@@ -11,8 +11,8 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Phase:** 1–4 done; 2.0.0 is ready on `dev`. **Next:** playtest passed; merge `dev` into `main` to go live when the author says "deploy".
-- **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) still serves v1 code from `main`; [/legacy/](https://camayal.info/wizardidle/legacy/) serves the frozen `v1.0.0` tag.
+- **Released:** 2.0.0 is live since 2026-11-11 (tag `v2.0.0`). **Next:** the features in the ideas backlog, one at a time on `dev`.
+- **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.0.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
 
@@ -164,6 +164,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-11: 2.0.0 is live
+
+- `dev` fast-forwarded into `main`, tagged `v2.0.0`, deployed by GitHub Actions. Checked live: new modules load, version 2.0.0, new service worker served, `/legacy/` still serves v1, old notes not published.
+- The author confirmed bulb won't be used again; its leftover worktree folders are deleted.
 
 ### 2026-11-10: Playtest passed; one notebook, one keeper
 

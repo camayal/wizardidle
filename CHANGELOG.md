@@ -4,7 +4,9 @@ The story of Wizard Idle, one version at a time. Newest first.
 
 ---
 
-## 2.0.0 — *ready, waiting for the final playtest*
+## 2.0.0 — released 2026-11-11
+
+The same game the author wrote by hand in 2018–2020, rebuilt from the inside, playtested, and live again at [camayal.info/wizardidle](https://camayal.info/wizardidle/).
 
 ### Phase 4: Old debts paid
 
