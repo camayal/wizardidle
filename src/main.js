@@ -18,7 +18,6 @@ const clickHandlers = {
     centerDivineBtn: game.centerBtn,
     npcDivineBtn: game.npcBtn,
     btnClose: game.btnCloseEvent,
-    exeRun: game.exe,
 };
 for (const [id, handler] of Object.entries(clickHandlers)) {
     document.getElementById(id).onclick = () => handler();

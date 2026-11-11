@@ -6,7 +6,8 @@ import { zones, places } from './data/zones.js';
 import { spells, spellTiers, npcSpells } from './data/spells.js';
 import { achievements } from './data/achievements.js';
 import { YesOrNot, getRandomInt, pickRandomItem, roundNumbertoLetter, capitalize, getRandomColor, secsToHours } from './utils.js';
-import { thx, hx, getLocal, setLocal, idx, check } from './storage.js';
+import { config } from './config.js';
+import { state, world, stat, count, deleteSave } from './state.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -18,7 +19,6 @@ import { thx, hx, getLocal, setLocal, idx, check } from './storage.js';
 ////////////////////////////////////////////////////////////////////////////////////
 //Definitions
 //Author:  Carlos Alonso Maya Lastra
-if(!localStorage[thx("firstUse")]){setLocal("firstUse", "true")};
 // #region Define vars
 var esceneCanvas = document.getElementById("esceneCanvas");
 var pjCanvas = document.getElementById("pjCanvas");
@@ -100,10 +100,10 @@ var healIcon = "<img class='imgInConsole' height='" + em + "' src='img/heal.png'
 const logro = {
     ...achievements,
     set: function(nameLogro){
-        if(!localStorage.getItem(nameLogro.name)){
+        if(!state.achievements[nameLogro.name]){
         //sonido de archivements
         playSound("achivement");
-        localStorage.setItem(nameLogro.name,true);
+        state.achievements[nameLogro.name] = true;
         print("<img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/achivement.png'><span class='specialTextInConsole' style='font-size:" + em * 1.5 + "px; line-height:" + em * 1.5 + "px;'><b>" + nameLogro.title + "</b> - " + nameLogro.description + "</span>");
         
         if (scrollCurrentContent == "achievements"){
@@ -134,7 +134,7 @@ var statObj = {
         if (!!stat.match(/^f/)){//if is a factor and not a probability modify 0.1 instead 0.001
             value = 0.1;
         }
-        setLocal(stat,(Number(getLocal(stat)) + value * extra))
+        state.statBonus[stat] = (state.statBonus[stat] || 0) + value * extra
         return statObj[stat].name;
     },
     random: function(){
@@ -153,16 +153,16 @@ var statueObj = {
     statue_el_Desierto: {name:"Feline", event:function(){return statObj.increase(statObj.pChangeZone.code,2)},code:"statue_el_Desierto"},
     statue_el_Duenon: {name:"Terrifying Imp", event:function(){return statObj.increase(statObj.pCritic.code,2)},code:"statue_el_Duenon"},
     statue_las_Dunas: {name:"Perfect sphere", event:function(){
-        feGanada = (getRandomInt(((Number(getLocal("HPBase")) * Number(getLocal("rGold"))) * 0.75),((Number(getLocal("HPBase")) * Number(getLocal("rGold"))) * 1.5))) * 10;
-        feGanada *= Number(getLocal("feMultiplicator"))
-        setLocal("fe", Number(getLocal("fe")) + feGanada);
+        feGanada = (getRandomInt(((state.player.hpBase * config.balance.rGold) * 0.75),((state.player.hpBase * config.balance.rGold) * 1.5))) * 10;
+        feGanada *= state.player.faithMultiplier
+        state.player.faith = state.player.faith + feGanada;
         updateHeading();
         return "divine</i> and gains some faith (" + spiritIcon + roundNumbertoLetter(feGanada) + ")<i>";
     },code:"statue_las_Dunas"},
     statue_el_Heidan: {name:"Majestic angel", event:function(){
         statObj.increase(statObj.pBotin.code,2)
-        var goldFound = (Number(getLocal("lastGoldFromBattle")) * 7.3)
-        setLocal("Gold", Number(getLocal("Gold")) + goldFound);
+        var goldFound = (state.player.lastBattleGold * 7.3)
+        state.player.gold = state.player.gold + goldFound;
         updateHeading();
         playSound("coins");
         return statObj.pBotin.name + "</i> and found some coins (" + goldIcon + roundNumbertoLetter(goldFound) + ")<i>";
@@ -170,7 +170,7 @@ var statueObj = {
     statue_la_Mina: {name:"Dwarf", event:function(){return statObj.increase(statObj.pFindMaterials.code,2)},code:"statue_la_Mina"},
     statue_el_Pantano: {name:"Hydra", event:function(){
         playSound("hidra");
-        setLocal("hydraMysteryResolved", "true");
+        state.hydraMysteryResolved = true;
         logro.set(logro.logro_hydramystery);
         return "hydraMysteryResolved";
     },code:"statue_el_Pantano"},
@@ -181,99 +181,52 @@ var statueObj = {
 }
 
 
-//Detect that is the first run and save some important information in local storage or if some is not it is saved
-function checkDB(){
-    if(!localStorage[thx("lvl")]){setLocal("lvl", 0)};
-    if(!localStorage[thx("age")]){setLocal("age", 19)};
-    if(!localStorage[thx("currentZone")]){setLocal("currentZone", "la_Ciudad")};
-    if(!localStorage[thx("lastZone")]){setLocal("lastZone", "la_Torre")};
-    if(!localStorage[thx("idx_zone_la_Ciudad")]){setLocal("idx_zone_la_Ciudad", 1)};
-    if(!localStorage[thx("currentStage")]){setLocal("currentStage", Math.floor((Math.random()*MAXSTAGES)+1))};
-    if(!localStorage[thx("idx_Combo")]){setLocal("idx_Combo", 0)};
-    if(!localStorage[thx("rXP")]){setLocal("rXP", 1.1)};//1.1
-    if(!localStorage[thx("rGold")]){setLocal("rGold", 0.15)};
-    if(!localStorage[thx("factorHP")]){setLocal("factorHP", 8)};
-    if(!localStorage[thx("rHP")]){setLocal("rHP", 1.6483)};
-    if(!localStorage[thx("rEnemyXP")]){setLocal("rEnemyXP", 16)};//16
-    if(!localStorage[thx("pAttack")]){setLocal("pAttack", 0.6)};
-    if(!localStorage[thx("fAttack")]){setLocal("fAttack", 1)};
-    if(!localStorage[thx("sacredDamageMultiplier")]){setLocal("sacredDamageMultiplier", 1)};
-    if(!localStorage[thx("pPolymorph")]){setLocal("pPolymorph", 0.025)};
-    if(!localStorage[thx("fCritic")]){setLocal("fCritic", 2)};
-    if(!localStorage[thx("pCritic")]){setLocal("pCritic", 0.2)};
-    if(!localStorage[thx("XP")]){setLocal("XP", 0)};
-    if(!localStorage[thx("pHeal")]){setLocal("pHeal", 0.17)};//0.2
-    if(!localStorage[thx("fHeal")]){setLocal("fHeal", 0.1)};
-    //if(!localStorage[thx("fHealinn")]){setLocal("fHealinn", 0.3)};
-    if(!localStorage[thx("pStudy")]){setLocal("pStudy", 0.1)};//0.25 down because it is the triple in this versio
-    if(!localStorage[thx("pBotin")]){setLocal("pBotin", 0.2)};
-    if(!localStorage[thx("pDados")]){setLocal("pDados", 0.1)};//0.2 down because is too much chance to stuck in dice game
-    if(!localStorage[thx("pChangeZone")]){setLocal("pChangeZone", 0.35)};
-    if(!localStorage[thx("allowChangeZone")]){setLocal("allowChangeZone", 1)};//1 means equal to pChangeZone, 0 means avoid changeZone at all
-    if(!localStorage[thx("pGetBoss")]){setLocal("pGetBoss", 0.015)};//0.015
-    if(!localStorage[thx("pGetGuardian")]){setLocal("pGetGuardian", 0.1)};//megabosses
-    if(!localStorage[thx("pGetStatue")]){setLocal("pGetStatue", 0.08)};
-    if(!localStorage[thx("Gold")]){setLocal("Gold",getRandomInt(10,50))};
-    if(!localStorage[thx("pFindMaterials")]){setLocal("pFindMaterials", 0.2)};
-    if(!localStorage[thx("pFindCapel")]){setLocal("pFindCapel", 0.35)};
-    if(!localStorage[thx("pOfrenda")]){setLocal("pOfrenda", 0.25)};
-    if(!localStorage[thx("fOfrenda")]){setLocal("fOfrenda", 0.5678)};//1.3748
-    if(!localStorage[thx("feMultiplicator")]){setLocal("feMultiplicator", 1)};
-    if(!localStorage[thx("lastGoldFromBattle")]){setLocal("lastGoldFromBattle", 0)};
-    if(!localStorage[thx("fe")]){setLocal("fe",getRandomInt(10,35))};
-    if(!localStorage[thx("hydraMysteryResolved")]){setLocal("hydraMysteryResolved", "false")};
-    if(!localStorage[thx("pGetHydra")]){setLocal("pGetHydra", 0.1)};
-    if(!localStorage[thx("forceEvent")]){setLocal("forceEvent", "")};
-    if(!localStorage[thx("inPecado")]){setLocal("inPecado", "false")};
-    if(!localStorage.initialDate){localStorage.initialDate=new Date();};
-}
-
 //levelUP function
 function levelUP() {
-    setLocal("lvl",Number(getLocal("lvl")) + 1)
+    state.player.lvl = state.player.lvl + 1
     //console.log("lvl" + getLocal("lvl"))
-    if (getLocal("lvl") > 1){
+    if (state.player.lvl > 1){
         //achievement
-        switch (getLocal("lvl")){
-            case "2":
+        switch (state.player.lvl){
+            case 2:
                 logro.set(logro.logro_lvl2);
             break;
-            case "140":
+            case 140:
                 logro.set(logro.logro_level140);
             break;
-            case "200":
+            case 200:
                 logro.set(logro.logro_level200);
             break;
             default:
             playSound("lvlup");
-            print("<img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/star.png'></img> " + "<span class='specialTextInConsole' style='font-size:" + em * 1.5 + "px; line-height:" + em * 1.5 + "px;'> <b>" + getLocal("pjName") + " level up</b></span>" + " <img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/star.png'></img> ");
+            print("<img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/star.png'></img> " + "<span class='specialTextInConsole' style='font-size:" + em * 1.5 + "px; line-height:" + em * 1.5 + "px;'> <b>" + state.player.name + " level up</b></span>" + " <img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/star.png'></img> ");
         }
     //calculate age
-        setLocal("age", Number(getLocal("age")) + (Number(getLocal("XPNextLevel")) * 0.0005))
+        state.player.age = state.player.age + (state.player.xpNext * 0.0005)
     }
 
 
 
-    setLocal("XPNextLevel", Math.pow(Number(getLocal("lvl")), Number(getLocal("rXP"))) * Number(getLocal("factorHP")));
-    setLocal("XPPastLevel", Math.pow((Number(getLocal("lvl")) - 1), Number(getLocal("rXP"))) * Number(getLocal("factorHP")));
-    setLocal("HPBase", Number(getLocal("XPNextLevel")) * Number(getLocal("rHP")));
-    setLocal("HP", Math.floor(getLocal("HPBase")));
-    setLocal("rangeEnemyHP", Number(getLocal("HPBase")) * 1.2);
-    setLocal("rangeEnemyAttack", Number(getLocal("HPBase")) * 0.2);
-    setLocal("XPbyEnemy", ((Math.pow((Number(getLocal("lvl")) + 1), Number(getLocal("rXP"))) * Number(getLocal("factorHP"))) - Number(getLocal("XPNextLevel"))) / Number(getLocal("rEnemyXP")));
-    setLocal("attack", Number(getLocal("HPBase")) * 0.2);
+    state.player.xpNext = Math.pow(state.player.lvl, config.balance.rXP) * config.balance.factorHP;
+    state.player.xpPast = Math.pow((state.player.lvl - 1), config.balance.rXP) * config.balance.factorHP;
+    state.player.hpBase = state.player.xpNext * config.balance.rHP;
+    state.player.hp = Math.floor(state.player.hpBase);
+    state.player.enemyHpRange = state.player.hpBase * 1.2;
+    state.player.enemyAttackRange = state.player.hpBase * 0.2;
+    state.player.xpPerEnemy = ((Math.pow((state.player.lvl + 1), config.balance.rXP) * config.balance.factorHP) - state.player.xpNext) / config.balance.rEnemyXP;
+    state.player.attack = state.player.hpBase * 0.2;
     //loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
     updateHeading();
 
     //call history if exists
-    if(chapter["lvl" + getLocal("lvl")]){
+    if(chapter["lvl" + state.player.lvl]){
         openHistory()
     }else{//avoid change lvl skin automatically, for levels that needs some previous change (before get corruption staff, en 149, etc)
-        loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
+        loadCanvasChar(state.player.lvl, squareSide, headLevel);
     }
 
     //multilevel control (not expected)
-    if(Number(getLocal("XP")) >= Number(getLocal("XPNextLevel"))){
+    if(state.player.xp >= state.player.xpNext){
         levelUP();
     };
    
@@ -286,24 +239,23 @@ function start() {
     timeStart = performance.now()
     
     playSound("start");
-    setLocal("currentNpc","");
-    checkDB();
-    if (localStorage[thx("firstUse")] === thx("true")) {
+    state.npc = "";
+    if (state.firstUse) {
         
         levelUP();
         //artificial levelUP from 0 to 1 to add some vars
-        setLocal("firstUse", "false");
+        state.firstUse = false;
     };
-    if (getLocal("HP") <= 0){//perfom a weak revive if the player does not revive after reload, loss faith
-        setLocal("HP", Number(getLocal("HPBase")) * 0.1);
-            var feperdida = Number(getLocal("HPBase")) * 0.25;
+    if (state.player.hp <= 0){//perfom a weak revive if the player does not revive after reload, loss faith
+        state.player.hp = state.player.hpBase * 0.1;
+            var feperdida = state.player.hpBase * 0.25;
             //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - feperdida);
-            setLocal("fe", Number(getLocal("fe")) - feperdida)
-        print("<b>" + getLocal("pjName") + "</b> " + "loses hope in you and trys to restore himself (" + spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
+            state.player.faith = state.player.faith - feperdida
+        print("<b>" + state.player.name + "</b> " + "loses hope in you and trys to restore himself (" + spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
     }
     updateHeading();
-    loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
-    loadBackground(getLocal("currentZone") + getLocal("currentStage"));
+    loadCanvasChar(state.player.lvl, squareSide, headLevel);
+    loadBackground(state.zone.current + state.zone.stage);
     //load previous locality random scenaria
     eventMasterClock = setInterval(event, masterTime);
     //statusClock = setInterval(cacheStatus, 5000);
@@ -314,21 +266,21 @@ function start() {
 
 //Populate and update the headding
 function updateHeading() {
-    document.getElementById('pjName').innerText = getLocal("pjName");
-    document.getElementById('lvl').innerText = "Lv. " + getLocal("lvl");
-    document.getElementById("XPprogressBar").max = getLocal("XPNextLevel");
-    document.getElementById("XPprogressBar").min = getLocal("XPPastLevel");
-    document.getElementById("XPprogressBar").value = getLocal("XP");
-    document.getElementById('hp').innerText = roundNumbertoLetter(getLocal("HP"));
-    document.getElementById('gold').innerText = roundNumbertoLetter(Number(getLocal("Gold")));
-    document.getElementById('fe').innerText = roundNumbertoLetter(Number(getLocal("fe")));
-    var hpPercent = Number(getLocal("HP")) / Number(getLocal("HPBase"));
+    document.getElementById('pjName').innerText = state.player.name;
+    document.getElementById('lvl').innerText = "Lv. " + state.player.lvl;
+    document.getElementById("XPprogressBar").max = state.player.xpNext;
+    document.getElementById("XPprogressBar").min = state.player.xpPast;
+    document.getElementById("XPprogressBar").value = state.player.xp;
+    document.getElementById('hp').innerText = roundNumbertoLetter(state.player.hp);
+    document.getElementById('gold').innerText = roundNumbertoLetter(state.player.gold);
+    document.getElementById('fe').innerText = roundNumbertoLetter(state.player.faith);
+    var hpPercent = state.player.hp / state.player.hpBase;
     document.getElementById("hpIcon").src = heartMeter(hpPercent);
 
-    if (Number(getLocal("fe")) < -10000){logro.set(logro.logro_hategod)}
+    if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
 
     //calcule % of xp bar
-    xpPercent = 1 - (Number(getLocal("XPNextLevel")) - Number(getLocal("XP"))) / (Number(getLocal("XPNextLevel")) - Number(getLocal("XPPastLevel")))
+    xpPercent = 1 - (state.player.xpNext - state.player.xp) / (state.player.xpNext - state.player.xpPast)
 
 };
 
@@ -431,7 +383,7 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
 
 //Draw NPC
 function loadNPC(npc, squareSideIn=squareSide, headLevelIn=headLevel, charWidthIn=charWidth, charHeightIn=charHeight) {
-    setLocal("currentNpc", npc);
+    state.npc = npc;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     var img = new Image();
@@ -443,19 +395,19 @@ function loadNPC(npc, squareSideIn=squareSide, headLevelIn=headLevel, charWidthI
         // ctx.msImageSmoothingEnabled = false;
         // ctx.imageSmoothingEnabled = false;
         //medium size bosses (64x64px)
-        if (getLocal("currentNpc") === "arcangel" || getLocal("currentNpc") === "doria" || getLocal("currentNpc") === "midas" || getLocal("currentNpc") === "kkck" || getLocal("currentNpc") === "herbus" || getLocal("currentNpc") === "skeleton" || getLocal("currentNpc") === "medusa" || getLocal("currentNpc") === "rainbow" || getLocal("currentNpc") === "rojo") {
+        if (state.npc === "arcangel" || state.npc === "doria" || state.npc === "midas" || state.npc === "kkck" || state.npc === "herbus" || state.npc === "skeleton" || state.npc === "medusa" || state.npc === "rainbow" || state.npc === "rojo") {
             ctx.drawImage(img, squareSideIn * 6, headLevelIn - (objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25);
         }
         //big bosses (64x64px)
-        else if (getLocal("currentNpc") === "bicaptop" || getLocal("currentNpc") === "cuboq" || getLocal("currentNpc") === "etymos" || getLocal("currentNpc") === "fenix" || getLocal("currentNpc") === "goro" || getLocal("currentNpc") === "infraespectro" || getLocal("currentNpc") === "protromus" || getLocal("currentNpc").match("hydskon") || getLocal("currentNpc").match("icedra")) {
+        else if (state.npc === "bicaptop" || state.npc === "cuboq" || state.npc === "etymos" || state.npc === "fenix" || state.npc === "goro" || state.npc === "infraespectro" || state.npc === "protromus" || state.npc.match("hydskon") || state.npc.match("icedra")) {
             ctx.drawImage(img, squareSideIn * 6, headLevelIn - (objectSize * 0.0625), charWidthIn * 1.5, charHeightIn * 1.5);
         }
         //huge bosses (64x96px)
-        else if (getLocal("currentNpc").match("mother") || getLocal("currentNpc").match("guardian")){
+        else if (state.npc.match("mother") || state.npc.match("guardian")){
             ctx.drawImage(img, squareSideIn * 6, headLevelIn - (objectSize * 0.113), charWidthIn * 1.33, charHeightIn * 1.9);
         }
         //objects to get (20x20px)
-        else if(getLocal("currentNpc").match("libro") || getLocal("currentNpc").match("runa")){
+        else if(state.npc.match("libro") || state.npc.match("runa")){
             ctx.drawImage(img, squareSideIn * 2, headLevelIn * 1.6, charWidthIn / 3, charHeightIn / 3);
         }
         //the remaining (32x32px)
@@ -477,10 +429,10 @@ function animatePJ() {
     switch (frameCounter) {
     case 1:
 
-        loadCanvasChar(getLocal("lvl"), squareSide - JUMPSPACE, headLevel);
+        loadCanvasChar(state.player.lvl, squareSide - JUMPSPACE, headLevel);
         break;
     case 2:
-       loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
+       loadCanvasChar(state.player.lvl, squareSide, headLevel);
         frameCounter = 0;
         clearInterval(animateClock);
     }
@@ -493,14 +445,14 @@ function animateNPC() {
     if(masterTime < 500){clearInterval(animateClockNPC);return}
 
 
-    if (getLocal("currentNpc") != ""){
+    if (state.npc != ""){
         frameCounter += 1;
         switch (frameCounter) {
         case 1:
-            loadNPC(getLocal("currentNpc"), squareSide + (JUMPSPACE / 6));
+            loadNPC(state.npc, squareSide + (JUMPSPACE / 6));
             break;
         case 2:
-            loadNPC(getLocal("currentNpc"));
+            loadNPC(state.npc);
             frameCounter = 0;
             clearInterval(animateClockNPC);
         }
@@ -624,8 +576,8 @@ function event() {
     afterChapter()//call special events after history
     }
 
-    if(getLocal("forceEvent")){//force some event for debugging and history
-        var masterOption = Number(pickRandomItem(getLocal("forceEvent")));
+    if(state.forceEvent){//force some event for debugging and history
+        var masterOption = Number(pickRandomItem(state.forceEvent));
     }else{
         var masterOption = Math.floor((Math.random() * 5) + 1)
     }
@@ -657,36 +609,36 @@ function event() {
 //Main event: EXPLORE
 function exploreEV() {
     //Evalue if booty or not
-    if (YesOrNot(getLocal("pBotin"), 0)) {
+    if (YesOrNot(stat("pBotin"), 0)) {
         //getBotin();
         objectToBreak = "";
-        print("<b>" + getLocal("pjName") + "</b> is searching...");
+        print("<b>" + state.player.name + "</b> is searching...");
         eventClock = setInterval(getBotin, masterTime);
     //go to dice house, use the same probability
-    } else if (YesOrNot(getLocal("pDados"), 0) && getLocal("currentZone") == "la_Ciudad" || getLocal("currentZone") == "el_Poblado"){
+    } else if (YesOrNot(config.balance.pDados, 0) && state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado"){
         //check if gold is more than 0
-        if(Number(getLocal("Gold")) > 0){
+        if(state.player.gold > 0){
             //call the game function
             if (previousEvent == "sixfivefour"){
                 var textDice = pickRandomItem("decides come back to the gaming house, returns to the dice house,wants to spend more coins at the gaming house");
             }else{
                 var textDice = pickRandomItem("finds a gamming house and enters,wants to play 6-5-4,wants to gambling");
             }
-            print("<b>" + getLocal("pjName") + "</b> " + textDice);
-            loadBackground(getLocal("currentZone") + "_casadados");
+            print("<b>" + state.player.name + "</b> " + textDice);
+            loadBackground(state.zone.current + "_casadados");
             loadNPC("jugon");
             previousEvent = "sixfivefour"
             eventClock = setInterval(sixfivefour, masterTime);       
         }else{
-            print("<b>" + getLocal("pjName") + "</b> " + "finds a gamming house but does not have gold to bet");
+            print("<b>" + state.player.name + "</b> " + "finds a gamming house but does not have gold to bet");
             eventMasterClock = setInterval(event, masterTime);
         }
     }else {
-        if (YesOrNot(Number(getLocal("pChangeZone")) * Number(getLocal("allowChangeZone")), 0)) {
-            print("<b>" + getLocal("pjName") + "</b> is exploring...");
+        if (YesOrNot(stat("pChangeZone") * config.balance.allowChangeZone, 0)) {
+            print("<b>" + state.player.name + "</b> is exploring...");
             eventClock = setInterval(changeLocality, masterTime);
         } else {
-            print("<b>" + getLocal("pjName") + "</b>" + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[getLocal("currentZone")].name);
+            print("<b>" + state.player.name + "</b>" + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
             pickRandomBackgroundForCurrentZone();
             addXP(0.5);
             eventMasterClock = setInterval(event, masterTime);
@@ -723,16 +675,16 @@ function battle() {
         break;
     case 2:
         //perform a loop until enemy or pj HP is 0
-        if(YesOrNot(getLocal("pHeal"),0) && (Number(getLocal("HP")) < Number(getLocal("HPBase")))){
+        if(YesOrNot(stat("pHeal"),0) && (state.player.hp < state.player.hpBase)){
             healEV();
         }else{
             attackEV();
         }
         //if enemy dies
         if (Math.round(enemyHP) <= 0) {
-            if (hydraCombat && (Number(getLocal("currentHead" + hydra)) + 1) <= Number(zones[getLocal("currentZone")].headsMax)){
-                setLocal("currentHead" + hydra, Number(getLocal("currentHead" + hydra)) + 1);
-                idx("HydrasHeadCut");
+            if (hydraCombat && (state.hydraHeads[hydra] + 1) <= Number(zones[state.zone.current].headsMax)){
+                state.hydraHeads[hydra] = state.hydraHeads[hydra] + 1;
+                count("HydrasHeadCut");
                 getHydra();
             }else{//end conditional hydra, here if die bosses and enemies
                 //stop clock of battle and reset bossMultiplier
@@ -748,25 +700,25 @@ function battle() {
 
             polymorphed = false;
             if (bossCombat){
-                idx("BossesKilled");
+                count("BossesKilled");
                 logro.set(logro.logro_primerbossderrotado)
                 //todo logro de todos los boss
             }else if(hydraCombat){
-                idx("HydrasKilled");
-                setLocal("currentHead" + hydra, "")
+                count("HydrasKilled");
+                delete state.hydraHeads[hydra]
                 //todo logro de cada hidra
             }else{
                 if(enemySprites[enemyAndNumber].rare == 1){
-                    idx("rareEnemiesKilled");
+                    count("rareEnemiesKilled");
                 }else{
-                    idx("EnemiesKilled");
+                    count("EnemiesKilled");
                 }
             }
-            idx("Combo");
-            if(!localStorage[thx("idx_longestCombo")]){
-                setLocal("idx_longestCombo", getLocal("idx_Combo"));
-            }else if(Number(getLocal("idx_longestCombo")) < Number(getLocal("idx_Combo"))){
-                setLocal("idx_longestCombo", getLocal("idx_Combo"));
+            count("Combo");
+            if(state.counters.longestCombo === undefined){
+                state.counters.longestCombo = state.counters.Combo;
+            }else if(state.counters.longestCombo < state.counters.Combo){
+                state.counters.longestCombo = state.counters.Combo;
             }
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             //addXP();
@@ -774,11 +726,11 @@ function battle() {
             
             //add faith if the enemy is corrupted but only if not boss or hydra
             if(!bossCombat && !hydraCombat){
-                if (enemySprites[enemyAndNumber].corrupted == "1" && getLocal("inPecado") == "false"){
+                if (enemySprites[enemyAndNumber].corrupted == "1" && !state.player.inSin){
                     feGanada = calculateFe() * 5;
-                    feGanada *= Number(getLocal("feMultiplicator"))
-                    setLocal("fe", Number(getLocal("fe")) + feGanada);
-                    idx("FeByCleanCorruption",Math.round(feGanada));
+                    feGanada *= state.player.faithMultiplier
+                    state.player.faith = state.player.faith + feGanada;
+                    count("FeByCleanCorruption",Math.round(feGanada));
                     var corruptedText = ", also gained " + spiritIcon + " " + roundNumbertoLetter(feGanada) + " by corruption erradication";
                 }else {
                     var corruptedText = "";
@@ -786,9 +738,9 @@ function battle() {
             }
 
             //punish if the wizard is in sin (use the same corruptedText)
-            if(getLocal("inPecado") == "true"){
+            if(state.player.inSin){
                 var feperdida = calculateFe();
-                setLocal("fe", Number(getLocal("fe")) - feperdida);
+                state.player.faith = state.player.faith - feperdida;
                 var corruptedText = ", and reduce the faith " + spiritIcon + " -" + roundNumbertoLetter(feperdida);
 
             }
@@ -799,13 +751,13 @@ function battle() {
                 addGold();
                 if(bossCombat){
                     addXP(4);
-                    print(enemyName + " was defeated and a big loot has been found " + goldIcon + roundNumbertoLetter(getLocal("lastGoldFromBattle") * bossGoldMultiplier));
+                    print(enemyName + " was defeated and a big loot has been found " + goldIcon + roundNumbertoLetter(state.player.lastBattleGold * bossGoldMultiplier));
                 }else if(hydraCombat){
-                    addXP(Number(zones[getLocal("currentZone")].hidrasXPMultiplier));
-                    print(enemyName + " was defeated and a treasure has been found " + goldIcon + roundNumbertoLetter(getLocal("lastGoldFromBattle") * 15));
+                    addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
+                    print(enemyName + " was defeated and a treasure has been found " + goldIcon + roundNumbertoLetter(state.player.lastBattleGold * 15));
                 }else{
                     addXP(enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
-                    print(enemyName + " was defeated and looted " + goldIcon + roundNumbertoLetter(getLocal("lastGoldFromBattle")) + corruptedText);
+                    print(enemyName + " was defeated and looted " + goldIcon + roundNumbertoLetter(state.player.lastBattleGold) + corruptedText);
                 }
             } else {
                 if(bossCombat){//kill no gold boss
@@ -820,7 +772,7 @@ function battle() {
 
             enemy = "";
             enemyAndNumber = "";
-            setLocal("currentNpc", "");
+            state.npc = "";
                 bossMultiplier = 1;
                 bossGoldMultiplier = 1;
                 eventMasterClock = setInterval(event, masterTime);
@@ -828,7 +780,7 @@ function battle() {
             
         }
         //if pj dies
-        if (Math.round(Number(getLocal("HP"))) <= 0) {
+        if (Math.round(state.player.hp) <= 0) {
             //stop clock of battle and reset bossMultiplier
             multipleEventsCounter = 0;
             clearInterval(eventClock);
@@ -846,28 +798,28 @@ function battle() {
             if(bossCombat){logro.set(logro.logro_primeraderrotaporboss)}
             
             polymorphed = false;
-            if(!localStorage[thx("idx_longestCombo")]){
-                setLocal("idx_longestCombo", getLocal("idx_Combo"));
-            }else if(Number(getLocal("idx_longestCombo")) < Number(getLocal("idx_Combo"))){
-                setLocal("idx_longestCombo", getLocal("idx_Combo"));
+            if(state.counters.longestCombo === undefined){
+                state.counters.longestCombo = state.counters.Combo;
+            }else if(state.counters.longestCombo < state.counters.Combo){
+                state.counters.longestCombo = state.counters.Combo;
             }
-            setLocal("idx_Combo", 0);
-            idx("Deaths");
+            state.counters.Combo = 0;
+            count("Deaths");
             playSound("hurt" + getRandomInt(1,6));
             pjDead = true;
             loadAlterCanvasChar("muerto", squareSide, headLevel);
             var lootedText = "";
             console.log(enemy +": a")//para detectar BUG
-            if (getLocal("Gold") > 0 && enemyTypes[enemy].hasgold == "true"){//acá hay un BUG
-            var goldLooted = getRandomInt(Number(getLocal("lastGoldFromBattle")),Number(getLocal("lastGoldFromBattle")) * 2);
-            setLocal("Gold", Number(getLocal("Gold")) - goldLooted);
+            if (state.player.gold > 0 && enemyTypes[enemy].hasgold == "true"){//acá hay un BUG
+            var goldLooted = getRandomInt(state.player.lastBattleGold,state.player.lastBattleGold * 2);
+            state.player.gold = state.player.gold - goldLooted;
             lootedText = " and losses some gold" +  " (" + goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
-            idx("goldLostInBattle", goldLooted);
+            count("goldLostInBattle", goldLooted);
             }
             console.log(enemy +": b")//para detectar BUG
-            print("<b>" + getLocal("pjName") + "</b>" + " has fallen in battle" + lootedText);
+            print("<b>" + state.player.name + "</b>" + " has fallen in battle" + lootedText);
             npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
-            setLocal("currentNpc", "");
+            state.npc = "";
             enemy = "";
             enemyAndNumber = "";
             bossMultiplier = 1;
@@ -877,12 +829,12 @@ function battle() {
                 previousEvent = "autorevive"
                 autorevive = "";       
                 //var feperdida = Number(getLocal("HPBase")) * 0.75;
-                var feperdida = Number(getLocal("HPBase")) * 1.2454654;
-                setLocal("fe", Number(getLocal("fe")) - feperdida);
-                print("<b>" + getLocal("pjName") + "</b> " + "recovers himself but feels abandoned by his god (" + spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
+                var feperdida = state.player.hpBase * 1.2454654;
+                state.player.faith = state.player.faith - feperdida;
+                print("<b>" + state.player.name + "</b> " + "recovers himself but feels abandoned by his god (" + spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
                 pjDead = false;
-                loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
-                idx("selfRevive");
+                loadCanvasChar(state.player.lvl, squareSide, headLevel);
+                count("selfRevive");
                 playSound("heal");
                 updateHeading();
                 eventMasterClock = setInterval(event, masterTime);
@@ -897,31 +849,31 @@ function reviveEV(){
     multipleEventsCounter += 1;
     switch(multipleEventsCounter){
         case 1:
-        print("<b>" + getLocal("pjName") + "</b>" + " wakes up " + pickRandomItem("confused,perplexed,perturbed"));
+        print("<b>" + state.player.name + "</b>" + " wakes up " + pickRandomItem("confused,perplexed,perturbed"));
         previousEvent = "reviveInCabin"
             break;
         case 2:
-            print("<b>" + getLocal("pjName") + "</b>" + " is treated by a mysterious healer");
+            print("<b>" + state.player.name + "</b>" + " is treated by a mysterious healer");
             playSound("heal");
             spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
             break;
         case 3:
             spell("spellPinRed_16",false,frameWidth,frameHeight,currentFrame,shift);
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-            setLocal("currentNpc", "");
-            print("<b>" + getLocal("pjName") + "</b>" + " is totally recovered (" + healIcon + roundNumbertoLetter(Number(getLocal("HPBase"))) + ") and the mysterious guy is gone")
+            state.npc = "";
+            print("<b>" + state.player.name + "</b>" + " is totally recovered (" + healIcon + roundNumbertoLetter(state.player.hpBase) + ") and the mysterious guy is gone")
             updateHeading();
             break;
         case 4:
         var randomLocality = pickRandomItem("el_Bosque,la_Pradera,el_Poblado,las_Dunas,el_Desierto,el_Pantano")
-        setLocal("currentZone", randomLocality);
-        setLocal("currentStage", Math.floor((Math.random() * MAXSTAGES) + 1));
-        idx("zonesChanged");
-        idx("zone_" + randomLocality);
+        state.zone.current = randomLocality;
+        state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
+        count("zonesChanged");
+        count("zone_" + randomLocality);
         //pickRandomBackgroundForCurrentZone();
-        loadBackground(getLocal("currentZone") +  getLocal("currentStage"));
-        print("<b>" + getLocal("pjName") + "</b>" + " leaves the healer's cabin")
-        idx("hospital");
+        loadBackground(state.zone.current +  state.zone.stage);
+        print("<b>" + state.player.name + "</b>" + " leaves the healer's cabin")
+        count("hospital");
         multipleEventsCounter = 0;
         clearInterval(eventClock);
         disablePjBtn = false;
@@ -932,20 +884,20 @@ function reviveEV(){
 
 //Main event: PRAY
 function prayEV(){
-    if (YesOrNot(getLocal("pFindCapel"),0)){
+    if (YesOrNot(stat("pFindCapel"),0)){
         playSound("altar");
-        idx("altar");
-        idx("altar_zone_" + getLocal("currentZone"));
+        count("altar");
+        count("altar_zone_" + state.zone.current);
         if (previousEvent == "enterAltar"){
             var textCapel = pickRandomItem("decides come back to the shire, returns to the shire,wants to spend more time at the temple");
         }else{
             var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
         }
-        print("<b>" + getLocal("pjName") + "</b> " + textCapel);
-        loadBackground(getLocal("currentZone") + "_altar");
+        print("<b>" + state.player.name + "</b> " + textCapel);
+        loadBackground(state.zone.current + "_altar");
         var mistico = "mistico" + getRandomInt(1,3);
         loadNPC(mistico);
-        if (YesOrNot(getLocal("pOfrenda"),0) && Number(getLocal("Gold")) > 0){
+        if (YesOrNot(stat("pOfrenda"),0) && state.player.gold > 0){
             offer = true;
         }else{
             offer = false;
@@ -953,15 +905,15 @@ function prayEV(){
         previousEvent = "enterAltar"
         eventClock = setInterval(doOffering, masterTime);
     }else{
-        idx("negar");
+        count("negar");
         if (previousEvent == "negar"){
             var textCapel = pickRandomItem("finds again the same shire,sees the same shire");
         }else{
             var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
         }
         var faithLost = calculateFe();
-        print("<b>" + getLocal("pjName") + "</b> " + textCapel + " but does not enter and continues (" + spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
-        setLocal("fe", Number(getLocal("fe")) - faithLost);
+        print("<b>" + state.player.name + "</b> " + textCapel + " but does not enter and continues (" + spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
+        state.player.faith = state.player.faith - faithLost;
         updateHeading();
         previousEvent = "negar"
         eventMasterClock = setInterval(event, masterTime);
@@ -972,19 +924,19 @@ function prayEV(){
 
 //Main event: SLEEP OR INN
 function innEV(){
-    if(Math.round(Number(getLocal("HP"))) < Math.round(Number(getLocal("HPBase")))){
+    if(Math.round(state.player.hp) < Math.round(state.player.hpBase)){
            
            if (previousEvent == "innEV"){
             var textInn = "wants to rest a little more,still is tired"
            }else{
             var textInn = "feels tired,wants to rest,is falling asleep"
            }
-           print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(textInn)) 
+           print("<b>" + state.player.name + "</b> " + pickRandomItem(textInn)) 
            previousEvent = "innEV"
            eventClock = setInterval(searchInn, masterTime);
     }else{
         var textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
-        print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(textNoInn)) 
+        print("<b>" + state.player.name + "</b> " + pickRandomItem(textNoInn)) 
         previousEvent = "innEVFeelsGood"
         eventMasterClock = setInterval(event, masterTime);
     }
@@ -996,18 +948,18 @@ function innEV(){
 //Main event: study and found statues
 //TODO:CHECK A POTENTIAL BUG, THE WIZARD NEVER WILL BE TRUE FOR THE TWO LAST STAIMENTS
 function studyEV() {
-     if(YesOrNot(getLocal("pGetStatue"), 0) &&  getLocal("currentZone") != "el_Poblado" &&  getLocal("currentZone") != "la_Cueva"){//found statue, poblado and cueva has not statue
-        if(getLocal("currentZone") == "el_Pantano" && getLocal("hydraMysteryResolved") == "true"){//avoid show hidra statue twice, instead find a rune
-            print("<b>" + getLocal("pjName") + "</b> " + "sees something...") 
+     if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva"){//found statue, poblado and cueva has not statue
+        if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
+            print("<b>" + state.player.name + "</b> " + "sees something...") 
             eventClock = setInterval(findRuneOrBook, masterTime);
         }else{
-            print("<b>" + getLocal("pjName") + "</b> " + "sees something...") 
+            print("<b>" + state.player.name + "</b> " + "sees something...") 
             eventClock = setInterval(findStatue, masterTime);
         }
         //examine the estatue
 
     }else{//found book or rune
-    print("<b>" + getLocal("pjName") + "</b> " + "sees something...") 
+    print("<b>" + state.player.name + "</b> " + "sees something...") 
     eventClock = setInterval(findRuneOrBook, masterTime);
     }
 }
@@ -1015,11 +967,11 @@ function studyEV() {
 
 //Main event: start battle, getting enemy (or boss), or guardian or hydra
 function enemyEV(){
-    if ((YesOrNot(getLocal("pGetGuardian"),0)) && (getLocal("lvl") > 190)){//get guardian
+    if ((YesOrNot(config.balance.pGetGuardian,0)) && (state.player.lvl > 190)){//get guardian
     //guardians in all the places
-    }else if ((YesOrNot(getLocal("pGetHydra"),0)) && (getLocal("hydraMysteryResolved") == "true")){//get hydra
+    }else if ((YesOrNot(config.balance.pGetHydra,0)) && (state.hydraMysteryResolved)){//get hydra
     //hydra in some localities
-        if(getLocal("currentZone") == "el_Pantano" || getLocal("currentZone") == "las_Dunas" || getLocal("currentZone") == "la_Tundra"){
+        if(state.zone.current == "el_Pantano" || state.zone.current == "las_Dunas" || state.zone.current == "la_Tundra"){
             getHydra(true);
         }else{
             getEnemy();
@@ -1053,30 +1005,30 @@ function findStatue(){
     switch(optionTemp){
         case 1:
         //found and change locality
-        loadBackground(getLocal("currentZone") + "_estatua");
-        idx("estatuas_statue_" + getLocal("currentZone"))
-        idx("statuesFound");
+        loadBackground(state.zone.current + "_estatua");
+        count("estatuas_statue_" + state.zone.current)
+        count("statuesFound");
         //print("<b>" + getLocal("pjName") + "</b> " + "finds a " + statueObj["statue_" + getLocal("currentZone")].name + " statue");
         if (previousEvent == "findStatue"){
-            print("<b>" + getLocal("pjName") + "</b> " + "wants to try study the " + statueObj["statue_" + getLocal("currentZone")].name + " statue again");
+            print("<b>" + state.player.name + "</b> " + "wants to try study the " + statueObj["statue_" + state.zone.current].name + " statue again");
         }else{
-            print("<b>" + getLocal("pjName") + "</b> " + "finds a " + statueObj["statue_" + getLocal("currentZone")].name + " statue");
+            print("<b>" + state.player.name + "</b> " + "finds a " + statueObj["statue_" + state.zone.current].name + " statue");
         }
         previousEvent = "findStatue"
         break;
         case 2:
         //examine and get or not
-        if (YesOrNot(getLocal("pStudy"),0.15)){//increase the prob a little to avoid never activate 
-            idx("sucessStudyStatue");
+        if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
+            count("sucessStudyStatue");
             spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
             var learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
-            var result = statueObj["statue_" + getLocal("currentZone")].event()
+            var result = statueObj["statue_" + state.zone.current].event()
         if(result == "hydraMysteryResolved"){
             //play hydra sound
-            print("<b>" + getLocal("pjName") + "</b> " + "hears something but nothing happens");
+            print("<b>" + state.player.name + "</b> " + "hears something but nothing happens");
         }else{
             playSound("statUp");
-            print("<b>" + getLocal("pjName") + "</b> " + learnTxt + ". Increases the <i>" + result + "</i>");
+            print("<b>" + state.player.name + "</b> " + learnTxt + ". Increases the <i>" + result + "</i>");
         }
             multipleEventsCounter = 4;
         }else{
@@ -1085,17 +1037,17 @@ function findStatue(){
             var learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
             //fail study try again
             if(multipleEventsCounter == 4){
-                idx("failStudyStatue");
+                count("failStudyStatue");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
                 var learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
             }
-            print("<b>" + getLocal("pjName") + "</b> " + learnTxt) 
+            print("<b>" + state.player.name + "</b> " + learnTxt) 
         }
         break;
         case 5:
-        print("<b>" + getLocal("pjName") + "</b> " + "leaves the statue and continues") 
-        loadBackground(getLocal("currentZone") +  getLocal("currentStage"));
+        print("<b>" + state.player.name + "</b> " + "leaves the statue and continues") 
+        loadBackground(state.zone.current +  state.zone.stage);
         multipleEventsCounter = 0;
         clearInterval(eventClock);
         addXP(1);
@@ -1106,7 +1058,7 @@ function findStatue(){
 
 //Find book or rune
 function findRuneOrBook(){
-    var placesWithBooks = getLocal("currentZone") == "la_Ciudad" || getLocal("currentZone") == "el_Poblado" || getLocal("currentZone") == "el_Castillo" || getLocal("currentZone") == "la_Torre";
+    var placesWithBooks = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Castillo" || state.zone.current == "la_Torre";
     multipleEventsCounter += 1;
     if (multipleEventsCounter >= 2 && multipleEventsCounter <= 4 ) {
         var optionTemp = 2;
@@ -1123,22 +1075,22 @@ function findRuneOrBook(){
             objectToStudy = "rune";
             loadNPC("runa" + number)
         }
-        print("<b>" + getLocal("pjName") + "</b> " + "finds " + (previousEvent == "findRuneorBook" ? "another " : "a ") + objectToStudy) 
-        idx(objectToStudy)
+        print("<b>" + state.player.name + "</b> " + "finds " + (previousEvent == "findRuneorBook" ? "another " : "a ") + objectToStudy) 
+        count(objectToStudy)
         previousEvent = "findRuneorBook"
         break;
         case 2:
-        if (YesOrNot(getLocal("pStudy"),0)){
+        if (YesOrNot(stat("pStudy"),0)){
             playSound("statUp");
-            idx("sucessStudy");
+            count("sucessStudy");
             spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
             var learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
             //var statToUP = pickRandomItem("pAttack,pPolymorph,fCritic,pCritic,pHeal,fHeal,pStudy,pBotin,pChangeZone,pFindCapel,pFindMaterials,pOfrenda,fOfrenda")
             var statToIncrease = statObj[statObj.random()];
             var learned = statObj.increase(statToIncrease.code);
-            print("<b>" + getLocal("pjName") + "</b> " + learnTxt + " " + objectToStudy + " and increases the <i>" + learned + "</i>") 
-            idx("study_" + statToIncrease.code);
+            print("<b>" + state.player.name + "</b> " + learnTxt + " " + objectToStudy + " and increases the <i>" + learned + "</i>") 
+            count("study_" + statToIncrease.code);
             
             multipleEventsCounter = 4;
         }else{
@@ -1147,18 +1099,18 @@ function findRuneOrBook(){
             var learnTxt = pickRandomItem("tries to understand what is written in the,reads the glyphs in the,analyzes the information in the,continues reading the");
             //fail study try again
             if(multipleEventsCounter == 4){
-                idx("failStudy");
+                count("failStudy");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
                 var learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
             }
-            print("<b>" + getLocal("pjName") + "</b> " + learnTxt + " " + objectToStudy) 
+            print("<b>" + state.player.name + "</b> " + learnTxt + " " + objectToStudy) 
         }
         break;
         case 5:
-        print("<b>" + getLocal("pjName") + "</b> " + "leaves the " + objectToStudy + " and continues") 
+        print("<b>" + state.player.name + "</b> " + "leaves the " + objectToStudy + " and continues") 
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-        setLocal("currentNpc", "");
+        state.npc = "";
         objectToStudy = "";
         multipleEventsCounter = 0;
         clearInterval(eventClock);
@@ -1171,21 +1123,21 @@ function findRuneOrBook(){
 
 //Search an inn
 function searchInn(){
-    var placesWithInn = getLocal("currentZone") == "la_Ciudad" || getLocal("currentZone") == "el_Poblado" || getLocal("currentZone") == "el_Desierto"
+    var placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto"
     multipleEventsCounter += 1;
     switch(multipleEventsCounter){
         case 1:
             if(placesWithInn){
-                loadBackground(getLocal("currentZone") + "_taberna");
-                idx("taberna");
-                idx("taberna_zone_" + getLocal("currentZone"));
-                print("<b>" + getLocal("pjName") + "</b> " + "enters in an inn") 
+                loadBackground(state.zone.current + "_taberna");
+                count("taberna");
+                count("taberna_zone_" + state.zone.current);
+                print("<b>" + state.player.name + "</b> " + "enters in an inn") 
 
             }else{
                 loadNPC("sleepingbag");
                 var textCamping = "looks for a safe place too rest,hides to rest,falls asleep"
-                print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(textCamping));
-                idx("camping");
+                print("<b>" + state.player.name + "</b> " + pickRandomItem(textCamping));
+                count("camping");
 
             }
             break;
@@ -1194,39 +1146,39 @@ function searchInn(){
             if(placesWithInn){
                 // add event of fight if have not gold
                 //var innCost = getRandomInt(Number(localStorage.Gold) * 0.05,Number(localStorage.Gold) * 0.1);
-                var innCost = 1 + getRandomInt(Number(getLocal("lastGoldFromBattle")) * 2,Number(getLocal("lastGoldFromBattle")) * 3);
-                if ((Number(getLocal("Gold")) - innCost) <= 0){
+                var innCost = 1 + getRandomInt(state.player.lastBattleGold * 2,state.player.lastBattleGold * 3);
+                if ((state.player.gold - innCost) <= 0){
                     //innCost = Number(getLocal("Gold"));
                     //setLocal("Gold", 0);
                     //cannot affort
                     playSound("drink");
-                    print("<b>" + getLocal("pjName") + "</b> " + "cannot afford pay a bed, but takes a free drink");
+                    print("<b>" + state.player.name + "</b> " + "cannot afford pay a bed, but takes a free drink");
                     restAtInn = false;
                 }else{
                     spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
-                    setLocal("Gold", Number(getLocal("Gold")) - innCost);
-                    idx("GoldSpendInn",Number(innCost));
+                    state.player.gold = state.player.gold - innCost;
+                    count("GoldSpendInn",Number(innCost));
                     playSound("coins");
-                    print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(textSleeps) +  " (" + goldIcon + "-" + roundNumbertoLetter(innCost) + ")") 
+                    print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps) +  " (" + goldIcon + "-" + roundNumbertoLetter(innCost) + ")") 
                     restAtInn = true;
                 }
                 
             }else{
                 spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(textSleeps)) 
+                print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps)) 
                 restAtInn = false;
             }
             updateHeading();
             break;
         case 3:
             if(placesWithInn && restAtInn){
-                var rested = Number(getLocal("HPBase")) - Number(getLocal("HP"))
+                var rested = state.player.hpBase - state.player.hp
             }
             else{
-                var rested = (Number(getLocal("HPBase")) - Number(getLocal("HP"))) / getRandomInt(1,5)
+                var rested = (state.player.hpBase - state.player.hp) / getRandomInt(1,5)
             }
-            setLocal("HP", Number(getLocal("HP")) + rested);
-            if ((Number(getLocal("HP")) + rested) >= Number(getLocal("HPBase"))){
+            state.player.hp = state.player.hp + rested;
+            if ((state.player.hp + rested) >= state.player.hpBase){
                 var textRecover = "feels totally renewed,feels well rested,has new energies,regained his health"
             }else{
                 var textRecover = "feels slightly renewed,feels poorly rested,has some energies,regained some health"
@@ -1237,11 +1189,11 @@ function searchInn(){
             //spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
             updateHeading();
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-            setLocal("currentNpc", "");
-            print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(textRecover) + " (" + healIcon + roundNumbertoLetter(rested) + ")") 
+            state.npc = "";
+            print("<b>" + state.player.name + "</b> " + pickRandomItem(textRecover) + " (" + healIcon + roundNumbertoLetter(rested) + ")") 
             if(placesWithInn){
                 //pickRandomBackgroundForCurrentZone();
-                loadBackground(getLocal("currentZone") +  getLocal("currentStage"));
+                loadBackground(state.zone.current +  state.zone.stage);
             }
             restAtInn = false;
             multipleEventsCounter = 0;
@@ -1258,28 +1210,28 @@ function doOffering(){
         multipleEventsCounter += 1;
         switch(multipleEventsCounter){
             case 1:
-                var ofrendaGold = getRandomInt(Number(getLocal("Gold")) * 0.1,Number(getLocal("Gold")) * 0.5)
-                feGanada = (ofrendaGold * getLocal("fOfrenda"));
-                feGanada *= Number(getLocal("feMultiplicator"));
-                setLocal("fe", Number(getLocal("fe")) + feGanada);
-                setLocal("Gold", Number(getLocal("Gold")) - ofrendaGold);
-                idx("offers");
-                idx("GoldOffered", Math.round(ofrendaGold));
-                idx("FeByGold",Math.round(feGanada));
+                var ofrendaGold = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
+                feGanada = (ofrendaGold * stat("fOfrenda"));
+                feGanada *= state.player.faithMultiplier;
+                state.player.faith = state.player.faith + feGanada;
+                state.player.gold = state.player.gold - ofrendaGold;
+                count("offers");
+                count("GoldOffered", Math.round(ofrendaGold));
+                count("FeByGold",Math.round(feGanada));
                 playSound("coins");
                 spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
                 var textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
-                print("<b>" + getLocal("pjName") + "</b>" + " offers " + goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
+                print("<b>" + state.player.name + "</b>" + " offers " + goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
                 break;
             case 2:
                 //animation anks for pj
                 //playSound("pray");
                 spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + getLocal("pjName") + "</b>" + " leaves the shire and continue the journey" + " (" + spiritIcon + roundNumbertoLetter(feGanada) + ")");
+                print("<b>" + state.player.name + "</b>" + " leaves the shire and continue the journey" + " (" + spiritIcon + roundNumbertoLetter(feGanada) + ")");
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-                setLocal("currentNpc", "");
+                state.npc = "";
                 //pickRandomBackgroundForCurrentZone();
-                loadBackground(getLocal("currentZone") +  getLocal("currentStage"));
+                loadBackground(state.zone.current +  state.zone.stage);
                 multipleEventsCounter = 0;
                 clearInterval(eventClock);
                 disableCenterBtn = false;
@@ -1296,24 +1248,24 @@ function doOffering(){
         switch(optionTemp){
             case 1:
                 var textPray = pickRandomItem(" adore you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor")
-                print("<b>" + getLocal("pjName") + "</b>" + textPray)
+                print("<b>" + state.player.name + "</b>" + textPray)
                 break;
             case 2:
                 playSound("pray");
                 spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
                 feGanada = calculateFe();
-                feGanada *= Number(getLocal("feMultiplicator"))
-                setLocal("fe", Number(getLocal("fe")) + feGanada);
-                idx("FeByPray",Math.round(feGanada));
+                feGanada *= state.player.faithMultiplier
+                state.player.faith = state.player.faith + feGanada;
+                count("FeByPray",Math.round(feGanada));
                 var textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
-                print("<b>" + getLocal("pjName") + "</b>" + textPray + " (" + spiritIcon + roundNumbertoLetter(feGanada) + ")")
+                print("<b>" + state.player.name + "</b>" + textPray + " (" + spiritIcon + roundNumbertoLetter(feGanada) + ")")
             break;
             case 5:
-                print("<b>" + getLocal("pjName") + "</b>" + " leaves the shire and continues")
+                print("<b>" + state.player.name + "</b>" + " leaves the shire and continues")
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-                setLocal("currentNpc", "");
+                state.npc = "";
                 //pickRandomBackgroundForCurrentZone();
-                loadBackground(getLocal("currentZone") +  getLocal("currentStage"));
+                loadBackground(state.zone.current +  state.zone.stage);
                 disableCenterBtn = false;
                 offer = false;
                 multipleEventsCounter = 0;
@@ -1331,7 +1283,7 @@ updateHeading();
 
 
 //Select random spell per level
-function getSpell(lvlBase = Math.floor(Number(getLocal("lvl")) / 10)){
+function getSpell(lvlBase = Math.floor(state.player.lvl / 10)){
     //spellTier0
     var i;
     var spellSelected = "";
@@ -1352,23 +1304,23 @@ function getSpell(lvlBase = Math.floor(Number(getLocal("lvl")) / 10)){
 //Add gold
 function addGold(){
     if (bossCombat){
-         var possibleGold = Number(getLocal("HPBase")) * Number(getLocal("rGold"));
-         setLocal("lastGoldFromBattle", getRandomInt(possibleGold,possibleGold * 2) + 1);
-         setLocal("Gold", Number(getLocal("Gold")) + (Number(getLocal("lastGoldFromBattle")) * bossGoldMultiplier));
-         idx("GoldFromBosses", (Number(getLocal("lastGoldFromBattle")) * (bossGoldMultiplier)));
+         var possibleGold = state.player.hpBase * config.balance.rGold;
+         state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
+         state.player.gold = state.player.gold + (state.player.lastBattleGold * bossGoldMultiplier);
+         count("GoldFromBosses", (state.player.lastBattleGold * (bossGoldMultiplier)));
     }else if(hydraCombat){
-        var possibleGold = Number(getLocal("HPBase")) * Number(getLocal("rGold"));
-         setLocal("lastGoldFromBattle", getRandomInt(possibleGold,possibleGold * 2) + 1);
-         setLocal("Gold", Number(getLocal("Gold")) + (Number(getLocal("lastGoldFromBattle")) * 15));
-         idx("GoldFromBosses", (Number(getLocal("lastGoldFromBattle")) * (15)));
+        var possibleGold = state.player.hpBase * config.balance.rGold;
+         state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
+         state.player.gold = state.player.gold + (state.player.lastBattleGold * 15);
+         count("GoldFromBosses", (state.player.lastBattleGold * (15)));
     }else{
      //if (eval(enemy).hasgold == "true") {
         if (enemyTypes[enemy].hasgold == "true") {
-         var possibleGold = Number(getLocal("HPBase")) * Number(getLocal("rGold"));
+         var possibleGold = state.player.hpBase * config.balance.rGold;
          var goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
-         setLocal("lastGoldFromBattle", goldcurrentBattle);
-         setLocal("Gold", Number(getLocal("Gold")) + goldcurrentBattle);
-         idx("GoldFromEnemies", goldcurrentBattle);
+         state.player.lastBattleGold = goldcurrentBattle;
+         state.player.gold = state.player.gold + goldcurrentBattle;
+         count("GoldFromEnemies", goldcurrentBattle);
          }else{
              //ToDo: add some material or resource
          }
@@ -1378,11 +1330,11 @@ function addGold(){
 
 //Add XP after a battle or exploration
 function addXP(specialMultiplier = 1){
-    var xpGained = ((Number(getLocal("XPbyEnemy")) * specialMultiplier));
+    var xpGained = ((state.player.xpPerEnemy * specialMultiplier));
     //console.log(("\t" + getLocal("lvl")) +"\t"+ xpGained);
-    setLocal("XP", (xpGained + Number(getLocal("XP"))));
+    state.player.xp = (xpGained + state.player.xp);
     updateHeading();
-    if(Number(getLocal("XP")) >= Number(getLocal("XPNextLevel"))){
+    if(state.player.xp >= state.player.xpNext){
         levelUP();
     };
 };
@@ -1412,7 +1364,7 @@ function getBotin() {
                     var number = getRandomInt(1,4);
                     loadNPC("pot" + number);
             }
-            print("<b>" + getLocal("pjName") + "</b>" + " sees " + (previousEvent == "getBotin" ? "another " : "a ")  + objectToBreak);
+            print("<b>" + state.player.name + "</b>" + " sees " + (previousEvent == "getBotin" ? "another " : "a ")  + objectToBreak);
             break;
         case 2:
         if (objectToBreak == "bag"){
@@ -1432,16 +1384,16 @@ function getBotin() {
             spell("spellPush9",false,frameWidth,frameHeight,currentFrame,shift);
         }
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-        setLocal("currentNpc", "");
-        var goldBotin = 1 + getRandomInt(Number(getLocal("lastGoldFromBattle")), Number(getLocal("lastGoldFromBattle")) * 10);
-        print("<b>" + getLocal("pjName") + "</b>" + botinTexts + goldIcon + roundNumbertoLetter(goldBotin));
-        idx("BotinGot");
-        idx("GoldFromBotin",goldBotin)
-        idx("GoldFromBotin_" + objectToBreak,goldBotin)
-        idx("BotinGot_" + objectToBreak);
-        setLocal("Gold", Number(getLocal("Gold")) + goldBotin);
-        if(Number(check("idx_BotinGot_chest")) > 100){logro.set(logro.logro_botines)};
-        if(Number(check("idx_BotinGot_pot")) > 100){logro.set(logro.logro_pots)};
+        state.npc = "";
+        var goldBotin = 1 + getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 10);
+        print("<b>" + state.player.name + "</b>" + botinTexts + goldIcon + roundNumbertoLetter(goldBotin));
+        count("BotinGot");
+        count("GoldFromBotin",goldBotin)
+        count("GoldFromBotin_" + objectToBreak,goldBotin)
+        count("BotinGot_" + objectToBreak);
+        state.player.gold = state.player.gold + goldBotin;
+        if(Number(counterText("BotinGot_chest")) > 100){logro.set(logro.logro_botines)};
+        if(Number(counterText("BotinGot_pot")) > 100){logro.set(logro.logro_pots)};
         previousEvent = "getBotin"
         updateHeading();    //Update heading
         multipleEventsCounter = 0;
@@ -1463,9 +1415,9 @@ function changeLocality() {
     switch (multipleEventsCounter) {
     case 1:
         //get new zone
-        setLocal("lastZone", getLocal("currentZone"));
+        state.zone.last = state.zone.current;
         //save in getLocal("currentZone")
-        print("<b>" + getLocal("pjName") + "</b> left the " + zones[getLocal("lastZone")].name);
+        print("<b>" + state.player.name + "</b> left the " + zones[state.zone.last].name);
         
         getZone();
         //get a new zone
@@ -1473,8 +1425,8 @@ function changeLocality() {
     case 2:
         //change background
         //pickRandomBackgroundForCurrentZone();
-        loadBackground(getLocal("currentZone") + getLocal("currentStage"));
-        print("<b>" + getLocal("pjName") + "</b> is entering to the " + zones[getLocal("currentZone")].name + ", " + pickRandomItem(zones[getLocal("currentZone")].legend));
+        loadBackground(state.zone.current + state.zone.stage);
+        print("<b>" + state.player.name + "</b> is entering to the " + zones[state.zone.current].name + ", " + pickRandomItem(zones[state.zone.current].legend));
         break;
     case 3:
         //cancel the Interval, put 0 to the counter and trigger a new event
@@ -1494,47 +1446,47 @@ function getEnemy() {
     //generate a unique type of attack for each enemy
     bossCombat = false;
     hydraCombat = false;
-    if (YesOrNot(getLocal("pGetBoss"), 0)) {
+    if (YesOrNot(config.balance.pGetBoss, 0)) {
         playSound("boss");
-        idx("Bosses");
+        count("Bosses");
         bossCombat = true;
         bossMultiplier = 2.5;
         bossGoldMultiplier = 5;
-        var boss = zones[getLocal("currentZone")].boss;
+        var boss = zones[state.zone.current].boss;
         // if (boss == "cuboq" || boss == "etymos" || boss == "infraespectro"){
         //     document.getElementById("npcCanvas").style.opacity = 0.7;
         // }else{
         //     document.getElementById("npcCanvas").style.opacity = 1;
         // }
         enemy = boss;
-        idx("typeBoss_" + boss)
+        count("typeBoss_" + boss)
         loadNPC(boss);
-        enemyHP = (getRandomInt(Number(getLocal("rangeEnemyHP")) * 0.75, Number(getLocal("rangeEnemyHP")) * 1.25)) * bossMultiplier;
+        enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * bossMultiplier;
         enemyHPbase = Math.round(enemyHP)
         updateHeartNPC()
         //enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + boss.toUpperCase() + "</span>";
         enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + enemyTypes[boss].name.toUpperCase() + "</span>";
     } else {
         //spellEnemy = pickRandomItem("spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush6,spellPush7,spellPush8,spellPush9,spellPush10");
-        enemy = pickRandomItem(zones[getLocal("currentZone")].enemies).toLowerCase();
+        enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
         // if (!!eval(enemy).translucid){
         //     document.getElementById("npcCanvas").style.opacity = 0.8;
         // }else{
         //     document.getElementById("npcCanvas").style.opacity = 1;
         // }
-        idx("enemy_" + enemy);
+        count("enemy_" + enemy);
         var number = Math.floor((Math.random() * enemyTypes[enemy].max) + 1);
         //random number of the image max    
         //select a spell based on the school of enemy
         spellEnemy = pickRandomItem(npcSpells[enemySprites[enemy + number].type]);
         enemyAndNumber = enemy + number;
         if (enemySprites[enemyAndNumber].rare == 1){
-            idx("rareEnemyEncounters");
+            count("rareEnemyEncounters");
         }else{
-            idx("enemyEncounters");
+            count("enemyEncounters");
         }
         loadNPC(enemy + number);
-        enemyHP = (getRandomInt(Number(getLocal("rangeEnemyHP")) * 0.75, Number(getLocal("rangeEnemyHP")) * 1.25));
+        enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
         enemyHPbase = Math.round(enemyHP)
         updateHeartNPC()
         var raretext = (enemySprites[enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
@@ -1562,7 +1514,7 @@ function getEnemy() {
         startBattleText = "has entered in " + article + " battle with a Boss!,finds " + article + " Boss!,start " + article + " fight with a Boss!"
         previousEvent = "boss";
     }
-    print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(startBattleText));
+    print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
     
     eventClock = setInterval(battle, masterTime);
 };
@@ -1576,23 +1528,23 @@ function getHydra(newEncounter = false){
     bossCombat = false;
     hydraCombat = true;
     playSound("hidra");
-    hydra =  zones[getLocal("currentZone")].hidrasName;
-    if(!localStorage[thx("currentHead" + hydra)]){setLocal("currentHead" + hydra, 1)};
+    hydra =  zones[state.zone.current].hidrasName;
+    if(!state.hydraHeads[hydra]){state.hydraHeads[hydra] = 1};
     enemy = hydra;
-    loadNPC(hydra + getLocal("currentHead" + hydra));
-    enemyHP = (getRandomInt(Number(getLocal("rangeEnemyHP")) * 0.75, Number(getLocal("rangeEnemyHP")) * 1.25)) * (Number(getLocal("currentHead" + hydra)));
+    loadNPC(hydra + state.hydraHeads[hydra]);
+    enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * (state.hydraHeads[hydra]);
     enemyHPbase = Math.round(enemyHP)
     updateHeartNPC();
     enemyName = "<span style='color:DarkGreen'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + hydra.toUpperCase() + "</span>";
     if (newEncounter){
-        idx("Hydras");
-        idx("typeofHydras_" + hydra)
+        count("Hydras");
+        count("typeofHydras_" + hydra)
         var startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
-        print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(startBattleText));
+        print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
         eventClock = setInterval(battle, masterTime);
     } else {
         var startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
-        print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(startBattleText));
+        print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
     }
     
 }
@@ -1601,27 +1553,27 @@ function getHydra(newEncounter = false){
 
 //Performs attack
 function attackEV() {
-    if (YesOrNot(getLocal("pPolymorph"), 0) && !hydraCombat && !bossCombat && !polymorphed && enemy !== "baba" && enemy !== "el_elemental" && enemy !== "el_ent" && enemy !== "el_espectro" && enemy !== "el_esqueleto" && enemy !== "el_golem" && enemy !== "el_ojo" && enemy !== "la_esencia"){
+    if (YesOrNot(stat("pPolymorph"), 0) && !hydraCombat && !bossCombat && !polymorphed && enemy !== "baba" && enemy !== "el_elemental" && enemy !== "el_ent" && enemy !== "el_espectro" && enemy !== "el_esqueleto" && enemy !== "el_golem" && enemy !== "el_ojo" && enemy !== "la_esencia"){
         if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
         enemyHP = 1;
         updateHeartNPC()
         spell("spellPinBlue_16",false,frameWidth,frameHeight,currentFrame,shift);
-        idx("school_" + spells.spellPinBlue_16.school)
+        count("school_" + spells.spellPinBlue_16.school)
         polymorphedAnimal = pickRandomItem("gallina,oveja");
         playSound(polymorphedAnimal);
         loadNPC(polymorphedAnimal);
-        print("<b>" + getLocal("pjName") + "</b>" + " cast polymorphism!");
-        idx("Polymorph_" + polymorphedAnimal);
+        print("<b>" + state.player.name + "</b>" + " cast polymorphism!");
+        count("Polymorph_" + polymorphedAnimal);
         polymorphed = true;
     } else {
-        if (YesOrNot(getLocal("pAttack"), 0)) {
+        if (YesOrNot(stat("pAttack"), 0)) {
             //determine the prob of attack, if fail enemy attack
-            if (YesOrNot(getLocal("pCritic"), 0)) {
+            if (YesOrNot(stat("pCritic"), 0)) {
                 //animateClock = setInterval(animatePJ, 100)                
                 if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
                 //determine if is critical or not
-                var pjAttackWithCritic = Number(getLocal("attack")) * Number(getLocal("fCritic")) * Number(getLocal("fAttack"));
-                pjAttackWithCritic *= Number(getLocal("sacredDamageMultiplier"));
+                var pjAttackWithCritic = state.player.attack * stat("fCritic") * stat("fAttack");
+                pjAttackWithCritic *= config.balance.sacredDamageMultiplier;
                 var spellId = getSpell();
                 if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                     pjAttackWithCritic = pjAttackWithCritic * 4 //if is one of the divine powers
@@ -1632,17 +1584,17 @@ function attackEV() {
                     enemyHP = Math.round(enemyHP) - Math.round(pjAttackWithCritic);
                 }
                 updateHeartNPC()
-                idx("school_" + spells[spellId].school)
+                count("school_" + spells[spellId].school)
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift,true);
-                print("<b>" + getLocal("pjName") + "</b> performs a <b>critic attack!</b>" + " (" + attackIcon + roundNumbertoLetter(Number(getLocal("attack")) * Number(getLocal("fAttack"))) + ") &times; " + Math.round(getLocal("fCritic")) + " - " + heartIcon + roundNumbertoLetter(enemyHP));
+                print("<b>" + state.player.name + "</b> performs a <b>critic attack!</b>" + " (" + attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + heartIcon + roundNumbertoLetter(enemyHP));
                 //if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
-                idx("Critics");
+                count("Critics");
             } else {
                 //animateClock = setInterval(animatePJ, 100)
                 if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
                 //attack with no critic
-                var pjHit = getRandomInt(Number(getLocal("attack")) * 0.5, Number(getLocal("attack"))) * Number(getLocal("fAttack"));
-                pjHit *= Number(getLocal("sacredDamageMultiplier"));
+                var pjHit = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
+                pjHit *= config.balance.sacredDamageMultiplier;
                 var spellId = getSpell();
                 if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                     pjHit *= 4 //if is one of the divine powers
@@ -1653,7 +1605,7 @@ function attackEV() {
                     enemyHP = Math.round(enemyHP) - Math.round(pjHit);
                 }
                 updateHeartNPC()
-                idx("school_" + spells[spellId].school)
+                count("school_" + spells[spellId].school)
                 var spellText = spells[spellId].name.toLowerCase()
                 
                 if (spells[spellId].school == "Physical"){
@@ -1662,11 +1614,11 @@ function attackEV() {
                     var text = pickRandomItem(" cast , attacks with ");
                 }
 
-                print("<b>" + getLocal("pjName") + "</b>" + text + spellText + " (" + attackIcon + roundNumbertoLetter(pjHit) + ") - " + heartIcon + roundNumbertoLetter(enemyHP));
+                print("<b>" + state.player.name + "</b>" + text + spellText + " (" + attackIcon + roundNumbertoLetter(pjHit) + ") - " + heartIcon + roundNumbertoLetter(enemyHP));
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift);
 
                 //if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
-                idx("Attacks");
+                count("Attacks");
 
             }
             if(pjAttackWithCritic > 500 || pjHit > 500){logro.set(logro.logro_attack500)}
@@ -1675,7 +1627,7 @@ function attackEV() {
             //enemy attack
             //animateClockNPC = setInterval(animateNPC, 100)
             if (document.hasFocus()){animateClockNPC = setInterval(animateNPC, 100)};
-            var enemyHit = getRandomInt(Number(getLocal("rangeEnemyAttack")) * 0.5, Number(getLocal("rangeEnemyAttack")) * Number(getLocal("fAttack"))) * bossMultiplier;
+            var enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * bossMultiplier;
 
             if (enemy == "midas"){enemyHit *= 2}//duplicate midas attack
 
@@ -1683,19 +1635,19 @@ function attackEV() {
                 enemyHit *= 4 //if is one of the divine powers
             }
 
-            if (Number(getLocal("HP")) - enemyHit < 0) {
-                setLocal("HP", 0);
+            if (state.player.hp - enemyHit < 0) {
+                state.player.hp = 0;
             } else {
-                setLocal("HP", Number(getLocal("HP")) - enemyHit);
+                state.player.hp = state.player.hp - enemyHit;
             }
             print(enemyName + " attacks (" + attackIcon + roundNumbertoLetter(enemyHit) + ")");
             if (bossCombat){
-                spellEnemy = pickRandomItem(zones[getLocal("currentZone")].bossSpell);
+                spellEnemy = pickRandomItem(zones[state.zone.current].bossSpell);
             }else if (hydraCombat){
-                spellEnemy = pickRandomItem(zones[getLocal("currentZone")].hidrasSpells);
+                spellEnemy = pickRandomItem(zones[state.zone.current].hidrasSpells);
             }
             spell(spellEnemy,true,frameWidth,frameHeight,currentFrame,shift);
-            idx("IncomingAttacks");
+            count("IncomingAttacks");
             //if (document.hasFocus()){animateClockNPC = setInterval(animateNPC, 100)};
         }
     }
@@ -1704,18 +1656,18 @@ function attackEV() {
 
 //Performs healing
 function healEV() {
-        idx("Heal");
-            var healOperation = Number(getLocal("HPBase")) * Number(getLocal("fHeal"));
+        count("Heal");
+            var healOperation = state.player.hpBase * stat("fHeal");
             var healHit = getRandomInt(healOperation * 0.5,healOperation);
-            if (Number(getLocal("HP")) + healHit > Number(getLocal("HPBase"))){
-                healHit =  Number(getLocal("HPBase")) - Number(getLocal("HP"));
-                setLocal("HP", getLocal("HPBase"));
+            if (state.player.hp + healHit > state.player.hpBase){
+                healHit =  state.player.hpBase - state.player.hp;
+                state.player.hp = state.player.hpBase;
             }else{
-                setLocal("HP", Number(getLocal("HP")) + healHit);
+                state.player.hp = state.player.hp + healHit;
             }
         playSound("heal");
         spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-        print("<b>" + getLocal("pjName") + "</b>" + pickRandomItem(" casts heal spell and restore , cast minor healing , use restauration ") + "(" + healIcon + roundNumbertoLetter(healHit) + ")");    
+        print("<b>" + state.player.name + "</b>" + pickRandomItem(" casts heal spell and restore , cast minor healing , use restauration ") + "(" + healIcon + roundNumbertoLetter(healHit) + ")");    
          
         
     
@@ -1752,13 +1704,12 @@ function cardCombat(){
 
 //Calculate fe per action (losses and gains)
 function calculateFe(){
-    return (getRandomInt(((Number(getLocal("HPBase")) * Number(getLocal("rGold")))),Number(getLocal("HPBase")) * Number(getLocal("rGold")) * 5 ));
+    return (getRandomInt(((state.player.hpBase * config.balance.rGold)),state.player.hpBase * config.balance.rGold * 5 ));
 }
 
 //Set the timer to avoid loss seconds
 function setLiveTime(){
-    if (!localStorage.timeTotal){localStorage.timWeTotal = 0}
-    localStorage.timeTotal = Number(localStorage.timeTotal) + (performance.now() - timeStart);
+    state.meta.playTimeMs += performance.now() - timeStart;
     timeStart = performance.now()
 }
 
@@ -1804,17 +1755,17 @@ function randomName() {
         name += pickRandomItem("A,E,I,O,U,B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z,Ss,Kh,Th,Br,Tr,Mr,Zr,Xh,Sj,Cr,Kr,Yh,'").toLowerCase();
         name += pickRandomItem("E,I,O,U,,,,,,,,,,").toLowerCase();
     }
-    idx("RandomNames");
-    if(!!localStorage[thx("pjName")]){
-    if(name == getLocal("pjName")){logro.set(logro.logro_namesake);}
+    count("RandomNames");
+    if(!!state.player.name){
+    if(name == state.player.name){logro.set(logro.logro_namesake);}
     };
 
     //avoid rename the two sacred
     if(enemyAndNumber == "el_hechicero10" || enemyAndNumber == "la_hechicera7" ){
-        if(!localStorage[thx(enemyAndNumber + "_name")]){
-            setLocal(enemyAndNumber + "_name", name);
+        if(!state.sacredNames[enemyAndNumber]){
+            state.sacredNames[enemyAndNumber] = name;
         }else{
-            name = getLocal(enemyAndNumber + "_name");
+            name = state.sacredNames[enemyAndNumber];
         }
     }
 
@@ -1832,21 +1783,21 @@ function randomName() {
 
 //Select random background for currentZone
 function pickRandomBackgroundForCurrentZone() {
-    var randomLocality = pickRandomItem(places[getLocal("currentZone") + getLocal("currentStage")].moves)
+    var randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].moves)
     loadBackground(randomLocality);
 };
 
 
 //Search for a close zone to move
 function getZone() {
-    if (getLocal("currentZone") !== undefined) {
-        idx("zonesChanged");
-        var randomLocality = pickRandomItem(places[getLocal("currentZone") + getLocal("currentStage")].destinations)
-        setLocal("currentZone", randomLocality.match(/\D+/).toString());//extract no digits
-        setLocal("currentStage", randomLocality.match(/\d+/).toString());//extract digits
-        idx("zone_" + getLocal("currentZone"));
+    if (state.zone.current !== undefined) {
+        count("zonesChanged");
+        var randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].destinations)
+        state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
+        state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
+        count("zone_" + state.zone.current);
         } else {
-        setLocal("currentZone", "la_Ciudad");//default start
+        state.zone.current = "la_Ciudad";//default start
     }
 };
 
@@ -1859,7 +1810,7 @@ function getZone() {
 
 //count number of spells that know
 function countSpellKnown(){
-    var lvlBase = Math.floor(Number(getLocal("lvl")) / 10)
+    var lvlBase = Math.floor(state.player.lvl / 10)
     var numberSpells = 0;
         for (var i = 0; i <= lvlBase; i++) { 
             numberSpells += Number(spellTiers[i].split(',').length)
@@ -1868,46 +1819,38 @@ function countSpellKnown(){
 }
 
 
-//check if the variable is undefined and put 0, intended for stats page
+//Stats page helpers (v1 scanned every localStorage key for these)
 
+// A counter formatted for the stats page, or 0 if it never happened (v1: check("idx_..."))
+function counterText(name){
+    return state.counters[name] ? roundNumbertoLetter(state.counters[name]) : 0;
+}
 
-//count the kind of elements and add the number for organized list of idx
-//example of usage getListOfOrganizedLocalStorage(thx("idx_enemy_"))
-function getListOfOrganizedLocalStorage(token,inObj=""){
-    //Get all localstore variables, useful for stats page
+// "Golem (3), Slime (5)" for every counter starting with prefix, e.g. "enemy_".
+// Names come from enemies/zones, or from statObj/statueObj when inObj says so.
+function counterList(prefix, inObj = ""){
     var out = "";
-    for (var i = 0; i < localStorage.length; i++){
-        // do something with localStorage.getItem(localStorage.key(i));
-        //for example search for idx_
-        if (localStorage.key(i).match(token)){
-            if(token == "/logro_/"){
-                var text = localStorage.key(i);
-                out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + logro[text].name + '.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>' + logro[text].title + '</strong> <br>' + logro[text].description + '</div></div>';
-            }else{
-                if(inObj == ""){
-                var text = hx(localStorage.key(i).replace(token, ""));
-                out += capitalize((enemyTypes[text] || zones[text]).name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
-                } else{
-                    //var text = hx(localStorage.key(i).replace(token, ""));
-                    //out += capitalize([inObj + "." + text].name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
-                    var text = hx(localStorage.key(i).replace(token, ""));
-                                        out += capitalize({ statObj, statueObj }[inObj][text].name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
-                }
-                
-            }
-        } 
+    for (const [key, value] of Object.entries(state.counters)){
+        if (!key.startsWith(prefix)) continue;
+        var text = key.slice(prefix.length);
+        var entry = inObj == "" ? (enemyTypes[text] || zones[text]) : { statObj, statueObj }[inObj][text];
+        out += capitalize(entry.name) + " (" + value + "), ";
     }
     return out.slice(0,-2);
 }
 
+// Table rows for every unlocked achievement
+function achievementList(){
+    var out = "";
+    for (const text of Object.keys(state.achievements)){
+        out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + logro[text].name + '.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>' + logro[text].title + '</strong> <br>' + logro[text].description + '</div></div>';
+    }
+    return out;
+}
+
 //count logros
 function countLogros(){
-    var count = 0;
-    for (var i = 0; i < localStorage.length; i++){
-        if (localStorage.key(i).match(/logro_/)){
-            count++
-        }}
-    return count;
+    return Object.keys(state.achievements).length;
 }
 
 
@@ -1925,16 +1868,21 @@ function countLogros(){
  
   
 
-function list(){
-    scrollOpen()
-    var txt = "";
-    for (var i = 0; i < localStorage.length; i++){
-        txt += hx(localStorage.key(i)) + " = " + hx(localStorage.getItem(localStorage.key(i))) + "<br>"
-    }
-    document.getElementById("innerTextScroll").style.display = "block";
-    document.getElementById('innerTextScroll').innerHTML=txt;
-    document.getElementById("btnClose").style.top = objectSize * 0.13 + "px";
-}
+/*
+ * v1 developer helper (only reachable from the disabled console): listed every
+ * decoded localStorage entry. Not functional in v2; safe to delete later.
+ *
+ * function list(){
+ *     scrollOpen()
+ *     var txt = "";
+ *     for (var i = 0; i < localStorage.length; i++){
+ *         txt += hx(localStorage.key(i)) + " = " + hx(localStorage.getItem(localStorage.key(i))) + "<br>"
+ *     }
+ *     document.getElementById("innerTextScroll").style.display = "block";
+ *     document.getElementById('innerTextScroll').innerHTML=txt;
+ *     document.getElementById("btnClose").style.top = objectSize * 0.13 + "px";
+ * }
+ */
 
 //convert secs to string 
  
@@ -2030,10 +1978,10 @@ function responsiveLayout() {
      headLevel = objectSize * 0.109375;//56;
      charWidth = charHeight = squareSide = objectSize * 0.125;//64;
      //load chars if was ok to redraw
-    if (localStorage[thx("currentNpc")]) {
-        loadNPC(getLocal("currentNpc"));
+    if (state.npc) {
+        loadNPC(state.npc);
     }
-    if(getLocal("firstUse") !== "true"){loadCanvasChar(getLocal("lvl"), squareSide, headLevel);}
+    if(!state.firstUse){loadCanvasChar(state.player.lvl, squareSide, headLevel);}
     if (pjDead){loadAlterCanvasChar("muerto", squareSide, headLevel);
 };
     
@@ -2091,7 +2039,7 @@ function getEM(){
 //Default layout for mobile and desktop
 function layoutPortrait(){
 
-    if(getLocal("firstUse") == "true"){
+    if(state.firstUse){
         document.getElementById("nubes").style.display = "none" ;
         document.getElementById("launcher").style.display = "block" ;
         //fadeOut(document.getElementById("nubes"))
@@ -2343,7 +2291,7 @@ function layoutPortrait(){
 //Change layout when is landscape in mobile only
 function layoutLandscapeMobile(){
 
-    if(getLocal("firstUse") == "true"){
+    if(state.firstUse){
         document.getElementById("launcher").style.display = "none" ;
         document.getElementById("nubes").style.display = "block" ;
         //fadeOut(document.getElementById("launcher"))
@@ -2559,14 +2507,14 @@ function localizarBocadillo(){
         document.getElementById("bocadilloMapa").style.display ="none";
         document.getElementById("pjMapa").style.display ="none";
     }else{
-        if(getLocal("currentZone") == "la_Mina" || getLocal("currentZone") == "la_Cueva" || getLocal("currentZone") == "el_Volcan"){
+        if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
             document.getElementById("backMapa").src = "img/mapaunderground.png";
         }else{
             document.getElementById("backMapa").src = "img/mapa.png";
         }
         if(!currentBackGround.match(/_altar/) && !currentBackGround.match(/_estatua/)){
         var localidad = places[currentBackGround];
-        document.getElementById("zoneMap").innerHTML= "The " + zones[getLocal("currentZone")].name;
+        document.getElementById("zoneMap").innerHTML= "The " + zones[state.zone.current].name;
         var mapWidth = document.getElementById("backMapa").style.width;
         document.getElementById("bocadilloMapa").style.display ="block";
         document.getElementById("pjMapa").style.display ="block";
@@ -2605,14 +2553,12 @@ function initialName(){
 
  
 
-    //add a pseudouniqueID for this device:
-    if(!localStorage[thx("uniqueID")]){
-        //uniqueID = Math.random().toString(36).substr(2, 16);
-        //localStorage.uniqueID = uniqueID;
-        setLocal("uniqueID",Math.random().toString(36).substr(2, 16))
-    };
+    // The Capricor is extinct once its last one was killed (v1 checked this inside the zone data)
+    if (state.achievements.logro_ultimocapricor) {
+        zones.el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
+    }
 
-    if(getLocal("firstUse") == "true"){
+    if(state.firstUse){
         document.getElementById("inputName").value = randomName();
         document.getElementById("launcher").style.display = "none" ;
 
@@ -2630,15 +2576,15 @@ function initialName(){
 //Only when start button is pressed
 function setName(){
     if(document.getElementById("inputName").value !== ""){
-            if(!localStorage[thx("pjName")]){setLocal("pjName",  document.getElementById("inputName").value)};
+            if(!state.player.name){state.player.name = document.getElementById("inputName").value};
         }else{
-            if(!localStorage[thx("pjName")]){setLocal("pjName", randomName())};
+            if(!state.player.name){state.player.name = randomName()};
         }
         document.getElementById("launcher").style.display = "none" ;
         document.getElementById("main").style.display = "block" ;
         //fadeOut(document.getElementById("launcher"))
         //fadeIn(document.getElementById("main"))
-        localStorage.timeTotal = 0;
+        state.meta.playTimeMs = 0;
         start();
 }
 
@@ -2706,22 +2652,29 @@ function killBtn(){
 }
 
 function realKill(){
-    if(!localStorage.cementery){localStorage.cementery = ""};
-    var birthDate = new Date(Date.parse(localStorage.initialDate)).toLocaleDateString("en", {year: 'numeric', month: 'long', day: 'numeric'});
-    var dieDate = new Date().toLocaleDateString("en", {year: 'numeric', month: 'long', day: 'numeric'});
-    localStorage.cementery = localStorage.cementery +  getLocal("pjName") + " (lvl: " + check("lvl") + ") died at the age of " + check("age") + ". " + birthDate + " - " + dieDate + "<br>";
-    clearInterval(animateClock); 
+    world.cemetery.push({
+        name: state.player.name,
+        lvl: state.player.lvl,
+        age: state.player.age,
+        born: state.meta.createdAt,
+        died: new Date().toISOString(),
+    });
+    clearInterval(animateClock);
     clearInterval(animateClockNPC);
     clearInterval(eventMasterClock);
     clearInterval(eventClock);
     multipleEventsCounter = 0;
-    //save uniqueID
-    var uniqueIDRescue = getLocal("uniqueID");
-    var cementery = localStorage.cementery;
-    localStorage.clear();
-    setLocal("uniqueID", uniqueIDRescue)
-    localStorage.cementery = cementery;
-    location.reload(true);
+    deleteSave();
+    location.reload();
+}
+
+// Cemetery lines as v1 wrote them: "Name (lvl: 12) died at the age of 23. May 3, 2026 - May 9, 2026"
+function cemeteryText(){
+    var dateOptions = {year: 'numeric', month: 'long', day: 'numeric'};
+    return world.cemetery.map(function(w){
+        return w.name + " (lvl: " + roundNumbertoLetter(w.lvl) + ") died at the age of " + roundNumbertoLetter(w.age) + ". " +
+            new Date(w.born).toLocaleDateString("en", dateOptions) + " - " + new Date(w.died).toLocaleDateString("en", dateOptions) + "<br>";
+    }).join("");
 }
 
 
@@ -2729,20 +2682,20 @@ function realKill(){
 function pjBtn(){
     if (!disablePjBtn){
         if(pjDead){
-            idx("divineTouch");
+            count("divineTouch");
             disablePjBtn = true;
             playSound("revive")
             spell("spellMultiDivine_28",true,frameWidth,frameHeight,currentFrame,shift);
-            print("<b>" + getLocal("pjName") + "</b> " + "feels the divine touch!");
+            print("<b>" + state.player.name + "</b> " + "feels the divine touch!");
             if (!!autorevive){
                 clearTimeout(autorevive);
                 autorevive = "";
             }
             //
-            setLocal("HP", getLocal("HPBase"));
+            state.player.hp = state.player.hpBase;
             loadBackground("curanderobg");
             pjDead = false;
-            loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
+            loadCanvasChar(state.player.lvl, squareSide, headLevel);
             loadNPC("curandero");
             //
             eventClock = setInterval(reviveEV, masterTime);
@@ -2750,28 +2703,28 @@ function pjBtn(){
             //heal pj
             // console.log("HP " + getLocal("HP"));
             // console.log("HPBase " + getLocal("HPBase"));
-            var healOperation = Number(getLocal("HPBase")) * Number(getLocal("fHeal"));
+            var healOperation = state.player.hpBase * stat("fHeal");
             var healHit = getRandomInt(healOperation * 0.5 ,healOperation * 2);
-            if ( Math.round(Number(getLocal("HP"))) +  Math.round(healHit) >  Math.round(Number(getLocal("HPBase")))){
-                healHit =   Math.round(Number(getLocal("HPBase"))) -  Math.round(Number(getLocal("HP"))); //modify heal to avoid overhealing
+            if ( Math.round(state.player.hp) +  Math.round(healHit) >  Math.round(state.player.hpBase)){
+                healHit =   Math.round(state.player.hpBase) -  Math.round(state.player.hp); //modify heal to avoid overhealing
             }
             var faithLost = healHit * getRandomInt(1,3);//determine faith cost
             //balance faith cost
-            if ( Math.round(Number(getLocal("fe"))) -  Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
-                faithLost = Number(getLocal("fe"));//update faith cost
+            if ( Math.round(state.player.faith) -  Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
+                faithLost = state.player.faith;//update faith cost
                 healHit = faithLost / getRandomInt(1,3);//update heal hit
             }
-            if ((Math.round(Number(getLocal("HP"))) < Math.round(Number(getLocal("HPBase")))) && ( Math.round(Number(getLocal("fe"))) > 0)){
-                idx("DivineHeal");
-                if (Number(getLocal("HP")) + healHit > Number(getLocal("HPBase"))){
-                    healHit = Number(getLocal("HPBase")) - Number(getLocal("HP"));//update values
-                    setLocal("HP", getLocal("HPBase"));
+            if ((Math.round(state.player.hp) < Math.round(state.player.hpBase)) && ( Math.round(state.player.faith) > 0)){
+                count("DivineHeal");
+                if (state.player.hp + healHit > state.player.hpBase){
+                    healHit = state.player.hpBase - state.player.hp;//update values
+                    state.player.hp = state.player.hpBase;
                     faithLost = healHit * getRandomInt(1,3)//update values
                 }else{
-                    setLocal("HP", Number(getLocal("HP")) + (healHit));
+                    state.player.hp = state.player.hp + (healHit);
                 } 
                 //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - faithLost);
-                setLocal("fe", Number(getLocal("fe")) - faithLost);
+                state.player.faith = state.player.faith - faithLost;
                 
                 // console.log("faithLost " + faithLost)
                 // console.log("healHit " + healHit)
@@ -2779,7 +2732,7 @@ function pjBtn(){
                 
                 playSound("heal");
                 spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + getLocal("pjName") + "</b> " + "feels a healing touch and recovers " + healIcon + roundNumbertoLetter(healHit)/* + " (" + spiritIcon + " -" + roundNumbertoLetter(faithLost) + ")"*/);
+                print("<b>" + state.player.name + "</b> " + "feels a healing touch and recovers " + healIcon + roundNumbertoLetter(healHit)/* + " (" + spiritIcon + " -" + roundNumbertoLetter(faithLost) + ")"*/);
 
             }
 
@@ -2789,15 +2742,15 @@ function pjBtn(){
 
 //npc divine button funct
 function npcBtn(){
-    if(!!localStorage[thx("currentNpc")] && !!enemy && Math.round(Number(getLocal("fe"))) > 0 && Math.round(enemyHP) > 1){
+    if(!!state.npc && !!enemy && Math.round(state.player.faith) > 0 && Math.round(enemyHP) > 1){
         //hurt npc
-        var divineHit = getRandomInt(Number(getLocal("attack")) * 1.5, Number(getLocal("attack")) * 3);
+        var divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
         if ( Math.round(enemyHP) -  Math.round(divineHit) <= 0){//modify the divineHit to avoid god kills
             divineHit = ( Math.round(enemyHP) - 1);
         }
         var faithLost =  divineHit * getRandomInt(1,3)
-        if ( Math.round(Number(getLocal("fe"))) - Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
-            faithLost = Number(getLocal("fe"));
+        if ( Math.round(state.player.faith) - Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
+            faithLost = state.player.faith;
             divineHit = faithLost / getRandomInt(1,3);//update divine hit
         }
 
@@ -2812,10 +2765,10 @@ function npcBtn(){
             enemyHP = Math.round(enemyHP) - (Math.round(divineHit));
             
             updateHeartNPC()
-            setLocal("fe", Number(getLocal("fe")) - faithLost);
+            state.player.faith = state.player.faith - faithLost;
             updateHeading();
-            print("<b>" + getLocal("pjName") + "</b> " + txt + heartIcon + " " + roundNumbertoLetter(enemyHP))
-            idx("DivineHit");
+            print("<b>" + state.player.name + "</b> " + txt + heartIcon + " " + roundNumbertoLetter(enemyHP))
+            count("DivineHit");
         }
     }
 
@@ -2823,20 +2776,20 @@ function npcBtn(){
 function centerBtn(){
     //increase faith like offer
     if(!disableCenterBtn){
-        if(Number(getLocal("Gold")) > 0 && !!currentBackGround.match(/altar/gi)){
+        if(state.player.gold > 0 && !!currentBackGround.match(/altar/gi)){
             disableCenterBtn = true;
-            var ofrendaGold = getRandomInt(Number(getLocal("Gold")) * 0.25, Number(getLocal("Gold")) * 0.75);
+            var ofrendaGold = getRandomInt(state.player.gold * 0.25, state.player.gold * 0.75);
             //feGanada = (ofrendaGold / getRandomInt(7,15)) * getLocal("fOfrenda");
-            feGanada = (ofrendaGold * Number(getLocal("fOfrenda")));
-            feGanada *= Number(getLocal("feMultiplicator"));
-            setLocal("fe", Number(getLocal("fe")) + feGanada);
-            setLocal("Gold", Number(getLocal("Gold")) - ofrendaGold);
+            feGanada = (ofrendaGold * stat("fOfrenda"));
+            feGanada *= state.player.faithMultiplier;
+            state.player.faith = state.player.faith + feGanada;
+            state.player.gold = state.player.gold - ofrendaGold;
             //localStorage.idx_offers = Number(localStorage.idx_offers) + ofrendaGold;
             var textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
-            print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(textoffer) + " (" + goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + spiritIcon + " " + roundNumbertoLetter(feGanada) + ")");
-            idx("DivineMandatoryOffers");
-            idx("GoldOffered", Math.round(ofrendaGold));
-            idx("FeByGold",Math.round(feGanada));
+            print("<b>" + state.player.name + "</b> " + pickRandomItem(textoffer) + " (" + goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + spiritIcon + " " + roundNumbertoLetter(feGanada) + ")");
+            count("DivineMandatoryOffers");
+            count("GoldOffered", Math.round(ofrendaGold));
+            count("FeByGold",Math.round(feGanada));
             updateHeading();
             playSound("coins");
             spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
@@ -2856,13 +2809,13 @@ function btnCloseEvent(){
 
 //map button funct
 function mapBtn(){
-    if(getLocal("currentZone") == "la_Mina" || getLocal("currentZone") == "la_Cueva" || getLocal("currentZone") == "el_Volcan"){
+    if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
         document.getElementById("backMapa").src = "img/mapaunderground.png";
     }else{
         document.getElementById("backMapa").src = "img/mapa.png";
     }
     document.getElementById("bocadilloMapa").src = "img/bocadillo.png";
-    document.getElementById("pjMapa").src = "img/lvl" + Math.floor(Number(getLocal("lvl")) / 10) * 10 + ".png";
+    document.getElementById("pjMapa").src = "img/lvl" + Math.floor(state.player.lvl / 10) * 10 + ".png";
     document.getElementById("mapa").style.display = "block";
     localizarBocadillo()
     
@@ -2910,7 +2863,7 @@ function archBtn(){
 function updateAchievements(){
 
     var txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
-    txt += getListOfOrganizedLocalStorage(/logro_/);
+    txt += achievementList();
     //txt += '<div class="divTableRow"><div class="divTableCell"><img src="img/no_logro.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>?????????????</strong> <br></div></div>';
     txt += "</div>"
     document.getElementById('innerTextScroll').innerHTML=txt;
@@ -2921,117 +2874,117 @@ function updateAchievements(){
 
 function updateStats(){
 
-    var secondsIngameInstats = ((Number(localStorage.timeTotal) + (performance.now() - timeStart))/1000).toFixed(0);
+    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - timeStart))/1000).toFixed(0);
     var numLogrosGanados = countLogros();
     statsPage = "<div id='stats'><span class='titles' id='titleStats'>Stats</span><br>" + 
     "<span class='subtitles'>Wizard</span><br>" + 
-    "Name: " + (getLocal("pjName")) + "<br>" +
-    "Level: " + check("lvl") + "<br>" +
-    "Age: " + check("age") + " yrs<br>" +
-    "Health points: " + check("HPBase") + "<br>" + 
-    "Attack points: " + check("attack") + "<br>" + 
-    "Critic multiplier: " + check("fCritic") + "<br>" + 
-    "Exp. to next level: " + Math.round((Number(getLocal("XPNextLevel")) - Number(getLocal("XP"))) * 100) + "<br>" + 
+    "Name: " + (state.player.name) + "<br>" +
+    "Level: " + roundNumbertoLetter(state.player.lvl) + "<br>" +
+    "Age: " + roundNumbertoLetter(state.player.age) + " yrs<br>" +
+    "Health points: " + roundNumbertoLetter(state.player.hpBase) + "<br>" + 
+    "Attack points: " + roundNumbertoLetter(state.player.attack) + "<br>" + 
+    "Critic multiplier: " + roundNumbertoLetter(stat("fCritic")) + "<br>" + 
+    "Exp. to next level: " + Math.round((state.player.xpNext - state.player.xp) * 100) + "<br>" + 
     "Time of existence: " + /*roundNumbertoLetter(secondsIngameInstats) + "~" +*/ secsToHours(secondsIngameInstats) + "<br>" +
     "<br><span class='subtitles'>Battles</span><br>" + 
-    "Attacks: " + check("idx_Attacks") + "<br>" + 
-    "Critic attacks: " + check("idx_Critics") + "<br>" + 
-    "Melee attacks: " + check("idx_school_Physical") + "<br>" + 
-    "Magical attacks: " + (Number(check("idx_Attacks")) - Number(check("idx_school_Physical")))  + "<br>" + 
-    "Attacks received: " + check("idx_IncomingAttacks") + "<br>" + 
-    "Enemy encounters: " + check("idx_enemyEncounters") + "<br>" + 
-    "Enemies derroted: " + check("idx_EnemiesKilled") + "<br>" + 
-    "Rare encounters: " + check("idx_rareEnemyEncounters") + "<br>" + 
-    "Rare derroted: " + check("idx_rareEnemiesKilled") + "<br>" + 
-    (check("idx_enemyEncounters") > 0 ? "Types of enemies found: " + getListOfOrganizedLocalStorage(thx("idx_enemy_")) + "<br>" : "") + 
+    "Attacks: " + counterText("Attacks") + "<br>" + 
+    "Critic attacks: " + counterText("Critics") + "<br>" + 
+    "Melee attacks: " + counterText("school_Physical") + "<br>" + 
+    "Magical attacks: " + (Number(counterText("Attacks")) - Number(counterText("school_Physical")))  + "<br>" + 
+    "Attacks received: " + counterText("IncomingAttacks") + "<br>" + 
+    "Enemy encounters: " + counterText("enemyEncounters") + "<br>" + 
+    "Enemies derroted: " + counterText("EnemiesKilled") + "<br>" + 
+    "Rare encounters: " + counterText("rareEnemyEncounters") + "<br>" + 
+    "Rare derroted: " + counterText("rareEnemiesKilled") + "<br>" + 
+    (counterText("enemyEncounters") > 0 ? "Types of enemies found: " + counterList("enemy_") + "<br>" : "") + 
     //"Bosses found: " + check("idx_Bosses") + "<br>" + 
-    "Bosses found: " + check("idx_Bosses") + (check("idx_Bosses") > 0 ? " {" + getListOfOrganizedLocalStorage(thx("idx_typeBoss_")) + "}": "") + "<br>" + 
-    "Bosses derroted: " + check("idx_BossesKilled") + "<br>" +
-    (getLocal("hydraMysteryResolved") == "true" &&  check("idx_Hydras") > 0 ?  "Hydras found: " + check("idx_Hydras") + " {" + getListOfOrganizedLocalStorage(thx("idx_typeofHydras_")) + "}<br>": "") +
-    (getLocal("hydraMysteryResolved") == "true" &&  check("idx_Hydras") > 0 ?  "Hydras derroted: " + check("idx_HydrasKilled") + "<br>" : "") +
-    (getLocal("hydraMysteryResolved") == "true" &&  check("idx_Hydras") > 0 ?  "Hydras heads chopped off: " + check("idx_HydrasHeadCut") + "<br>" : "") +
-    "Falls: " + check("idx_Deaths") + "<br>" + 
-    "Current flawless victory: " + check("idx_Combo") + "<br>" + 
-    "Longest flawless victory: " + check("idx_longestCombo") + "<br>" + 
+    "Bosses found: " + counterText("Bosses") + (counterText("Bosses") > 0 ? " {" + counterList("typeBoss_") + "}": "") + "<br>" + 
+    "Bosses derroted: " + counterText("BossesKilled") + "<br>" +
+    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras found: " + counterText("Hydras") + " {" + counterList("typeofHydras_") + "}<br>": "") +
+    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras derroted: " + counterText("HydrasKilled") + "<br>" : "") +
+    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras heads chopped off: " + counterText("HydrasHeadCut") + "<br>" : "") +
+    "Falls: " + counterText("Deaths") + "<br>" + 
+    "Current flawless victory: " + counterText("Combo") + "<br>" + 
+    "Longest flawless victory: " + counterText("longestCombo") + "<br>" + 
     "<br><span class='subtitles'>Magic</span><br>" + 
-    "Current magical level: " + Math.floor(Number(getLocal("lvl")) / 10) + "<br>" + 
+    "Current magical level: " + Math.floor(state.player.lvl / 10) + "<br>" + 
     "Known spells: " + countSpellKnown() + "<br>" + 
-    "Arcane spells cast: " + check("idx_school_Arcane") + "<br>" + 
-    "Healing spells cast: " + check("idx_Heal") + "<br>" + 
-    "Nature spells cast: " + check("idx_school_Nature") + "<br>" + 
-    "Fire spells cast: " + check("idx_school_Fire") + "<br>" + 
-    "Frost spells cast: " + check("idx_school_Frost") + "<br>" + 
-    "Thunder spells cast: " + check("idx_school_Thunder") + "<br>" + 
-    "Shadow spells cast: " + check("idx_school_Shadow") + "<br>" + 
-    "Divine spells cast: " + check("idx_school_Divine") + "<br>" + 
-    "Enemies polymorphed into a sheep: " + check("idx_Polymorph_oveja") + "<br>" + 
-    "Enemies polymorphed into a chicken: " + check("idx_Polymorph_gallina") + "<br>" + 
+    "Arcane spells cast: " + counterText("school_Arcane") + "<br>" + 
+    "Healing spells cast: " + counterText("Heal") + "<br>" + 
+    "Nature spells cast: " + counterText("school_Nature") + "<br>" + 
+    "Fire spells cast: " + counterText("school_Fire") + "<br>" + 
+    "Frost spells cast: " + counterText("school_Frost") + "<br>" + 
+    "Thunder spells cast: " + counterText("school_Thunder") + "<br>" + 
+    "Shadow spells cast: " + counterText("school_Shadow") + "<br>" + 
+    "Divine spells cast: " + counterText("school_Divine") + "<br>" + 
+    "Enemies polymorphed into a sheep: " + counterText("Polymorph_oveja") + "<br>" + 
+    "Enemies polymorphed into a chicken: " + counterText("Polymorph_gallina") + "<br>" + 
     "<br><span class='subtitles'>Study</span><br>" + 
-    "Books found: " + check("idx_book") + "<br>" + 
-    "Runes found: " + check("idx_rune") + "<br>" + 
-    "Successful studies: " + check("idx_sucessStudy") + "<br>" + 
-    "Failed studies: " + check("idx_failStudy") + "<br>" + 
-    "Successful statue studies: " + check("idx_sucessStudyStatue") + "<br>" + 
-    "Failed statue studies: " + check("idx_failStudyStatue") + "<br>" + 
-    (check("idx_sucessStudyStatue") > 0 ?  "Skills incresed studing books or runes: " + getListOfOrganizedLocalStorage(thx("idx_study_"),"statObj") + "<br>" : "") + 
+    "Books found: " + counterText("book") + "<br>" + 
+    "Runes found: " + counterText("rune") + "<br>" + 
+    "Successful studies: " + counterText("sucessStudy") + "<br>" + 
+    "Failed studies: " + counterText("failStudy") + "<br>" + 
+    "Successful statue studies: " + counterText("sucessStudyStatue") + "<br>" + 
+    "Failed statue studies: " + counterText("failStudyStatue") + "<br>" + 
+    (counterText("sucessStudyStatue") > 0 ?  "Skills incresed studing books or runes: " + counterList("study_", "statObj") + "<br>" : "") + 
     "<br><span class='subtitles'>Exploration</span><br>" + 
-    "Current zone: " + "The " + zones[getLocal("currentZone")].name + "<br>" + 
-    "Last zone: " + "The " + zones[getLocal("lastZone")].name + "<br>" + 
-    "Changes of zones: " + check("idx_zonesChanged") + "<br>" + 
-    "Times in the Prairie: " + check("idx_zone_la_Pradera") + "<br>" + 
-    "Times in the City: " + check("idx_zone_la_Ciudad") + "<br>" + 
-    "Times in the Castle: " + check("idx_zone_el_Castillo") + "<br>" + 
-    "Times in the Town: " + check("idx_zone_el_Poblado") + "<br>" + 
-    "Times in the Cave: " + check("idx_zone_la_Cueva") + "<br>" + 
-    "Times in the Grute: " + check("idx_zone_la_Gruta") + "<br>" + 
-    "Times in the Tower: " + check("idx_zone_la_Torre") + "<br>" + 
-    "Times in the Forest: " + check("idx_zone_el_Bosque") + "<br>" + 
-    "Times in the Swamp: " + check("idx_zone_el_Pantano") + "<br>" + 
-    "Times in the Dunes: " + check("idx_zone_las_Dunas") + "<br>" + 
-    "Times in the Tundra: " + check("idx_zone_la_Tundra") + "<br>" + 
-    "Times in the Volcano: " + check("idx_zone_el_Volcan") + "<br>" + 
-    "Times in the Desert: " + check("idx_zone_el_Desierto") + "<br>" + 
-    "Times in the Heidan: " + check("idx_zone_el_Heidan") + "<br>" + 
-    "Times in the Duenon: " + check("idx_zone_el_Duenon") + "<br>" + 
-    "Times in the Mine: " + check("idx_zone_la_Mina") + "<br>" + 
-    "Bags found: " + check("idx_BotinGot_bag") + "<br>" + 
-    "Chests found: " + check("idx_BotinGot_chest") + "<br>" + 
-    "Pots found: " + check("idx_BotinGot_pot") + "<br>" + 
-    "Barrels found: " + check("idx_BotinGot_barrel") + "<br>" + 
-    "Boxes found: " + check("idx_BotinGot_box") + "<br>" + 
-    "Total statues found: " + check("idx_statuesFound") + "<br>" + 
-    (check("idx_statuesFound") > 0 ? "Type of statues found: " + getListOfOrganizedLocalStorage(thx("idx_estatuas_"),"statueObj") + "<br>" : "") + 
+    "Current zone: " + "The " + zones[state.zone.current].name + "<br>" + 
+    "Last zone: " + "The " + zones[state.zone.last].name + "<br>" + 
+    "Changes of zones: " + counterText("zonesChanged") + "<br>" + 
+    "Times in the Prairie: " + counterText("zone_la_Pradera") + "<br>" + 
+    "Times in the City: " + counterText("zone_la_Ciudad") + "<br>" + 
+    "Times in the Castle: " + counterText("zone_el_Castillo") + "<br>" + 
+    "Times in the Town: " + counterText("zone_el_Poblado") + "<br>" + 
+    "Times in the Cave: " + counterText("zone_la_Cueva") + "<br>" + 
+    "Times in the Grute: " + counterText("zone_la_Gruta") + "<br>" + 
+    "Times in the Tower: " + counterText("zone_la_Torre") + "<br>" + 
+    "Times in the Forest: " + counterText("zone_el_Bosque") + "<br>" + 
+    "Times in the Swamp: " + counterText("zone_el_Pantano") + "<br>" + 
+    "Times in the Dunes: " + counterText("zone_las_Dunas") + "<br>" + 
+    "Times in the Tundra: " + counterText("zone_la_Tundra") + "<br>" + 
+    "Times in the Volcano: " + counterText("zone_el_Volcan") + "<br>" + 
+    "Times in the Desert: " + counterText("zone_el_Desierto") + "<br>" + 
+    "Times in the Heidan: " + counterText("zone_el_Heidan") + "<br>" + 
+    "Times in the Duenon: " + counterText("zone_el_Duenon") + "<br>" + 
+    "Times in the Mine: " + counterText("zone_la_Mina") + "<br>" + 
+    "Bags found: " + counterText("BotinGot_bag") + "<br>" + 
+    "Chests found: " + counterText("BotinGot_chest") + "<br>" + 
+    "Pots found: " + counterText("BotinGot_pot") + "<br>" + 
+    "Barrels found: " + counterText("BotinGot_barrel") + "<br>" + 
+    "Boxes found: " + counterText("BotinGot_box") + "<br>" + 
+    "Total statues found: " + counterText("statuesFound") + "<br>" + 
+    (counterText("statuesFound") > 0 ? "Type of statues found: " + counterList("estatuas_", "statueObj") + "<br>" : "") + 
     "<br><span class='subtitles'>Economy</span><br>" + 
-    "Current gold: " + check("Gold") + "<br>" + 
-    "Total gold looted: " + check("idx_GoldFromEnemies") + "<br>" + 
-    "Total gold looted from bosses: " + check("idx_GoldFromBosses") + "<br>" + 
-    "Total gold found: " + check("idx_GoldFromBotin") + "<br>" + 
-    "Total gold lost in battles: " + check("idx_goldLostInBattle") + "<br>" + 
-    "Gold found in bags: " + check("idx_GoldFromBotin_bag") + "<br>" + 
-    "Gold found in chests: " + check("idx_GoldFromBotin_chest") + "<br>" + 
-    "Gold found in pots: " + check("idx_GoldFromBotin_pot") + "<br>" + 
-    "Gold found in barrels: " + check("idx_GoldFromBotin_barrel") + "<br>" + 
-    "Gold found in boxes: " + check("idx_GoldFromBotin_box") + "<br>" + 
+    "Current gold: " + roundNumbertoLetter(state.player.gold) + "<br>" + 
+    "Total gold looted: " + counterText("GoldFromEnemies") + "<br>" + 
+    "Total gold looted from bosses: " + counterText("GoldFromBosses") + "<br>" + 
+    "Total gold found: " + counterText("GoldFromBotin") + "<br>" + 
+    "Total gold lost in battles: " + counterText("goldLostInBattle") + "<br>" + 
+    "Gold found in bags: " + counterText("GoldFromBotin_bag") + "<br>" + 
+    "Gold found in chests: " + counterText("GoldFromBotin_chest") + "<br>" + 
+    "Gold found in pots: " + counterText("GoldFromBotin_pot") + "<br>" + 
+    "Gold found in barrels: " + counterText("GoldFromBotin_barrel") + "<br>" + 
+    "Gold found in boxes: " + counterText("GoldFromBotin_box") + "<br>" + 
     "<br><span class='subtitles'>Leisure</span><br>" + 
-    "Rests in inns: " + check("idx_taberna") + "<br>" + 
-    "Gold spend at inns: " + check("idx_GoldSpendInn") + "<br>" + 
-    "Campings: " + check("idx_camping") + "<br>" + 
+    "Rests in inns: " + counterText("taberna") + "<br>" + 
+    "Gold spend at inns: " + counterText("GoldSpendInn") + "<br>" + 
+    "Campings: " + counterText("camping") + "<br>" + 
     "<br><span class='subtitles'>Spirituality</span><br>" + 
-    "Faith: " + check("fe") + "<br>" + 
-    "Offers: " + check("idx_offers") + "<br>" + 
-    "Tithe: " + check("idx_GoldOffered") + "<br>" + 
-    "Faith obtained by gold: " + check("idx_FeByGold") + "<br>" + 
-    "Faith obtained by pray: " + check("idx_FeByPray") + "<br>" + 
-    "Faith obtained by corruption erradication: " + check("idx_FeByCleanCorruption") + "<br>" + 
-    "Shrines visited: " + check("idx_altar") + "<br>" + 
-    (check("idx_altar") > 0 ? "Shrines visited in: " + getListOfOrganizedLocalStorage(thx("idx_altar_zone_")) + "<br>" : "") + 
-    "Mandatory offers: " + check("idx_DivineMandatoryOffers") + "<br>" + 
-    "Negations: " + check("idx_negar") + "<br>" + 
-    "Self recovery: " + check("idx_selfRevive")  + "<br>" + 
-    "Recovered by healer: " + check("idx_hospital") + "<br>" + 
-    "Divine touches: " + check("idx_divineTouch") + "<br>" + 
-    "Divine healings: " + check("idx_DivineHeal") + "<br>" + 
-    "Divine punishments to enemies: " + check("idx_DivineHit") + "<br>" + 
+    "Faith: " + roundNumbertoLetter(state.player.faith) + "<br>" + 
+    "Offers: " + counterText("offers") + "<br>" + 
+    "Tithe: " + counterText("GoldOffered") + "<br>" + 
+    "Faith obtained by gold: " + counterText("FeByGold") + "<br>" + 
+    "Faith obtained by pray: " + counterText("FeByPray") + "<br>" + 
+    "Faith obtained by corruption erradication: " + counterText("FeByCleanCorruption") + "<br>" + 
+    "Shrines visited: " + counterText("altar") + "<br>" + 
+    (counterText("altar") > 0 ? "Shrines visited in: " + counterList("altar_zone_") + "<br>" : "") + 
+    "Mandatory offers: " + counterText("DivineMandatoryOffers") + "<br>" + 
+    "Negations: " + counterText("negar") + "<br>" + 
+    "Self recovery: " + counterText("selfRevive")  + "<br>" + 
+    "Recovered by healer: " + counterText("hospital") + "<br>" + 
+    "Divine touches: " + counterText("divineTouch") + "<br>" + 
+    "Divine healings: " + counterText("DivineHeal") + "<br>" + 
+    "Divine punishments to enemies: " + counterText("DivineHit") + "<br>" + 
     "<br><span class='subtitles'>Achievements</span><br>" + 
     "Currenly won: " + numLogrosGanados + "<br>" + 
     "Completation: " + Math.round((numLogrosGanados / (Object.keys(logro).length - 1)) * 100) + "%<br>" + 
@@ -3073,9 +3026,9 @@ function updateHelp(){
         '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + em * 1.5 + 'px">...</span></div><div class="divTableCell">Showed near the bottom-right corner, searching for new content or updates.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + em * 1.5 + 'px">.</span></div><div class="divTableCell">Showed near the bottom-right corner, the game can run but some problem with the offline functions happens. No enough space, your browser does not allow cache, or cache is in conflict with a previous one.</div></div>' +
    '</div>' +
-   '<div class="faq">The wizard</div><div class="a">The center of this game, ' + (getLocal("pjName")) + ' is growing in power and ambitions. The fate is just one.</div>' +
+   '<div class="faq">The wizard</div><div class="a">The center of this game, ' + (state.player.name) + ' is growing in power and ambitions. The fate is just one.</div>' +
    '<div class="faq">The player</div><div class="a"><b>You</b>, to avoid interrupt the free will of the wizard, you can only watch and help limited reducing the faith of the wizard. If the wizard has faith < 0 you cannot help him.</div>' +
-   '<div class="faq">Divine touches</div><div class="a">This is the main player interaction with the wizard and occurs when click or touch the Scene panel. Some basic interactions are: <ol><li>Touch the wizard heal him (cost faith).</li><li>Touch the wizard when he is dead (soft dead) revive him.</li><li>Touch the enemy damage him/her/it (cost faith).</li><li>Touch a shire mandate the wizard to give a tribute in gold (gain faith).</li>'+(check("travelFavor") == "1" ? "<li>Touch the map teleport the wizard to the selected area.</li>" : "")+'</ol></div>' +
+   '<div class="faq">Divine touches</div><div class="a">This is the main player interaction with the wizard and occurs when click or touch the Scene panel. Some basic interactions are: <ol><li>Touch the wizard heal him (cost faith).</li><li>Touch the wizard when he is dead (soft dead) revive him.</li><li>Touch the enemy damage him/her/it (cost faith).</li><li>Touch a shire mandate the wizard to give a tribute in gold (gain faith).</li>'+(state.travelFavor ? "<li>Touch the map teleport the wizard to the selected area.</li>" : "")+'</ol></div>' +
    '<div class="faq">Kill the wizard</div><div class="a">' +
    '<div class="divTableRow"><div class="divTableCell"><img src="img/diebtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">This is a definitive option, with this the player can destroy the current wizard in order to create another, <b>this action cannot be undone.</b></div></div>' +
    '</div>' +
@@ -3086,7 +3039,7 @@ function updateHelp(){
    '<div class="divTableRow"><div class="divTableCell"><img src="img/statsbtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Many stats about what happen in the wizard trip. Pure informational.</div></div>' +
    '</div>' +
    '<div class="faq">Map</div><div class="a">' + 
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/mapbtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (check("travelFavor") == "1" ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="img/mapbtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
    '</div>' +
    '<div class="faq">Study and skills</div><div class="a">During the wizard\'s trip, books, runes and statues can be found available to study. A sucessful study of them increase some stats. In this way the wizard can be a strong archmage or a devote donor to your cause.</div>' +
    '<div class="faq">Faith</div><div class="a">Your interaction with the wizard\'s world depends of this currency. The wizard gains faith praying and offering in your shrines. He loses the faith avoiding enter to the shires, reviving himself, and after each divine touch.</div>' +
@@ -3130,19 +3083,19 @@ function updateHelp(){
 }
 
 function updateKill(){
-    var secondsIngameInstats = ((Number(localStorage.timeTotal) + (performance.now() - timeStart))/1000).toFixed(0);
+    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - timeStart))/1000).toFixed(0);
     var txt = '<div id="kill"><span class="titles" id="titleKill">Kill</span><br>' +
     '<div>' + 
-    'Do you want to kill <b>' + getLocal("pjName") + '</b>?<br><br>' +
+    'Do you want to kill <b>' + state.player.name + '</b>?<br><br>' +
     'All progress, achievement and stats of this wizard will be lost forever (<b>this action cannot be undone</b>).<br><br>' +
-    '<b>' + getLocal("pjName") + '</b> has existed for ' + secsToHours(secondsIngameInstats) + ", he is on level " + check("lvl") + (countLogros() > 0 ? " and has " + countLogros() + " achievements" : "") + "<br><br>" +
+    '<b>' + state.player.name + '</b> has existed for ' + secsToHours(secondsIngameInstats) + ", he is on level " + roundNumbertoLetter(state.player.lvl) + (countLogros() > 0 ? " and has " + countLogros() + " achievements" : "") + "<br><br>" +
     'For kill the wizard press Kill button below, otherwise just close this scroll.' +
     '</div>' +
     '<br><br><div>' + 
     '<img class="btn" id="realKillBtn" src="img/matar.png"/>' +
     '</div><br><br>' + 
-    '<span class="titles" id="titleCementery">' + (!localStorage.cementery ? "" : "Cementery") + '</span>' + 
-    (!localStorage.cementery ? "" : "<small>" + localStorage.cementery + "</small>");
+    '<span class="titles" id="titleCementery">' + (world.cemetery.length == 0 ? "" : "Cementery") + '</span>' + 
+    (world.cemetery.length == 0 ? "" : "<small>" + cemeteryText() + "</small>");
     document.getElementById('innerTextScroll').innerHTML=txt;
     document.getElementById("realKillBtn").onclick = realKill;
     document.getElementById("kill").style.fontSize = em + "px";
@@ -3188,20 +3141,20 @@ var chapter = {
         event: function(){
             //teleport al altar de la zona
             playSound("altar");
-            idx("altar");
-            idx("altar_zone_" + getLocal("currentZone"));
+            count("altar");
+            count("altar_zone_" + state.zone.current);
             //multiplicador de fe 
-            setLocal("feMultiplicator", 2)
-            if (Number(check("idx_divineTouch")) + Number(check("idx_DivineHeal")) + Number(check("idx_DivineHit")) > 200){
+            state.player.faithMultiplier = 2
+            if (Number(counterText("divineTouch")) + Number(counterText("DivineHeal")) + Number(counterText("DivineHit")) > 200){
                 var text = "decides to devote himself to your consecration to retribute all your help";
             }else{
                 var text = "decides to devote himself to your consecration to get more divine attention";
             }
-            print("<b>" + getLocal("pjName") + "</b> " + text + ", and obtain a Divine crosier")
-            loadBackground(getLocal("currentZone") + "_altar");
+            print("<b>" + state.player.name + "</b> " + text + ", and obtain a Divine crosier")
+            loadBackground(state.zone.current + "_altar");
             var mistico = "mistico" + getRandomInt(1,3);
             loadNPC(mistico);
-            loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
+            loadCanvasChar(state.player.lvl, squareSide, headLevel);
         }
     },
     lvl50:{
@@ -3387,10 +3340,10 @@ var chapter = {
 function openHistory(){
     //execute the action for each lvl
     afterChapterExe = true;//activate post chapter event
-    chapter["lvl" + getLocal("lvl")].event()
+    chapter["lvl" + state.player.lvl].event()
 
     //if has writen history display it
-    if (chapter["lvl" + getLocal("lvl")].text != "NA"){
+    if (chapter["lvl" + state.player.lvl].text != "NA"){
         if (parseInt(document.getElementById("scrollBackCenter").style.minHeight) > 0) {
             scrollClose()
             document.getElementById("scrollBackCenter").addEventListener("transitionend", updateHistory);
@@ -3404,7 +3357,7 @@ function openHistory(){
 function updateHistory(){
    document.getElementById("scrollBackCenter").removeEventListener("transitionend", updateHistory)
    pauseToggle();
-   document.getElementById('innerTextScroll').innerHTML= chapter["lvl" + getLocal("lvl")].text;
+   document.getElementById('innerTextScroll').innerHTML= chapter["lvl" + state.player.lvl].text;
    document.getElementById("innerTextScroll").style.display = "block";
    document.getElementById("historyTitle").style.fontSize = em * 2.5 + "px";
    document.getElementById("historyTitle").style.lineHeight = em * 2.5 + "px";
@@ -3414,13 +3367,13 @@ function updateHistory(){
 
 function afterChapter(){
     afterChapterExe = false;
-    var lvl = Number(getLocal("lvl"));
+    var lvl = state.player.lvl;
     switch(lvl){
         case 30:
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-        setLocal("currentNpc", "");
-        loadBackground(getLocal("currentZone") +  getLocal("currentStage"));
-        print("<b>" + getLocal("pjName") + "</b>" + " leaves the shire and continue the journey");
+        state.npc = "";
+        loadBackground(state.zone.current +  state.zone.stage);
+        print("<b>" + state.player.name + "</b>" + " leaves the shire and continue the journey");
         break;       
         case 50:
 
@@ -3461,14 +3414,14 @@ function sixfivefour(){
     //determine if the opponent start or the wizard
     var enemyStart = Math.random() >= 0.5;
     //declare bet
-    betForDice = getRandomInt(Number(getLocal("Gold")) * 0.1,Number(getLocal("Gold")) * 0.5)
+    betForDice = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
     playSound("coins");
 
     //console.log("enemy start: " + enemyStart)
     if (enemyStart){
         nameDicePlayer = gamblingManName
     } else {
-        nameDicePlayer = "<b>" + getLocal("pjName") + "</b> "
+        nameDicePlayer = "<b>" + state.player.name + "</b> "
     }
 
     
@@ -3477,7 +3430,7 @@ function sixfivefour(){
     //spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
     //spell("spellCoins",true,frameWidth,frameHeight,currentFrame,shift);
     //set or equal the bet
-    setLocal("Gold", Number(getLocal("Gold")) - betForDice);
+    state.player.gold = state.player.gold - betForDice;
     updateHeading();
     print(nameDicePlayer + " starts the game and suggest a bet of " + goldIcon + roundNumbertoLetter(betForDice))
 
@@ -3630,7 +3583,7 @@ function evalSixFiveFour(enemyStart, nameDicePlayer){
             cargoFirstPlayer = cargo;
             nameFirstPlayer = nameDicePlayer;
             countRounds++
-            if (!enemyStart){nameDicePlayer = gamblingManName} else {nameDicePlayer = "<b>" + getLocal("pjName") + "</b> "}
+            if (!enemyStart){nameDicePlayer = gamblingManName} else {nameDicePlayer = "<b>" + state.player.name + "</b> "}
             resetSixFiveFour()
             clearInterval(eventClock);
             eventClock = setInterval( function() { rollDicesForSixfivefour(!enemyStart,nameDicePlayer); }, masterTime );
@@ -3677,24 +3630,24 @@ function finalScoreSixFiveFour(nameDicePlayer){
                 }else{
                     playSound("coins");
                     spell("spellCoins",true,frameWidth,frameHeight,currentFrame,shift);
-                    setLocal("Gold", Number(getLocal("Gold")) + betForDice * 2);
+                    state.player.gold = state.player.gold + betForDice * 2;
                     updateHeading();
                 }
 
             }else{
                 print("Nobody won (" + cargoFirstPlayer + " vs. " + cargo + ")")
                 //spell("spellCoins",true,frameWidth,frameHeight,currentFrame,shift);
-                setLocal("Gold", Number(getLocal("Gold")) + betForDice);
+                state.player.gold = state.player.gold + betForDice;
                 updateHeading();
             }
         break;
         case 2:
-            print("<b>" + getLocal("pjName") + "</b> exits the gaming house");
+            print("<b>" + state.player.name + "</b> exits the gaming house");
             cargoFirstPlayer = 0;
             resetSixFiveFour()
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-            setLocal("currentNpc", "");
-            loadBackground(getLocal("currentZone") +  getLocal("currentStage"));
+            state.npc = "";
+            loadBackground(state.zone.current +  state.zone.stage);
             restAtInn = false;
             multipleEventsCounter = 0;
             clearInterval(eventClock);
@@ -3721,49 +3674,55 @@ function resetSixFiveFour(){
 
 //BUG: when the wizard is killed and start again another one, maybe some clocks are still running and have some problems
 
-///////////////////////
-///////////////////////
-///////////////////////
-//////just for dev/////
-function exe(){
-    try{
-    var exeString = document.getElementById("inputExe").value;
-    var exeResult = eval(exeString);
-    print("<span style='color:DarkRed'>DEV: " + exeResult + "</span>")
-    }catch(err){
-    print("<span style='color:Red'>DEV error: " + err.message+ "</span>")
-    }
-    }
-
-
-//dev acces clic in pjname>lvl>feIcon
-var devAccess;
-document.addEventListener("click",function(e){
-    //console.log(e);
-if(e.target.id == "pjName"){
-    devAccess = 1;
-}else if(e.target.id == "lvl" && devAccess == 1){
-    devAccess = 2;
-}else if(e.target.id == "spiritIcon" && devAccess == 2){
-    devAccess = undefined;
-    document.getElementById("exe").style.display = "block";
-    /*document.getElementById("pjName").style.color = getRandomColor();*/
-} else {
-    devAccess = undefined;
-}
-});
-
-
-var commands = '<br>FUNCTIONS<br>\
-pauseToggle() \
-list(), \
-setLocal("property", value), \
-getLocal("property"), \
-addXP(#factor), \
-setLocal("forceEvent","#event,#event2"), \
-<br>VARS<br>\
-masterTime = #ms, \
-selfrevivetime = #ms';
+/*
+ * v1 developer console - DISABLED in v2, kept for the record.
+ * Clicking name -> level -> faith icon opened a box that ran any typed text with eval().
+ * Not functional (it still uses the v1 storage API); safe to delete later.
+ *
+ * ///////////////////////
+ * ///////////////////////
+ * ///////////////////////
+ * //////just for dev/////
+ * function exe(){
+ *     try{
+ *     var exeString = document.getElementById("inputExe").value;
+ *     var exeResult = eval(exeString);
+ *     print("<span style='color:DarkRed'>DEV: " + exeResult + "</span>")
+ *     }catch(err){
+ *     print("<span style='color:Red'>DEV error: " + err.message+ "</span>")
+ *     }
+ *     }
+ *
+ *
+ * //dev acces clic in pjname>lvl>feIcon
+ * var devAccess;
+ * document.addEventListener("click",function(e){
+ *     //console.log(e);
+ * if(e.target.id == "pjName"){
+ *     devAccess = 1;
+ * }else if(e.target.id == "lvl" && devAccess == 1){
+ *     devAccess = 2;
+ * }else if(e.target.id == "spiritIcon" && devAccess == 2){
+ *     devAccess = undefined;
+ *     document.getElementById("exe").style.display = "block";
+ *     /*document.getElementById("pjName").style.color = getRandomColor();* /
+ * } else {
+ *     devAccess = undefined;
+ * }
+ * });
+ *
+ *
+ * var commands = '<br>FUNCTIONS<br>\
+ * pauseToggle() \
+ * list(), \
+ * setLocal("property", value), \
+ * getLocal("property"), \
+ * addXP(#factor), \
+ * setLocal("forceEvent","#event,#event2"), \
+ * <br>VARS<br>\
+ * masterTime = #ms, \
+ * selfrevivetime = #ms';
+ */
 
 
 //This app is made by Carlos Alonso Maya Lastra by fun//
@@ -3771,7 +3730,7 @@ selfrevivetime = #ms';
 
 // Entry points used by src/main.js to wire the page (v1 used inline onclick="..." attributes).
 export {
-    initialName, setName, responsiveLayout, exe,
+    initialName, setName, responsiveLayout,
     archBtn, statsBtn, killBtn, mapBtn, helpBtn,
     pjBtn, centerBtn, npcBtn, btnCloseEvent,
 };
