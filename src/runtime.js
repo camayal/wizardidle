@@ -47,6 +47,7 @@ export const ui = {
     squareSide: undefined,
     charWidth: undefined,
     charHeight: undefined,
+    jumpSpace: undefined,          // how high characters hop when animated (v1: JUMPSPACE, set once at load)
     em: undefined,                 // base font size in px
     xpPercent: undefined,
     frameCounter: undefined,       // character animation frame

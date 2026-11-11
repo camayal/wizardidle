@@ -2,28 +2,31 @@
 // Wires the page to the game. In v1 this was done with inline onclick="..." attributes,
 // which can't see functions that live inside ES modules.
 
-import * as game from './game.js';
+import { initialName, setName } from './game.js';
+import { responsiveLayout } from './ui/layout.js';
+import { archBtn, statsBtn, killBtn, mapBtn, helpBtn, btnCloseEvent } from './ui/menu.js';
+import { pjBtn, centerBtn, npcBtn } from './divine.js';
 
 // Handlers are assigned as .onclick properties (not addEventListener) on purpose:
-// disableMainButtons()/enableMainButtons() in game.js temporarily swap .onclick
+// disableMainButtons()/enableMainButtons() in ui/scrolls.js temporarily swap .onclick
 // to block the toolbar while a scroll is open.
 const clickHandlers = {
-    startBtn: game.setName,
-    btn1: game.archBtn,
-    btn2: game.statsBtn,
-    btn3: game.killBtn,
-    btn5: game.mapBtn,
-    btn6: game.helpBtn,
-    pjDivineBtn: game.pjBtn,
-    centerDivineBtn: game.centerBtn,
-    npcDivineBtn: game.npcBtn,
-    btnClose: game.btnCloseEvent,
+    startBtn: setName,
+    btn1: archBtn,
+    btn2: statsBtn,
+    btn3: killBtn,
+    btn5: mapBtn,
+    btn6: helpBtn,
+    pjDivineBtn: pjBtn,
+    centerDivineBtn: centerBtn,
+    npcDivineBtn: npcBtn,
+    btnClose: btnCloseEvent,
 };
 for (const [id, handler] of Object.entries(clickHandlers)) {
     document.getElementById(id).onclick = () => handler();
 }
 
-window.addEventListener('resize', () => game.responsiveLayout());
-window.addEventListener('load', () => game.responsiveLayout());
+window.addEventListener('resize', () => responsiveLayout());
+window.addEventListener('load', () => responsiveLayout());
 
-game.initialName();
+initialName();

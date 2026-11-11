@@ -41,3 +41,10 @@ export const config = {
         fOfrenda: 0.5678,          // generosity (was 1.3748)
     },
 };
+
+// Timing and limits (v1: loose globals at the top of main.js).
+export const MAXSTAGES = 5;
+export const MAXLINESINCONSOLE = 50;
+export const RAREMULTIPLIER = 2;
+export const masterTime = 1500;
+export const selfrevivetime = 120000;

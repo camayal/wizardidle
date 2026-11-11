@@ -1,0 +1,642 @@
+// Wizard Idle v2 - What happens on each tick of the master clock: the event picker and every event the wizard can
+// stumble into (exploring, inns, shrines, statues, runes and books, loot, offerings, revival).
+// Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
+
+import { zones } from './data/zones.js';
+import { getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
+import { config, masterTime, MAXSTAGES } from './config.js';
+import { count, stat, state } from './state.js';
+import { run, ui } from './runtime.js';
+import * as loop from './loop.js';
+import { enemyEV } from './combat.js';
+import { addXP, calculateFe, statObj } from './wizard.js';
+import { changeLocality, pickRandomBackgroundForCurrentZone } from './travel.js';
+import { afterChapter } from './story.js';
+import { logro } from './achievements.js';
+import { currentFrame, frameHeight, frameWidth, shift, spell } from './spells.js';
+import { playSound } from './audio.js';
+import { loadBackground, loadNPC, npcCanvas, print, updateHeading } from './ui/render.js';
+import { counterText } from './ui/scrolls.js';
+import { sixfivefour } from './minigames/sixFiveFour.js';
+
+//define statueobj
+var statueObj = {
+    statue_el_Bosque: {name:"Snail",event:function(){return statObj.increase(statObj.pPolymorph.code,2)},code:"statue_el_Bosque"},
+    statue_el_Castillo: {name:"Knight", event:function(){return statObj.increase(statObj.pAttack.code,2)},code:"statue_el_Castillo"},
+    statue_la_Ciudad: {name:"Queen", event:function(){return statObj.increase(statObj.fOfrenda.code,2)},code:"statue_la_Ciudad"},
+    statue_la_Gruta: {name:"Grotesque creature", event:function(){return statObj.increase(statObj.fAttack.code,2)},code:"statue_la_Gruta"},
+    statue_el_Desierto: {name:"Feline", event:function(){return statObj.increase(statObj.pChangeZone.code,2)},code:"statue_el_Desierto"},
+    statue_el_Duenon: {name:"Terrifying Imp", event:function(){return statObj.increase(statObj.pCritic.code,2)},code:"statue_el_Duenon"},
+    statue_las_Dunas: {name:"Perfect sphere", event:function(){
+        run.feGanada = (getRandomInt(((state.player.hpBase * config.balance.rGold) * 0.75),((state.player.hpBase * config.balance.rGold) * 1.5))) * 10;
+        run.feGanada *= state.player.faithMultiplier
+        state.player.faith = state.player.faith + run.feGanada;
+        updateHeading();
+        return "divine</i> and gains some faith (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")<i>";
+    },code:"statue_las_Dunas"},
+    statue_el_Heidan: {name:"Majestic angel", event:function(){
+        statObj.increase(statObj.pBotin.code,2)
+        var goldFound = (state.player.lastBattleGold * 7.3)
+        state.player.gold = state.player.gold + goldFound;
+        updateHeading();
+        playSound("coins");
+        return statObj.pBotin.name + "</i> and found some coins (" + ui.goldIcon + roundNumbertoLetter(goldFound) + ")<i>";
+    },code:"statue_el_Heidan"},
+    statue_la_Mina: {name:"Dwarf", event:function(){return statObj.increase(statObj.pFindMaterials.code,2)},code:"statue_la_Mina"},
+    statue_el_Pantano: {name:"Hydra", event:function(){
+        playSound("hidra");
+        state.hydraMysteryResolved = true;
+        logro.set(logro.logro_hydramystery);
+        return "hydraMysteryResolved";
+    },code:"statue_el_Pantano"},
+    statue_la_Pradera: {name:"Strange bird", event:function(){return statObj.increase(statObj.fHeal.code,2)},code:"statue_la_Pradera"},
+    statue_la_Torre: {name:"Wizard", event:function(){return statObj.increase(statObj.pStudy.code,2)},code:"statue_la_Torre"},
+    statue_la_Tundra: {name:"Wraith", event:function(){return statObj.increase(statObj.fCritic.code,2)},code:"statue_la_Tundra"},
+    statue_el_Volcan: {name:"Dragon", event:function(){return statObj.increase(statObj.pHeal.code,2)},code:"statue_el_Volcan"},
+}
+
+
+
+
+
+
+/////////////////////////////////////////////////////////
+// ███████╗██╗   ██╗███████╗███╗   ██╗████████╗███████╗//
+// ██╔════╝██║   ██║██╔════╝████╗  ██║╚══██╔══╝██╔════╝//
+// █████╗  ██║   ██║█████╗  ██╔██╗ ██║   ██║   ███████╗//
+// ██╔══╝  ╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ╚════██║//
+// ███████╗ ╚████╔╝ ███████╗██║ ╚████║   ██║   ███████║//
+// ╚══════╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝//
+///////////////////////////////////////////////////////// 
+//Events
+
+//Select event, call in this way only:  loop.every("master", event, masterTime);    
+function event() {
+    loop.stop("master");
+    if(run.pause){return}//detect pause command
+
+    if (run.afterChapterExe){
+    afterChapter()//call special events after history
+    }
+
+    if(state.forceEvent){//force some event for debugging and history
+        var masterOption = Number(pickRandomItem(state.forceEvent));
+    }else{
+        var masterOption = Math.floor((Math.random() * 5) + 1)
+    }
+    switch (masterOption) {
+    case 1:
+        //Get an enemy and start a battle
+        //getEnemy();
+        enemyEV();
+        break;
+    case 2:
+        //Move to other locality
+        exploreEV();
+        break;
+    case 3:
+        //enter to the shrine
+        prayEV();
+        break;
+    case 4:
+        //rest in a inn
+        innEV();
+        break;
+    case 5:
+        //found book, rune or statue
+        studyEV();
+    }
+
+};
+
+//Main event: EXPLORE
+function exploreEV() {
+    //Evalue if booty or not
+    if (YesOrNot(stat("pBotin"), 0)) {
+        //getBotin();
+        run.objectToBreak = "";
+        print("<b>" + state.player.name + "</b> is searching...");
+        loop.every("event", getBotin, masterTime);
+    //go to dice house, use the same probability
+    } else if (YesOrNot(config.balance.pDados, 0) && state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado"){
+        //check if gold is more than 0
+        if(state.player.gold > 0){
+            //call the game function
+            if (run.previousEvent == "sixfivefour"){
+                var textDice = pickRandomItem("decides come back to the gaming house, returns to the dice house,wants to spend more coins at the gaming house");
+            }else{
+                var textDice = pickRandomItem("finds a gamming house and enters,wants to play 6-5-4,wants to gambling");
+            }
+            print("<b>" + state.player.name + "</b> " + textDice);
+            loadBackground(state.zone.current + "_casadados");
+            loadNPC("jugon");
+            run.previousEvent = "sixfivefour"
+            loop.every("event", sixfivefour, masterTime);       
+        }else{
+            print("<b>" + state.player.name + "</b> " + "finds a gamming house but does not have gold to bet");
+            loop.every("master", event, masterTime);
+        }
+    }else {
+        if (YesOrNot(stat("pChangeZone") * config.balance.allowChangeZone, 0)) {
+            print("<b>" + state.player.name + "</b> is exploring...");
+            loop.every("event", changeLocality, masterTime);
+        } else {
+            print("<b>" + state.player.name + "</b>" + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
+            pickRandomBackgroundForCurrentZone();
+            addXP(0.5);
+            loop.every("master", event, masterTime);
+            //trigger event selecter
+        };
+    };
+};
+
+//Main event: REVIVE BY MISTERIOUS GUY
+function reviveEV(){
+    run.multipleEventsCounter += 1;
+    switch(run.multipleEventsCounter){
+        case 1:
+        print("<b>" + state.player.name + "</b>" + " wakes up " + pickRandomItem("confused,perplexed,perturbed"));
+        run.previousEvent = "reviveInCabin"
+            break;
+        case 2:
+            print("<b>" + state.player.name + "</b>" + " is treated by a mysterious healer");
+            playSound("heal");
+            spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
+            break;
+        case 3:
+            spell("spellPinRed_16",false,frameWidth,frameHeight,currentFrame,shift);
+            npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+            state.npc = "";
+            print("<b>" + state.player.name + "</b>" + " is totally recovered (" + ui.healIcon + roundNumbertoLetter(state.player.hpBase) + ") and the mysterious guy is gone")
+            updateHeading();
+            break;
+        case 4:
+        var randomLocality = pickRandomItem("el_Bosque,la_Pradera,el_Poblado,las_Dunas,el_Desierto,el_Pantano")
+        state.zone.current = randomLocality;
+        state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
+        count("zonesChanged");
+        count("zone_" + randomLocality);
+        //pickRandomBackgroundForCurrentZone();
+        loadBackground(state.zone.current +  state.zone.stage);
+        print("<b>" + state.player.name + "</b>" + " leaves the healer's cabin")
+        count("hospital");
+        run.multipleEventsCounter = 0;
+        loop.stop("event");
+        run.disablePjBtn = false;
+        loop.every("master", event, masterTime);
+    }
+};
+
+
+//Main event: PRAY
+function prayEV(){
+    if (YesOrNot(stat("pFindCapel"),0)){
+        playSound("altar");
+        count("altar");
+        count("altar_zone_" + state.zone.current);
+        if (run.previousEvent == "enterAltar"){
+            var textCapel = pickRandomItem("decides come back to the shire, returns to the shire,wants to spend more time at the temple");
+        }else{
+            var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
+        }
+        print("<b>" + state.player.name + "</b> " + textCapel);
+        loadBackground(state.zone.current + "_altar");
+        var mistico = "mistico" + getRandomInt(1,3);
+        loadNPC(mistico);
+        if (YesOrNot(stat("pOfrenda"),0) && state.player.gold > 0){
+            run.offer = true;
+        }else{
+            run.offer = false;
+        }
+        run.previousEvent = "enterAltar"
+        loop.every("event", doOffering, masterTime);
+    }else{
+        count("negar");
+        if (run.previousEvent == "negar"){
+            var textCapel = pickRandomItem("finds again the same shire,sees the same shire");
+        }else{
+            var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
+        }
+        var faithLost = calculateFe();
+        print("<b>" + state.player.name + "</b> " + textCapel + " but does not enter and continues (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
+        state.player.faith = state.player.faith - faithLost;
+        updateHeading();
+        run.previousEvent = "negar"
+        loop.every("master", event, masterTime);
+    }
+}
+
+
+
+//Main event: SLEEP OR INN
+function innEV(){
+    if(Math.round(state.player.hp) < Math.round(state.player.hpBase)){
+           
+           if (run.previousEvent == "innEV"){
+            var textInn = "wants to rest a little more,still is tired"
+           }else{
+            var textInn = "feels tired,wants to rest,is falling asleep"
+           }
+           print("<b>" + state.player.name + "</b> " + pickRandomItem(textInn)) 
+           run.previousEvent = "innEV"
+           loop.every("event", searchInn, masterTime);
+    }else{
+        var textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
+        print("<b>" + state.player.name + "</b> " + pickRandomItem(textNoInn)) 
+        run.previousEvent = "innEVFeelsGood"
+        loop.every("master", event, masterTime);
+    }
+}
+
+//ToDo: agregar que un pillo lo robe y escape, bajon de gold
+
+
+//Main event: study and found statues
+//TODO:CHECK A POTENTIAL BUG, THE WIZARD NEVER WILL BE TRUE FOR THE TWO LAST STAIMENTS
+function studyEV() {
+     if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva"){//found statue, poblado and cueva has not statue
+        if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
+            print("<b>" + state.player.name + "</b> " + "sees something...") 
+            loop.every("event", findRuneOrBook, masterTime);
+        }else{
+            print("<b>" + state.player.name + "</b> " + "sees something...") 
+            loop.every("event", findStatue, masterTime);
+        }
+        //examine the estatue
+
+    }else{//found book or rune
+    print("<b>" + state.player.name + "</b> " + "sees something...") 
+    loop.every("event", findRuneOrBook, masterTime);
+    }
+}
+
+    
+
+
+////////////////////////////////////////////////////////////////////////////////
+// ███╗   ███╗███████╗ ██████╗██╗  ██╗ █████╗ ███╗   ██╗██╗███████╗███╗   ███╗//
+// ████╗ ████║██╔════╝██╔════╝██║  ██║██╔══██╗████╗  ██║██║██╔════╝████╗ ████║//
+// ██╔████╔██║█████╗  ██║     ███████║███████║██╔██╗ ██║██║███████╗██╔████╔██║//
+// ██║╚██╔╝██║██╔══╝  ██║     ██╔══██║██╔══██║██║╚██╗██║██║╚════██║██║╚██╔╝██║//
+// ██║ ╚═╝ ██║███████╗╚██████╗██║  ██║██║  ██║██║ ╚████║██║███████║██║ ╚═╝ ██║//
+// ╚═╝     ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝     ╚═╝//
+////////////////////////////////////////////////////////////////////////////////
+//Mechanisms
+
+//find statue
+function findStatue(){
+    run.multipleEventsCounter += 1;
+    if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
+        var optionTemp = 2;
+    }else{
+        var optionTemp = run.multipleEventsCounter;
+    }
+    switch(optionTemp){
+        case 1:
+        //found and change locality
+        loadBackground(state.zone.current + "_estatua");
+        count("estatuas_statue_" + state.zone.current)
+        count("statuesFound");
+        //print("<b>" + getLocal("pjName") + "</b> " + "finds a " + statueObj["statue_" + getLocal("currentZone")].name + " statue");
+        if (run.previousEvent == "findStatue"){
+            print("<b>" + state.player.name + "</b> " + "wants to try study the " + statueObj["statue_" + state.zone.current].name + " statue again");
+        }else{
+            print("<b>" + state.player.name + "</b> " + "finds a " + statueObj["statue_" + state.zone.current].name + " statue");
+        }
+        run.previousEvent = "findStatue"
+        break;
+        case 2:
+        //examine and get or not
+        if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
+            count("sucessStudyStatue");
+            spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
+            var learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
+            var result = statueObj["statue_" + state.zone.current].event()
+        if(result == "hydraMysteryResolved"){
+            //play hydra sound
+            print("<b>" + state.player.name + "</b> " + "hears something but nothing happens");
+        }else{
+            playSound("statUp");
+            print("<b>" + state.player.name + "</b> " + learnTxt + ". Increases the <i>" + result + "</i>");
+        }
+            run.multipleEventsCounter = 4;
+        }else{
+            playSound("studyrune");
+            spell("spellStudyTry_16",true,frameWidth,frameHeight,currentFrame,shift);
+            var learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
+            //fail study try again
+            if(run.multipleEventsCounter == 4){
+                count("failStudyStatue");
+                //last chance of study failed, mod text
+                spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
+                var learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
+            }
+            print("<b>" + state.player.name + "</b> " + learnTxt) 
+        }
+        break;
+        case 5:
+        print("<b>" + state.player.name + "</b> " + "leaves the statue and continues") 
+        loadBackground(state.zone.current +  state.zone.stage);
+        run.multipleEventsCounter = 0;
+        loop.stop("event");
+        addXP(1);
+        loop.every("master", event, masterTime);
+    }
+}
+
+
+//Find book or rune
+function findRuneOrBook(){
+    var placesWithBooks = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Castillo" || state.zone.current == "la_Torre";
+    run.multipleEventsCounter += 1;
+    if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
+        var optionTemp = 2;
+    }else{
+        var optionTemp = run.multipleEventsCounter;
+    }
+    switch(optionTemp){
+        case 1:
+        var number = getRandomInt(1,10);
+        if(placesWithBooks){
+            run.objectToStudy = "book";
+            loadNPC("libro" + number)
+        }else{
+            run.objectToStudy = "rune";
+            loadNPC("runa" + number)
+        }
+        print("<b>" + state.player.name + "</b> " + "finds " + (run.previousEvent == "findRuneorBook" ? "another " : "a ") + run.objectToStudy) 
+        count(run.objectToStudy)
+        run.previousEvent = "findRuneorBook"
+        break;
+        case 2:
+        if (YesOrNot(stat("pStudy"),0)){
+            playSound("statUp");
+            count("sucessStudy");
+            spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
+            var learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
+            //exit loop, sucess study
+            //var statToUP = pickRandomItem("pAttack,pPolymorph,fCritic,pCritic,pHeal,fHeal,pStudy,pBotin,pChangeZone,pFindCapel,pFindMaterials,pOfrenda,fOfrenda")
+            var statToIncrease = statObj[statObj.random()];
+            var learned = statObj.increase(statToIncrease.code);
+            print("<b>" + state.player.name + "</b> " + learnTxt + " " + run.objectToStudy + " and increases the <i>" + learned + "</i>") 
+            count("study_" + statToIncrease.code);
+            
+            run.multipleEventsCounter = 4;
+        }else{
+            playSound("study" + run.objectToStudy);
+            spell("spellStudyTry_16",true,frameWidth,frameHeight,currentFrame,shift);
+            var learnTxt = pickRandomItem("tries to understand what is written in the,reads the glyphs in the,analyzes the information in the,continues reading the");
+            //fail study try again
+            if(run.multipleEventsCounter == 4){
+                count("failStudy");
+                //last chance of study failed, mod text
+                spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
+                var learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
+            }
+            print("<b>" + state.player.name + "</b> " + learnTxt + " " + run.objectToStudy) 
+        }
+        break;
+        case 5:
+        print("<b>" + state.player.name + "</b> " + "leaves the " + run.objectToStudy + " and continues") 
+        npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        state.npc = "";
+        run.objectToStudy = "";
+        run.multipleEventsCounter = 0;
+        loop.stop("event");
+        addXP(0.25);
+        loop.every("master", event, masterTime);
+    }
+}
+
+
+
+//Search an inn
+function searchInn(){
+    var placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto"
+    run.multipleEventsCounter += 1;
+    switch(run.multipleEventsCounter){
+        case 1:
+            if(placesWithInn){
+                loadBackground(state.zone.current + "_taberna");
+                count("taberna");
+                count("taberna_zone_" + state.zone.current);
+                print("<b>" + state.player.name + "</b> " + "enters in an inn") 
+
+            }else{
+                loadNPC("sleepingbag");
+                var textCamping = "looks for a safe place too rest,hides to rest,falls asleep"
+                print("<b>" + state.player.name + "</b> " + pickRandomItem(textCamping));
+                count("camping");
+
+            }
+            break;
+        case 2:
+            var textSleeps = "sleeps,replenishes energies,rests"
+            if(placesWithInn){
+                // add event of fight if have not gold
+                //var innCost = getRandomInt(Number(localStorage.Gold) * 0.05,Number(localStorage.Gold) * 0.1);
+                var innCost = 1 + getRandomInt(state.player.lastBattleGold * 2,state.player.lastBattleGold * 3);
+                if ((state.player.gold - innCost) <= 0){
+                    //innCost = Number(getLocal("Gold"));
+                    //setLocal("Gold", 0);
+                    //cannot affort
+                    playSound("drink");
+                    print("<b>" + state.player.name + "</b> " + "cannot afford pay a bed, but takes a free drink");
+                    run.restAtInn = false;
+                }else{
+                    spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
+                    state.player.gold = state.player.gold - innCost;
+                    count("GoldSpendInn",Number(innCost));
+                    playSound("coins");
+                    print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps) +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(innCost) + ")") 
+                    run.restAtInn = true;
+                }
+                
+            }else{
+                spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
+                print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps)) 
+                run.restAtInn = false;
+            }
+            updateHeading();
+            break;
+        case 3:
+            if(placesWithInn && run.restAtInn){
+                var rested = state.player.hpBase - state.player.hp
+            }
+            else{
+                var rested = (state.player.hpBase - state.player.hp) / getRandomInt(1,5)
+            }
+            state.player.hp = state.player.hp + rested;
+            if ((state.player.hp + rested) >= state.player.hpBase){
+                var textRecover = "feels totally renewed,feels well rested,has new energies,regained his health"
+            }else{
+                var textRecover = "feels slightly renewed,feels poorly rested,has some energies,regained some health"
+            }
+            if (Math.round(rested) <= 0){
+                var textRecover = "couldn't rest well"
+            };
+            //spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
+            updateHeading();
+            npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+            state.npc = "";
+            print("<b>" + state.player.name + "</b> " + pickRandomItem(textRecover) + " (" + ui.healIcon + roundNumbertoLetter(rested) + ")") 
+            if(placesWithInn){
+                //pickRandomBackgroundForCurrentZone();
+                loadBackground(state.zone.current +  state.zone.stage);
+            }
+            run.restAtInn = false;
+            run.multipleEventsCounter = 0;
+            loop.stop("event");
+            loop.every("master", event, masterTime);
+    }
+}
+
+
+//Pray and offer gold
+function doOffering(){
+    
+    if(run.offer){
+        run.multipleEventsCounter += 1;
+        switch(run.multipleEventsCounter){
+            case 1:
+                var ofrendaGold = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
+                run.feGanada = (ofrendaGold * stat("fOfrenda"));
+                run.feGanada *= state.player.faithMultiplier;
+                state.player.faith = state.player.faith + run.feGanada;
+                state.player.gold = state.player.gold - ofrendaGold;
+                count("offers");
+                count("GoldOffered", Math.round(ofrendaGold));
+                count("FeByGold",Math.round(run.feGanada));
+                playSound("coins");
+                spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
+                var textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
+                print("<b>" + state.player.name + "</b>" + " offers " + ui.goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
+                break;
+            case 2:
+                //animation anks for pj
+                //playSound("pray");
+                spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
+                print("<b>" + state.player.name + "</b>" + " leaves the shire and continue the journey" + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
+                npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+                state.npc = "";
+                //pickRandomBackgroundForCurrentZone();
+                loadBackground(state.zone.current +  state.zone.stage);
+                run.multipleEventsCounter = 0;
+                loop.stop("event");
+                run.disableCenterBtn = false;
+                run.offer = false;
+                loop.every("master", event, masterTime);
+        }
+    }else{
+        run.multipleEventsCounter += 1;
+        if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
+            var optionTemp = 2;
+        }else{
+            var optionTemp = run.multipleEventsCounter;
+        }
+        switch(optionTemp){
+            case 1:
+                var textPray = pickRandomItem(" adore you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor")
+                print("<b>" + state.player.name + "</b>" + textPray)
+                break;
+            case 2:
+                playSound("pray");
+                spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
+                run.feGanada = calculateFe();
+                run.feGanada *= state.player.faithMultiplier
+                state.player.faith = state.player.faith + run.feGanada;
+                count("FeByPray",Math.round(run.feGanada));
+                var textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
+                print("<b>" + state.player.name + "</b>" + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")")
+            break;
+            case 5:
+                print("<b>" + state.player.name + "</b>" + " leaves the shire and continues")
+                npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+                state.npc = "";
+                //pickRandomBackgroundForCurrentZone();
+                loadBackground(state.zone.current +  state.zone.stage);
+                run.disableCenterBtn = false;
+                run.offer = false;
+                run.multipleEventsCounter = 0;
+                loop.stop("event");
+                loop.every("master", event, masterTime);
+        }
+    }
+
+
+updateHeading();
+
+}
+
+
+//Get Botin
+function getBotin() {
+    run.multipleEventsCounter += 1;
+    switch (run.multipleEventsCounter){
+        case 1:
+            run.objectToBreak = pickRandomItem("bag,barrel,box,chest,pot")
+            switch (run.objectToBreak){
+                case "bag":
+                    loadNPC("bag");
+                    break;
+                case "barrel":
+                loadNPC("barrel");
+                    break;
+                case "box":
+                loadNPC("box");
+                    break;
+                case "chest":
+                    var number = getRandomInt(1,6);
+                    loadNPC("chest" + number);
+                    break;
+                case "pot":
+                    var number = getRandomInt(1,4);
+                    loadNPC("pot" + number);
+            }
+            print("<b>" + state.player.name + "</b>" + " sees " + (run.previousEvent == "getBotin" ? "another " : "a ")  + run.objectToBreak);
+            break;
+        case 2:
+        if (run.objectToBreak == "bag"){
+            playSound("coins");
+            var botinTexts = " takes the bag and finds ";
+        }else if(run.objectToBreak == "chest"){
+            playSound("unlock");
+            var botinTexts = " opens the chest and finds ";
+            spell("spellKey_8",false,frameWidth,frameHeight,currentFrame,shift);
+        }else{
+            if (run.objectToBreak == "pot"){
+                playSound("breakPot");
+            }else{
+                playSound("breakWood");
+            }
+            var botinTexts = " breaks the " + run.objectToBreak +" and finds ";
+            spell("spellPush9",false,frameWidth,frameHeight,currentFrame,shift);
+        }
+        npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        state.npc = "";
+        var goldBotin = 1 + getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 10);
+        print("<b>" + state.player.name + "</b>" + botinTexts + ui.goldIcon + roundNumbertoLetter(goldBotin));
+        count("BotinGot");
+        count("GoldFromBotin",goldBotin)
+        count("GoldFromBotin_" + run.objectToBreak,goldBotin)
+        count("BotinGot_" + run.objectToBreak);
+        state.player.gold = state.player.gold + goldBotin;
+        if(Number(counterText("BotinGot_chest")) > 100){logro.set(logro.logro_botines)};
+        if(Number(counterText("BotinGot_pot")) > 100){logro.set(logro.logro_pots)};
+        run.previousEvent = "getBotin"
+        updateHeading();    //Update heading
+        run.multipleEventsCounter = 0;
+        loop.stop("event");
+        addXP(0.5);
+        loop.every("master", event, masterTime);//trigger event selecter
+            
+    }
+    
+   
+};
+
+export {
+    event,
+    reviveEV,
+    statueObj,
+};
