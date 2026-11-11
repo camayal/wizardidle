@@ -23,9 +23,7 @@
     <meta http-equiv="Cache-Control" content="max-age=86000">
     <meta http-equiv="Cache-Control" content="must-revalidate">
     
-        <script src="enemyinfo.js"></script>
-        <script src="main.js"></script>
-         <!-- <script src="obfuscated.js"></script> -->
+        <script type="module" src="src/main.js"></script>
 
          
          
@@ -383,7 +381,7 @@
         </style>
     </head>
     
-    <body ondragstart="return false;" oncontextmenu="return false;" onresize="responsiveLayout()" onload="responsiveLayout()">
+    <body ondragstart="return false;" oncontextmenu="return false;">
             <noscript>
                     
                     <pre>
@@ -424,7 +422,7 @@
         <input id="inputName" type="text" name="name" value="">
              
 
-            <img onclick="setName()" class="btn" id="startBtn" src="img/start.png"/>
+            <img class="btn" id="startBtn" src="img/start.png"/>
             <span id="footer" class="pixelFont">A divine perspective of a wizard journey</span>
     </div>
     
@@ -444,12 +442,12 @@
             </div>
 
              <div id="mainButtons">
-                 <img onclick="archBtn()" id="btn1" class="btn dis" src="img/archbtn.png"/>
-                 <img onclick="statsBtn()" id="btn2" class="btn dis" src="img/statsbtn.png"/>
-                 <img onclick="killBtn()" id="btn3" class="btn dis" src="img/diebtn.png"/>
+                 <img id="btn1" class="btn dis" src="img/archbtn.png"/>
+                 <img id="btn2" class="btn dis" src="img/statsbtn.png"/>
+                 <img id="btn3" class="btn dis" src="img/diebtn.png"/>
                  <img id="btn4" class="btn dis" src="img/plegariabtn.png"/>
-                 <img onclick="mapBtn()" id="btn5" class="btn dis" src="img/mapbtn.png"/>
-                 <img onclick="helpBtn()" id="btn6" class="btn dis" src="img/helpbtn.png"/>
+                 <img id="btn5" class="btn dis" src="img/mapbtn.png"/>
+                 <img id="btn6" class="btn dis" src="img/helpbtn.png"/>
             </div>
         
         </div>
@@ -462,9 +460,9 @@
         <canvas id="pjCanvas"></canvas>
         <canvas id="npcCanvas"></canvas>
         <canvas id="spellCanvas"></canvas>
-        <button onclick="pjBtn()" class="transparentBtn" id="pjDivineBtn"></button>
-        <button onclick="centerBtn()" class="transparentBtn" id="centerDivineBtn"></button>
-        <button onclick="npcBtn()" class="transparentBtn" id="npcDivineBtn"></button>
+        <button class="transparentBtn" id="pjDivineBtn"></button>
+        <button class="transparentBtn" id="centerDivineBtn"></button>
+        <button class="transparentBtn" id="npcDivineBtn"></button>
 
         <span id="statusText"></span>  
 
@@ -490,7 +488,7 @@
             </div>
 
         </div>
-        <img onclick="btnCloseEvent()" class="initialHidden btn" id="btnClose" src="img/CloseBtn.png"/>
+        <img class="initialHidden btn" id="btnClose" src="img/CloseBtn.png"/>
     </div>
 
 
@@ -508,14 +506,13 @@
 
 
 
-    <script>initialName()</script>
 
     <!-- 26jul2018_6pm -->
 
 <!-- only for dev -->
 <div id="exe" class="initialHidden">
     <input id="inputExe" type="text" name="function" value="">
-    <div onclick="exe()">&#9654;</div>
+    <div id="exeRun">&#9654;</div>
     <div onclick="document.getElementById('exe').style.display = 'none'">&#10060;</div>
 </div>
 <!-- only for dev -->

@@ -1,3 +1,13 @@
+// Wizard Idle v2 - game logic (phase 1: same code as v1, now an ES module).
+// Original game hand-written by Carlos Alonso Maya Lastra (2018-2020), see tag v1.0.0.
+
+import { enemyTypes, enemySprites } from './data/enemies.js';
+import { zones, places } from './data/zones.js';
+import { spells, spellTiers, npcSpells } from './data/spells.js';
+import { achievements } from './data/achievements.js';
+import { YesOrNot, getRandomInt, pickRandomItem, roundNumbertoLetter, capitalize, getRandomColor, secsToHours } from './utils.js';
+import { thx, hx, getLocal, setLocal, idx, check } from './storage.js';
+
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
 // ██╔══██╗██╔════╝██╔════╝██║████╗  ██║██║╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝//
@@ -10,11 +20,15 @@
 //Author:  Carlos Alonso Maya Lastra
 if(!localStorage[thx("firstUse")]){setLocal("firstUse", "true")};
 // #region Define vars
+var esceneCanvas = document.getElementById("esceneCanvas");
+var pjCanvas = document.getElementById("pjCanvas");
+var npcCanvas = document.getElementById("npcCanvas");
 var version = "02nov2020_10pm"; //26jul2018_6pm
 var uniqueID;
 var objectSize = defineObjectSize();
 var headLevel = objectSize * 0.109375;//56;
-var charWidth = charHeight = squareSide = objectSize * 0.125;//64;
+var squareSide = objectSize * 0.125;//64;
+var charWidth = squareSide, charHeight = squareSide;
 var em = getEM();
 var eventClock;//declare the main clock
 var eventMasterClock;
@@ -66,7 +80,7 @@ var afterChapterExe = false;
 //vars spell animation
 var frameWidth = 30;
 var frameHeight = 30;
-var currentFrame = shift = 0;
+var currentFrame = 0, shift = 0;
 //vars icons
 var goldIcon = "<img class='imgInConsole' height='" + em + "' src='img/gold.png'/> ";
 //var heartIcon = "<img class='imgInConsole' height='" + em + "' src='img/heart.png'/> ";
@@ -80,344 +94,11 @@ var healIcon = "<img class='imgInConsole' height='" + em + "' src='img/heal.png'
 
 
 
-// #region Define enemies info
-var animalejo={max:82,name:"creature",hasgold:"false"};
-var baba={translucid:true,max:10,name:"slime",hasgold:"false"};
-var el_angelicus={max:8,name:"angelicus",hasgold:"true"};
-var el_capricor={max:1,name:"capricor",hasgold:"true"};
-var el_carcero={max:17,name:"carcero",hasgold:"true"};
-var el_cicolpus={max:6,name:"cicolpus",hasgold:"true"};
-var el_cornovit={max:7,name:"cornovit",hasgold:"true"};
-var el_dare={max:6,name:"dare",hasgold:"true"};
-var el_demonio={max:14,name:"demon",hasgold:"true"};
-var el_diabillo={max:7,name:"imp",hasgold:"true"};
-var el_dragonian={max:8,name:"dragonian",hasgold:"true"};
-var el_dragus={max:32,name:"dragus",hasgold:"true"};
-var el_dranei={max:14,name:"draneit",hasgold:"true"};
-var el_elemental={max:3,name:"elemental",hasgold:"false"};
-var el_elidoy={max:6,name:"elidoy",hasgold:"true"};
-var el_enano={max:14,name:"dwarf",hasgold:"true"};
-var el_ent={max:15,name:"quent",hasgold:"false"};
-var el_espectro={translucid:true,max:27,name:"spectre",hasgold:"false"};
-var el_esqueleto={max:26,name:"skeleton",hasgold:"false"};
-var el_falconifen={max:6,name:"falconifen",hasgold:"true"};
-var el_golem={max:20,name:"golem",hasgold:"true"};
-var el_gris={max:6,name:"cinereous",hasgold:"true"};
-var el_guerrero={max:17,name:"warrior",hasgold:"true"};
-var el_hechicero={max:18,name:"wizard",hasgold:"true"};
-var el_herbo={max:7,name:"herbo",hasgold:"true"};
-var el_maro={max:6,name:"maro",hasgold:"true"};
-var el_mediano={max:25,name:"shortie",hasgold:"true"};
-var el_ogro={max:19,name:"ogre",hasgold:"true"};
-var el_ojo={max:9,name:"eye",hasgold:"false"};
-var el_orco={max:19,name:"orc",hasgold:"true"};
-var el_palmeru={max:8,name:"palmeru",hasgold:"true"};
-var el_pillo={max:20,name:"rogue",hasgold:"true"};
-var el_purbipco={max:12,name:"purbipcu",hasgold:"true"};
-var el_roco={max:6,name:"roco",hasgold:"true"};
-var el_rojo={max:5,name:"vermiliu",hasgold:"true"};
-var el_seleneco={max:5,name:"seleneco",hasgold:"true"};
-var el_tauren={max:4,name:"cowren",hasgold:"true"};
-var el_tocand={max:12,name:"tocand",hasgold:"true"};
-var el_tricolpus={max:8,name:"tricolpus",hasgold:"true"};
-var el_umigubi={max:16,name:"umigubi",hasgold:"false"};
-var el_vampiro={max:5,name:"vampire",hasgold:"true"};
-var la_amazona={max:9,name:"amazon",hasgold:"true"};
-var la_esencia={translucid:true,max:16,name:"ether",hasgold:"false"};
-var la_guerrera={max:5,name:"warrioress",hasgold:"true"};
-var la_hechicera={max:7,name:"wizardess",hasgold:"true"};
-var la_hidra={max:10,name:"pybrya",hasgold:"false"};
-var la_pilla={max:2,name:"rogue",hasgold:"true"};
-var momia={max:8,name:"mummy",hasgold:"true"};
-var polipoide={max:13,name:"polypoid",hasgold:"false"};
-var el_elfo={max:6,name:"elf",hasgold:"true"};
-//bosses
-var bicaptop = {name: "bicaptop", hasgold:"true"}
-var cuboq = {name: "cuboq", hasgold:"false"}
-var doria = {name: "doria", hasgold:"true"}
-var arcangel = {name: "arcangel", hasgold:"true"}
-var etymos = {name: "etymos", hasgold:"false"}
-var goro = {name: "goro", hasgold:"true"}
-var herbus = {name: "herbus", hasgold:"true"}
-var infraespectro = {name: "infraespectro", hasgold:"false"}
-var kkck = {name: "kkck", hasgold:"false"}
-var medusa = {name: "medusa", hasgold:"true"}
-var midas = {name: "king midas", hasgold:"true"}
-var protromus = {name: "protromus", hasgold:"true"}
-var rainbow = {name: "rainbow", hasgold:"true"}
-var rojo = {name: "rojo", hasgold:"true"}
-var skeleton = {name: "king skeleton", hasgold:"true"}
-var mother = {name: "mother", hasgold:"true"}
-var hydskon = {name: "hydskon", hasgold:"true"}
-var icedra = {name: "icedra", hasgold:"true"}
-// #endregion
+// Game data (enemies, zones, spells, achievements) now lives in src/data/.
 
-
-// #region Define localities info
-var el_Castillo={legend:" ,some cries are heard in the distance",name:"Castle",enemies:"el_Espectro,el_Esqueleto,el_Guerrero,el_Vampiro",bossSpell:"spellMaldicion_8,spellWhiteMaldicion_8,spellChispasWhite_8,spellPinBlue_16,spellPush1",boss:"infraespectro",drop:"ectoplasma",maxdestination:3,destinations:"el_Pantano,la_Pradera,el_Bosque"};
-var la_Ciudad={legend:"",name:"City",enemies:"el_Guerrero,el_Hechicero,el_Pillo,la_Hechicera",bossSpell:"spellPush2,spellRainPurple_24,spellRingRose_8,spellSparkRose_8,spellSpiralRose_15",boss:"doria",drop:"NA",maxdestination:2,destinations:"el_Bosque,la_Pradera"};
-var la_Pradera={legend:"",name:"Prairie",enemies:"Animalejo,el_Mediano,el_Tauren",bossSpell:"spellPush10,spellPush6,spellPush9",boss:"goro",drop:"hierba",maxdestination:9,destinations:"la_Ciudad,el_Poblado,el_Desierto,el_Castillo,la_Gruta,la_Cueva,las_Dunas,la_Mina,el_Pantano"};
-var el_Poblado={legend:"",name:"Town",enemies:"el_Palmeru,el_Tocand",bossSpell:"spellPush9,spellRingGreen_8",boss:"kkck",drop:"NA",maxdestination:2,destinations:"el_Bosque,la_Pradera"};
-var la_Cueva={legend:"",name:"Cave",enemies:"Animalejo,Baba,el_Golem,el_Vampiro",bossSpell:"spellEarthSpike_10,spellPush10,spellPush6,spellPush9",boss:"protromus",drop:"gema",maxdestination:3,destinations:"la_Pradera,las_Dunas,el_Desierto"};
-var la_Gruta={legend:"",name:"Grute",enemies:"el_Cicolpus,el_Golem,el_Ojo",bossSpell:"spellPush10,spellPush6,spellPush9",boss:"bicaptop",drop:"hueso",maxdestination:2,destinations:"la_Pradera,el_Duenon"};
-var la_Torre={legend:"",name:"Tower",enemies:"el_Elemental,el_Hechicero,la_Hechicera",bossSpell:"spellChispasBlue_8,spellChispasGreen_8,spellChispasReddish_8,spellChispasRed_8,spellChispasWhite_8,spellChispasYellow_8,spellMaldicion_8,spellPinBlue_16,spellPoisson_8,spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush7,spellPush8,spellRainBlue_24,spellRainGreen_24,spellRainPurple_24,spellRainRed_24,spellRainSpark_24,spellRingBlue_8,spellRingGreen_8,spellRingPale_8,spellRingRose_8,spellRingYellow_8,spellSparkGold_8,spellSparkGreen_8,spellSparkRose_8,spellSparkWhite_8,spellSparkYellow_8,spellSpiralBlue_15,spellSpiralGreen_15,spellSpiralRed_15,spellSpiralRose_15,spellSpiralYellow_15,spellWhiteMaldicion_8,spellWhiteSpin_16,spellEarthSpike_10,spellIceSpike_10",boss:"midas",drop:"esencia",maxdestination:1,destinations:"la_Tundra"};
-var el_Bosque={legend:" ,good and healthy fresh air,something is stalking in the shadows",name:"Forest",enemies:(!localStorage.logro_ultimocapricor) ? "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona,el_Capricor" : "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona",bossSpell:"spellChispasGreen_8,spellPoisson_8,spellPush3,spellPush7,spellRainGreen_24,spellRingGreen_8,spellSparkGreen_8,spellSpiralGreen_15",boss:"herbus",drop:"hongo",maxdestination:7,destinations:"la_Pradera,el_Volcan,la_Tundra,el_Pantano,el_Castillo,la_Ciudad,el_Poblado"};
-var el_Pantano={legend:"",name:"Swamp",enemies:"Baba,Polipoide,el_Elidoy,el_Purbipco,la_Hidra",bossSpell:"spellPoisson_8,spellPush3",boss:"cuboq",drop:"hongo",maxdestination:5,destinations:"la_Cueva,el_Castillo,la_Pradera,el_Bosque,la_Tundra,el_Heidan",hidrasName:"mother",headsMax:10,hidrasSpells:"spellChispasGreen_8,spellPoisson_8,spellRainGreen_24,spellRingGreen_8,spellSparkGreen_8,spellSpiralGreen_15,spellEarthSpike_10",hidrasXPMultiplier:10};
-var las_Dunas={legend:"",name:"Dunes",enemies:"Momia,el_Gris,el_Seleneco,el_Tricolpus",bossSpell:"spellPush2,spellRainPurple_24,spellRingRose_8,spellSparkRose_8,spellSpiralRose_15,spellMaldicion_8,spellWhiteMaldicion_8",boss:"skeleton",drop:"NA",maxdestination:2,destinations:"la_Pradera,la_Mina",hidrasName:"hydskon",headsMax:5,hidrasSpells:"spellMaldicion_8,spellWhiteMaldicion_8,spellRainRed_24,spellRingPale_8,spellSpiralRed_15",hidrasXPMultiplier:5};
-var la_Tundra={legend:"",name:"Tundra",enemies:"el_Carcero,el_Elemental",bossSpell:"spellChispasBlue_8,spellPush8,spellRainBlue_24,spellRingBlue_8,spellSparkWhite_8,spellSpiralBlue_15,spellWhiteSpin_16,spellIceSpike_10",boss:"rainbow",drop:"hierba",maxdestination:4,destinations:"el_Volcan,la_Torre,el_Bosque,el_Pantano",hidrasName:"icedra",headsMax:5,hidrasSpells:"spellChispasBlue_8,spellRainBlue_24,spellRingBlue_8,spellSparkWhite_8,spellSpiralBlue_15,spellWhiteSpin_16,spellIceSpike_10",hidrasXPMultiplier:5};
-var el_Volcan={legend:"",name:"Volcano",enemies:"el_Dare,el_Dragonian,el_Dragus,el_Golem,el_Roco",bossSpell:"spellChispasRed_8,spellPush4,spellRainRed_24,spellRingPale_8,spellSparkYellow_8,spellSpiralRed_15",boss:"fenix",drop:"NA",maxdestination:2,destinations:"la_Tundra,el_Bosque"};
-var el_Desierto={legend:" ,this hot dry the bones",name:"Desert",enemies:"Animalejo,Momia,el_Cornovit,el_Orco",bossSpell:"spellChispasGreen_8,spellPoisson_8,spellPush3,spellPush7,spellRainGreen_24,spellRingGreen_8,spellSparkGreen_8,spellSpiralGreen_15",boss:"medusa",drop:"hueso",maxdestination:3,destinations:"la_Pradera,la_Mina,el_Heidan"};
-var el_Heidan={legend:"",name:"Heidan",enemies:"el_Angelicus,el_Dranei,el_Falconifen,el_Umigubi,la_Esencia",bossSpell:"spellChispasReddish_8,spellChispasYellow_8,spellPush5,spellRainSpark_24,spellRingYellow_8,spellSparkGold_8,spellSpiralYellow_15",boss:"arcangel",drop:"esencia",maxdestination:2,destinations:"el_Desierto,el_Pantano"};
-var el_Duenon={legend:" ,the smell of rotten flesh intoxicate the air",name:"Duenon",enemies:"el_Demonio,el_Diabillo,el_Ojo,la_Esencia",bossSpell:"spellChispasBlue_8,spellChispasGreen_8,spellChispasReddish_8,spellChispasRed_8,spellChispasWhite_8,spellChispasYellow_8",boss:"etymos",drop:"ectoplasma",maxdestination:2,destinations:"la_Cueva,la_Gruta"};
-var la_Mina={legend:"",name:"Mine",enemies:"el_Enano,el_Maro,el_Ogro,el_Rojo",bossSpell:"spellPush10,spellPush6,spellPush9,spellChispasRed_8,spellPush4,spellRainRed_24,spellRingPale_8",boss:"rojo",drop:"gema",maxdestination:3,destinations:"la_Pradera,el_Pantano,el_Duenon"};
-
-
-
-
-//loc xy for map
-var el_Bosque_altar={x:0.54,y:0.56}
-var el_Castillo_altar={x:0.732,y:0.364}
-var el_Desierto_altar={x:0.832,y:0.684}
-var el_Desierto_taberna={x:0.8,y:0.7}
-var el_Duenon_altar={x:0.556,y:0.816}
-var el_Heidan_altar={x:0.856,y:0.92}
-var el_Pantano_altar={x:0.64,y:0.332}
-var el_Poblado_altar={x:0.68,y:0.592}
-var el_Poblado_casadados={x:0.68,y:0.592}
-var el_Poblado_taberna={x:0.68,y:0.592}
-var el_Volcan_altar={x:0.52,y:0.484}
-var la_Ciudad_casadados={x:0.292,y:0.492}
-var la_Ciudad_altar={x:0.292,y:0.492}
-var la_Ciudad_taberna={x:0.292,y:0.492}
-var la_Cueva_altar={x:0.456,y:0.668}
-var la_Gruta_altar={x:0.32,y:0.724}
-var la_Mina_altar={x:0.384,y:0.644}
-var la_Pradera_altar={x:0.412,y:0.624}
-var la_Torre_altar={x:0.412,y:0.336}
-var la_Tundra_altar={x:0.596,y:0.52}
-var las_Dunas_altar={x:0.164,y:0.7}
-//
-var el_Bosque1={zone:"el_Bosque",x:0.292,y:0.404,moves:"el_Bosque2,el_Bosque3",destinations:"la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5,la_Pradera1,la_Tundra1"}
-var el_Bosque2={zone:"el_Bosque",x:0.332,y:0.32,moves:"el_Bosque1",destinations:"el_Heidan1,el_Heidan2,el_Heidan3,el_Pantano4,el_Pantano5,la_Tundra1"}
-var el_Bosque3={zone:"el_Bosque",x:0.428,y:0.524,moves:"el_Bosque1,el_Bosque4",destinations:"la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5,la_Gruta4,la_Gruta5,la_Pradera4,la_Tundra1,la_Tundra2,la_Tundra5"}
-var el_Bosque4={zone:"el_Bosque",x:0.628,y:0.548,moves:"el_Bosque3,el_Bosque5",destinations:"el_Desierto2,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5,la_Pradera2,la_Tundra3,la_Tundra4,la_Tundra5"}
-var el_Bosque5={zone:"el_Bosque",x:0.652,y:0.452,moves:"el_Bosque4",destinations:"el_Castillo1,el_Castillo2,el_Castillo3,el_Castillo4,el_Castillo5,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5,la_Tundra3,la_Tundra4,la_Tundra5"}
-var el_Castillo1={zone:"el_Castillo",x:0.732,y:0.364,moves:"el_Castillo2,el_Castillo3,el_Castillo4,el_Castillo5",destinations:"el_Bosque5,la_Pradera5,la_Tundra3"}
-var el_Castillo2={zone:"el_Castillo",x:0.732,y:0.364,moves:"el_Castillo1,el_Castillo3,el_Castillo4,el_Castillo5",destinations:"el_Bosque5,la_Pradera5,la_Tundra3"}
-var el_Castillo3={zone:"el_Castillo",x:0.732,y:0.364,moves:"el_Castillo1,el_Castillo2,el_Castillo4,el_Castillo5",destinations:"el_Bosque5,la_Pradera5,la_Tundra3"}
-var el_Castillo4={zone:"el_Castillo",x:0.732,y:0.364,moves:"el_Castillo1,el_Castillo2,el_Castillo3,el_Castillo5",destinations:"el_Bosque5,la_Pradera5,la_Tundra3"}
-var el_Castillo5={zone:"el_Castillo",x:0.732,y:0.364,moves:"el_Castillo1,el_Castillo2,el_Castillo3,el_Castillo4",destinations:"el_Bosque5,la_Pradera5,la_Tundra3"}
-var el_Desierto1={zone:"el_Desierto",x:0.8,y:0.7,moves:"el_Desierto2,el_Desierto3,el_Desierto4,el_Desierto5",destinations:"el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5,la_Pradera2"}
-var el_Desierto2={zone:"el_Desierto",x:0.776,y:0.62,moves:"el_Desierto1,el_Desierto3,el_Desierto4",destinations:"la_Mina3,el_Bosque4,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5,la_Pradera2"}
-var el_Desierto3={zone:"el_Desierto",x:0.852,y:0.632,moves:"el_Desierto1,el_Desierto2,el_Desierto4",destinations:"la_Pradera2"}
-var el_Desierto4={zone:"el_Desierto",x:0.848,y:0.764,moves:"el_Desierto1,el_Desierto2,el_Desierto3,el_Desierto5",destinations:"la_Mina3,la_Pradera2"}
-var el_Desierto5={zone:"el_Desierto",x:0.86,y:0.808,moves:"el_Desierto1,el_Desierto4",destinations:"la_Mina3,el_Heidan4,el_Heidan5"}
-var el_Duenon1={zone:"el_Duenon",x:0.332,y:0.776,moves:"el_Duenon2,el_Duenon3,el_Duenon4,el_Duenon5",destinations:"la_Cueva5,la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4,la_Gruta5,la_Pradera4,las_Dunas2,las_Dunas5"}
-var el_Duenon2={zone:"el_Duenon",x:0.416,y:0.728,moves:"el_Duenon1,el_Duenon3,el_Duenon5",destinations:"la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4,la_Gruta5,la_Pradera4"}
-var el_Duenon3={zone:"el_Duenon",x:0.404,y:0.832,moves:"el_Duenon1,el_Duenon2,el_Duenon4,el_Duenon5",destinations:"la_Cueva5,la_Gruta1,la_Gruta3,la_Gruta4,la_Gruta5"}
-var el_Duenon4={zone:"el_Duenon",x:0.392,y:0.9,moves:"el_Duenon1,el_Duenon3,el_Duenon5",destinations:"la_Cueva5"}
-var el_Duenon5={zone:"el_Duenon",x:0.46,y:0.832,moves:"el_Duenon1,el_Duenon2,el_Duenon3,el_Duenon4",destinations:"la_Cueva5"}
-var el_Heidan1={zone:"el_Heidan",x:0.308,y:0.184,moves:"el_Heidan2,el_Heidan3",destinations:"el_Bosque2,el_Pantano4"}
-var el_Heidan2={zone:"el_Heidan",x:0.26,y:0.108,moves:"el_Heidan1,el_Heidan3",destinations:"el_Bosque2,el_Pantano4"}
-var el_Heidan3={zone:"el_Heidan",x:0.228,y:0.08,moves:"el_Heidan1,el_Heidan2,el_Heidan5",destinations:"el_Bosque2,el_Pantano4"}
-var el_Heidan4={zone:"el_Heidan",x:0.904,y:0.976,moves:"el_Heidan5",destinations:"el_Desierto5"}
-var el_Heidan5={zone:"el_Heidan",x:0.824,y:0.96,moves:"el_Heidan4,el_Heidan3",destinations:"el_Desierto5"}
-var el_Pantano1={zone:"el_Pantano",x:0.692,y:0.168,moves:"el_Pantano2",destinations:"la_Cueva1,la_Pradera3"}
-var el_Pantano2={zone:"el_Pantano",x:0.6,y:0.236,moves:"el_Pantano1,el_Pantano3,el_Pantano4,el_Pantano5",destinations:"la_Cueva1"}
-var el_Pantano3={zone:"el_Pantano",x:0.5,y:0.172,moves:"el_Pantano2,el_Pantano4,el_Pantano5",destinations:"la_Cueva1"}
-var el_Pantano4={zone:"el_Pantano",x:0.476,y:0.244,moves:"el_Pantano2,el_Pantano3,el_Pantano5",destinations:"el_Heidan1,el_Heidan2,el_Heidan3,la_Cueva1,el_Bosque2"}
-var el_Pantano5={zone:"el_Pantano",x:0.488,y:0.296,moves:"el_Pantano2,el_Pantano3,el_Pantano4",destinations:"el_Bosque2,la_Tundra2"}
-var el_Poblado1={zone:"el_Poblado",x:0.68,y:0.592,moves:"el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5",destinations:"el_Bosque4,el_Bosque5,el_Desierto1,el_Desierto2,la_Pradera2,la_Tundra4,la_Tundra5"}
-var el_Poblado2={zone:"el_Poblado",x:0.68,y:0.592,moves:"el_Poblado1,el_Poblado3,el_Poblado4,el_Poblado5",destinations:"el_Bosque4,el_Bosque5,el_Desierto1,el_Desierto2,la_Pradera2,la_Tundra4,la_Tundra5"}
-var el_Poblado3={zone:"el_Poblado",x:0.68,y:0.592,moves:"el_Poblado1,el_Poblado2,el_Poblado4,el_Poblado5",destinations:"el_Bosque4,el_Bosque5,el_Desierto1,el_Desierto2,la_Pradera2,la_Tundra4,la_Tundra5"}
-var el_Poblado4={zone:"el_Poblado",x:0.68,y:0.592,moves:"el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado5",destinations:"el_Bosque4,el_Bosque5,el_Desierto1,el_Desierto2,la_Pradera2,la_Tundra4,la_Tundra5"}
-var el_Poblado5={zone:"el_Poblado",x:0.68,y:0.592,moves:"el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4",destinations:"el_Bosque4,el_Bosque5,el_Desierto1,el_Desierto2,la_Pradera2,la_Tundra4,la_Tundra5"}
-var el_Volcan1={zone:"el_Volcan",x:0.608,y:0.524,moves:"el_Volcan2,el_Volcan3,el_Volcan4,el_Volcan5",destinations:"la_Mina2"}
-var el_Volcan2={zone:"el_Volcan",x:0.496,y:0.452,moves:"el_Volcan1,el_Volcan3,el_Volcan4,el_Volcan5",destinations:"la_Mina2,la_Tundra2"}
-var el_Volcan3={zone:"el_Volcan",x:0.44,y:0.504,moves:"el_Volcan2,el_Volcan1,el_Volcan4,el_Volcan5",destinations:"la_Mina2,la_Tundra2"}
-var el_Volcan4={zone:"el_Volcan",x:0.54,y:0.54,moves:"el_Volcan2,el_Volcan3,el_Volcan1,el_Volcan5",destinations:"la_Mina2"}
-var el_Volcan5={zone:"el_Volcan",x:0.536,y:0.496,moves:"el_Volcan2,el_Volcan3,el_Volcan1,el_Volcan4",destinations:"la_Mina2,la_Tundra2"}
-var la_Ciudad1={zone:"la_Ciudad",x:0.292,y:0.492,moves:"la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5",destinations:"el_Bosque1,el_Bosque3,la_Pradera1,la_Pradera4,la_Tundra1"}
-var la_Ciudad2={zone:"la_Ciudad",x:0.292,y:0.492,moves:"la_Ciudad1,la_Ciudad3,la_Ciudad4,la_Ciudad5",destinations:"el_Bosque1,el_Bosque3,la_Pradera1,la_Pradera4,la_Tundra1"}
-var la_Ciudad3={zone:"la_Ciudad",x:0.292,y:0.492,moves:"la_Ciudad1,la_Ciudad2,la_Ciudad4,la_Ciudad5",destinations:"el_Bosque1,el_Bosque3,la_Pradera1,la_Pradera4,la_Tundra1"}
-var la_Ciudad4={zone:"la_Ciudad",x:0.292,y:0.492,moves:"la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad5",destinations:"el_Bosque1,el_Bosque3,la_Pradera1,la_Pradera4,la_Tundra1"}
-var la_Ciudad5={zone:"la_Ciudad",x:0.292,y:0.492,moves:"la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4",destinations:"el_Bosque1,el_Bosque3,la_Pradera1,la_Pradera4,la_Tundra1"}
-var la_Cueva1={zone:"la_Cueva",x:0.6,y:0.144,moves:"la_Cueva2",destinations:"el_Pantano1,el_Pantano2,el_Pantano3,el_Pantano4"}
-var la_Cueva2={zone:"la_Cueva",x:0.432,y:0.28,moves:"la_Cueva1,la_Cueva3",destinations:"el_Pantano1,el_Pantano2,el_Pantano3"}
-var la_Cueva3={zone:"la_Cueva",x:0.116,y:0.464,moves:"la_Cueva4,la_Cueva2",destinations:"la_Pradera1"}
-var la_Cueva4={zone:"la_Cueva",x:0.448,y:0.688,moves:"la_Cueva2,la_Cueva3,la_Cueva5",destinations:"el_Duenon4"}
-var la_Cueva5={zone:"la_Cueva",x:0.364,y:0.92,moves:"la_Cueva4",destinations:"el_Duenon1,el_Duenon3,el_Duenon4,el_Duenon5"}
-var la_Gruta1={zone:"la_Gruta",x:0.284,y:0.712,moves:"la_Gruta2,la_Gruta3,la_Gruta4,la_Gruta5",destinations:"el_Duenon1,el_Duenon2,el_Duenon3,la_Pradera4,las_Dunas2,las_Dunas5"}
-var la_Gruta2={zone:"la_Gruta",x:0.312,y:0.688,moves:"la_Gruta1,la_Gruta3,la_Gruta4,la_Gruta5",destinations:"el_Duenon1,el_Duenon2,la_Pradera4,las_Dunas2,las_Dunas5"}
-var la_Gruta3={zone:"la_Gruta",x:0.356,y:0.692,moves:"la_Gruta1,la_Gruta2,la_Gruta4,la_Gruta5",destinations:"el_Duenon1,el_Duenon2,el_Duenon3,la_Pradera4,las_Dunas2,las_Dunas5"}
-var la_Gruta4={zone:"la_Gruta",x:0.392,y:0.676,moves:"la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta5",destinations:"el_Bosque3,el_Duenon1,el_Duenon2,el_Duenon3,la_Pradera4,las_Dunas2,las_Dunas5"}
-var la_Gruta5={zone:"la_Gruta",x:0.42,y:0.664,moves:"la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4",destinations:"el_Bosque3,el_Duenon1,el_Duenon2,el_Duenon3,la_Pradera4"}
-var la_Mina1={zone:"la_Mina",x:0.912,y:0.276,moves:"la_Mina4",destinations:"la_Pradera3,la_Pradera5"}
-var la_Mina2={zone:"la_Mina",x:0.56,y:0.624,moves:"la_Mina5,la_Mina3,la_Mina4",destinations:"el_Volcan4,el_Desierto4,las_Dunas2"}
-var la_Mina3={zone:"la_Mina",x:0.86,y:0.752,moves:"la_Mina4,la_Mina2",destinations:"el_Desierto4"}
-var la_Mina4={zone:"la_Mina",x:0.748,y:0.46,moves:"la_Mina1,la_Mina3,la_Mina2",destinations:"el_Desierto4,la_Pradera3,la_Pradera5"}
-var la_Mina5={zone:"la_Mina",x:0.136,y:0.68,moves:"la_Mina2",destinations:"las_Dunas2"}
-var la_Pradera1={zone:"la_Pradera",x:0.164,y:0.428,moves:"la_Pradera4",destinations:"la_Cueva3,el_Bosque1,el_Bosque2,la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5"}
-var la_Pradera2={zone:"la_Pradera",x:0.728,y:0.68,moves:"la_Pradera4",destinations:"el_Bosque4,el_Desierto1,el_Desierto2,el_Desierto3,el_Desierto4,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5"}
-var la_Pradera3={zone:"la_Pradera",x:0.864,y:0.204,moves:"la_Pradera5",destinations:"el_Pantano1,la_Mina1"}
-var la_Pradera4={zone:"la_Pradera",x:0.324,y:0.62,moves:"la_Pradera1,la_Pradera2",destinations:"el_Bosque3,el_Duenon1,el_Duenon2,la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5,la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4,la_Gruta5,las_Dunas2,las_Dunas5"}
-var la_Pradera5={zone:"la_Pradera",x:0.876,y:0.38,moves:"la_Pradera3",destinations:"la_Mina1,el_Castillo1,el_Castillo2,el_Castillo3,el_Castillo4,el_Castillo5"}
-var la_Torre1={zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre2,la_Torre3,la_Torre4,la_Torre5",destinations:"la_Tundra1"}
-var la_Torre2={zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre1,la_Torre3,la_Torre4,la_Torre5",destinations:"la_Tundra1"}
-var la_Torre3={zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre1,la_Torre2,la_Torre4,la_Torre5",destinations:"la_Tundra1"}
-var la_Torre4={zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre1,la_Torre2,la_Torre3,la_Torre5",destinations:"la_Tundra1"}
-var la_Torre5={zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre1,la_Torre2,la_Torre3,la_Torre4",destinations:"la_Tundra1"}
-var la_Tundra1={zone:"la_Tundra",x:0.38,y:0.436,moves:"la_Tundra2",destinations:"el_Bosque1,el_Bosque2,el_Bosque3,la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5,la_Torre1,la_Torre2,la_Torre3,la_Torre4,la_Torre5"}
-var la_Tundra2={zone:"la_Tundra",x:0.484,y:0.428,moves:"la_Tundra1,la_Tundra3,la_Tundra4,la_Tundra5",destinations:"el_Volcan2,el_Bosque3,el_Bosque5,el_Pantano5"}
-var la_Tundra3={zone:"la_Tundra",x:0.62,y:0.42,moves:"la_Tundra2,la_Tundra4,la_Tundra5",destinations:"el_Bosque4,el_Bosque5,el_Castillo1,el_Castillo2,el_Castillo3,el_Castillo4,el_Castillo5"}
-var la_Tundra4={zone:"la_Tundra",x:0.596,y:0.452,moves:"la_Tundra2,la_Tundra3,la_Tundra5",destinations:"el_Bosque4,el_Bosque5,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5"}
-var la_Tundra5={zone:"la_Tundra",x:0.588,y:0.484,moves:"la_Tundra2,la_Tundra3,la_Tundra4",destinations:"el_Bosque3,el_Bosque4,el_Bosque5,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5"}
-var las_Dunas1={zone:"las_Dunas",x:0.068,y:0.676,moves:"las_Dunas2,las_Dunas3,las_Dunas4",destinations:"la_Mina5"}
-var las_Dunas2={zone:"las_Dunas",x:0.232,y:0.652,moves:"las_Dunas1,las_Dunas3,las_Dunas4,las_Dunas5",destinations:"la_Mina5,el_Duenon1,la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4,la_Pradera4"}
-var las_Dunas3={zone:"las_Dunas",x:0.072,y:0.648,moves:"las_Dunas1,las_Dunas2,las_Dunas4",destinations:"la_Mina5,la_Pradera4"}
-var las_Dunas4={zone:"las_Dunas",x:0.088,y:0.716,moves:"las_Dunas1,las_Dunas2,las_Dunas3,las_Dunas5",destinations:"la_Mina5,la_Pradera4"}
-var las_Dunas5={zone:"las_Dunas",x:0.244,y:0.692,moves:"las_Dunas2,las_Dunas4",destinations:"el_Duenon1,la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4,la_Pradera4"}
-
-
-// #endregion
-
-
-
-// #region Define spell info
-var spellAnk_8 = {school:"na",frames:16, name:"Faith"}
-var spellBread_16 = {school:"na",frames:16,name:"Eat"}
-var spellChispasBlue_8 = {school:"Frost",frames:16,name:"<span style='color:#1E90FF'>Ice shards</span>"}
-var spellChispasGreen_8 = {school:"Nature",frames:16,name:"<span style='color:#00AB00'>Poison needles</span>"}
-var spellChispasReddish_8 = {school:"Thunder",frames:16,name:"<span style='color:#FFD800'>Golden touch</span>"}
-var spellChispasRed_8 = {school:"Fire",frames:16,name:"<span style='color:#E32300'>Crimson flash</span>"}
-var spellChispasWhite_8 = {school:"Arcane",frames:16,name:"<span style='color:#BA47E0'>Arcane flare</span>"}
-var spellChispasYellow_8 = {school:"Thunder",frames:16,name:"<span style='color:#FFD800'>Sparks</span>"}
-var spellColorSpin_16 = {school:"Divine",frames:32,name:"<span style='background: linear-gradient(to right, #1E90FF, #4800FF, #FFD800, #E32300, #BA47E0, #00AB00);-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text;'>Multielemental vortex</span>"}
-var spellHeal_8 = {school:"na",frames:16,name:"Heal"}
-var spellKey_8 = {school:"na",frames:16,name:"Open chest"}
-var spellMaldicion_8 = {school:"Shadow",frames:16,name:"<span style='color:#4800FF'>Curse</span>"}
-var spellPinBlue_16 = {school:"Arcane",frames:16,name:"Polymorphy"}
-var spellPinRed_16 = {school:"na",frames:16,name:"Death"}
-var spellPoisson_8 = {school:"Nature",frames:16,name:"<span style='color:#00AB00'>Toxic touch</span>"}
-var spellPush1 = {school:"Arcane",frames:12,name:"<span style='color:#BA47E0'>Arcane blast</span>"}
-var spellPush10 = {school:"Physical",frames:12,name:"Staff"}
-var spellPush2 = {school:"Arcane",frames:12,name:"<span style='color:#BA47E0'>Sonic boom</span>"}
-var spellPush3 = {school:"Nature",frames:12,name:"<span style='color:#00AB00'>Toxic strike </span>"}
-var spellPush4 = {school:"Fire",frames:12,name:"<span style='color:#E32300'>Fire explotion</span>"}
-var spellPush5 = {school:"Thunder",frames:12,name:"<span style='color:#FFD800'>Shock</span>"}
-var spellPush6 = {school:"Physical",frames:12,name:"Staff and cause hemorrhage"}
-var spellPush7 = {school:"Nature",frames:12,name:"<span style='color:#00AB00'>Viper strike</span>"}
-var spellPush8 = {school:"Frost",frames:12,name:"<span style='color:#1E90FF'>Ice hit</span>"}
-var spellPush9 = {school:"Physical",frames:12,name:"Staff"}
-var spellRainBlue_24 = {school:"Frost",frames:24,name:"<span style='color:#1E90FF'>Blizzard</span>"}
-var spellRainGreen_24 = {school:"Nature",frames:24,name:"<span style='color:#00AB00'>Toxic rain</span>"}
-var spellRainMultiColor_24 = {school:"Divine",frames:24,name:"<span style='background: linear-gradient(to right, #1E90FF, #4800FF, #FFD800, #E32300, #BA47E0, #00AB00);-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text;'>Multielemental tempest</span>"}
-var spellRainPurple_24 = {school:"Arcane",frames:24,name:"<span style='color:#BA47E0'>Arcane rain</span>"}
-var spellRainRed_24 = {school:"Fire",frames:24,name:"<span style='color:#E32300'>Armageddon</span>"}
-var spellRainSpark_24 = {school:"Thunder",frames:24,name:"<span style='color:#FFD800'>Storm</span>"}
-var spellRingBlue_8 = {school:"Frost",frames:16,name:"<span style='color:#1E90FF'>Frozen mist</span>"}
-var spellRingGreen_8 = {school:"Nature",frames:16,name:"<span style='color:#00AB00'>Poison cloud</span>"}
-var spellRingPale_8 = {school:"Fire",frames:16,name:"<span style='color:#E32300'>Superheated steam</span>"}
-var spellRingRose_8 = {school:"Arcane",frames:16,name:"<span style='color:#BA47E0'>Arcane atmosphere</span>"}
-var spellRingYellow_8 = {school:"Thunder",frames:8,name:"<span style='color:#FFD800'>Electrostatic ring</span>"}
-var spellSparkGold_8 = {school:"Thunder",frames:16,name:"<span style='color:#FFD800'>Shock</span>"}
-var spellSparkGreen_8 = {school:"Nature",frames:16,name:"<span style='color:#00AB00'>Poison sparks</span>"}
-var spellSparkRose_8 = {school:"Arcane",frames:16,name:"<span style='color:#BA47E0'>Arcane sparks</span>"}
-var spellSparkWhite_8 = {school:"Frost",frames:16,name:"<span style='color:#1E90FF'>Ice sparks</span>"}
-var spellSparkYellow_8 = {school:"Fire",frames:16,name:"<span style='color:#E32300'>Fire sparks</span>"}
-var spellSpiralBlue_15 = {school:"Frost",frames:15,name:"<span style='color:#1E90FF'>Frozen spiral</span>"}
-var spellSpiralGreen_15 = {school:"Nature",frames:15,name:"<span style='color:#00AB00'>Rancid spiral</span>"}
-var spellSpiralRed_15 = {school:"Fire",frames:15,name:"<span style='color:#E32300'>Flame spiral</span>"}
-var spellSpiralRose_15 = {school:"Arcane",frames:15,name:"<span style='color:#BA47E0'>Arcane spiral</span>"}
-var spellSpiralYellow_15 = {school:"Thunder",frames:15,name:"<span style='color:#FFD800'>Electric spiral</span>"}
-var spellStudyGood_15 = {school:"na",frames:30,name:"Study ok"}
-var spellStudySleep_15 = {school:"na",frames:30,name:"Study sleep"}
-var spellStudyTry_16 = {school:"na",frames:32,name:"Study try"}
-var spellWhiteMaldicion_8 = {school:"Shadow",frames:16,name:"<span style='color:#4800FF'>White curse</span>"}
-var spellWhiteSpin_16 = {school:"Frost",frames:32,name:"<span style='color:#1E90FF'>Wind of cold</span>"}
-var spellEarthSpike_10 = {school:"Nature",frames:20,name:"<span style='color:#00AB00'>Earth spike</span>"}
-var spellIceSpike_10 = {school:"Frost",frames:20,name:"<span style='color:#1E90FF'>Ice spike</span>"}
-var spellChispasMulti_12 = {school:"Divine",frames:24,name:"<span style='background: linear-gradient(to right, #1E90FF, #4800FF, #FFD800, #E32300, #BA47E0, #00AB00);-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text;'>Multielemental sparks</span>"}
-var spellCoins = {school:"na",frames:20,name:"Coin"}
-var spellSleep_24 = {school:"na",frames:24,name:"Sleep"}
-var spellMultiDivine_28 = {school:"na",frames:28,name:"Divine interaction"}
-var spellMiniDados_18 = {school:"na",frames:18,name:"Dice"}
-
-
-var spellTier0 = "spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush6"
-var spellTier1 = "spellPush7,spellPush8,spellPush9,spellPush10"
-var spellTier2 = "spellChispasBlue_8,spellChispasGreen_8,spellChispasReddish_8"
-var spellTier3 = "spellChispasRed_8,spellChispasWhite_8,spellChispasYellow_8"
-var spellTier4 = "spellMaldicion_8,spellPoisson_8"
-var spellTier5 = "spellSpiralBlue_15,spellSpiralGreen_15"
-var spellTier6 = "spellSpiralRed_15,spellSpiralRose_15"
-var spellTier7 = "spellSpiralYellow_15,spellWhiteSpin_16"
-var spellTier8 = "spellWhiteMaldicion_8,spellRingBlue_8"
-var spellTier9 = "spellEarthSpike_10,spellIceSpike_10"
-var spellTier10 = "spellRingGreen_8,spellRingPale_8"
-var spellTier11 = "spellRingRose_8,spellRingYellow_8"
-var spellTier12 = "spellSparkGold_8,spellSparkGreen_8"
-var spellTier13 = "spellSparkRose_8,spellSparkWhite_8"
-var spellTier14 = "spellRainBlue_24,spellRainRed_24,spellSparkYellow_8"
-var spellTier15 = "spellRainGreen_24"
-var spellTier16 = "spellRainSpark_24"
-var spellTier17 = "spellRainPurple_24"
-var spellTier18 = "spellChispasMulti_12"
-var spellTier19 = "spellRainMultiColor_24"
-var spellTier20 = "spellColorSpin_16"
-
-//define NPC spells by type
-var wizard_spells = "spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush7,spellPush8";
-var melee_spells = "spellPush9,spellPush6,spellPush10";
-var fire_spells = "spellPush4";
-var frost_spells = "spellPush8";
-var nature_spells = "spellPush3,spellPush7";
-var arcane_spells = "spellPush1,spellPush2";
-var thunder_spells = "spellPush5";
-var divine_spells = "spellChispasMulti_12";
-
-
-// #endregion
-
-
-//logros definition ejemplo de uso: 
-//logro.set(logro.ultimocapricor), declara el localstorage, otras propiadesde de los objetos anidados para la page
-var logro = {
-    logro_attack500: {name:"logro_attack500", title:"Over 500!", description:"Great performance!, execute a 500 HP attack"},//ok
-    logro_attack1000: {name:"logro_attack1000", title:"Divine hit!", description:"The power of a god is inside, execute a 1000 HP attack"},//ok
-    logro_botines: {name:"logro_botines", title:"Follow the pirate path", description:"Excellent work for someone without a shovel, found 100 chests"},//ok
-    logro_pots: {name:"logro_pots", title:"Fragile, handle with care", description:"This behavior have some link, break 100 pots"},//ok
-    logro_corazongrande: {name:"logro_corazongrande", title:"logro_corazongrande", description:"logro_corazongrande"},
-    logro_dadoscargados: {name:"logro_dadoscargados", title:"logro_dadoscargados", description:"logro_dadoscargados"},
-    logro_dormiletas: {name:"logro_dormiletas", title:"logro_dormiletas", description:"logro_dormiletas"},
-    logro_esosiesiluminacion: {name:"logro_esosiesiluminacion", title:"logro_esosiesiluminacion", description:"logro_esosiesiluminacion"},
-    logro_estudioso: {name:"logro_estudioso", title:"logro_estudioso", description:"logro_estudioso"},
-    logro_fanatico: {name:"logro_fanatico", title:"logro_fanatico", description:"logro_fanatico"},
-    logro_flawless: {name:"logro_flawless", title:"logro_flawless", description:"logro_flawless"},
-    logro_fullcarga: {name:"logro_fullcarga", title:"", description:""},
-    logro_inventariolleno: {name:"logro_inventariolleno", title:"", description:""},
-    logro_jugon: {name:"logro_jugon", title:"", description:""},    
-    logro_lvl2: {name:"logro_lvl2", title:"Level UP!", description:"Reach to the level 2, no new powers but pure fun"},//ok
-    logro_level140: {name:"logro_level140", title:"A new king", description:"Occupate the throne and kill King Midas"},//ok
-    logro_level200: {name:"logro_level200", title:"The return of the king", description:"A evil king with a great power, recover the throne"},//ok
-    logro_libros: {name:"logro_libros", title:"The librarian", description:"Like Alejandria but pixelated, found 1000 books"},
-    logro_muchapradera: {name:"logro_muchapradera", title:"", description:""},
-    logro_muchopoblado: {name:"logro_muchopoblado", title:"", description:""},
-    logro_primeraderrotaporboss: {name:"logro_primeraderrotaporboss", title:"Poor little creature", description:"A boss can not be underestimated, killed by a boss for first time"},//ok
-    //logro_primerboss: {name:"logro_primerboss", title:"", description:""},
-    logro_primerbossderrotado: {name:"logro_primerbossderrotado", title:"Piece of cake", description:"Who is the boss now?, defeat a boss"},//ok
-    logro_ricachon: {name:"logro_ricachon", title:"", description:""},
-    logro_runas: {name:"logro_runas", title:"Someone is throwing rocks", description:"Runemaster, found 1000 runes to study"},
-    logro_tabernero: {name:"logro_tabernero", title:"BnB, beer and bed", description:"Spend some time in a inn, visit 250 times a inn"},
-    logro_tocado: {name:"logro_tocado", title:"Feel the divine touch", description:"Touched many times"},
-    logro_ultimocapricor: {name:"logro_ultimocapricor", title:"The last of their kind", description:"Kill the last existing Capricor, an ateist lineage with no revive posibilities, are you happy?"},
-    logro_vistoaguilaencueva: {name:"logro_vistoaguilaencueva", title:"Why this animal is here?", description:"Found a eagle in the cave"},
-    logro_killedbysheep: {name:"logro_killedbysheep", title:"Shaaaaame on you", description:"Killed by a powerful sheep"},//ok
-    logro_killedbychicken: {name:"logro_killedbychicken", title:"The last cluck-cluck", description:"Badly defeated by a demonic chicken"},//ok
-    logro_namesake: {name:"logro_namesake", title:"Tocayo", description:"Find a namesake, something almost impossible in these lands"},//ok -i
-    logro_hategod:  {name:"logro_hategod", title:"Atheist!", description:"Found a new way to live the life, pure and real hate for god, reach -10K of faith"},//ok -i
-    //love god give setLocal("travelFavor",1)
-    logro_hydramystery:  {name:"logro_hydramystery", title:"The hydra is awake", description:"Discover the mantra to wake up the ancient hydras"},//ok
+// Achievements: definitions from data/achievements.js plus the unlock function.
+const logro = {
+    ...achievements,
     set: function(nameLogro){
         if(!localStorage.getItem(nameLogro.name)){
         //sonido de archivements
@@ -430,7 +111,7 @@ var logro = {
         }
         }
     }
-}
+};
     
 
 //stat definition object
@@ -838,14 +519,14 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
 
 //    var t0 = performance.now();
     //if (eval(img).school != "na"){
-    if (window[img].school != "na"){
+    if (spells[img].school != "na"){
         if(critic){var volume = 1}
         //playSound(eval(img).school, volume);
-        playSound(window[img].school, volume);
+        playSound(spells[img].school, volume);
 
     }
     //var totalFrames = eval(img).frames;
-    var totalFrames = window[img].frames;
+    var totalFrames = spells[img].frames;
     var canvas = document.querySelector("#spellCanvas");
     var context = canvas.getContext("2d");
 
@@ -1005,7 +686,7 @@ function exploreEV() {
             print("<b>" + getLocal("pjName") + "</b> is exploring...");
             eventClock = setInterval(changeLocality, masterTime);
         } else {
-            print("<b>" + getLocal("pjName") + "</b>" + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + window[getLocal("currentZone")].name);
+            print("<b>" + getLocal("pjName") + "</b>" + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[getLocal("currentZone")].name);
             pickRandomBackgroundForCurrentZone();
             addXP(0.5);
             eventMasterClock = setInterval(event, masterTime);
@@ -1049,7 +730,7 @@ function battle() {
         }
         //if enemy dies
         if (Math.round(enemyHP) <= 0) {
-            if (hydraCombat && (Number(getLocal("currentHead" + hydra)) + 1) <= Number(window[getLocal("currentZone")].headsMax)){
+            if (hydraCombat && (Number(getLocal("currentHead" + hydra)) + 1) <= Number(zones[getLocal("currentZone")].headsMax)){
                 setLocal("currentHead" + hydra, Number(getLocal("currentHead" + hydra)) + 1);
                 idx("HydrasHeadCut");
                 getHydra();
@@ -1062,7 +743,7 @@ function battle() {
             //kill capricor
             if (enemy == "el_capricor"){
                 logro.set(logro.logro_ultimocapricor);
-                el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
+                zones.el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
             }
 
             polymorphed = false;
@@ -1075,7 +756,7 @@ function battle() {
                 setLocal("currentHead" + hydra, "")
                 //todo logro de cada hidra
             }else{
-                if(window[enemyAndNumber].rare == 1){
+                if(enemySprites[enemyAndNumber].rare == 1){
                     idx("rareEnemiesKilled");
                 }else{
                     idx("EnemiesKilled");
@@ -1093,7 +774,7 @@ function battle() {
             
             //add faith if the enemy is corrupted but only if not boss or hydra
             if(!bossCombat && !hydraCombat){
-                if (window[enemyAndNumber].corrupted == "1" && getLocal("inPecado") == "false"){
+                if (enemySprites[enemyAndNumber].corrupted == "1" && getLocal("inPecado") == "false"){
                     feGanada = calculateFe() * 5;
                     feGanada *= Number(getLocal("feMultiplicator"))
                     setLocal("fe", Number(getLocal("fe")) + feGanada);
@@ -1106,24 +787,24 @@ function battle() {
 
             //punish if the wizard is in sin (use the same corruptedText)
             if(getLocal("inPecado") == "true"){
-                feperdida = calculateFe();
+                var feperdida = calculateFe();
                 setLocal("fe", Number(getLocal("fe")) - feperdida);
                 var corruptedText = ", and reduce the faith " + spiritIcon + " -" + roundNumbertoLetter(feperdida);
 
             }
 
             //print and add xp depent of the enemy
-            if (window[enemy].hasgold == "true") {
+            if (enemyTypes[enemy].hasgold == "true") {
                 playSound("coins");
                 addGold();
                 if(bossCombat){
                     addXP(4);
                     print(enemyName + " was defeated and a big loot has been found " + goldIcon + roundNumbertoLetter(getLocal("lastGoldFromBattle") * bossGoldMultiplier));
                 }else if(hydraCombat){
-                    addXP(Number(window[getLocal("currentZone")].hidrasXPMultiplier));
+                    addXP(Number(zones[getLocal("currentZone")].hidrasXPMultiplier));
                     print(enemyName + " was defeated and a treasure has been found " + goldIcon + roundNumbertoLetter(getLocal("lastGoldFromBattle") * 15));
                 }else{
-                    addXP(window[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+                    addXP(enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
                     print(enemyName + " was defeated and looted " + goldIcon + roundNumbertoLetter(getLocal("lastGoldFromBattle")) + corruptedText);
                 }
             } else {
@@ -1131,7 +812,7 @@ function battle() {
                     addXP(4);
                     print(enemyName + " was defeated");
                 }else{
-                    addXP(window[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+                    addXP(enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
                     print(enemyName + " was defeated" + corruptedText);
                 }
 
@@ -1177,7 +858,7 @@ function battle() {
             loadAlterCanvasChar("muerto", squareSide, headLevel);
             var lootedText = "";
             console.log(enemy +": a")//para detectar BUG
-            if (getLocal("Gold") > 0 && window[enemy].hasgold == "true"){//acá hay un BUG
+            if (getLocal("Gold") > 0 && enemyTypes[enemy].hasgold == "true"){//acá hay un BUG
             var goldLooted = getRandomInt(Number(getLocal("lastGoldFromBattle")),Number(getLocal("lastGoldFromBattle")) * 2);
             setLocal("Gold", Number(getLocal("Gold")) - goldLooted);
             lootedText = " and losses some gold" +  " (" + goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
@@ -1657,10 +1338,10 @@ function getSpell(lvlBase = Math.floor(Number(getLocal("lvl")) / 10)){
     for (i = 0; i <= lvlBase; i++) { 
         if(spellSelected !== ""){
             //spellSelected =  spellSelected + "," + eval("spellTier" + i);
-            spellSelected =  spellSelected + "," + window["spellTier" + i];
+            spellSelected =  spellSelected + "," + spellTiers[i];
         }else{
         //spellSelected =  eval("spellTier" + i);
-        spellSelected =  window["spellTier" + i];
+        spellSelected =  spellTiers[i];
         }
     }
     return pickRandomItem(spellSelected);
@@ -1682,9 +1363,9 @@ function addGold(){
          idx("GoldFromBosses", (Number(getLocal("lastGoldFromBattle")) * (15)));
     }else{
      //if (eval(enemy).hasgold == "true") {
-        if (window[enemy].hasgold == "true") {
+        if (enemyTypes[enemy].hasgold == "true") {
          var possibleGold = Number(getLocal("HPBase")) * Number(getLocal("rGold"));
-         var goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (window[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
+         var goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
          setLocal("lastGoldFromBattle", goldcurrentBattle);
          setLocal("Gold", Number(getLocal("Gold")) + goldcurrentBattle);
          idx("GoldFromEnemies", goldcurrentBattle);
@@ -1784,7 +1465,7 @@ function changeLocality() {
         //get new zone
         setLocal("lastZone", getLocal("currentZone"));
         //save in getLocal("currentZone")
-        print("<b>" + getLocal("pjName") + "</b> left the " + window[getLocal("lastZone")].name);
+        print("<b>" + getLocal("pjName") + "</b> left the " + zones[getLocal("lastZone")].name);
         
         getZone();
         //get a new zone
@@ -1793,7 +1474,7 @@ function changeLocality() {
         //change background
         //pickRandomBackgroundForCurrentZone();
         loadBackground(getLocal("currentZone") + getLocal("currentStage"));
-        print("<b>" + getLocal("pjName") + "</b> is entering to the " + window[getLocal("currentZone")].name + ", " + pickRandomItem(window[getLocal("currentZone")].legend));
+        print("<b>" + getLocal("pjName") + "</b> is entering to the " + zones[getLocal("currentZone")].name + ", " + pickRandomItem(zones[getLocal("currentZone")].legend));
         break;
     case 3:
         //cancel the Interval, put 0 to the counter and trigger a new event
@@ -1819,7 +1500,7 @@ function getEnemy() {
         bossCombat = true;
         bossMultiplier = 2.5;
         bossGoldMultiplier = 5;
-        var boss = window[getLocal("currentZone")].boss;
+        var boss = zones[getLocal("currentZone")].boss;
         // if (boss == "cuboq" || boss == "etymos" || boss == "infraespectro"){
         //     document.getElementById("npcCanvas").style.opacity = 0.7;
         // }else{
@@ -1832,22 +1513,22 @@ function getEnemy() {
         enemyHPbase = Math.round(enemyHP)
         updateHeartNPC()
         //enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + boss.toUpperCase() + "</span>";
-        enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + window[boss].name.toUpperCase() + "</span>";
+        enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + enemyTypes[boss].name.toUpperCase() + "</span>";
     } else {
         //spellEnemy = pickRandomItem("spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush6,spellPush7,spellPush8,spellPush9,spellPush10");
-        enemy = pickRandomItem(window[getLocal("currentZone")].enemies).toLowerCase();
+        enemy = pickRandomItem(zones[getLocal("currentZone")].enemies).toLowerCase();
         // if (!!eval(enemy).translucid){
         //     document.getElementById("npcCanvas").style.opacity = 0.8;
         // }else{
         //     document.getElementById("npcCanvas").style.opacity = 1;
         // }
         idx("enemy_" + enemy);
-        var number = Math.floor((Math.random() * window[enemy].max) + 1);
+        var number = Math.floor((Math.random() * enemyTypes[enemy].max) + 1);
         //random number of the image max    
         //select a spell based on the school of enemy
-        spellEnemy = pickRandomItem(window[window[enemy + number].type + "_spells"]);
+        spellEnemy = pickRandomItem(npcSpells[enemySprites[enemy + number].type]);
         enemyAndNumber = enemy + number;
-        if (window[enemyAndNumber].rare == 1){
+        if (enemySprites[enemyAndNumber].rare == 1){
             idx("rareEnemyEncounters");
         }else{
             idx("enemyEncounters");
@@ -1856,20 +1537,20 @@ function getEnemy() {
         enemyHP = (getRandomInt(Number(getLocal("rangeEnemyHP")) * 0.75, Number(getLocal("rangeEnemyHP")) * 1.25));
         enemyHPbase = Math.round(enemyHP)
         updateHeartNPC()
-        var raretext = (window[enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
+        var raretext = (enemySprites[enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
         
         if (enemy == "baba" || enemy == "el_esqueleto" || enemy == "animalejo" || enemy == "polipoide" || enemy == "momia") {
             //avoid name creatures and others
-            //enemyName = "A " + window[enemy].name;
-            enemyName = "A " + window[enemy + number].altName + raretext;
+            //enemyName = "A " + enemyTypes[enemy].name;
+            enemyName = "A " + enemySprites[enemy + number].altName + raretext;
         } else if (enemy == "el_capricor"){
-            enemyName = "The " + capitalize(window[enemy].name) + raretext;
+            enemyName = "The " + capitalize(enemyTypes[enemy].name) + raretext;
         }
         else {
-            if (window[enemy + number].altName){//choose the altername if have some
-                enemyName = "<i>" + randomName() + "</i> the " + capitalize(window[enemy + number].altName) + raretext;
+            if (enemySprites[enemy + number].altName){//choose the altername if have some
+                enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemySprites[enemy + number].altName) + raretext;
             }else{
-                enemyName = "<i>" + randomName() + "</i> the " + capitalize(window[enemy].name) + raretext;
+                enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemyTypes[enemy].name) + raretext;
             }
         }
     }
@@ -1895,7 +1576,7 @@ function getHydra(newEncounter = false){
     bossCombat = false;
     hydraCombat = true;
     playSound("hidra");
-    hydra =  window[getLocal("currentZone")].hidrasName;
+    hydra =  zones[getLocal("currentZone")].hidrasName;
     if(!localStorage[thx("currentHead" + hydra)]){setLocal("currentHead" + hydra, 1)};
     enemy = hydra;
     loadNPC(hydra + getLocal("currentHead" + hydra));
@@ -1906,11 +1587,11 @@ function getHydra(newEncounter = false){
     if (newEncounter){
         idx("Hydras");
         idx("typeofHydras_" + hydra)
-        startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
+        var startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
         print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(startBattleText));
         eventClock = setInterval(battle, masterTime);
     } else {
-        startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
+        var startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
         print("<b>" + getLocal("pjName") + "</b> " + pickRandomItem(startBattleText));
     }
     
@@ -1925,7 +1606,7 @@ function attackEV() {
         enemyHP = 1;
         updateHeartNPC()
         spell("spellPinBlue_16",false,frameWidth,frameHeight,currentFrame,shift);
-        idx("school_" + spellPinBlue_16.school)
+        idx("school_" + spells.spellPinBlue_16.school)
         polymorphedAnimal = pickRandomItem("gallina,oveja");
         playSound(polymorphedAnimal);
         loadNPC(polymorphedAnimal);
@@ -1951,7 +1632,7 @@ function attackEV() {
                     enemyHP = Math.round(enemyHP) - Math.round(pjAttackWithCritic);
                 }
                 updateHeartNPC()
-                idx("school_" + window[spellId].school)
+                idx("school_" + spells[spellId].school)
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift,true);
                 print("<b>" + getLocal("pjName") + "</b> performs a <b>critic attack!</b>" + " (" + attackIcon + roundNumbertoLetter(Number(getLocal("attack")) * Number(getLocal("fAttack"))) + ") &times; " + Math.round(getLocal("fCritic")) + " - " + heartIcon + roundNumbertoLetter(enemyHP));
                 //if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
@@ -1972,10 +1653,10 @@ function attackEV() {
                     enemyHP = Math.round(enemyHP) - Math.round(pjHit);
                 }
                 updateHeartNPC()
-                idx("school_" + window[spellId].school)
-                var spellText = window[spellId].name.toLowerCase()
+                idx("school_" + spells[spellId].school)
+                var spellText = spells[spellId].name.toLowerCase()
                 
-                if (window[spellId].school == "Physical"){
+                if (spells[spellId].school == "Physical"){
                     var text = pickRandomItem(" uses the , attacks with the ");
                 }else{
                     var text = pickRandomItem(" cast , attacks with ");
@@ -2009,9 +1690,9 @@ function attackEV() {
             }
             print(enemyName + " attacks (" + attackIcon + roundNumbertoLetter(enemyHit) + ")");
             if (bossCombat){
-                spellEnemy = pickRandomItem(window[getLocal("currentZone")].bossSpell);
+                spellEnemy = pickRandomItem(zones[getLocal("currentZone")].bossSpell);
             }else if (hydraCombat){
-                spellEnemy = pickRandomItem(window[getLocal("currentZone")].hidrasSpells);
+                spellEnemy = pickRandomItem(zones[getLocal("currentZone")].hidrasSpells);
             }
             spell(spellEnemy,true,frameWidth,frameHeight,currentFrame,shift);
             idx("IncomingAttacks");
@@ -2082,32 +1763,16 @@ function setLiveTime(){
 }
 
 //Create the localStorage object if it does not exist and add 1 by default to the stats and return the current number
-function idx(idx, number = 1){
-    if(!localStorage[thx("idx_" + idx)]){
-        setLocal("idx_" + idx, number);
-    }else{
-        setLocal("idx_" + idx, Number(getLocal("idx_" + idx)) + number);
-    }
-    return getLocal("idx_" + idx);
-}
+
 
 
 //Do something probability Yes or Not
-function YesOrNot(probBase, probExtra) {
-    if (Math.random() <= Number(probBase) + Number(probExtra)) {
-        var result = true
-    } else {
-        var result = false
-    }
-    ;return result;
-};
+;
 
 
 
 //Get random number in an interval
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-};
+;
 
 
 
@@ -2161,19 +1826,13 @@ function randomName() {
 
 
 //Return a random element from a list
-function pickRandomItem(localStorageItem) {
-    var items = localStorageItem.split(",");
-    //convert localStorage string into var name, get destination item and split it by ,
-    var randomItem = items[Math.floor(Math.random() * items.length)];
-    //select a random item
-    return randomItem;
-};
+;
 
 
 
 //Select random background for currentZone
 function pickRandomBackgroundForCurrentZone() {
-    var randomLocality = pickRandomItem(window[getLocal("currentZone") + getLocal("currentStage")].moves)
+    var randomLocality = pickRandomItem(places[getLocal("currentZone") + getLocal("currentStage")].moves)
     loadBackground(randomLocality);
 };
 
@@ -2182,7 +1841,7 @@ function pickRandomBackgroundForCurrentZone() {
 function getZone() {
     if (getLocal("currentZone") !== undefined) {
         idx("zonesChanged");
-        var randomLocality = pickRandomItem(window[getLocal("currentZone") + getLocal("currentStage")].destinations)
+        var randomLocality = pickRandomItem(places[getLocal("currentZone") + getLocal("currentStage")].destinations)
         setLocal("currentZone", randomLocality.match(/\D+/).toString());//extract no digits
         setLocal("currentStage", randomLocality.match(/\d+/).toString());//extract digits
         idx("zone_" + getLocal("currentZone"));
@@ -2192,44 +1851,25 @@ function getZone() {
 };
 
 
-function roundNumbertoLetter(numberNoAbs) {
-    var number = Math.abs(Number(numberNoAbs))
-    var negative;
-    Number(numberNoAbs) < -0.499999999999999 ?  negative = "-" : negative = "";
-    if (number >= 0 && number < 1000) {
-        return negative + Number(number).toFixed(0)
-    } else if (number >= 1000 && number < 1000000) {
-        return negative + Number(number / 1000).toFixed(2) + "k"
-    } else if (number >= 1000000 && number < 1000000000) {
-        return negative + Number(number / 1000000).toFixed(2) + "M"
-    } else if (number >= 1000000000) {
-        return negative + Number(number / 1000000000).toFixed(2) + "G"
-    };
-
-};
+;
 
 
 //Put first char in uppercase
-function capitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-};
+;
 
 //count number of spells that know
 function countSpellKnown(){
     var lvlBase = Math.floor(Number(getLocal("lvl")) / 10)
     var numberSpells = 0;
-        for (i = 0; i <= lvlBase; i++) { 
-            numberSpells += Number(window["spellTier" + i].split(',').length)
+        for (var i = 0; i <= lvlBase; i++) { 
+            numberSpells += Number(spellTiers[i].split(',').length)
         }
     return numberSpells
 }
 
 
 //check if the variable is undefined and put 0, intended for stats page
-function check(variable){
-    //return eval(variable) ? roundNumbertoLetter(eval(variable)) : 0;
-    return localStorage.getItem(thx(variable)) ? roundNumbertoLetter(Number(hx(localStorage.getItem(thx(variable))))) : 0;
-}
+
 
 //count the kind of elements and add the number for organized list of idx
 //example of usage getListOfOrganizedLocalStorage(thx("idx_enemy_"))
@@ -2242,17 +1882,16 @@ function getListOfOrganizedLocalStorage(token,inObj=""){
         if (localStorage.key(i).match(token)){
             if(token == "/logro_/"){
                 var text = localStorage.key(i);
-                out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + window.logro[text].name + '.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>' + window.logro[text].title + '</strong> <br>' + window.logro[text].description + '</div></div>';
+                out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + logro[text].name + '.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>' + logro[text].title + '</strong> <br>' + logro[text].description + '</div></div>';
             }else{
                 if(inObj == ""){
                 var text = hx(localStorage.key(i).replace(token, ""));
-                out += capitalize(window[text].name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
+                out += capitalize((enemyTypes[text] || zones[text]).name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
                 } else{
                     //var text = hx(localStorage.key(i).replace(token, ""));
                     //out += capitalize([inObj + "." + text].name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
                     var text = hx(localStorage.key(i).replace(token, ""));
-                    //console.log(window[inObj][text].name);
-                    out += capitalize(window[inObj][text].name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
+                                        out += capitalize({ statObj, statueObj }[inObj][text].name) + " (" + hx(localStorage.getItem(localStorage.key(i))) + "), ";
                 }
                 
             }
@@ -2273,44 +1912,17 @@ function countLogros(){
 
 
 //seg
-function thx(str){
-    str = str.toString();
-	var arr1 = [];
-	for (var n = 0, l = str.length; n < l; n ++) 
-     {
-		var hx = Number(str.charCodeAt(n)).toString(36);
-		arr1.push(hx);
-	 }
-	return arr1.join('');
-   }
-
-function hx(str1){
-	var hx  = str1;
-	var str = '';
-	for (var n = 0; n < hx.length; n += 2) {
-		str += String.fromCharCode(parseInt(hx.substr(n, 2), 36));
-	}
-	return str;
- }
 
 
- function getLocal(str){
-    return hx(localStorage[thx(str)]);
- }
-
- function setLocal(str,value){
-    return localStorage[thx(str)] = thx(value);
- }
 
 
- function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  }
+
+ 
+
+ 
+
+
+ 
   
 
 function list(){
@@ -2325,21 +1937,7 @@ function list(){
 }
 
 //convert secs to string 
- function secsToHours(segundos){
-    var month_f = segundos / 2629750;
-    var week_f = (month_f - parseInt(month_f)) * 4.34802865
-    var day_f = (week_f - parseInt(week_f)) * 7
-    var hour_f = (day_f - parseInt(day_f)) * 24
-    var minutes_f = (hour_f - parseInt(hour_f)) * 60
-    var seconds_f = (minutes_f - parseInt(minutes_f)) * 60
-    var result =  (month_f >= 1 ?  Math.floor(month_f) + "mo" : "") +
-    (week_f >= 1 ?  " " + Math.floor(week_f) + "w" : "") +
-    (day_f >= 1 ?  " " + Math.floor(day_f) + "d" : "") +
-    (hour_f >= 1 ?  " " + Math.floor(hour_f) + "h" : "") +
-    (minutes_f >= 1 ? " " + Math.floor(minutes_f) + "m" : "") +
-    (Math.round(seconds_f) >= 1 ?  " " + Math.round(seconds_f) + "s" : "");
-   return result;
-}
+ 
 
 ///////////////////////////////////////////////////////// 
 // ██╗      █████╗ ██╗   ██╗ ██████╗ ██╗   ██╗████████╗//
@@ -2967,8 +2565,8 @@ function localizarBocadillo(){
             document.getElementById("backMapa").src = "img/mapa.png";
         }
         if(!currentBackGround.match(/_altar/) && !currentBackGround.match(/_estatua/)){
-        var localidad = window[currentBackGround];
-        document.getElementById("zoneMap").innerHTML= "The " + window[getLocal("currentZone")].name;
+        var localidad = places[currentBackGround];
+        document.getElementById("zoneMap").innerHTML= "The " + zones[getLocal("currentZone")].name;
         var mapWidth = document.getElementById("backMapa").style.width;
         document.getElementById("bocadilloMapa").style.display ="block";
         document.getElementById("pjMapa").style.display ="block";
@@ -3060,94 +2658,9 @@ function setName(){
 
 
 
-//service worker related
-if ('serviceWorker' in navigator) {
-    // Delay registration until after the page has loaded, to ensure that our
-    // precaching requests don't degrade the first visit experience.
-    // See https://developers.google.com/web/fundamentals/instant-and-offline/service-worker/registration
-    window.addEventListener('load', function() {
-      // Your service-worker.js *must* be located at the top-level directory relative to your site.
-      // It won't be able to control pages unless it's located at the same level or higher than them.
-      // *Don't* register service worker file in, e.g., a scripts/ sub-directory!
-      // See https://github.com/slightlyoff/ServiceWorker/issues/468
-      //document.getElementById("statusText").innerHTML="...";
-      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
-        // updatefound is fired if service-worker.js changes.
-        reg.onupdatefound = function() {
-            document.getElementById("statusText").innerHTML="...";
-          // The updatefound event implies that reg.installing is set; see
-          // https://w3c.github.io/ServiceWorker/#service-worker-registration-updatefound-event
-          var installingWorker = reg.installing;
-  
-          installingWorker.onstatechange = function() {
-            switch (installingWorker.state) {
-              case 'installed':
-                if (navigator.serviceWorker.controller) {
-                  // At this point, the old content will have been purged and the fresh content will
-                  // have been added to the cache.
-                  // It's the perfect time to display a "New content is available; please refresh."
-                  // message in the page's interface.
-                  document.getElementById("statusText").innerHTML="!";
-                  console.log('[Service Worker] (!) New or updated content is available.');
-                } else {
-                  // At this point, everything has been precached.
-                  // It's the perfect time to display a "Content is cached for offline use." message.
-                  document.getElementById("statusText").innerHTML="";
-                  console.log('[Service Worker] Content is now available offline!');
-                }
-                break;
-  
-              case 'redundant':
-                document.getElementById("statusText").innerHTML=".";
-                // console.error('[Service Worker] (?) The installing service worker became redundant.');
-                // if ('storage' in navigator && 'estimate' in navigator.storage) {
-                //     navigator.storage.estimate().then(function(results) {
-                //       var percentUsed = (results.usage / results.quota) * 100;
-                //       console.log("percent used: " + percentUsed);
-                //       console.log("bytes used: " + results.usage);
-                //       console.log("quota in bytes: " + results.quota);
-                //     });
-                // }
-                navigator.storage.estimate().then(({usage, quota}) => {
-                    console.log(`Using ${usage} out of ${quota} bytes.`);
-                  }).catch(error => {
-                    // console.error('Loading storage estimate failed:');
-                    console.log(error.stack);
-                  });
-                  
-                navigator.serviceWorker.getRegistrations().then(function (registrations) {
-                    if (!registrations.length) {
-                      console.log('No serviceWorker registrations found.')
-                      return
-                    }
-                    for(let registration of registrations) {
-                      registration.unregister().then(function (boolean) {
-                        console.log(
-                          (boolean ? 'Successfully unregistered' : 'Failed to unregister'), 'ServiceWorkerRegistration\n' +
-                          (registration.installing ? '  .installing.scriptURL = ' + registration.installing.scriptURL + '\n' : '') +
-                          (registration.waiting ? '  .waiting.scriptURL = ' + registration.waiting.scriptURL + '\n' : '') +
-                          (registration.active ? '  .active.scriptURL = ' + registration.active.scriptURL + '\n' : '') +
-                          '  .scope: ' + registration.scope + '\n'
-                        )
-                      })
-                    }
-                  })
-                break;
-            }
-          };
-        };
-      },function() {
-        //document.getElementById("statusText").innerHTML="x1";
-        console.log('[Service Worker] (x1) service worker registration failure.');
-      }).catch(function(e) {
-        //document.getElementById("statusText").innerHTML="x2";
-        console.error('[Service Worker] (x2) Error during service worker registration:', e);
-      });
-    });
-  }else{
-    //document.getElementById("statusText").innerHTML="x3";
-    console.log('[Service Worker] (x3) service worker is not supported.');
-  }
+// v1 registered an offline-cache service worker here. v2 ships a self-removing
+// service-worker.js instead (so nobody gets stuck on cached v1 files); a proper
+// offline cache comes back before the 2.0.0 release.
 
 
 
@@ -3462,8 +2975,8 @@ function updateStats(){
     "Failed statue studies: " + check("idx_failStudyStatue") + "<br>" + 
     (check("idx_sucessStudyStatue") > 0 ?  "Skills incresed studing books or runes: " + getListOfOrganizedLocalStorage(thx("idx_study_"),"statObj") + "<br>" : "") + 
     "<br><span class='subtitles'>Exploration</span><br>" + 
-    "Current zone: " + "The " + window[getLocal("currentZone")].name + "<br>" + 
-    "Last zone: " + "The " + window[getLocal("lastZone")].name + "<br>" + 
+    "Current zone: " + "The " + zones[getLocal("currentZone")].name + "<br>" + 
+    "Last zone: " + "The " + zones[getLocal("lastZone")].name + "<br>" + 
     "Changes of zones: " + check("idx_zonesChanged") + "<br>" + 
     "Times in the Prairie: " + check("idx_zone_la_Pradera") + "<br>" + 
     "Times in the City: " + check("idx_zone_la_Ciudad") + "<br>" + 
@@ -3626,11 +3139,12 @@ function updateKill(){
     'For kill the wizard press Kill button below, otherwise just close this scroll.' +
     '</div>' +
     '<br><br><div>' + 
-    '<img onclick="realKill()" class="btn" id="realKillBtn" src="img/matar.png"/>' +
+    '<img class="btn" id="realKillBtn" src="img/matar.png"/>' +
     '</div><br><br>' + 
     '<span class="titles" id="titleCementery">' + (!localStorage.cementery ? "" : "Cementery") + '</span>' + 
     (!localStorage.cementery ? "" : "<small>" + localStorage.cementery + "</small>");
     document.getElementById('innerTextScroll').innerHTML=txt;
+    document.getElementById("realKillBtn").onclick = realKill;
     document.getElementById("kill").style.fontSize = em + "px";
     document.getElementById("kill").style.lineHeight = em + "px";
     document.getElementById("titleKill").style.fontSize = em * 2.5 + "px";
@@ -3656,7 +3170,7 @@ function updateKill(){
 //History
 
 //declaration of chapter object, if text is NA, considere only a event and not a history.
-chapter = {
+var chapter = {
     lvl1:{
         text:'<span class="titles" id="historyTitle">Prologue</span>~~THE BEGINING~~<br>',
         event: function(){
@@ -3922,6 +3436,7 @@ function afterChapter(){
 //temp dicegame
 //define dice and set 1 as default
 var dicesToRoll = {a: 1,b: 1,c: 1,d: 1,e: 1}
+var nameDicePlayer, tie, firstPlayerWins, diceRolled; // shared by the dice game functions (were implicit globals)
 var ship = false;
 var captain = false;
 var crew = false;
@@ -4252,3 +3767,11 @@ selfrevivetime = #ms';
 
 
 //This app is made by Carlos Alonso Maya Lastra by fun//
+
+
+// Entry points used by src/main.js to wire the page (v1 used inline onclick="..." attributes).
+export {
+    initialName, setName, responsiveLayout, exe,
+    archBtn, statsBtn, killBtn, mapBtn, helpBtn,
+    pjBtn, centerBtn, npcBtn, btnCloseEvent,
+};
