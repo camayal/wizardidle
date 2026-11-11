@@ -44,6 +44,7 @@ Ideas go to bulb, building goes to dev. When dev picks up an idea, it moves from
 | 2026-11-10 | Shared runtime variables live in `fight`, `run` and `ui` (`src/runtime.js`), never saved | Modules can't reassign each other's variables; a fight still doesn't survive a reload, as in v1 |
 | 2026-11-10 | One game loop with named clocks (`src/loop.js`) instead of `setInterval` handles | v1 leaked master clocks that could never be stopped; a named clock exists at most once |
 | 2026-11-10 | One module per system; startup values stay together in `game.js`, other modules only define things at load | Keeps load order identical to v1 and makes circular imports safe |
+| 2026-11-10 | `docs/old_ideas/` and `tools/` stay local-only (untracked, in `.gitignore`) | Working material, not part of the game; never published with the site |
 
 ## Ideas backlog
 
