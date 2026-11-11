@@ -133,7 +133,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 
   **Direction from the author:** build scenes dynamically, but **keep the nature of the hand-crafted ones**: compose from his own layers following the way he composed them, not generic generation. Keep **special scenes identical to the legacy ones**.
 
-  **Layers extracted** (2026-11-10): all 51 .pdn files are now in `docs/old_ideas/layers/` (901 PNGs, a `layers.json` per file with each layer's name, visibility, opacity and blend mode, plus `composite.png`). The tool is `tools/pdn_extract.py`. **26 of the 34 scene files rebuild a game background pixel for pixel** from their saved layers (e.g. `la Ciudad` → `la_ciudad_altar.png`), so legacy-identical scenes are possible. The files hide most of their layers (City 13 of 18, Duenon 34 of 41, Plain + Forest 31 of 42): the numbered versions of each place, `_altar` and `_estatua`, were made by switching layers in one file. So "dynamic" can mean recording which layer combinations he used and which he'd allow, then mixing within those rules. See the README there for the full match table.
+  **Layers extracted** (2026-11-10): all 51 .pdn files are now in `docs/old_ideas/layers/` (*local only*: on the author's machine, not in git) (901 PNGs, a `layers.json` per file with each layer's name, visibility, opacity and blend mode, plus `composite.png`). The tool is `tools/pdn_extract.py` (also local only). **26 of the 34 scene files rebuild a game background pixel for pixel** from their saved layers (e.g. `la Ciudad` → `la_ciudad_altar.png`), so legacy-identical scenes are possible. The files hide most of their layers (City 13 of 18, Duenon 34 of 41, Plain + Forest 31 of 42): the numbered versions of each place, `_altar` and `_estatua`, were made by switching layers in one file. So "dynamic" can mean recording which layer combinations he used and which he'd allow, then mixing within those rules. See the README there for the full match table.
 
   Ways to make scenes dynamic:
   - **Compose from layers:** draw base + deco + a random or state-driven set of props on the canvas, so each visit looks a bit different and the five versions per place become combinations instead of fixed images.
@@ -152,7 +152,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Open questions
 
-- Publishing (raised by dev): when `dev` is merged into `main`, `docs/old_ideas/` (about 900 extracted layer PNGs) and `tools/` would be published with the site. Keep them in the repo but out of the deploy (e.g. exclude them in the Pages workflow), move them to their own branch, or publish them on purpose?
+- ~~Publishing: would `docs/old_ideas/` and `tools/` go live with the site?~~ **Resolved 2026-11-10:** the author keeps both **local only**. They're untracked on `dev` and listed in `.gitignore`, and the files stay on disk in the main checkout.
 - Pixel-art UI: which elements get tiles first (XP bar, then faith or HP bars, scroll frames, console)? Should the XP bar animate (filling, a level-up flash)?
 - Dynamic scenes: which kinds of change matter most (layer variety, day / night and weather, animation, scenes that remember, story changes, passers-by)? Do the layers `1`–`5` in *pradera y bosque* really match the five versions of each place? And which .pdn is the latest when there's a "- copia" (copy) with more layers than the original (e.g. Volcano 36 vs 27, Dunes 30 vs 25)?
 - Card game: what are the rules (how the 1–6 cards are played, betting, how the wizard decides), and who are the tavern NPCs he plays? Unused sprites: were the boss crowns for boss ranks, or something else (achievement tiers)? Which town ideas (shops, rumours, talking NPCs, interiors) are still worth keeping?
@@ -169,6 +169,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Old ideas and tools kept local (bulb)
+
+- The author decided `docs/old_ideas/` (sources, extracted layers) and `tools/` stay local only. dev untracked them and added `.gitignore`. Marked the publishing question resolved and noted "local only" where the backlog points at them. The paths are unchanged.
 
 ### 2026-11-10: Anchors updated for phase 3 (bulb)
 
