@@ -47,13 +47,43 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 - Link to the legacy version from inside the game (help or stats scroll).
 - A real offline mode (new service worker) so it plays like an app again.
 - Fix the typos in player-facing text.
-- **Map rework: many ways to move** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. *Today:* the map is mostly a display: the marker sits at the current zone's fixed spot, and the only player-driven move is tapping the map to teleport once the "travelFavor" is unlocked (map code near `src/game.js:2556`).
+- **Map rework: many ways to move** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. *Today:* the map is mostly a display: the marker sits at the current zone's fixed spot, and zone changes pick a random destination from the place graph (`places` in `src/data/zones.js`: each place has `x`, `y`, `moves` within the zone and `destinations` to other zones). Tapping the map to teleport was planned ("travelFavor") and is described in the help, but **never built**: nothing sets `travelFavor` and the map has no tap handler (map code near `src/game.js:2556`). Old notes: `docs/old_ideas/localidades…txt` (the original place graph) and `correspondencia de colores.txt`, a colour per place, which looks like the colour-coded hit map the original app used to know which place was tapped. Useful if tap-to-travel gets built.
 - **Rebalance faith and player interaction** (2026-11-10): rebalance faith points and how the player (the god) interacts with the wizard, while **keeping the atheist ending possible**. *Today:* faith comes from praying, shrine offerings (gold to faith) and wiping out corrupted enemies. It's lost by skipping shrines, self-reviving, and every divine touch (heal, hit enemy). Below 0 faith the player can't help at all, which is the road to atheism (help text near `src/game.js:3077`; touch costs near `src/game.js:2758`).
-- **Professions for the wizard** (2026-11-10, *asked to be built: ready for dev*): give the wizard professions. *Today:* nothing like it exists (no jobs, classes or crafting in `src/`). The wizard only fights, prays, sleeps and visits shrines.
+- **Professions for the wizard** (2026-11-10, *asked to be built: ready for dev*): give the wizard professions. *From the old notes* (`docs/old_ideas/Help.txt`, `Recetas.csv`): three professions, **Alchemy, Enchanting and Writing**. Each zone has its own material to gather: mushroom (hongo), bone (hueso), gem (gema), ectoplasm, essence, herb. Recipes take two materials and have a price (50 or 100) and a difficulty:
+  - *Writing → scrolls:* reduction, teleportation, understanding, maximisation, divine binding.
+  - *Enchanting → rings:* health, magic power, natural integration, luck, greatness.
+  - *Alchemy → potions:* health, mana, vitality, alcohol, golden potion.
+
+  *Today:* half-prepared. Zones already name their material (`drop:` in `src/data/zones.js`) and there's a "scavenger skills" stat (`pFindMaterials`, raised by the Dwarf statue), but gathering is only a `//found materials` ToDo (`src/game.js:701`), and there's no inventory, crafting or use for the items. The old help also had "Commerce" and "Gathering" pages that the current help lacks.
+
+- **Finish the story: chapters III–XI and the final battle** (from old notes, 2018): *Today:* only the Prologue, Chapter I and Chapter II (Devotion: faith multiplier, Divine crosier) do anything. Chapters III–VIII (lvl 50–149) exist as titles with TODO comments describing the plan (`chapter` object near `src/game.js:3173`). Chapters IX–XI and the ending aren't there at all. The planned arc (`docs/old_ideas/historiaperlevel.txt`):
+  - **50, III:** faith multiplier halves; he seeks knowledge and artefacts instead of preaching.
+  - **60–80:** finds a staff he believes is sacred, then breaks it.
+  - **90, IV, The search for the forbidden:** gains the sacred staff. **100:** controls it, ×1.5 damage, loses faith with every kill.
+  - **110, V, Repentance:** damage bonus and faith loss removed; faith rises again but less than in II.
+  - **128–129:** finds a red rune with the location of the staff of corruption, then teleports to the volcano. He can't leave and fights until the staff appears in the lava.
+  - **130, VI, Corruption:** ×2–3 damage, no altars, faith only falls; when about to die he teleports away and heals.
+  - **139–140, VII, The ascent:** locked in the tower until King Midas appears (forced if he's near the next level). He kills Midas, absorbs his essence (the god can no longer revive him) and becomes the tower's boss. The wizards and sorceresses go into exile.
+  - **149, VIII, Overthrow:** a lynching. A rare sorceress and a crowd of mages curse him (no healing) and strip the corrupt staff. He escapes at 150 with his last strength.
+  - **150–159:** altars give no faith while it's above 0, he can't be revived but self-revives faster, and he never refuses help.
+  - **160, IX, Vindication:** regains faith.
+  - **190, X, Disobedience:** breaks his bond with the god, refuses all help, starts hunting the staff of *Nomaleatorio*. More bosses plus a Megaboss, no altars, no faith.
+  - **199–200, XI, The return of the king:** goes to Heidan for the staff and proclaims himself king to take revenge on the god who abandoned him. ×2–3 damage, faith icon gone, XP bar stuck full in dark red.
+  - **Final battle:** the healer appears with HP like the wizard's. When the healer dies, the god's true form appears, and that death is final. The player gets a button each second to heal or hit.
+  - **Also planned:** a story for whoever dies (wizard or god), and narrative text every 10 levels. Only the lvl 0 text was written: *"Exiled by his king Midas for believing in the wrong god…"*
+
+  Ties into the faith rebalance and the atheist path.
+- **King Midas hits ×4** (from old notes): the old story notes wanted a special modifier giving Midas four times the damage. *Today:* ×2 (`src/game.js:1680`).
+- **Notify story and achievements in the background** (from old notes, 2014): the Android app played a sound and vibrated for new achievements and story chapters while in the background. For the web version, this could use browser notifications. Pairs with the offline-mode idea.
+
+## Already built (from the old notes)
+
+Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0).
 
 ## Open questions
 
-- Professions: which ones (e.g. alchemist, miner, scribe, merchant...)? Does the wizard pick one himself (free will) or does the player choose? One at a time or several, with their own levels? What do they produce: gold, faith, items, spell boosts? Do they tie into the faith rebalance or atheism?
+- Story: keep the old arc as written (sacred staff → corruption → killing Midas → lynching → disobedience → war on the god), or revise it? Should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?
+- Professions: keep the old trio (Alchemy, Enchanting, Writing) and the 15 recipes, or rethink them? What should each item actually do (e.g. teleportation scroll ↔ map rework, divine binding ↔ faith)? Does the wizard pick one himself (free will) or does the player choose? One at a time or several, with their own levels? What do they produce: gold, faith, items, spell boosts? Do they tie into the faith rebalance or atheism?
 - Faith rebalance: what feels off today: too little faith, touches too expensive, too easy or too hard to fall into atheism? And should atheism stay a one-way fate, or could the wizard drift back and forth?
 - Map rework: which ways should the character be able to move? (walking between neighbouring zones, teleporting, being pushed by events or bosses, choosing a destination...) And should the map itself look or behave differently, or only how the location changes?
 - Should the dev console (`exe()`, unlocked by clicking name → level → faith icon) stay in v2 as a secret, or move behind a debug flag?
@@ -61,6 +91,13 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 ---
 
 ## Journal
+
+### 2026-11-10: Old notes mined (bulb)
+
+- Read the 2014–2018 notes in `docs/old_ideas/` (old help text, story-per-level plan, place graph, place colours, recipes, spell list) and checked each against the code.
+- Added: story chapters III–XI and the final battle, Midas ×4, background notifications. Enriched professions with the old trio, materials and recipes.
+- Corrected the map entry: tap-to-teleport (`travelFavor`) was never built. It only appears in the help text.
+- Listed what's already built so it isn't proposed again.
 
 ### 2026-11-10: Idea: professions (bulb)
 
