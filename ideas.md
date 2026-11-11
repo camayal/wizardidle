@@ -47,7 +47,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 - Link to the legacy version from inside the game (help or stats scroll).
 - A real offline mode (new service worker) so it plays like an app again.
 - Fix the typos in player-facing text.
-- **Map rework: many ways to move** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. *Today:* the map is mostly a display: the marker sits at the current zone's fixed spot, and zone changes pick a random destination from the place graph (`places` in `src/data/zones.js`: each place has `x`, `y`, `moves` within the zone and `destinations` to other zones). Tapping the map to teleport was planned ("travelFavor") and is described in the help, but **never built**: nothing sets `travelFavor` and the map has no tap handler (map code near `src/game.js:2556`). Old notes: `docs/old_ideas/localidades…txt` (the original place graph) and `correspondencia de colores.txt`, a colour per place, which looks like the colour-coded hit map the original app used to know which place was tapped. Useful if tap-to-travel gets built.
+- **Map rework: many ways to move** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. *Today:* the map is mostly a display: the marker sits at the current zone's fixed spot, and zone changes pick a random destination from the place graph (`places` in `src/data/zones.js`: each place has `x`, `y`, `moves` within the zone and `destinations` to other zones). Tapping the map to teleport was planned ("travelFavor") and is described in the help, but **never built**: nothing sets `travelFavor` and the map has no tap handler (map code near `src/game.js:2556`). Old notes: `docs/old_ideas/localidades…txt` (the original place graph) and `correspondencia de colores.txt`, a colour per place, which looks like the colour-coded hit map the original app used to know which place was tapped. Useful if tap-to-travel gets built. *Travel favor* (from dev, phase 2): kept as `state.travelFavor` in `src/state.js`, default false. The help scroll already shows "Touch the map…" / "Touching it can…" when it's on, and a v1 comment says `love god give setLocal("travelFavor",1)`, so the idea was that the god *grants* travel as a favour when the wizard loves him. There's no travel code behind it yet.
 - **Rebalance faith and player interaction** (2026-11-10): rebalance faith points and how the player (the god) interacts with the wizard, while **keeping the atheist ending possible**. *Today:* faith comes from praying, shrine offerings (gold to faith) and wiping out corrupted enemies. It's lost by skipping shrines, self-reviving, and every divine touch (heal, hit enemy). Below 0 faith the player can't help at all, which is the road to atheism (help text near `src/game.js:3077`; touch costs near `src/game.js:2758`).
 - **Professions for the wizard** (2026-11-10, *asked to be built: ready for dev*): give the wizard professions. *From the old notes* (`docs/old_ideas/Help.txt`, `Recetas.csv`): three professions, **Alchemy, Enchanting and Writing**. Each zone has its own material to gather: mushroom (hongo), bone (hueso), gem (gema), ectoplasm, essence, herb. Recipes take two materials and have a price (50 or 100) and a difficulty:
   - *Writing → scrolls:* reduction, teleportation, understanding, maximisation, divine binding.
@@ -73,8 +73,11 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - **Also planned:** a story for whoever dies (wizard or god), and narrative text every 10 levels. Only the lvl 0 text was written: *"Exiled by his king Midas for believing in the wrong god…"*
 
   Ties into the faith rebalance and the atheist path.
+
+  *"In sin" switch* (from dev, phase 2): the mechanism for the lvl 100 "loses faith with every kill" rule is already coded. Kills while in sin subtract faith (`src/game.js:789`), and cleansing corrupted enemies only gains faith when *not* in sin (`:777`). Nothing ever turns it on: the chapter events have only comments (lvl 100 sets it, lvl 110 clears it, lvl 130 sets it again). v2 keeps it as `state.player.inSin` in `src/state.js` (v1 key `inPecado`), default false. Wiring the chapters to flip it is most of the work.
 - **King Midas hits ×4** (from old notes): the old story notes wanted a special modifier giving Midas four times the damage. *Today:* ×2 (`src/game.js:1680`).
 - **Notify story and achievements in the background** (from old notes, 2014): the Android app played a sound and vibrated for new achievements and story chapters while in the background. For the web version, this could use browser notifications. Pairs with the offline-mode idea.
+- **Wizards from the past help in the story** (2026-11-10, via dev): build on the cemetery. Since phase 2, killed wizards are kept as records (name, level, age, born, died) in the `wizardidle2:world` save. Fallen wizards from earlier runs could come back to help in the story: as ghosts, allies, legends in the console, or tied to the "story for whoever dies" from the old notes.
 
 ## Already built (from the old notes)
 
@@ -82,6 +85,8 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Open questions
 
+- Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
+- Travel favor: what earns it (a faith threshold, a chapter, an achievement), and can the wizard lose it (e.g. while in sin or atheist)?
 - Story: keep the old arc as written (sacred staff → corruption → killing Midas → lynching → disobedience → war on the god), or revise it? Should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?
 - Professions: keep the old trio (Alchemy, Enchanting, Writing) and the 15 recipes, or rethink them? What should each item actually do (e.g. teleportation scroll ↔ map rework, divine binding ↔ faith)? Does the wizard pick one himself (free will) or does the player choose? One at a time or several, with their own levels? What do they produce: gold, faith, items, spell boosts? Do they tie into the faith rebalance or atheism?
 - Faith rebalance: what feels off today: too little faith, touches too expensive, too easy or too hard to fall into atheism? And should atheism stay a one-way fate, or could the wizard drift back and forth?
@@ -91,6 +96,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: From dev: unfinished flags and the cemetery (bulb)
+
+- dev found two v1 features coded but never switched on: "in sin" (`inPecado` → `state.player.inSin`) and "travel favor" (`state.travelFavor`). Added to the story and map entries.
+- New idea via dev: wizards from the cemetery help in the story.
 
 ### 2026-11-10: Old notes mined (bulb)
 
