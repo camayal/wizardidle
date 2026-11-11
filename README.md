@@ -30,7 +30,8 @@ python -m http.server 8000
 index.html          page and styles
 src/main.js         entry point: wires buttons to the game
 src/game.js         game logic
-src/storage.js      save/load helpers
+src/state.js        everything the game remembers, saved as plain JSON
+src/config.js       game balance (XP curve, chances, starting skills)
 src/utils.js        small pure helpers (random, formatting)
 src/data/           enemies, zones, spells, achievements
 img/  ogg/          art and sound
