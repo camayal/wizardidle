@@ -47,7 +47,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 - Link to the legacy version from inside the game (help or stats scroll).
 - A real offline mode (new service worker) so it plays like an app again.
 - Fix the typos in player-facing text.
-- **Map rework: many ways to move** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. *Today:* the map is mostly a display: the marker sits at the current zone's fixed spot, and the only player-driven move is tapping the map to teleport once the "travelFavor" is unlocked (`showMap` area in `src/game.js`).
+- **Map rework: many ways to move** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. *Today:* the map is mostly a display: the marker sits at the current zone's fixed spot, and the only player-driven move is tapping the map to teleport once the "travelFavor" is unlocked (map code near `src/game.js:2556`).
 
 ## Open questions
 
