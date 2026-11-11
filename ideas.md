@@ -5,6 +5,17 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 - Player-facing story of each release → [CHANGELOG.md](CHANGELOG.md) (written for humans)
 - The phase plan and known v1 bugs → [docs/ROADMAP.md](docs/ROADMAP.md)
 
+## Who's who
+
+Two working roles share this notebook:
+
+| Name | Role | Owns |
+|---|---|---|
+| **dev** | Builds the game: works through the phases on the `dev` branch | `src/`, "Where we are", "Decisions", journal entries for code work |
+| **bulb** | Keeps the ideas: writes down development ideas as they come up, in the author's own terms, without judging or building them | "Ideas backlog", "Open questions" |
+
+Ideas go to bulb, building goes to dev. When dev picks up an idea, it moves from the backlog into the phase plan or a decision.
+
 ---
 
 ## Where we are
@@ -28,7 +39,9 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 
 ## Ideas backlog
 
-Things to try after 2.0.0 (or sooner if they fit). Add freely; nothing here is a commitment.
+Things to try after 2.0.0 (or sooner if they fit). Add freely; nothing here is a commitment. Kept by **bulb**.
+
+New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it would be fun or useful.` Once dev takes one on, it's marked *→ picked up by dev* and links to where it went.
 
 - Finish the 13 placeholder achievements (`logro_jugon`, `logro_ricachon`, `logro_muchapradera`...): give them titles, descriptions and real triggers.
 - Link to the legacy version from inside the game (help or stats scroll).
@@ -42,6 +55,10 @@ Things to try after 2.0.0 (or sooner if they fit). Add freely; nothing here is a
 ---
 
 ## Journal
+
+### 2026-11-10: Roles named (bulb)
+
+- Named the two working roles: **dev** builds the game, **bulb** keeps the ideas. Added "Who's who" and a format for new backlog entries.
 
 ### 2026-11-10: Legacy preserved, phase 1 done
 
