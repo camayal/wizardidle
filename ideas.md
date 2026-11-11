@@ -48,7 +48,7 @@ Things to try after 2.0.0 (or sooner if they fit). Add freely; nothing here is a
 
 New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it would be fun or useful.` Once dev takes one on, it's marked *→ picked up by dev* and links to where it went.
 
-- Finish the 13 placeholder achievements (`logro_jugon`, `logro_ricachon`, `logro_muchapradera`...): give them titles, descriptions and real triggers.
+- Finish the 13 placeholder achievements (`logro_jugon`, `logro_ricachon`, `logro_muchapradera`...): give them titles, descriptions and real triggers. Every one already has its icon. The names hint at the plan: *jugón* (gambler), *dados cargados* (loaded dice) and *full carga* (full cargo) are dice; *inventario lleno* (full inventory) needs an inventory (professions); *dormiletas* (sleepyhead) is camping or inn; *corazón grande* (big heart), *ricachón* (rich), *fanático*, *estudioso* (studious), *eso sí es iluminación* (now that's enlightenment), *flawless*, *mucha pradera* / *mucho poblado* (lots of meadow / village), *primer boss* (first boss). Most need the stats from "Track almost everything as stats".
 - Link to the legacy version from inside the game (help or stats scroll).
 - A real offline mode (new service worker) so it plays like an app again.
 - Fix the typos in player-facing text.
@@ -59,7 +59,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *Enchanting → rings:* health, magic power, natural integration, luck, greatness.
   - *Alchemy → potions:* health, mana, vitality, alcohol, golden potion.
 
-  *Today:* half-prepared. Zones already name their material (`drop:` in `src/data/zones.js`) and there's a "scavenger skills" stat (`pFindMaterials`, raised by the Dwarf statue), but gathering is only a `//found materials` ToDo in `src/game.js`, and there's no inventory, crafting or use for the items. The old help also had "Commerce" and "Gathering" pages that the current help lacks.
+  *Today:* half-prepared. Zones already name their material (`drop:` in `src/data/zones.js`) and there's a "scavenger skills" stat (`pFindMaterials`, raised by the Dwarf statue), but gathering is only a `//found materials` ToDo in `src/game.js`, and there's no inventory, crafting or use for the items. The old help also had "Commerce" and "Gathering" pages that the current help lacks. *Art already drawn* (`docs/old_ideas/unorganzed_sprites/Sprites/`): `anilos.png` is **five gem rings** (pink, blue, green, orange, brown), one per ring recipe. `BASE/dg_food32.gif` has mushrooms in a dozen colours (the *hongo* material), plus drinks, bread and meat.
 
 - **Finish the story: chapters III–XI and the final battle** (from old notes, 2018): *Today:* only the Prologue, Chapter I and Chapter II (Devotion: faith multiplier, Divine crosier) do anything. Chapters III–VIII (lvl 50–149) exist as titles with TODO comments describing the plan (`var chapter` object in `src/game.js`). Chapters IX–XI and the ending aren't there at all. The planned arc (`docs/old_ideas/historiaperlevel.txt`):
   - **50, III:** faith multiplier halves; he seeks knowledge and artefacts instead of preaching.
@@ -109,6 +109,17 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *For future systems:* materials gathered by type, items crafted / used (professions); quests started / completed; story choices.
 
   Found while looking: `cardCombat()` in `src/game.js` is an empty placeholder (a card-combat idea that never started?).
+- **Unused sprites: abandoned ideas with art ready** (2026-11-10, from `docs/old_ideas/unorganzed_sprites/`): 51 of the folder's images aren't in `img/`. Most of the folder (backgrounds, altars, statues, dice, buttons) is already in the game. What's left points at ideas:
+  - **Rings** (`anilos.png`) → Enchanting (see Professions).
+  - **Playing cards numbered 1–6**, in the town sheet `BASE/townactions.gif` → probably the empty `cardCombat()` stub: a card game or card-based combat next to the dice game.
+  - **Town sheet** (`townactions.gif`, D.E. Gervais): a *Rumors* scroll (quests or hints), keys, a map, potions, books, a coin bag, food, a crown, NPC portraits → quests, rumours, shops.
+  - **Shop fronts** (`BASE/dg_town932.gif`): weapons, armour, potions, magic, books, tavern, bank, temple, stables, guild signs → shops and guilds in the City or Village. Commerce from the old help, profession trainers.
+  - **Townsfolk** (`BASE/dg_people32.gif`, 12 characters) and a **speech bubble with text** (`bocadillo con letras.png`) → NPCs who talk: quest givers, merchants, rumours.
+  - **Interior tiles** (`BASE/L2_*`: bar, beds, kegs, tables, cabinet, columns, doors, a prison mat) → indoor scenes: the inn, the healer's hut, or a prison (the Chapter VIII lynching?).
+  - **Boss crowns** (`boss icons/`: plain, silver, gold, red; `bossCoronas.pdn`) → boss ranks. *Today* bosses, hydras and guardians all show the same `boss.png`. Could mark boss / guardian / hydra / megaboss, or how many times a boss has been beaten.
+  - **`logro_level100` icon** → a level-100 achievement that doesn't exist (only 2, 140 and 200 do). Level 100 is when the wizard takes control of the sacred staff in the story.
+  - **New Meadow backgrounds** (`Bkg/news/la_pradera32.png`, a crowd at the edge; `la_pradera4b.png`, a rock or hut) → scene variants or story scenes.
+  - Not features: `iconSiluete.png` (the "IDLE" logo), `ForGooglePlay.png` (store art).
 
 ## Already built (from the old notes)
 
@@ -116,6 +127,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Open questions
 
+- Unused sprites: was `cardCombat()` meant to use the 1–6 playing cards? Were the boss crowns for boss ranks, or something else (achievement tiers)? Which town ideas (shops, rumours, talking NPCs, interiors) are still worth keeping?
 - Stats: should everything show on the stats scroll, or only some, with the rest hidden and used for achievements and quests? Per wizard, per world, or both? And what was `cardCombat()` meant to be?
 - Levelling pace: keep the flat ~16 kills per level the game has always had, or move toward the spreadsheet's 16 × level (much slower late game)? Or something in between? And should gold go back to 0.25 per HP?
 - Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
@@ -129,6 +141,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Unused sprites matched to ideas (bulb)
+
+- Compared `docs/old_ideas/unorganzed_sprites/` with `img/`: 51 images aren't in the game. Matched them to ideas: rings and mushrooms (professions), playing cards (`cardCombat()`), town and shop sheets (shops, rumours, NPCs), interior tiles, boss crowns, a missing level-100 achievement icon.
+- Wrote the placeholder achievements' intended meanings next to that entry, decoded from their icon names.
 
 ### 2026-11-10: Idea: track almost everything (bulb)
 
