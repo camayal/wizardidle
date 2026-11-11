@@ -120,6 +120,19 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - **`logro_level100` icon** → a level-100 achievement that doesn't exist (only 2, 140 and 200 do). Level 100 is when the wizard takes control of the sacred staff in the story.
   - **New Meadow backgrounds** (`Bkg/news/la_pradera32.png`, a crowd at the edge; `la_pradera4b.png`, a rock or hut) → scene variants or story scenes.
   - Not features: `iconSiluete.png` (the "IDLE" logo), `ForGooglePlay.png` (store art).
+- **Dynamic scenes: as alive as possible** (2026-11-10, *a big idea*): make the scenes change as much as possible instead of being fixed pictures. *Today:* every place is one flat 256×64 PNG set as the canvas's CSS background (`loadBackground()` in `src/game.js`; a canvas-drawing version sits commented out right below it). The same place always looks the same, and nothing moves except the wizard, the NPC and the spells.
+
+  *Source art exists, in layers* (`docs/old_ideas/unorganzed_sprites/Sprites/Bkg/pdns/`, Paint.NET files): 32 scene files, 256×64, most with **5–42 layers**. Plain + Forest has 42, Duenon 41, Volcano 27–36, Dunes 25–30, Heidan 22, City 18–25. Most are built as `Fondo` (base) + `Deco` + many prop layers. Named layers show intent: the City has `calle` (street), `puerta` (door), `lampara` (lamp); Plain + Forest has layers **`1`–`5`**, which look like the five numbered versions of each place, made from one file; the Swamp has `death_ooze`; the healer's hut is assembled from the interior tiles (keg, floor decoration, potion). Also there: `bkgtemplate.pdn` (Fondo + Deco template), `mapa.pdn` (a layer per zone: Pradera, Bosque, Desierto, Pantano, Gruta, Tundra, Volcán, Duenon), and `guias.pdn` / `guias y otros mapas.pdn` (map guides with circles, dots and numbers), useful for the map rework.
+
+  Ways to make scenes dynamic:
+  - **Compose from layers:** draw base + deco + a random or state-driven set of props on the canvas, so each visit looks a bit different and the five versions per place become combinations instead of fixed images.
+  - **Time and weather:** day / night tint, the City's lamp layer lit at night, rain, snow in the Tundra, a lava glow in the Volcano. Could follow real time or the wizard's age.
+  - **Small animations:** flickering lamps and fire, bubbling ooze, water, smoke; light parallax between layers.
+  - **Scenes that remember:** fallen enemies or broken loot stay for a while, doors open (`puerta`), the altar or statue appears in the scene when found, the Forest thins out as the last capricors die.
+  - **Story changes the world:** the tower empties after the mages' exile (VII), the staff in the Volcano's lava (129), a darker world in the corruption chapters, the City after Midas falls.
+  - **Passers-by:** townsfolk from `dg_people32.gif` walking through towns, tavern patrons for the card game.
+
+  Practical note: the game needs each layer as its own PNG. Paint.NET can export layers individually (via a plugin, or by hiding the other layers and saving). A small script could also pull them straight out of the .pdn files.
 
 ## Already built (from the old notes)
 
@@ -127,6 +140,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Open questions
 
+- Dynamic scenes: which kinds of change matter most (layer variety, day / night and weather, animation, scenes that remember, story changes, passers-by)? Do the layers `1`–`5` in *pradera y bosque* really match the five versions of each place? And which .pdn is the latest when there's a "- copia" (copy) with more layers than the original (e.g. Volcano 36 vs 27, Dunes 30 vs 25)?
 - Card game: what are the rules (how the 1–6 cards are played, betting, how the wizard decides), and who are the tavern NPCs he plays? Unused sprites: were the boss crowns for boss ranks, or something else (achievement tiers)? Which town ideas (shops, rumours, talking NPCs, interiors) are still worth keeping?
 - Stats: should everything show on the stats scroll, or only some, with the rest hidden and used for achievements and quests? Per wizard, per world, or both? And what was `cardCombat()` meant to be?
 - Levelling pace: keep the flat ~16 kills per level the game has always had, or move toward the spreadsheet's 16 × level (much slower late game)? Or something in between? And should gold go back to 0.25 per HP?
@@ -141,6 +155,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Idea: dynamic scenes (bulb)
+
+- Added "Dynamic scenes". Read the 32 background .pdn files: 256×64 scenes with 5–42 layers each (base + deco + props, some named). Proposed composing scenes from layers plus time, weather, animation, memory and story changes. Also found layered map files (`mapa.pdn`, `guias.pdn`) for the map rework, and a merchant sprite (`Monsters/comerciante.pdn`).
 
 ### 2026-11-10: Cards confirmed (bulb)
 
