@@ -9,6 +9,7 @@ import { YesOrNot, getRandomInt, pickRandomItem, roundNumbertoLetter, capitalize
 import { config } from './config.js';
 import { state, world, stat, count, deleteSave } from './state.js';
 import { fight, run, ui } from './runtime.js';
+import * as loop from './loop.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -31,12 +32,6 @@ ui.headLevel = ui.objectSize * 0.109375;//56;
 ui.squareSide = ui.objectSize * 0.125;//64;
 ui.charWidth = ui.squareSide; ui.charHeight = ui.squareSide;
 ui.em = getEM();
-var eventClock;//declare the main clock
-var eventMasterClock;
-var animateClockNPC;
-var animateClock;
-var statusClock;
-var statsClock;
 
 run.multipleEventsCounter = 0;
 ui.frameCounter = 0;
@@ -258,7 +253,7 @@ function start() {
     loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
     loadBackground(state.zone.current + state.zone.stage);
     //load previous locality random scenaria
-    eventMasterClock = setInterval(event, masterTime);
+    loop.every("master", event, masterTime);
     //statusClock = setInterval(cacheStatus, 5000);
     //trigger event selecter
 
@@ -303,7 +298,7 @@ ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 function pauseToggle(){
     if (run.pause){
         run.pause = false;
-        eventMasterClock = setInterval(event, masterTime);
+        loop.every("master", event, masterTime);
     }else{
         run.pause = true;
     }
@@ -419,11 +414,11 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
 }
 
 
-//Animate pj execute as: animateClock = setInterval(animatePJ, 100);
+//Animate pj execute as: loop.every("animPJ", animatePJ, 100);
 function animatePJ() {
 
     //avoid  animation in high speed debug
-    if(masterTime < 500){clearInterval(animateClock);return}
+    if(masterTime < 500){loop.stop("animPJ");return}
 
 
     ui.frameCounter += 1;
@@ -435,15 +430,15 @@ function animatePJ() {
     case 2:
        loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
         ui.frameCounter = 0;
-        clearInterval(animateClock);
+        loop.stop("animPJ");
     }
 };
 
-//Animate npc execute as: animateClockNPC = setInterval(animateNPC, 100);
+//Animate npc execute as: loop.every("animNPC", animateNPC, 100);
 function animateNPC() {  
 
     //avoid  animation in high speed debug
-    if(masterTime < 500){clearInterval(animateClockNPC);return}
+    if(masterTime < 500){loop.stop("animNPC");return}
 
 
     if (state.npc != ""){
@@ -455,7 +450,7 @@ function animateNPC() {
         case 2:
             loadNPC(state.npc);
             ui.frameCounter = 0;
-            clearInterval(animateClockNPC);
+            loop.stop("animNPC");
         }
     }
 };
@@ -568,9 +563,9 @@ function playSound(ogg, volume = 0.3){
 ///////////////////////////////////////////////////////// 
 //Events
 
-//Select event, call in this way only:  eventMasterClock = setInterval(event, masterTime);    
+//Select event, call in this way only:  loop.every("master", event, masterTime);    
 function event() {
-    clearInterval(eventMasterClock);
+    loop.stop("master");
     if(run.pause){return}//detect pause command
 
     if (run.afterChapterExe){
@@ -614,7 +609,7 @@ function exploreEV() {
         //getBotin();
         run.objectToBreak = "";
         print("<b>" + state.player.name + "</b> is searching...");
-        eventClock = setInterval(getBotin, masterTime);
+        loop.every("event", getBotin, masterTime);
     //go to dice house, use the same probability
     } else if (YesOrNot(config.balance.pDados, 0) && state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado"){
         //check if gold is more than 0
@@ -629,20 +624,20 @@ function exploreEV() {
             loadBackground(state.zone.current + "_casadados");
             loadNPC("jugon");
             run.previousEvent = "sixfivefour"
-            eventClock = setInterval(sixfivefour, masterTime);       
+            loop.every("event", sixfivefour, masterTime);       
         }else{
             print("<b>" + state.player.name + "</b> " + "finds a gamming house but does not have gold to bet");
-            eventMasterClock = setInterval(event, masterTime);
+            loop.every("master", event, masterTime);
         }
     }else {
         if (YesOrNot(stat("pChangeZone") * config.balance.allowChangeZone, 0)) {
             print("<b>" + state.player.name + "</b> is exploring...");
-            eventClock = setInterval(changeLocality, masterTime);
+            loop.every("event", changeLocality, masterTime);
         } else {
             print("<b>" + state.player.name + "</b>" + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
             pickRandomBackgroundForCurrentZone();
             addXP(0.5);
-            eventMasterClock = setInterval(event, masterTime);
+            loop.every("master", event, masterTime);
             //trigger event selecter
         };
     };
@@ -690,7 +685,7 @@ function battle() {
             }else{//end conditional hydra, here if die bosses and enemies
                 //stop clock of battle and reset bossMultiplier
             run.multipleEventsCounter = 0;
-            clearInterval(eventClock);
+            loop.stop("event");
 
             
             //kill capricor
@@ -776,7 +771,7 @@ function battle() {
             state.npc = "";
                 fight.bossMultiplier = 1;
                 fight.bossGoldMultiplier = 1;
-                eventMasterClock = setInterval(event, masterTime);
+                loop.every("master", event, masterTime);
             }
             
         }
@@ -784,7 +779,7 @@ function battle() {
         if (Math.round(state.player.hp) <= 0) {
             //stop clock of battle and reset bossMultiplier
             run.multipleEventsCounter = 0;
-            clearInterval(eventClock);
+            loop.stop("event");
             //kiled by a sheep or chicken
             if(fight.polymorphed){
                 switch (fight.polymorphedAnimal){
@@ -838,7 +833,7 @@ function battle() {
                 count("selfRevive");
                 playSound("heal");
                 updateHeading();
-                eventMasterClock = setInterval(event, masterTime);
+                loop.every("master", event, masterTime);
             }, selfrevivetime);
         }
     }
@@ -876,9 +871,9 @@ function reviveEV(){
         print("<b>" + state.player.name + "</b>" + " leaves the healer's cabin")
         count("hospital");
         run.multipleEventsCounter = 0;
-        clearInterval(eventClock);
+        loop.stop("event");
         run.disablePjBtn = false;
-        eventMasterClock = setInterval(event, masterTime);
+        loop.every("master", event, masterTime);
     }
 };
 
@@ -904,7 +899,7 @@ function prayEV(){
             run.offer = false;
         }
         run.previousEvent = "enterAltar"
-        eventClock = setInterval(doOffering, masterTime);
+        loop.every("event", doOffering, masterTime);
     }else{
         count("negar");
         if (run.previousEvent == "negar"){
@@ -917,7 +912,7 @@ function prayEV(){
         state.player.faith = state.player.faith - faithLost;
         updateHeading();
         run.previousEvent = "negar"
-        eventMasterClock = setInterval(event, masterTime);
+        loop.every("master", event, masterTime);
     }
 }
 
@@ -934,12 +929,12 @@ function innEV(){
            }
            print("<b>" + state.player.name + "</b> " + pickRandomItem(textInn)) 
            run.previousEvent = "innEV"
-           eventClock = setInterval(searchInn, masterTime);
+           loop.every("event", searchInn, masterTime);
     }else{
         var textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
         print("<b>" + state.player.name + "</b> " + pickRandomItem(textNoInn)) 
         run.previousEvent = "innEVFeelsGood"
-        eventMasterClock = setInterval(event, masterTime);
+        loop.every("master", event, masterTime);
     }
 }
 
@@ -952,16 +947,16 @@ function studyEV() {
      if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva"){//found statue, poblado and cueva has not statue
         if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
             print("<b>" + state.player.name + "</b> " + "sees something...") 
-            eventClock = setInterval(findRuneOrBook, masterTime);
+            loop.every("event", findRuneOrBook, masterTime);
         }else{
             print("<b>" + state.player.name + "</b> " + "sees something...") 
-            eventClock = setInterval(findStatue, masterTime);
+            loop.every("event", findStatue, masterTime);
         }
         //examine the estatue
 
     }else{//found book or rune
     print("<b>" + state.player.name + "</b> " + "sees something...") 
-    eventClock = setInterval(findRuneOrBook, masterTime);
+    loop.every("event", findRuneOrBook, masterTime);
     }
 }
 
@@ -1050,9 +1045,9 @@ function findStatue(){
         print("<b>" + state.player.name + "</b> " + "leaves the statue and continues") 
         loadBackground(state.zone.current +  state.zone.stage);
         run.multipleEventsCounter = 0;
-        clearInterval(eventClock);
+        loop.stop("event");
         addXP(1);
-        eventMasterClock = setInterval(event, masterTime);
+        loop.every("master", event, masterTime);
     }
 }
 
@@ -1114,9 +1109,9 @@ function findRuneOrBook(){
         state.npc = "";
         run.objectToStudy = "";
         run.multipleEventsCounter = 0;
-        clearInterval(eventClock);
+        loop.stop("event");
         addXP(0.25);
-        eventMasterClock = setInterval(event, masterTime);
+        loop.every("master", event, masterTime);
     }
 }
 
@@ -1198,8 +1193,8 @@ function searchInn(){
             }
             run.restAtInn = false;
             run.multipleEventsCounter = 0;
-            clearInterval(eventClock);
-            eventMasterClock = setInterval(event, masterTime);
+            loop.stop("event");
+            loop.every("master", event, masterTime);
     }
 }
 
@@ -1234,10 +1229,10 @@ function doOffering(){
                 //pickRandomBackgroundForCurrentZone();
                 loadBackground(state.zone.current +  state.zone.stage);
                 run.multipleEventsCounter = 0;
-                clearInterval(eventClock);
+                loop.stop("event");
                 run.disableCenterBtn = false;
                 run.offer = false;
-                eventMasterClock = setInterval(event, masterTime);
+                loop.every("master", event, masterTime);
         }
     }else{
         run.multipleEventsCounter += 1;
@@ -1270,8 +1265,8 @@ function doOffering(){
                 run.disableCenterBtn = false;
                 run.offer = false;
                 run.multipleEventsCounter = 0;
-                clearInterval(eventClock);
-                eventMasterClock = setInterval(event, masterTime);
+                loop.stop("event");
+                loop.every("master", event, masterTime);
         }
     }
 
@@ -1398,9 +1393,9 @@ function getBotin() {
         run.previousEvent = "getBotin"
         updateHeading();    //Update heading
         run.multipleEventsCounter = 0;
-        clearInterval(eventClock);
+        loop.stop("event");
         addXP(0.5);
-        eventMasterClock = setInterval(event, masterTime);//trigger event selecter
+        loop.every("master", event, masterTime);//trigger event selecter
             
     }
     
@@ -1434,8 +1429,8 @@ function changeLocality() {
         addXP(1);
         run.previousEvent = "changeLocality";
         run.multipleEventsCounter = 0;
-        clearInterval(eventClock);
-        eventMasterClock = setInterval(event, masterTime);
+        loop.stop("event");
+        loop.every("master", event, masterTime);
         //trigger event selecter
     }
 
@@ -1517,7 +1512,7 @@ function getEnemy() {
     }
     print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
     
-    eventClock = setInterval(battle, masterTime);
+    loop.every("event", battle, masterTime);
 };
 
 
@@ -1542,7 +1537,7 @@ function getHydra(newEncounter = false){
         count("typeofHydras_" + fight.hydra)
         var startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
         print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
-        eventClock = setInterval(battle, masterTime);
+        loop.every("event", battle, masterTime);
     } else {
         var startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
         print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
@@ -1555,7 +1550,7 @@ function getHydra(newEncounter = false){
 //Performs attack
 function attackEV() {
     if (YesOrNot(stat("pPolymorph"), 0) && !fight.hydraCombat && !fight.bossCombat && !fight.polymorphed && fight.enemy !== "baba" && fight.enemy !== "el_elemental" && fight.enemy !== "el_ent" && fight.enemy !== "el_espectro" && fight.enemy !== "el_esqueleto" && fight.enemy !== "el_golem" && fight.enemy !== "el_ojo" && fight.enemy !== "la_esencia"){
-        if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
+        if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
         fight.enemyHP = 1;
         updateHeartNPC()
         spell("spellPinBlue_16",false,frameWidth,frameHeight,currentFrame,shift);
@@ -1570,8 +1565,8 @@ function attackEV() {
         if (YesOrNot(stat("pAttack"), 0)) {
             //determine the prob of attack, if fail enemy attack
             if (YesOrNot(stat("pCritic"), 0)) {
-                //animateClock = setInterval(animatePJ, 100)                
-                if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
+                //loop.every("animPJ", animatePJ, 100)                
+                if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 //determine if is critical or not
                 var pjAttackWithCritic = state.player.attack * stat("fCritic") * stat("fAttack");
                 pjAttackWithCritic *= config.balance.sacredDamageMultiplier;
@@ -1588,11 +1583,11 @@ function attackEV() {
                 count("school_" + spells[spellId].school)
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift,true);
                 print("<b>" + state.player.name + "</b> performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
-                //if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
+                //if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 count("Critics");
             } else {
-                //animateClock = setInterval(animatePJ, 100)
-                if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
+                //loop.every("animPJ", animatePJ, 100)
+                if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 //attack with no critic
                 var pjHit = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
                 pjHit *= config.balance.sacredDamageMultiplier;
@@ -1618,7 +1613,7 @@ function attackEV() {
                 print("<b>" + state.player.name + "</b>" + text + spellText + " (" + ui.attackIcon + roundNumbertoLetter(pjHit) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift);
 
-                //if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
+                //if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 count("Attacks");
 
             }
@@ -1626,8 +1621,8 @@ function attackEV() {
             if(pjAttackWithCritic > 1000 || pjHit > 1000){logro.set(logro.logro_attack1000)}
         } else {
             //enemy attack
-            //animateClockNPC = setInterval(animateNPC, 100)
-            if (document.hasFocus()){animateClockNPC = setInterval(animateNPC, 100)};
+            //loop.every("animNPC", animateNPC, 100)
+            if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
             var enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
 
             if (fight.enemy == "midas"){enemyHit *= 2}//duplicate midas attack
@@ -1649,7 +1644,7 @@ function attackEV() {
             }
             spell(fight.spellEnemy,true,frameWidth,frameHeight,currentFrame,shift);
             count("IncomingAttacks");
-            //if (document.hasFocus()){animateClockNPC = setInterval(animateNPC, 100)};
+            //if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
         }
     }
 };
@@ -2428,7 +2423,7 @@ function layoutLandscapeMobile(){
 
 //hide content from scroll
 function hideScrollContent(){
-    clearInterval(statsClock);
+    loop.stop("stats");
     enableMainButtons()
     document.getElementById("scrollBackDown").style.opacity = 0;
     document.getElementById("scrollBackUp").style.opacity = 0;
@@ -2660,10 +2655,7 @@ function realKill(){
         born: state.meta.createdAt,
         died: new Date().toISOString(),
     });
-    clearInterval(animateClock);
-    clearInterval(animateClockNPC);
-    clearInterval(eventMasterClock);
-    clearInterval(eventClock);
+    loop.stopAll(); // every clock, including any v1 would have leaked
     run.multipleEventsCounter = 0;
     deleteSave();
     location.reload();
@@ -2699,7 +2691,7 @@ function pjBtn(){
             loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
             loadNPC("curandero");
             //
-            eventClock = setInterval(reviveEV, masterTime);
+            loop.every("event", reviveEV, masterTime);
         }else{
             //heal pj
             // console.log("HP " + getLocal("HP"));
@@ -2836,7 +2828,7 @@ function helpBtn(){
 //stats button funct
 function statsBtn(){
     //document.getElementById('innerTextScroll').innerHTML= statsPage;
-    statsClock = setInterval(updateStats,masterTime);
+    loop.every("stats", updateStats,masterTime);
     updateStats();
     document.getElementById("innerTextScroll").style.display = "block";
     scrollOpen("stats");
@@ -3437,8 +3429,8 @@ function sixfivefour(){
 
     
 
-    clearInterval(eventClock);
-    eventClock = setInterval( function() { rollDicesForSixfivefour(enemyStart,nameDicePlayer); }, masterTime);
+    loop.stop("event");
+    loop.every("event", function() { rollDicesForSixfivefour(enemyStart,nameDicePlayer); }, masterTime);
 }
 
 
@@ -3457,9 +3449,9 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
 
             //animate thow dice
             if (nameDicePlayer == gamblingManName){
-                if (document.hasFocus()){animateClockNPC = setInterval(animateNPC, 100)};
+                if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
             }else{
-                if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
+                if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
             }
             spell("spellMiniDados_18",true,frameWidth,frameHeight,currentFrame,shift,false,true);
             playSound("dice");
@@ -3537,11 +3529,11 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
 
         }else{
             
-            clearInterval(eventClock);
+            loop.stop("event");
             run.multipleEventsCounter = 0;
             print(nameDicePlayer + " thinks the cargo is enought and skip")
             //va a eval
-            eventClock = setInterval( function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime );
+            loop.every("event", function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime);
         }
 
 
@@ -3556,11 +3548,11 @@ else{
     symbolCurrentHand = "";
 
     if (run.multipleEventsCounter == 6){
-        clearInterval(eventClock);
+        loop.stop("event");
         run.multipleEventsCounter = 0;
         
         //eval
-        eventClock = setInterval( function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime );
+        loop.every("event", function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime);
     }
 }
 }
@@ -3586,13 +3578,13 @@ function evalSixFiveFour(enemyStart, nameDicePlayer){
             countRounds++
             if (!enemyStart){nameDicePlayer = gamblingManName} else {nameDicePlayer = "<b>" + state.player.name + "</b> "}
             resetSixFiveFour()
-            clearInterval(eventClock);
-            eventClock = setInterval( function() { rollDicesForSixfivefour(!enemyStart,nameDicePlayer); }, masterTime );
+            loop.stop("event");
+            loop.every("event", function() { rollDicesForSixfivefour(!enemyStart,nameDicePlayer); }, masterTime);
         }else{
             //Final scoring call
             //multipleEventsCounter = 0;
-            clearInterval(eventClock);
-            eventClock = setInterval( function() { finalScoreSixFiveFour(nameDicePlayer); }, masterTime );
+            loop.stop("event");
+            loop.every("event", function() { finalScoreSixFiveFour(nameDicePlayer); }, masterTime);
         }
 
     
@@ -3651,8 +3643,8 @@ function finalScoreSixFiveFour(nameDicePlayer){
             loadBackground(state.zone.current +  state.zone.stage);
             run.restAtInn = false;
             run.multipleEventsCounter = 0;
-            clearInterval(eventClock);
-            eventMasterClock = setInterval(event, masterTime);
+            loop.stop("event");
+            loop.every("master", event, masterTime);
     }
 }
 
