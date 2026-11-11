@@ -132,7 +132,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - **Story changes the world:** the tower empties after the mages' exile (VII), the staff in the Volcano's lava (129), a darker world in the corruption chapters, the City after Midas falls.
   - **Passers-by:** townsfolk from `dg_people32.gif` walking through towns, tavern patrons for the card game.
 
-  Practical note: the game needs each layer as its own PNG. Paint.NET can export layers individually (via a plugin, or by hiding the other layers and saving). A small script could also pull them straight out of the .pdn files.
+  Practical note: the game needs each layer as its own PNG. Paint.NET can export layers individually (via a plugin, or by hiding the other layers and saving). **Confirmed 2026-11-10:** a small Python script (no extra libraries) pulls every layer straight out of a .pdn as a transparent PNG. Tested on `la Ciudad.pdn`: all 18 layers came out correctly (stone wall base, street, three lamps with their glow, a cross…). Still to solve: matching every layer to its name (15 of 18 matched), and reading each layer's visible / hidden flag and opacity.
 
 ## Already built (from the old notes)
 
