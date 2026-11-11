@@ -22,7 +22,7 @@ import { counterText, scrollClose, scrollOpen } from './ui/scrolls.js';
 //declaration of chapter object, if text is NA, considere only a event and not a history.
 var chapter = {
     lvl1:{
-        text:'<span class="titles" id="historyTitle">Prologue</span>~~THE BEGINING~~<br>',
+        text:'<span class="titles" id="historyTitle">Prologue</span>~~THE BEGINNING~~<br>',
         event: function(){
             //just history reserve the event
         }
@@ -270,7 +270,7 @@ function afterChapter(){
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
         state.npc = "";
         loadBackground(state.zone.current +  state.zone.stage);
-        print("<b>" + state.player.name + "</b>" + " leaves the shire and continue the journey");
+        print("<b>" + state.player.name + "</b>" + " leaves the shrine and continues the journey");
         break;       
         case 50:
 

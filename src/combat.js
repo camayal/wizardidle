@@ -101,7 +101,7 @@ function battle() {
                     run.feGanada *= state.player.faithMultiplier
                     state.player.faith = state.player.faith + run.feGanada;
                     count("FeByCleanCorruption",Math.round(run.feGanada));
-                    var corruptedText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption erradication";
+                    var corruptedText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption eradication";
                 }else {
                     var corruptedText = "";
                 }
@@ -133,6 +133,9 @@ function battle() {
                 if(fight.bossCombat){//kill no gold boss
                     addXP(4);
                     print(fight.enemyName + " was defeated");
+                }else if(fight.hydraCombat){
+                    addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
+                    print(fight.enemyName + " was defeated");
                 }else{
                     addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
                     print(fight.enemyName + " was defeated" + corruptedText);
@@ -154,6 +157,9 @@ function battle() {
             //stop clock of battle and reset bossMultiplier
             run.multipleEventsCounter = 0;
             loop.stop("event");
+            // If the enemy fell in this same round, its death above already restarted the
+            // event picker: stop it until the wizard is revived.
+            loop.stop("master");
             //kiled by a sheep or chicken
             if(fight.polymorphed){
                 switch (fight.polymorphedAnimal){
@@ -179,14 +185,14 @@ function battle() {
             fight.pjDead = true;
             loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
             var lootedText = "";
-            console.log(fight.enemy +": a")//para detectar BUG
-            if (state.player.gold > 0 && enemyTypes[fight.enemy].hasgold == "true"){//acá hay un BUG
+            // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:
+            // fight.enemy was already empty. A fallen enemy can't take the wizard's gold.
+            if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold == "true"){
             var goldLooted = getRandomInt(state.player.lastBattleGold,state.player.lastBattleGold * 2);
             state.player.gold = state.player.gold - goldLooted;
-            lootedText = " and losses some gold" +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
+            lootedText = " and loses some gold" +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
             count("goldLostInBattle", goldLooted);
             }
-            console.log(fight.enemy +": b")//para detectar BUG
             print("<b>" + state.player.name + "</b>" + " has fallen in battle" + lootedText);
             npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             state.npc = "";
@@ -298,12 +304,14 @@ function getEnemy() {
         }
     }
     var startBattleText = "has entered in " + (run.previousEvent == "enemy" ? "another" : "a") + " battle!,finds " + (run.previousEvent == "enemy" ? "another" : "an") + " enemy!,start " + (run.previousEvent == "enemy" ? "another" : "a") + " fight!"
-    if (fight.enemy + number == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!"
-    run.previousEvent = "enemy";
-    if (fight.bossCombat){ 
+    if (fight.bossCombat){
+        // v1 overwrote previousEvent before reading it here, so this always said "a Boss"
         var article = (run.previousEvent == "boss" ? "another" : "a")
         startBattleText = "has entered in " + article + " battle with a Boss!,finds " + article + " Boss!,start " + article + " fight with a Boss!"
         run.previousEvent = "boss";
+    }else{
+        if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!"
+        run.previousEvent = "enemy";
     }
     print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
     
@@ -458,7 +466,7 @@ function healEV() {
             }
         playSound("heal");
         spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-        print("<b>" + state.player.name + "</b>" + pickRandomItem(" casts heal spell and restore , cast minor healing , use restauration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    
+        print("<b>" + state.player.name + "</b>" + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    
          
         
     

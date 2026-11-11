@@ -195,9 +195,9 @@ function prayEV(){
         count("altar");
         count("altar_zone_" + state.zone.current);
         if (run.previousEvent == "enterAltar"){
-            var textCapel = pickRandomItem("decides come back to the shire, returns to the shire,wants to spend more time at the temple");
+            var textCapel = pickRandomItem("decides come back to the shrine, returns to the shrine,wants to spend more time at the temple");
         }else{
-            var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
+            var textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
         print("<b>" + state.player.name + "</b> " + textCapel);
         loadBackground(state.zone.current + "_altar");
@@ -213,9 +213,9 @@ function prayEV(){
     }else{
         count("negar");
         if (run.previousEvent == "negar"){
-            var textCapel = pickRandomItem("finds again the same shire,sees the same shire");
+            var textCapel = pickRandomItem("finds again the same shrine,sees the same shrine");
         }else{
-            var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
+            var textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
         var faithLost = calculateFe();
         print("<b>" + state.player.name + "</b> " + textCapel + " but does not enter and continues (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
@@ -516,7 +516,7 @@ function doOffering(){
                 //animation anks for pj
                 //playSound("pray");
                 spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + state.player.name + "</b>" + " leaves the shire and continue the journey" + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
+                print("<b>" + state.player.name + "</b>" + " leaves the shrine and continues the journey" + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
                 state.npc = "";
                 //pickRandomBackgroundForCurrentZone();
@@ -550,7 +550,7 @@ function doOffering(){
                 print("<b>" + state.player.name + "</b>" + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")")
             break;
             case 5:
-                print("<b>" + state.player.name + "</b>" + " leaves the shire and continues")
+                print("<b>" + state.player.name + "</b>" + " leaves the shrine and continues")
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
                 state.npc = "";
                 //pickRandomBackgroundForCurrentZone();

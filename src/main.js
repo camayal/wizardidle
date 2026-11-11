@@ -29,4 +29,12 @@ for (const [id, handler] of Object.entries(clickHandlers)) {
 window.addEventListener('resize', () => responsiveLayout());
 window.addEventListener('load', () => responsiveLayout());
 
+// Offline mode (service-worker.js). Registered after load so storing ~6 MB of art and
+// sound doesn't slow down the first visit.
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js').catch((error) => console.warn('[offline] not available:', error));
+    });
+}
+
 initialName();

@@ -237,15 +237,15 @@ function updateStats(){
     "Magical attacks: " + (Number(counterText("Attacks")) - Number(counterText("school_Physical")))  + "<br>" + 
     "Attacks received: " + counterText("IncomingAttacks") + "<br>" + 
     "Enemy encounters: " + counterText("enemyEncounters") + "<br>" + 
-    "Enemies derroted: " + counterText("EnemiesKilled") + "<br>" + 
+    "Enemies defeated: " + counterText("EnemiesKilled") + "<br>" + 
     "Rare encounters: " + counterText("rareEnemyEncounters") + "<br>" + 
-    "Rare derroted: " + counterText("rareEnemiesKilled") + "<br>" + 
+    "Rare defeated: " + counterText("rareEnemiesKilled") + "<br>" + 
     (counterText("enemyEncounters") > 0 ? "Types of enemies found: " + counterList("enemy_") + "<br>" : "") + 
     //"Bosses found: " + check("idx_Bosses") + "<br>" + 
     "Bosses found: " + counterText("Bosses") + (counterText("Bosses") > 0 ? " {" + counterList("typeBoss_") + "}": "") + "<br>" + 
-    "Bosses derroted: " + counterText("BossesKilled") + "<br>" +
+    "Bosses defeated: " + counterText("BossesKilled") + "<br>" +
     (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras found: " + counterText("Hydras") + " {" + counterList("typeofHydras_") + "}<br>": "") +
-    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras derroted: " + counterText("HydrasKilled") + "<br>" : "") +
+    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras defeated: " + counterText("HydrasKilled") + "<br>" : "") +
     (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras heads chopped off: " + counterText("HydrasHeadCut") + "<br>" : "") +
     "Falls: " + counterText("Deaths") + "<br>" + 
     "Current flawless victory: " + counterText("Combo") + "<br>" + 
@@ -270,7 +270,7 @@ function updateStats(){
     "Failed studies: " + counterText("failStudy") + "<br>" + 
     "Successful statue studies: " + counterText("sucessStudyStatue") + "<br>" + 
     "Failed statue studies: " + counterText("failStudyStatue") + "<br>" + 
-    (counterText("sucessStudyStatue") > 0 ?  "Skills incresed studing books or runes: " + counterList("study_", "statObj") + "<br>" : "") + 
+    (counterText("sucessStudyStatue") > 0 ?  "Skills increased studying books or runes: " + counterList("study_", "statObj") + "<br>" : "") + 
     "<br><span class='subtitles'>Exploration</span><br>" + 
     "Current zone: " + "The " + zones[state.zone.current].name + "<br>" + 
     "Last zone: " + "The " + zones[state.zone.last].name + "<br>" + 
@@ -280,7 +280,7 @@ function updateStats(){
     "Times in the Castle: " + counterText("zone_el_Castillo") + "<br>" + 
     "Times in the Town: " + counterText("zone_el_Poblado") + "<br>" + 
     "Times in the Cave: " + counterText("zone_la_Cueva") + "<br>" + 
-    "Times in the Grute: " + counterText("zone_la_Gruta") + "<br>" + 
+    "Times in the Grotto: " + counterText("zone_la_Gruta") + "<br>" + 
     "Times in the Tower: " + counterText("zone_la_Torre") + "<br>" + 
     "Times in the Forest: " + counterText("zone_el_Bosque") + "<br>" + 
     "Times in the Swamp: " + counterText("zone_el_Pantano") + "<br>" + 
@@ -319,7 +319,7 @@ function updateStats(){
     "Tithe: " + counterText("GoldOffered") + "<br>" + 
     "Faith obtained by gold: " + counterText("FeByGold") + "<br>" + 
     "Faith obtained by pray: " + counterText("FeByPray") + "<br>" + 
-    "Faith obtained by corruption erradication: " + counterText("FeByCleanCorruption") + "<br>" + 
+    "Faith obtained by corruption eradication: " + counterText("FeByCleanCorruption") + "<br>" + 
     "Shrines visited: " + counterText("altar") + "<br>" + 
     (counterText("altar") > 0 ? "Shrines visited in: " + counterList("altar_zone_") + "<br>" : "") + 
     "Mandatory offers: " + counterText("DivineMandatoryOffers") + "<br>" + 
@@ -331,7 +331,7 @@ function updateStats(){
     "Divine punishments to enemies: " + counterText("DivineHit") + "<br>" + 
     "<br><span class='subtitles'>Achievements</span><br>" + 
     "Currenly won: " + numLogrosGanados + "<br>" + 
-    "Completation: " + Math.round((numLogrosGanados / (Object.keys(logro).length - 1)) * 100) + "%<br>" + 
+    "Completion: " + Math.round((numLogrosGanados / Object.keys(logro).filter((key) => logro[key].name && !logro[key].planned).length) * 100) + "%<br>" + 
     "</div>";   
     document.getElementById('innerTextScroll').innerHTML= ui.statsPage;  
     document.getElementById("stats").style.fontSize = ui.em + "px";
@@ -356,7 +356,7 @@ function updateHelp(){
     var txt = '<div id="help"><span class="titles" id="titleHelp">Help</span><br>' +
    '<div class="faq">WizardIDLE, what is this?</div><div class="a">It is a game with typical elements of a common RPG game, the only difference is the player role. You are the god of the wizard and your interaction is limited due his free will. With or withour your help the wizard can reach to his fate being a deep believer or a hardened atheist.</div>' +
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true idle game, you must do nothing. The wizard can perform all actions without your help. This is a different way to play, watching what other beings do without your control but some interference (you can interact with miracles). <b><i>This is a god like game</i></b>.</div>' +
-   '<div class="faq">Graphical layout</div><div class="a">The screen is divided in three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, heal points, gold and faith points. In this panel you can found the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where is printed all actions performed by the wizard.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to intect</i> with the wizard, non-player caracters or enviroments. </div>' +
+   '<div class="faq">Graphical layout</div><div class="a">The screen is divided in three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, heal points, gold and faith points. In this panel you can found the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where is printed all actions performed by the wizard.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to intect</i> with the wizard, non-player caracters or environments. </div>' +
    '<div class="faq">Icons explanation</div><div class="a">' +
         '<div class="divTableRow"><div class="divTableCell"><img src="img/boss.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Boss, this encounter is harder than others, the reward is multiplied too.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><img src="img/attack.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Attack, followed by the amount of damage against the wizard or the enemy.</div></div>' +
@@ -372,7 +372,7 @@ function updateHelp(){
    '</div>' +
    '<div class="faq">The wizard</div><div class="a">The center of this game, ' + (state.player.name) + ' is growing in power and ambitions. The fate is just one.</div>' +
    '<div class="faq">The player</div><div class="a"><b>You</b>, to avoid interrupt the free will of the wizard, you can only watch and help limited reducing the faith of the wizard. If the wizard has faith < 0 you cannot help him.</div>' +
-   '<div class="faq">Divine touches</div><div class="a">This is the main player interaction with the wizard and occurs when click or touch the Scene panel. Some basic interactions are: <ol><li>Touch the wizard heal him (cost faith).</li><li>Touch the wizard when he is dead (soft dead) revive him.</li><li>Touch the enemy damage him/her/it (cost faith).</li><li>Touch a shire mandate the wizard to give a tribute in gold (gain faith).</li>'+(state.travelFavor ? "<li>Touch the map teleport the wizard to the selected area.</li>" : "")+'</ol></div>' +
+   '<div class="faq">Divine touches</div><div class="a">This is the main player interaction with the wizard and occurs when click or touch the Scene panel. Some basic interactions are: <ol><li>Touch the wizard heal him (cost faith).</li><li>Touch the wizard when he is dead (soft dead) revive him.</li><li>Touch the enemy damage him/her/it (cost faith).</li><li>Touch a shrine mandate the wizard to give a tribute in gold (gain faith).</li>'+(state.travelFavor ? "<li>Touch the map teleport the wizard to the selected area.</li>" : "")+'</ol></div>' +
    '<div class="faq">Kill the wizard</div><div class="a">' +
    '<div class="divTableRow"><div class="divTableCell"><img src="img/diebtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">This is a definitive option, with this the player can destroy the current wizard in order to create another, <b>this action cannot be undone.</b></div></div>' +
    '</div>' +
@@ -385,9 +385,9 @@ function updateHelp(){
    '<div class="faq">Map</div><div class="a">' + 
    '<div class="divTableRow"><div class="divTableCell"><img src="img/mapbtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
    '</div>' +
-   '<div class="faq">Study and skills</div><div class="a">During the wizard\'s trip, books, runes and statues can be found available to study. A sucessful study of them increase some stats. In this way the wizard can be a strong archmage or a devote donor to your cause.</div>' +
+   '<div class="faq">Study and skills</div><div class="a">During the wizard\'s trip, books, runes and statues can be found available to study. A successful study of them increase some stats. In this way the wizard can be a strong archmage or a devote donor to your cause.</div>' +
    '<div class="faq">Faith</div><div class="a">Your interaction with the wizard\'s world depends of this currency. The wizard gains faith praying and offering in your shrines. He loses the faith avoiding enter to the shires, reviving himself, and after each divine touch.</div>' +
-   '<div class="faq">Rest and healing</div><div class="a">There are different ways to heal the wizard:<br><ol><li>By himself, casting some restauration spell during the battles.</li><li>By himself, sleeping.</li><li>By your interaction, in exchange for faith.</li></ol></div>' +
+   '<div class="faq">Rest and healing</div><div class="a">There are different ways to heal the wizard:<br><ol><li>By himself, casting some restoration spell during the battles.</li><li>By himself, sleeping.</li><li>By your interaction, in exchange for faith.</li></ol></div>' +
    '<div class="faq">Revive (soft dead)</div><div class="a">' +
         '<div class="divTableRow"><div class="divTableCell"><img src="img/muerto.png" height="' + ui.em * 3 + 'px" /></div><div class="divTableCell">If the wizard falls in a battle, there are two ways to revive and continue with the game: <ol><li>By divine intervention touching the dead image (promotes godliness).</li><li>By himself, after some time, this cost huge amounts of faith and the recover is partial (promotes atheism).</li></ol></div></div>' +
    '</div>' +
@@ -438,7 +438,7 @@ function updateKill(){
     '<br><br><div>' + 
     '<img class="btn" id="realKillBtn" src="img/matar.png"/>' +
     '</div><br><br>' + 
-    '<span class="titles" id="titleCementery">' + (world.cemetery.length == 0 ? "" : "Cementery") + '</span>' + 
+    '<span class="titles" id="titleCementery">' + (world.cemetery.length == 0 ? "" : "Cemetery") + '</span>' + 
     (world.cemetery.length == 0 ? "" : "<small>" + cemeteryText() + "</small>");
     document.getElementById('innerTextScroll').innerHTML=txt;
     document.getElementById("realKillBtn").onclick = realKill;

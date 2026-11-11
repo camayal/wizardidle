@@ -21,7 +21,7 @@ export const spells = {
     spellPush10: {school:"Physical",frames:12,name:"Staff"},
     spellPush2: {school:"Arcane",frames:12,name:"<span style='color:#BA47E0'>Sonic boom</span>"},
     spellPush3: {school:"Nature",frames:12,name:"<span style='color:#00AB00'>Toxic strike </span>"},
-    spellPush4: {school:"Fire",frames:12,name:"<span style='color:#E32300'>Fire explotion</span>"},
+    spellPush4: {school:"Fire",frames:12,name:"<span style='color:#E32300'>Fire explosion</span>"},
     spellPush5: {school:"Thunder",frames:12,name:"<span style='color:#FFD800'>Shock</span>"},
     spellPush6: {school:"Physical",frames:12,name:"Staff and cause hemorrhage"},
     spellPush7: {school:"Nature",frames:12,name:"<span style='color:#00AB00'>Viper strike</span>"},

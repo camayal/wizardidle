@@ -1,16 +1,28 @@
- {
-  "name": "WizardIdle",
+{
+  "name": "Wizard Idle",
   "short_name": "WizardIdle",
-  "start_url": "wizardidle/index.html",
+  "description": "A divine perspective of a wizard journey",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "fullscreen",
   "lang": "en-US",
-  "background_color": "#ffffff",  
+  "background_color": "#ffffff",
   "theme_color": "#ffffff",
   "icons": [
-  {
-    "src": "wizardidle/img/icon.png",
-    "type": "image/png",
-    "sizes": "96x96"
-  }
-]
+    {
+      "src": "img/icon.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "img/icon192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "img/icon512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
 }

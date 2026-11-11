@@ -21,8 +21,8 @@ var statObj = {
     fCritic: {name:"critical multiplier", code:"fCritic"},
     pCritic: {name:"critic chance", code:"pCritic"},
     pHeal: {name:"heal chance", code:"pHeal"},
-    fHeal: {name:"restauration knowledge", code:"fHeal"},
-    pStudy: {name:"intelect", code:"pStudy"},
+    fHeal: {name:"restoration knowledge", code:"fHeal"},
+    pStudy: {name:"intellect", code:"pStudy"},
     pBotin: {name:"avarice", code:"pBotin"},
     pChangeZone: {name:"exploration faculties", code:"pChangeZone"},
     pFindCapel: {name:"devotion", code:"pFindCapel"},
@@ -37,8 +37,9 @@ var statObj = {
         return statObj[stat].name;
     },
     random: function(){
-        var keys = Object.keys(this);
-        return this[keys[ (keys.length - 2) * Math.random() << 0]].code;
+        // a random skill (v1 relied on increase/random being the last two keys)
+        var skills = Object.keys(this).filter((key) => typeof this[key] === "object");
+        return this[skills[Math.floor(Math.random() * skills.length)]].code;
     }
 }
 

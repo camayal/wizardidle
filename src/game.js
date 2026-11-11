@@ -15,7 +15,7 @@ import { playSound } from './audio.js';
 import { loadBackground, loadCanvasChar, print, updateHeading } from './ui/render.js';
 import { defineObjectSize, getEM } from './ui/layout.js';
 
-var version = "02nov2020_10pm"; //26jul2018_6pm
+var version = "2.0.0"; // v1: "02nov2020_10pm"
 var uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * 0.109375;//56;
@@ -79,7 +79,7 @@ function start() {
             var feperdida = state.player.hpBase * 0.25;
             //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - feperdida);
             state.player.faith = state.player.faith - feperdida
-        print("<b>" + state.player.name + "</b> " + "loses hope in you and trys to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
+        print("<b>" + state.player.name + "</b> " + "loses hope in you and tries to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
     }
     updateHeading();
     loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);

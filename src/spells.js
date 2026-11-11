@@ -86,8 +86,14 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
 
 
 
+// Highest spell tier the wizard knows: one tier every 10 levels, up to the last one.
+// (v1 asked for tier 21 at level 210, which doesn't exist, and every attack crashed.)
+function knownTier(){
+    return Math.min(Math.floor(state.player.lvl / 10), spellTiers.length - 1);
+}
+
 //Select random spell per level
-function getSpell(lvlBase = Math.floor(state.player.lvl / 10)){
+function getSpell(lvlBase = knownTier()){
     //spellTier0
     var i;
     var spellSelected = "";
@@ -105,7 +111,7 @@ function getSpell(lvlBase = Math.floor(state.player.lvl / 10)){
 
 //count number of spells that know
 function countSpellKnown(){
-    var lvlBase = Math.floor(state.player.lvl / 10)
+    var lvlBase = knownTier()
     var numberSpells = 0;
         for (var i = 0; i <= lvlBase; i++) { 
             numberSpells += Number(spellTiers[i].split(',').length)
