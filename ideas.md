@@ -83,13 +83,16 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 - **King Midas hits ×4** (from old notes): the old story notes wanted a special modifier giving Midas four times the damage. *Today:* ×2 (`if (enemy == "midas"){enemyHit *= 2}` in `src/game.js`).
 - **Notify story and achievements in the background** (from old notes, 2014): the Android app played a sound and vibrated for new achievements and story chapters while in the background. For the web version, this could use browser notifications. Pairs with the offline-mode idea.
 - **Wizards from the past help in the story** (2026-11-10, via dev): build on the cemetery. In the author's words: *"perhaps the cemetery will be something we can build on in the future, for example part of the history in which wizards from the past can help."* *Today* (phase 2, on dev): killed wizards are kept as records in the `wizardidle2:world` save, which outlives every wizard (`world.cemetery = [{ name, lvl, age, born, died }]`). The kill scroll lists them ("Name (lvl: 12) died at the age of 23. born – died"), and nothing else uses them yet. Fallen wizards from earlier runs could come back to help in the story: as ghosts, allies, legends in the console, or tied to the "story for whoever dies" from the old notes.
+- **Levelling pace: XP per enemy** (from `docs/old_ideas/infodexp.xlsx`, 2018): the XP spreadsheet planned that each level takes **16 × level kills**: XP per enemy = (XP gap to next level) ÷ (16 × level). That's 16 kills at level 1, 800 at 50, 1,600 at 100 and 3,200 at 200, where the sheet marks **END**. *Today:* the game divides by 16 only (`xpPerEnemy` in `levelUP()`, `rEnemyXP` in `src/config.js`), so every level takes about 16 base kills (normal kills give ×1.5, so ~11) no matter the level. The sheet's own playtest log (sheet "Hoja4", pivot of XP events per level for levels 1–196) shows the shipped pace: ~17–27 XP events per level, flat. The rest of the sheet matches the code exactly: XP curve `lvl^1.1 × 8`, HP = XP × 1.6483, enemy HP = HP × 1.2, age starting at 19 and growing by XP × 0.0005. One more difference: gold per HP is **0.25** in the sheet but **0.15** in `config.js`.
+- **New creatures from the old list** (from `infodexp.xlsx`, sheet "Hoja2"): a list of 27 creatures written as zone-enemy names. 4 are already enemies (elf, dwarf, ogre, golem), and a griffin appears as an animal sprite's display name. Not in the game yet: salamander, gargoyle, gremlin, ghoul, troll, harpy, banshee, serpent, leviathan, minotaur, nymph, centaur, chimera, sphinx, cyclops, naga, sylph, treant, doxy, duende. They'd need sprites, and the v2 plan keeps the existing assets, so this is post-2.0.0 material.
 
 ## Already built (from the old notes)
 
-Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0).
+Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0) · the per-sprite enemy table: all 669 sprites in `InformationByEnemy.xlsx` match `src/data/enemies.js` exactly (type, rare, corrupted, display name) · the zone boss and enemy table in `enemyLocation.xlsx` (2014): all 16 bosses match, and 14 of 16 enemy lists match exactly. The Castle's sorceress (`la_Hechicera`) was later dropped from the code, and the Forest's elf (`el_Elfo`) was added · the XP/HP/age/enemy-HP formulas in `infodexp.xlsx` (except the two differences noted in "Levelling pace").
 
 ## Open questions
 
+- Levelling pace: keep the flat ~16 kills per level the game has always had, or move toward the spreadsheet's 16 × level (much slower late game)? Or something in between? And should gold go back to 0.25 per HP?
 - Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
 - Travel favor: what earns it (a faith threshold, a chapter, an achievement), and can the wizard lose it (e.g. while in sin or atheist)?
 - Story: keep the old arc as written (sacred staff → corruption → killing Midas → lynching → disobedience → war on the god), or revise it? Should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?
@@ -101,6 +104,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Old spreadsheets checked (bulb)
+
+- `infodexp.xlsx`: the XP model. The curve, HP, age and enemy HP match the code. Two differences went to the backlog: the planned kills per level (16 × level vs. today's flat 16) and gold per HP (0.25 vs. 0.15). Its creature list became a new-enemies idea.
+- `InformationByEnemy.xlsx` and `enemyLocation.xlsx`: already in the game (669/669 sprites identical; zones match apart from two later edits). Recorded under "Already built".
 
 ### 2026-11-10: Phase 2 done, the wizard has one memory
 
