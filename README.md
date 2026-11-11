@@ -27,14 +27,27 @@ python -m http.server 8000
 ## Project layout
 
 ```
-index.html          page and styles
-src/main.js         entry point: wires buttons to the game
-src/game.js         game logic
-src/state.js        everything the game remembers, saved as plain JSON
-src/config.js       game balance (XP curve, chances, starting skills)
-src/utils.js        small pure helpers (random, formatting)
-src/data/           enemies, zones, spells, achievements
-img/  ogg/          art and sound
+index.html               page and styles
+src/main.js              entry point: wires buttons to the game
+src/game.js              start, name screen, startup values
+src/combat.js            battles, bosses, hydras
+src/events.js            everything that can happen on the road
+src/wizard.js            levels, XP, gold, faith, skills
+src/travel.js            moving between zones
+src/divine.js            the player's divine touches
+src/story.js             chapters
+src/achievements.js      achievements
+src/spells.js            spell animations and choice
+src/audio.js             sounds
+src/ui/                  drawing, scroll pages, toolbar, layout
+src/minigames/           the dice game
+src/state.js             everything the game remembers, saved as plain JSON
+src/runtime.js           what it keeps in mind while running (never saved)
+src/loop.js              the game loop
+src/config.js            game balance and timing
+src/data/                enemies, zones, spells, achievements
+src/utils.js             small pure helpers
+img/  ogg/               art and sound
 ```
 
 ## Deployment

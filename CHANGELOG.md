@@ -6,6 +6,27 @@ The story of Wizard Idle, one version at a time. Newest first.
 
 ## 2.0.0 — *in progress*
 
+### Phase 3: The tower gets rooms
+
+Phase 1 gave the tower floors, but `game.js` was still one enormous hall: 3,700 lines where battles, inns, statues, the story, the menus, the screen layout, the sounds and a whole dice game shared the same space and about sixty loose variables. Now every system has its own room:
+
+| Room | What lives there |
+|---|---|
+| `combat.js` | battles, bosses, hydras, the wizard's spells in a fight |
+| `events.js` | everything that can happen on the road: inns, shrines, statues, runes and books, loot, offerings |
+| `wizard.js` | levels, XP, gold, faith, skills |
+| `travel.js` · `story.js` · `achievements.js` · `divine.js` | moving around · chapters · achievements · your divine touches |
+| `ui/` | drawing the scene, the scroll pages, the toolbar, the screen layout |
+| `minigames/sixFiveFour.js` | the gamblers' dice game, with all its own variables |
+
+None of the code inside the rooms was rewritten: every function moved whole, comments and all. What changed is the plumbing between them.
+
+**The clocks stopped multiplying.** v1 ran on a handful of timers that started and stopped each other. In several places the main clock (the one that decides what happens next) was started again without stopping the old one first. Each time that happened, an extra invisible clock joined in, its handle lost so nothing could ever stop it, and the wizard's life quietly sped up. The original code even carried a note about it: *"maybe some clocks are still running"*. Now one game loop keeps named clocks, each one can exist only once, and killing a wizard stops them all.
+
+**Same pace, checked.** Four half-hour games of v1 against four of v2: the wizard reached level 6.5 on average in v1 and 6.75 in v2, with the same numbers of fights, kills, runes and books.
+
+**Same memory, new test.** A save now gets checked the honest way: play, quit the browser entirely, open it again and see the wizard pick up where they left off.
+
 ### Phase 2: The wizard gets one memory
 
 v1 remembered things the way a hoarder keeps receipts: about 150 separate scraps in the browser's storage, each one in a homemade cipher. The game read and rewrote them hundreds of times a minute through `getLocal("Gold")` and `setLocal("Gold", …)`, turned the text back into numbers every single time, and even kept the rules of the world (how fast XP grows, how likely a boss is) inside each wizard's save.

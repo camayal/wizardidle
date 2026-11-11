@@ -21,7 +21,7 @@ Ideas go to bulb, building goes to dev. When dev picks up an idea, it moves from
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Phase:** 1 (ES modules) and 2 (state + JSON save) done. **Next: phase 3**, split `game.js` into systems (combat, events, spells, zones, UI, audio, dice game) and one game loop.
+- **Phase:** 1 (ES modules), 2 (state + JSON save) and 3 (systems + game loop) done. **Next: phase 4**, fix the logged v1 bugs, real offline mode, link to `/legacy/`, version 2.0.0, then merge into `main`.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) still serves v1 code from `main`; [/legacy/](https://camayal.info/wizardidle/legacy/) serves the frozen `v1.0.0` tag.
 
 ## Decisions (and why)
@@ -41,6 +41,9 @@ Ideas go to bulb, building goes to dev. When dev picks up an idea, it moves from
 | 2026-11-10 | Two saves: `wizardidle2:save` (the wizard) and `wizardidle2:world` (cemetery, device id) | Killing a wizard deletes only the first; the world, and its cemetery, outlives every wizard |
 | 2026-11-10 | Kill never calls `localStorage.clear()` | It wiped every game on the domain, including the legacy copy |
 | 2026-11-10 | v1 dev console (`exe()`) disabled, kept as commented code for the record | It ran typed text with `eval()`; hacky for its time. Safe to delete later |
+| 2026-11-10 | Shared runtime variables live in `fight`, `run` and `ui` (`src/runtime.js`), never saved | Modules can't reassign each other's variables; a fight still doesn't survive a reload, as in v1 |
+| 2026-11-10 | One game loop with named clocks (`src/loop.js`) instead of `setInterval` handles | v1 leaked master clocks that could never be stopped; a named clock exists at most once |
+| 2026-11-10 | One module per system; startup values stay together in `game.js`, other modules only define things at load | Keeps load order identical to v1 and makes circular imports safe |
 
 ## Ideas backlog
 
@@ -165,6 +168,14 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Phase 3 done, the tower has rooms
+
+- 3a: ~45 shared variables moved into `fight` / `run` / `ui` (`src/runtime.js`) with a scope-aware rename (711 references; locals with the same name untouched).
+- 3b: `src/loop.js`, one 50 ms tick with named clocks (`master`, `event`, `animPJ`, `animNPC`, `stats`). Fixes v1's leaked master clocks (several places restarted it without stopping it); kill stops everything. Pace checked against v1 over four 30-minute runs: average level 6.5 (v1) vs 6.75 (v2), same encounter and kill counts.
+- 3c: `game.js` (3,700 lines) split into 15 modules by a script from a name-to-module map, imports/exports computed. Constants (`masterTime`, `RAREMULTIPLIER`...) moved to `config.js`; `JUMPSPACE` became `ui.jumpSpace`.
+- Tests: play, persistence across a full browser restart (new test: quit the browser, reopen the same profile), kill with foreign keys, v1 vs v2 stress with identical settings (v2 197-232, v1 208). Only the known level-210 bug.
+- Note for the merge into `main`: bulb's extracted art layers (`docs/old_ideas/`, ~900 files) and `tools/` would be published with the site; decide before 2.0.0 whether the deploy should skip them.
 
 ### 2026-11-10: Layers extracted; map fog, inner maps, pixel UI (bulb)
 
