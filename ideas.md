@@ -56,10 +56,10 @@ Things to try after 2.0.0 (or sooner if they fit). Add freely; nothing here is a
 
 New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it would be fun or useful.` Once dev takes one on, it's marked *→ picked up by dev* and links to where it went.
 
-- Finish the 13 placeholder achievements (`logro_jugon`, `logro_ricachon`, `logro_muchapradera`...): give them titles, descriptions and real triggers. Every one already has its icon. The names hint at the plan: *jugón* (gambler), *dados cargados* (loaded dice) and *full carga* (full cargo) are dice; *inventario lleno* (full inventory) needs an inventory (professions); *dormiletas* (sleepyhead) is camping or inn; *corazón grande* (big heart), *ricachón* (rich), *fanático*, *estudioso* (studious), *eso sí es iluminación* (now that's enlightenment), *flawless*, *mucha pradera* / *mucho poblado* (lots of meadow / village), *primer boss* (first boss). Most need the stats from "Track almost everything as stats".
-- Link to the legacy version from inside the game (help or stats scroll).
+- Finish the 13 placeholder achievements (`logro_jugon`, `logro_ricachon`, `logro_muchapradera`...): give them titles, descriptions and real triggers. *Since 2.0.0* they're marked `planned:true` in `src/data/achievements.js`: hidden, and not counted towards completion. So finishing one means designing it and removing the flag. Every one already has its icon. The names hint at the plan: *jugón* (gambler), *dados cargados* (loaded dice) and *full carga* (full cargo) are dice; *inventario lleno* (full inventory) needs an inventory (professions); *dormiletas* (sleepyhead) is camping or inn; *corazón grande* (big heart), *ricachón* (rich), *fanático*, *estudioso* (studious), *eso sí es iluminación* (now that's enlightenment), *flawless*, *mucha pradera* / *mucho poblado* (lots of meadow / village), *primer boss* (first boss). Most need the stats from "Track almost everything as stats".
+- ~~Link to the legacy version from inside the game (help or stats scroll).~~ *Dropped 2026-11-10:* the author decided there's no link to `/legacy/` from the game or the README.
 - A real offline mode (new service worker) so it plays like an app again.
-- Fix the typos in player-facing text.
+- ~~Fix the typos in player-facing text.~~ *Done by dev in phase 4 (2.0.0):* fourteen kinds of typos fixed ("the Grute" → "the Grotto", "shire" → "shrine", "restauration" → "restoration", …). See CHANGELOG.md.
 - **Map revamp: many ways to move, fog, inner maps** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. Also from the author:
   - **Map fog:** places the wizard doesn't know stay hidden and are revealed as he discovers them. Some places start out known because they're part of the story (e.g. the City where he was exiled, the Tower of King Midas).
   - **Inner or local maps:** maps of a single area (inside the City, the Tower, a cave or mine) in addition to the world map.
@@ -174,6 +174,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Backlog after 2.0.0 (bulb)
+
+- Synced phase 4. Placeholder achievements: noted the `planned:true` flag (design them, then remove the flag). Struck the legacy-link idea (the author decided against it) and the typo fixes (done in 2.0.0). No quotes in the backlog used the old spellings.
 
 ### 2026-11-10: Phase 4 done, 2.0.0 ready for the playtest
 
