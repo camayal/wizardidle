@@ -13,7 +13,7 @@ Simple pure JavaScript project to learn more about this language. CAML
 
 **v1** was written by hand in 2018–2020, before AI coding assistants, while I was learning JavaScript. It is frozen exactly as it was and kept as a historical record.
 
-**v2** keeps the same game, content and art, and reorganizes the code into modules, fixes old bugs, and finally adds features that were waiting for years. See [CHANGELOG.md](CHANGELOG.md) for the story so far and [docs/ROADMAP.md](docs/ROADMAP.md) for what's next.
+**v2** keeps the same game, content and art, and reorganizes the code into modules, fixes old bugs, and finally adds features that were waiting for years. See [CHANGELOG.md](CHANGELOG.md) for the list of changes and [docs/ROADMAP.md](docs/ROADMAP.md) for what's next.
 
 ## Run it locally
 

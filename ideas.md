@@ -2,8 +2,8 @@
 
 The working notebook for Wizard Idle v2: where the project stands, what was decided and why, and ideas waiting their turn. Read this first before starting a session; update it before ending one.
 
-- Player-facing story of each release → [CHANGELOG.md](CHANGELOG.md) (written for humans)
-- The phase plan and known v1 bugs → [docs/ROADMAP.md](docs/ROADMAP.md)
+- What changed in each release → [CHANGELOG.md](CHANGELOG.md) (short bullet points)
+- The route ahead (cleanup, speed, story, features) and the fixed v1 bugs → [docs/ROADMAP.md](docs/ROADMAP.md)
 - The author's old notes, spreadsheets and art sources (2014–2018) live **outside the repo**, in the sibling folder `wizardidle-old-ideas/` on the author's machine; the layer extraction script is in its `tools/`. Paths below like `wizardidle-old-ideas/layers/` refer to it.
 
 ---
@@ -11,7 +11,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.0.0 is live since 2026-11-11 (tag `v2.0.0`). **Next:** the features in the ideas backlog, one at a time on `dev`.
+- **Released:** 2.0.0 is live since 2026-11-11 (tag `v2.0.0`). **Next: stage 1 of the roadmap**, clean up the code (modern JS, less redundancy, more manageable, short annotations). Then stage 2 (modern and faster), stage 3 (the story), stage 4 (new features).
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.0.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
@@ -39,6 +39,8 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-10 | Unfinished achievements ship hidden (`planned:true`) and don't count towards completion | Design them later; until then 100% is reachable |
 | 2026-11-10 | Past level 200 the wizard keeps the 21 existing spell tiers | Fixes the level-210 crash with no new content |
 | 2026-11-10 | Offline mode: network first for code, stored copy first for art and sound, new cache per release | Online players always get the newest version; offline still plays; old versions don't linger |
+| 2026-11-11 | Route after 2.0.0: 1 clean up the code, 2 modern and faster, 3 the story, 4 new features | The author's order: a clean, fast base before adding content |
+| 2026-11-11 | CHANGELOG is a flat list of short bullets per version, no narrative or subtitles | The author's preference for readability |
 
 ## Ideas backlog
 
@@ -164,6 +166,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-11: New route, simpler changelog
+
+- CHANGELOG rewritten as plain bullet points per version (the narrative version was not what the author wanted).
+- Roadmap now follows the author's route: 1 clean up the code, 2 modern and faster, 3 the story, 4 new features.
 
 ### 2026-11-11: 2.0.0 is live
 

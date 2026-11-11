@@ -1,15 +1,33 @@
-# v2 Roadmap
+# Roadmap
 
-Same game, same content and art; better code, then new features. Work happens on `dev` and is merged into `main` (the live site) only when it's playable.
+Work happens on `dev`; `main` is the live site and only gets playable versions. Each stage starts when the one before it is done.
 
-## Phases
+## 1. Clean up the code
 
-- [x] **1. Structure.** ES modules under `src/`, game data in `src/data/`, no build step. Gameplay identical.
-- [x] **2. State.** One `state` object (`src/state.js`) saved as plain JSON under `wizardidle2:save`, plus `wizardidle2:world` for what outlives a wizard (cemetery). Balance constants in `src/config.js`. "Kill wizard" no longer calls `localStorage.clear()`. The v1 dev console is disabled and kept as commented code. (Combat variables such as `enemyHP` and `bossCombat` moved in phase 3 to the runtime `fight` object, which is never saved, as in v1.)
-- [x] **3. Systems.** `game.js` split into 15 modules (`combat`, `events`, `wizard`, `travel`, `divine`, `story`, `achievements`, `spells`, `audio`, `ui/render`, `ui/scrolls`, `ui/menu`, `ui/layout`, `minigames/sixFiveFour`, and a small `game.js`). Shared runtime variables in `fight` / `run` / `ui`; one game loop with named clocks (`src/loop.js`).
-- [x] **4. Polish and release.** v1 bugs fixed (list below), real offline mode (`service-worker.js`), fixed install manifest, unfinished achievements hidden, version 2.0.0. No link to `/legacy/` inside the game (decided: legacy is for the author and the record). *Remaining: the author's playtest, then merge `dev` into `main`.*
+- [ ] Update the code to modern JavaScript (`let`/`const`, template strings, arrow functions where they help).
+- [ ] Remove redundancy: repeated blocks (e.g. the same "end of event, back to the event picker" code in many places), copy-pasted texts, duplicated constants.
+- [ ] Make it more manageable: smaller functions with clear names, related code together.
+- [ ] Annotate each part of the code: a short comment per module and per function saying what it does. No excessive comments.
+- [ ] Keep gameplay identical, checked with the same tests as the v2 rebuild.
 
-After 2.0.0: the features v1 never got to.
+## 2. Modern, faster, less redundant
+
+Gate before moving on: the whole code base is modern, measurably faster where it matters (game loop, drawing, console output), and free of the redundancy found in stage 1.
+
+## 3. The story
+
+- [ ] Implement the story from the ideas backlog in `ideas.md` ("Finish the story": chapters III–XI and the final battle, plus the related story ideas).
+
+## 4. New features
+
+- [ ] The rest of the ideas backlog in `ideas.md`, one feature at a time. This is the long part.
+
+## Done: the v2 rebuild (2.0.0, live since 2026-11-11)
+
+- [x] **Structure.** ES modules under `src/`, game data in `src/data/`, no build step.
+- [x] **State.** One plain-JSON save (`src/state.js`), balance in `src/config.js`, kill no longer wipes other site data.
+- [x] **Systems.** 15 modules, shared runtime objects (`src/runtime.js`), one game loop (`src/loop.js`).
+- [x] **Polish and release.** v1 bugs fixed (below), offline mode, fixed manifest, version 2.0.0.
 
 ## Bugs spotted in v1
 
