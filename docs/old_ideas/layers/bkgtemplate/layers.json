@@ -1,0 +1,35 @@
+{
+ "source": "bkgtemplate.pdn",
+ "width": 256,
+ "height": 64,
+ "layers": [
+  {
+   "name": "Fondo",
+   "visible": true,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Fondo.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Piso_-90_64_50_.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Deco",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Deco.png",
+   "drawn": 0.0
+  }
+ ],
+ "problems": []
+}

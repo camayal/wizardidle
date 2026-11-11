@@ -1,0 +1,323 @@
+{
+ "source": "Logros.pdn",
+ "width": 53,
+ "height": 53,
+ "layers": [
+  {
+   "name": "Layer 2",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Layer 2.png",
+   "drawn": 0.721
+  },
+  {
+   "name": "Layer 2",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Layer 2.png",
+   "drawn": 0.808
+  },
+  {
+   "name": "Layer 2",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Layer 2.png",
+   "drawn": 0.808
+  },
+  {
+   "name": "Layer 7",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Layer 7.png",
+   "drawn": 0.073
+  },
+  {
+   "name": "Layer 3",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_Layer 3.png",
+   "drawn": 0.22
+  },
+  {
+   "name": "Layer 1",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_Layer 1.png",
+   "drawn": 0.11
+  },
+  {
+   "name": "Layer 6",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_Layer 6.png",
+   "drawn": 0.086
+  },
+  {
+   "name": "Layer 8",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_Layer 8.png",
+   "drawn": 0.059
+  },
+  {
+   "name": "Layer 9",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "08_Layer 9.png",
+   "drawn": 0.107
+  },
+  {
+   "name": "Layer 10",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "09_Layer 10.png",
+   "drawn": 0.172
+  },
+  {
+   "name": "Layer 11",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "10_Layer 11.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 11",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "11_Layer 11.png",
+   "drawn": 0.22
+  },
+  {
+   "name": "Layer 11",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "12_Layer 11.png",
+   "drawn": 0.176
+  },
+  {
+   "name": "Layer 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "13_Layer 12.png",
+   "drawn": 0.19
+  },
+  {
+   "name": "Layer 13",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "14_Layer 13.png",
+   "drawn": 0.173
+  },
+  {
+   "name": "Layer 14",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "15_Layer 14.png",
+   "drawn": 0.166
+  },
+  {
+   "name": "Layer 15",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "16_Layer 15.png",
+   "drawn": 0.163
+  },
+  {
+   "name": "Layer 16",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "17_Layer 16.png",
+   "drawn": 0.173
+  },
+  {
+   "name": "Layer 17",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "18_Layer 17.png",
+   "drawn": 0.044
+  },
+  {
+   "name": "Layer 18",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "19_Layer 18.png",
+   "drawn": 0.138
+  },
+  {
+   "name": "d6: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "20_d6_ Background.png",
+   "drawn": 0.112
+  },
+  {
+   "name": "Layer 22",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "21_Layer 22.png",
+   "drawn": 0.061
+  },
+  {
+   "name": "heart: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "22_heart_ Background.png",
+   "drawn": 0.097
+  },
+  {
+   "name": "boss: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "23_boss_ Background.png",
+   "drawn": 0.095
+  },
+  {
+   "name": "boss: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "24_boss_ Background.png",
+   "drawn": 0.139
+  },
+  {
+   "name": "Layer 26",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "25_Layer 26.png",
+   "drawn": 0.095
+  },
+  {
+   "name": "Layer 27",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "26_Layer 27.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "cabezasss",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "27_cabezasss.png",
+   "drawn": 0.163
+  },
+  {
+   "name": "el Capricor1: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "28_el Capricor1_ Background.png",
+   "drawn": 0.034
+  },
+  {
+   "name": "Layer 30",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "29_Layer 30.png",
+   "drawn": 0.09
+  },
+  {
+   "name": "Layer 31",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "30_Layer 31.png",
+   "drawn": 0.138
+  },
+  {
+   "name": "Layer 31",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "31_Layer 31.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "blood_puddle_red1: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "32_blood_puddle_red1_ Fondo.png",
+   "drawn": 0.088
+  },
+  {
+   "name": "oveja: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "33_oveja_ Fondo.png",
+   "drawn": 0.135
+  },
+  {
+   "name": "Capa 36",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "34_Capa 36.png",
+   "drawn": 0.083
+  }
+ ],
+ "problems": []
+}

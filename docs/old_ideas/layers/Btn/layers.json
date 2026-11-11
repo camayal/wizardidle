@@ -1,0 +1,71 @@
+{
+ "source": "Btn.pdn",
+ "width": 33,
+ "height": 33,
+ "layers": [
+  {
+   "name": "Background",
+   "visible": true,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Background.png",
+   "drawn": 0.741
+  },
+  {
+   "name": "Layer 3",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Layer 3.png",
+   "drawn": 0.246
+  },
+  {
+   "name": "Layer 4",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Layer 4.png",
+   "drawn": 0.185
+  },
+  {
+   "name": "Layer 2",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Layer 2.png",
+   "drawn": 0.167
+  },
+  {
+   "name": "spirit: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_spirit_ Background.png",
+   "drawn": 0.167
+  },
+  {
+   "name": "Layer 6",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_Layer 6.png",
+   "drawn": 0.097
+  },
+  {
+   "name": "Capa 7",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_Capa 7.png",
+   "drawn": 0.104
+  }
+ ],
+ "problems": []
+}

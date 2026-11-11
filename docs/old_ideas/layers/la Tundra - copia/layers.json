@@ -1,0 +1,89 @@
+{
+ "source": "la Tundra - copia.pdn",
+ "width": 256,
+ "height": 64,
+ "layers": [
+  {
+   "name": "Fondo",
+   "visible": true,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Fondo.png",
+   "drawn": 0.836
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Piso_-90_64_50_.png",
+   "drawn": 0.953
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Piso_-90_64_50_.png",
+   "drawn": 0.891
+  },
+  {
+   "name": "Layer 5",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Layer 5.png",
+   "drawn": 0.09
+  },
+  {
+   "name": "Deco",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_Deco.png",
+   "drawn": 0.153
+  },
+  {
+   "name": "Layer 6",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_Layer 6.png",
+   "drawn": 0.141
+  },
+  {
+   "name": "Layer 6",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_Layer 6.png",
+   "drawn": 0.114
+  },
+  {
+   "name": "Layer 7",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_Layer 7.png",
+   "drawn": 0.015
+  },
+  {
+   "name": "Layer 9",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "08_Layer 9.png",
+   "drawn": 0.092
+  }
+ ],
+ "problems": []
+}

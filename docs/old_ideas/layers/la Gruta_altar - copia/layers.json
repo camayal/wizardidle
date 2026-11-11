@@ -1,0 +1,197 @@
+{
+ "source": "la Gruta_altar - copia.pdn",
+ "width": 256,
+ "height": 64,
+ "layers": [
+  {
+   "name": "Fondo",
+   "visible": true,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Fondo.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Piso_-90_64_50_.png",
+   "drawn": 0.875
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Piso_-90_64_50_.png",
+   "drawn": 0.469
+  },
+  {
+   "name": "Deco",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Deco.png",
+   "drawn": 0.116
+  },
+  {
+   "name": "Layer 6",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_Layer 6.png",
+   "drawn": 0.16
+  },
+  {
+   "name": "Layer 5",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_Layer 5.png",
+   "drawn": 0.077
+  },
+  {
+   "name": "Layer 7",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_Layer 7.png",
+   "drawn": 0.121
+  },
+  {
+   "name": "Layer 9",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_Layer 9.png",
+   "drawn": 0.069
+  },
+  {
+   "name": "Layer 9",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "08_Layer 9.png",
+   "drawn": 0.215
+  },
+  {
+   "name": "Layer 9",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "09_Layer 9.png",
+   "drawn": 0.159
+  },
+  {
+   "name": "Layer 10",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "10_Layer 10.png",
+   "drawn": 0.188
+  },
+  {
+   "name": "Layer 11",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "11_Layer 11.png",
+   "drawn": 0.031
+  },
+  {
+   "name": "Layer 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "12_Layer 12.png",
+   "drawn": 0.128
+  },
+  {
+   "name": "Layer 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "13_Layer 12.png",
+   "drawn": 0.062
+  },
+  {
+   "name": "Layer 14",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "14_Layer 14.png",
+   "drawn": 0.088
+  },
+  {
+   "name": "Layer 15",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "15_Layer 15.png",
+   "drawn": 0.095
+  },
+  {
+   "name": "Layer 15",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "16_Layer 15.png",
+   "drawn": 0.108
+  },
+  {
+   "name": "Layer 16",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "17_Layer 16.png",
+   "drawn": 0.106
+  },
+  {
+   "name": "Layer 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "18_Layer 12.png",
+   "drawn": 0.071
+  },
+  {
+   "name": "Layer 20",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "19_Layer 20.png",
+   "drawn": 0.033
+  },
+  {
+   "name": "Layer 6",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "20_Layer 6.png",
+   "drawn": 0.017
+  }
+ ],
+ "problems": []
+}
