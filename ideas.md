@@ -111,7 +111,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   Found while looking: `cardCombat()` in `src/game.js` is an empty placeholder (a card-combat idea that never started?).
 - **Unused sprites: abandoned ideas with art ready** (2026-11-10, from `docs/old_ideas/unorganzed_sprites/`): 51 of the folder's images aren't in `img/`. Most of the folder (backgrounds, altars, statues, dice, buttons) is already in the game. What's left points at ideas:
   - **Rings** (`anilos.png`) → Enchanting (see Professions).
-  - **Playing cards numbered 1–6**, in the town sheet `BASE/townactions.gif` → probably the empty `cardCombat()` stub: a card game or card-based combat next to the dice game.
+  - **Playing cards numbered 1–6**, in the town sheet `BASE/townactions.gif` → **a card game against tavern NPCs** (confirmed by the author). That's what the empty `cardCombat()` stub was for. Taverns already exist (`la_ciudad_taberna`, `el_poblado_taberna`, `el_desierto_taberna` backgrounds; `innEV()` and the `taberna` counters), so the game would sit next to the dice game (played at the dice house, `casadados`). It would need its own stats (games, wins / losses, gold won / lost, opponents) and could share the gambling achievements (*jugón*).
   - **Town sheet** (`townactions.gif`, D.E. Gervais): a *Rumors* scroll (quests or hints), keys, a map, potions, books, a coin bag, food, a crown, NPC portraits → quests, rumours, shops.
   - **Shop fronts** (`BASE/dg_town932.gif`): weapons, armour, potions, magic, books, tavern, bank, temple, stables, guild signs → shops and guilds in the City or Village. Commerce from the old help, profession trainers.
   - **Townsfolk** (`BASE/dg_people32.gif`, 12 characters) and a **speech bubble with text** (`bocadillo con letras.png`) → NPCs who talk: quest givers, merchants, rumours.
@@ -127,7 +127,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Open questions
 
-- Unused sprites: was `cardCombat()` meant to use the 1–6 playing cards? Were the boss crowns for boss ranks, or something else (achievement tiers)? Which town ideas (shops, rumours, talking NPCs, interiors) are still worth keeping?
+- Card game: what are the rules (how the 1–6 cards are played, betting, how the wizard decides), and who are the tavern NPCs he plays? Unused sprites: were the boss crowns for boss ranks, or something else (achievement tiers)? Which town ideas (shops, rumours, talking NPCs, interiors) are still worth keeping?
 - Stats: should everything show on the stats scroll, or only some, with the rest hidden and used for achievements and quests? Per wizard, per world, or both? And what was `cardCombat()` meant to be?
 - Levelling pace: keep the flat ~16 kills per level the game has always had, or move toward the spreadsheet's 16 × level (much slower late game)? Or something in between? And should gold go back to 0.25 per HP?
 - Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
@@ -141,6 +141,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Cards confirmed (bulb)
+
+- The author confirmed the 1–6 playing cards were for a card game against tavern NPCs, which explains the empty `cardCombat()`. Updated the sprites entry. The open question is now about the rules.
 
 ### 2026-11-10: Unused sprites matched to ideas (bulb)
 
