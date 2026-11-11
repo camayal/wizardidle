@@ -1,0 +1,6 @@
+# Local working material: kept on the author's machine, never committed or published.
+docs/old_ideas/
+tools/
+
+# Claude Code worktrees and local settings
+.claude/
