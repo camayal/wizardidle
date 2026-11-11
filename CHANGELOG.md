@@ -4,7 +4,22 @@ The story of Wizard Idle, one version at a time. Newest first.
 
 ---
 
-## 2.0.0 — *in progress*
+## 2.0.0 — *ready, waiting for the final playtest*
+
+### Phase 4: Old debts paid
+
+For three phases the rule was "change the code, never the game": every bug from 2018 was carefully kept, so v2 could be checked against v1 line by line. This phase finally pays those debts.
+
+- **The wizard can grow old.** Past level 209 every single attack crashed. The wizard learns a new tier of spells every ten levels, there are 21 tiers, and at level 210 the game went looking for a 22nd that was never drawn. Now an old wizard keeps casting everything he learned. Stress-tested from level 205 up to 270 without a single error.
+- **"acá hay un BUG", solved.** The original code carried a note in Spanish, *"here there's a bug"*, and a debug line hunting it. It took years and a stress test to catch: the wizard and his enemy can fall **in the same round**. The enemy's death was handled first and wiped its name, so the wizard's death found nobody to blame and the game stumbled. Worse, the world kept turning while the wizard lay dead. Now a fallen enemy can't pick the wizard's pockets, and everything waits for the revival.
+- **"Another Boss!"** The game always announced "a Boss", even right after another one. It read its memory of the last fight a moment after overwriting it.
+- **Small things:** the shouting shortie's easter egg no longer checks a number that doesn't exist; random skill training no longer counts on the order of its own fields.
+- **Words.** "Fire explotion", "trys", "Cementery", "the Grute", "restauration"… fourteen kinds of typos fixed. Our favourite: the wizard was always visiting a *shire* instead of a *shrine*.
+- **Achievements you can actually finish.** Thirteen achievements were sketched in 2018 but never written: no title, no way to earn them. They're hidden now and don't count, so the completion percentage can finally reach 100%.
+
+**It plays offline again.** A new service worker stores the whole game (about 6 MB of code, art and sound) on the first visit. The code always comes fresh from the network when you're online, so updates arrive immediately. Art and sound come from the device, and each release clears the previous one's storage. While at it, the install manifest got fixed: it pointed one folder too deep, so installing the game as an app opened a page that didn't exist.
+
+**And it's called 2.0.0 now**, instead of the old build stamp "02nov2020_10pm".
 
 ### Phase 3: The tower gets rooms
 

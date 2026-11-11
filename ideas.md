@@ -21,7 +21,7 @@ Ideas go to bulb, building goes to dev. When dev picks up an idea, it moves from
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Phase:** 1 (ES modules), 2 (state + JSON save) and 3 (systems + game loop) done. **Next: phase 4**, fix the logged v1 bugs, real offline mode, link to `/legacy/`, version 2.0.0, then merge into `main`.
+- **Phase:** 1–4 done; 2.0.0 is ready on `dev`. **Next:** the author's playtest (including the offline check), then merge `dev` into `main` to go live.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) still serves v1 code from `main`; [/legacy/](https://camayal.info/wizardidle/legacy/) serves the frozen `v1.0.0` tag.
 
 ## Decisions (and why)
@@ -45,6 +45,10 @@ Ideas go to bulb, building goes to dev. When dev picks up an idea, it moves from
 | 2026-11-10 | One game loop with named clocks (`src/loop.js`) instead of `setInterval` handles | v1 leaked master clocks that could never be stopped; a named clock exists at most once |
 | 2026-11-10 | One module per system; startup values stay together in `game.js`, other modules only define things at load | Keeps load order identical to v1 and makes circular imports safe |
 | 2026-11-10 | `docs/old_ideas/` and `tools/` stay local-only (untracked, in `.gitignore`) | Working material, not part of the game; never published with the site |
+| 2026-11-10 | No link to `/legacy/` from the game or the README | The legacy copy is for the author and the historical record |
+| 2026-11-10 | Unfinished achievements ship hidden (`planned:true`) and don't count towards completion | Design them later; until then 100% is reachable |
+| 2026-11-10 | Past level 200 the wizard keeps the 21 existing spell tiers | Fixes the level-210 crash with no new content |
+| 2026-11-10 | Offline mode: network first for code, stored copy first for art and sound, new cache per release | Online players always get the newest version; offline still plays; old versions don't linger |
 
 ## Ideas backlog
 
@@ -170,6 +174,15 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Phase 4 done, 2.0.0 ready for the playtest
+
+- Fixed: the level-210 crash (`knownTier()` keeps the 21 tiers; stress runs from level 205 reached 224–270 with zero errors), the author's own "acá hay un BUG" (wizard and enemy falling in the same round; the event picker also kept running while the wizard was dead), "another Boss" text, the easter egg check, `statObj.random()`, 14 kinds of typos ("shire" was meant to be "shrine").
+- Corrected an earlier roadmap entry: "bosses read the previous enemy" wasn't a real bug; hardened the one theoretical spot.
+- 13 unfinished achievements marked `planned:true`: hidden, not counted, so completion can reach 100%.
+- Offline mode (`service-worker.js`): stores ~6 MB of code, art and sound; network first for code, stored first for media; per-release cache. Fixed `manifest.json`, whose paths opened `/wizardidle/wizardidle/index.html` when installed.
+- Version 2.0.0. No legacy link in the game; removed the public legacy link from the README.
+- Testing gap: headless Edge can't complete a service worker install here (its fetches never resolve), so offline mode needs a manual check in a real browser before going live.
 
 ### 2026-11-10: Old ideas and tools kept local (bulb)
 
