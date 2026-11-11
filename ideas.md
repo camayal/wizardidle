@@ -48,15 +48,21 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 - A real offline mode (new service worker) so it plays like an app again.
 - Fix the typos in player-facing text.
 - **Map rework: many ways to move** (2026-11-10): the map should work differently, and the character's location should be able to change in several ways, not just one. *Today:* the map is mostly a display: the marker sits at the current zone's fixed spot, and the only player-driven move is tapping the map to teleport once the "travelFavor" is unlocked (map code near `src/game.js:2556`).
+- **Rebalance faith and player interaction** (2026-11-10): rebalance faith points and how the player (the god) interacts with the wizard, while **keeping the atheist ending possible**. *Today:* faith comes from praying, shrine offerings (gold to faith) and wiping out corrupted enemies. It's lost by skipping shrines, self-reviving, and every divine touch (heal, hit enemy). Below 0 faith the player can't help at all, which is the road to atheism (help text near `src/game.js:3077`; touch costs near `src/game.js:2758`).
 
 ## Open questions
 
+- Faith rebalance: what feels off today: too little faith, touches too expensive, too easy or too hard to fall into atheism? And should atheism stay a one-way fate, or could the wizard drift back and forth?
 - Map rework: which ways should the character be able to move? (walking between neighbouring zones, teleporting, being pushed by events or bosses, choosing a destination...) And should the map itself look or behave differently, or only how the location changes?
 - Should the dev console (`exe()`, unlocked by clicking name → level → faith icon) stay in v2 as a secret, or move behind a debug flag?
 
 ---
 
 ## Journal
+
+### 2026-11-10: Idea: faith rebalance (bulb)
+
+- Added "Rebalance faith and player interaction" to the backlog (the atheist path must survive), with an open question about what feels off.
 
 ### 2026-11-10: Idea: map rework (bulb)
 
