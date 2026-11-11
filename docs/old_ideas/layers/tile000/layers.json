@@ -1,0 +1,107 @@
+{
+ "source": "tile000.pdn",
+ "width": 93,
+ "height": 31,
+ "layers": [
+  {
+   "name": "Fondo",
+   "visible": false,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Fondo.png",
+   "drawn": 0.198
+  },
+  {
+   "name": "tile001: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_tile001_ Fondo.png",
+   "drawn": 0.141
+  },
+  {
+   "name": "tile002: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_tile002_ Fondo.png",
+   "drawn": 0.198
+  },
+  {
+   "name": "tile003: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_tile003_ Fondo.png",
+   "drawn": 0.198
+  },
+  {
+   "name": "tile004: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_tile004_ Fondo.png",
+   "drawn": 0.161
+  },
+  {
+   "name": "tile005: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_tile005_ Fondo.png",
+   "drawn": 0.251
+  },
+  {
+   "name": "tile006: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_tile006_ Fondo.png",
+   "drawn": 0.243
+  },
+  {
+   "name": "tile007: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_tile007_ Fondo.png",
+   "drawn": 0.256
+  },
+  {
+   "name": "tile008: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "08_tile008_ Fondo.png",
+   "drawn": 0.194
+  },
+  {
+   "name": "tile009: Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "09_tile009_ Fondo.png",
+   "drawn": 0.198
+  },
+  {
+   "name": "Capa 11",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "10_Capa 11.png",
+   "drawn": 0.125
+  }
+ ],
+ "problems": []
+}

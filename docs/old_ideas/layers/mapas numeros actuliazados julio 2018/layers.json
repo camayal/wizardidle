@@ -1,0 +1,26 @@
+{
+ "source": "mapas numeros actuliazados julio 2018.pdn",
+ "width": 487,
+ "height": 768,
+ "layers": [
+  {
+   "name": "Capa 1",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Capa 1.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Capa 2",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Capa 2.png",
+   "drawn": 0.967
+  }
+ ],
+ "problems": []
+}

@@ -1,0 +1,278 @@
+{
+ "source": "las Dunas - copia.pdn",
+ "width": 256,
+ "height": 64,
+ "layers": [
+  {
+   "name": "Layer 6",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Layer 6.png",
+   "drawn": 0.828
+  },
+  {
+   "name": "Layer 4",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Layer 4.png",
+   "drawn": 0.859
+  },
+  {
+   "name": "Layer 4",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Layer 4.png",
+   "drawn": 0.859
+  },
+  {
+   "name": "Capa 20",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Capa 20.png",
+   "drawn": 0.53
+  },
+  {
+   "name": "Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_Fondo.png",
+   "drawn": 0.783
+  },
+  {
+   "name": "Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_Fondo.png",
+   "drawn": 0.58
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "difference",
+   "file": "06_Piso_-90_64_50_.png",
+   "drawn": 0.688
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_Piso_-90_64_50_.png",
+   "drawn": 0.469
+  },
+  {
+   "name": "Fondo",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "08_Fondo.png",
+   "drawn": 0.4
+  },
+  {
+   "name": "Deco",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "09_Deco.png",
+   "drawn": 0.048
+  },
+  {
+   "name": "Deco",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "10_Deco.png",
+   "drawn": 0.029
+  },
+  {
+   "name": "Layer 8",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "11_Layer 8.png",
+   "drawn": 0.022
+  },
+  {
+   "name": "Layer 9",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "12_Layer 9.png",
+   "drawn": 0.048
+  },
+  {
+   "name": "Layer 13",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "13_Layer 13.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 15",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "14_Layer 15.png",
+   "drawn": 0.202
+  },
+  {
+   "name": "Layer 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "15_Layer 12.png",
+   "drawn": 0.312
+  },
+  {
+   "name": "Layer 17",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "16_Layer 17.png",
+   "drawn": 0.279
+  },
+  {
+   "name": "Layer 17",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "17_Layer 17.png",
+   "drawn": 0.279
+  },
+  {
+   "name": "Layer 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "18_Layer 12.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 14",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "19_Layer 14.png",
+   "drawn": 0.014
+  },
+  {
+   "name": "Capa 25",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "20_Capa 25.png",
+   "drawn": 0.046
+  },
+  {
+   "name": "Capa 23",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "21_Capa 23.png",
+   "drawn": 0.02
+  },
+  {
+   "name": "Capa 22",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "22_Capa 22.png",
+   "drawn": 0.094
+  },
+  {
+   "name": "Capa 21",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "23_Capa 21.png",
+   "drawn": 0.023
+  },
+  {
+   "name": "L2_Floor_Deco01: Fondo",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "24_L2_Floor_Deco01_ Fondo.png",
+   "drawn": 0.051
+  },
+  {
+   "name": "Capa 26",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "25_Capa 26.png",
+   "drawn": 0.01
+  },
+  {
+   "name": "Capa 27",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "26_Capa 27.png",
+   "drawn": 0.092
+  },
+  {
+   "name": "Capa 28",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "27_Capa 28.png",
+   "drawn": 0.008
+  },
+  {
+   "name": "Capa 29",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "28_Capa 29.png",
+   "drawn": 0.035
+  },
+  {
+   "name": "Capa 30",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "29_Capa 30.png",
+   "drawn": 0.036
+  }
+ ],
+ "problems": []
+}

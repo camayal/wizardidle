@@ -1,0 +1,296 @@
+{
+ "source": "mapa.pdn",
+ "width": 250,
+ "height": 250,
+ "layers": [
+  {
+   "name": "Background",
+   "visible": false,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Background.png",
+   "drawn": 0.542
+  },
+  {
+   "name": "Layer 16",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Layer 16.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Layer 4",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Layer 4.png",
+   "drawn": 0.008
+  },
+  {
+   "name": "du",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_du.png",
+   "drawn": 0.049
+  },
+  {
+   "name": "gruta",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_gruta.png",
+   "drawn": 0.006
+  },
+  {
+   "name": "tundra",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_tundra.png",
+   "drawn": 0.025
+  },
+  {
+   "name": "volcan",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_volcan.png",
+   "drawn": 0.004
+  },
+  {
+   "name": "Pantano",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_Pantano.png",
+   "drawn": 0.12
+  },
+  {
+   "name": "Desierto",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "08_Desierto.png",
+   "drawn": 0.014
+  },
+  {
+   "name": "Bosque",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "09_Bosque.png",
+   "drawn": 0.037
+  },
+  {
+   "name": "Layer 15",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "10_Layer 15.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Pradera",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "11_Pradera.png",
+   "drawn": 0.161
+  },
+  {
+   "name": "Layer 3",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "12_Layer 3.png",
+   "drawn": 0.024
+  },
+  {
+   "name": "Layer 3",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "13_Layer 3.png",
+   "drawn": 0.43
+  },
+  {
+   "name": "Layer 14",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "14_Layer 14.png",
+   "drawn": 0.01
+  },
+  {
+   "name": "Layer 2",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "15_Layer 2.png",
+   "drawn": 0.076
+  },
+  {
+   "name": "Layer 20",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "16_Layer 20.png",
+   "drawn": 0.009
+  },
+  {
+   "name": "Layer 26",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "17_Layer 26.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Layer 22",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "18_Layer 22.png",
+   "drawn": 0.008
+  },
+  {
+   "name": "Layer 23",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "19_Layer 23.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 24",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "20_Layer 24.png",
+   "drawn": 0.003
+  },
+  {
+   "name": "casas y city",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "21_casas y city.png",
+   "drawn": 0.024
+  },
+  {
+   "name": "Layer 19",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "22_Layer 19.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 25",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "23_Layer 25.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 27",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "24_Layer 27.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "lvl0: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "25_lvl0_ Background.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "lvl0: Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "26_lvl0_ Background.png",
+   "drawn": 0.01
+  },
+  {
+   "name": "Capa 31",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "27_Capa 31.png",
+   "drawn": 0.012
+  },
+  {
+   "name": "Capa 29",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "28_Capa 29.png",
+   "drawn": 0.019
+  },
+  {
+   "name": "Capa 32",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "29_Capa 32.png",
+   "drawn": 0.028
+  },
+  {
+   "name": "Capa 30",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "30_Capa 30.png",
+   "drawn": 0.022
+  },
+  {
+   "name": "bosque y pantano",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "31_bosque y pantano.png",
+   "drawn": 0.05
+  }
+ ],
+ "problems": []
+}

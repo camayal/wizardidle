@@ -1,0 +1,278 @@
+{
+ "source": "guias y otros mapas.pdn",
+ "width": 250,
+ "height": 250,
+ "layers": [
+  {
+   "name": "Background",
+   "visible": false,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Background.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Layer 10",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Layer 10.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Background.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Background.png",
+   "drawn": 0.953
+  },
+  {
+   "name": "Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_Background.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Background",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_Background.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Background",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_Background.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Layer 5",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_Layer 5.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "circulos",
+   "visible": false,
+   "background": false,
+   "opacity": 163,
+   "blend": "normal",
+   "file": "08_circulos.png",
+   "drawn": 0.302
+  },
+  {
+   "name": "guiasdots",
+   "visible": false,
+   "background": false,
+   "opacity": 163,
+   "blend": "normal",
+   "file": "09_guiasdots.png",
+   "drawn": 0.002
+  },
+  {
+   "name": "numeros",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "10_numeros.png",
+   "drawn": 0.014
+  },
+  {
+   "name": "Capa 13",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "11_Capa 13.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "volcan",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "12_volcan.png",
+   "drawn": 0.04
+  },
+  {
+   "name": "volcan",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "13_volcan.png",
+   "drawn": 0.038
+  },
+  {
+   "name": "Capa 24",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "14_Capa 24.png",
+   "drawn": 0.07
+  },
+  {
+   "name": "Capa 24",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "15_Capa 24.png",
+   "drawn": 0.012
+  },
+  {
+   "name": "Capa 25",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "overlay",
+   "file": "16_Capa 25.png",
+   "drawn": 0.04
+  },
+  {
+   "name": "Capa 14",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "17_Capa 14.png",
+   "drawn": 0.072
+  },
+  {
+   "name": "Capa 19",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "overlay",
+   "file": "18_Capa 19.png",
+   "drawn": 0.072
+  },
+  {
+   "name": "Capa 14",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "19_Capa 14.png",
+   "drawn": 0.072
+  },
+  {
+   "name": "Capa 15",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "20_Capa 15.png",
+   "drawn": 0.053
+  },
+  {
+   "name": "Capa 18",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "overlay",
+   "file": "21_Capa 18.png",
+   "drawn": 0.053
+  },
+  {
+   "name": "mapa mina",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "22_mapa mina.png",
+   "drawn": 0.053
+  },
+  {
+   "name": "carrilera",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "23_carrilera.png",
+   "drawn": 0.012
+  },
+  {
+   "name": "luces mina",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "24_luces mina.png",
+   "drawn": 0.003
+  },
+  {
+   "name": "luces cueva",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "25_luces cueva.png",
+   "drawn": 0.002
+  },
+  {
+   "name": "Layer 3",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "26_Layer 3.png",
+   "drawn": 0.992
+  },
+  {
+   "name": "Layer 8",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "27_Layer 8.png",
+   "drawn": 0.049
+  },
+  {
+   "name": "Capa 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "28_Capa 12.png",
+   "drawn": 0.001
+  },
+  {
+   "name": "Background",
+   "visible": false,
+   "background": false,
+   "opacity": 129,
+   "blend": "normal",
+   "file": "29_Background.png",
+   "drawn": 0.992
+  }
+ ],
+ "problems": []
+}

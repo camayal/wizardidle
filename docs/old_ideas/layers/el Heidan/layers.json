@@ -1,0 +1,206 @@
+{
+ "source": "el Heidan.pdn",
+ "width": 256,
+ "height": 64,
+ "layers": [
+  {
+   "name": "Fondo",
+   "visible": true,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Fondo.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Layer 5",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Layer 5.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Piso_-90_64_50_.png",
+   "drawn": 1.0
+  },
+  {
+   "name": "Piso(-90,64,50)",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Piso_-90_64_50_.png",
+   "drawn": 0.7
+  },
+  {
+   "name": "Layer 4",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "04_Layer 4.png",
+   "drawn": 0.12
+  },
+  {
+   "name": "Layer 7",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "05_Layer 7.png",
+   "drawn": 0.122
+  },
+  {
+   "name": "Layer 7",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "06_Layer 7.png",
+   "drawn": 0.014
+  },
+  {
+   "name": "Layer 8",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "07_Layer 8.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 6",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "08_Layer 6.png",
+   "drawn": 0.073
+  },
+  {
+   "name": "Layer 10",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "09_Layer 10.png",
+   "drawn": 0.075
+  },
+  {
+   "name": "Layer 11",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "10_Layer 11.png",
+   "drawn": 0.045
+  },
+  {
+   "name": "Layer 12",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "11_Layer 12.png",
+   "drawn": 0.014
+  },
+  {
+   "name": "Layer 13",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "12_Layer 13.png",
+   "drawn": 0.008
+  },
+  {
+   "name": "Layer 14",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "13_Layer 14.png",
+   "drawn": 0.114
+  },
+  {
+   "name": "Layer 14",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "14_Layer 14.png",
+   "drawn": 0.179
+  },
+  {
+   "name": "Layer 15",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "15_Layer 15.png",
+   "drawn": 0.0
+  },
+  {
+   "name": "Layer 17",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "16_Layer 17.png",
+   "drawn": 0.108
+  },
+  {
+   "name": "Layer 18",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "17_Layer 18.png",
+   "drawn": 0.051
+  },
+  {
+   "name": "Layer 18",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "18_Layer 18.png",
+   "drawn": 0.049
+  },
+  {
+   "name": "Layer 18",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "19_Layer 18.png",
+   "drawn": 0.049
+  },
+  {
+   "name": "Capa 19",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "20_Capa 19.png",
+   "drawn": 0.102
+  },
+  {
+   "name": "Layer 18",
+   "visible": true,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "21_Layer 18.png",
+   "drawn": 0.051
+  }
+ ],
+ "problems": []
+}

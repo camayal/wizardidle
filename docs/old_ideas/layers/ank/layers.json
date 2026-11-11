@@ -1,0 +1,17 @@
+{
+ "source": "ank.pdn",
+ "width": 47,
+ "height": 56,
+ "layers": [
+  {
+   "name": "Background",
+   "visible": true,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Background.png",
+   "drawn": 0.674
+  }
+ ],
+ "problems": []
+}

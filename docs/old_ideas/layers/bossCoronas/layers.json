@@ -1,0 +1,44 @@
+{
+ "source": "bossCoronas.pdn",
+ "width": 20,
+ "height": 24,
+ "layers": [
+  {
+   "name": "Fondo",
+   "visible": true,
+   "background": true,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "00_Fondo.png",
+   "drawn": 0.556
+  },
+  {
+   "name": "Capa 2",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "01_Capa 2.png",
+   "drawn": 0.237
+  },
+  {
+   "name": "Capa 3",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "02_Capa 3.png",
+   "drawn": 0.277
+  },
+  {
+   "name": "Capa 4",
+   "visible": false,
+   "background": false,
+   "opacity": 255,
+   "blend": "normal",
+   "file": "03_Capa 4.png",
+   "drawn": 0.237
+  }
+ ],
+ "problems": []
+}
