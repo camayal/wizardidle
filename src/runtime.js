@@ -1,0 +1,63 @@
+// Wizard Idle v2 - what the game keeps in mind while it runs (never saved).
+//
+// In v1 these were loose global variables shared by the whole game. They're grouped here
+// so every module can read and change them. Unlike `state` (src/state.js), none of this
+// survives a page reload, exactly as in v1: a fight in progress is simply gone.
+// Starting values are set in game.js, in the same order v1 set them.
+
+// The current fight.
+export const fight = {
+    enemy: undefined,              // enemy family or boss/hydra name, e.g. "el_golem", "doria"
+    enemyAndNumber: undefined,     // sprite of a normal enemy, e.g. "el_golem5"
+    enemyName: undefined,          // display name, e.g. "<i>Zubruwi</i> the Maro"
+    enemyHP: undefined,
+    enemyHPbase: undefined,
+    spellEnemy: undefined,         // spell the enemy casts
+    bossCombat: undefined,
+    hydraCombat: undefined,
+    hydra: undefined,              // hydra name in hydra fights, e.g. "mother"
+    bossMultiplier: undefined,     // HP multiplier for bosses
+    bossGoldMultiplier: undefined,
+    polymorphed: undefined,        // enemy turned into a sheep or a chicken
+    polymorphedAnimal: undefined,
+    pjDead: undefined,             // the wizard has fallen
+    autorevive: undefined,         // timer for the wizard's self-revive
+};
+
+// The flow of the current session.
+export const run = {
+    previousEvent: undefined,      // last event type, for texts like "finds another enemy"
+    multipleEventsCounter: undefined,
+    timeStart: undefined,          // performance.now() when play time was last counted
+    pause: undefined,
+    offer: undefined,              // gold asked at a shrine
+    feGanada: undefined,           // faith just gained, for the message
+    objectToBreak: undefined,      // loot container: pot, chest, barrel...
+    objectToStudy: undefined,      // rune or book
+    restAtInn: undefined,
+    afterChapterExe: undefined,
+    disablePjBtn: undefined,       // divine buttons temporarily blocked
+    disableCenterBtn: undefined,
+};
+
+// Screen layout and what's on screen.
+export const ui = {
+    objectSize: undefined,         // main square size, depends on the window
+    headLevel: undefined,
+    squareSide: undefined,
+    charWidth: undefined,
+    charHeight: undefined,
+    em: undefined,                 // base font size in px
+    xpPercent: undefined,
+    frameCounter: undefined,       // character animation frame
+    sceneOnTop: undefined,
+    currentBackGround: undefined,
+    scrollCurrentContent: undefined, // which scroll is open: "stats", "achievements", ...
+    statsPage: undefined,
+    audio: undefined,              // last sound played
+    goldIcon: undefined,           // <img> snippets sized to em, used in console messages
+    spiritIcon: undefined,
+    attackIcon: undefined,
+    healIcon: undefined,
+    heartIcon: undefined,
+};

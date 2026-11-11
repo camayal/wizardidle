@@ -8,6 +8,7 @@ import { achievements } from './data/achievements.js';
 import { YesOrNot, getRandomInt, pickRandomItem, roundNumbertoLetter, capitalize, getRandomColor, secsToHours } from './utils.js';
 import { config } from './config.js';
 import { state, world, stat, count, deleteSave } from './state.js';
+import { fight, run, ui } from './runtime.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -25,69 +26,69 @@ var pjCanvas = document.getElementById("pjCanvas");
 var npcCanvas = document.getElementById("npcCanvas");
 var version = "02nov2020_10pm"; //26jul2018_6pm
 var uniqueID;
-var objectSize = defineObjectSize();
-var headLevel = objectSize * 0.109375;//56;
-var squareSide = objectSize * 0.125;//64;
-var charWidth = squareSide, charHeight = squareSide;
-var em = getEM();
+ui.objectSize = defineObjectSize();
+ui.headLevel = ui.objectSize * 0.109375;//56;
+ui.squareSide = ui.objectSize * 0.125;//64;
+ui.charWidth = ui.squareSide; ui.charHeight = ui.squareSide;
+ui.em = getEM();
 var eventClock;//declare the main clock
 var eventMasterClock;
 var animateClockNPC;
 var animateClock;
 var statusClock;
 var statsClock;
-var xpPercent;
-var multipleEventsCounter = 0;
-var frameCounter = 0;
+
+run.multipleEventsCounter = 0;
+ui.frameCounter = 0;
 var MAXSTAGES = 5;//max number of scenaria per locality
 var MAXLINESINCONSOLE = 50;
-var JUMPSPACE = squareSide / 4;
-var bossCombat = false;
-var hydraCombat = false;
-var hydra;
-var enemyHP = 0;
-var enemyHPbase = 0;
-var enemyName = "";
+var JUMPSPACE = ui.squareSide / 4;
+fight.bossCombat = false;
+fight.hydraCombat = false;
+
+fight.enemyHP = 0;
+fight.enemyHPbase = 0;
+fight.enemyName = "";
 var RAREMULTIPLIER = 2;
-var bossMultiplier = 1;//reset the bossmultiplier
-var bossGoldMultiplier = 1;
+fight.bossMultiplier = 1;//reset the bossmultiplier
+fight.bossGoldMultiplier = 1;
 var masterTime = 1500;
 var selfrevivetime = 120000;
-var enemy = "";
-var enemyAndNumber = "";
-var spellEnemy = "";
-var polymorphed = false;
-var polymorphedAnimal;
-var offer;
-var feGanada;
-var objectToBreak;
-var objectToStudy;
+fight.enemy = "";
+fight.enemyAndNumber = "";
+fight.spellEnemy = "";
+fight.polymorphed = false;
+
+
+
+
+
 var scrollIDContent;
-var pjDead = false;
-var disablePjBtn = false;
-var disableCenterBtn = false;
-var sceneOnTop = true;
-var currentBackGround;
-var autorevive;
-var audio;
-var statsPage;
-var timeStart;
-var previousEvent;
-var restAtInn = false;
-var pause = false;
-var scrollCurrentContent;
-var afterChapterExe = false;
+fight.pjDead = false;
+run.disablePjBtn = false;
+run.disableCenterBtn = false;
+ui.sceneOnTop = true;
+
+
+
+
+
+
+run.restAtInn = false;
+run.pause = false;
+
+run.afterChapterExe = false;
 //vars spell animation
 var frameWidth = 30;
 var frameHeight = 30;
 var currentFrame = 0, shift = 0;
 //vars icons
-var goldIcon = "<img class='imgInConsole' height='" + em + "' src='img/gold.png'/> ";
+ui.goldIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/gold.png'/> ";
 //var heartIcon = "<img class='imgInConsole' height='" + em + "' src='img/heart.png'/> ";
-var heartIcon;
-var spiritIcon = "<img class='imgInConsole' height='" + em + "' src='img/spirit.png'/> ";
-var attackIcon = "<img class='imgInConsole' height='" + em + "' src='img/attack.png'/> ";
-var healIcon = "<img class='imgInConsole' height='" + em + "' src='img/heal.png'/> ";
+
+ui.spiritIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/spirit.png'/> ";
+ui.attackIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/attack.png'/> ";
+ui.healIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/heal.png'/> ";
 // #endregion
 
 
@@ -104,9 +105,9 @@ const logro = {
         //sonido de archivements
         playSound("achivement");
         state.achievements[nameLogro.name] = true;
-        print("<img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/achivement.png'><span class='specialTextInConsole' style='font-size:" + em * 1.5 + "px; line-height:" + em * 1.5 + "px;'><b>" + nameLogro.title + "</b> - " + nameLogro.description + "</span>");
+        print("<img class='imgInConsoleSpecial' height='" + ui.em * 1.5 + "' src='img/achivement.png'><span class='specialTextInConsole' style='font-size:" + ui.em * 1.5 + "px; line-height:" + ui.em * 1.5 + "px;'><b>" + nameLogro.title + "</b> - " + nameLogro.description + "</span>");
         
-        if (scrollCurrentContent == "achievements"){
+        if (ui.scrollCurrentContent == "achievements"){
         updateAchievements();
         }
         }
@@ -153,11 +154,11 @@ var statueObj = {
     statue_el_Desierto: {name:"Feline", event:function(){return statObj.increase(statObj.pChangeZone.code,2)},code:"statue_el_Desierto"},
     statue_el_Duenon: {name:"Terrifying Imp", event:function(){return statObj.increase(statObj.pCritic.code,2)},code:"statue_el_Duenon"},
     statue_las_Dunas: {name:"Perfect sphere", event:function(){
-        feGanada = (getRandomInt(((state.player.hpBase * config.balance.rGold) * 0.75),((state.player.hpBase * config.balance.rGold) * 1.5))) * 10;
-        feGanada *= state.player.faithMultiplier
-        state.player.faith = state.player.faith + feGanada;
+        run.feGanada = (getRandomInt(((state.player.hpBase * config.balance.rGold) * 0.75),((state.player.hpBase * config.balance.rGold) * 1.5))) * 10;
+        run.feGanada *= state.player.faithMultiplier
+        state.player.faith = state.player.faith + run.feGanada;
         updateHeading();
-        return "divine</i> and gains some faith (" + spiritIcon + roundNumbertoLetter(feGanada) + ")<i>";
+        return "divine</i> and gains some faith (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")<i>";
     },code:"statue_las_Dunas"},
     statue_el_Heidan: {name:"Majestic angel", event:function(){
         statObj.increase(statObj.pBotin.code,2)
@@ -165,7 +166,7 @@ var statueObj = {
         state.player.gold = state.player.gold + goldFound;
         updateHeading();
         playSound("coins");
-        return statObj.pBotin.name + "</i> and found some coins (" + goldIcon + roundNumbertoLetter(goldFound) + ")<i>";
+        return statObj.pBotin.name + "</i> and found some coins (" + ui.goldIcon + roundNumbertoLetter(goldFound) + ")<i>";
     },code:"statue_el_Heidan"},
     statue_la_Mina: {name:"Dwarf", event:function(){return statObj.increase(statObj.pFindMaterials.code,2)},code:"statue_la_Mina"},
     statue_el_Pantano: {name:"Hydra", event:function(){
@@ -199,7 +200,7 @@ function levelUP() {
             break;
             default:
             playSound("lvlup");
-            print("<img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/star.png'></img> " + "<span class='specialTextInConsole' style='font-size:" + em * 1.5 + "px; line-height:" + em * 1.5 + "px;'> <b>" + state.player.name + " level up</b></span>" + " <img class='imgInConsoleSpecial' height='" + em * 1.5 + "' src='img/star.png'></img> ");
+            print("<img class='imgInConsoleSpecial' height='" + ui.em * 1.5 + "' src='img/star.png'></img> " + "<span class='specialTextInConsole' style='font-size:" + ui.em * 1.5 + "px; line-height:" + ui.em * 1.5 + "px;'> <b>" + state.player.name + " level up</b></span>" + " <img class='imgInConsoleSpecial' height='" + ui.em * 1.5 + "' src='img/star.png'></img> ");
         }
     //calculate age
         state.player.age = state.player.age + (state.player.xpNext * 0.0005)
@@ -222,7 +223,7 @@ function levelUP() {
     if(chapter["lvl" + state.player.lvl]){
         openHistory()
     }else{//avoid change lvl skin automatically, for levels that needs some previous change (before get corruption staff, en 149, etc)
-        loadCanvasChar(state.player.lvl, squareSide, headLevel);
+        loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
     }
 
     //multilevel control (not expected)
@@ -236,7 +237,7 @@ function levelUP() {
 
 //Start the game (load everything)
 function start() {
-    timeStart = performance.now()
+    run.timeStart = performance.now()
     
     playSound("start");
     state.npc = "";
@@ -251,10 +252,10 @@ function start() {
             var feperdida = state.player.hpBase * 0.25;
             //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - feperdida);
             state.player.faith = state.player.faith - feperdida
-        print("<b>" + state.player.name + "</b> " + "loses hope in you and trys to restore himself (" + spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
+        print("<b>" + state.player.name + "</b> " + "loses hope in you and trys to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
     }
     updateHeading();
-    loadCanvasChar(state.player.lvl, squareSide, headLevel);
+    loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
     loadBackground(state.zone.current + state.zone.stage);
     //load previous locality random scenaria
     eventMasterClock = setInterval(event, masterTime);
@@ -280,7 +281,7 @@ function updateHeading() {
     if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
 
     //calcule % of xp bar
-    xpPercent = 1 - (state.player.xpNext - state.player.xp) / (state.player.xpNext - state.player.xpPast)
+    ui.xpPercent = 1 - (state.player.xpNext - state.player.xp) / (state.player.xpNext - state.player.xpPast)
 
 };
 
@@ -295,16 +296,16 @@ function heartMeter(hpPercent){
 
 //update the level of healt in NPC icon
 function updateHeartNPC(){
-heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" height="' + em + '" src="' + heartMeter(Math.round(enemyHP) / enemyHPbase) + '"/> ';
+ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" height="' + ui.em + '" src="' + heartMeter(Math.round(fight.enemyHP) / fight.enemyHPbase) + '"/> ';
 }
 
 //permits continue the action but stop in the next event, if paused trigger a new event
 function pauseToggle(){
-    if (pause){
-        pause = false;
+    if (run.pause){
+        run.pause = false;
         eventMasterClock = setInterval(event, masterTime);
     }else{
-        pause = true;
+        run.pause = true;
     }
     
 }
@@ -324,7 +325,7 @@ function pauseToggle(){
 
 //Load locality
 function loadBackground(back) {
-    currentBackGround = back;
+    ui.currentBackGround = back;
     esceneCanvas.style.background = "url('img/" + back.toLowerCase() + ".png') no-repeat";
     esceneCanvas.style.backgroundSize = "contain";
     // esceneCanvas.width = esceneCanvas.offsetWidth;
@@ -357,7 +358,7 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
         // ctx.webkitImageSmoothingEnabled = false;
         // ctx.msImageSmoothingEnabled = false;
         // ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(img, squareSide, headLevel, charWidth, charHeight);
+        ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     }, false);
 }
 
@@ -376,13 +377,13 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
         // ctx.msImageSmoothingEnabled = false;
         // ctx.imageSmoothingEnabled = false;
         ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
-        ctx.drawImage(img, squareSide, headLevel, charWidth, charHeight);
+        ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     }, false);
 }
 
 
 //Draw NPC
-function loadNPC(npc, squareSideIn=squareSide, headLevelIn=headLevel, charWidthIn=charWidth, charHeightIn=charHeight) {
+function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, charWidthIn=ui.charWidth, charHeightIn=ui.charHeight) {
     state.npc = npc;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
@@ -396,15 +397,15 @@ function loadNPC(npc, squareSideIn=squareSide, headLevelIn=headLevel, charWidthI
         // ctx.imageSmoothingEnabled = false;
         //medium size bosses (64x64px)
         if (state.npc === "arcangel" || state.npc === "doria" || state.npc === "midas" || state.npc === "kkck" || state.npc === "herbus" || state.npc === "skeleton" || state.npc === "medusa" || state.npc === "rainbow" || state.npc === "rojo") {
-            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25);
+            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25);
         }
         //big bosses (64x64px)
         else if (state.npc === "bicaptop" || state.npc === "cuboq" || state.npc === "etymos" || state.npc === "fenix" || state.npc === "goro" || state.npc === "infraespectro" || state.npc === "protromus" || state.npc.match("hydskon") || state.npc.match("icedra")) {
-            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (objectSize * 0.0625), charWidthIn * 1.5, charHeightIn * 1.5);
+            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.0625), charWidthIn * 1.5, charHeightIn * 1.5);
         }
         //huge bosses (64x96px)
         else if (state.npc.match("mother") || state.npc.match("guardian")){
-            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (objectSize * 0.113), charWidthIn * 1.33, charHeightIn * 1.9);
+            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.113), charWidthIn * 1.33, charHeightIn * 1.9);
         }
         //objects to get (20x20px)
         else if(state.npc.match("libro") || state.npc.match("runa")){
@@ -425,15 +426,15 @@ function animatePJ() {
     if(masterTime < 500){clearInterval(animateClock);return}
 
 
-    frameCounter += 1;
-    switch (frameCounter) {
+    ui.frameCounter += 1;
+    switch (ui.frameCounter) {
     case 1:
 
-        loadCanvasChar(state.player.lvl, squareSide - JUMPSPACE, headLevel);
+        loadCanvasChar(state.player.lvl, ui.squareSide - JUMPSPACE, ui.headLevel);
         break;
     case 2:
-       loadCanvasChar(state.player.lvl, squareSide, headLevel);
-        frameCounter = 0;
+       loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+        ui.frameCounter = 0;
         clearInterval(animateClock);
     }
 };
@@ -446,14 +447,14 @@ function animateNPC() {
 
 
     if (state.npc != ""){
-        frameCounter += 1;
-        switch (frameCounter) {
+        ui.frameCounter += 1;
+        switch (ui.frameCounter) {
         case 1:
-            loadNPC(state.npc, squareSide + (JUMPSPACE / 6));
+            loadNPC(state.npc, ui.squareSide + (JUMPSPACE / 6));
             break;
         case 2:
             loadNPC(state.npc);
-            frameCounter = 0;
+            ui.frameCounter = 0;
             clearInterval(animateClockNPC);
         }
     }
@@ -516,7 +517,7 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
         context.clearRect(0, 0, canvas.width, canvas.height);
         //draw each frame + place them in the middle
         context.drawImage(myImage, shift, 0, frameWidth, 
-            frameHeight, (squareSide * mult) * leftMultiHeadLocation, headLevel * topMultiHeadLocation, squareSide * multiSize, squareSide * multiSize);
+            frameHeight, (ui.squareSide * mult) * leftMultiHeadLocation, ui.headLevel * topMultiHeadLocation, ui.squareSide * multiSize, ui.squareSide * multiSize);
         shift += frameWidth + 1;
         if (currentFrame == totalFrames) {
             window.cancelAnimationFrame(requestFrame);
@@ -535,12 +536,12 @@ function playSound(ogg, volume = 0.3){
     //avoid sound in speed debug
     if(masterTime < 500){return}
 
-    audio = new Audio("ogg/" + ogg + ".ogg");
+    ui.audio = new Audio("ogg/" + ogg + ".ogg");
     //audio.volume = 0.3;
-    audio.volume = volume;
+    ui.audio.volume = volume;
     //audio.playbackRate = -1.0; 
     //if (loop){audio.loop = true}
-    var promise = audio.play();
+    var promise = ui.audio.play();
     //avoid autoplay policy error
     if (promise !== undefined) {
         promise.then(_ => {
@@ -570,9 +571,9 @@ function playSound(ogg, volume = 0.3){
 //Select event, call in this way only:  eventMasterClock = setInterval(event, masterTime);    
 function event() {
     clearInterval(eventMasterClock);
-    if(pause){return}//detect pause command
+    if(run.pause){return}//detect pause command
 
-    if (afterChapterExe){
+    if (run.afterChapterExe){
     afterChapter()//call special events after history
     }
 
@@ -611,7 +612,7 @@ function exploreEV() {
     //Evalue if booty or not
     if (YesOrNot(stat("pBotin"), 0)) {
         //getBotin();
-        objectToBreak = "";
+        run.objectToBreak = "";
         print("<b>" + state.player.name + "</b> is searching...");
         eventClock = setInterval(getBotin, masterTime);
     //go to dice house, use the same probability
@@ -619,7 +620,7 @@ function exploreEV() {
         //check if gold is more than 0
         if(state.player.gold > 0){
             //call the game function
-            if (previousEvent == "sixfivefour"){
+            if (run.previousEvent == "sixfivefour"){
                 var textDice = pickRandomItem("decides come back to the gaming house, returns to the dice house,wants to spend more coins at the gaming house");
             }else{
                 var textDice = pickRandomItem("finds a gamming house and enters,wants to play 6-5-4,wants to gambling");
@@ -627,7 +628,7 @@ function exploreEV() {
             print("<b>" + state.player.name + "</b> " + textDice);
             loadBackground(state.zone.current + "_casadados");
             loadNPC("jugon");
-            previousEvent = "sixfivefour"
+            run.previousEvent = "sixfivefour"
             eventClock = setInterval(sixfivefour, masterTime);       
         }else{
             print("<b>" + state.player.name + "</b> " + "finds a gamming house but does not have gold to bet");
@@ -657,20 +658,20 @@ function exploreEV() {
 //Main event: BATTLE
 function battle() {
     //stats
-    multipleEventsCounter += 1;
+    run.multipleEventsCounter += 1;
     var option = 1;
-    if (multipleEventsCounter > 1) {//special because is a loop in the second case until someone die
+    if (run.multipleEventsCounter > 1) {//special because is a loop in the second case until someone die
         option = 2
     }
     switch (option) {
     case 1:
         //anounce the battle
-        if (bossCombat) {
-            print(enemyName + " releases the power and attack!" + " (" + heartIcon + roundNumbertoLetter(enemyHP) + ")");
-        } else if (hydraCombat){
-            print(enemyName + " releases all its fury and attack with brutality!" + " (" + heartIcon + roundNumbertoLetter(enemyHP) + ")");
+        if (fight.bossCombat) {
+            print(fight.enemyName + " releases the power and attack!" + " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")");
+        } else if (fight.hydraCombat){
+            print(fight.enemyName + " releases all its fury and attack with brutality!" + " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")");
         }else {
-            print(enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + " (" + heartIcon + roundNumbertoLetter(enemyHP) + ")");
+            print(fight.enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")");
         }
         break;
     case 2:
@@ -681,34 +682,34 @@ function battle() {
             attackEV();
         }
         //if enemy dies
-        if (Math.round(enemyHP) <= 0) {
-            if (hydraCombat && (state.hydraHeads[hydra] + 1) <= Number(zones[state.zone.current].headsMax)){
-                state.hydraHeads[hydra] = state.hydraHeads[hydra] + 1;
+        if (Math.round(fight.enemyHP) <= 0) {
+            if (fight.hydraCombat && (state.hydraHeads[fight.hydra] + 1) <= Number(zones[state.zone.current].headsMax)){
+                state.hydraHeads[fight.hydra] = state.hydraHeads[fight.hydra] + 1;
                 count("HydrasHeadCut");
                 getHydra();
             }else{//end conditional hydra, here if die bosses and enemies
                 //stop clock of battle and reset bossMultiplier
-            multipleEventsCounter = 0;
+            run.multipleEventsCounter = 0;
             clearInterval(eventClock);
 
             
             //kill capricor
-            if (enemy == "el_capricor"){
+            if (fight.enemy == "el_capricor"){
                 logro.set(logro.logro_ultimocapricor);
                 zones.el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
             }
 
-            polymorphed = false;
-            if (bossCombat){
+            fight.polymorphed = false;
+            if (fight.bossCombat){
                 count("BossesKilled");
                 logro.set(logro.logro_primerbossderrotado)
                 //todo logro de todos los boss
-            }else if(hydraCombat){
+            }else if(fight.hydraCombat){
                 count("HydrasKilled");
-                delete state.hydraHeads[hydra]
+                delete state.hydraHeads[fight.hydra]
                 //todo logro de cada hidra
             }else{
-                if(enemySprites[enemyAndNumber].rare == 1){
+                if(enemySprites[fight.enemyAndNumber].rare == 1){
                     count("rareEnemiesKilled");
                 }else{
                     count("EnemiesKilled");
@@ -725,13 +726,13 @@ function battle() {
             
             
             //add faith if the enemy is corrupted but only if not boss or hydra
-            if(!bossCombat && !hydraCombat){
-                if (enemySprites[enemyAndNumber].corrupted == "1" && !state.player.inSin){
-                    feGanada = calculateFe() * 5;
-                    feGanada *= state.player.faithMultiplier
-                    state.player.faith = state.player.faith + feGanada;
-                    count("FeByCleanCorruption",Math.round(feGanada));
-                    var corruptedText = ", also gained " + spiritIcon + " " + roundNumbertoLetter(feGanada) + " by corruption erradication";
+            if(!fight.bossCombat && !fight.hydraCombat){
+                if (enemySprites[fight.enemyAndNumber].corrupted == "1" && !state.player.inSin){
+                    run.feGanada = calculateFe() * 5;
+                    run.feGanada *= state.player.faithMultiplier
+                    state.player.faith = state.player.faith + run.feGanada;
+                    count("FeByCleanCorruption",Math.round(run.feGanada));
+                    var corruptedText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption erradication";
                 }else {
                     var corruptedText = "";
                 }
@@ -741,40 +742,40 @@ function battle() {
             if(state.player.inSin){
                 var feperdida = calculateFe();
                 state.player.faith = state.player.faith - feperdida;
-                var corruptedText = ", and reduce the faith " + spiritIcon + " -" + roundNumbertoLetter(feperdida);
+                var corruptedText = ", and reduce the faith " + ui.spiritIcon + " -" + roundNumbertoLetter(feperdida);
 
             }
 
             //print and add xp depent of the enemy
-            if (enemyTypes[enemy].hasgold == "true") {
+            if (enemyTypes[fight.enemy].hasgold == "true") {
                 playSound("coins");
                 addGold();
-                if(bossCombat){
+                if(fight.bossCombat){
                     addXP(4);
-                    print(enemyName + " was defeated and a big loot has been found " + goldIcon + roundNumbertoLetter(state.player.lastBattleGold * bossGoldMultiplier));
-                }else if(hydraCombat){
+                    print(fight.enemyName + " was defeated and a big loot has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier));
+                }else if(fight.hydraCombat){
                     addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
-                    print(enemyName + " was defeated and a treasure has been found " + goldIcon + roundNumbertoLetter(state.player.lastBattleGold * 15));
+                    print(fight.enemyName + " was defeated and a treasure has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * 15));
                 }else{
-                    addXP(enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
-                    print(enemyName + " was defeated and looted " + goldIcon + roundNumbertoLetter(state.player.lastBattleGold) + corruptedText);
+                    addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+                    print(fight.enemyName + " was defeated and looted " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold) + corruptedText);
                 }
             } else {
-                if(bossCombat){//kill no gold boss
+                if(fight.bossCombat){//kill no gold boss
                     addXP(4);
-                    print(enemyName + " was defeated");
+                    print(fight.enemyName + " was defeated");
                 }else{
-                    addXP(enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
-                    print(enemyName + " was defeated" + corruptedText);
+                    addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+                    print(fight.enemyName + " was defeated" + corruptedText);
                 }
 
             }
 
-            enemy = "";
-            enemyAndNumber = "";
+            fight.enemy = "";
+            fight.enemyAndNumber = "";
             state.npc = "";
-                bossMultiplier = 1;
-                bossGoldMultiplier = 1;
+                fight.bossMultiplier = 1;
+                fight.bossGoldMultiplier = 1;
                 eventMasterClock = setInterval(event, masterTime);
             }
             
@@ -782,11 +783,11 @@ function battle() {
         //if pj dies
         if (Math.round(state.player.hp) <= 0) {
             //stop clock of battle and reset bossMultiplier
-            multipleEventsCounter = 0;
+            run.multipleEventsCounter = 0;
             clearInterval(eventClock);
             //kiled by a sheep or chicken
-            if(polymorphed){
-                switch (polymorphedAnimal){
+            if(fight.polymorphed){
+                switch (fight.polymorphedAnimal){
                     case "gallina":
                     logro.set(logro.logro_killedbychicken);
                     break;
@@ -795,9 +796,9 @@ function battle() {
                 }
             }
 
-            if(bossCombat){logro.set(logro.logro_primeraderrotaporboss)}
+            if(fight.bossCombat){logro.set(logro.logro_primeraderrotaporboss)}
             
-            polymorphed = false;
+            fight.polymorphed = false;
             if(state.counters.longestCombo === undefined){
                 state.counters.longestCombo = state.counters.Combo;
             }else if(state.counters.longestCombo < state.counters.Combo){
@@ -806,34 +807,34 @@ function battle() {
             state.counters.Combo = 0;
             count("Deaths");
             playSound("hurt" + getRandomInt(1,6));
-            pjDead = true;
-            loadAlterCanvasChar("muerto", squareSide, headLevel);
+            fight.pjDead = true;
+            loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
             var lootedText = "";
-            console.log(enemy +": a")//para detectar BUG
-            if (state.player.gold > 0 && enemyTypes[enemy].hasgold == "true"){//acá hay un BUG
+            console.log(fight.enemy +": a")//para detectar BUG
+            if (state.player.gold > 0 && enemyTypes[fight.enemy].hasgold == "true"){//acá hay un BUG
             var goldLooted = getRandomInt(state.player.lastBattleGold,state.player.lastBattleGold * 2);
             state.player.gold = state.player.gold - goldLooted;
-            lootedText = " and losses some gold" +  " (" + goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
+            lootedText = " and losses some gold" +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
             count("goldLostInBattle", goldLooted);
             }
-            console.log(enemy +": b")//para detectar BUG
+            console.log(fight.enemy +": b")//para detectar BUG
             print("<b>" + state.player.name + "</b>" + " has fallen in battle" + lootedText);
             npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             state.npc = "";
-            enemy = "";
-            enemyAndNumber = "";
-            bossMultiplier = 1;
-            bossGoldMultiplier = 1;
+            fight.enemy = "";
+            fight.enemyAndNumber = "";
+            fight.bossMultiplier = 1;
+            fight.bossGoldMultiplier = 1;
             //Activate clock event //
-            autorevive = setTimeout(function(){ 
-                previousEvent = "autorevive"
-                autorevive = "";       
+            fight.autorevive = setTimeout(function(){ 
+                run.previousEvent = "autorevive"
+                fight.autorevive = "";       
                 //var feperdida = Number(getLocal("HPBase")) * 0.75;
                 var feperdida = state.player.hpBase * 1.2454654;
                 state.player.faith = state.player.faith - feperdida;
-                print("<b>" + state.player.name + "</b> " + "recovers himself but feels abandoned by his god (" + spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
-                pjDead = false;
-                loadCanvasChar(state.player.lvl, squareSide, headLevel);
+                print("<b>" + state.player.name + "</b> " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
+                fight.pjDead = false;
+                loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
                 count("selfRevive");
                 playSound("heal");
                 updateHeading();
@@ -846,11 +847,11 @@ function battle() {
 
 //Main event: REVIVE BY MISTERIOUS GUY
 function reviveEV(){
-    multipleEventsCounter += 1;
-    switch(multipleEventsCounter){
+    run.multipleEventsCounter += 1;
+    switch(run.multipleEventsCounter){
         case 1:
         print("<b>" + state.player.name + "</b>" + " wakes up " + pickRandomItem("confused,perplexed,perturbed"));
-        previousEvent = "reviveInCabin"
+        run.previousEvent = "reviveInCabin"
             break;
         case 2:
             print("<b>" + state.player.name + "</b>" + " is treated by a mysterious healer");
@@ -861,7 +862,7 @@ function reviveEV(){
             spell("spellPinRed_16",false,frameWidth,frameHeight,currentFrame,shift);
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             state.npc = "";
-            print("<b>" + state.player.name + "</b>" + " is totally recovered (" + healIcon + roundNumbertoLetter(state.player.hpBase) + ") and the mysterious guy is gone")
+            print("<b>" + state.player.name + "</b>" + " is totally recovered (" + ui.healIcon + roundNumbertoLetter(state.player.hpBase) + ") and the mysterious guy is gone")
             updateHeading();
             break;
         case 4:
@@ -874,9 +875,9 @@ function reviveEV(){
         loadBackground(state.zone.current +  state.zone.stage);
         print("<b>" + state.player.name + "</b>" + " leaves the healer's cabin")
         count("hospital");
-        multipleEventsCounter = 0;
+        run.multipleEventsCounter = 0;
         clearInterval(eventClock);
-        disablePjBtn = false;
+        run.disablePjBtn = false;
         eventMasterClock = setInterval(event, masterTime);
     }
 };
@@ -888,7 +889,7 @@ function prayEV(){
         playSound("altar");
         count("altar");
         count("altar_zone_" + state.zone.current);
-        if (previousEvent == "enterAltar"){
+        if (run.previousEvent == "enterAltar"){
             var textCapel = pickRandomItem("decides come back to the shire, returns to the shire,wants to spend more time at the temple");
         }else{
             var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
@@ -898,24 +899,24 @@ function prayEV(){
         var mistico = "mistico" + getRandomInt(1,3);
         loadNPC(mistico);
         if (YesOrNot(stat("pOfrenda"),0) && state.player.gold > 0){
-            offer = true;
+            run.offer = true;
         }else{
-            offer = false;
+            run.offer = false;
         }
-        previousEvent = "enterAltar"
+        run.previousEvent = "enterAltar"
         eventClock = setInterval(doOffering, masterTime);
     }else{
         count("negar");
-        if (previousEvent == "negar"){
+        if (run.previousEvent == "negar"){
             var textCapel = pickRandomItem("finds again the same shire,sees the same shire");
         }else{
             var textCapel = pickRandomItem("finds a shire,sees a shire,finds a temple");
         }
         var faithLost = calculateFe();
-        print("<b>" + state.player.name + "</b> " + textCapel + " but does not enter and continues (" + spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
+        print("<b>" + state.player.name + "</b> " + textCapel + " but does not enter and continues (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
         state.player.faith = state.player.faith - faithLost;
         updateHeading();
-        previousEvent = "negar"
+        run.previousEvent = "negar"
         eventMasterClock = setInterval(event, masterTime);
     }
 }
@@ -926,18 +927,18 @@ function prayEV(){
 function innEV(){
     if(Math.round(state.player.hp) < Math.round(state.player.hpBase)){
            
-           if (previousEvent == "innEV"){
+           if (run.previousEvent == "innEV"){
             var textInn = "wants to rest a little more,still is tired"
            }else{
             var textInn = "feels tired,wants to rest,is falling asleep"
            }
            print("<b>" + state.player.name + "</b> " + pickRandomItem(textInn)) 
-           previousEvent = "innEV"
+           run.previousEvent = "innEV"
            eventClock = setInterval(searchInn, masterTime);
     }else{
         var textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
         print("<b>" + state.player.name + "</b> " + pickRandomItem(textNoInn)) 
-        previousEvent = "innEVFeelsGood"
+        run.previousEvent = "innEVFeelsGood"
         eventMasterClock = setInterval(event, masterTime);
     }
 }
@@ -996,11 +997,11 @@ function enemyEV(){
 
 //find statue
 function findStatue(){
-    multipleEventsCounter += 1;
-    if (multipleEventsCounter >= 2 && multipleEventsCounter <= 4 ) {
+    run.multipleEventsCounter += 1;
+    if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
         var optionTemp = 2;
     }else{
-        var optionTemp = multipleEventsCounter;
+        var optionTemp = run.multipleEventsCounter;
     }
     switch(optionTemp){
         case 1:
@@ -1009,12 +1010,12 @@ function findStatue(){
         count("estatuas_statue_" + state.zone.current)
         count("statuesFound");
         //print("<b>" + getLocal("pjName") + "</b> " + "finds a " + statueObj["statue_" + getLocal("currentZone")].name + " statue");
-        if (previousEvent == "findStatue"){
+        if (run.previousEvent == "findStatue"){
             print("<b>" + state.player.name + "</b> " + "wants to try study the " + statueObj["statue_" + state.zone.current].name + " statue again");
         }else{
             print("<b>" + state.player.name + "</b> " + "finds a " + statueObj["statue_" + state.zone.current].name + " statue");
         }
-        previousEvent = "findStatue"
+        run.previousEvent = "findStatue"
         break;
         case 2:
         //examine and get or not
@@ -1030,13 +1031,13 @@ function findStatue(){
             playSound("statUp");
             print("<b>" + state.player.name + "</b> " + learnTxt + ". Increases the <i>" + result + "</i>");
         }
-            multipleEventsCounter = 4;
+            run.multipleEventsCounter = 4;
         }else{
             playSound("studyrune");
             spell("spellStudyTry_16",true,frameWidth,frameHeight,currentFrame,shift);
             var learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
             //fail study try again
-            if(multipleEventsCounter == 4){
+            if(run.multipleEventsCounter == 4){
                 count("failStudyStatue");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
@@ -1048,7 +1049,7 @@ function findStatue(){
         case 5:
         print("<b>" + state.player.name + "</b> " + "leaves the statue and continues") 
         loadBackground(state.zone.current +  state.zone.stage);
-        multipleEventsCounter = 0;
+        run.multipleEventsCounter = 0;
         clearInterval(eventClock);
         addXP(1);
         eventMasterClock = setInterval(event, masterTime);
@@ -1059,25 +1060,25 @@ function findStatue(){
 //Find book or rune
 function findRuneOrBook(){
     var placesWithBooks = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Castillo" || state.zone.current == "la_Torre";
-    multipleEventsCounter += 1;
-    if (multipleEventsCounter >= 2 && multipleEventsCounter <= 4 ) {
+    run.multipleEventsCounter += 1;
+    if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
         var optionTemp = 2;
     }else{
-        var optionTemp = multipleEventsCounter;
+        var optionTemp = run.multipleEventsCounter;
     }
     switch(optionTemp){
         case 1:
         var number = getRandomInt(1,10);
         if(placesWithBooks){
-            objectToStudy = "book";
+            run.objectToStudy = "book";
             loadNPC("libro" + number)
         }else{
-            objectToStudy = "rune";
+            run.objectToStudy = "rune";
             loadNPC("runa" + number)
         }
-        print("<b>" + state.player.name + "</b> " + "finds " + (previousEvent == "findRuneorBook" ? "another " : "a ") + objectToStudy) 
-        count(objectToStudy)
-        previousEvent = "findRuneorBook"
+        print("<b>" + state.player.name + "</b> " + "finds " + (run.previousEvent == "findRuneorBook" ? "another " : "a ") + run.objectToStudy) 
+        count(run.objectToStudy)
+        run.previousEvent = "findRuneorBook"
         break;
         case 2:
         if (YesOrNot(stat("pStudy"),0)){
@@ -1089,30 +1090,30 @@ function findRuneOrBook(){
             //var statToUP = pickRandomItem("pAttack,pPolymorph,fCritic,pCritic,pHeal,fHeal,pStudy,pBotin,pChangeZone,pFindCapel,pFindMaterials,pOfrenda,fOfrenda")
             var statToIncrease = statObj[statObj.random()];
             var learned = statObj.increase(statToIncrease.code);
-            print("<b>" + state.player.name + "</b> " + learnTxt + " " + objectToStudy + " and increases the <i>" + learned + "</i>") 
+            print("<b>" + state.player.name + "</b> " + learnTxt + " " + run.objectToStudy + " and increases the <i>" + learned + "</i>") 
             count("study_" + statToIncrease.code);
             
-            multipleEventsCounter = 4;
+            run.multipleEventsCounter = 4;
         }else{
-            playSound("study" + objectToStudy);
+            playSound("study" + run.objectToStudy);
             spell("spellStudyTry_16",true,frameWidth,frameHeight,currentFrame,shift);
             var learnTxt = pickRandomItem("tries to understand what is written in the,reads the glyphs in the,analyzes the information in the,continues reading the");
             //fail study try again
-            if(multipleEventsCounter == 4){
+            if(run.multipleEventsCounter == 4){
                 count("failStudy");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
                 var learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
             }
-            print("<b>" + state.player.name + "</b> " + learnTxt + " " + objectToStudy) 
+            print("<b>" + state.player.name + "</b> " + learnTxt + " " + run.objectToStudy) 
         }
         break;
         case 5:
-        print("<b>" + state.player.name + "</b> " + "leaves the " + objectToStudy + " and continues") 
+        print("<b>" + state.player.name + "</b> " + "leaves the " + run.objectToStudy + " and continues") 
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
         state.npc = "";
-        objectToStudy = "";
-        multipleEventsCounter = 0;
+        run.objectToStudy = "";
+        run.multipleEventsCounter = 0;
         clearInterval(eventClock);
         addXP(0.25);
         eventMasterClock = setInterval(event, masterTime);
@@ -1124,8 +1125,8 @@ function findRuneOrBook(){
 //Search an inn
 function searchInn(){
     var placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto"
-    multipleEventsCounter += 1;
-    switch(multipleEventsCounter){
+    run.multipleEventsCounter += 1;
+    switch(run.multipleEventsCounter){
         case 1:
             if(placesWithInn){
                 loadBackground(state.zone.current + "_taberna");
@@ -1153,25 +1154,25 @@ function searchInn(){
                     //cannot affort
                     playSound("drink");
                     print("<b>" + state.player.name + "</b> " + "cannot afford pay a bed, but takes a free drink");
-                    restAtInn = false;
+                    run.restAtInn = false;
                 }else{
                     spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
                     state.player.gold = state.player.gold - innCost;
                     count("GoldSpendInn",Number(innCost));
                     playSound("coins");
-                    print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps) +  " (" + goldIcon + "-" + roundNumbertoLetter(innCost) + ")") 
-                    restAtInn = true;
+                    print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps) +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(innCost) + ")") 
+                    run.restAtInn = true;
                 }
                 
             }else{
                 spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
                 print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps)) 
-                restAtInn = false;
+                run.restAtInn = false;
             }
             updateHeading();
             break;
         case 3:
-            if(placesWithInn && restAtInn){
+            if(placesWithInn && run.restAtInn){
                 var rested = state.player.hpBase - state.player.hp
             }
             else{
@@ -1190,13 +1191,13 @@ function searchInn(){
             updateHeading();
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             state.npc = "";
-            print("<b>" + state.player.name + "</b> " + pickRandomItem(textRecover) + " (" + healIcon + roundNumbertoLetter(rested) + ")") 
+            print("<b>" + state.player.name + "</b> " + pickRandomItem(textRecover) + " (" + ui.healIcon + roundNumbertoLetter(rested) + ")") 
             if(placesWithInn){
                 //pickRandomBackgroundForCurrentZone();
                 loadBackground(state.zone.current +  state.zone.stage);
             }
-            restAtInn = false;
-            multipleEventsCounter = 0;
+            run.restAtInn = false;
+            run.multipleEventsCounter = 0;
             clearInterval(eventClock);
             eventMasterClock = setInterval(event, masterTime);
     }
@@ -1206,44 +1207,44 @@ function searchInn(){
 //Pray and offer gold
 function doOffering(){
     
-    if(offer){
-        multipleEventsCounter += 1;
-        switch(multipleEventsCounter){
+    if(run.offer){
+        run.multipleEventsCounter += 1;
+        switch(run.multipleEventsCounter){
             case 1:
                 var ofrendaGold = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
-                feGanada = (ofrendaGold * stat("fOfrenda"));
-                feGanada *= state.player.faithMultiplier;
-                state.player.faith = state.player.faith + feGanada;
+                run.feGanada = (ofrendaGold * stat("fOfrenda"));
+                run.feGanada *= state.player.faithMultiplier;
+                state.player.faith = state.player.faith + run.feGanada;
                 state.player.gold = state.player.gold - ofrendaGold;
                 count("offers");
                 count("GoldOffered", Math.round(ofrendaGold));
-                count("FeByGold",Math.round(feGanada));
+                count("FeByGold",Math.round(run.feGanada));
                 playSound("coins");
                 spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
                 var textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
-                print("<b>" + state.player.name + "</b>" + " offers " + goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
+                print("<b>" + state.player.name + "</b>" + " offers " + ui.goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
                 break;
             case 2:
                 //animation anks for pj
                 //playSound("pray");
                 spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + state.player.name + "</b>" + " leaves the shire and continue the journey" + " (" + spiritIcon + roundNumbertoLetter(feGanada) + ")");
+                print("<b>" + state.player.name + "</b>" + " leaves the shire and continue the journey" + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
                 state.npc = "";
                 //pickRandomBackgroundForCurrentZone();
                 loadBackground(state.zone.current +  state.zone.stage);
-                multipleEventsCounter = 0;
+                run.multipleEventsCounter = 0;
                 clearInterval(eventClock);
-                disableCenterBtn = false;
-                offer = false;
+                run.disableCenterBtn = false;
+                run.offer = false;
                 eventMasterClock = setInterval(event, masterTime);
         }
     }else{
-        multipleEventsCounter += 1;
-        if (multipleEventsCounter >= 2 && multipleEventsCounter <= 4 ) {
+        run.multipleEventsCounter += 1;
+        if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
             var optionTemp = 2;
         }else{
-            var optionTemp = multipleEventsCounter;
+            var optionTemp = run.multipleEventsCounter;
         }
         switch(optionTemp){
             case 1:
@@ -1253,12 +1254,12 @@ function doOffering(){
             case 2:
                 playSound("pray");
                 spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
-                feGanada = calculateFe();
-                feGanada *= state.player.faithMultiplier
-                state.player.faith = state.player.faith + feGanada;
-                count("FeByPray",Math.round(feGanada));
+                run.feGanada = calculateFe();
+                run.feGanada *= state.player.faithMultiplier
+                state.player.faith = state.player.faith + run.feGanada;
+                count("FeByPray",Math.round(run.feGanada));
                 var textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
-                print("<b>" + state.player.name + "</b>" + textPray + " (" + spiritIcon + roundNumbertoLetter(feGanada) + ")")
+                print("<b>" + state.player.name + "</b>" + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")")
             break;
             case 5:
                 print("<b>" + state.player.name + "</b>" + " leaves the shire and continues")
@@ -1266,9 +1267,9 @@ function doOffering(){
                 state.npc = "";
                 //pickRandomBackgroundForCurrentZone();
                 loadBackground(state.zone.current +  state.zone.stage);
-                disableCenterBtn = false;
-                offer = false;
-                multipleEventsCounter = 0;
+                run.disableCenterBtn = false;
+                run.offer = false;
+                run.multipleEventsCounter = 0;
                 clearInterval(eventClock);
                 eventMasterClock = setInterval(event, masterTime);
         }
@@ -1303,21 +1304,21 @@ function getSpell(lvlBase = Math.floor(state.player.lvl / 10)){
 
 //Add gold
 function addGold(){
-    if (bossCombat){
+    if (fight.bossCombat){
          var possibleGold = state.player.hpBase * config.balance.rGold;
          state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
-         state.player.gold = state.player.gold + (state.player.lastBattleGold * bossGoldMultiplier);
-         count("GoldFromBosses", (state.player.lastBattleGold * (bossGoldMultiplier)));
-    }else if(hydraCombat){
+         state.player.gold = state.player.gold + (state.player.lastBattleGold * fight.bossGoldMultiplier);
+         count("GoldFromBosses", (state.player.lastBattleGold * (fight.bossGoldMultiplier)));
+    }else if(fight.hydraCombat){
         var possibleGold = state.player.hpBase * config.balance.rGold;
          state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
          state.player.gold = state.player.gold + (state.player.lastBattleGold * 15);
          count("GoldFromBosses", (state.player.lastBattleGold * (15)));
     }else{
      //if (eval(enemy).hasgold == "true") {
-        if (enemyTypes[enemy].hasgold == "true") {
+        if (enemyTypes[fight.enemy].hasgold == "true") {
          var possibleGold = state.player.hpBase * config.balance.rGold;
-         var goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
+         var goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
          state.player.lastBattleGold = goldcurrentBattle;
          state.player.gold = state.player.gold + goldcurrentBattle;
          count("GoldFromEnemies", goldcurrentBattle);
@@ -1342,11 +1343,11 @@ function addXP(specialMultiplier = 1){
 
 //Get Botin
 function getBotin() {
-    multipleEventsCounter += 1;
-    switch (multipleEventsCounter){
+    run.multipleEventsCounter += 1;
+    switch (run.multipleEventsCounter){
         case 1:
-            objectToBreak = pickRandomItem("bag,barrel,box,chest,pot")
-            switch (objectToBreak){
+            run.objectToBreak = pickRandomItem("bag,barrel,box,chest,pot")
+            switch (run.objectToBreak){
                 case "bag":
                     loadNPC("bag");
                     break;
@@ -1364,39 +1365,39 @@ function getBotin() {
                     var number = getRandomInt(1,4);
                     loadNPC("pot" + number);
             }
-            print("<b>" + state.player.name + "</b>" + " sees " + (previousEvent == "getBotin" ? "another " : "a ")  + objectToBreak);
+            print("<b>" + state.player.name + "</b>" + " sees " + (run.previousEvent == "getBotin" ? "another " : "a ")  + run.objectToBreak);
             break;
         case 2:
-        if (objectToBreak == "bag"){
+        if (run.objectToBreak == "bag"){
             playSound("coins");
             var botinTexts = " takes the bag and finds ";
-        }else if(objectToBreak == "chest"){
+        }else if(run.objectToBreak == "chest"){
             playSound("unlock");
             var botinTexts = " opens the chest and finds ";
             spell("spellKey_8",false,frameWidth,frameHeight,currentFrame,shift);
         }else{
-            if (objectToBreak == "pot"){
+            if (run.objectToBreak == "pot"){
                 playSound("breakPot");
             }else{
                 playSound("breakWood");
             }
-            var botinTexts = " breaks the " + objectToBreak +" and finds ";
+            var botinTexts = " breaks the " + run.objectToBreak +" and finds ";
             spell("spellPush9",false,frameWidth,frameHeight,currentFrame,shift);
         }
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
         state.npc = "";
         var goldBotin = 1 + getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 10);
-        print("<b>" + state.player.name + "</b>" + botinTexts + goldIcon + roundNumbertoLetter(goldBotin));
+        print("<b>" + state.player.name + "</b>" + botinTexts + ui.goldIcon + roundNumbertoLetter(goldBotin));
         count("BotinGot");
         count("GoldFromBotin",goldBotin)
-        count("GoldFromBotin_" + objectToBreak,goldBotin)
-        count("BotinGot_" + objectToBreak);
+        count("GoldFromBotin_" + run.objectToBreak,goldBotin)
+        count("BotinGot_" + run.objectToBreak);
         state.player.gold = state.player.gold + goldBotin;
         if(Number(counterText("BotinGot_chest")) > 100){logro.set(logro.logro_botines)};
         if(Number(counterText("BotinGot_pot")) > 100){logro.set(logro.logro_pots)};
-        previousEvent = "getBotin"
+        run.previousEvent = "getBotin"
         updateHeading();    //Update heading
-        multipleEventsCounter = 0;
+        run.multipleEventsCounter = 0;
         clearInterval(eventClock);
         addXP(0.5);
         eventMasterClock = setInterval(event, masterTime);//trigger event selecter
@@ -1410,9 +1411,9 @@ function getBotin() {
 
 //Change locality
 function changeLocality() {
-    multipleEventsCounter += 1;
+    run.multipleEventsCounter += 1;
     //console.log(multipleEventsCounter);
-    switch (multipleEventsCounter) {
+    switch (run.multipleEventsCounter) {
     case 1:
         //get new zone
         state.zone.last = state.zone.current;
@@ -1431,8 +1432,8 @@ function changeLocality() {
     case 3:
         //cancel the Interval, put 0 to the counter and trigger a new event
         addXP(1);
-        previousEvent = "changeLocality";
-        multipleEventsCounter = 0;
+        run.previousEvent = "changeLocality";
+        run.multipleEventsCounter = 0;
         clearInterval(eventClock);
         eventMasterClock = setInterval(event, masterTime);
         //trigger event selecter
@@ -1444,75 +1445,75 @@ function changeLocality() {
 //Get enemy by current locality and drow it
 function getEnemy() {
     //generate a unique type of attack for each enemy
-    bossCombat = false;
-    hydraCombat = false;
+    fight.bossCombat = false;
+    fight.hydraCombat = false;
     if (YesOrNot(config.balance.pGetBoss, 0)) {
         playSound("boss");
         count("Bosses");
-        bossCombat = true;
-        bossMultiplier = 2.5;
-        bossGoldMultiplier = 5;
+        fight.bossCombat = true;
+        fight.bossMultiplier = 2.5;
+        fight.bossGoldMultiplier = 5;
         var boss = zones[state.zone.current].boss;
         // if (boss == "cuboq" || boss == "etymos" || boss == "infraespectro"){
         //     document.getElementById("npcCanvas").style.opacity = 0.7;
         // }else{
         //     document.getElementById("npcCanvas").style.opacity = 1;
         // }
-        enemy = boss;
+        fight.enemy = boss;
         count("typeBoss_" + boss)
         loadNPC(boss);
-        enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * bossMultiplier;
-        enemyHPbase = Math.round(enemyHP)
+        fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
+        fight.enemyHPbase = Math.round(fight.enemyHP)
         updateHeartNPC()
         //enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + boss.toUpperCase() + "</span>";
-        enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + enemyTypes[boss].name.toUpperCase() + "</span>";
+        fight.enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + ui.em + "' src='img/boss.png'/>" + " " + enemyTypes[boss].name.toUpperCase() + "</span>";
     } else {
         //spellEnemy = pickRandomItem("spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush6,spellPush7,spellPush8,spellPush9,spellPush10");
-        enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
+        fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
         // if (!!eval(enemy).translucid){
         //     document.getElementById("npcCanvas").style.opacity = 0.8;
         // }else{
         //     document.getElementById("npcCanvas").style.opacity = 1;
         // }
-        count("enemy_" + enemy);
-        var number = Math.floor((Math.random() * enemyTypes[enemy].max) + 1);
+        count("enemy_" + fight.enemy);
+        var number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
         //random number of the image max    
         //select a spell based on the school of enemy
-        spellEnemy = pickRandomItem(npcSpells[enemySprites[enemy + number].type]);
-        enemyAndNumber = enemy + number;
-        if (enemySprites[enemyAndNumber].rare == 1){
+        fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
+        fight.enemyAndNumber = fight.enemy + number;
+        if (enemySprites[fight.enemyAndNumber].rare == 1){
             count("rareEnemyEncounters");
         }else{
             count("enemyEncounters");
         }
-        loadNPC(enemy + number);
-        enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
-        enemyHPbase = Math.round(enemyHP)
+        loadNPC(fight.enemy + number);
+        fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
+        fight.enemyHPbase = Math.round(fight.enemyHP)
         updateHeartNPC()
-        var raretext = (enemySprites[enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
+        var raretext = (enemySprites[fight.enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
         
-        if (enemy == "baba" || enemy == "el_esqueleto" || enemy == "animalejo" || enemy == "polipoide" || enemy == "momia") {
+        if (fight.enemy == "baba" || fight.enemy == "el_esqueleto" || fight.enemy == "animalejo" || fight.enemy == "polipoide" || fight.enemy == "momia") {
             //avoid name creatures and others
             //enemyName = "A " + enemyTypes[enemy].name;
-            enemyName = "A " + enemySprites[enemy + number].altName + raretext;
-        } else if (enemy == "el_capricor"){
-            enemyName = "The " + capitalize(enemyTypes[enemy].name) + raretext;
+            fight.enemyName = "A " + enemySprites[fight.enemy + number].altName + raretext;
+        } else if (fight.enemy == "el_capricor"){
+            fight.enemyName = "The " + capitalize(enemyTypes[fight.enemy].name) + raretext;
         }
         else {
-            if (enemySprites[enemy + number].altName){//choose the altername if have some
-                enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemySprites[enemy + number].altName) + raretext;
+            if (enemySprites[fight.enemy + number].altName){//choose the altername if have some
+                fight.enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemySprites[fight.enemy + number].altName) + raretext;
             }else{
-                enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemyTypes[enemy].name) + raretext;
+                fight.enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemyTypes[fight.enemy].name) + raretext;
             }
         }
     }
-    var startBattleText = "has entered in " + (previousEvent == "enemy" ? "another" : "a") + " battle!,finds " + (previousEvent == "enemy" ? "another" : "an") + " enemy!,start " + (previousEvent == "enemy" ? "another" : "a") + " fight!"
-    if (enemy + number == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!"
-    previousEvent = "enemy";
-    if (bossCombat){ 
-        var article = (previousEvent == "boss" ? "another" : "a")
+    var startBattleText = "has entered in " + (run.previousEvent == "enemy" ? "another" : "a") + " battle!,finds " + (run.previousEvent == "enemy" ? "another" : "an") + " enemy!,start " + (run.previousEvent == "enemy" ? "another" : "a") + " fight!"
+    if (fight.enemy + number == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!"
+    run.previousEvent = "enemy";
+    if (fight.bossCombat){ 
+        var article = (run.previousEvent == "boss" ? "another" : "a")
         startBattleText = "has entered in " + article + " battle with a Boss!,finds " + article + " Boss!,start " + article + " fight with a Boss!"
-        previousEvent = "boss";
+        run.previousEvent = "boss";
     }
     print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
     
@@ -1525,20 +1526,20 @@ function getEnemy() {
 
 
 function getHydra(newEncounter = false){
-    bossCombat = false;
-    hydraCombat = true;
+    fight.bossCombat = false;
+    fight.hydraCombat = true;
     playSound("hidra");
-    hydra =  zones[state.zone.current].hidrasName;
-    if(!state.hydraHeads[hydra]){state.hydraHeads[hydra] = 1};
-    enemy = hydra;
-    loadNPC(hydra + state.hydraHeads[hydra]);
-    enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * (state.hydraHeads[hydra]);
-    enemyHPbase = Math.round(enemyHP)
+    fight.hydra =  zones[state.zone.current].hidrasName;
+    if(!state.hydraHeads[fight.hydra]){state.hydraHeads[fight.hydra] = 1};
+    fight.enemy = fight.hydra;
+    loadNPC(fight.hydra + state.hydraHeads[fight.hydra]);
+    fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * (state.hydraHeads[fight.hydra]);
+    fight.enemyHPbase = Math.round(fight.enemyHP)
     updateHeartNPC();
-    enemyName = "<span style='color:DarkGreen'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + hydra.toUpperCase() + "</span>";
+    fight.enemyName = "<span style='color:DarkGreen'><img class='imgInConsole' height='" + ui.em + "' src='img/boss.png'/>" + " " + fight.hydra.toUpperCase() + "</span>";
     if (newEncounter){
         count("Hydras");
-        count("typeofHydras_" + hydra)
+        count("typeofHydras_" + fight.hydra)
         var startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
         print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
         eventClock = setInterval(battle, masterTime);
@@ -1553,18 +1554,18 @@ function getHydra(newEncounter = false){
 
 //Performs attack
 function attackEV() {
-    if (YesOrNot(stat("pPolymorph"), 0) && !hydraCombat && !bossCombat && !polymorphed && enemy !== "baba" && enemy !== "el_elemental" && enemy !== "el_ent" && enemy !== "el_espectro" && enemy !== "el_esqueleto" && enemy !== "el_golem" && enemy !== "el_ojo" && enemy !== "la_esencia"){
+    if (YesOrNot(stat("pPolymorph"), 0) && !fight.hydraCombat && !fight.bossCombat && !fight.polymorphed && fight.enemy !== "baba" && fight.enemy !== "el_elemental" && fight.enemy !== "el_ent" && fight.enemy !== "el_espectro" && fight.enemy !== "el_esqueleto" && fight.enemy !== "el_golem" && fight.enemy !== "el_ojo" && fight.enemy !== "la_esencia"){
         if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
-        enemyHP = 1;
+        fight.enemyHP = 1;
         updateHeartNPC()
         spell("spellPinBlue_16",false,frameWidth,frameHeight,currentFrame,shift);
         count("school_" + spells.spellPinBlue_16.school)
-        polymorphedAnimal = pickRandomItem("gallina,oveja");
-        playSound(polymorphedAnimal);
-        loadNPC(polymorphedAnimal);
+        fight.polymorphedAnimal = pickRandomItem("gallina,oveja");
+        playSound(fight.polymorphedAnimal);
+        loadNPC(fight.polymorphedAnimal);
         print("<b>" + state.player.name + "</b>" + " cast polymorphism!");
-        count("Polymorph_" + polymorphedAnimal);
-        polymorphed = true;
+        count("Polymorph_" + fight.polymorphedAnimal);
+        fight.polymorphed = true;
     } else {
         if (YesOrNot(stat("pAttack"), 0)) {
             //determine the prob of attack, if fail enemy attack
@@ -1578,15 +1579,15 @@ function attackEV() {
                 if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                     pjAttackWithCritic = pjAttackWithCritic * 4 //if is one of the divine powers
                 }
-                if (enemyHP - pjAttackWithCritic < 0) {//avoid -hp in enemy
-                    enemyHP = 0;
+                if (fight.enemyHP - pjAttackWithCritic < 0) {//avoid -hp in enemy
+                    fight.enemyHP = 0;
                 } else {
-                    enemyHP = Math.round(enemyHP) - Math.round(pjAttackWithCritic);
+                    fight.enemyHP = Math.round(fight.enemyHP) - Math.round(pjAttackWithCritic);
                 }
                 updateHeartNPC()
                 count("school_" + spells[spellId].school)
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift,true);
-                print("<b>" + state.player.name + "</b> performs a <b>critic attack!</b>" + " (" + attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + heartIcon + roundNumbertoLetter(enemyHP));
+                print("<b>" + state.player.name + "</b> performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
                 //if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
                 count("Critics");
             } else {
@@ -1599,10 +1600,10 @@ function attackEV() {
                 if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                     pjHit *= 4 //if is one of the divine powers
                 }
-                if (enemyHP - pjHit < 0) {//avoid -hp in enemy
-                    enemyHP = 0;
+                if (fight.enemyHP - pjHit < 0) {//avoid -hp in enemy
+                    fight.enemyHP = 0;
                 } else {
-                    enemyHP = Math.round(enemyHP) - Math.round(pjHit);
+                    fight.enemyHP = Math.round(fight.enemyHP) - Math.round(pjHit);
                 }
                 updateHeartNPC()
                 count("school_" + spells[spellId].school)
@@ -1614,7 +1615,7 @@ function attackEV() {
                     var text = pickRandomItem(" cast , attacks with ");
                 }
 
-                print("<b>" + state.player.name + "</b>" + text + spellText + " (" + attackIcon + roundNumbertoLetter(pjHit) + ") - " + heartIcon + roundNumbertoLetter(enemyHP));
+                print("<b>" + state.player.name + "</b>" + text + spellText + " (" + ui.attackIcon + roundNumbertoLetter(pjHit) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift);
 
                 //if (document.hasFocus()){animateClock = setInterval(animatePJ, 100)};
@@ -1627,11 +1628,11 @@ function attackEV() {
             //enemy attack
             //animateClockNPC = setInterval(animateNPC, 100)
             if (document.hasFocus()){animateClockNPC = setInterval(animateNPC, 100)};
-            var enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * bossMultiplier;
+            var enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
 
-            if (enemy == "midas"){enemyHit *= 2}//duplicate midas attack
+            if (fight.enemy == "midas"){enemyHit *= 2}//duplicate midas attack
 
-            if (spellEnemy == "spellChispasMulti_12" || spellEnemy == "spellRainMultiColor_24" || spellEnemy == "spellColorSpin_16"){
+            if (fight.spellEnemy == "spellChispasMulti_12" || fight.spellEnemy == "spellRainMultiColor_24" || fight.spellEnemy == "spellColorSpin_16"){
                 enemyHit *= 4 //if is one of the divine powers
             }
 
@@ -1640,13 +1641,13 @@ function attackEV() {
             } else {
                 state.player.hp = state.player.hp - enemyHit;
             }
-            print(enemyName + " attacks (" + attackIcon + roundNumbertoLetter(enemyHit) + ")");
-            if (bossCombat){
-                spellEnemy = pickRandomItem(zones[state.zone.current].bossSpell);
-            }else if (hydraCombat){
-                spellEnemy = pickRandomItem(zones[state.zone.current].hidrasSpells);
+            print(fight.enemyName + " attacks (" + ui.attackIcon + roundNumbertoLetter(enemyHit) + ")");
+            if (fight.bossCombat){
+                fight.spellEnemy = pickRandomItem(zones[state.zone.current].bossSpell);
+            }else if (fight.hydraCombat){
+                fight.spellEnemy = pickRandomItem(zones[state.zone.current].hidrasSpells);
             }
-            spell(spellEnemy,true,frameWidth,frameHeight,currentFrame,shift);
+            spell(fight.spellEnemy,true,frameWidth,frameHeight,currentFrame,shift);
             count("IncomingAttacks");
             //if (document.hasFocus()){animateClockNPC = setInterval(animateNPC, 100)};
         }
@@ -1667,7 +1668,7 @@ function healEV() {
             }
         playSound("heal");
         spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-        print("<b>" + state.player.name + "</b>" + pickRandomItem(" casts heal spell and restore , cast minor healing , use restauration ") + "(" + healIcon + roundNumbertoLetter(healHit) + ")");    
+        print("<b>" + state.player.name + "</b>" + pickRandomItem(" casts heal spell and restore , cast minor healing , use restauration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    
          
         
     
@@ -1709,8 +1710,8 @@ function calculateFe(){
 
 //Set the timer to avoid loss seconds
 function setLiveTime(){
-    state.meta.playTimeMs += performance.now() - timeStart;
-    timeStart = performance.now()
+    state.meta.playTimeMs += performance.now() - run.timeStart;
+    run.timeStart = performance.now()
 }
 
 //Create the localStorage object if it does not exist and add 1 by default to the stats and return the current number
@@ -1746,7 +1747,7 @@ function randomName() {
     var name = pickRandomItem("B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z,Sh,Kh,Th,Br,Tr,Mr,Zr,Xh,Sj,Cr,Kr,Yh,A,E,I,O,U");
     name += pickRandomItem("A,E,I,O,U").toLowerCase();
     name += pickRandomItem("B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z,Ss,Kh,Th,Br,Tr,Mr,Zr,Xh,Sj,Cr,Kr,Yh").toLowerCase();
-    if(enemyAndNumber.match("amazona") || enemyAndNumber.match("guerrera") || enemyAndNumber.match("hechicera") || enemyAndNumber.match("pilla")){//feminice name
+    if(fight.enemyAndNumber.match("amazona") || fight.enemyAndNumber.match("guerrera") || fight.enemyAndNumber.match("hechicera") || fight.enemyAndNumber.match("pilla")){//feminice name
         name += pickRandomItem("A,E,I").toLowerCase();
         name += pickRandomItem("A,E,I,B,C,D,F,G,H,J,K,L,M,N,P,S,V,W,X,Y,Z,Ss,Kh,Th,Xh,Sj,Yh,'").toLowerCase();
         name += pickRandomItem("E,I,A,,,,,,,,,,").toLowerCase();
@@ -1761,11 +1762,11 @@ function randomName() {
     };
 
     //avoid rename the two sacred
-    if(enemyAndNumber == "el_hechicero10" || enemyAndNumber == "la_hechicera7" ){
-        if(!state.sacredNames[enemyAndNumber]){
-            state.sacredNames[enemyAndNumber] = name;
+    if(fight.enemyAndNumber == "el_hechicero10" || fight.enemyAndNumber == "la_hechicera7" ){
+        if(!state.sacredNames[fight.enemyAndNumber]){
+            state.sacredNames[fight.enemyAndNumber] = name;
         }else{
-            name = state.sacredNames[enemyAndNumber];
+            name = state.sacredNames[fight.enemyAndNumber];
         }
     }
 
@@ -1843,7 +1844,7 @@ function counterList(prefix, inObj = ""){
 function achievementList(){
     var out = "";
     for (const text of Object.keys(state.achievements)){
-        out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + logro[text].name + '.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>' + logro[text].title + '</strong> <br>' + logro[text].description + '</div></div>';
+        out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + logro[text].name + '.png" height="' + ui.em * 4 + 'px" /></div><div class="divTableCell"><strong>' + logro[text].title + '</strong> <br>' + logro[text].description + '</div></div>';
     }
     return out;
 }
@@ -1900,21 +1901,21 @@ function countLogros(){
 //Responsive layout
 function responsiveLayout() {
     
-    objectSize = defineObjectSize();
-    em = getEM();
+    ui.objectSize = defineObjectSize();
+    ui.em = getEM();
     
     //update the icons to avoid bug big icons when start the game in landscape
-    goldIcon = "<img class='imgInConsole' height='" + em + "' src='img/gold.png'/> ";
-    spiritIcon = "<img class='imgInConsole' height='" + em + "' src='img/spirit.png'/> ";
-    attackIcon = "<img class='imgInConsole' height='" + em + "' src='img/attack.png'/> ";
-    healIcon = "<img class='imgInConsole' height='" + em + "' src='img/heal.png'/> ";
+    ui.goldIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/gold.png'/> ";
+    ui.spiritIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/spirit.png'/> ";
+    ui.attackIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/attack.png'/> ";
+    ui.healIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/heal.png'/> ";
 
     if (!!document.getElementsByClassName("imgInConsole")[0]){
     var x = document.getElementsByClassName("imgInConsole");
     var i;
     for (i = 0; i < x.length; i++) {
-        x[i].style.height = em + "px";
-        x[i].style.width = em + "px";
+        x[i].style.height = ui.em + "px";
+        x[i].style.width = ui.em + "px";
     }
     }
 
@@ -1922,8 +1923,8 @@ function responsiveLayout() {
         var x = document.getElementsByClassName("imgInConsoleSpecial");
         var i;
         for (i = 0; i < x.length; i++) {
-            x[i].style.height = em * 1.5 + "px";
-            x[i].style.width = em * 1.5 + "px";
+            x[i].style.height = ui.em * 1.5 + "px";
+            x[i].style.width = ui.em * 1.5 + "px";
         }
         }
 
@@ -1931,8 +1932,8 @@ function responsiveLayout() {
     var x = document.getElementsByClassName("specialTextInConsole");
     var i;
     for (i = 0; i < x.length; i++) {
-        x[i].style.fontSize = em * 1.5 + "px";
-        x[i].style.lineHeight = em *1.5 + "px";
+        x[i].style.fontSize = ui.em * 1.5 + "px";
+        x[i].style.lineHeight = ui.em *1.5 + "px";
     }
     }
         
@@ -1965,7 +1966,7 @@ function responsiveLayout() {
     if (!!orientation.match("landscape") && detectmob()){//solved the problem that landscape-secondary does not trigger the landscape mode
         layoutLandscapeMobile();
         if (parseInt(document.getElementById("scrollBackCenter").style.minHeight) > 0) {
-            if (scrollCurrentContent != "history"){//avoid close scroll in a history
+            if (ui.scrollCurrentContent != "history"){//avoid close scroll in a history
                 scrollClose()
             }
         }
@@ -1975,14 +1976,14 @@ function responsiveLayout() {
 
     
      
-     headLevel = objectSize * 0.109375;//56;
-     charWidth = charHeight = squareSide = objectSize * 0.125;//64;
+     ui.headLevel = ui.objectSize * 0.109375;//56;
+     ui.charWidth = ui.charHeight = ui.squareSide = ui.objectSize * 0.125;//64;
      //load chars if was ok to redraw
     if (state.npc) {
         loadNPC(state.npc);
     }
-    if(!state.firstUse){loadCanvasChar(state.player.lvl, squareSide, headLevel);}
-    if (pjDead){loadAlterCanvasChar("muerto", squareSide, headLevel);
+    if(!state.firstUse){loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);}
+    if (fight.pjDead){loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
 };
     
 
@@ -1995,15 +1996,15 @@ var centerLauncher;
 function defineObjectSize() {
      if (!detectmob()) {
         //var objectSize = 512;
-        objectSize = window.innerHeight / 2;//better adaptation 
+        ui.objectSize = window.innerHeight / 2;//better adaptation 
         // centerMain = (window.innerWidth / 2) - (objectSize * 1.0625 /2) + "px";
         // centerLauncher = (window.innerWidth / 2) - ((objectSize / 0.9) /2) + "px";
     } else {
-        objectSize = window.innerWidth * 0.9;
+        ui.objectSize = window.innerWidth * 0.9;
         // centerMain = (window.innerWidth  / 2) - (objectSize * 1.0625 /2) + "px";
         // centerLauncher = "0px"
     }
-    ;return objectSize;
+    ;return ui.objectSize;
 }
 
 
@@ -2030,8 +2031,8 @@ function getEM(){
     //em = window.innerHeight / 55
     //em = parseInt(document.getElementById("console").style.height) / 30;
     //em = (window.innerHeight - (objectSize * 0.5225)) / 30;
-    em = objectSize * 0.04;
-    return em;
+    ui.em = ui.objectSize * 0.04;
+    return ui.em;
 }
 
 
@@ -2063,64 +2064,64 @@ function layoutPortrait(){
     document.getElementById("btn6").style.display = "block" ;
     
     //fonts
-    document.getElementById("pjName").style.fontSize = objectSize * 0.09375 + "px";
-    document.getElementById("console").style.fontSize = em + "px";
-    document.getElementById("indicadores").style.fontSize = objectSize * 0.045 + "px";
-    document.getElementById("statusText").style.fontSize = em * 2 + "px";
-    document.getElementById("inputName").style.fontSize = (objectSize * 0.09375) * 1.5 + "px";
-    document.getElementById("labelInputName").style.fontSize = (objectSize * 0.09375) * 0.5 + "px";
+    document.getElementById("pjName").style.fontSize = ui.objectSize * 0.09375 + "px";
+    document.getElementById("console").style.fontSize = ui.em + "px";
+    document.getElementById("indicadores").style.fontSize = ui.objectSize * 0.045 + "px";
+    document.getElementById("statusText").style.fontSize = ui.em * 2 + "px";
+    document.getElementById("inputName").style.fontSize = (ui.objectSize * 0.09375) * 1.5 + "px";
+    document.getElementById("labelInputName").style.fontSize = (ui.objectSize * 0.09375) * 0.5 + "px";
     // document.querySelector(".longBtnText").style.fontSize = (objectSize * 0.09375) * 0.75 + "px";
-    document.getElementById("title1").style.fontSize = (objectSize * 0.09375) * 2.5 + "px";
-    document.getElementById("title2").style.fontSize = (objectSize * 0.09375) * 1.5 + "px";
-    document.getElementById("footer").style.fontSize = (objectSize * 0.09375) * 0.6 + "px";
-    document.getElementById("scrollText").style.fontSize = em + "px";
+    document.getElementById("title1").style.fontSize = (ui.objectSize * 0.09375) * 2.5 + "px";
+    document.getElementById("title2").style.fontSize = (ui.objectSize * 0.09375) * 1.5 + "px";
+    document.getElementById("footer").style.fontSize = (ui.objectSize * 0.09375) * 0.6 + "px";
+    document.getElementById("scrollText").style.fontSize = ui.em + "px";
     
-    document.getElementById("zoneMap").style.fontSize = em * 2.5 + "px";
-    document.getElementById("scrollText").style.margin = em / 2 + "px";
+    document.getElementById("zoneMap").style.fontSize = ui.em * 2.5 + "px";
+    document.getElementById("scrollText").style.margin = ui.em / 2 + "px";
 
     
 
 
     //widths
-    document.getElementById("main").style.width = objectSize + "px";
-    document.getElementById("console").style.width = objectSize + "px";
-    document.getElementById("marco").style.width = objectSize * 1.0625 + "px";
-    document.getElementById("esceneCanvas").style.width = objectSize + "px";
-    document.getElementById("pjCanvas").style.width = objectSize + "px";
-    document.getElementById("npcCanvas").style.width = objectSize + "px";
-    document.getElementById("spellCanvas").style.width = objectSize + "px";
-    document.getElementById("XPprogressBar").style.width  = objectSize * 0.7 + "px";
-    document.getElementById("pjName").style.width  = objectSize * 0.7 + "px";
-    document.getElementById("indicadores").style.width  = objectSize * 0.7 + "px";
-    document.getElementById("btn1").style.width  = objectSize * 0.09375 + "px";
-    document.getElementById("btn2").style.width  = objectSize * 0.09375 + "px";
-    document.getElementById("btn3").style.width  = objectSize * 0.09375 + "px";
-    document.getElementById("btn4").style.width  = objectSize * 0.09375 + "px";
-    document.getElementById("btn5").style.width  = objectSize * 0.09375 + "px";
-    document.getElementById("btn6").style.width  = objectSize * 0.09375 + "px";  
-    document.getElementById("backConsole").style.width = objectSize + (objectSize * 0.075) + "px";
-    document.getElementById("launcher").style.width = objectSize / 0.9 + "px";
+    document.getElementById("main").style.width = ui.objectSize + "px";
+    document.getElementById("console").style.width = ui.objectSize + "px";
+    document.getElementById("marco").style.width = ui.objectSize * 1.0625 + "px";
+    document.getElementById("esceneCanvas").style.width = ui.objectSize + "px";
+    document.getElementById("pjCanvas").style.width = ui.objectSize + "px";
+    document.getElementById("npcCanvas").style.width = ui.objectSize + "px";
+    document.getElementById("spellCanvas").style.width = ui.objectSize + "px";
+    document.getElementById("XPprogressBar").style.width  = ui.objectSize * 0.7 + "px";
+    document.getElementById("pjName").style.width  = ui.objectSize * 0.7 + "px";
+    document.getElementById("indicadores").style.width  = ui.objectSize * 0.7 + "px";
+    document.getElementById("btn1").style.width  = ui.objectSize * 0.09375 + "px";
+    document.getElementById("btn2").style.width  = ui.objectSize * 0.09375 + "px";
+    document.getElementById("btn3").style.width  = ui.objectSize * 0.09375 + "px";
+    document.getElementById("btn4").style.width  = ui.objectSize * 0.09375 + "px";
+    document.getElementById("btn5").style.width  = ui.objectSize * 0.09375 + "px";
+    document.getElementById("btn6").style.width  = ui.objectSize * 0.09375 + "px";  
+    document.getElementById("backConsole").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";
+    document.getElementById("launcher").style.width = ui.objectSize / 0.9 + "px";
     //document.getElementById("fondoLauncher").style.width = objectSize + (objectSize * 0.075) + "px";
-    document.getElementById("fondoLauncher").style.width = objectSize / 0.9 + "px";
-    document.getElementById("inputName").style.width = objectSize * 1.085 + "px";
-    document.getElementById("labelInputName").style.width = objectSize * 1.085 + "px";
-    var startBtnW = document.getElementById("startBtn").style.width  = ((objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
+    document.getElementById("fondoLauncher").style.width = ui.objectSize / 0.9 + "px";
+    document.getElementById("inputName").style.width = ui.objectSize * 1.085 + "px";
+    document.getElementById("labelInputName").style.width = ui.objectSize * 1.085 + "px";
+    var startBtnW = document.getElementById("startBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
     // document.getElementById("btnBlackBack").style.width  = startBtnW;
-    document.getElementById("scroll").style.width = objectSize + "px";  
-    document.getElementById("scrollBackCenter").style.width = objectSize + (objectSize * 0.075) + "px";  
-    document.getElementById("scrollBackUp").style.width = objectSize + (objectSize * 0.075) + "px";  
-    document.getElementById("scrollBackDown").style.width = objectSize + (objectSize * 0.075) + "px";  
+    document.getElementById("scroll").style.width = ui.objectSize + "px";  
+    document.getElementById("scrollBackCenter").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
+    document.getElementById("scrollBackUp").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
+    document.getElementById("scrollBackDown").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
 
-    document.getElementById("scrollText").style.width = objectSize + "px";  
-    document.getElementById("btnClose").style.width  = objectSize * 0.09375 + "px";  
+    document.getElementById("scrollText").style.width = ui.objectSize + "px";  
+    document.getElementById("btnClose").style.width  = ui.objectSize * 0.09375 + "px";  
     
-    var pjBtnWidth = document.getElementById("pjDivineBtn").style.width = objectSize * 0.325 + "px";
-    document.getElementById("npcDivineBtn").style.width = objectSize * 0.325 + "px";
-    var centerDivineBtn = document.getElementById("centerDivineBtn").style.width = objectSize * 0.35 + "px";
+    var pjBtnWidth = document.getElementById("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
+    document.getElementById("npcDivineBtn").style.width = ui.objectSize * 0.325 + "px";
+    var centerDivineBtn = document.getElementById("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
 
-    document.getElementById("backMapa").style.width = objectSize + "px"; 
-    document.getElementById("bocadilloMapa").style.width  = objectSize * 0.075 + "px";  
-    document.getElementById("pjMapa").style.width  = objectSize * 0.065 + "px";  
+    document.getElementById("backMapa").style.width = ui.objectSize + "px"; 
+    document.getElementById("bocadilloMapa").style.width  = ui.objectSize * 0.075 + "px";  
+    document.getElementById("pjMapa").style.width  = ui.objectSize * 0.065 + "px";  
 
     
     
@@ -2129,77 +2130,77 @@ function layoutPortrait(){
 
 
     //heights
-    var headingH = document.getElementById("heading").style.height = objectSize * 0.21 + "px";
-    var marcoH = document.getElementById("marco").style.height = objectSize * 0.3125 + "px";
-    var sceneCanvasH = document.getElementById("esceneCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("pjCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("npcCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("spellCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("XPprogressBar").style.height  = objectSize * 0.035  + "px";
+    var headingH = document.getElementById("heading").style.height = ui.objectSize * 0.21 + "px";
+    var marcoH = document.getElementById("marco").style.height = ui.objectSize * 0.3125 + "px";
+    var sceneCanvasH = document.getElementById("esceneCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("pjCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("npcCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("spellCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("XPprogressBar").style.height  = ui.objectSize * 0.035  + "px";
     var backConsoleH = document.getElementById("backConsole").style.height = window.innerHeight - parseInt(sceneCanvasH) * 1.2 - parseInt(headingH) * 1.2 + "px";
     var consoleH = document.getElementById("console").style.height = parseInt(backConsoleH) * 0.94 + "px";
     document.getElementById("launcher").style.height = window.innerHeight + "px";
     document.getElementById("fondoLauncher").style.height = window.innerHeight + "px";
     //document.getElementById("startBtn").style.height  = (objectSize * 0.09375) * 1.5 + "px"; 
-    document.getElementById("startBtn").style.height  = (objectSize * 0.09375) * 1.5 + "px"; 
+    document.getElementById("startBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
     // document.getElementById("btnBlackBack").style.height  = (objectSize * 0.09375) * 1.4 + "px"; 
     //document.getElementById("scrollBackCenter").style.height = window.innerHeight - parseInt(sceneCanvasH) * 1.5 + "px";
     //document.getElementById("scrollBackUp").style.height = window.innerHeight - parseInt(sceneCanvasH) * 0.25 + "px";
     document.getElementById("main").style.height = window.innerHeight + "px";
-    document.getElementById("scrollText").style.height = (window.innerHeight - (objectSize * 0.25) * 1.5) + "px";
+    document.getElementById("scrollText").style.height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) + "px";
     //document.getElementById("scrollBackCenter").style.height = (window.innerHeight - (objectSize * 0.25) * 1.5) + "px";
     
-    document.getElementById("pjDivineBtn").style.height = objectSize * 0.25 + "px";
-    document.getElementById("npcDivineBtn").style.height = objectSize * 0.25 + "px";
-    document.getElementById("centerDivineBtn").style.height = objectSize * 0.25 + "px";
+    document.getElementById("pjDivineBtn").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("npcDivineBtn").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("centerDivineBtn").style.height = ui.objectSize * 0.25 + "px";
 
     //auto resize scroll if is open
     if(parseInt(document.getElementById("scrollBackCenter").style.minHeight) > 0){
-    document.getElementById("scrollBackCenter").style.minHeight = (window.innerHeight - (objectSize * 0.25) * 1.5) * 0.97 + "px";
-    document.getElementById("scrollText").style.minHeight = (window.innerHeight - (objectSize * 0.25) * 1.5) * 0.92 + "px";
-    document.getElementById("scrollBackDown").style.top = (window.innerHeight - (objectSize * 0.25) * 1.5) * 0.97 + "px";
+    document.getElementById("scrollBackCenter").style.minHeight = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) * 0.97 + "px";
+    document.getElementById("scrollText").style.minHeight = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) * 0.92 + "px";
+    document.getElementById("scrollBackDown").style.top = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) * 0.97 + "px";
     }
     
 
     //lefts
     //document.getElementById("main").style.left = (window.innerWidth - objectSize) / 2 - (window.innerWidth * 0.025) + "px";
     //document.getElementById("main").style.left = centerMain;
-    document.getElementById("main").style.left = (window.innerWidth / 2) - (objectSize * 1.0625 /2) + "px";
-    document.getElementById("console").style.left = objectSize * 0.03 + "px";
-    document.getElementById("backConsole").style.left = (objectSize * -0.01) + "px";
+    document.getElementById("main").style.left = (window.innerWidth / 2) - (ui.objectSize * 1.0625 /2) + "px";
+    document.getElementById("console").style.left = ui.objectSize * 0.03 + "px";
+    document.getElementById("backConsole").style.left = (ui.objectSize * -0.01) + "px";
     document.getElementById("esceneCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("pjCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("npcCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("spellCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    document.getElementById("btn1").style.left = objectSize * 0.75 + "px";
-    document.getElementById("btn4").style.left = objectSize * 0.75 + "px";
-    document.getElementById("btn2").style.left = objectSize * 0.75 + (objectSize * 0.1) + "px";
-    document.getElementById("btn5").style.left = objectSize * 0.75 + (objectSize * 0.1) + "px";
-    document.getElementById("btn3").style.left = objectSize * 0.75 + (objectSize * 0.1) * 2 +"px";
-    document.getElementById("btn6").style.left = objectSize * 0.75 + (objectSize * 0.1) * 2 + "px";
-    document.getElementById("statusText").style.left = objectSize + "px";
+    document.getElementById("btn1").style.left = ui.objectSize * 0.75 + "px";
+    document.getElementById("btn4").style.left = ui.objectSize * 0.75 + "px";
+    document.getElementById("btn2").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) + "px";
+    document.getElementById("btn5").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) + "px";
+    document.getElementById("btn3").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 +"px";
+    document.getElementById("btn6").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
+    document.getElementById("statusText").style.left = ui.objectSize + "px";
     ////launcher
     //document.getElementById("launcher").style.left = (window.innerWidth - objectSize) / 2 - (window.innerWidth * 0.05) + "px";
     //document.getElementById("launcher").style.left = centerLauncher;
-    document.getElementById("launcher").style.left = (window.innerWidth / 2) - ((objectSize / 0.9) /2) + "px";
+    document.getElementById("launcher").style.left = (window.innerWidth / 2) - ((ui.objectSize / 0.9) /2) + "px";
     document.getElementById("fondoLauncher").style.left = "0px";
-    document.getElementById("labelInputName").style.left = objectSize * 0.03 + "px";
-    document.getElementById("startBtn").style.left = ((objectSize * 1.085 - parseInt(startBtnW)) / 2) + "px";
+    document.getElementById("labelInputName").style.left = ui.objectSize * 0.03 + "px";
+    document.getElementById("startBtn").style.left = ((ui.objectSize * 1.085 - parseInt(startBtnW)) / 2) + "px";
     // document.getElementById("btnBlackBack").style.left = ((objectSize * 1.085 - parseInt(startBtnW)) / 2) + "px";
     // document.getElementById("textStartBtn").style.left = ((objectSize * 1.085 - parseInt(startBtnW)) / 2) * 1.115 + "px";
     
-    document.getElementById("title1").style.left = objectSize * 0.16 + "px";
-    document.getElementById("title2").style.left = objectSize * 0.7 + "px";
-    document.getElementById("footer").style.left = objectSize * 0.1 + "px";
+    document.getElementById("title1").style.left = ui.objectSize * 0.16 + "px";
+    document.getElementById("title2").style.left = ui.objectSize * 0.7 + "px";
+    document.getElementById("footer").style.left = ui.objectSize * 0.1 + "px";
     ////scroll
     //document.getElementById("scroll").style.left = (window.innerWidth - objectSize) / 2 - (window.innerWidth * 0.025) + "px";
-    document.getElementById("scroll").style.left = (window.innerWidth / 2) - (objectSize * 1.0625 /2) + "px";
-    document.getElementById("scrollBackCenter").style.left = (objectSize * -0.01) + "px";
-    document.getElementById("scrollBackUp").style.left = (objectSize * -0.01) + "px";
-    document.getElementById("scrollBackDown").style.left = (objectSize * -0.01) + "px";
+    document.getElementById("scroll").style.left = (window.innerWidth / 2) - (ui.objectSize * 1.0625 /2) + "px";
+    document.getElementById("scrollBackCenter").style.left = (ui.objectSize * -0.01) + "px";
+    document.getElementById("scrollBackUp").style.left = (ui.objectSize * -0.01) + "px";
+    document.getElementById("scrollBackDown").style.left = (ui.objectSize * -0.01) + "px";
 
-    document.getElementById("btnClose").style.left = objectSize * 0.75 + (objectSize * 0.1) * 2 + "px";
-    document.getElementById("scrollText").style.left = objectSize * 0.03 + "px";
+    document.getElementById("btnClose").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
+    document.getElementById("scrollText").style.left = ui.objectSize * 0.03 + "px";
 
     var pjBtnLeft = document.getElementById("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("centerDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + "px";
@@ -2214,7 +2215,7 @@ function layoutPortrait(){
     document.getElementById("main").style.top = window.innerHeight * 0.005 + "px";
 
     // define if scene is on top of console, if not invert (useful when scroll is desplayed)
-    if (sceneOnTop){
+    if (ui.sceneOnTop){
     	//test new organization, scene top
     	document.getElementById("marco").style.top = parseInt(headingH) + parseInt(headingH) * 0.1 + "px";
     	document.getElementById("esceneCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
@@ -2242,14 +2243,14 @@ function layoutPortrait(){
 	    document.getElementById("statusText").style.top = parseInt(headingH) + (parseInt(backConsoleH) * 0.925) + "px";
     }
 	
-    document.getElementById("indicadores").style.top = (objectSize * 0.09375) * 1.57 + "px";
-    document.getElementById("XPprogressBar").style.top = (objectSize * 0.09375) * 1.125 + "px";
-    document.getElementById("btn1").style.top = objectSize * 0.01 + "px";
-    document.getElementById("btn4").style.top = objectSize * 0.11 + "px";
-    document.getElementById("btn2").style.top = objectSize * 0.01 + "px";
-    document.getElementById("btn5").style.top = objectSize * 0.11 + "px";
-    document.getElementById("btn3").style.top = objectSize * 0.01 + "px";
-    document.getElementById("btn6").style.top = objectSize * 0.11 + "px";
+    document.getElementById("indicadores").style.top = (ui.objectSize * 0.09375) * 1.57 + "px";
+    document.getElementById("XPprogressBar").style.top = (ui.objectSize * 0.09375) * 1.125 + "px";
+    document.getElementById("btn1").style.top = ui.objectSize * 0.01 + "px";
+    document.getElementById("btn4").style.top = ui.objectSize * 0.11 + "px";
+    document.getElementById("btn2").style.top = ui.objectSize * 0.01 + "px";
+    document.getElementById("btn5").style.top = ui.objectSize * 0.11 + "px";
+    document.getElementById("btn3").style.top = ui.objectSize * 0.01 + "px";
+    document.getElementById("btn6").style.top = ui.objectSize * 0.11 + "px";
     //document.getElementById("nubes").style.top = "0px";
     document.getElementById("title1").style.top = window.innerHeight * 0.1 + "px";
     document.getElementById("title2").style.top = window.innerHeight * 0.20 + "px";
@@ -2261,24 +2262,24 @@ function layoutPortrait(){
     // document.getElementById("textStartBtn").style.top = window.innerHeight * 0.721 + "px";
 
     document.getElementById("footer").style.top = window.innerHeight * 0.9 + "px";
-    document.getElementById("scroll").style.top = objectSize * 0.02 + "px";
-    document.getElementById("scrollBackCenter").style.top = objectSize * 0.02 + "px";
-    document.getElementById("scrollBackUp").style.top = objectSize * 0.02 + "px";
-    document.getElementById("btnClose").style.top = objectSize * 0.065 + "px";
-    document.getElementById("scrollText").style.top = objectSize * 0.065 + "px";
+    document.getElementById("scroll").style.top = ui.objectSize * 0.02 + "px";
+    document.getElementById("scrollBackCenter").style.top = ui.objectSize * 0.02 + "px";
+    document.getElementById("scrollBackUp").style.top = ui.objectSize * 0.02 + "px";
+    document.getElementById("btnClose").style.top = ui.objectSize * 0.065 + "px";
+    document.getElementById("scrollText").style.top = ui.objectSize * 0.065 + "px";
 
-    document.getElementById("backMapa").style.top = objectSize * 0.1 + "px";
+    document.getElementById("backMapa").style.top = ui.objectSize * 0.1 + "px";
     
     
     //Others
     document.getElementById("indicadores").style.display = "flex";
     document.getElementById("indicadores").style.justifyContent = "space-between";
-    document.getElementById("hpIcon").style.height = objectSize * 0.045 + "px";
-    document.getElementById("goldIcon").style.height = objectSize * 0.045 + "px";
-    document.getElementById("spiritIcon").style.height = objectSize * 0.045 + "px";
-    document.getElementById("hpIcon").style.width = objectSize * 0.045 + "px";
-    document.getElementById("goldIcon").style.width = objectSize * 0.045 + "px";
-    document.getElementById("spiritIcon").style.width = objectSize * 0.045 + "px";
+    document.getElementById("hpIcon").style.height = ui.objectSize * 0.045 + "px";
+    document.getElementById("goldIcon").style.height = ui.objectSize * 0.045 + "px";
+    document.getElementById("spiritIcon").style.height = ui.objectSize * 0.045 + "px";
+    document.getElementById("hpIcon").style.width = ui.objectSize * 0.045 + "px";
+    document.getElementById("goldIcon").style.width = ui.objectSize * 0.045 + "px";
+    document.getElementById("spiritIcon").style.width = ui.objectSize * 0.045 + "px";
     //document.getElementById("textStartBtn").style.padding = objectSize * 0.02 + "px";
     //document.getElementById("btnBlackBack").style.borderRadius = objectSize * 0.05859375 + "px";
     
@@ -2316,22 +2317,22 @@ function layoutLandscapeMobile(){
     document.getElementById("btn6").style.display = "none" ;
 
     //fonts
-    document.getElementById("pjName").style.fontSize = objectSize * 0.11 + "px";
-    document.getElementById("indicadores").style.fontSize = objectSize * 0.05 + "px";
-    document.getElementById("statusText").style.fontSize = em * 2 + "px";
-    document.getElementById("scrollText").style.fontSize = objectSize * 0.05 + "px";
+    document.getElementById("pjName").style.fontSize = ui.objectSize * 0.11 + "px";
+    document.getElementById("indicadores").style.fontSize = ui.objectSize * 0.05 + "px";
+    document.getElementById("statusText").style.fontSize = ui.em * 2 + "px";
+    document.getElementById("scrollText").style.fontSize = ui.objectSize * 0.05 + "px";
 
     
     //widths
-    document.getElementById("main").style.width = objectSize + "px";
+    document.getElementById("main").style.width = ui.objectSize + "px";
     document.getElementById("XPprogressBar").style.width  = window.innerWidth * 0.95  + "px";
     document.getElementById("pjName").style.width  = window.innerWidth * 0.90 + "px";
     document.getElementById("indicadores").style.width  = window.innerWidth * 0.95 + "px";
-    document.getElementById("marco").style.width = objectSize * 1.0625 + "px";
-    document.getElementById("esceneCanvas").style.width = objectSize + "px";
-    document.getElementById("pjCanvas").style.width = objectSize + "px";
-    document.getElementById("npcCanvas").style.width = objectSize + "px";
-    document.getElementById("spellCanvas").style.width = objectSize + "px";
+    document.getElementById("marco").style.width = ui.objectSize * 1.0625 + "px";
+    document.getElementById("esceneCanvas").style.width = ui.objectSize + "px";
+    document.getElementById("pjCanvas").style.width = ui.objectSize + "px";
+    document.getElementById("npcCanvas").style.width = ui.objectSize + "px";
+    document.getElementById("spellCanvas").style.width = ui.objectSize + "px";
     document.getElementById("nubes").style.width = window.innerWidth + "px";
     document.getElementById("scroll").style.width = window.innerWidth * 0.98 + "px";  
     document.getElementById("scrollBackCenter").style.width = window.innerWidth * 0.98 + "px";  
@@ -2339,22 +2340,22 @@ function layoutLandscapeMobile(){
     document.getElementById("scrollBackDown").style.width = window.innerWidth * 0.98 + "px";  
   
     document.getElementById("scrollText").style.width = window.innerWidth * 0.92 + "px";  
-    document.getElementById("btnClose").style.width  = objectSize * 0.09375 + "px";  
+    document.getElementById("btnClose").style.width  = ui.objectSize * 0.09375 + "px";  
 
 
-    var pjBtnWidth = document.getElementById("pjDivineBtn").style.width = objectSize * 0.325 + "px";
-    document.getElementById("npcDivineBtn").style.width = objectSize * 0.325 + "px";
-    var centerDivineBtn = document.getElementById("centerDivineBtn").style.width = objectSize * 0.35 + "px";
+    var pjBtnWidth = document.getElementById("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
+    document.getElementById("npcDivineBtn").style.width = ui.objectSize * 0.325 + "px";
+    var centerDivineBtn = document.getElementById("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
 
 
     //heights
-    var headingH = document.getElementById("heading").style.height = objectSize * 0.24 + "px";
-    var marcoH = document.getElementById("marco").style.height = objectSize * 0.3125 + "px";
-    document.getElementById("esceneCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("pjCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("npcCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("spellCanvas").style.height = objectSize * 0.25 + "px";
-    document.getElementById("XPprogressBar").style.height  = objectSize * 0.03  + "px";
+    var headingH = document.getElementById("heading").style.height = ui.objectSize * 0.24 + "px";
+    var marcoH = document.getElementById("marco").style.height = ui.objectSize * 0.3125 + "px";
+    document.getElementById("esceneCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("pjCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("npcCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("spellCanvas").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("XPprogressBar").style.height  = ui.objectSize * 0.03  + "px";
     document.getElementById("nubes").style.height  = window.innerHeight  + "px";
     //document.getElementById("scrollText").style.height  = window.innerHeight * 0.75  + "px";
     //document.getElementById("scrollBackCenter").style.height  = window.innerHeight * 0.9  + "px";
@@ -2367,22 +2368,22 @@ function layoutLandscapeMobile(){
 
 
 
-    document.getElementById("pjDivineBtn").style.height = objectSize * 0.25 + "px";
-    document.getElementById("npcDivineBtn").style.height = objectSize * 0.25 + "px";
-    document.getElementById("centerDivineBtn").style.height = objectSize * 0.25 + "px";
+    document.getElementById("pjDivineBtn").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("npcDivineBtn").style.height = ui.objectSize * 0.25 + "px";
+    document.getElementById("centerDivineBtn").style.height = ui.objectSize * 0.25 + "px";
 
 
     //lefts
-    document.getElementById("main").style.left = (window.innerWidth - objectSize) / 2 - (window.innerWidth * 0.025) + "px";
+    document.getElementById("main").style.left = (window.innerWidth - ui.objectSize) / 2 - (window.innerWidth * 0.025) + "px";
     document.getElementById("esceneCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("pjCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("npcCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("spellCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("statusText").style.left = window.innerWidth * 0.925 + "px";
     document.getElementById("nubes").style.left = "0px";
-    document.getElementById("btnClose").style.left = objectSize * 0.75 + (objectSize * 0.1) * 2 + "px";
-    document.getElementById("scroll").style.left = objectSize * 0.01 + "px";
-    document.getElementById("scrollText").style.left = objectSize * 0.03 + "px";
+    document.getElementById("btnClose").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
+    document.getElementById("scroll").style.left = ui.objectSize * 0.01 + "px";
+    document.getElementById("scrollText").style.left = ui.objectSize * 0.03 + "px";
 
     var pjBtnLeft = document.getElementById("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("centerDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + "px";
@@ -2390,20 +2391,20 @@ function layoutLandscapeMobile(){
 
 
     //tops
-    document.getElementById("indicadores").style.top = objectSize * 0.17 + "px";
-    document.getElementById("XPprogressBar").style.top = objectSize * 0.13 + "px";
-    document.getElementById("statusText").style.top = objectSize * 0.01 + "px";
+    document.getElementById("indicadores").style.top = ui.objectSize * 0.17 + "px";
+    document.getElementById("XPprogressBar").style.top = ui.objectSize * 0.13 + "px";
+    document.getElementById("statusText").style.top = ui.objectSize * 0.01 + "px";
     document.getElementById("marco").style.top = parseInt(headingH) + "px";
     document.getElementById("esceneCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("pjCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("npcCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("spellCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("nubes").style.top = "0px";
-    document.getElementById("scroll").style.top = objectSize * 0.02 + "px";
-    document.getElementById("scrollBackCenter").style.top = objectSize * 0.02 + "px";
-    document.getElementById("scrollBackUp").style.top = objectSize * 0.02 + "px";
-    document.getElementById("btnClose").style.top = objectSize * 0.065 + "px";
-    document.getElementById("scrollText").style.top = objectSize * 0.06 + "px";
+    document.getElementById("scroll").style.top = ui.objectSize * 0.02 + "px";
+    document.getElementById("scrollBackCenter").style.top = ui.objectSize * 0.02 + "px";
+    document.getElementById("scrollBackUp").style.top = ui.objectSize * 0.02 + "px";
+    document.getElementById("btnClose").style.top = ui.objectSize * 0.065 + "px";
+    document.getElementById("scrollText").style.top = ui.objectSize * 0.06 + "px";
 
     document.getElementById("pjDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("npcDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
@@ -2413,12 +2414,12 @@ function layoutLandscapeMobile(){
     //Others
     document.getElementById("indicadores").style.display = "flex";
     document.getElementById("indicadores").style.justifyContent = "space-between";
-    document.getElementById("hpIcon").style.height = objectSize * 0.05 + "px";
-    document.getElementById("goldIcon").style.height = objectSize * 0.05 + "px";
-    document.getElementById("spiritIcon").style.height = objectSize * 0.05 + "px";
-    document.getElementById("hpIcon").style.width = objectSize * 0.05 + "px";
-    document.getElementById("goldIcon").style.width = objectSize * 0.05 + "px";
-    document.getElementById("spiritIcon").style.width = objectSize * 0.05 + "px";
+    document.getElementById("hpIcon").style.height = ui.objectSize * 0.05 + "px";
+    document.getElementById("goldIcon").style.height = ui.objectSize * 0.05 + "px";
+    document.getElementById("spiritIcon").style.height = ui.objectSize * 0.05 + "px";
+    document.getElementById("hpIcon").style.width = ui.objectSize * 0.05 + "px";
+    document.getElementById("goldIcon").style.width = ui.objectSize * 0.05 + "px";
+    document.getElementById("spiritIcon").style.width = ui.objectSize * 0.05 + "px";
 
 };
 
@@ -2439,23 +2440,23 @@ function hideScrollContent(){
 	
 	
 	//switch positions scene and console
-	sceneOnTop = true;
+	ui.sceneOnTop = true;
 	layoutPortrait()
 }
   
 // scroll close 
 function scrollClose(){
-    scrollCurrentContent = "";
+    ui.scrollCurrentContent = "";
     playSound("scroll");
     document.getElementById("btnClose").style.display = "none";
-    document.getElementById("btnClose").style.top = objectSize * 0.065 + "px";
+    document.getElementById("btnClose").style.top = ui.objectSize * 0.065 + "px";
     var content = document.getElementById("scrollText");
     var el = document.getElementById("scrollBackCenter");
     var sbd =  document.getElementById("scrollBackDown");
 
     el.style.minHeight = 0 + "px";
     content.style.minHeight = 0 + "px";
-    sbd.style.top = objectSize * 0.02 + "px";
+    sbd.style.top = ui.objectSize * 0.02 + "px";
 
     //crate a event that listen the css transition, and after that remove the listener in hideScrollContent
     el.addEventListener("transitionend", hideScrollContent);
@@ -2469,8 +2470,8 @@ function showCloseButton(){
 }
 
 // scroll open
-function scrollOpen(currentContent,height = (window.innerHeight - (objectSize * 0.25) * 1.5)){
-    scrollCurrentContent = currentContent;
+function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5)){
+    ui.scrollCurrentContent = currentContent;
     playSound("scroll");
     var content = document.getElementById("scrollText");
     var el = document.getElementById("scrollBackCenter");
@@ -2483,7 +2484,7 @@ function scrollOpen(currentContent,height = (window.innerHeight - (objectSize * 
     disableMainButtons()
     document.getElementById("scrollBackUp").style.opacity = 1;
     var sbd =  document.getElementById("scrollBackDown");
-    sbd.style.top = objectSize * 0.02 + "px";
+    sbd.style.top = ui.objectSize * 0.02 + "px";
     //sbd.style.visibility = "visible";
     sbd.style.opacity = 1;
 
@@ -2496,14 +2497,14 @@ function scrollOpen(currentContent,height = (window.innerHeight - (objectSize * 
     el.addEventListener("transitionend", showCloseButton);
 	
 		//switch positions scene and console
-	sceneOnTop = false;
+	ui.sceneOnTop = false;
 	layoutPortrait()
   }
 
 
 //Put the bocadillo in the right place in the map
 function localizarBocadillo(){
-    if (currentBackGround == "curanderobg"){
+    if (ui.currentBackGround == "curanderobg"){
         document.getElementById("bocadilloMapa").style.display ="none";
         document.getElementById("pjMapa").style.display ="none";
     }else{
@@ -2512,8 +2513,8 @@ function localizarBocadillo(){
         }else{
             document.getElementById("backMapa").src = "img/mapa.png";
         }
-        if(!currentBackGround.match(/_altar/) && !currentBackGround.match(/_estatua/)){
-        var localidad = places[currentBackGround];
+        if(!ui.currentBackGround.match(/_altar/) && !ui.currentBackGround.match(/_estatua/)){
+        var localidad = places[ui.currentBackGround];
         document.getElementById("zoneMap").innerHTML= "The " + zones[state.zone.current].name;
         var mapWidth = document.getElementById("backMapa").style.width;
         document.getElementById("bocadilloMapa").style.display ="block";
@@ -2663,7 +2664,7 @@ function realKill(){
     clearInterval(animateClockNPC);
     clearInterval(eventMasterClock);
     clearInterval(eventClock);
-    multipleEventsCounter = 0;
+    run.multipleEventsCounter = 0;
     deleteSave();
     location.reload();
 }
@@ -2680,22 +2681,22 @@ function cemeteryText(){
 
 //pj divine button funct
 function pjBtn(){
-    if (!disablePjBtn){
-        if(pjDead){
+    if (!run.disablePjBtn){
+        if(fight.pjDead){
             count("divineTouch");
-            disablePjBtn = true;
+            run.disablePjBtn = true;
             playSound("revive")
             spell("spellMultiDivine_28",true,frameWidth,frameHeight,currentFrame,shift);
             print("<b>" + state.player.name + "</b> " + "feels the divine touch!");
-            if (!!autorevive){
-                clearTimeout(autorevive);
-                autorevive = "";
+            if (!!fight.autorevive){
+                clearTimeout(fight.autorevive);
+                fight.autorevive = "";
             }
             //
             state.player.hp = state.player.hpBase;
             loadBackground("curanderobg");
-            pjDead = false;
-            loadCanvasChar(state.player.lvl, squareSide, headLevel);
+            fight.pjDead = false;
+            loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
             loadNPC("curandero");
             //
             eventClock = setInterval(reviveEV, masterTime);
@@ -2732,7 +2733,7 @@ function pjBtn(){
                 
                 playSound("heal");
                 spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + state.player.name + "</b> " + "feels a healing touch and recovers " + healIcon + roundNumbertoLetter(healHit)/* + " (" + spiritIcon + " -" + roundNumbertoLetter(faithLost) + ")"*/);
+                print("<b>" + state.player.name + "</b> " + "feels a healing touch and recovers " + ui.healIcon + roundNumbertoLetter(healHit)/* + " (" + spiritIcon + " -" + roundNumbertoLetter(faithLost) + ")"*/);
 
             }
 
@@ -2742,11 +2743,11 @@ function pjBtn(){
 
 //npc divine button funct
 function npcBtn(){
-    if(!!state.npc && !!enemy && Math.round(state.player.faith) > 0 && Math.round(enemyHP) > 1){
+    if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 1){
         //hurt npc
         var divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
-        if ( Math.round(enemyHP) -  Math.round(divineHit) <= 0){//modify the divineHit to avoid god kills
-            divineHit = ( Math.round(enemyHP) - 1);
+        if ( Math.round(fight.enemyHP) -  Math.round(divineHit) <= 0){//modify the divineHit to avoid god kills
+            divineHit = ( Math.round(fight.enemyHP) - 1);
         }
         var faithLost =  divineHit * getRandomInt(1,3)
         if ( Math.round(state.player.faith) - Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
@@ -2762,12 +2763,12 @@ function npcBtn(){
             }else{
                 var txt = "feels the god's power over the enemy - ";
             }
-            enemyHP = Math.round(enemyHP) - (Math.round(divineHit));
+            fight.enemyHP = Math.round(fight.enemyHP) - (Math.round(divineHit));
             
             updateHeartNPC()
             state.player.faith = state.player.faith - faithLost;
             updateHeading();
-            print("<b>" + state.player.name + "</b> " + txt + heartIcon + " " + roundNumbertoLetter(enemyHP))
+            print("<b>" + state.player.name + "</b> " + txt + ui.heartIcon + " " + roundNumbertoLetter(fight.enemyHP))
             count("DivineHit");
         }
     }
@@ -2775,21 +2776,21 @@ function npcBtn(){
 //center divine button funct
 function centerBtn(){
     //increase faith like offer
-    if(!disableCenterBtn){
-        if(state.player.gold > 0 && !!currentBackGround.match(/altar/gi)){
-            disableCenterBtn = true;
+    if(!run.disableCenterBtn){
+        if(state.player.gold > 0 && !!ui.currentBackGround.match(/altar/gi)){
+            run.disableCenterBtn = true;
             var ofrendaGold = getRandomInt(state.player.gold * 0.25, state.player.gold * 0.75);
             //feGanada = (ofrendaGold / getRandomInt(7,15)) * getLocal("fOfrenda");
-            feGanada = (ofrendaGold * stat("fOfrenda"));
-            feGanada *= state.player.faithMultiplier;
-            state.player.faith = state.player.faith + feGanada;
+            run.feGanada = (ofrendaGold * stat("fOfrenda"));
+            run.feGanada *= state.player.faithMultiplier;
+            state.player.faith = state.player.faith + run.feGanada;
             state.player.gold = state.player.gold - ofrendaGold;
             //localStorage.idx_offers = Number(localStorage.idx_offers) + ofrendaGold;
             var textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
-            print("<b>" + state.player.name + "</b> " + pickRandomItem(textoffer) + " (" + goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + spiritIcon + " " + roundNumbertoLetter(feGanada) + ")");
+            print("<b>" + state.player.name + "</b> " + pickRandomItem(textoffer) + " (" + ui.goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + ")");
             count("DivineMandatoryOffers");
             count("GoldOffered", Math.round(ofrendaGold));
-            count("FeByGold",Math.round(feGanada));
+            count("FeByGold",Math.round(run.feGanada));
             updateHeading();
             playSound("coins");
             spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
@@ -2800,7 +2801,7 @@ function centerBtn(){
 
 //control close button in the scroll
 function btnCloseEvent(){
-    if (scrollCurrentContent == "history"){//unpause game after history
+    if (ui.scrollCurrentContent == "history"){//unpause game after history
        pauseToggle();
     }
     scrollClose()
@@ -2867,16 +2868,16 @@ function updateAchievements(){
     //txt += '<div class="divTableRow"><div class="divTableCell"><img src="img/no_logro.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>?????????????</strong> <br></div></div>';
     txt += "</div>"
     document.getElementById('innerTextScroll').innerHTML=txt;
-    document.getElementById("titleAchievements").style.fontSize = em * 2.5 + "px";
-    document.getElementById("titleAchievements").style.lineHeight = em * 2.5 + "px";  
+    document.getElementById("titleAchievements").style.fontSize = ui.em * 2.5 + "px";
+    document.getElementById("titleAchievements").style.lineHeight = ui.em * 2.5 + "px";  
 
 }
 
 function updateStats(){
 
-    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - timeStart))/1000).toFixed(0);
+    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
     var numLogrosGanados = countLogros();
-    statsPage = "<div id='stats'><span class='titles' id='titleStats'>Stats</span><br>" + 
+    ui.statsPage = "<div id='stats'><span class='titles' id='titleStats'>Stats</span><br>" + 
     "<span class='subtitles'>Wizard</span><br>" + 
     "Name: " + (state.player.name) + "<br>" +
     "Level: " + roundNumbertoLetter(state.player.lvl) + "<br>" +
@@ -2989,11 +2990,11 @@ function updateStats(){
     "Currenly won: " + numLogrosGanados + "<br>" + 
     "Completation: " + Math.round((numLogrosGanados / (Object.keys(logro).length - 1)) * 100) + "%<br>" + 
     "</div>";   
-    document.getElementById('innerTextScroll').innerHTML= statsPage;  
-    document.getElementById("stats").style.fontSize = em + "px";
-    document.getElementById("stats").style.lineHeight = em + "px";
-    document.getElementById("titleStats").style.fontSize = em * 2.5 + "px";
-    document.getElementById("titleStats").style.lineHeight = em * 2.5 + "px";    
+    document.getElementById('innerTextScroll').innerHTML= ui.statsPage;  
+    document.getElementById("stats").style.fontSize = ui.em + "px";
+    document.getElementById("stats").style.lineHeight = ui.em + "px";
+    document.getElementById("titleStats").style.fontSize = ui.em * 2.5 + "px";
+    document.getElementById("titleStats").style.lineHeight = ui.em * 2.5 + "px";    
 
 }
 
@@ -3014,38 +3015,38 @@ function updateHelp(){
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true idle game, you must do nothing. The wizard can perform all actions without your help. This is a different way to play, watching what other beings do without your control but some interference (you can interact with miracles). <b><i>This is a god like game</i></b>.</div>' +
    '<div class="faq">Graphical layout</div><div class="a">The screen is divided in three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, heal points, gold and faith points. In this panel you can found the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where is printed all actions performed by the wizard.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to intect</i> with the wizard, non-player caracters or enviroments. </div>' +
    '<div class="faq">Icons explanation</div><div class="a">' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/boss.png" height="' + em + 'px" /></div><div class="divTableCell">Boss, this encounter is harder than others, the reward is multiplied too.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/attack.png" height="' + em + 'px" /></div><div class="divTableCell">Attack, followed by the amount of damage against the wizard or the enemy.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/heart.png" height="' + em + 'px" /></div><div class="divTableCell">Wizard health, can be found in five states depending of the percentage (100%, 75%, 50%, 10%, and 0%).</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img style="filter: hue-rotate(45deg)" src="img/heart.png" height="' + em + 'px" /></div><div class="divTableCell">Enemy health, as well wizard health, it can be found in five states.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/achivement.png" height="' + em + 'px" /></div><div class="divTableCell">Achivement, just won a achivement.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/gold.png" height="' + em + 'px" /></div><div class="divTableCell">Gold, represent the currency in the game.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/heal.png" height="' + em + 'px" /></div><div class="divTableCell">Healing, followed by amount of health recovered.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/spirit.png" height="' + em + 'px" /></div><div class="divTableCell">Faith, divine currency in the game, divine touches and other stuff cost faith instead gold.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + em * 1.5 + 'px">!</span></div><div class="divTableCell">Showed near the bottom-right corner, new content or update is available in the server. Reload the game to download the new content for offline access.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + em * 1.5 + 'px">...</span></div><div class="divTableCell">Showed near the bottom-right corner, searching for new content or updates.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + em * 1.5 + 'px">.</span></div><div class="divTableCell">Showed near the bottom-right corner, the game can run but some problem with the offline functions happens. No enough space, your browser does not allow cache, or cache is in conflict with a previous one.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/boss.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Boss, this encounter is harder than others, the reward is multiplied too.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/attack.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Attack, followed by the amount of damage against the wizard or the enemy.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/heart.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Wizard health, can be found in five states depending of the percentage (100%, 75%, 50%, 10%, and 0%).</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img style="filter: hue-rotate(45deg)" src="img/heart.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Enemy health, as well wizard health, it can be found in five states.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/achivement.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Achivement, just won a achivement.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/gold.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Gold, represent the currency in the game.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/heal.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Healing, followed by amount of health recovered.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/spirit.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Faith, divine currency in the game, divine touches and other stuff cost faith instead gold.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + ui.em * 1.5 + 'px">!</span></div><div class="divTableCell">Showed near the bottom-right corner, new content or update is available in the server. Reload the game to download the new content for offline access.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + ui.em * 1.5 + 'px">...</span></div><div class="divTableCell">Showed near the bottom-right corner, searching for new content or updates.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + ui.em * 1.5 + 'px">.</span></div><div class="divTableCell">Showed near the bottom-right corner, the game can run but some problem with the offline functions happens. No enough space, your browser does not allow cache, or cache is in conflict with a previous one.</div></div>' +
    '</div>' +
    '<div class="faq">The wizard</div><div class="a">The center of this game, ' + (state.player.name) + ' is growing in power and ambitions. The fate is just one.</div>' +
    '<div class="faq">The player</div><div class="a"><b>You</b>, to avoid interrupt the free will of the wizard, you can only watch and help limited reducing the faith of the wizard. If the wizard has faith < 0 you cannot help him.</div>' +
    '<div class="faq">Divine touches</div><div class="a">This is the main player interaction with the wizard and occurs when click or touch the Scene panel. Some basic interactions are: <ol><li>Touch the wizard heal him (cost faith).</li><li>Touch the wizard when he is dead (soft dead) revive him.</li><li>Touch the enemy damage him/her/it (cost faith).</li><li>Touch a shire mandate the wizard to give a tribute in gold (gain faith).</li>'+(state.travelFavor ? "<li>Touch the map teleport the wizard to the selected area.</li>" : "")+'</ol></div>' +
    '<div class="faq">Kill the wizard</div><div class="a">' +
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/diebtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">This is a definitive option, with this the player can destroy the current wizard in order to create another, <b>this action cannot be undone.</b></div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="img/diebtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">This is a definitive option, with this the player can destroy the current wizard in order to create another, <b>this action cannot be undone.</b></div></div>' +
    '</div>' +
    '<div class="faq">Achievements</div><div class="a">' + 
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/archbtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">A history of events your wizard achieve during his journey.</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="img/archbtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">A history of events your wizard achieve during his journey.</div></div>' +
    '</div>' +
    '<div class="faq">Stats</div><div class="a">' +
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/statsbtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Many stats about what happen in the wizard trip. Pure informational.</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="img/statsbtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Many stats about what happen in the wizard trip. Pure informational.</div></div>' +
    '</div>' +
    '<div class="faq">Map</div><div class="a">' + 
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/mapbtn.png" height="' + objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="img/mapbtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
    '</div>' +
    '<div class="faq">Study and skills</div><div class="a">During the wizard\'s trip, books, runes and statues can be found available to study. A sucessful study of them increase some stats. In this way the wizard can be a strong archmage or a devote donor to your cause.</div>' +
    '<div class="faq">Faith</div><div class="a">Your interaction with the wizard\'s world depends of this currency. The wizard gains faith praying and offering in your shrines. He loses the faith avoiding enter to the shires, reviving himself, and after each divine touch.</div>' +
    '<div class="faq">Rest and healing</div><div class="a">There are different ways to heal the wizard:<br><ol><li>By himself, casting some restauration spell during the battles.</li><li>By himself, sleeping.</li><li>By your interaction, in exchange for faith.</li></ol></div>' +
    '<div class="faq">Revive (soft dead)</div><div class="a">' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/muerto.png" height="' + em * 3 + 'px" /></div><div class="divTableCell">If the wizard falls in a battle, there are two ways to revive and continue with the game: <ol><li>By divine intervention touching the dead image (promotes godliness).</li><li>By himself, after some time, this cost huge amounts of faith and the recover is partial (promotes atheism).</li></ol></div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="img/muerto.png" height="' + ui.em * 3 + 'px" /></div><div class="divTableCell">If the wizard falls in a battle, there are two ways to revive and continue with the game: <ol><li>By divine intervention touching the dead image (promotes godliness).</li><li>By himself, after some time, this cost huge amounts of faith and the recover is partial (promotes atheism).</li></ol></div></div>' +
    '</div>' +
    '<div class="faq">FAQ</div><div class="a">' + frequentQuestions + '</div>' +
    '<div class="faq">Licences</div><div class="a">' + 
@@ -3058,10 +3059,10 @@ function updateHelp(){
    //'</div>' +
 
     document.getElementById('innerTextScroll').innerHTML=txt;
-    document.getElementById("help").style.fontSize = em + "px";
-    document.getElementById("help").style.lineHeight = em + "px";
-    document.getElementById("titleHelp").style.fontSize = em * 2.5 + "px";
-    document.getElementById("titleHelp").style.lineHeight = em * 2.5 + "px";  
+    document.getElementById("help").style.fontSize = ui.em + "px";
+    document.getElementById("help").style.lineHeight = ui.em + "px";
+    document.getElementById("titleHelp").style.fontSize = ui.em * 2.5 + "px";
+    document.getElementById("titleHelp").style.lineHeight = ui.em * 2.5 + "px";  
 
 
     
@@ -3069,7 +3070,7 @@ function updateHelp(){
     var coll = document.getElementsByClassName("faq");
     var i;
     for (i = 0; i < coll.length; i++) {
-    coll[i].style.lineHeight = em * 2 + "px";
+    coll[i].style.lineHeight = ui.em * 2 + "px";
     coll[i].addEventListener("click", function() {
         this.classList.toggle("active");
         var content = this.nextElementSibling;
@@ -3083,7 +3084,7 @@ function updateHelp(){
 }
 
 function updateKill(){
-    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - timeStart))/1000).toFixed(0);
+    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
     var txt = '<div id="kill"><span class="titles" id="titleKill">Kill</span><br>' +
     '<div>' + 
     'Do you want to kill <b>' + state.player.name + '</b>?<br><br>' +
@@ -3098,16 +3099,16 @@ function updateKill(){
     (world.cemetery.length == 0 ? "" : "<small>" + cemeteryText() + "</small>");
     document.getElementById('innerTextScroll').innerHTML=txt;
     document.getElementById("realKillBtn").onclick = realKill;
-    document.getElementById("kill").style.fontSize = em + "px";
-    document.getElementById("kill").style.lineHeight = em + "px";
-    document.getElementById("titleKill").style.fontSize = em * 2.5 + "px";
-    document.getElementById("titleKill").style.lineHeight = em * 2.5 + "px";
-    document.getElementById("titleCementery").style.fontSize = em * 2.5 + "px";
-    document.getElementById("titleCementery").style.lineHeight = em * 2.5 + "px";
+    document.getElementById("kill").style.fontSize = ui.em + "px";
+    document.getElementById("kill").style.lineHeight = ui.em + "px";
+    document.getElementById("titleKill").style.fontSize = ui.em * 2.5 + "px";
+    document.getElementById("titleKill").style.lineHeight = ui.em * 2.5 + "px";
+    document.getElementById("titleCementery").style.fontSize = ui.em * 2.5 + "px";
+    document.getElementById("titleCementery").style.lineHeight = ui.em * 2.5 + "px";
     
-    var realKillBtnW = document.getElementById("realKillBtn").style.width  = ((objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
-    document.getElementById("realKillBtn").style.left = ((objectSize - parseInt(realKillBtnW)) / 2) + "px";
-    document.getElementById("realKillBtn").style.height  = (objectSize * 0.09375) * 1.5 + "px"; 
+    var realKillBtnW = document.getElementById("realKillBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
+    document.getElementById("realKillBtn").style.left = ((ui.objectSize - parseInt(realKillBtnW)) / 2) + "px";
+    document.getElementById("realKillBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
 
 }
 
@@ -3154,7 +3155,7 @@ var chapter = {
             loadBackground(state.zone.current + "_altar");
             var mistico = "mistico" + getRandomInt(1,3);
             loadNPC(mistico);
-            loadCanvasChar(state.player.lvl, squareSide, headLevel);
+            loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
         }
     },
     lvl50:{
@@ -3339,7 +3340,7 @@ var chapter = {
 //Open scroll for history closing if opened only ishas history, if not only event is triggered
 function openHistory(){
     //execute the action for each lvl
-    afterChapterExe = true;//activate post chapter event
+    run.afterChapterExe = true;//activate post chapter event
     chapter["lvl" + state.player.lvl].event()
 
     //if has writen history display it
@@ -3359,14 +3360,14 @@ function updateHistory(){
    pauseToggle();
    document.getElementById('innerTextScroll').innerHTML= chapter["lvl" + state.player.lvl].text;
    document.getElementById("innerTextScroll").style.display = "block";
-   document.getElementById("historyTitle").style.fontSize = em * 2.5 + "px";
-   document.getElementById("historyTitle").style.lineHeight = em * 2.5 + "px";
+   document.getElementById("historyTitle").style.fontSize = ui.em * 2.5 + "px";
+   document.getElementById("historyTitle").style.lineHeight = ui.em * 2.5 + "px";
    scrollOpen("history");
 }
 
 
 function afterChapter(){
-    afterChapterExe = false;
+    run.afterChapterExe = false;
     var lvl = state.player.lvl;
     switch(lvl){
         case 30:
@@ -3432,7 +3433,7 @@ function sixfivefour(){
     //set or equal the bet
     state.player.gold = state.player.gold - betForDice;
     updateHeading();
-    print(nameDicePlayer + " starts the game and suggest a bet of " + goldIcon + roundNumbertoLetter(betForDice))
+    print(nameDicePlayer + " starts the game and suggest a bet of " + ui.goldIcon + roundNumbertoLetter(betForDice))
 
     
 
@@ -3443,7 +3444,7 @@ function sixfivefour(){
 
 //Mechanism for the game Six Five Four
 function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
-    multipleEventsCounter += 1;
+    run.multipleEventsCounter += 1;
     
     //switch between rolling and results
     isRolling = !isRolling
@@ -3471,9 +3472,9 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
             }else if(cargo <= cargoFirstPlayer && ship && captain && crew){
                 print(nameDicePlayer + " rolls the dice to try to get more cargo")
             }else{
-                if (multipleEventsCounter == 3){
+                if (run.multipleEventsCounter == 3){
                     print(nameDicePlayer + " rolls the dice again " + ((symbolCurrentHand != '') ? '(' : '') + symbolCurrentHand + ((symbolCurrentHand != '') ? ')' : ''))
-                }else if (multipleEventsCounter == 5){
+                }else if (run.multipleEventsCounter == 5){
                     print(nameDicePlayer + " plays the last turn " + ((symbolCurrentHand != '') ? '(' : '') + symbolCurrentHand + ((symbolCurrentHand != '') ? ')' : ''))
                 }else{
                     print(nameDicePlayer + " rolls the dice")
@@ -3488,7 +3489,7 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                 // "dado: " + elem + " roll: " + dicesToRoll[elem]
                 //console.log("dado: " + elem + " roll: " + dicesToRoll[elem])
                 //save current roll (to avoid delete info in the next steps) with images
-                resultDice = resultDice + "<img class='imgInConsole' height='" + em + "' src='img/d" + dicesToRoll[elem] +".png'/>"
+                resultDice = resultDice + "<img class='imgInConsole' height='" + ui.em + "' src='img/d" + dicesToRoll[elem] +".png'/>"
             }
             
 
@@ -3498,8 +3499,8 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                 if(dicesToRoll[elem] == 6 && !ship){
                     delete dicesToRoll[elem];
                     ship = true
-                    currentHand = "<img class='imgInConsole' height='" + em + "' src='img/d6.png'/>:<img class='imgInConsole' height='" + em + "' src='img/ship.png'/> "
-                    symbolCurrentHand = "<img class='imgInConsole' height='" + em + "' src='img/ship.png'/>"
+                    currentHand = "<img class='imgInConsole' height='" + ui.em + "' src='img/d6.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/ship.png'/> "
+                    symbolCurrentHand = "<img class='imgInConsole' height='" + ui.em + "' src='img/ship.png'/>"
                     //console.log("ship: " + ship)
                 }
             }
@@ -3508,8 +3509,8 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                 if(dicesToRoll[elem] == 5 && ship && !captain){
                     delete dicesToRoll[elem];
                     captain = true
-                    currentHand += "<img class='imgInConsole' height='" + em + "' src='img/d5.png'/>:<img class='imgInConsole' height='" + em + "' src='img/captain.png'/> "
-                    symbolCurrentHand += "<img class='imgInConsole' height='" + em + "' src='img/captain.png'/>"
+                    currentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/d5.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/captain.png'/> "
+                    symbolCurrentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/captain.png'/>"
                     //console.log("captain: " + captain)
                 }
             }
@@ -3518,8 +3519,8 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                 if(dicesToRoll[elem] == 4 && ship && captain && !crew){
                     delete dicesToRoll[elem];
                     crew = true
-                    currentHand += "<img class='imgInConsole' height='" + em + "' src='img/d4.png'/>:<img class='imgInConsole' height='" + em + "' src='img/crew.png'/> "
-                    symbolCurrentHand += "<img class='imgInConsole' height='" + em + "' src='img/crew.png'/>"
+                    currentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/d4.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/crew.png'/> "
+                    symbolCurrentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/crew.png'/>"
                     //console.log("crew: " + crew)
                 }
             }
@@ -3537,7 +3538,7 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
         }else{
             
             clearInterval(eventClock);
-            multipleEventsCounter = 0;
+            run.multipleEventsCounter = 0;
             print(nameDicePlayer + " thinks the cargo is enought and skip")
             //va a eval
             eventClock = setInterval( function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime );
@@ -3554,9 +3555,9 @@ else{
     currentHand = "";
     symbolCurrentHand = "";
 
-    if (multipleEventsCounter == 6){
+    if (run.multipleEventsCounter == 6){
         clearInterval(eventClock);
-        multipleEventsCounter = 0;
+        run.multipleEventsCounter = 0;
         
         //eval
         eventClock = setInterval( function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime );
@@ -3608,8 +3609,8 @@ updateHeading();
 //calculate the final result and check the winner
 function finalScoreSixFiveFour(nameDicePlayer){
 
-    multipleEventsCounter += 1;
-    switch (multipleEventsCounter){
+    run.multipleEventsCounter += 1;
+    switch (run.multipleEventsCounter){
         case 1:
             countRounds = 0
             tie = cargoFirstPlayer == cargo
@@ -3617,10 +3618,10 @@ function finalScoreSixFiveFour(nameDicePlayer){
             if (!tie){
                 firstPlayerWins = cargoFirstPlayer > cargo;
                 if(firstPlayerWins){
-                    print(nameFirstPlayer + " wins " + goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
+                    print(nameFirstPlayer + " wins " + ui.goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
                     var winnerDice = nameFirstPlayer;
                 }else{
-                    print(nameDicePlayer + " wins " + goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
+                    print(nameDicePlayer + " wins " + ui.goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
                     var winnerDice = nameDicePlayer;
                 }
 
@@ -3648,8 +3649,8 @@ function finalScoreSixFiveFour(nameDicePlayer){
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             state.npc = "";
             loadBackground(state.zone.current +  state.zone.stage);
-            restAtInn = false;
-            multipleEventsCounter = 0;
+            run.restAtInn = false;
+            run.multipleEventsCounter = 0;
             clearInterval(eventClock);
             eventMasterClock = setInterval(event, masterTime);
     }
