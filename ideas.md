@@ -85,6 +85,30 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 - **Wizards from the past help in the story** (2026-11-10, via dev): build on the cemetery. In the author's words: *"perhaps the cemetery will be something we can build on in the future, for example part of the history in which wizards from the past can help."* *Today* (phase 2, on dev): killed wizards are kept as records in the `wizardidle2:world` save, which outlives every wizard (`world.cemetery = [{ name, lvl, age, born, died }]`). The kill scroll lists them ("Name (lvl: 12) died at the age of 23. born – died"), and nothing else uses them yet. Fallen wizards from earlier runs could come back to help in the story: as ghosts, allies, legends in the console, or tied to the "story for whoever dies" from the old notes.
 - **Levelling pace: XP per enemy** (from `docs/old_ideas/infodexp.xlsx`, 2018): the XP spreadsheet planned that each level takes **16 × level kills**: XP per enemy = (XP gap to next level) ÷ (16 × level). That's 16 kills at level 1, 800 at 50, 1,600 at 100 and 3,200 at 200, where the sheet marks **END**. *Today:* the game divides by 16 only (`xpPerEnemy` in `levelUP()`, `rEnemyXP` in `src/config.js`), so every level takes about 16 base kills (normal kills give ×1.5, so ~11) no matter the level. The sheet's own playtest log (sheet "Hoja4", pivot of XP events per level for levels 1–196) shows the shipped pace: ~17–27 XP events per level, flat. The rest of the sheet matches the code exactly: XP curve `lvl^1.1 × 8`, HP = XP × 1.6483, enemy HP = HP × 1.2, age starting at 19 and growing by XP × 0.0005. One more difference: gold per HP is **0.25** in the sheet but **0.15** in `config.js`.
 - **New creatures from the old list** (from `infodexp.xlsx`, sheet "Hoja2"): a list of 27 creatures written as zone-enemy names. 4 are already enemies (elf, dwarf, ogre, golem), and a griffin appears as an animal sprite's display name. Not in the game yet: salamander, gargoyle, gremlin, ghoul, troll, harpy, banshee, serpent, leviathan, minotaur, nymph, centaur, chimera, sphinx, cyclops, naga, sylph, treant, doxy, duende. They'd need sprites, and the v2 plan keeps the existing assets, so this is post-2.0.0 material.
+- **Track almost everything as stats** (2026-11-10): keep a stat for nearly everything that happens, so later achievements, missions, quests and new areas have numbers to hang on ("kill 50 corrupted enemies", "reach 0 faith three times", "visit every place in the Swamp"). *Today:* 56 counters via `count()` into `state.counters`, several split by key (`zone_*`, `enemy_*`, `typeBoss_*`, `school_*`, `altar_zone_*`, `BotinGot_*`, `Polymorph_*`, `study_*`…), plus `meta.playTimeMs`. Gaps found: they're **all counters**. There are no records (highest / lowest), no "firsts" (when something first happened), and nothing across wizards. The **dice game tracks nothing at all**.
+
+  Four kinds of stat to keep:
+  - *Counters:* how many times (what `count()` does today).
+  - *Totals:* how much in all (damage, gold, faith).
+  - *Records:* the best or worst ever (biggest hit, most gold held, lowest faith).
+  - *Firsts:* the level, age and date something first happened (first boss, first death, first rare). These are great for story callbacks and quest unlocks.
+
+  Each can live per wizard (`state`) or per world across all wizards (`wizardidle2:world`, next to the cemetery).
+
+  Candidates, by area:
+  - *Combat:* damage dealt / taken (totals); biggest hit and biggest crit (records); longest fight in rounds; fights won without taking a hit; close calls (won under 10% HP); kill streak without dying; kills by enemy type (melee, wizard, nature, fire, frost…) and by zone; corrupted enemies killed; rare enemies killed by name; spells cast by spell, not just school; total HP healed; kills while polymorphed.
+  - *Deaths:* deaths by zone and **killed by** (which enemy or boss); divine revives vs self-revives (amount of faith lost); level and age at each death.
+  - *Faith and the god:* faith gained / spent (totals); highest and lowest faith ever (how deep into atheism); times faith crossed 0 in each direction; time spent below 0; divine touches by target (wizard, enemy, boss, shrine); touches with too little faith; faith lost skipping shrines (an amount; `negar` only counts).
+  - *Gold:* earned / spent (totals); most gold held (record); inn spending (exists); robbed, once robbery exists.
+  - *Dice (untracked today):* games played; won / lost / tied; gold won / lost; best cargo; times he risked another roll and whether it paid; opponents beaten.
+  - *Exploration:* unique places visited (e.g. `el_Bosque3`, not just zones); first-visit level per zone; time spent per zone; overworld vs underground; longest stay in one zone; map opened.
+  - *Study:* runes vs books separately; total skill gained per stat (`statBonus` holds the result, not the history).
+  - *Progress and time:* time per level (real play time); level, age and date of each chapter; sessions, days played, longest session; offline time, if offline progress comes back.
+  - *Player habits:* scrolls opened (stats, achievements, help, map); taps on the scene.
+  - *World, across wizards:* wizards created / killed; highest level ever; oldest wizard; lifetime kills, bosses, gold, faith. Enables account-wide achievements and the cemetery idea.
+  - *For future systems:* materials gathered by type, items crafted / used (professions); quests started / completed; story choices.
+
+  Found while looking: `cardCombat()` in `src/game.js` is an empty placeholder (a card-combat idea that never started?).
 
 ## Already built (from the old notes)
 
@@ -92,6 +116,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Open questions
 
+- Stats: should everything show on the stats scroll, or only some, with the rest hidden and used for achievements and quests? Per wizard, per world, or both? And what was `cardCombat()` meant to be?
 - Levelling pace: keep the flat ~16 kills per level the game has always had, or move toward the spreadsheet's 16 × level (much slower late game)? Or something in between? And should gold go back to 0.25 per HP?
 - Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
 - Travel favor: what earns it (a faith threshold, a chapter, an achievement), and can the wizard lose it (e.g. while in sin or atheist)?
@@ -104,6 +129,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-10: Idea: track almost everything (bulb)
+
+- Added "Track almost everything as stats": listed the 56 counters the game keeps today, proposed records, totals and firsts on top of counters, and a catalogue of candidates by area. Noted the dice game is untracked and `cardCombat()` is an empty stub.
 
 ### 2026-11-10: Old spreadsheets checked (bulb)
 
