@@ -28,7 +28,7 @@ import { animateNPC, animatePJ, loadAlterCanvasChar, loadCanvasChar, loadNPC, np
 function battle() {
     //stats
     run.multipleEventsCounter += 1;
-    var option = 1;
+    let option = 1;
     if (run.multipleEventsCounter > 1) {//special because is a loop in the second case until someone die
         option = 2
     }
@@ -109,7 +109,7 @@ function battle() {
 
             //punish if the wizard is in sin (use the same corruptedText)
             if(state.player.inSin){
-                var feperdida = calculateFe();
+                const feperdida = calculateFe();
                 state.player.faith = state.player.faith - feperdida;
                 var corruptedText = ", and reduce the faith " + ui.spiritIcon + " -" + roundNumbertoLetter(feperdida);
 
@@ -184,11 +184,11 @@ function battle() {
             playSound("hurt" + getRandomInt(1,6));
             fight.pjDead = true;
             loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
-            var lootedText = "";
+            let lootedText = "";
             // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:
             // fight.enemy was already empty. A fallen enemy can't take the wizard's gold.
             if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold == "true"){
-            var goldLooted = getRandomInt(state.player.lastBattleGold,state.player.lastBattleGold * 2);
+            const goldLooted = getRandomInt(state.player.lastBattleGold,state.player.lastBattleGold * 2);
             state.player.gold = state.player.gold - goldLooted;
             lootedText = " and loses some gold" +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
             count("goldLostInBattle", goldLooted);
@@ -205,7 +205,7 @@ function battle() {
                 run.previousEvent = "autorevive"
                 fight.autorevive = "";       
                 //var feperdida = Number(getLocal("HPBase")) * 0.75;
-                var feperdida = state.player.hpBase * 1.2454654;
+                const feperdida = state.player.hpBase * 1.2454654;
                 state.player.faith = state.player.faith - feperdida;
                 print("<b>" + state.player.name + "</b> " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
                 fight.pjDead = false;
@@ -249,7 +249,7 @@ function getEnemy() {
         fight.bossCombat = true;
         fight.bossMultiplier = 2.5;
         fight.bossGoldMultiplier = 5;
-        var boss = zones[state.zone.current].boss;
+        const boss = zones[state.zone.current].boss;
         // if (boss == "cuboq" || boss == "etymos" || boss == "infraespectro"){
         //     document.getElementById("npcCanvas").style.opacity = 0.7;
         // }else{
@@ -272,7 +272,7 @@ function getEnemy() {
         //     document.getElementById("npcCanvas").style.opacity = 1;
         // }
         count("enemy_" + fight.enemy);
-        var number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
+        const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
         //random number of the image max    
         //select a spell based on the school of enemy
         fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
@@ -286,7 +286,7 @@ function getEnemy() {
         fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
         fight.enemyHPbase = Math.round(fight.enemyHP)
         updateHeartNPC()
-        var raretext = (enemySprites[fight.enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
+        const raretext = (enemySprites[fight.enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
         
         if (fight.enemy == "baba" || fight.enemy == "el_esqueleto" || fight.enemy == "animalejo" || fight.enemy == "polipoide" || fight.enemy == "momia") {
             //avoid name creatures and others
@@ -303,10 +303,10 @@ function getEnemy() {
             }
         }
     }
-    var startBattleText = "has entered in " + (run.previousEvent == "enemy" ? "another" : "a") + " battle!,finds " + (run.previousEvent == "enemy" ? "another" : "an") + " enemy!,start " + (run.previousEvent == "enemy" ? "another" : "a") + " fight!"
+    let startBattleText = "has entered in " + (run.previousEvent == "enemy" ? "another" : "a") + " battle!,finds " + (run.previousEvent == "enemy" ? "another" : "an") + " enemy!,start " + (run.previousEvent == "enemy" ? "another" : "a") + " fight!"
     if (fight.bossCombat){
         // v1 overwrote previousEvent before reading it here, so this always said "a Boss"
-        var article = (run.previousEvent == "boss" ? "another" : "a")
+        const article = (run.previousEvent == "boss" ? "another" : "a")
         startBattleText = "has entered in " + article + " battle with a Boss!,finds " + article + " Boss!,start " + article + " fight with a Boss!"
         run.previousEvent = "boss";
     }else{
@@ -405,7 +405,7 @@ function attackEV() {
                 }
                 updateHeartNPC()
                 count("school_" + spells[spellId].school)
-                var spellText = spells[spellId].name.toLowerCase()
+                const spellText = spells[spellId].name.toLowerCase()
                 
                 if (spells[spellId].school == "Physical"){
                     var text = pickRandomItem(" uses the , attacks with the ");
@@ -426,7 +426,7 @@ function attackEV() {
             //enemy attack
             //loop.every("animNPC", animateNPC, 100)
             if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
-            var enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
+            let enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
 
             if (fight.enemy == "midas"){enemyHit *= 2}//duplicate midas attack
 
@@ -456,8 +456,8 @@ function attackEV() {
 //Performs healing
 function healEV() {
         count("Heal");
-            var healOperation = state.player.hpBase * stat("fHeal");
-            var healHit = getRandomInt(healOperation * 0.5,healOperation);
+            const healOperation = state.player.hpBase * stat("fHeal");
+            let healHit = getRandomInt(healOperation * 0.5,healOperation);
             if (state.player.hp + healHit > state.player.hpBase){
                 healHit =  state.player.hpBase - state.player.hp;
                 state.player.hp = state.player.hpBase;
@@ -485,7 +485,7 @@ function cardCombat(){
 
 //Get a random name
 function randomName() {
-    var name = pickRandomItem("B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z,Sh,Kh,Th,Br,Tr,Mr,Zr,Xh,Sj,Cr,Kr,Yh,A,E,I,O,U");
+    let name = pickRandomItem("B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z,Sh,Kh,Th,Br,Tr,Mr,Zr,Xh,Sj,Cr,Kr,Yh,A,E,I,O,U");
     name += pickRandomItem("A,E,I,O,U").toLowerCase();
     name += pickRandomItem("B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z,Ss,Kh,Th,Br,Tr,Mr,Zr,Xh,Sj,Cr,Kr,Yh").toLowerCase();
     if(fight.enemyAndNumber.match("amazona") || fight.enemyAndNumber.match("guerrera") || fight.enemyAndNumber.match("hechicera") || fight.enemyAndNumber.match("pilla")){//feminice name

@@ -90,7 +90,7 @@ function responsiveLayout() {
         
     
     
-    var orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
+    const orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
     //block for detect landscape in mobile and change the elements
     // if (!orientation){ //add support for browsers that have not this property working like edge
     //     if (window.matchMedia("(orientation: landscape)").matches && detectmob()) {
@@ -141,8 +141,8 @@ function responsiveLayout() {
 };
 
 
-var centerMain;
-var centerLauncher;
+let centerMain;
+let centerLauncher;
 //Define size of window
 function defineObjectSize() {
      if (!detectmob()) {
@@ -256,7 +256,7 @@ function layoutPortrait(){
     document.getElementById("fondoLauncher").style.width = ui.objectSize / 0.9 + "px";
     document.getElementById("inputName").style.width = ui.objectSize * 1.085 + "px";
     document.getElementById("labelInputName").style.width = ui.objectSize * 1.085 + "px";
-    var startBtnW = document.getElementById("startBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
+    const startBtnW = document.getElementById("startBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
     // document.getElementById("btnBlackBack").style.width  = startBtnW;
     document.getElementById("scroll").style.width = ui.objectSize + "px";  
     document.getElementById("scrollBackCenter").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
@@ -266,9 +266,9 @@ function layoutPortrait(){
     document.getElementById("scrollText").style.width = ui.objectSize + "px";  
     document.getElementById("btnClose").style.width  = ui.objectSize * 0.09375 + "px";  
     
-    var pjBtnWidth = document.getElementById("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
+    const pjBtnWidth = document.getElementById("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
     document.getElementById("npcDivineBtn").style.width = ui.objectSize * 0.325 + "px";
-    var centerDivineBtn = document.getElementById("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
+    const centerDivineBtn = document.getElementById("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
 
     document.getElementById("backMapa").style.width = ui.objectSize + "px"; 
     document.getElementById("bocadilloMapa").style.width  = ui.objectSize * 0.075 + "px";  
@@ -281,15 +281,15 @@ function layoutPortrait(){
 
 
     //heights
-    var headingH = document.getElementById("heading").style.height = ui.objectSize * 0.21 + "px";
-    var marcoH = document.getElementById("marco").style.height = ui.objectSize * 0.3125 + "px";
-    var sceneCanvasH = document.getElementById("esceneCanvas").style.height = ui.objectSize * 0.25 + "px";
+    const headingH = document.getElementById("heading").style.height = ui.objectSize * 0.21 + "px";
+    const marcoH = document.getElementById("marco").style.height = ui.objectSize * 0.3125 + "px";
+    const sceneCanvasH = document.getElementById("esceneCanvas").style.height = ui.objectSize * 0.25 + "px";
     document.getElementById("pjCanvas").style.height = ui.objectSize * 0.25 + "px";
     document.getElementById("npcCanvas").style.height = ui.objectSize * 0.25 + "px";
     document.getElementById("spellCanvas").style.height = ui.objectSize * 0.25 + "px";
     document.getElementById("XPprogressBar").style.height  = ui.objectSize * 0.035  + "px";
-    var backConsoleH = document.getElementById("backConsole").style.height = window.innerHeight - parseInt(sceneCanvasH) * 1.2 - parseInt(headingH) * 1.2 + "px";
-    var consoleH = document.getElementById("console").style.height = parseInt(backConsoleH) * 0.94 + "px";
+    const backConsoleH = document.getElementById("backConsole").style.height = window.innerHeight - parseInt(sceneCanvasH) * 1.2 - parseInt(headingH) * 1.2 + "px";
+    const consoleH = document.getElementById("console").style.height = parseInt(backConsoleH) * 0.94 + "px";
     document.getElementById("launcher").style.height = window.innerHeight + "px";
     document.getElementById("fondoLauncher").style.height = window.innerHeight + "px";
     //document.getElementById("startBtn").style.height  = (objectSize * 0.09375) * 1.5 + "px"; 
@@ -353,7 +353,7 @@ function layoutPortrait(){
     document.getElementById("btnClose").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
     document.getElementById("scrollText").style.left = ui.objectSize * 0.03 + "px";
 
-    var pjBtnLeft = document.getElementById("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
+    const pjBtnLeft = document.getElementById("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("centerDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + "px";
     document.getElementById("npcDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + parseInt(centerDivineBtn) + "px";
     
@@ -494,14 +494,14 @@ function layoutLandscapeMobile(){
     document.getElementById("btnClose").style.width  = ui.objectSize * 0.09375 + "px";  
 
 
-    var pjBtnWidth = document.getElementById("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
+    const pjBtnWidth = document.getElementById("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
     document.getElementById("npcDivineBtn").style.width = ui.objectSize * 0.325 + "px";
-    var centerDivineBtn = document.getElementById("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
+    const centerDivineBtn = document.getElementById("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
 
 
     //heights
-    var headingH = document.getElementById("heading").style.height = ui.objectSize * 0.24 + "px";
-    var marcoH = document.getElementById("marco").style.height = ui.objectSize * 0.3125 + "px";
+    const headingH = document.getElementById("heading").style.height = ui.objectSize * 0.24 + "px";
+    const marcoH = document.getElementById("marco").style.height = ui.objectSize * 0.3125 + "px";
     document.getElementById("esceneCanvas").style.height = ui.objectSize * 0.25 + "px";
     document.getElementById("pjCanvas").style.height = ui.objectSize * 0.25 + "px";
     document.getElementById("npcCanvas").style.height = ui.objectSize * 0.25 + "px";
@@ -536,7 +536,7 @@ function layoutLandscapeMobile(){
     document.getElementById("scroll").style.left = ui.objectSize * 0.01 + "px";
     document.getElementById("scrollText").style.left = ui.objectSize * 0.03 + "px";
 
-    var pjBtnLeft = document.getElementById("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
+    const pjBtnLeft = document.getElementById("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
     document.getElementById("centerDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + "px";
     document.getElementById("npcDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + parseInt(centerDivineBtn) + "px";
 

@@ -9,9 +9,9 @@ import { masterTime } from './config.js';
 import { playSound } from './audio.js';
 
 //vars spell animation
-var frameWidth = 30;
-var frameHeight = 30;
-var currentFrame = 0, shift = 0;
+const frameWidth = 30;
+const frameHeight = 30;
+const currentFrame = 0, shift = 0;
 
 
 
@@ -32,9 +32,9 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
 
     }
     //var totalFrames = eval(img).frames;
-    var totalFrames = spells[img].frames;
-    var canvas = document.querySelector("#spellCanvas");
-    var context = canvas.getContext("2d");
+    const totalFrames = spells[img].frames;
+    const canvas = document.querySelector("#spellCanvas");
+    const context = canvas.getContext("2d");
 
     if(!pj){
         var mult = 6;
@@ -61,10 +61,10 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    var myImage = new Image();
+    const myImage = new Image();
     myImage.src = "img/" + img + ".png";
     myImage.addEventListener("load",animate)
-    var requestFrame;
+    let requestFrame;
 
     function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -95,8 +95,8 @@ function knownTier(){
 //Select random spell per level
 function getSpell(lvlBase = knownTier()){
     //spellTier0
-    var i;
-    var spellSelected = "";
+    let i;
+    let spellSelected = "";
     for (i = 0; i <= lvlBase; i++) { 
         if(spellSelected !== ""){
             //spellSelected =  spellSelected + "," + eval("spellTier" + i);
@@ -111,9 +111,9 @@ function getSpell(lvlBase = knownTier()){
 
 //count number of spells that know
 function countSpellKnown(){
-    var lvlBase = knownTier()
-    var numberSpells = 0;
-        for (var i = 0; i <= lvlBase; i++) { 
+    const lvlBase = knownTier()
+    let numberSpells = 0;
+        for (let i = 0; i <= lvlBase; i++) { 
             numberSpells += Number(spellTiers[i].split(',').length)
         }
     return numberSpells

@@ -15,8 +15,8 @@ import { playSound } from './audio.js';
 import { loadBackground, loadCanvasChar, print, updateHeading } from './ui/render.js';
 import { defineObjectSize, getEM } from './ui/layout.js';
 
-var version = "2.0.0"; // v1: "02nov2020_10pm"
-var uniqueID;
+const version = "2.0.0"; // v1: "02nov2020_10pm"
+let uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * 0.109375;//56;
 ui.squareSide = ui.objectSize * 0.125;//64;
@@ -76,7 +76,7 @@ function start() {
     };
     if (state.player.hp <= 0){//perfom a weak revive if the player does not revive after reload, loss faith
         state.player.hp = state.player.hpBase * 0.1;
-            var feperdida = state.player.hpBase * 0.25;
+            const feperdida = state.player.hpBase * 0.25;
             //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - feperdida);
             state.player.faith = state.player.faith - feperdida
         print("<b>" + state.player.name + "</b> " + "loses hope in you and tries to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");

@@ -16,7 +16,7 @@ import { playSound } from '../audio.js';
 import { detectmob, layoutPortrait } from './layout.js';
 import { realKill } from './menu.js';
 
-var scrollIDContent;
+let scrollIDContent;
 
 
 //Stats page helpers (v1 scanned every localStorage key for these)
@@ -29,11 +29,11 @@ function counterText(name){
 // "Golem (3), Slime (5)" for every counter starting with prefix, e.g. "enemy_".
 // Names come from enemies/zones, or from statObj/statueObj when inObj says so.
 function counterList(prefix, inObj = ""){
-    var out = "";
+    let out = "";
     for (const [key, value] of Object.entries(state.counters)){
         if (!key.startsWith(prefix)) continue;
-        var text = key.slice(prefix.length);
-        var entry = inObj == "" ? (enemyTypes[text] || zones[text]) : { statObj, statueObj }[inObj][text];
+        const text = key.slice(prefix.length);
+        const entry = inObj == "" ? (enemyTypes[text] || zones[text]) : { statObj, statueObj }[inObj][text];
         out += capitalize(entry.name) + " (" + value + "), ";
     }
     return out.slice(0,-2);
@@ -66,9 +66,9 @@ function scrollClose(){
     playSound("scroll");
     document.getElementById("btnClose").style.display = "none";
     document.getElementById("btnClose").style.top = ui.objectSize * 0.065 + "px";
-    var content = document.getElementById("scrollText");
-    var el = document.getElementById("scrollBackCenter");
-    var sbd =  document.getElementById("scrollBackDown");
+    const content = document.getElementById("scrollText");
+    const el = document.getElementById("scrollBackCenter");
+    const sbd =  document.getElementById("scrollBackDown");
 
     el.style.minHeight = 0 + "px";
     content.style.minHeight = 0 + "px";
@@ -89,17 +89,17 @@ function showCloseButton(){
 function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5)){
     ui.scrollCurrentContent = currentContent;
     playSound("scroll");
-    var content = document.getElementById("scrollText");
-    var el = document.getElementById("scrollBackCenter");
+    const content = document.getElementById("scrollText");
+    const el = document.getElementById("scrollBackCenter");
 
-    var orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
+    const orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
     if (!!orientation.match("landscape") && detectmob()){
         height = window.innerHeight * 0.92;
     }
 
     disableMainButtons()
     document.getElementById("scrollBackUp").style.opacity = 1;
-    var sbd =  document.getElementById("scrollBackDown");
+    const sbd =  document.getElementById("scrollBackDown");
     sbd.style.top = ui.objectSize * 0.02 + "px";
     //sbd.style.visibility = "visible";
     sbd.style.opacity = 1;
@@ -130,9 +130,9 @@ function localizarBocadillo(){
             document.getElementById("backMapa").src = "img/mapa.png";
         }
         if(!ui.currentBackGround.match(/_altar/) && !ui.currentBackGround.match(/_estatua/)){
-        var localidad = places[ui.currentBackGround];
+        const localidad = places[ui.currentBackGround];
         document.getElementById("zoneMap").innerHTML= "The " + zones[state.zone.current].name;
-        var mapWidth = document.getElementById("backMapa").style.width;
+        const mapWidth = document.getElementById("backMapa").style.width;
         document.getElementById("bocadilloMapa").style.display ="block";
         document.getElementById("pjMapa").style.display ="block";
         document.getElementById("bocadilloMapa").style.left = parseInt(mapWidth) * localidad.x + "px";
@@ -172,22 +172,22 @@ function localizarBocadillo(){
 
 //avoid clic when scroll is open
   function disableMainButtons() {
-    var eles = document.getElementsByClassName('dis');
-    for (var i=0; i < eles.length; i++) {
+    const eles = document.getElementsByClassName('dis');
+    for (let i=0; i < eles.length; i++) {
       eles[i].prev_click = eles[i].onclick; // save the previous value
       eles[i].onclick = false;
     }
 }
 
 function enableMainButtons() {
-    var eles = document.getElementsByClassName('dis');
-    for (var i=0; i < eles.length; i++)
+    const eles = document.getElementsByClassName('dis');
+    for (let i=0; i < eles.length; i++)
        eles[i].onclick = eles[i].prev_click;  // restore the previous value
     };
 
 // Cemetery lines as v1 wrote them: "Name (lvl: 12) died at the age of 23. May 3, 2026 - May 9, 2026"
 function cemeteryText(){
-    var dateOptions = {year: 'numeric', month: 'long', day: 'numeric'};
+    const dateOptions = {year: 'numeric', month: 'long', day: 'numeric'};
     return world.cemetery.map(function(w){
         return w.name + " (lvl: " + roundNumbertoLetter(w.lvl) + ") died at the age of " + roundNumbertoLetter(w.age) + ". " +
             new Date(w.born).toLocaleDateString("en", dateOptions) + " - " + new Date(w.died).toLocaleDateString("en", dateOptions) + "<br>";
@@ -206,7 +206,7 @@ function cemeteryText(){
 //Texts
 function updateAchievements(){
 
-    var txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
+    let txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
     txt += achievementList();
     //txt += '<div class="divTableRow"><div class="divTableCell"><img src="img/no_logro.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>?????????????</strong> <br></div></div>';
     txt += "</div>"
@@ -218,8 +218,8 @@ function updateAchievements(){
 
 function updateStats(){
 
-    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
-    var numLogrosGanados = countLogros();
+    const secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
+    const numLogrosGanados = countLogros();
     ui.statsPage = "<div id='stats'><span class='titles' id='titleStats'>Stats</span><br>" + 
     "<span class='subtitles'>Wizard</span><br>" + 
     "Name: " + (state.player.name) + "<br>" +
@@ -342,7 +342,7 @@ function updateStats(){
 }
 
 function updateHelp(){
-    var frequentQuestions = '<b>Why everyone has a name?</b> - All individuals of sentient species have one (Pybryas are very smart!)<br>' +
+    const frequentQuestions = '<b>Why everyone has a name?</b> - All individuals of sentient species have one (Pybryas are very smart!)<br>' +
     '<b>Why the wizard knows all the names?</b> - The console is not what the wizard sees, is what you sees, and you are an omniscient god that know all the names<br>' +
     '<b>Why everyone is so hostile?</b> - It is a very conflictive world and the interspecific hate is very accepted<br>' +
     '<b>Why other humans attack my wizard</b> - He is a heretic in the eyes of the King Midas<br>' +
@@ -353,7 +353,7 @@ function updateHelp(){
     '<b></b> - <br>' +
     '<b></b> - <br>';
 
-    var txt = '<div id="help"><span class="titles" id="titleHelp">Help</span><br>' +
+    const txt = '<div id="help"><span class="titles" id="titleHelp">Help</span><br>' +
    '<div class="faq">WizardIDLE, what is this?</div><div class="a">It is a game with typical elements of a common RPG game, the only difference is the player role. You are the god of the wizard and your interaction is limited due his free will. With or withour your help the wizard can reach to his fate being a deep believer or a hardened atheist.</div>' +
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true idle game, you must do nothing. The wizard can perform all actions without your help. This is a different way to play, watching what other beings do without your control but some interference (you can interact with miracles). <b><i>This is a god like game</i></b>.</div>' +
    '<div class="faq">Graphical layout</div><div class="a">The screen is divided in three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, heal points, gold and faith points. In this panel you can found the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where is printed all actions performed by the wizard.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to intect</i> with the wizard, non-player caracters or environments. </div>' +
@@ -410,13 +410,13 @@ function updateHelp(){
 
     
     //collapsible in help scroll
-    var coll = document.getElementsByClassName("faq");
-    var i;
+    const coll = document.getElementsByClassName("faq");
+    let i;
     for (i = 0; i < coll.length; i++) {
     coll[i].style.lineHeight = ui.em * 2 + "px";
     coll[i].addEventListener("click", function() {
         this.classList.toggle("active");
-        var content = this.nextElementSibling;
+        const content = this.nextElementSibling;
         if (content.style.maxHeight){
         content.style.maxHeight = null;
         } else {
@@ -427,8 +427,8 @@ function updateHelp(){
 }
 
 function updateKill(){
-    var secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
-    var txt = '<div id="kill"><span class="titles" id="titleKill">Kill</span><br>' +
+    const secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
+    const txt = '<div id="kill"><span class="titles" id="titleKill">Kill</span><br>' +
     '<div>' + 
     'Do you want to kill <b>' + state.player.name + '</b>?<br><br>' +
     'All progress, achievement and stats of this wizard will be lost forever (<b>this action cannot be undone</b>).<br><br>' +
@@ -449,7 +449,7 @@ function updateKill(){
     document.getElementById("titleCementery").style.fontSize = ui.em * 2.5 + "px";
     document.getElementById("titleCementery").style.lineHeight = ui.em * 2.5 + "px";
     
-    var realKillBtnW = document.getElementById("realKillBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
+    const realKillBtnW = document.getElementById("realKillBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
     document.getElementById("realKillBtn").style.left = ((ui.objectSize - parseInt(realKillBtnW)) / 2) + "px";
     document.getElementById("realKillBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
 

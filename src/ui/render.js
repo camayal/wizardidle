@@ -22,9 +22,9 @@ import { localizarBocadillo } from './scrolls.js';
 //Definitions
 //Author:  Carlos Alonso Maya Lastra
 // #region Define vars
-var esceneCanvas = document.getElementById("esceneCanvas");
-var pjCanvas = document.getElementById("pjCanvas");
-var npcCanvas = document.getElementById("npcCanvas");
+const esceneCanvas = document.getElementById("esceneCanvas");
+const pjCanvas = document.getElementById("pjCanvas");
+const npcCanvas = document.getElementById("npcCanvas");
 
 
 //Populate and update the headding
@@ -37,7 +37,7 @@ function updateHeading() {
     document.getElementById('hp').innerText = roundNumbertoLetter(state.player.hp);
     document.getElementById('gold').innerText = roundNumbertoLetter(state.player.gold);
     document.getElementById('fe').innerText = roundNumbertoLetter(state.player.faith);
-    var hpPercent = state.player.hp / state.player.hpBase;
+    const hpPercent = state.player.hp / state.player.hpBase;
     document.getElementById("hpIcon").src = heartMeter(hpPercent);
 
     if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
@@ -100,11 +100,11 @@ function loadBackground(back) {
 function loadCanvasChar(lvl, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
-    var img = new Image();
+    const img = new Image();
     img.src = "img/lvl" + Math.floor(lvl / 10) * 10 + ".png";
     //round in base 10
     img.addEventListener("load", function() {
-        var ctx = pjCanvas.getContext("2d");
+        const ctx = pjCanvas.getContext("2d");
         // ctx.mozImageSmoothingEnabled = false;
         // ctx.webkitImageSmoothingEnabled = false;
         // ctx.msImageSmoothingEnabled = false;
@@ -119,10 +119,10 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
 function loadAlterCanvasChar(imagen, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
-    var img = new Image();
+    const img = new Image();
     img.src = "img/" + imagen + ".png";
     img.addEventListener("load", function() {
-        var ctx = pjCanvas.getContext("2d");
+        const ctx = pjCanvas.getContext("2d");
         // ctx.mozImageSmoothingEnabled = false;
         // ctx.webkitImageSmoothingEnabled = false;
         // ctx.msImageSmoothingEnabled = false;
@@ -138,10 +138,10 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     state.npc = npc;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
-    var img = new Image();
+    const img = new Image();
     img.src = "img/" + npc + ".png";
     img.addEventListener("load", function() {
-        var ctx = npcCanvas.getContext("2d");
+        const ctx = npcCanvas.getContext("2d");
         // ctx.mozImageSmoothingEnabled = false;
         // ctx.webkitImageSmoothingEnabled = false;
         // ctx.msImageSmoothingEnabled = false;
@@ -217,7 +217,7 @@ function animateNPC() {
 function print(data) {
     setLiveTime(); //set seconds of game and add to total time
     document.getElementById("console").innerHTML = data + "<br>" + document.getElementById("console").innerHTML;
-    var brSplit = document.getElementById('console').innerHTML.split("<br>")
+    const brSplit = document.getElementById('console').innerHTML.split("<br>")
     if (brSplit.length > MAXLINESINCONSOLE) {
         brSplit.splice(-1, 1);
         document.getElementById("console").innerHTML = brSplit.join("<br>");

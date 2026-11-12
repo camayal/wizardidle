@@ -14,7 +14,7 @@ import { loadCanvasChar, print, updateHeading } from './ui/render.js';
     
 
 //stat definition object
-var statObj = {
+const statObj = {
     pAttack: {name:"attack chance", code:"pAttack"},
     fAttack: {name:"mastery in magic arts", code:"fAttack"},
     pPolymorph: {name:"polymorphism mastery", code:"pPolymorph"},
@@ -38,7 +38,7 @@ var statObj = {
     },
     random: function(){
         // a random skill (v1 relied on increase/random being the last two keys)
-        var skills = Object.keys(this).filter((key) => typeof this[key] === "object");
+        const skills = Object.keys(this).filter((key) => typeof this[key] === "object");
         return this[skills[Math.floor(Math.random() * skills.length)]].code;
     }
 }
@@ -113,7 +113,7 @@ function addGold(){
      //if (eval(enemy).hasgold == "true") {
         if (enemyTypes[fight.enemy].hasgold == "true") {
          var possibleGold = state.player.hpBase * config.balance.rGold;
-         var goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
+         const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
          state.player.lastBattleGold = goldcurrentBattle;
          state.player.gold = state.player.gold + goldcurrentBattle;
          count("GoldFromEnemies", goldcurrentBattle);
@@ -126,7 +126,7 @@ function addGold(){
 
 //Add XP after a battle or exploration
 function addXP(specialMultiplier = 1){
-    var xpGained = ((state.player.xpPerEnemy * specialMultiplier));
+    const xpGained = ((state.player.xpPerEnemy * specialMultiplier));
     //console.log(("\t" + getLocal("lvl")) +"\t"+ xpGained);
     state.player.xp = (xpGained + state.player.xp);
     updateHeading();

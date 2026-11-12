@@ -20,7 +20,7 @@ import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 
 //define statueobj
-var statueObj = {
+const statueObj = {
     statue_el_Bosque: {name:"Snail",event:function(){return statObj.increase(statObj.pPolymorph.code,2)},code:"statue_el_Bosque"},
     statue_el_Castillo: {name:"Knight", event:function(){return statObj.increase(statObj.pAttack.code,2)},code:"statue_el_Castillo"},
     statue_la_Ciudad: {name:"Queen", event:function(){return statObj.increase(statObj.fOfrenda.code,2)},code:"statue_la_Ciudad"},
@@ -36,7 +36,7 @@ var statueObj = {
     },code:"statue_las_Dunas"},
     statue_el_Heidan: {name:"Majestic angel", event:function(){
         statObj.increase(statObj.pBotin.code,2)
-        var goldFound = (state.player.lastBattleGold * 7.3)
+        const goldFound = (state.player.lastBattleGold * 7.3)
         state.player.gold = state.player.gold + goldFound;
         updateHeading();
         playSound("coins");
@@ -171,7 +171,7 @@ function reviveEV(){
             updateHeading();
             break;
         case 4:
-        var randomLocality = pickRandomItem("el_Bosque,la_Pradera,el_Poblado,las_Dunas,el_Desierto,el_Pantano")
+        const randomLocality = pickRandomItem("el_Bosque,la_Pradera,el_Poblado,las_Dunas,el_Desierto,el_Pantano")
         state.zone.current = randomLocality;
         state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
         count("zonesChanged");
@@ -201,7 +201,7 @@ function prayEV(){
         }
         print("<b>" + state.player.name + "</b> " + textCapel);
         loadBackground(state.zone.current + "_altar");
-        var mistico = "mistico" + getRandomInt(1,3);
+        const mistico = "mistico" + getRandomInt(1,3);
         loadNPC(mistico);
         if (YesOrNot(stat("pOfrenda"),0) && state.player.gold > 0){
             run.offer = true;
@@ -217,7 +217,7 @@ function prayEV(){
         }else{
             var textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
-        var faithLost = calculateFe();
+        const faithLost = calculateFe();
         print("<b>" + state.player.name + "</b> " + textCapel + " but does not enter and continues (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
         state.player.faith = state.player.faith - faithLost;
         updateHeading();
@@ -241,7 +241,7 @@ function innEV(){
            run.previousEvent = "innEV"
            loop.every("event", searchInn, masterTime);
     }else{
-        var textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
+        const textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
         print("<b>" + state.player.name + "</b> " + pickRandomItem(textNoInn)) 
         run.previousEvent = "innEVFeelsGood"
         loop.every("master", event, masterTime);
@@ -311,7 +311,7 @@ function findStatue(){
             count("sucessStudyStatue");
             spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
             var learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
-            var result = statueObj["statue_" + state.zone.current].event()
+            const result = statueObj["statue_" + state.zone.current].event()
         if(result == "hydraMysteryResolved"){
             //play hydra sound
             print("<b>" + state.player.name + "</b> " + "hears something but nothing happens");
@@ -347,7 +347,7 @@ function findStatue(){
 
 //Find book or rune
 function findRuneOrBook(){
-    var placesWithBooks = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Castillo" || state.zone.current == "la_Torre";
+    const placesWithBooks = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Castillo" || state.zone.current == "la_Torre";
     run.multipleEventsCounter += 1;
     if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
         var optionTemp = 2;
@@ -356,7 +356,7 @@ function findRuneOrBook(){
     }
     switch(optionTemp){
         case 1:
-        var number = getRandomInt(1,10);
+        const number = getRandomInt(1,10);
         if(placesWithBooks){
             run.objectToStudy = "book";
             loadNPC("libro" + number)
@@ -376,8 +376,8 @@ function findRuneOrBook(){
             var learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
             //var statToUP = pickRandomItem("pAttack,pPolymorph,fCritic,pCritic,pHeal,fHeal,pStudy,pBotin,pChangeZone,pFindCapel,pFindMaterials,pOfrenda,fOfrenda")
-            var statToIncrease = statObj[statObj.random()];
-            var learned = statObj.increase(statToIncrease.code);
+            const statToIncrease = statObj[statObj.random()];
+            const learned = statObj.increase(statToIncrease.code);
             print("<b>" + state.player.name + "</b> " + learnTxt + " " + run.objectToStudy + " and increases the <i>" + learned + "</i>") 
             count("study_" + statToIncrease.code);
             
@@ -412,7 +412,7 @@ function findRuneOrBook(){
 
 //Search an inn
 function searchInn(){
-    var placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto"
+    const placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto"
     run.multipleEventsCounter += 1;
     switch(run.multipleEventsCounter){
         case 1:
@@ -424,18 +424,18 @@ function searchInn(){
 
             }else{
                 loadNPC("sleepingbag");
-                var textCamping = "looks for a safe place too rest,hides to rest,falls asleep"
+                const textCamping = "looks for a safe place too rest,hides to rest,falls asleep"
                 print("<b>" + state.player.name + "</b> " + pickRandomItem(textCamping));
                 count("camping");
 
             }
             break;
         case 2:
-            var textSleeps = "sleeps,replenishes energies,rests"
+            const textSleeps = "sleeps,replenishes energies,rests"
             if(placesWithInn){
                 // add event of fight if have not gold
                 //var innCost = getRandomInt(Number(localStorage.Gold) * 0.05,Number(localStorage.Gold) * 0.1);
-                var innCost = 1 + getRandomInt(state.player.lastBattleGold * 2,state.player.lastBattleGold * 3);
+                const innCost = 1 + getRandomInt(state.player.lastBattleGold * 2,state.player.lastBattleGold * 3);
                 if ((state.player.gold - innCost) <= 0){
                     //innCost = Number(getLocal("Gold"));
                     //setLocal("Gold", 0);
@@ -499,7 +499,7 @@ function doOffering(){
         run.multipleEventsCounter += 1;
         switch(run.multipleEventsCounter){
             case 1:
-                var ofrendaGold = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
+                const ofrendaGold = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
                 run.feGanada = (ofrendaGold * stat("fOfrenda"));
                 run.feGanada *= state.player.faithMultiplier;
                 state.player.faith = state.player.faith + run.feGanada;
@@ -509,7 +509,7 @@ function doOffering(){
                 count("FeByGold",Math.round(run.feGanada));
                 playSound("coins");
                 spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
-                var textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
+                const textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
                 print("<b>" + state.player.name + "</b>" + " offers " + ui.goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
                 break;
             case 2:
@@ -614,7 +614,7 @@ function getBotin() {
         }
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
         state.npc = "";
-        var goldBotin = 1 + getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 10);
+        const goldBotin = 1 + getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 10);
         print("<b>" + state.player.name + "</b>" + botinTexts + ui.goldIcon + roundNumbertoLetter(goldBotin));
         count("BotinGot");
         count("GoldFromBotin",goldBotin)

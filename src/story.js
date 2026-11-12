@@ -20,7 +20,7 @@ import { counterText, scrollClose, scrollOpen } from './ui/scrolls.js';
 //History
 
 //declaration of chapter object, if text is NA, considere only a event and not a history.
-var chapter = {
+const chapter = {
     lvl1:{
         text:'<span class="titles" id="historyTitle">Prologue</span>~~THE BEGINNING~~<br>',
         event: function(){
@@ -49,7 +49,7 @@ var chapter = {
             }
             print("<b>" + state.player.name + "</b> " + text + ", and obtain a Divine crosier")
             loadBackground(state.zone.current + "_altar");
-            var mistico = "mistico" + getRandomInt(1,3);
+            const mistico = "mistico" + getRandomInt(1,3);
             loadNPC(mistico);
             loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
         }
@@ -264,7 +264,7 @@ function updateHistory(){
 
 function afterChapter(){
     run.afterChapterExe = false;
-    var lvl = state.player.lvl;
+    const lvl = state.player.lvl;
     switch(lvl){
         case 30:
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);

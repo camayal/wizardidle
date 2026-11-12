@@ -36,12 +36,12 @@ function pjBtn(){
             //heal pj
             // console.log("HP " + getLocal("HP"));
             // console.log("HPBase " + getLocal("HPBase"));
-            var healOperation = state.player.hpBase * stat("fHeal");
-            var healHit = getRandomInt(healOperation * 0.5 ,healOperation * 2);
+            const healOperation = state.player.hpBase * stat("fHeal");
+            let healHit = getRandomInt(healOperation * 0.5 ,healOperation * 2);
             if ( Math.round(state.player.hp) +  Math.round(healHit) >  Math.round(state.player.hpBase)){
                 healHit =   Math.round(state.player.hpBase) -  Math.round(state.player.hp); //modify heal to avoid overhealing
             }
-            var faithLost = healHit * getRandomInt(1,3);//determine faith cost
+            let faithLost = healHit * getRandomInt(1,3);//determine faith cost
             //balance faith cost
             if ( Math.round(state.player.faith) -  Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
                 faithLost = state.player.faith;//update faith cost
@@ -77,17 +77,17 @@ function pjBtn(){
 function npcBtn(){
     if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 1){
         //hurt npc
-        var divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
+        let divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
         if ( Math.round(fight.enemyHP) -  Math.round(divineHit) <= 0){//modify the divineHit to avoid god kills
             divineHit = ( Math.round(fight.enemyHP) - 1);
         }
-        var faithLost =  divineHit * getRandomInt(1,3)
+        let faithLost =  divineHit * getRandomInt(1,3)
         if ( Math.round(state.player.faith) - Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
             faithLost = state.player.faith;
             divineHit = faithLost / getRandomInt(1,3);//update divine hit
         }
 
-            var spellId = getSpell(20);
+            const spellId = getSpell(20);
             spell( spellId,false,frameWidth,frameHeight,currentFrame,shift);
             if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                 divineHit = Math.round(divineHit) * 8 //if is one of the divine powers
@@ -111,14 +111,14 @@ function centerBtn(){
     if(!run.disableCenterBtn){
         if(state.player.gold > 0 && !!ui.currentBackGround.match(/altar/gi)){
             run.disableCenterBtn = true;
-            var ofrendaGold = getRandomInt(state.player.gold * 0.25, state.player.gold * 0.75);
+            const ofrendaGold = getRandomInt(state.player.gold * 0.25, state.player.gold * 0.75);
             //feGanada = (ofrendaGold / getRandomInt(7,15)) * getLocal("fOfrenda");
             run.feGanada = (ofrendaGold * stat("fOfrenda"));
             run.feGanada *= state.player.faithMultiplier;
             state.player.faith = state.player.faith + run.feGanada;
             state.player.gold = state.player.gold - ofrendaGold;
             //localStorage.idx_offers = Number(localStorage.idx_offers) + ofrendaGold;
-            var textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
+            const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
             print("<b>" + state.player.name + "</b> " + pickRandomItem(textoffer) + " (" + ui.goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + ")");
             count("DivineMandatoryOffers");
             count("GoldOffered", Math.round(ofrendaGold));

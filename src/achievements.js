@@ -35,7 +35,7 @@ const logro = {
 
 // Table rows for every unlocked achievement
 function achievementList(){
-    var out = "";
+    let out = "";
     for (const text of Object.keys(state.achievements)){
         out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + logro[text].name + '.png" height="' + ui.em * 4 + 'px" /></div><div class="divTableCell"><strong>' + logro[text].title + '</strong> <br>' + logro[text].description + '</div></div>';
     }

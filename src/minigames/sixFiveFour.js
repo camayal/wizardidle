@@ -14,23 +14,23 @@ import { animateNPC, animatePJ, loadBackground, npcCanvas, print, updateHeading 
 //TODO add idx for all this part and archievements
 //temp dicegame
 //define dice and set 1 as default
-var dicesToRoll = {a: 1,b: 1,c: 1,d: 1,e: 1}
-var nameDicePlayer, tie, firstPlayerWins, diceRolled; // shared by the dice game functions (were implicit globals)
-var ship = false;
-var captain = false;
-var crew = false;
-var cargo = 0;
-var cargoFirstPlayer = 0;
-var nameFirstPlayer = ""
-var riskinDice = 7;
-var countRounds = 0;
-var currentHand = "";
-var symbolCurrentHand = "";
-var currentPlayerDice = ""
-var gamblingManName = "<i>Gambling man</i>"
-var isRolling = false
-var resultDice = "";
-var betForDice = 0;
+let dicesToRoll = {a: 1,b: 1,c: 1,d: 1,e: 1}
+let nameDicePlayer, tie, firstPlayerWins, diceRolled; // shared by the dice game functions (were implicit globals)
+let ship = false;
+let captain = false;
+let crew = false;
+let cargo = 0;
+let cargoFirstPlayer = 0;
+let nameFirstPlayer = ""
+let riskinDice = 7;
+let countRounds = 0;
+let currentHand = "";
+let symbolCurrentHand = "";
+const currentPlayerDice = ""
+const gamblingManName = "<i>Gambling man</i>"
+let isRolling = false
+let resultDice = "";
+let betForDice = 0;
 
 
 //Start the game Six Five Four
@@ -38,7 +38,7 @@ function sixfivefour(){
     //calculate the risk (amount of cargo that consider risky)
     riskinDice = Math.floor(Math.random() * (10 - 6) ) + 6;
     //determine if the opponent start or the wizard
-    var enemyStart = Math.random() >= 0.5;
+    const enemyStart = Math.random() >= 0.5;
     //declare bet
     betForDice = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
     playSound("coins");

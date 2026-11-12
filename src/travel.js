@@ -47,7 +47,7 @@ function changeLocality() {
 
 //Select random background for currentZone
 function pickRandomBackgroundForCurrentZone() {
-    var randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].moves)
+    const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].moves)
     loadBackground(randomLocality);
 };
 
@@ -56,7 +56,7 @@ function pickRandomBackgroundForCurrentZone() {
 function getZone() {
     if (state.zone.current !== undefined) {
         count("zonesChanged");
-        var randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].destinations)
+        const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].destinations)
         state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
         count("zone_" + state.zone.current);
