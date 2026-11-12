@@ -22,6 +22,7 @@ Decided by the author on 2026-11-12, one question at a time.
 | The staff | **One staff that changes**, made by the dead: cracked (60), seems sacred (90), shows its makers in the lava (130), carried off by the seer (149), reforged as *Nomaleatorio* (200). |
 | Prophecy reveal | **In pieces:** III, the red rune (128), Midas at VII; the seer gives the last line at XI. |
 | Deaths in play | **Falls, not deaths:** he lies injured, almost dead (a new sprite on the ground; the planner is looking for one). Your touch sends the hooded healer; otherwise a rescuer (FAITH.md). Rarely nobody comes: a **true death**, and his soul waits in purgatory until the end of days. |
+| True death rule | **Always possible while you can click to revive him.** Where the story takes that click away, the story protects him: the corrupt staff (VI), the scripted escape (VIII), the Last Escape scroll (X, FAITH.md), the reforged staff (XI until the final battle). |
 | V vs IX | **V is a moral shock** (guilt for the harm he did). **IX is depression and questions:** why didn't you protect me? X answers it. |
 | The seer | **Guards the staff in Heidan** and gives it up at XI. **She sees the loops:** in echo games she counts your rewinds. |
 | The Tower at 139 | **The corrupt staff drags him there**, hungry for a king. |
@@ -273,7 +274,7 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 **Console, lvl 170:** The healer hums a hymn while he works. · It's one of yours. {name} never taught it to him.
 
 ### Chapter X: Disobedience (lvl 190)
-*Event: refuses all help, no altars, no faith, more bosses.*
+*Event: refuses all help, no altars, no faith, more bosses. He carries the Last Escape scroll (FAITH.md): at 0 HP it tears him away and heals him, and each use burns it a little.*
 
 > He knew those hands.
 >
@@ -287,10 +288,14 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 >
 > He has stopped asking whether you are listening. He hopes you are.
 
+**Console, lvl 190 (event, the Last Escape):** {name} writes one last scroll, for himself alone. · No god will carry him now. He will carry himself.
+
+**Console, Last Escape used:** The scroll tears {name} out of the fight and closes his wounds. · A new burn spreads across its edge.
+
 **Console, lvl 199 (event, Heidan):** {name} learns where the seer took his staff: Heidan. · He walks to Heidan. He will not leave without it.
 
 ### Chapter XI: The Return of the King (lvl 200)
-*Event: ×2–3 damage, faith icon gone, XP bar full and dark red, more bosses and the Megaboss (the curse), the healer can appear.*
+*Event: the Last Escape scroll burns to ash as he takes the staff; from now on Nomaleatorio raises him when he falls (no true death until the final battle). ×2–3 damage, faith icon gone, XP bar full and dark red, more bosses and the Megaboss (the curse), the healer can appear.*
 
 > The seer was waiting in Heidan, the staff across her knees.
 >
@@ -313,10 +318,12 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 | He falls (any time) | {name} falls, broken, at the edge of the gray. |
 | Your touch | A hooded healer lifts him and carries him away. *(then the cabin event, as today)* |
 | A rescuer comes | One line per rescuer, in FAITH.md (caravan, shaman, gravedigger, ghost, potion, alone). |
-| He falls, after X | Something cold kneels beside him. "Let us carry you." · He gets up alone. |
+| He falls in VI | The staff drags {name} up before he touches the ground. |
+| He falls in X | The Last Escape scroll (see Chapter X). |
+| He falls in XI | Nomaleatorio drags {name} up, burning. · He does not thank it. |
 
 ### True death (rare: nobody comes)
-*Skull sprite, cemetery record with the cause, back to the name screen (FAITH.md / ideas.md "a wizard can really die"). Not an erasure: no echoes.*
+*Only where you could have revived him: never in VI, VIII, X or XI (see the rule above). Skull sprite, cemetery record with the cause, back to the name screen (FAITH.md / ideas.md "a wizard can really die"). Not an erasure: no echoes.*
 
 > No one came.
 >
