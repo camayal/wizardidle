@@ -176,7 +176,10 @@ function wizardFalls() {
 
 // If nobody revives him, the wizard gets up by himself after selfrevivetime, losing faith.
 function scheduleSelfRevive() {
-    fight.autorevive = setTimeout(function () {
+    // a loop clock that runs once (v1: a setTimeout), so the simulation's clock drives it too
+    fight.autorevive = true;
+    loop.every("selfRevive", function () {
+        loop.stop("selfRevive");
         run.previousEvent = "autorevive";
         fight.autorevive = "";
         const faithLost = state.player.hpBase * 1.2454654;
@@ -188,7 +191,7 @@ function scheduleSelfRevive() {
         playSound("heal");
         updateHeading();
         nextEvent();
-    }, selfrevivetime / loop.getSpeed());
+    }, selfrevivetime);
 }
 
 // Keep the longest streak of fights won in a row.
@@ -332,14 +335,14 @@ function isDivineSpell(spellId) {
     return spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16";
 }
 
-// Make the wizard hop, only while the page has focus.
+// Make the wizard hop, only while the page has focus (never in a simulation).
 function hopWizard() {
-    if (document.hasFocus()) loop.every("animPJ", animatePJ, 100);
+    if (document.hasFocus() && !run.simulation) loop.every("animPJ", animatePJ, 100);
 }
 
-// Make the enemy hop, only while the page has focus.
+// Make the enemy hop, only while the page has focus (never in a simulation).
 function hopEnemy() {
-    if (document.hasFocus()) loop.every("animNPC", animateNPC, 100);
+    if (document.hasFocus() && !run.simulation) loop.every("animNPC", animateNPC, 100);
 }
 
 // Take damage off the enemy, never below 0.

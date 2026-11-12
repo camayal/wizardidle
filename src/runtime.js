@@ -28,7 +28,7 @@ export const fight = {
 export const run = {
     previousEvent: undefined,      // last event type, for texts like "finds another enemy"
     multipleEventsCounter: undefined,
-    timeStart: undefined,          // performance.now() when play time was last counted
+    timeStart: undefined,          // loop.now() when play time was last counted
     pause: undefined,
     offer: undefined,              // gold asked at a shrine
     feGanada: undefined,           // faith just gained, for the message
@@ -38,6 +38,7 @@ export const run = {
     afterChapterExe: undefined,
     disablePjBtn: undefined,       // divine buttons temporarily blocked
     disableCenterBtn: undefined,
+    simulation: false,             // simulation mode (src/dev/sim.js): no sound, no spell animations
     forceOnce: undefined,          // dev tools: event number for the next event only
     forceEnemy: undefined,         // dev tools: sprite for the next normal enemy, e.g. "animalejo13"
 };

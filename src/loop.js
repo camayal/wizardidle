@@ -17,6 +17,30 @@
 const TICK_MS = 50;
 const clocks = new Map();   // name -> { fn, ms, due }
 let speed = 1;              // dev tools only: 10 runs every clock ten times faster
+let simulated = false;      // simulation mode (src/dev/sim.js): a virtual clock
+let virtualNow = 0;
+
+// The time clocks are measured in: real time, or the virtual time of a simulation.
+export function now() {
+    return simulated ? virtualNow : performance.now();
+}
+
+// Simulation mode: stop following real time; step() moves the clock instead.
+export function simulate() {
+    simulated = true;
+    clearInterval(timer);
+}
+
+// Simulation mode: jump straight to the next clock that is due and run it.
+// Returns false when no clock is running (nothing will ever happen by itself).
+export function step() {
+    let next = Infinity;
+    for (const clock of clocks.values()) next = Math.min(next, clock.due);
+    if (next === Infinity) return false;
+    virtualNow = Math.max(virtualNow, next);
+    tick();
+    return true;
+}
 
 export function setSpeed(factor) {
     speed = factor;
@@ -27,7 +51,7 @@ export function getSpeed() {
 }
 
 export function every(name, fn, ms) {
-    clocks.set(name, { fn, ms, due: performance.now() + ms / speed });
+    clocks.set(name, { fn, ms, due: now() + ms / speed });
 }
 
 export function stop(name) {
@@ -43,13 +67,13 @@ export function isRunning(name) {
 }
 
 function tick() {
-    const now = performance.now();
+    const time = now();
     for (const [name, clock] of clocks) {
         // a clock run earlier in this tick may have stopped or replaced this one
-        if (clocks.get(name) !== clock || now < clock.due) continue;
+        if (clocks.get(name) !== clock || time < clock.due) continue;
         // keep the rhythm; if the tab was asleep, don't fire a burst to catch up
         const ms = clock.ms / speed;
-        clock.due = clock.due + ms > now ? clock.due + ms : now + ms;
+        clock.due = clock.due + ms > time ? clock.due + ms : time + ms;
         try {
             clock.fn();
         } catch (error) {
@@ -61,4 +85,9 @@ function tick() {
     }
 }
 
-setInterval(tick, TICK_MS);
+const timer = setInterval(tick, TICK_MS);
+
+// Debugging: the names of the clocks running now.
+export function clockNames() {
+    return [...clocks.keys()].join(',');
+}

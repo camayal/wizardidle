@@ -41,5 +41,7 @@ if ('serviceWorker' in navigator) {
 
 // Dev tools: the test bar, only while developing (DEV is false on the live site). Loaded
 // before the game starts, so a test scenario can prepare the wizard first.
-if (DEV) import('./dev/tests.js').catch((error) => console.error('[dev] test bar failed', error)).then(() => initialName());
+// Simulation mode (?sim=1, src/dev/sim.js): a playtest run, much faster than real time.
+if (new URLSearchParams(location.search).has('sim')) import('./dev/sim.js').then((sim) => sim.startSimulation(new URLSearchParams(location.search)));
+else if (DEV) import('./dev/tests.js').catch((error) => console.error('[dev] test bar failed', error)).then(() => initialName());
 else initialName();

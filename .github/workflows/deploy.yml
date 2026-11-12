@@ -36,7 +36,7 @@ jobs:
       - name: Assemble site
         run: |
           mkdir -p _site/legacy
-          rsync -a --exclude '.git' --exclude '.github' current/ _site/
+          rsync -a --exclude '.git' --exclude '.github' --exclude '/tools' current/ _site/
           rsync -a --exclude '.git' --exclude '.github' legacy/ _site/legacy/
 
       # dev tools (the test bar in src/dev/) are for local testing only: switch them off

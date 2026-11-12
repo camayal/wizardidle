@@ -11,7 +11,7 @@ Run by the deploy workflow on the assembled site folder:
 import json, os, sys
 
 site, version = sys.argv[1], sys.argv[2]
-SKIP_DIRS = {'legacy', 'docs', '.github', '.git'}
+SKIP_DIRS = {'legacy', 'docs', 'tools', '.github', '.git'}
 SKIP_FILES = {'precache.json', 'service-worker.js', 'LICENSE', 'browserconfig.xml'}
 
 files = ['./']

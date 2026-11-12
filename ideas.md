@@ -11,7 +11,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.1.0 live since 2026-11-12 (stages 1 and 2: cleanup and speed). **Now:** stage 3a; the dev test bar is built. **Next:** the stats module and the playtest tools ([STATS.md](docs/STATS.md)); then the story with the faith rebalance.
+- **Released:** 2.1.0 live since 2026-11-12 (stages 1 and 2: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the curated stats scroll and records page, then the faith stats and playtests ([FAITH.md](docs/FAITH.md)); then the story with the faith rebalance.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.1.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
@@ -206,6 +206,14 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Stats module, simulation mode, god bots, runner, baseline
+- **Stats** (`src/stats.js`): counters, totals, records and firsts, per wizard (`state.stats`) and per world (`world.stats`); all 55 old counters renamed to dotted names (no migration); one history line per level. Stats, achievements, help and kill pages byte-identical before and after.
+- **Simulation mode** (`?sim=1`, `src/dev/sim.js`): the loop jumps to the next due clock on a virtual clock (`loop.now()`), `Math.random` is seeded, sound, spell animations, hops and drawing are skipped (the logic inside the drawing functions still runs), nothing is read from or written to the saves. The self-revive is now a loop clock instead of a `setTimeout`. A seed always plays the same run; a level-200 run takes about 2 real seconds.
+- **God bots** (`src/dev/bots.js`): idle, active (revive at once, heal below 30%, tithe at shrines), or custom rules from the URL. `set=key:value` overrides config for a run; unknown keys are reported.
+- **Runner** (`tools/playtest.py`, standard library only): serves the repo, runs headless Edge per setting and seed, writes `docs/playtests/<date>-<name>/summary.md` and `runs.csv`. `tools/` is kept off the live site.
+- Found on the way: the enemy hop clock never stopped when no enemy was on screen (harmless for players, it flooded the simulation; now it stops). Headless browsers throttle chained `setTimeout`s, so the sim yields with a `MessageChannel`.
+- **Baseline** ([docs/playtests/2026-11-12-baseline](docs/playtests/2026-11-12-baseline/summary.md)), 10 seeds each to level 200: idle god about 43 h of play (falls 570, all self-revived), active god about 16 h (falls 109). Faith ends in the millions with nothing to spend it on (the faith rebalance's starting point). The guardian freeze hits 4–18 times per run above level 190. One active run ended with negative gold (-148): something can spend more gold than he has; to look into with the faith stats.
 
 ### 2026-11-12: Faith and story agree on chapter X
 

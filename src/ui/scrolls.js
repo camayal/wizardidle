@@ -336,7 +336,7 @@ function statsAchievements() {
 
 // Fill the stats scroll from the wizard's counters, section by section.
 function updateStats(){
-    const secondsInGame = ((state.meta.playTimeMs + (performance.now() - run.timeStart)) / 1000).toFixed(0);
+    const secondsInGame = ((state.meta.playTimeMs + (loop.now() - run.timeStart)) / 1000).toFixed(0);
     ui.statsPage = "<div id='stats'><span class='titles' id='titleStats'>Stats</span><br>" +
         statsWizard(secondsInGame) + statsBattles() + statsMagic() + statsStudy() + statsExploration() +
         statsEconomy() + statsLeisure() + statsSpirituality() + statsAchievements() +
@@ -434,7 +434,7 @@ function updateHelp(){
 
 // Fill the kill scroll: the warning, the kill button and the cemetery.
 function updateKill(){
-    const secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
+    const secondsIngameInstats = ((state.meta.playTimeMs + (loop.now() - run.timeStart))/1000).toFixed(0);
     const txt = '<div id="kill"><span class="titles" id="titleKill">Kill</span><br>' +
     '<div>' + 
     'Do you want to kill <b>' + state.player.name + '</b>?<br><br>' +

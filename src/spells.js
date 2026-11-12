@@ -4,7 +4,7 @@
 import { spells, spellTiers } from './data/spells.js';
 import { pickRandomItem } from './utils.js';
 import { state } from './state.js';
-import { ui } from './runtime.js';
+import { run, ui } from './runtime.js';
 import { playSound } from './audio.js';
 import { withImage } from './ui/render.js';
 
@@ -14,6 +14,7 @@ import { withImage } from './ui/render.js';
 
 // Play a spell animation from img/<spell>.png on the wizard or the enemy (bigger on a critic) and its sound.
 function spell(img, pj, critic = 0, center = 0){
+    if (run.simulation) return;
     const frameWidth = 30, frameHeight = 30;    // size of one frame in the sprite sheet
     let currentFrame = 0, shift = 0;            // animation position, advanced every frame
 

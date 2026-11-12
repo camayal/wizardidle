@@ -4,7 +4,7 @@
 
 import { roundNumbertoLetter } from '../utils.js';
 import { state } from '../state.js';
-import { fight, ui } from '../runtime.js';
+import { fight, run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { setLiveTime } from '../game.js';
 import { MAXLINESINCONSOLE } from '../config.js';
@@ -28,6 +28,14 @@ const npcCanvas = el("npcCanvas");
 
 // Refresh the heading: name, level, XP bar, HP, gold and faith.
 function updateHeading() {
+    if (!run.simulation) showHeading();
+    if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
+    //calcule % of xp bar
+    ui.xpPercent = 1 - (state.player.xpNext - state.player.xp) / (state.player.xpNext - state.player.xpPast)
+};
+
+// The heading on screen (skipped in a simulation, where nobody looks).
+function showHeading() {
     el('pjName').innerText = state.player.name;
     el('lvl').innerText = `Lv. ${state.player.lvl}`;
     el("XPprogressBar").max = state.player.xpNext;
@@ -38,13 +46,7 @@ function updateHeading() {
     el('fe').innerText = roundNumbertoLetter(state.player.faith);
     const hpPercent = state.player.hp / state.player.hpBase;
     el("hpIcon").src = heartMeter(hpPercent);
-
-    if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
-
-    //calcule % of xp bar
-    ui.xpPercent = 1 - (state.player.xpNext - state.player.xp) / (state.player.xpNext - state.player.xpPast)
-
-};
+}
 
 // Heart icon for the enemy's remaining HP (fraction from 0 to 1).
 function heartMeter(hpPercent){
@@ -76,6 +78,7 @@ ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 // Draw a background (a zone stage, altar, inn...) and move the map marker.
 function loadBackground(back) {
     ui.currentBackGround = back;
+    if (run.simulation) return;     // in a simulation only what's on the scene matters
     esceneCanvas.style.background = `url('img/${back.toLowerCase()}.png') no-repeat`;
     esceneCanvas.style.backgroundSize = "contain";
     //change bocadillo location
@@ -106,6 +109,7 @@ function withImage(canvasName, src, draw) {
 
 // Draw the wizard; his sprite changes with the level (img/lvl<N>.png, every 10 levels).
 function loadCanvasChar(lvl, squareSide, headLevel) {
+    if (run.simulation) return;
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
     withImage("pj", `img/lvl${Math.floor(lvl / 10) * 10}.png`, (img) => {
@@ -139,6 +143,7 @@ function wizardName() {
 
 // Draw another image in the wizard's place (e.g. the skull when he falls).
 function loadAlterCanvasChar(imagen, squareSide, headLevel) {
+    if (run.simulation) return;
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
     const img = new Image();
@@ -154,6 +159,7 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
 // Draw the enemy or object on the right, sized by type (bosses, objects, the rest).
 function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, charWidthIn=ui.charWidth, charHeightIn=ui.charHeight) {
     state.npc = npc;
+    if (run.simulation) return;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     withImage("npc", `img/${npc}.png`, (img) => {
@@ -214,6 +220,8 @@ function animateNPC() {
             ui.frameCounter = 0;
             loop.stop("animNPC");
         }
+    } else {
+        loop.stop("animNPC");   // nobody left to hop (v1 kept this clock running forever)
     }
 };
 
@@ -222,6 +230,7 @@ function animateNPC() {
 // Add a line at the top of the console, keeping at most MAXLINESINCONSOLE lines.
 function print(data) {
     setLiveTime(); //set seconds of game and add to total time
+    if (run.simulation) return;     // nobody reads the console in a simulation
     el("console").innerHTML = `${data}<br>${el("console").innerHTML}`;
     const brSplit = el('console').innerHTML.split("<br>")
     if (brSplit.length > MAXLINESINCONSOLE) {

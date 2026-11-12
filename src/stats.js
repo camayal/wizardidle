@@ -16,10 +16,11 @@
 
 import { state, world } from './state.js';
 import { run } from './runtime.js';
+import * as loop from './loop.js';
 
 // Play time including the session running now.
 export function playTime() {
-    const running = run.timeStart === undefined ? 0 : performance.now() - run.timeStart;
+    const running = run.timeStart === undefined ? 0 : loop.now() - run.timeStart;
     return Math.round(state.meta.playTimeMs + running);
 }
 

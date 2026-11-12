@@ -4,7 +4,7 @@ The technical base the professions plan ([PROFESSIONS.md](PROFESSIONS.md)) and t
 1. **Stats:** record almost everything that happens, so achievements, quests, the story and balance decisions have numbers to work from. This is the "Track almost everything as stats" backlog entry in `ideas.md`.
 2. **Playtest tools:** fast, repeatable simulated runs with god bots, because the author decided that **no balance number is set without a playtest**.
 
-Written 2026-11-12. Nothing is built yet.
+Written 2026-11-12. **Built 2026-11-12:** steps 1–4 below (the stats module, simulation mode, god bots and the runner, and the baseline in `docs/playtests/`); the curated scroll and records page are still open.
 
 ---
 

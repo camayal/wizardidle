@@ -14,6 +14,7 @@ import { playSound } from './audio.js';
 import { drawWizard, print, showStage, updateHeading, wizardName } from './ui/render.js';
 import { defineObjectSize, getEM } from './ui/layout.js';
 import { el } from './ui/dom.js';
+import * as loop from './loop.js';
 
 const version = "2.1.0"; // v1: "02nov2020_10pm"
 let uniqueID;
@@ -63,7 +64,7 @@ ui.healIcon = `<img class='imgInConsole' height='${ui.em}' src='img/heal.png'/> 
 
 // Load the wizard on screen and start the master clock (first run: level up from 0 to 1).
 function start() {
-    run.timeStart = performance.now()
+    run.timeStart = loop.now()
     
     playSound("start");
     state.npc = "";
@@ -101,8 +102,8 @@ function pauseToggle(){
 
 // Add the time since the last call to the wizard's total play time.
 function setLiveTime(){
-    state.meta.playTimeMs += performance.now() - run.timeStart;
-    run.timeStart = performance.now()
+    state.meta.playTimeMs += loop.now() - run.timeStart;
+    run.timeStart = loop.now()
 }
 
 

@@ -5,6 +5,7 @@ import { getRandomInt, pickRandomItem, roundNumbertoLetter } from './utils.js';
 import { stat, state } from './state.js';
 import { stats } from './stats.js';
 import { fight, run, ui } from './runtime.js';
+import * as loop from './loop.js';
 import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
@@ -28,7 +29,7 @@ function reviveByTouch() {
     spell("spellMultiDivine_28", true);
     print(`${wizardName()} feels the divine touch!`);
     if (!!fight.autorevive) {
-        clearTimeout(fight.autorevive);
+        loop.stop("selfRevive");
         fight.autorevive = "";
     }
     state.player.hp = state.player.hpBase;

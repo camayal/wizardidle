@@ -114,6 +114,16 @@ export function saveGame() {
     write(WORLD_KEY, world);
 }
 
+// Simulation mode (src/dev/sim.js): a new wizard and an empty world, never read from or
+// written to the saves.
+export function freshStart() {
+    saving = false;
+    for (const key of Object.keys(state)) delete state[key];
+    Object.assign(state, newState());
+    for (const key of Object.keys(world)) delete world[key];
+    Object.assign(world, newWorld());
+}
+
 // Kill the wizard: forget the current save (the world, with the cemetery, stays).
 // Saving stops so nothing writes the old wizard back before the page reloads.
 export function deleteSave() {
