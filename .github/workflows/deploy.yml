@@ -24,6 +24,7 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
+          ref: main      # always publish main, even when the workflow is started by hand from another branch
           path: current
 
       - name: Checkout legacy v1.0.0
