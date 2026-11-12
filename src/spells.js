@@ -5,7 +5,6 @@ import { spells, spellTiers } from './data/spells.js';
 import { pickRandomItem } from './utils.js';
 import { state } from './state.js';
 import { ui } from './runtime.js';
-import { masterTime } from './config.js';
 import { playSound } from './audio.js';
 import { withImage } from './ui/render.js';
 
@@ -17,9 +16,6 @@ import { withImage } from './ui/render.js';
 function spell(img, pj, critic = 0, center = 0){
     const frameWidth = 30, frameHeight = 30;    // size of one frame in the sprite sheet
     let currentFrame = 0, shift = 0;            // animation position, advanced every frame
-
-    //avoid spell animation in high speed debug
-    if(masterTime < 500){return}
 
 
     let volume;

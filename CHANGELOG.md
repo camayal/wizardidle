@@ -13,6 +13,9 @@
 - Faster: spell animations stop after their last frame (before, every spell ever cast kept redrawing forever; 19x less drawing work over a 30-minute game).
 - Faster: images are loaded once and reused instead of on every redraw.
 - Fixed: an image that loaded late could be drawn over a newer one.
+- Code: removed the old speed-debug shortcuts that could no longer run.
+- Code: enemy data uses true/false instead of "true"/"1" text.
+- Code: the inn, shrine, loot, enemy choice and divine touch split into named steps.
 - Restored the disabled developer console notes, lost in the 2.0.0 module split.
 
 ## 2.0.0 — 2026-11-11

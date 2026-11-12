@@ -271,7 +271,6 @@ function afterChapter(){
     switch(lvl){
         case 30:
         clearNPC();
-        state.npc = "";
         showStage();
         print(`${wizardName()} leaves the shrine and continues the journey`);
         break;       

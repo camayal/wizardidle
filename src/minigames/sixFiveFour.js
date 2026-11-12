@@ -252,7 +252,6 @@ function finalScoreSixFiveFour(nameDicePlayer){
             cargoFirstPlayer = 0;
             resetSixFiveFour()
             clearNPC();
-            state.npc = "";
             showStage();
             run.restAtInn = false;
             endEvent();

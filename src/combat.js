@@ -75,7 +75,7 @@ function defeatEnemy() {
     } else if (fight.hydraCombat) {
         count("HydrasKilled");
         delete state.hydraHeads[fight.hydra];
-    } else if (enemySprites[fight.enemyAndNumber].rare == 1) {
+    } else if (enemySprites[fight.enemyAndNumber].rare) {
         count("rareEnemiesKilled");
     } else {
         count("EnemiesKilled");
@@ -87,7 +87,7 @@ function defeatEnemy() {
     // faith: cleansing a corrupted enemy gains faith; while in sin every kill costs faith
     let faithText;
     if (!fight.bossCombat && !fight.hydraCombat) {
-        if (enemySprites[fight.enemyAndNumber].corrupted == "1" && !state.player.inSin) {
+        if (enemySprites[fight.enemyAndNumber].corrupted && !state.player.inSin) {
             run.feGanada = calculateFe() * 5;
             run.feGanada *= state.player.faithMultiplier;
             state.player.faith = state.player.faith + run.feGanada;
@@ -110,7 +110,7 @@ function defeatEnemy() {
 
 // Gold (if the enemy carries any) and XP for a won fight, with the victory message.
 function victoryRewards(faithText) {
-    if (enemyTypes[fight.enemy].hasgold == "true") {
+    if (enemyTypes[fight.enemy].hasgold) {
         playSound("coins");
         addGold();
         if (fight.bossCombat) {
@@ -120,7 +120,7 @@ function victoryRewards(faithText) {
             addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
             print(`${fight.enemyName} was defeated and a treasure has been found ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * 15)}`);
         } else {
-            addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+            addXP(enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1.5);
             print(`${fight.enemyName} was defeated and looted ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold)}${faithText}`);
         }
     } else if (fight.bossCombat) {
@@ -130,7 +130,7 @@ function victoryRewards(faithText) {
         addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
         print(`${fight.enemyName} was defeated`);
     } else {
-        addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+        addXP(enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1.5);
         print(`${fight.enemyName} was defeated${faithText}`);
     }
 }
@@ -157,7 +157,7 @@ function wizardFalls() {
     let lootedText = "";
     // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:
     // fight.enemy was already empty. A fallen enemy can't take the wizard's gold.
-    if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold == "true") {
+    if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold) {
         const goldLooted = getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 2);
         state.player.gold = state.player.gold - goldLooted;
         lootedText = ` and loses some gold (${ui.goldIcon}-${roundNumbertoLetter(goldLooted)})`;
@@ -220,72 +220,72 @@ function enemyEV(){
 }
 
 
+// Creatures that get no personal name ("A slime", not "Zubruwi the slime").
+const NAMELESS = ["baba", "el_esqueleto", "animalejo", "polipoide", "momia"];
+
 // Pick the opponent for the current zone (sometimes the zone boss), draw it, name it and start the battle.
 function getEnemy() {
-    //generate a unique type of attack for each enemy
     fight.bossCombat = false;
     fight.hydraCombat = false;
     if (YesOrNot(config.balance.pGetBoss, 0)) {
-        playSound("boss");
-        count("Bosses");
-        fight.bossCombat = true;
-        fight.bossMultiplier = 2.5;
-        fight.bossGoldMultiplier = 5;
-        const boss = zones[state.zone.current].boss;
-        fight.enemy = boss;
-        count(`typeBoss_${boss}`)
-        loadNPC(boss);
-        fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
-        fight.enemyHPbase = Math.round(fight.enemyHP)
-        updateHeartNPC()
-        fight.enemyName = `<span style='color:DarkRed'><img class='imgInConsole' height='${ui.em}' src='img/boss.png'/> ${enemyTypes[boss].name.toUpperCase()}</span>`;
+        setUpBoss();
     } else {
-        fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
-        count(`enemy_${fight.enemy}`);
-        const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
-        //random number of the image max    
-        //select a spell based on the school of enemy
-        fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
-        fight.enemyAndNumber = fight.enemy + number;
-        if (enemySprites[fight.enemyAndNumber].rare == 1){
-            count("rareEnemyEncounters");
-        }else{
-            count("enemyEncounters");
-        }
-        loadNPC(fight.enemy + number);
-        fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
-        fight.enemyHPbase = Math.round(fight.enemyHP)
-        updateHeartNPC()
-        const raretext = (enemySprites[fight.enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
-        
-        if (fight.enemy == "baba" || fight.enemy == "el_esqueleto" || fight.enemy == "animalejo" || fight.enemy == "polipoide" || fight.enemy == "momia") {
-            //avoid name creatures and others
-            fight.enemyName = `A ${enemySprites[fight.enemy + number].altName}${raretext}`;
-        } else if (fight.enemy == "el_capricor"){
-            fight.enemyName = `The ${capitalize(enemyTypes[fight.enemy].name)}${raretext}`;
-        }
-        else {
-            if (enemySprites[fight.enemy + number].altName){//choose the altername if have some
-                fight.enemyName = `<i>${randomName()}</i> the ${capitalize(enemySprites[fight.enemy + number].altName)}${raretext}`;
-            }else{
-                fight.enemyName = `<i>${randomName()}</i> the ${capitalize(enemyTypes[fight.enemy].name)}${raretext}`;
-            }
-        }
+        setUpEnemy();
     }
-    let startBattleText = `has entered in ${run.previousEvent == "enemy" ? "another" : "a"} battle!,finds ${run.previousEvent == "enemy" ? "another" : "an"} enemy!,start ${run.previousEvent == "enemy" ? "another" : "a"} fight!`
-    if (fight.bossCombat){
+    let startBattleText = `has entered in ${run.previousEvent == "enemy" ? "another" : "a"} battle!,finds ${run.previousEvent == "enemy" ? "another" : "an"} enemy!,start ${run.previousEvent == "enemy" ? "another" : "a"} fight!`;
+    if (fight.bossCombat) {
         // v1 overwrote previousEvent before reading it here, so this always said "a Boss"
-        const article = (run.previousEvent == "boss" ? "another" : "a")
-        startBattleText = `has entered in ${article} battle with a Boss!,finds ${article} Boss!,start ${article} fight with a Boss!`
+        const article = (run.previousEvent == "boss" ? "another" : "a");
+        startBattleText = `has entered in ${article} battle with a Boss!,finds ${article} Boss!,start ${article} fight with a Boss!`;
         run.previousEvent = "boss";
-    }else{
-        if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!"
+    } else {
+        if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!";
         run.previousEvent = "enemy";
     }
     print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
-    
     startEvent(battle);
-};
+}
+
+// The zone boss: 2.5x HP, 5x gold.
+function setUpBoss() {
+    playSound("boss");
+    count("Bosses");
+    fight.bossCombat = true;
+    fight.bossMultiplier = 2.5;
+    fight.bossGoldMultiplier = 5;
+    const boss = zones[state.zone.current].boss;
+    fight.enemy = boss;
+    count(`typeBoss_${boss}`);
+    loadNPC(boss);
+    fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
+    fight.enemyHPbase = Math.round(fight.enemyHP);
+    updateHeartNPC();
+    fight.enemyName = `<span style='color:DarkRed'><img class='imgInConsole' height='${ui.em}' src='img/boss.png'/> ${enemyTypes[boss].name.toUpperCase()}</span>`;
+}
+
+// A normal enemy of the zone: one of its family's sprites, with the spell of its type.
+function setUpEnemy() {
+    fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
+    count(`enemy_${fight.enemy}`);
+    const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
+    fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
+    fight.enemyAndNumber = fight.enemy + number;
+    count(enemySprites[fight.enemyAndNumber].rare ? "rareEnemyEncounters" : "enemyEncounters");
+    loadNPC(fight.enemy + number);
+    fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
+    fight.enemyHPbase = Math.round(fight.enemyHP);
+    updateHeartNPC();
+    fight.enemyName = enemyDisplayName(enemySprites[fight.enemyAndNumber]);
+}
+
+// "A slime", "The Capricor", or a random name plus the sprite's own name; rare ones are marked.
+function enemyDisplayName(sprite) {
+    const raretext = (sprite.rare ? " <b><small>(RARE)</small></b> " : "");
+    if (NAMELESS.includes(fight.enemy)) return `A ${sprite.altName}${raretext}`;
+    if (fight.enemy == "el_capricor") return `The ${capitalize(enemyTypes[fight.enemy].name)}${raretext}`;
+    if (sprite.altName) return `<i>${randomName()}</i> the ${capitalize(sprite.altName)}${raretext}`;
+    return `<i>${randomName()}</i> the ${capitalize(enemyTypes[fight.enemy].name)}${raretext}`;
+}
 
 
 

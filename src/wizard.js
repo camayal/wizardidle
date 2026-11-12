@@ -109,9 +109,9 @@ function addGold(){
          state.player.gold = state.player.gold + (state.player.lastBattleGold * 15);
          count("GoldFromBosses", (state.player.lastBattleGold * (15)));
     }else{
-        if (enemyTypes[fight.enemy].hasgold == "true") {
+        if (enemyTypes[fight.enemy].hasgold) {
          possibleGold = state.player.hpBase * config.balance.rGold;
-         const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
+         const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1)
          state.player.lastBattleGold = goldcurrentBattle;
          state.player.gold = state.player.gold + goldcurrentBattle;
          count("GoldFromEnemies", goldcurrentBattle);

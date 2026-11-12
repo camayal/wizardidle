@@ -181,6 +181,14 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Stage 2, tidy data and medium functions
+
+- Removed the `masterTime < 500` speed-debug branches (masterTime is a constant now, they could never run).
+- Enemy data: `hasgold`, `rare`, `corrupted` are booleans instead of "true"/"1" strings; the 10 checks read naturally.
+- Split `searchInn`, `doOffering`, `getBotin`, `getEnemy`, `pjBtn` into named steps; `clearNPC()` also forgets the npc (it always went together).
+- Pace re-checked over 4 runs of 10 game-minutes per version: 48 vs 48 encounters, 9 vs 9 deaths.
+- Noted a v1 text bug in `wakeUp()` (HP counted twice when choosing the message), recorded in the roadmap.
+
 ### 2026-11-12: Stage 2 started, the endless animations
 
 - Measured first (10 and 30 virtual minutes, counting animation callbacks, images, sounds and console writes). The only big cost was the spell animations: up to 999 animation callbacks per second, growing with play time. Images, sounds and the console are small.

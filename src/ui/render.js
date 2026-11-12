@@ -7,7 +7,7 @@ import { state } from '../state.js';
 import { fight, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { setLiveTime } from '../game.js';
-import { masterTime, MAXLINESINCONSOLE } from '../config.js';
+import { MAXLINESINCONSOLE } from '../config.js';
 import { logro } from '../achievements.js';
 import { localizarBocadillo } from './scrolls.js';
 import { el } from './dom.js';
@@ -122,6 +122,7 @@ function drawWizard() {
 // Remove the enemy (or object) from the right side of the scene.
 function clearNPC() {
     npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+    state.npc = "";
 }
 
 // Show the background of the stage the wizard is on.
@@ -184,9 +185,6 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
 // Make the wizard hop for a few frames (run by the animPJ clock).
 function animatePJ() {
 
-    //avoid  animation in high speed debug
-    if(masterTime < 500){loop.stop("animPJ");return}
-
 
     ui.frameCounter += 1;
     switch (ui.frameCounter) {
@@ -203,9 +201,6 @@ function animatePJ() {
 
 // Make the enemy hop for a few frames (run by the animNPC clock).
 function animateNPC() {  
-
-    //avoid  animation in high speed debug
-    if(masterTime < 500){loop.stop("animNPC");return}
 
 
     if (state.npc != ""){
