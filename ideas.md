@@ -201,7 +201,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ### 2026-11-12: Stage 2 started, the endless animations
 
-- Measured first (10 and 30 virtual minutes, counting animation callbacks, images, sounds and console writes). The only big cost was the spell animations: up to 999 animation callbacks per second, growing with play time. Images, sounds and the console are small.
+- Measured first (10 and 30 virtual minutes, counting animation callbacks, images, sounds and console writes). The only big cost was the spell animations: up to 999 animation callbacks per second in the 10-minute baseline runs (646/s in the 30-minute comparison), growing with play time. Images, sounds and the console are small.
 - Spell animations now stop after their last frame; images are cached and a late-loading image can't overwrite a newer one.
 - 30-minute game: 72,329 → 3,730 animation callbacks, peak 646/s → 50/s. Wizard sprite verified pixel-identical; gameplay suite zero errors.
 
@@ -230,6 +230,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - One short comment above each of the 95 functions; stale comments replaced (old storage API, "possible bug" note in studyEV, which was checked and is fine).
 - The author's Spanish story plans in `src/story.js` translated line by line, plus the few other Spanish comments.
 - Found a v1 bug in the chapter keys (`lvl60`/`lvl90` twice, `lvl99`, `lv200`); left as is to keep gameplay identical, recorded in the roadmap for stage 3.
+
+### 2026-11-11: Stage 1 steps 1-3, var gone and helpers
+
+- Step 1: 157 `var` statements became `const`/`let` with a scope-aware tool that only converted what provably couldn't change behavior.
+- Step 2: helpers for repeated snippets (`startEvent`, `endEvent`, `nextEvent`, `showStage`, `wizardName`, `el`). The tests caught three mistakes in the replacement script (helpers calling themselves, `events.js` importing itself, a local variable named like the new `el`), fixed before pushing. The module checker now also checks that imports match exports, self-imports, duplicate names and shadowed imports.
+- Step 3: the 92 remaining `var` converted by hand (one `let` per name where first needed); `YesOrNot()` and `heartMeter()` rewritten.
 
 ### 2026-11-11: Stage 1 step 4, dead code removed
 
