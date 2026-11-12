@@ -2,17 +2,19 @@
 
 Work happens on `dev`; `main` is the live site and only gets playable versions. Each stage starts when the one before it is done.
 
-## 1. Clean up the code
+## 1. Clean up the code (done 2026-11-11)
 
-- [ ] Update the code to modern JavaScript (`let`/`const`, template strings, arrow functions where they help).
-- [ ] Remove redundancy: repeated blocks (e.g. the same "end of event, back to the event picker" code in many places), copy-pasted texts, duplicated constants.
-- [ ] Make it more manageable: smaller functions with clear names, related code together.
-- [ ] Annotate each part of the code: a short comment per module and per function saying what it does. No excessive comments.
-- [ ] Keep gameplay identical, checked with the same tests as the v2 rebuild.
+- [x] Update the code to modern JavaScript (`let`/`const`, template strings, arrow functions where they help).
+- [x] Remove redundancy: repeated blocks (e.g. the same "end of event, back to the event picker" code in many places), copy-pasted texts, duplicated constants.
+- [x] Make it more manageable: smaller functions with clear names, related code together.
+- [x] Annotate each part of the code: a short comment per module and per function saying what it does. No excessive comments.
+- [x] Keep gameplay identical, checked with the same tests as the v2 rebuild.
 
 ## 2. Modern, faster, less redundant
 
 Gate before moving on: the whole code base is modern, measurably faster where it matters (game loop, drawing, console output), and free of the redundancy found in stage 1.
+
+- [ ] Spell animations never stop (a v1 bug, found in stage 1): when the last frame is drawn, `spell()` cancels the frame request but then requests another one, so every spell ever cast keeps redrawing about 60 times per second, each loop clearing the shared spell canvas. Fix first: it costs CPU and can make spells flicker.
 
 ## 3. The story
 

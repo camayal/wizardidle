@@ -11,7 +11,7 @@ import { spell } from '../spells.js';
 import { playSound } from '../audio.js';
 import { clearNPC, print, showStage, updateHeading, wizardName } from '../ui/render.js';
 
-//TODO add idx for all this part and archievements
+//TODO add idx for all this part and achievements
 //temp dicegame
 //define dice and set 1 as default
 let dicesToRoll = {a: 1,b: 1,c: 1,d: 1,e: 1}
@@ -160,7 +160,7 @@ function bankDie(face) {
 // The cargo is good enough: end the turn early.
 function skipRoll(enemyStart, nameDicePlayer) {
     endEvent();
-    print(`${nameDicePlayer} thinks the cargo is enought and skip`);
+    print(`${nameDicePlayer} thinks the cargo is enough and skips`);
     startEvent(function () { evalSixFiveFour(enemyStart, nameDicePlayer); });
 }
 

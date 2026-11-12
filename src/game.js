@@ -81,7 +81,7 @@ function start() {
     updateHeading();
     drawWizard();
     showStage();
-    //load previous locality random scenaria
+    //load previous locality random scenery
     nextEvent();
     //trigger event selecter
 

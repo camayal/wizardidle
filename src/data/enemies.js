@@ -731,7 +731,7 @@ export const enemySprites = {
     mother7: {type:"boss", rare:"0", corrupted:"0", altName:""},
     mother8: {type:"boss", rare:"0", corrupted:"0", altName:""},
     mother9: {type:"boss", rare:"0", corrupted:"0", altName:""},
-    polipoide1: {type:"divine", rare:"1", corrupted:"0", altName:"Divine polipoid"},
+    polipoide1: {type:"divine", rare:"1", corrupted:"0", altName:"Divine polypoid"},
     polipoide10: {type:"wizard", rare:"0", corrupted:"0", altName:"polypoid"},
     polipoide11: {type:"fire", rare:"0", corrupted:"0", altName:"polypoid"},
     polipoide12: {type:"nature", rare:"0", corrupted:"0", altName:"polypoid"},

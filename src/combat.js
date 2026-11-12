@@ -307,11 +307,11 @@ function getHydra(newEncounter = false){
     if (newEncounter){
         count("Hydras");
         count(`typeofHydras_${fight.hydra}`)
-        startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
+        startBattleText = "has entered in a battle with a hydra!,finds a hydra!,start a fight with a hydra!"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
         startEvent(battle);
     } else {
-        startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
+        startBattleText = "sees how another head grows!, sees how the hydra regenerates its health points"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
     }
     

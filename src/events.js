@@ -150,9 +150,9 @@ function exploreEV() {
         if(state.player.gold > 0){
             //call the game function
             if (run.previousEvent == "sixfivefour"){
-                textDice = pickRandomItem("decides come back to the gaming house, returns to the dice house,wants to spend more coins at the gaming house");
+                textDice = pickRandomItem("decides to come back to the gaming house, returns to the dice house,wants to spend more coins at the gaming house");
             }else{
-                textDice = pickRandomItem("finds a gamming house and enters,wants to play 6-5-4,wants to gambling");
+                textDice = pickRandomItem("finds a gaming house and enters,wants to play 6-5-4,wants to gamble");
             }
             print(`${wizardName()} ${textDice}`);
             loadBackground(`${state.zone.current}_casadados`);
@@ -160,7 +160,7 @@ function exploreEV() {
             run.previousEvent = "sixfivefour"
             startEvent(sixfivefour);       
         }else{
-            print(`${wizardName()} finds a gamming house but does not have gold to bet`);
+            print(`${wizardName()} finds a gaming house but does not have gold to bet`);
             nextEvent();
         }
     }else {
@@ -221,7 +221,7 @@ function prayEV(){
         count("altar");
         count(`altar_zone_${state.zone.current}`);
         if (run.previousEvent == "enterAltar"){
-            textCapel = pickRandomItem("decides come back to the shrine, returns to the shrine,wants to spend more time at the temple");
+            textCapel = pickRandomItem("decides to come back to the shrine, returns to the shrine,wants to spend more time at the temple");
         }else{
             textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }

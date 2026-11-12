@@ -249,7 +249,7 @@ function statsBattles() {
         statLine("Bosses defeated", counterText("BossesKilled")) +
         (hydras ? `Hydras found: ${counterText("Hydras")} {${counterList("typeofHydras_")}}<br>` : "") +
         (hydras ? statLine("Hydras defeated", counterText("HydrasKilled")) : "") +
-        (hydras ? statLine("Hydras heads chopped off", counterText("HydrasHeadCut")) : "") +
+        (hydras ? statLine("Hydra heads chopped off", counterText("HydrasHeadCut")) : "") +
         statLine("Falls", counterText("Deaths")) +
         statLine("Current flawless victory", counterText("Combo")) +
         statLine("Longest flawless victory", counterText("longestCombo"));
@@ -301,7 +301,7 @@ function statsEconomy() {
 function statsLeisure() {
     return statSection("Leisure") +
         statLine("Rests in inns", counterText("taberna")) +
-        statLine("Gold spend at inns", counterText("GoldSpendInn")) +
+        statLine("Gold spent at inns", counterText("GoldSpendInn")) +
         statLine("Campings", counterText("camping"));
 }
 
@@ -328,7 +328,7 @@ function statsAchievements() {
     const won = countLogros();
     const total = Object.keys(logro).filter((key) => logro[key].name && !logro[key].planned).length;
     return statSection("Achievements") +
-        statLine("Currenly won", won) +
+        statLine("Currently won", won) +
         "Completion: " + Math.round((won / total) * 100) + "%<br>";
 }
 
@@ -362,7 +362,7 @@ function updateHelp(){
     const txt = '<div id="help"><span class="titles" id="titleHelp">Help</span><br>' +
    '<div class="faq">WizardIDLE, what is this?</div><div class="a">It is a game with typical elements of a common RPG game, the only difference is the player role. You are the god of the wizard and your interaction is limited due his free will. With or withour your help the wizard can reach to his fate being a deep believer or a hardened atheist.</div>' +
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true idle game, you must do nothing. The wizard can perform all actions without your help. This is a different way to play, watching what other beings do without your control but some interference (you can interact with miracles). <b><i>This is a god like game</i></b>.</div>' +
-   '<div class="faq">Graphical layout</div><div class="a">The screen is divided in three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, heal points, gold and faith points. In this panel you can found the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where is printed all actions performed by the wizard.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to intect</i> with the wizard, non-player caracters or environments. </div>' +
+   '<div class="faq">Graphical layout</div><div class="a">The screen is divided in three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, health points, gold and faith points. In this panel you can found the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where is printed all actions performed by the wizard.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to intect</i> with the wizard, non-player caracters or environments. </div>' +
    '<div class="faq">Icons explanation</div><div class="a">' +
         '<div class="divTableRow"><div class="divTableCell"><img src="img/boss.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Boss, this encounter is harder than others, the reward is multiplied too.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><img src="img/attack.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Attack, followed by the amount of damage against the wizard or the enemy.</div></div>' +

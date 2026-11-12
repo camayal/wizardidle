@@ -11,7 +11,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.0.0 is live since 2026-11-11 (tag `v2.0.0`). **Next: stage 1 of the roadmap**, clean up the code (modern JS, less redundancy, more manageable, short annotations). Then stage 2 (modern and faster), stage 3 (the story), stage 4 (new features).
+- **Released:** 2.0.0 is live since 2026-11-11 (tag `v2.0.0`). **Stage 1 (code cleanup) done. Next: stage 2**, modern and faster (first: the endless spell animations). Then stage 3 (the story), stage 4 (new features).
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.0.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
@@ -180,6 +180,13 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-11: Stage 1 step 8, tidy-ups; stage 1 done
+
+- 223 single-line concatenations became template strings (only where it can't change the text); `spell()` keeps its own animation counters instead of taking four constant arguments; `drawWizard()`, `clearNPC()` and `studyPhase()` replace repeated snippets. Stats page and all 8 layout cases verified identical.
+- Player-facing typos fixed (health points, Currently, spent, enough, gaming, gamble, a hydra, polypoid...). Internal names that live in saves or file names (`sucessStudy`, `polipoide`) left as they are.
+- Found a v1 performance bug: spell animations never stop and keep redrawing forever. First item of stage 2 in the roadmap.
+- **Stage 1 is done.** Next: stage 2 (modern and faster).
 
 ### 2026-11-11: Stage 1 step 7, layout
 
