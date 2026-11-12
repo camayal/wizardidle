@@ -41,6 +41,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-10 | Offline mode: network first for code, stored copy first for art and sound, new cache per release | Online players always get the newest version; offline still plays; old versions don't linger |
 | 2026-11-11 | Route after 2.0.0: 1 clean up the code, 2 modern and faster, 3 the story, 4 new features | The author's order: a clean, fast base before adding content |
 | 2026-11-11 | CHANGELOG is a flat list of short bullets per version, no narrative or subtitles | The author's preference for readability |
+| 2026-11-11 | Professions: one trade per wizard, a second at chapter III; the wizard asks the god for guidance (the god chooses only with faith above 0) | The old help's "one of three", with the god as guide rather than master. All 11 decisions in [docs/PROFESSIONS.md](docs/PROFESSIONS.md) |
 
 ## Ideas backlog
 
@@ -172,7 +173,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
 - Travel favor: what earns it (a faith threshold, a chapter, an achievement), and can the wizard lose it (e.g. while in sin or atheist)?
 - Story: keep the old arc as written (sacred staff → corruption → killing Midas → lynching → disobedience → war on the god), or revise it? Should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?
-- Professions (*partly answered by [docs/PROFESSIONS.md](docs/PROFESSIONS.md), which proposes one trade per wizard, chosen by him; its own open questions are at the end*): keep the old trio (Alchemy, Enchanting, Writing) and the 15 recipes, or rethink them? What should each item actually do (e.g. teleportation scroll ↔ map rework, divine binding ↔ faith)? Does the wizard pick one himself (free will) or does the player choose? One at a time or several, with their own levels? What do they produce: gold, faith, items, spell boosts? Do they tie into the faith rebalance or atheism?
+- ~~Professions: keep the old trio (Alchemy, Enchanting, Writing) and the 15 recipes, or rethink them? What should each item actually do (e.g. teleportation scroll ↔ map rework, divine binding ↔ faith)? Does the wizard pick one himself (free will) or does the player choose? One at a time or several, with their own levels? What do they produce: gold, faith, items, spell boosts? Do they tie into the faith rebalance or atheism?~~ **Decided 2026-11-11:** see "Decisions" in [docs/PROFESSIONS.md](docs/PROFESSIONS.md); a few smaller questions remain there.
 - Faith rebalance: what feels off today: too little faith, touches too expensive, too easy or too hard to fall into atheism? And should atheism stay a one-way fate, or could the wizard drift back and forth?
 - Map revamp: which places are known from the start for story reasons, and how are the others discovered (visiting, rumours, scrolls, the travel favour)? Which areas get an inner map first? Which ways should the character be able to move? (walking between neighbouring zones, teleporting, being pushed by events or bosses, choosing a destination...) And should the map itself look or behave differently, or only how the location changes?
 - Should the dev console (`exe()`, unlocked by clicking name → level → faith icon) stay in v2 as a secret, or move behind a debug flag?
@@ -180,6 +181,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-11: Professions decided
+
+- The author decided the plan's open questions: one trade per wizard plus a second at chapter III; the wizard asks the god for guidance (the god chooses only with faith above 0, otherwise he decides by his skills); 2 zones per reagent (to revisit); rings wear out; all four god touches ship together; the Town dice quirk is fixed with the vendors; no mana; holy recipes later; vendors as scene events; divine binding refused by atheists and burnt at chapter X. Recorded in `docs/PROFESSIONS.md`.
 
 ### 2026-11-11: Professions plan
 

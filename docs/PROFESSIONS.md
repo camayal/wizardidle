@@ -9,6 +9,26 @@ Sources:
 
 ---
 
+## Decisions (2026-11-11, by the author)
+
+| Question | Decision |
+|---|---|
+| How many professions | **One per wizard; a second unlocks at chapter III (lvl 50)**, when the story has him "seek knowledge and artefacts" |
+| Who picks | **The wizard picks, but first asks the god for guidance.** At that moment the god can choose by touching a trainer, **only with faith above 0** |
+| If the god is silent | **He decides himself**, weighted by his skills ("hears only silence and decides alone") |
+| Reagent zones | **2 zones each**, as in the code today. *Not fully sure: revisit after playtesting* |
+| Rings | **Wear out** (crack after ~300 fights) |
+| God's touches | **All four ship with professions:** blessed craft, generous merchant, item offerings, bountiful harvest |
+| Town dice-house quirk | **Fixed in the same change that adds vendors**, with the pace change in the CHANGELOG |
+| Mana potion | **No mana in the game:** the potion means "more spells this fight" (attack and heal chances up) |
+| Holy recipes | **Yes, later:** one per trade after the base 15 work |
+| Vendors and trainers | **Scene events** in the City and Town, like the dice house |
+| Divine binding | **An atheist wizard refuses it; at chapter X he burns the ones he carries** |
+
+The sections below are updated to match.
+
+---
+
 ## 1. What the author already decided
 
 From the old help (translated):
@@ -69,15 +89,19 @@ Reagents scale with **nothing**: a mushroom is a mushroom at level 1 or 200. Wha
 
 ## 3. The three professions
 
-### Who chooses
+### Who chooses (decided)
 
-**Recommendation: the wizard chooses, once, and the god only watches.** That's the spirit of the game ("the player is a mere spectator"). It happens the first time he meets a trainer (section 6), at **level 10** or later. The choice is weighted by his trained skills: *intellect* (`pStudy`) leans toward Writing, *restoration knowledge* (`fHeal`) toward Alchemy, *avarice* (`pBotin`) toward Enchanting. Each new wizard can end up with a different trade, which makes the cemetery more varied ("Name (lvl 87, alchemist) died at…").
+The first time he meets a trainer (section 6) at **level 10** or later, the wizard **asks the god for guidance** ("kneels and asks his god which path to follow"). For a few seconds the scene shows the trainers:
+- **With faith above 0**, the god can **touch a trainer**, and the wizard follows that choice.
+- **With no touch, or faith at 0 or below,** he decides himself, weighted by his trained skills: *intellect* (`pStudy`) leans toward Writing, *restoration knowledge* (`fHeal`) toward Alchemy, *avarice* (`pBotin`) toward Enchanting. ("hears only silence and decides alone").
 
-He can still **use** all 15 items. He just can't **make** the other professions' items; he buys them from vendors.
+At **chapter III (lvl 50)** he learns a **second trade**, chosen the same way (he asks again). Each new wizard can end up with different trades, which makes the cemetery more varied ("Name (lvl 87, alchemist and scribe) died at…").
+
+He can still **use** all 15 items. He just can't **make** the items of trades he doesn't have; he buys them from vendors.
 
 ### Skill
 
-Each wizard has one profession with a **skill level 1–100** (`state.profession = { id, skill, xp }`). Crafting raises it; failing raises it a little too.
+Each trade he knows has a **skill level 1–100** (`state.professions = [ { id, skill, xp } ]`, one entry, two from chapter III). Crafting raises it; failing raises it a little too.
 
 - **Success chance** = `difficulty / 5 + skill / 200`, capped at 95%. A difficulty-4 recipe starts at 80%, a difficulty-2 recipe at 40%, and at skill 100 both reach 95%.
 - **Failure** loses one of the two reagents (the non-base one) and prints a line ("the potion turns black and bubbles over").
@@ -179,7 +203,7 @@ Notes:
 
 ### Before adding the vendor hook: a v1 quirk
 
-In `exploreEV()` the dice-house check is `YesOrNot(pDados) && zone == "la_Ciudad" || zone == "el_Poblado"`. Operator precedence turns this into "(chance and City) or Town", so **in the Town every explore that doesn't find loot goes to the dice house**. Vendor events in the Town would never get their turn. Decide whether this was intended before adding vendors there, and if it wasn't, fix it with brackets in the same change (it changes the pace in the Town, so record it).
+In `exploreEV()` the dice-house check is `YesOrNot(pDados) && zone == "la_Ciudad" || zone == "el_Poblado"`. Operator precedence turns this into "(chance and City) or Town", so **in the Town every explore that doesn't find loot goes to the dice house**. Vendor events in the Town would never get their turn. **Decided:** fix it with brackets in the same change that adds vendors, and record the pace change in the CHANGELOG.
 
 ---
 
@@ -205,16 +229,16 @@ Today the god's only tool is the **touch**, always priced in faith (`src/divine.
 | He **crafts** at rest | Touch the wizard | **Blessed craft:** success guaranteed and the item comes out *blessed* (stronger, golden name, sells for more) | medium cost, more for hard recipes |
 | He **trades** with a vendor | Touch the merchant | **Generous merchant:** better prices. The reverse of the tithe: faith becomes gold | cost grows with the deal |
 | He **visits a shrine** carrying items | Touch the shrine (the tithe touch) | He offers a **crafted item** instead of gold, worth more faith than its gold value; a blessed item is worth double | gains faith |
-| He **chooses his profession** | Touch one trainer | **Sways the choice** towards that trade; the god's only say in it. Only works with faith above 0 | large, once per wizard |
+| He **asks for guidance** on his profession (lvl 10, and again at chapter III) | Touch one trainer | **The god chooses the trade.** Only with faith above 0; otherwise, or with no touch, he decides alone | none: it's his question, answering is free |
 | He'd **drink a potion** in a fight | Touch the wizard (existing heal) | A divine heal makes him keep the potion for later | same cost as today |
 
 Faith and the story:
 - **Below 0 faith he refuses:** blessing a craft does nothing ("I need no god for this"), and he never offers items at shrines. Crafting stays the faithless wizard's way to survive, so the atheist path keeps working.
 - **Scroll of divine binding** halves the cost of these touches for a while: the one item that makes him easier to help.
 - **Chapter X** (he breaks his bond): every blessed item he carries loses its blessing.
-- **Optional:** a sixth "holy" recipe per profession (holy water, a ring of devotion, a scroll of prayer) that he can only learn while faith is high. It would reward a devout run as potions reward an atheist one.
+- **Holy recipes (decided: later):** a sixth "holy" recipe per profession (holy water, a ring of devotion, a scroll of prayer) that he can only learn while faith is high. It would reward a devout run as potions reward an atheist one.
 
-The two touches that matter most are the **blessed craft** and the **generous merchant**: they spend faith in both directions (to craft better, or to trade for gold), so they have to be tuned together with the faith rebalance.
+**Decided:** all four touches (harvest, craft, merchant, offerings) ship with professions. The blessed craft and the generous merchant spend faith in both directions (to craft better, or to trade for gold), so they have to be tuned together with the faith rebalance.
 
 Code: each touch is a new branch in the scene-touch handlers of `src/divine.js`, checking what is on screen (`run.previousEvent`, `state.npc`) the same way the shrine tithe does. Counters: `bless_gather`, `bless_craft`, `bless_trade`, `offerItem_<item>`, `blessRefused`.
 
@@ -277,13 +301,9 @@ Each step is playable on its own and checked for pace against the previous versi
 
 ## 12. Open questions
 
-- **One profession or all three?** The old help says one of three, and this plan follows it. Should the wizard ever be able to change trade (at a cost) or learn a second one late in the story?
-- **Who chooses:** the wizard, weighted by his skills, with the god's one paid nudge (the trainer touch)? Or the wizard alone?
-- **God's touches:** are the six in "The god's part" too many? Which ship first (recommended: blessed craft and generous merchant)? Should the holy recipes exist?
-- **Scarcity:** keep 2 zones per reagent (code today) or go back to the sheet's 1 zone for the bases and 3 for the rest?
-- **Dunes and Volcano** have no reagent: leave them empty, give them existing ones (bone for the Dunes, gem for the Volcano), or add a seventh reagent (ash, ember) for a later recipe?
-- **Rings wear out** (recommended, to keep the trade useful) or last forever?
-- **Mana:** keep the game without mana and make the Mana potion "more spells this fight" (recommended)?
-- **Divine binding:** is it right that an atheist wizard refuses it, and that chapter X burns it?
-- **Shops as places:** are vendors a scene in the zone (like the dice house), or the start of the inner maps for the City and Town (map revamp)?
-- **The Town dice-house quirk** (section 6): intended, or a precedence bug to fix?
+Most questions were decided on 2026-11-11 (see "Decisions" at the top). Still open:
+
+- **Reagent zones:** 2 each for now; check after playtesting whether the base reagents (mushroom, gem, essence) need to be scarcer.
+- **Dunes and Volcano** have no reagent: leave them empty or give them one later?
+- **Holy recipes:** which three, and what faith level unlocks them (when their turn comes)?
+- **Numbers:** drop rates, ring wear, success formula and prices are starting points for playtesting.
