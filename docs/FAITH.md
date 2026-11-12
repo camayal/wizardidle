@@ -4,6 +4,19 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 
 ---
 
+## Decisions (by the author)
+
+| Date | Question | Decision |
+|---|---|---|
+| 2026-11-12 | Belief | **Four levels:** Devout / Believer / Doubter / Atheist, each changing his behaviour |
+| 2026-11-12 | God's revive | **Always free, and it gives a little faith** (amount to playtest). It works for atheists too: the god still helps |
+| 2026-11-12 | Full rejection (chapter X) | **A unique artefact or scroll teleports him away before he dies, and the story has a plot where it breaks** |
+| 2026-11-12 | When the god doesn't revive him | **Other rescuers** (a pagan caravan, a shaman, other ideas), **not the mysterious healer**, who stays the god's own |
+| 2026-11-12 | Offerings snowball | **Not decided without playtests:** the plan includes a test setup to compare the options |
+| 2026-11-12 | Atheism | **Both ways.** While atheist outside chapter X, **the god has actions to try to win him back** |
+
+---
+
 ## 1. How faith works today
 
 ### One unit for everything: *g*
@@ -68,13 +81,26 @@ The console announces each change ("starts to doubt his god", "no longer believe
 
 **Drift with a margin:** to climb back from Atheist to Doubter, faith must pass −200 g, not −300 g, so it doesn't flicker at the edge.
 
-### 3.2 Revival costs faith
+### 3.2 Revival (decided)
 
-- **Divine revive** costs **10 g** (twice a self-revive's 8 g, because it's instant and at full HP). The god can always revive, even at negative faith: it's the last bond and it pushes faith down.
-- An **Atheist** revived by the god: *"wakes up and curses the healer"*. It works but costs double.
-- **Self-revive** stays at ≈ 8 g; an Atheist does it in 1 minute instead of 2.
+**The god's revive is free and gives faith.** Touching the dead wizard always works, at any belief level, and the miracle strengthens his belief: **+`calculateFe()` (≈ 3 g)** as a starting value, to playtest. For an Atheist or Doubter it's a stronger nudge (×2), since being raised by a god you deny is hard to ignore: *"wakes up in the healer's cabin and wonders who brought him here"*.
 
-### 3.3 Offerings don't snowball
+*Guard to test:* a free revive that gives faith could become a way to farm faith by letting him die. Dying already costs time and gold (`goldLostInBattle`). If playtests show farming, the boost only applies once every few minutes.
+
+**When the god doesn't touch: other rescuers.** Today, after 2 minutes, he *"recovers himself but feels abandoned by his god"* (−8 g). That becomes a **rescue event** with someone who isn't the god. The **mysterious healer stays the god's own** (only the divine revive leads to the healer's cabin). Candidates, picked by zone and belief level:
+
+| Rescuer | Where | What happens | Faith | Art |
+|---|---|---|---|---|
+| **Pagan caravan** | Prairie, Desert, Dunes (roads) | Travelling pagans pick him up, heal him with their rites and drop him in another zone | −8 g (pagan rites) | townsfolk (`dg_people32.gif`), the Meadow crowd background |
+| **Shaman** | Forest, Swamp, Tundra | Heals him with herbs; asks for reagents or gold as payment (professions) | −5 g | townsfolk sprite, healer hut layers |
+| **Gravedigger / necromancer** | Castle, Duenon, Grotto | Raises him "not quite alive": half HP; pushes toward sin | −12 g | skeleton or spectre sprites |
+| **Ghost of a fallen wizard** | Anywhere, rare, only if the cemetery has wizards | A wizard from a past run (`world.cemetery`) lifts him: *"the ghost of Merlin (lvl 87) lifts him up"*. Ties to "wizards from the past" | none | spectre sprite, translucent |
+| **His own potion** | Anywhere, if he carries a Health potion (professions) | Drinks it with his last strength | −3 g (he trusts himself) | potion sprite |
+| **Alone** | Anywhere, if nobody else fits | Today's self-revive | −8 g | |
+
+An Atheist is rescued faster (1 minute instead of 2): the world takes care of those who don't wait for gods.
+
+### 3.3 Offerings don't snowball (option A, pending playtests: see 3.10)
 
 The offering and the tithe stay a share of his gold (the gold leaves the bag, which is a nice sink), but the **faith they give is capped at 20 g per offering** (40 g for the god's tithe). Spare gold becomes useless for faith past that point, so the snowball stops.
 
@@ -91,22 +117,55 @@ All touches priced in g, adjusted by belief level (Devout −25%, Doubter ×2, A
 |---|---|
 | Heal | HP healed / `hpBase` × 15 g (a full heal ≈ 15 g) |
 | Hit the enemy | damage / enemy HP × 10 g |
-| Revive | 10 g (Atheist 20 g) |
+| Revive | **free, gives ≈ 3 g** (×2 for Doubter/Atheist) |
 | Tithe (touch the shrine) | gains up to 40 g |
 | Professions (from PROFESSIONS.md) | harvest, blessed craft, generous merchant, item offering: priced with the tithe rate |
 
-### 3.6 Atheism and the story
+### 3.6 Winning back an atheist (decided: the god tries)
 
-- **Belief levels are the everyday system; the story can lock them.** Chapter X (*Disobedience*) forces **Atheist** and freezes it: from then on he refuses all help until the end, as the story notes plan. That's the one-way fate. Before chapter X, belief drifts both ways.
+Outside chapter X belief drifts both ways, and an Atheist **refuses the god's heal and hit**. So the god gets gentler actions that don't ask for his consent. They cost no faith (his faith is negative anyway); each has a cool-down instead, so the player can't spam them.
+
+| Action | How | Effect |
+|---|---|---|
+| **Free revive** | Touch him when dead (decided above) | +faith ×2 for an Atheist |
+| **Prayer in despair** | Below 10% HP in a fight, a short window opens: *"in despair, he whispers a prayer to nobody"*. Touching him then **works** | Heals him and gives a big faith boost (≈ 20 g): the foxhole prayer |
+| **A sign** | Touch the sky / scene outside a fight | A light, a rainbow, a flight of birds. A small chance (rising with each sign) of a little faith: *"stares at the sky, unsettled"* |
+| **A dream** | Touch the sleeping bag while he camps | A dream of the shrine: next time he finds one, he enters despite being Atheist |
+| **Hidden blessings** | The professions touches (harvest, blessed craft, generous merchant) still work, because he doesn't know it's the god | After several lucky moments: *"feels someone is watching over him"*, +faith |
+| **A pilgrim** | Touch the scene in a town | A believer NPC walks in and talks to him; small faith gain, more if he's a Doubter |
+
+### 3.7 The escape artefact and the story (decided: it exists, and it breaks)
+
+The story notes already contain the mechanism twice:
+- **Chapter VI (lvl 130, Corruption):** *"when about to die he teleports away and heals"*, the power of the **staff of corruption**. At **chapter VIII (lvl 149)** the lynching mob **strips the corrupt staff** from him. That's the first "break".
+- **Chapter X (lvl 190, Disobedience):** *"no longer dies: at 0 HP he teleports away and heals completely"*, and he refuses all help.
+
+Proposal for X: when he breaks with the god he crafts or finds a **unique scroll**, the *Last Escape* (a master version of the Scroll of teleportation from professions, so a scribe wizard may write it himself). At 0 HP it tears him out of the fight and heals him. **The plot where it breaks:** each use leaves a burn on it (shown in the console); in **chapter XI** at Heidan, while he goes for the staff of *Nomaleatorio*, the scroll **burns to ash** (the god's last word, or the staff's price). From then on his deaths are real, which sets up the final battle.
+
+### 3.8 Atheism and the story
+
+- **Belief levels are the everyday system; the story can lock them.** Chapter X (*Disobedience*) forces **Atheist** and freezes it: from then on he refuses all help until the end, as the story notes plan, and the winning-back actions stop working. That's the one-way fate. Before chapter X, belief drifts both ways.
 - Chapter III halves the multiplier (story notes) and chapter VIII/IX rules follow the notes, applied on top of belief levels.
 - **"Atheist!" achievement:** reaching the Atheist level (or staying there for a while) instead of −10,000.
 - New achievements: reaching Devout; climbing from Atheist back to Believer (*Repentance*, which matches chapter V's name).
 
-### 3.7 Stats
+### 3.9 Stats
 
 Counters and records from "Track almost everything as stats": faith gained and spent by source (totals), highest and lowest faith (records, in g), times each belief level was reached, time spent at each level, touches refused, revives by the god vs self.
 
 ---
+
+### 3.10 Playtest setup (decided: no decision without tests)
+
+The offering question (cap, diminishing returns, fixed by level, keep the snowball) and every number in this plan are decided by **measured runs**, not by guessing.
+
+- **Switches in `src/config.js`:** `offeringMode: "share" | "cap" | "sqrt" | "level"`, plus the belief thresholds, revive boost and shrine chance, so each option runs from the same code.
+- **Simulated runs:** the headless browser runs already used in every phase (virtual time, boosted clocks), from level 1 to 100+, with two **god bots**:
+  - *Idle god:* never touches. Shows the natural drift (toward atheism?).
+  - *Active god:* heals below 30% HP, revives at once, tithes at every shrine, tries to win back an Atheist. Shows whether faith snowballs.
+- **Measured per level:** faith (in g), time spent at each belief level, touches the god could afford, deaths and how he was revived, gold held.
+- **Output:** a small table or chart per option, kept in `docs/playtests/`, so each decision is written down with its numbers.
+- **When:** after step 1 of the build order (every faith change goes through one function), because the bots need it to count everything.
 
 ## 4. Code plan
 
@@ -128,11 +187,6 @@ Counters and records from "Track almost everything as stats": faith gained and s
 
 ## 6. Open questions
 
-To be asked as choices (see the Decisions section once answered).
-
-- What feels off when playing: too much faith, touches too expensive, too easy or too hard to become atheist?
-- Four belief levels, or fewer (believer / atheist)?
-- Should the god's revive cost faith, and should it work for an atheist?
-- Cap offerings, or keep the share-of-gold snowball?
-- Atheism drifting both ways until chapter X (proposed), always reversible, or one-way once reached?
-- Should the god's absence (idle player) push toward atheism, as it does now through skipped shrines and self-revives?
+- **Offerings:** cap, diminishing returns, fixed by level, or keep the snowball: decided by the playtests (3.10).
+- **Revive boost amount**, and whether farming needs a guard: playtests.
+- The rescuers, the winning-back actions and the escape scroll's plot: to be confirmed (see Decisions).
