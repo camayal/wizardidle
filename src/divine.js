@@ -4,12 +4,10 @@
 import { getRandomInt, pickRandomItem, roundNumbertoLetter } from './utils.js';
 import { count, stat, state } from './state.js';
 import { fight, run, ui } from './runtime.js';
-import * as loop from './loop.js';
-import { masterTime } from './config.js';
-import { reviveEV } from './events.js';
+import { reviveEV, startEvent } from './events.js';
 import { currentFrame, frameHeight, frameWidth, getSpell, shift, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { loadBackground, loadCanvasChar, loadNPC, print, updateHeading, updateHeartNPC } from './ui/render.js';
+import { loadBackground, loadCanvasChar, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
 //pj divine button funct
 function pjBtn(){
@@ -19,7 +17,7 @@ function pjBtn(){
             run.disablePjBtn = true;
             playSound("revive")
             spell("spellMultiDivine_28",true,frameWidth,frameHeight,currentFrame,shift);
-            print("<b>" + state.player.name + "</b> " + "feels the divine touch!");
+            print(wizardName() + " " + "feels the divine touch!");
             if (!!fight.autorevive){
                 clearTimeout(fight.autorevive);
                 fight.autorevive = "";
@@ -31,7 +29,7 @@ function pjBtn(){
             loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
             loadNPC("curandero");
             //
-            loop.every("event", reviveEV, masterTime);
+            startEvent(reviveEV);
         }else{
             //heal pj
             // console.log("HP " + getLocal("HP"));
@@ -65,7 +63,7 @@ function pjBtn(){
                 
                 playSound("heal");
                 spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + state.player.name + "</b> " + "feels a healing touch and recovers " + ui.healIcon + roundNumbertoLetter(healHit)/* + " (" + spiritIcon + " -" + roundNumbertoLetter(faithLost) + ")"*/);
+                print(wizardName() + " " + "feels a healing touch and recovers " + ui.healIcon + roundNumbertoLetter(healHit)/* + " (" + spiritIcon + " -" + roundNumbertoLetter(faithLost) + ")"*/);
 
             }
 
@@ -100,7 +98,7 @@ function npcBtn(){
             updateHeartNPC()
             state.player.faith = state.player.faith - faithLost;
             updateHeading();
-            print("<b>" + state.player.name + "</b> " + txt + ui.heartIcon + " " + roundNumbertoLetter(fight.enemyHP))
+            print(wizardName() + " " + txt + ui.heartIcon + " " + roundNumbertoLetter(fight.enemyHP))
             count("DivineHit");
         }
     }
@@ -119,7 +117,7 @@ function centerBtn(){
             state.player.gold = state.player.gold - ofrendaGold;
             //localStorage.idx_offers = Number(localStorage.idx_offers) + ofrendaGold;
             const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
-            print("<b>" + state.player.name + "</b> " + pickRandomItem(textoffer) + " (" + ui.goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + ")");
+            print(wizardName() + " " + pickRandomItem(textoffer) + " (" + ui.goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + ")");
             count("DivineMandatoryOffers");
             count("GoldOffered", Math.round(ofrendaGold));
             count("FeByGold",Math.round(run.feGanada));

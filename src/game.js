@@ -6,14 +6,13 @@ import { zones } from './data/zones.js';
 import { roundNumbertoLetter } from './utils.js';
 import { state } from './state.js';
 import { fight, run, ui } from './runtime.js';
-import * as loop from './loop.js';
-import { masterTime } from './config.js';
 import { randomName } from './combat.js';
-import { event } from './events.js';
+import { event, nextEvent } from './events.js';
 import { levelUP } from './wizard.js';
 import { playSound } from './audio.js';
-import { loadBackground, loadCanvasChar, print, updateHeading } from './ui/render.js';
+import { loadCanvasChar, print, showStage, updateHeading, wizardName } from './ui/render.js';
 import { defineObjectSize, getEM } from './ui/layout.js';
+import { el } from './ui/dom.js';
 
 const version = "2.0.0"; // v1: "02nov2020_10pm"
 let uniqueID;
@@ -79,13 +78,13 @@ function start() {
             const feperdida = state.player.hpBase * 0.25;
             //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - feperdida);
             state.player.faith = state.player.faith - feperdida
-        print("<b>" + state.player.name + "</b> " + "loses hope in you and tries to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
+        print(wizardName() + " " + "loses hope in you and tries to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
     }
     updateHeading();
     loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
-    loadBackground(state.zone.current + state.zone.stage);
+    showStage();
     //load previous locality random scenaria
-    loop.every("master", event, masterTime);
+    nextEvent();
     //statusClock = setInterval(cacheStatus, 5000);
     //trigger event selecter
 
@@ -95,7 +94,7 @@ function start() {
 function pauseToggle(){
     if (run.pause){
         run.pause = false;
-        loop.every("master", event, masterTime);
+        nextEvent();
     }else{
         run.pause = true;
     }
@@ -149,8 +148,8 @@ function initialName(){
     }
 
     if(state.firstUse){
-        document.getElementById("inputName").value = randomName();
-        document.getElementById("launcher").style.display = "none" ;
+        el("inputName").value = randomName();
+        el("launcher").style.display = "none" ;
 
     }else{
         start();
@@ -165,15 +164,15 @@ function initialName(){
 
 //Only when start button is pressed
 function setName(){
-    if(document.getElementById("inputName").value !== ""){
-            if(!state.player.name){state.player.name = document.getElementById("inputName").value};
+    if(el("inputName").value !== ""){
+            if(!state.player.name){state.player.name = el("inputName").value};
         }else{
             if(!state.player.name){state.player.name = randomName()};
         }
-        document.getElementById("launcher").style.display = "none" ;
-        document.getElementById("main").style.display = "block" ;
-        //fadeOut(document.getElementById("launcher"))
-        //fadeIn(document.getElementById("main"))
+        el("launcher").style.display = "none" ;
+        el("main").style.display = "block" ;
+        //fadeOut(el("launcher"))
+        //fadeIn(el("main"))
         state.meta.playTimeMs = 0;
         start();
 }

@@ -7,6 +7,7 @@ import * as loop from '../loop.js';
 import { pauseToggle } from '../game.js';
 import { masterTime } from '../config.js';
 import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, updateHelp, updateKill, updateStats } from './scrolls.js';
+import { el } from './dom.js';
 
 //////////////////////////////END OTHER REGION//////////////////////////////////
 //------------------------------------------------------------------------------//
@@ -24,7 +25,7 @@ import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, update
 //Kill button funct
 function killBtn(){
     updateKill();
-    document.getElementById("innerTextScroll").style.display = "block";
+    el("innerTextScroll").style.display = "block";
     scrollOpen("kill");    
 }
 
@@ -55,13 +56,13 @@ function btnCloseEvent(){
 //map button funct
 function mapBtn(){
     if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
-        document.getElementById("backMapa").src = "img/mapaunderground.png";
+        el("backMapa").src = "img/mapaunderground.png";
     }else{
-        document.getElementById("backMapa").src = "img/mapa.png";
+        el("backMapa").src = "img/mapa.png";
     }
-    document.getElementById("bocadilloMapa").src = "img/bocadillo.png";
-    document.getElementById("pjMapa").src = "img/lvl" + Math.floor(state.player.lvl / 10) * 10 + ".png";
-    document.getElementById("mapa").style.display = "block";
+    el("bocadilloMapa").src = "img/bocadillo.png";
+    el("pjMapa").src = "img/lvl" + Math.floor(state.player.lvl / 10) * 10 + ".png";
+    el("mapa").style.display = "block";
     localizarBocadillo()
     
     
@@ -72,17 +73,17 @@ function mapBtn(){
 //help button funct
 function helpBtn(){
     updateHelp();
-    document.getElementById("innerTextScroll").style.display = "block";
+    el("innerTextScroll").style.display = "block";
     scrollOpen("help");
 }
 
 
 //stats button funct
 function statsBtn(){
-    //document.getElementById('innerTextScroll').innerHTML= statsPage;
+    //el('innerTextScroll').innerHTML= statsPage;
     loop.every("stats", updateStats,masterTime);
     updateStats();
-    document.getElementById("innerTextScroll").style.display = "block";
+    el("innerTextScroll").style.display = "block";
     scrollOpen("stats");
 }
 
@@ -90,7 +91,7 @@ function statsBtn(){
 
 function archBtn(){
     updateAchievements();
-    document.getElementById("innerTextScroll").style.display = "block";
+    el("innerTextScroll").style.display = "block";
     scrollOpen("achievements");
 
 }

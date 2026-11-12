@@ -5,11 +5,10 @@ import { getRandomInt, roundNumbertoLetter } from '../utils.js';
 import { state } from '../state.js';
 import { run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
-import { masterTime } from '../config.js';
-import { event } from '../events.js';
+import { endEvent, event, nextEvent, startEvent } from '../events.js';
 import { currentFrame, frameHeight, frameWidth, shift, spell } from '../spells.js';
 import { playSound } from '../audio.js';
-import { animateNPC, animatePJ, loadBackground, npcCanvas, print, updateHeading } from '../ui/render.js';
+import { animateNPC, animatePJ, npcCanvas, print, showStage, updateHeading, wizardName } from '../ui/render.js';
 
 //TODO add idx for all this part and archievements
 //temp dicegame
@@ -47,7 +46,7 @@ function sixfivefour(){
     if (enemyStart){
         nameDicePlayer = gamblingManName
     } else {
-        nameDicePlayer = "<b>" + state.player.name + "</b> "
+        nameDicePlayer = wizardName() + " "
     }
 
     
@@ -63,7 +62,7 @@ function sixfivefour(){
     
 
     loop.stop("event");
-    loop.every("event", function() { rollDicesForSixfivefour(enemyStart,nameDicePlayer); }, masterTime);
+    startEvent(function() { rollDicesForSixfivefour(enemyStart,nameDicePlayer); });
 }
 
 
@@ -166,7 +165,7 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
             run.multipleEventsCounter = 0;
             print(nameDicePlayer + " thinks the cargo is enought and skip")
             //va a eval
-            loop.every("event", function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime);
+            startEvent(function() { evalSixFiveFour(enemyStart,nameDicePlayer); });
         }
 
 
@@ -185,7 +184,7 @@ else{
         run.multipleEventsCounter = 0;
         
         //eval
-        loop.every("event", function() { evalSixFiveFour(enemyStart,nameDicePlayer); }, masterTime);
+        startEvent(function() { evalSixFiveFour(enemyStart,nameDicePlayer); });
     }
 }
 }
@@ -209,15 +208,15 @@ function evalSixFiveFour(enemyStart, nameDicePlayer){
             cargoFirstPlayer = cargo;
             nameFirstPlayer = nameDicePlayer;
             countRounds++
-            if (!enemyStart){nameDicePlayer = gamblingManName} else {nameDicePlayer = "<b>" + state.player.name + "</b> "}
+            if (!enemyStart){nameDicePlayer = gamblingManName} else {nameDicePlayer = wizardName() + " "}
             resetSixFiveFour()
             loop.stop("event");
-            loop.every("event", function() { rollDicesForSixfivefour(!enemyStart,nameDicePlayer); }, masterTime);
+            startEvent(function() { rollDicesForSixfivefour(!enemyStart,nameDicePlayer); });
         }else{
             //Final scoring call
             //multipleEventsCounter = 0;
             loop.stop("event");
-            loop.every("event", function() { finalScoreSixFiveFour(nameDicePlayer); }, masterTime);
+            startEvent(function() { finalScoreSixFiveFour(nameDicePlayer); });
         }
 
     
@@ -268,16 +267,15 @@ function finalScoreSixFiveFour(nameDicePlayer){
             }
         break;
         case 2:
-            print("<b>" + state.player.name + "</b> exits the gaming house");
+            print(wizardName() + " exits the gaming house");
             cargoFirstPlayer = 0;
             resetSixFiveFour()
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             state.npc = "";
-            loadBackground(state.zone.current +  state.zone.stage);
+            showStage();
             run.restAtInn = false;
-            run.multipleEventsCounter = 0;
-            loop.stop("event");
-            loop.every("master", event, masterTime);
+            endEvent();
+            nextEvent();
     }
 }
 

@@ -6,6 +6,7 @@ import { initialName, setName } from './game.js';
 import { responsiveLayout } from './ui/layout.js';
 import { archBtn, statsBtn, killBtn, mapBtn, helpBtn, btnCloseEvent } from './ui/menu.js';
 import { pjBtn, centerBtn, npcBtn } from './divine.js';
+import { el } from './ui/dom.js';
 
 // Handlers are assigned as .onclick properties (not addEventListener) on purpose:
 // disableMainButtons()/enableMainButtons() in ui/scrolls.js temporarily swap .onclick
@@ -23,7 +24,7 @@ const clickHandlers = {
     btnClose: btnCloseEvent,
 };
 for (const [id, handler] of Object.entries(clickHandlers)) {
-    document.getElementById(id).onclick = () => handler();
+    el(id).onclick = () => handler();
 }
 
 window.addEventListener('resize', () => responsiveLayout());

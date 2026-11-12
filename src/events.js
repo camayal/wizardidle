@@ -15,7 +15,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { currentFrame, frameHeight, frameWidth, shift, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { loadBackground, loadNPC, npcCanvas, print, updateHeading } from './ui/render.js';
+import { loadBackground, loadNPC, npcCanvas, print, showStage, updateHeading, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 
@@ -70,7 +70,26 @@ const statueObj = {
 ///////////////////////////////////////////////////////// 
 //Events
 
-//Select event, call in this way only:  loop.every("master", event, masterTime);    
+// The game moves on two clocks (see loop.js): the "master" clock picks the next event,
+// and the "event" clock runs a multi-step event until it hands control back.
+
+// Run fn on the event clock, one step every masterTime.
+function startEvent(fn){
+    loop.every("event", fn, masterTime);
+}
+
+// The current event is over: stop its clock and reset its step counter.
+function endEvent(){
+    run.multipleEventsCounter = 0;
+    loop.stop("event");
+}
+
+// Hand control back to the event picker.
+function nextEvent(){
+    loop.every("master", event, masterTime);
+}
+
+//Select event, call in this way only:  nextEvent();    
 function event() {
     loop.stop("master");
     if(run.pause){return}//detect pause command
@@ -115,8 +134,8 @@ function exploreEV() {
     if (YesOrNot(stat("pBotin"), 0)) {
         //getBotin();
         run.objectToBreak = "";
-        print("<b>" + state.player.name + "</b> is searching...");
-        loop.every("event", getBotin, masterTime);
+        print(wizardName() + " is searching...");
+        startEvent(getBotin);
     //go to dice house, use the same probability
     } else if (YesOrNot(config.balance.pDados, 0) && state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado"){
         //check if gold is more than 0
@@ -127,24 +146,24 @@ function exploreEV() {
             }else{
                 var textDice = pickRandomItem("finds a gamming house and enters,wants to play 6-5-4,wants to gambling");
             }
-            print("<b>" + state.player.name + "</b> " + textDice);
+            print(wizardName() + " " + textDice);
             loadBackground(state.zone.current + "_casadados");
             loadNPC("jugon");
             run.previousEvent = "sixfivefour"
-            loop.every("event", sixfivefour, masterTime);       
+            startEvent(sixfivefour);       
         }else{
-            print("<b>" + state.player.name + "</b> " + "finds a gamming house but does not have gold to bet");
-            loop.every("master", event, masterTime);
+            print(wizardName() + " " + "finds a gamming house but does not have gold to bet");
+            nextEvent();
         }
     }else {
         if (YesOrNot(stat("pChangeZone") * config.balance.allowChangeZone, 0)) {
-            print("<b>" + state.player.name + "</b> is exploring...");
-            loop.every("event", changeLocality, masterTime);
+            print(wizardName() + " is exploring...");
+            startEvent(changeLocality);
         } else {
-            print("<b>" + state.player.name + "</b>" + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
+            print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
             pickRandomBackgroundForCurrentZone();
             addXP(0.5);
-            loop.every("master", event, masterTime);
+            nextEvent();
             //trigger event selecter
         };
     };
@@ -155,11 +174,11 @@ function reviveEV(){
     run.multipleEventsCounter += 1;
     switch(run.multipleEventsCounter){
         case 1:
-        print("<b>" + state.player.name + "</b>" + " wakes up " + pickRandomItem("confused,perplexed,perturbed"));
+        print(wizardName() + " wakes up " + pickRandomItem("confused,perplexed,perturbed"));
         run.previousEvent = "reviveInCabin"
             break;
         case 2:
-            print("<b>" + state.player.name + "</b>" + " is treated by a mysterious healer");
+            print(wizardName() + " is treated by a mysterious healer");
             playSound("heal");
             spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
             break;
@@ -167,7 +186,7 @@ function reviveEV(){
             spell("spellPinRed_16",false,frameWidth,frameHeight,currentFrame,shift);
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             state.npc = "";
-            print("<b>" + state.player.name + "</b>" + " is totally recovered (" + ui.healIcon + roundNumbertoLetter(state.player.hpBase) + ") and the mysterious guy is gone")
+            print(wizardName() + " is totally recovered (" + ui.healIcon + roundNumbertoLetter(state.player.hpBase) + ") and the mysterious guy is gone")
             updateHeading();
             break;
         case 4:
@@ -177,13 +196,12 @@ function reviveEV(){
         count("zonesChanged");
         count("zone_" + randomLocality);
         //pickRandomBackgroundForCurrentZone();
-        loadBackground(state.zone.current +  state.zone.stage);
-        print("<b>" + state.player.name + "</b>" + " leaves the healer's cabin")
+        showStage();
+        print(wizardName() + " leaves the healer's cabin")
         count("hospital");
-        run.multipleEventsCounter = 0;
-        loop.stop("event");
+        endEvent();
         run.disablePjBtn = false;
-        loop.every("master", event, masterTime);
+        nextEvent();
     }
 };
 
@@ -199,7 +217,7 @@ function prayEV(){
         }else{
             var textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
-        print("<b>" + state.player.name + "</b> " + textCapel);
+        print(wizardName() + " " + textCapel);
         loadBackground(state.zone.current + "_altar");
         const mistico = "mistico" + getRandomInt(1,3);
         loadNPC(mistico);
@@ -209,7 +227,7 @@ function prayEV(){
             run.offer = false;
         }
         run.previousEvent = "enterAltar"
-        loop.every("event", doOffering, masterTime);
+        startEvent(doOffering);
     }else{
         count("negar");
         if (run.previousEvent == "negar"){
@@ -218,11 +236,11 @@ function prayEV(){
             var textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
         const faithLost = calculateFe();
-        print("<b>" + state.player.name + "</b> " + textCapel + " but does not enter and continues (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
+        print(wizardName() + " " + textCapel + " but does not enter and continues (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
         state.player.faith = state.player.faith - faithLost;
         updateHeading();
         run.previousEvent = "negar"
-        loop.every("master", event, masterTime);
+        nextEvent();
     }
 }
 
@@ -237,14 +255,14 @@ function innEV(){
            }else{
             var textInn = "feels tired,wants to rest,is falling asleep"
            }
-           print("<b>" + state.player.name + "</b> " + pickRandomItem(textInn)) 
+           print(wizardName() + " " + pickRandomItem(textInn)) 
            run.previousEvent = "innEV"
-           loop.every("event", searchInn, masterTime);
+           startEvent(searchInn);
     }else{
         const textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
-        print("<b>" + state.player.name + "</b> " + pickRandomItem(textNoInn)) 
+        print(wizardName() + " " + pickRandomItem(textNoInn)) 
         run.previousEvent = "innEVFeelsGood"
-        loop.every("master", event, masterTime);
+        nextEvent();
     }
 }
 
@@ -256,17 +274,17 @@ function innEV(){
 function studyEV() {
      if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva"){//found statue, poblado and cueva has not statue
         if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
-            print("<b>" + state.player.name + "</b> " + "sees something...") 
-            loop.every("event", findRuneOrBook, masterTime);
+            print(wizardName() + " " + "sees something...") 
+            startEvent(findRuneOrBook);
         }else{
-            print("<b>" + state.player.name + "</b> " + "sees something...") 
-            loop.every("event", findStatue, masterTime);
+            print(wizardName() + " " + "sees something...") 
+            startEvent(findStatue);
         }
         //examine the estatue
 
     }else{//found book or rune
-    print("<b>" + state.player.name + "</b> " + "sees something...") 
-    loop.every("event", findRuneOrBook, masterTime);
+    print(wizardName() + " " + "sees something...") 
+    startEvent(findRuneOrBook);
     }
 }
 
@@ -299,9 +317,9 @@ function findStatue(){
         count("statuesFound");
         //print("<b>" + getLocal("pjName") + "</b> " + "finds a " + statueObj["statue_" + getLocal("currentZone")].name + " statue");
         if (run.previousEvent == "findStatue"){
-            print("<b>" + state.player.name + "</b> " + "wants to try study the " + statueObj["statue_" + state.zone.current].name + " statue again");
+            print(wizardName() + " " + "wants to try study the " + statueObj["statue_" + state.zone.current].name + " statue again");
         }else{
-            print("<b>" + state.player.name + "</b> " + "finds a " + statueObj["statue_" + state.zone.current].name + " statue");
+            print(wizardName() + " " + "finds a " + statueObj["statue_" + state.zone.current].name + " statue");
         }
         run.previousEvent = "findStatue"
         break;
@@ -314,10 +332,10 @@ function findStatue(){
             const result = statueObj["statue_" + state.zone.current].event()
         if(result == "hydraMysteryResolved"){
             //play hydra sound
-            print("<b>" + state.player.name + "</b> " + "hears something but nothing happens");
+            print(wizardName() + " " + "hears something but nothing happens");
         }else{
             playSound("statUp");
-            print("<b>" + state.player.name + "</b> " + learnTxt + ". Increases the <i>" + result + "</i>");
+            print(wizardName() + " " + learnTxt + ". Increases the <i>" + result + "</i>");
         }
             run.multipleEventsCounter = 4;
         }else{
@@ -331,16 +349,15 @@ function findStatue(){
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
                 var learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
             }
-            print("<b>" + state.player.name + "</b> " + learnTxt) 
+            print(wizardName() + " " + learnTxt) 
         }
         break;
         case 5:
-        print("<b>" + state.player.name + "</b> " + "leaves the statue and continues") 
-        loadBackground(state.zone.current +  state.zone.stage);
-        run.multipleEventsCounter = 0;
-        loop.stop("event");
+        print(wizardName() + " " + "leaves the statue and continues") 
+        showStage();
+        endEvent();
         addXP(1);
-        loop.every("master", event, masterTime);
+        nextEvent();
     }
 }
 
@@ -364,7 +381,7 @@ function findRuneOrBook(){
             run.objectToStudy = "rune";
             loadNPC("runa" + number)
         }
-        print("<b>" + state.player.name + "</b> " + "finds " + (run.previousEvent == "findRuneorBook" ? "another " : "a ") + run.objectToStudy) 
+        print(wizardName() + " " + "finds " + (run.previousEvent == "findRuneorBook" ? "another " : "a ") + run.objectToStudy) 
         count(run.objectToStudy)
         run.previousEvent = "findRuneorBook"
         break;
@@ -378,7 +395,7 @@ function findRuneOrBook(){
             //var statToUP = pickRandomItem("pAttack,pPolymorph,fCritic,pCritic,pHeal,fHeal,pStudy,pBotin,pChangeZone,pFindCapel,pFindMaterials,pOfrenda,fOfrenda")
             const statToIncrease = statObj[statObj.random()];
             const learned = statObj.increase(statToIncrease.code);
-            print("<b>" + state.player.name + "</b> " + learnTxt + " " + run.objectToStudy + " and increases the <i>" + learned + "</i>") 
+            print(wizardName() + " " + learnTxt + " " + run.objectToStudy + " and increases the <i>" + learned + "</i>") 
             count("study_" + statToIncrease.code);
             
             run.multipleEventsCounter = 4;
@@ -393,18 +410,17 @@ function findRuneOrBook(){
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
                 var learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
             }
-            print("<b>" + state.player.name + "</b> " + learnTxt + " " + run.objectToStudy) 
+            print(wizardName() + " " + learnTxt + " " + run.objectToStudy) 
         }
         break;
         case 5:
-        print("<b>" + state.player.name + "</b> " + "leaves the " + run.objectToStudy + " and continues") 
+        print(wizardName() + " " + "leaves the " + run.objectToStudy + " and continues") 
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
         state.npc = "";
         run.objectToStudy = "";
-        run.multipleEventsCounter = 0;
-        loop.stop("event");
+        endEvent();
         addXP(0.25);
-        loop.every("master", event, masterTime);
+        nextEvent();
     }
 }
 
@@ -420,12 +436,12 @@ function searchInn(){
                 loadBackground(state.zone.current + "_taberna");
                 count("taberna");
                 count("taberna_zone_" + state.zone.current);
-                print("<b>" + state.player.name + "</b> " + "enters in an inn") 
+                print(wizardName() + " " + "enters in an inn") 
 
             }else{
                 loadNPC("sleepingbag");
                 const textCamping = "looks for a safe place too rest,hides to rest,falls asleep"
-                print("<b>" + state.player.name + "</b> " + pickRandomItem(textCamping));
+                print(wizardName() + " " + pickRandomItem(textCamping));
                 count("camping");
 
             }
@@ -441,20 +457,20 @@ function searchInn(){
                     //setLocal("Gold", 0);
                     //cannot affort
                     playSound("drink");
-                    print("<b>" + state.player.name + "</b> " + "cannot afford pay a bed, but takes a free drink");
+                    print(wizardName() + " " + "cannot afford pay a bed, but takes a free drink");
                     run.restAtInn = false;
                 }else{
                     spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
                     state.player.gold = state.player.gold - innCost;
                     count("GoldSpendInn",Number(innCost));
                     playSound("coins");
-                    print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps) +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(innCost) + ")") 
+                    print(wizardName() + " " + pickRandomItem(textSleeps) +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(innCost) + ")") 
                     run.restAtInn = true;
                 }
                 
             }else{
                 spell("spellSleep_24",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + state.player.name + "</b> " + pickRandomItem(textSleeps)) 
+                print(wizardName() + " " + pickRandomItem(textSleeps)) 
                 run.restAtInn = false;
             }
             updateHeading();
@@ -479,15 +495,14 @@ function searchInn(){
             updateHeading();
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             state.npc = "";
-            print("<b>" + state.player.name + "</b> " + pickRandomItem(textRecover) + " (" + ui.healIcon + roundNumbertoLetter(rested) + ")") 
+            print(wizardName() + " " + pickRandomItem(textRecover) + " (" + ui.healIcon + roundNumbertoLetter(rested) + ")") 
             if(placesWithInn){
                 //pickRandomBackgroundForCurrentZone();
-                loadBackground(state.zone.current +  state.zone.stage);
+                showStage();
             }
             run.restAtInn = false;
-            run.multipleEventsCounter = 0;
-            loop.stop("event");
-            loop.every("master", event, masterTime);
+            endEvent();
+            nextEvent();
     }
 }
 
@@ -510,22 +525,21 @@ function doOffering(){
                 playSound("coins");
                 spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
                 const textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
-                print("<b>" + state.player.name + "</b>" + " offers " + ui.goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
+                print(wizardName() + " offers " + ui.goldIcon + roundNumbertoLetter(ofrendaGold) + " " + textOffering);
                 break;
             case 2:
                 //animation anks for pj
                 //playSound("pray");
                 spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print("<b>" + state.player.name + "</b>" + " leaves the shrine and continues the journey" + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
+                print(wizardName() + " leaves the shrine and continues the journey" + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
                 state.npc = "";
                 //pickRandomBackgroundForCurrentZone();
-                loadBackground(state.zone.current +  state.zone.stage);
-                run.multipleEventsCounter = 0;
-                loop.stop("event");
+                showStage();
+                endEvent();
                 run.disableCenterBtn = false;
                 run.offer = false;
-                loop.every("master", event, masterTime);
+                nextEvent();
         }
     }else{
         run.multipleEventsCounter += 1;
@@ -537,7 +551,7 @@ function doOffering(){
         switch(optionTemp){
             case 1:
                 var textPray = pickRandomItem(" adore you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor")
-                print("<b>" + state.player.name + "</b>" + textPray)
+                print(wizardName() + textPray)
                 break;
             case 2:
                 playSound("pray");
@@ -547,19 +561,18 @@ function doOffering(){
                 state.player.faith = state.player.faith + run.feGanada;
                 count("FeByPray",Math.round(run.feGanada));
                 var textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
-                print("<b>" + state.player.name + "</b>" + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")")
+                print(wizardName() + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")")
             break;
             case 5:
-                print("<b>" + state.player.name + "</b>" + " leaves the shrine and continues")
+                print(wizardName() + " leaves the shrine and continues")
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
                 state.npc = "";
                 //pickRandomBackgroundForCurrentZone();
-                loadBackground(state.zone.current +  state.zone.stage);
+                showStage();
                 run.disableCenterBtn = false;
                 run.offer = false;
-                run.multipleEventsCounter = 0;
-                loop.stop("event");
-                loop.every("master", event, masterTime);
+                endEvent();
+                nextEvent();
         }
     }
 
@@ -593,7 +606,7 @@ function getBotin() {
                     var number = getRandomInt(1,4);
                     loadNPC("pot" + number);
             }
-            print("<b>" + state.player.name + "</b>" + " sees " + (run.previousEvent == "getBotin" ? "another " : "a ")  + run.objectToBreak);
+            print(wizardName() + " sees " + (run.previousEvent == "getBotin" ? "another " : "a ")  + run.objectToBreak);
             break;
         case 2:
         if (run.objectToBreak == "bag"){
@@ -615,7 +628,7 @@ function getBotin() {
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
         state.npc = "";
         const goldBotin = 1 + getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 10);
-        print("<b>" + state.player.name + "</b>" + botinTexts + ui.goldIcon + roundNumbertoLetter(goldBotin));
+        print(wizardName() + botinTexts + ui.goldIcon + roundNumbertoLetter(goldBotin));
         count("BotinGot");
         count("GoldFromBotin",goldBotin)
         count("GoldFromBotin_" + run.objectToBreak,goldBotin)
@@ -625,10 +638,9 @@ function getBotin() {
         if(Number(counterText("BotinGot_pot")) > 100){logro.set(logro.logro_pots)};
         run.previousEvent = "getBotin"
         updateHeading();    //Update heading
-        run.multipleEventsCounter = 0;
-        loop.stop("event");
+        endEvent();
         addXP(0.5);
-        loop.every("master", event, masterTime);//trigger event selecter
+        nextEvent();//trigger event selecter
             
     }
     
@@ -636,7 +648,10 @@ function getBotin() {
 };
 
 export {
+    endEvent,
     event,
+    nextEvent,
+    startEvent,
     reviveEV,
     statueObj,
 };

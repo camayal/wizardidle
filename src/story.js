@@ -6,8 +6,9 @@ import { count, state } from './state.js';
 import { run, ui } from './runtime.js';
 import { pauseToggle } from './game.js';
 import { playSound } from './audio.js';
-import { loadBackground, loadCanvasChar, loadNPC, npcCanvas, print } from './ui/render.js';
+import { loadBackground, loadCanvasChar, loadNPC, npcCanvas, print, showStage, wizardName } from './ui/render.js';
 import { counterText, scrollClose, scrollOpen } from './ui/scrolls.js';
+import { el } from './ui/dom.js';
 
 //////////////////////////////////////////////////////////
 //██╗  ██╗██╗███████╗████████╗ ██████╗ ██████╗ ██╗   ██╗//
@@ -47,7 +48,7 @@ const chapter = {
             }else{
                 var text = "decides to devote himself to your consecration to get more divine attention";
             }
-            print("<b>" + state.player.name + "</b> " + text + ", and obtain a Divine crosier")
+            print(wizardName() + " " + text + ", and obtain a Divine crosier")
             loadBackground(state.zone.current + "_altar");
             const mistico = "mistico" + getRandomInt(1,3);
             loadNPC(mistico);
@@ -241,9 +242,9 @@ function openHistory(){
 
     //if has writen history display it
     if (chapter["lvl" + state.player.lvl].text != "NA"){
-        if (parseInt(document.getElementById("scrollBackCenter").style.minHeight) > 0) {
+        if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
             scrollClose()
-            document.getElementById("scrollBackCenter").addEventListener("transitionend", updateHistory);
+            el("scrollBackCenter").addEventListener("transitionend", updateHistory);
         } else{
             updateHistory();
         }
@@ -252,12 +253,12 @@ function openHistory(){
 
 //update content of history scroll
 function updateHistory(){
-   document.getElementById("scrollBackCenter").removeEventListener("transitionend", updateHistory)
+   el("scrollBackCenter").removeEventListener("transitionend", updateHistory)
    pauseToggle();
-   document.getElementById('innerTextScroll').innerHTML= chapter["lvl" + state.player.lvl].text;
-   document.getElementById("innerTextScroll").style.display = "block";
-   document.getElementById("historyTitle").style.fontSize = ui.em * 2.5 + "px";
-   document.getElementById("historyTitle").style.lineHeight = ui.em * 2.5 + "px";
+   el('innerTextScroll').innerHTML= chapter["lvl" + state.player.lvl].text;
+   el("innerTextScroll").style.display = "block";
+   el("historyTitle").style.fontSize = ui.em * 2.5 + "px";
+   el("historyTitle").style.lineHeight = ui.em * 2.5 + "px";
    scrollOpen("history");
 }
 
@@ -269,8 +270,8 @@ function afterChapter(){
         case 30:
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
         state.npc = "";
-        loadBackground(state.zone.current +  state.zone.stage);
-        print("<b>" + state.player.name + "</b>" + " leaves the shrine and continues the journey");
+        showStage();
+        print(wizardName() + " leaves the shrine and continues the journey");
         break;       
         case 50:
 

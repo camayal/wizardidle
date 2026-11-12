@@ -10,6 +10,7 @@ import { setLiveTime } from '../game.js';
 import { masterTime, MAXLINESINCONSOLE } from '../config.js';
 import { logro } from '../achievements.js';
 import { localizarBocadillo } from './scrolls.js';
+import { el } from './dom.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -22,23 +23,23 @@ import { localizarBocadillo } from './scrolls.js';
 //Definitions
 //Author:  Carlos Alonso Maya Lastra
 // #region Define vars
-const esceneCanvas = document.getElementById("esceneCanvas");
-const pjCanvas = document.getElementById("pjCanvas");
-const npcCanvas = document.getElementById("npcCanvas");
+const esceneCanvas = el("esceneCanvas");
+const pjCanvas = el("pjCanvas");
+const npcCanvas = el("npcCanvas");
 
 
 //Populate and update the headding
 function updateHeading() {
-    document.getElementById('pjName').innerText = state.player.name;
-    document.getElementById('lvl').innerText = "Lv. " + state.player.lvl;
-    document.getElementById("XPprogressBar").max = state.player.xpNext;
-    document.getElementById("XPprogressBar").min = state.player.xpPast;
-    document.getElementById("XPprogressBar").value = state.player.xp;
-    document.getElementById('hp').innerText = roundNumbertoLetter(state.player.hp);
-    document.getElementById('gold').innerText = roundNumbertoLetter(state.player.gold);
-    document.getElementById('fe').innerText = roundNumbertoLetter(state.player.faith);
+    el('pjName').innerText = state.player.name;
+    el('lvl').innerText = "Lv. " + state.player.lvl;
+    el("XPprogressBar").max = state.player.xpNext;
+    el("XPprogressBar").min = state.player.xpPast;
+    el("XPprogressBar").value = state.player.xp;
+    el('hp').innerText = roundNumbertoLetter(state.player.hp);
+    el('gold').innerText = roundNumbertoLetter(state.player.gold);
+    el('fe').innerText = roundNumbertoLetter(state.player.faith);
     const hpPercent = state.player.hp / state.player.hpBase;
-    document.getElementById("hpIcon").src = heartMeter(hpPercent);
+    el("hpIcon").src = heartMeter(hpPercent);
 
     if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
 
@@ -111,6 +112,16 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
         // ctx.imageSmoothingEnabled = false;
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     }, false);
+}
+
+// Show the background of the stage the wizard is on.
+function showStage() {
+    loadBackground(state.zone.current + state.zone.stage);
+}
+
+// The wizard's name in bold, as every console message starts.
+function wizardName() {
+    return "<b>" + state.player.name + "</b>";
 }
 
 
@@ -216,16 +227,18 @@ function animateNPC() {
 //Print in ingame-console and cut after 30 lines
 function print(data) {
     setLiveTime(); //set seconds of game and add to total time
-    document.getElementById("console").innerHTML = data + "<br>" + document.getElementById("console").innerHTML;
-    const brSplit = document.getElementById('console').innerHTML.split("<br>")
+    el("console").innerHTML = data + "<br>" + el("console").innerHTML;
+    const brSplit = el('console').innerHTML.split("<br>")
     if (brSplit.length > MAXLINESINCONSOLE) {
         brSplit.splice(-1, 1);
-        document.getElementById("console").innerHTML = brSplit.join("<br>");
+        el("console").innerHTML = brSplit.join("<br>");
     }
     ;
 };
 
 export {
+    showStage,
+    wizardName,
     animateNPC,
     animatePJ,
     loadAlterCanvasChar,

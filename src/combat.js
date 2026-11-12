@@ -6,16 +6,17 @@ import { enemySprites, enemyTypes } from './data/enemies.js';
 import { zones } from './data/zones.js';
 import { npcSpells, spells } from './data/spells.js';
 import { capitalize, getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
-import { config, masterTime, RAREMULTIPLIER, selfrevivetime } from './config.js';
+import { config, RAREMULTIPLIER, selfrevivetime } from './config.js';
 import { count, stat, state } from './state.js';
 import { fight, run, ui } from './runtime.js';
 import * as loop from './loop.js';
-import { event } from './events.js';
+import { endEvent, event, nextEvent, startEvent } from './events.js';
 import { addGold, addXP, calculateFe } from './wizard.js';
 import { logro } from './achievements.js';
 import { currentFrame, frameHeight, frameWidth, getSpell, shift, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { animateNPC, animatePJ, loadAlterCanvasChar, loadCanvasChar, loadNPC, npcCanvas, pjCanvas, print, updateHeading, updateHeartNPC } from './ui/render.js';
+import { animateNPC, animatePJ, loadAlterCanvasChar, loadCanvasChar, loadNPC, npcCanvas, pjCanvas, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { el } from './ui/dom.js';
 
 //ToDo:
 //robbed!
@@ -58,8 +59,7 @@ function battle() {
                 getHydra();
             }else{//end conditional hydra, here if die bosses and enemies
                 //stop clock of battle and reset bossMultiplier
-            run.multipleEventsCounter = 0;
-            loop.stop("event");
+            endEvent();
 
             
             //kill capricor
@@ -148,15 +148,14 @@ function battle() {
             state.npc = "";
                 fight.bossMultiplier = 1;
                 fight.bossGoldMultiplier = 1;
-                loop.every("master", event, masterTime);
+                nextEvent();
             }
             
         }
         //if pj dies
         if (Math.round(state.player.hp) <= 0) {
             //stop clock of battle and reset bossMultiplier
-            run.multipleEventsCounter = 0;
-            loop.stop("event");
+            endEvent();
             // If the enemy fell in this same round, its death above already restarted the
             // event picker: stop it until the wizard is revived.
             loop.stop("master");
@@ -193,7 +192,7 @@ function battle() {
             lootedText = " and loses some gold" +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
             count("goldLostInBattle", goldLooted);
             }
-            print("<b>" + state.player.name + "</b>" + " has fallen in battle" + lootedText);
+            print(wizardName() + " has fallen in battle" + lootedText);
             npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             state.npc = "";
             fight.enemy = "";
@@ -207,13 +206,13 @@ function battle() {
                 //var feperdida = Number(getLocal("HPBase")) * 0.75;
                 const feperdida = state.player.hpBase * 1.2454654;
                 state.player.faith = state.player.faith - feperdida;
-                print("<b>" + state.player.name + "</b> " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
+                print(wizardName() + " " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
                 fight.pjDead = false;
                 loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
                 count("selfRevive");
                 playSound("heal");
                 updateHeading();
-                loop.every("master", event, masterTime);
+                nextEvent();
             }, selfrevivetime);
         }
     }
@@ -251,9 +250,9 @@ function getEnemy() {
         fight.bossGoldMultiplier = 5;
         const boss = zones[state.zone.current].boss;
         // if (boss == "cuboq" || boss == "etymos" || boss == "infraespectro"){
-        //     document.getElementById("npcCanvas").style.opacity = 0.7;
+        //     el("npcCanvas").style.opacity = 0.7;
         // }else{
-        //     document.getElementById("npcCanvas").style.opacity = 1;
+        //     el("npcCanvas").style.opacity = 1;
         // }
         fight.enemy = boss;
         count("typeBoss_" + boss)
@@ -267,9 +266,9 @@ function getEnemy() {
         //spellEnemy = pickRandomItem("spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush6,spellPush7,spellPush8,spellPush9,spellPush10");
         fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
         // if (!!eval(enemy).translucid){
-        //     document.getElementById("npcCanvas").style.opacity = 0.8;
+        //     el("npcCanvas").style.opacity = 0.8;
         // }else{
-        //     document.getElementById("npcCanvas").style.opacity = 1;
+        //     el("npcCanvas").style.opacity = 1;
         // }
         count("enemy_" + fight.enemy);
         const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
@@ -313,9 +312,9 @@ function getEnemy() {
         if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!"
         run.previousEvent = "enemy";
     }
-    print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
+    print(wizardName() + " " + pickRandomItem(startBattleText));
     
-    loop.every("event", battle, masterTime);
+    startEvent(battle);
 };
 
 
@@ -339,11 +338,11 @@ function getHydra(newEncounter = false){
         count("Hydras");
         count("typeofHydras_" + fight.hydra)
         var startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
-        print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
-        loop.every("event", battle, masterTime);
+        print(wizardName() + " " + pickRandomItem(startBattleText));
+        startEvent(battle);
     } else {
         var startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
-        print("<b>" + state.player.name + "</b> " + pickRandomItem(startBattleText));
+        print(wizardName() + " " + pickRandomItem(startBattleText));
     }
     
 }
@@ -361,7 +360,7 @@ function attackEV() {
         fight.polymorphedAnimal = pickRandomItem("gallina,oveja");
         playSound(fight.polymorphedAnimal);
         loadNPC(fight.polymorphedAnimal);
-        print("<b>" + state.player.name + "</b>" + " cast polymorphism!");
+        print(wizardName() + " cast polymorphism!");
         count("Polymorph_" + fight.polymorphedAnimal);
         fight.polymorphed = true;
     } else {
@@ -385,7 +384,7 @@ function attackEV() {
                 updateHeartNPC()
                 count("school_" + spells[spellId].school)
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift,true);
-                print("<b>" + state.player.name + "</b> performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
+                print(wizardName() + " performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
                 //if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 count("Critics");
             } else {
@@ -413,7 +412,7 @@ function attackEV() {
                     var text = pickRandomItem(" cast , attacks with ");
                 }
 
-                print("<b>" + state.player.name + "</b>" + text + spellText + " (" + ui.attackIcon + roundNumbertoLetter(pjHit) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
+                print(wizardName() + text + spellText + " (" + ui.attackIcon + roundNumbertoLetter(pjHit) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift);
 
                 //if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
@@ -466,7 +465,7 @@ function healEV() {
             }
         playSound("heal");
         spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-        print("<b>" + state.player.name + "</b>" + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    
+        print(wizardName() + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    
          
         
     

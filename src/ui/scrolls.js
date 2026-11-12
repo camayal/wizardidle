@@ -15,6 +15,7 @@ import { countSpellKnown } from '../spells.js';
 import { playSound } from '../audio.js';
 import { detectmob, layoutPortrait } from './layout.js';
 import { realKill } from './menu.js';
+import { el } from './dom.js';
 
 let scrollIDContent;
 
@@ -46,13 +47,13 @@ function counterList(prefix, inObj = ""){
 function hideScrollContent(){
     loop.stop("stats");
     enableMainButtons()
-    document.getElementById("scrollBackDown").style.opacity = 0;
-    document.getElementById("scrollBackUp").style.opacity = 0;
-    document.getElementById("mapa").style.display = "none"
-    document.getElementById("innerTextScroll").style.display = "none"
-    document.getElementById('innerTextScroll').innerHTML='';
-    document.getElementById("scroll").style.zIndex = 0;
-    document.getElementById("scrollBackCenter").removeEventListener("transitionend", hideScrollContent)
+    el("scrollBackDown").style.opacity = 0;
+    el("scrollBackUp").style.opacity = 0;
+    el("mapa").style.display = "none"
+    el("innerTextScroll").style.display = "none"
+    el('innerTextScroll').innerHTML='';
+    el("scroll").style.zIndex = 0;
+    el("scrollBackCenter").removeEventListener("transitionend", hideScrollContent)
 	
 	
 	//switch positions scene and console
@@ -64,33 +65,33 @@ function hideScrollContent(){
 function scrollClose(){
     ui.scrollCurrentContent = "";
     playSound("scroll");
-    document.getElementById("btnClose").style.display = "none";
-    document.getElementById("btnClose").style.top = ui.objectSize * 0.065 + "px";
-    const content = document.getElementById("scrollText");
-    const el = document.getElementById("scrollBackCenter");
-    const sbd =  document.getElementById("scrollBackDown");
+    el("btnClose").style.display = "none";
+    el("btnClose").style.top = ui.objectSize * 0.065 + "px";
+    const content = el("scrollText");
+    const scrollBack = el("scrollBackCenter");
+    const sbd =  el("scrollBackDown");
 
-    el.style.minHeight = 0 + "px";
+    scrollBack.style.minHeight = 0 + "px";
     content.style.minHeight = 0 + "px";
     sbd.style.top = ui.objectSize * 0.02 + "px";
 
     //crate a event that listen the css transition, and after that remove the listener in hideScrollContent
-    el.addEventListener("transitionend", hideScrollContent);
+    scrollBack.addEventListener("transitionend", hideScrollContent);
 	
   }
 
 //show the close button only when the scroll is totally opened
 function showCloseButton(){
-    document.getElementById("btnClose").style.display = "block";
-    document.getElementById("scrollBackCenter").removeEventListener("transitionend", showCloseButton)
+    el("btnClose").style.display = "block";
+    el("scrollBackCenter").removeEventListener("transitionend", showCloseButton)
 }
 
 // scroll open
 function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5)){
     ui.scrollCurrentContent = currentContent;
     playSound("scroll");
-    const content = document.getElementById("scrollText");
-    const el = document.getElementById("scrollBackCenter");
+    const content = el("scrollText");
+    const scrollBack = el("scrollBackCenter");
 
     const orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
     if (!!orientation.match("landscape") && detectmob()){
@@ -98,19 +99,19 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
     }
 
     disableMainButtons()
-    document.getElementById("scrollBackUp").style.opacity = 1;
-    const sbd =  document.getElementById("scrollBackDown");
+    el("scrollBackUp").style.opacity = 1;
+    const sbd =  el("scrollBackDown");
     sbd.style.top = ui.objectSize * 0.02 + "px";
     //sbd.style.visibility = "visible";
     sbd.style.opacity = 1;
 
 
-    document.getElementById("scroll").style.zIndex = 150;
-    el.style.minHeight = height * 0.97 + "px";
+    el("scroll").style.zIndex = 150;
+    scrollBack.style.minHeight = height * 0.97 + "px";
     content.style.minHeight = height * 0.92 + "px";
     sbd.style.top = height * 0.97 + "px";
 
-    el.addEventListener("transitionend", showCloseButton);
+    scrollBack.addEventListener("transitionend", showCloseButton);
 	
 		//switch positions scene and console
 	ui.sceneOnTop = false;
@@ -121,27 +122,27 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
 //Put the bocadillo in the right place in the map
 function localizarBocadillo(){
     if (ui.currentBackGround == "curanderobg"){
-        document.getElementById("bocadilloMapa").style.display ="none";
-        document.getElementById("pjMapa").style.display ="none";
+        el("bocadilloMapa").style.display ="none";
+        el("pjMapa").style.display ="none";
     }else{
         if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
-            document.getElementById("backMapa").src = "img/mapaunderground.png";
+            el("backMapa").src = "img/mapaunderground.png";
         }else{
-            document.getElementById("backMapa").src = "img/mapa.png";
+            el("backMapa").src = "img/mapa.png";
         }
         if(!ui.currentBackGround.match(/_altar/) && !ui.currentBackGround.match(/_estatua/)){
         const localidad = places[ui.currentBackGround];
-        document.getElementById("zoneMap").innerHTML= "The " + zones[state.zone.current].name;
-        const mapWidth = document.getElementById("backMapa").style.width;
-        document.getElementById("bocadilloMapa").style.display ="block";
-        document.getElementById("pjMapa").style.display ="block";
-        document.getElementById("bocadilloMapa").style.left = parseInt(mapWidth) * localidad.x + "px";
-        document.getElementById("bocadilloMapa").style.top = parseInt(mapWidth) * localidad.y + "px";
-        document.getElementById("pjMapa").style.left = parseInt(mapWidth) * localidad.x * 1.01 + "px";
-        document.getElementById("pjMapa").style.top = parseInt(mapWidth) * localidad.y * 0.98 + "px";
+        el("zoneMap").innerHTML= "The " + zones[state.zone.current].name;
+        const mapWidth = el("backMapa").style.width;
+        el("bocadilloMapa").style.display ="block";
+        el("pjMapa").style.display ="block";
+        el("bocadilloMapa").style.left = parseInt(mapWidth) * localidad.x + "px";
+        el("bocadilloMapa").style.top = parseInt(mapWidth) * localidad.y + "px";
+        el("pjMapa").style.left = parseInt(mapWidth) * localidad.x * 1.01 + "px";
+        el("pjMapa").style.top = parseInt(mapWidth) * localidad.y * 0.98 + "px";
         }else{
-            document.getElementById("bocadilloMapa").style.display ="none";
-            document.getElementById("pjMapa").style.display ="none";
+            el("bocadilloMapa").style.display ="none";
+            el("pjMapa").style.display ="none";
         }
     }
     
@@ -210,9 +211,9 @@ function updateAchievements(){
     txt += achievementList();
     //txt += '<div class="divTableRow"><div class="divTableCell"><img src="img/no_logro.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>?????????????</strong> <br></div></div>';
     txt += "</div>"
-    document.getElementById('innerTextScroll').innerHTML=txt;
-    document.getElementById("titleAchievements").style.fontSize = ui.em * 2.5 + "px";
-    document.getElementById("titleAchievements").style.lineHeight = ui.em * 2.5 + "px";  
+    el('innerTextScroll').innerHTML=txt;
+    el("titleAchievements").style.fontSize = ui.em * 2.5 + "px";
+    el("titleAchievements").style.lineHeight = ui.em * 2.5 + "px";  
 
 }
 
@@ -333,11 +334,11 @@ function updateStats(){
     "Currenly won: " + numLogrosGanados + "<br>" + 
     "Completion: " + Math.round((numLogrosGanados / Object.keys(logro).filter((key) => logro[key].name && !logro[key].planned).length) * 100) + "%<br>" + 
     "</div>";   
-    document.getElementById('innerTextScroll').innerHTML= ui.statsPage;  
-    document.getElementById("stats").style.fontSize = ui.em + "px";
-    document.getElementById("stats").style.lineHeight = ui.em + "px";
-    document.getElementById("titleStats").style.fontSize = ui.em * 2.5 + "px";
-    document.getElementById("titleStats").style.lineHeight = ui.em * 2.5 + "px";    
+    el('innerTextScroll').innerHTML= ui.statsPage;  
+    el("stats").style.fontSize = ui.em + "px";
+    el("stats").style.lineHeight = ui.em + "px";
+    el("titleStats").style.fontSize = ui.em * 2.5 + "px";
+    el("titleStats").style.lineHeight = ui.em * 2.5 + "px";    
 
 }
 
@@ -401,11 +402,11 @@ function updateHelp(){
    //'<div class="divTableRow"><div class="divTableCell"><img src="img/muerto.png" height="' + em * 3 + 'px" /></div><div class="divTableCell"></div></div>' +
    //'</div>' +
 
-    document.getElementById('innerTextScroll').innerHTML=txt;
-    document.getElementById("help").style.fontSize = ui.em + "px";
-    document.getElementById("help").style.lineHeight = ui.em + "px";
-    document.getElementById("titleHelp").style.fontSize = ui.em * 2.5 + "px";
-    document.getElementById("titleHelp").style.lineHeight = ui.em * 2.5 + "px";  
+    el('innerTextScroll').innerHTML=txt;
+    el("help").style.fontSize = ui.em + "px";
+    el("help").style.lineHeight = ui.em + "px";
+    el("titleHelp").style.fontSize = ui.em * 2.5 + "px";
+    el("titleHelp").style.lineHeight = ui.em * 2.5 + "px";  
 
 
     
@@ -440,18 +441,18 @@ function updateKill(){
     '</div><br><br>' + 
     '<span class="titles" id="titleCementery">' + (world.cemetery.length == 0 ? "" : "Cemetery") + '</span>' + 
     (world.cemetery.length == 0 ? "" : "<small>" + cemeteryText() + "</small>");
-    document.getElementById('innerTextScroll').innerHTML=txt;
-    document.getElementById("realKillBtn").onclick = realKill;
-    document.getElementById("kill").style.fontSize = ui.em + "px";
-    document.getElementById("kill").style.lineHeight = ui.em + "px";
-    document.getElementById("titleKill").style.fontSize = ui.em * 2.5 + "px";
-    document.getElementById("titleKill").style.lineHeight = ui.em * 2.5 + "px";
-    document.getElementById("titleCementery").style.fontSize = ui.em * 2.5 + "px";
-    document.getElementById("titleCementery").style.lineHeight = ui.em * 2.5 + "px";
+    el('innerTextScroll').innerHTML=txt;
+    el("realKillBtn").onclick = realKill;
+    el("kill").style.fontSize = ui.em + "px";
+    el("kill").style.lineHeight = ui.em + "px";
+    el("titleKill").style.fontSize = ui.em * 2.5 + "px";
+    el("titleKill").style.lineHeight = ui.em * 2.5 + "px";
+    el("titleCementery").style.fontSize = ui.em * 2.5 + "px";
+    el("titleCementery").style.lineHeight = ui.em * 2.5 + "px";
     
-    const realKillBtnW = document.getElementById("realKillBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
-    document.getElementById("realKillBtn").style.left = ((ui.objectSize - parseInt(realKillBtnW)) / 2) + "px";
-    document.getElementById("realKillBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
+    const realKillBtnW = el("realKillBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
+    el("realKillBtn").style.left = ((ui.objectSize - parseInt(realKillBtnW)) / 2) + "px";
+    el("realKillBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
 
 }
 
