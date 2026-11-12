@@ -41,6 +41,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-10 | Offline mode: network first for code, stored copy first for art and sound, new cache per release | Online players always get the newest version; offline still plays; old versions don't linger |
 | 2026-11-11 | Route after 2.0.0: 1 clean up the code, 2 modern and faster, 3 the story, 4 new features | The author's order: a clean, fast base before adding content |
 | 2026-11-11 | CHANGELOG is a flat list of short bullets per version, no narrative or subtitles | The author's preference for readability |
+| 2026-11-12 | Story script revised: the scroll speaks to you (the god), a prophecy behind the exile, a hooded stranger who is your mask, one staff that changes, two endings by who dies | Decided one question at a time; full list and the text in [docs/STORY.md](docs/STORY.md) |
 
 ## Ideas backlog
 
@@ -65,7 +66,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 
   *Today:* half-prepared. Zones already name their material (`drop:` in `src/data/zones.js`) and there's a "scavenger skills" stat (`pFindMaterials`, raised by the Dwarf statue), but gathering is only a `//found materials` ToDo in `src/combat.js`, and there's no inventory, crafting or use for the items. The old help also had "Commerce" and "Gathering" pages that the current help lacks. *Art already drawn* (`wizardidle-old-ideas/unorganzed_sprites/Sprites/`): `anilos.png` is **five gem rings** (pink, blue, green, orange, brown), one per ring recipe. `BASE/dg_food32.gif` has mushrooms in a dozen colours (the *hongo* material), plus drinks, bread and meat.
 
-- **Finish the story: chapters III–XI and the final battle** (from old notes, 2018): *Today:* only the Prologue, Chapter I and Chapter II (Devotion: faith multiplier, Divine crosier) do anything. Chapters III–VIII (lvl 50–149) exist as titles with TODO comments describing the plan (`var chapter` object in `src/story.js`). Chapters IX–XI and the ending aren't there at all. The planned arc (`wizardidle-old-ideas/historiaperlevel.txt`):
+- **Finish the story: chapters III–XI and the final battle** (from old notes, 2018): **Scripted 2026-11-12 in [docs/STORY.md](docs/STORY.md)** (branch `plan/story`): every scroll and console beat, revised from the arc below; the code still has to follow. *Today:* only the Prologue, Chapter I and Chapter II (Devotion: faith multiplier, Divine crosier) do anything. Chapters III–VIII (lvl 50–149) exist as titles with TODO comments describing the plan (`var chapter` object in `src/story.js`). Chapters IX–XI and the ending aren't there at all. The planned arc (`wizardidle-old-ideas/historiaperlevel.txt`):
   - **50, III:** faith multiplier halves; he seeks knowledge and artefacts instead of preaching.
   - **60–80:** finds a staff he believes is sacred, then breaks it.
   - **90, IV, The search for the forbidden:** gains the sacred staff. **100:** controls it, ×1.5 damage, loses faith with every kill.
@@ -171,7 +172,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - Levelling pace: keep the flat ~16 kills per level the game has always had, or move toward the spreadsheet's 16 × level (much slower late game)? Or something in between? And should gold go back to 0.25 per HP?
 - Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
 - Travel favor: what earns it (a faith threshold, a chapter, an achievement), and can the wizard lose it (e.g. while in sin or atheist)?
-- Story: keep the old arc as written (sacred staff → corruption → killing Midas → lynching → disobedience → war on the god), or revise it? Should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?
+- Story: ~~keep the old arc or revise it?~~ Revised, see [docs/STORY.md](docs/STORY.md). Still open: should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?
 - Professions: keep the old trio (Alchemy, Enchanting, Writing) and the 15 recipes, or rethink them? What should each item actually do (e.g. teleportation scroll ↔ map rework, divine binding ↔ faith)? Does the wizard pick one himself (free will) or does the player choose? One at a time or several, with their own levels? What do they produce: gold, faith, items, spell boosts? Do they tie into the faith rebalance or atheism?
 - Faith rebalance: what feels off today: too little faith, touches too expensive, too easy or too hard to fall into atheism? And should atheism stay a one-way fate, or could the wizard drift back and forth?
 - Map revamp: which places are known from the start for story reasons, and how are the others discovered (visiting, rumours, scrolls, the travel favour)? Which areas get an inner map first? Which ways should the character be able to move? (walking between neighbouring zones, teleporting, being pushed by events or bosses, choosing a destination...) And should the map itself look or behave differently, or only how the location changes?
@@ -180,6 +181,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: The story is scripted
+- Wrote [docs/STORY.md](docs/STORY.md) on branch `plan/story`: the text of every chapter scroll (Prologue to XI, both epilogues) and the console lines between them. 38–77 words each, so every scroll fits the screen without scrolling (it holds about 110–140).
+- The author decided, one question at a time: the scroll speaks to you, the god; the arc is free to revise; hooks are a secret behind the exile, a recurring stranger and a cliffhanger last line; the secret is a prophecy; the stranger is your mask; two endings by who dies; short scrolls plus console beats; one staff that changes; the prophecy is revealed in pieces, complete at VII; in X he finds out who watched the lynching; the god fears the prophecy.
+- Choices made while writing, open to change: the lynching's sorceress is the seer who wrote the prophecy; the reforged staff is *Nomaleatorio*; Midas thought he was the god of the prophecy.
 
 ### 2026-11-12: Stage 2 started, the endless animations
 
