@@ -14,7 +14,8 @@ Work happens on `dev`; `main` is the live site and only gets playable versions. 
 
 Gate before moving on: the whole code base is modern, measurably faster where it matters (game loop, drawing, console output), and free of the redundancy found in stage 1.
 
-- [ ] Spell animations never stop (a v1 bug, found in stage 1): when the last frame is drawn, `spell()` cancels the frame request but then requests another one, so every spell ever cast keeps redrawing about 60 times per second, each loop clearing the shared spell canvas. Fix first: it costs CPU and can make spells flicker.
+- [x] Spell animations never stop (a v1 bug, found in stage 1): when the last frame is drawn, `spell()` cancels the frame request but then requests another one, so every spell ever cast keeps redrawing about 60 times per second, each loop clearing the shared spell canvas. Fix first: it costs CPU and can make spells flicker. *Fixed 2026-11-12: over a 30-minute game, 72,329 animation callbacks (peak 646/s) became 3,730 (peak 50/s).*
+- [x] Images loaded once and reused (v1 created a new image on every redraw), with stale late loads ignored.
 
 ## 3. The story
 

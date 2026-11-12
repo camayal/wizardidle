@@ -10,6 +10,9 @@
 - Code: screen layout rewritten as one line per element (352 → 139 lines), same positions and sizes.
 - Code: template strings instead of long + concatenations; more small helpers (`drawWizard`, `clearNPC`, `studyPhase`); `spell()` no longer takes four constant arguments.
 - Fixed typos: health points, Currently won, Gold spent at inns, Hydra heads, enough, decides to come back, gaming house, wants to gamble, a hydra, Divine polypoid.
+- Faster: spell animations stop after their last frame (before, every spell ever cast kept redrawing forever; 19x less drawing work over a 30-minute game).
+- Faster: images are loaded once and reused instead of on every redraw.
+- Fixed: an image that loaded late could be drawn over a newer one.
 - Restored the disabled developer console notes, lost in the 2.0.0 module split.
 
 ## 2.0.0 — 2026-11-11

@@ -7,6 +7,7 @@ import { state } from './state.js';
 import { ui } from './runtime.js';
 import { masterTime } from './config.js';
 import { playSound } from './audio.js';
+import { withImage } from './ui/render.js';
 
 
 
@@ -58,25 +59,21 @@ function spell(img, pj, critic = 0, center = 0){
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    const myImage = new Image();
-    myImage.src = `img/${img}.png`;
-    myImage.addEventListener("load",animate)
-    let requestFrame;
+    let myImage;
+    withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, `img/${img}.png`, (image) => { myImage = image; animate(); });
 
+    // one frame per screen refresh; the last step draws past the end of the sprite sheet,
+    // which leaves the canvas clear, and then the animation stops
     function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
         //draw each frame + place them in the middle
         context.drawImage(myImage, shift, 0, frameWidth, 
             frameHeight, (ui.squareSide * mult) * leftMultiHeadLocation, ui.headLevel * topMultiHeadLocation, ui.squareSide * multiSize, ui.squareSide * multiSize);
         shift += frameWidth + 1;
-        if (currentFrame == totalFrames) {
-            window.cancelAnimationFrame(requestFrame);
-        }
+        if (currentFrame == totalFrames) return;    // v1 asked for another frame here, forever
         currentFrame++;
-    
-        requestFrame = requestAnimationFrame(animate);
-    
-        }
+        requestAnimationFrame(animate);
+    }
 };
 
 

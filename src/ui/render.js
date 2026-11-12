@@ -82,17 +82,36 @@ function loadBackground(back) {
     localizarBocadillo();
 };
 
+// Images are loaded once and reused (v1 created a new Image for every redraw).
+const imageCache = new Map();
+const latestDraw = {};
+
+// Call draw(img) with the image at src, now if it's already loaded, otherwise when it loads.
+// Each canvas only keeps its latest request: an older image that finishes loading late is
+// not drawn over a newer one.
+function withImage(canvasName, src, draw) {
+    const ticket = latestDraw[canvasName] = (latestDraw[canvasName] || 0) + 1;
+    let img = imageCache.get(src);
+    if (!img) {
+        img = new Image();
+        img.src = src;
+        imageCache.set(src, img);
+    }
+    if (img.complete && img.naturalWidth > 0) {
+        draw(img);
+    } else {
+        img.addEventListener("load", () => { if (latestDraw[canvasName] === ticket) draw(img); }, { once: true });
+    }
+}
+
 // Draw the wizard; his sprite changes with the level (img/lvl<N>.png, every 10 levels).
 function loadCanvasChar(lvl, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
-    const img = new Image();
-    img.src = `img/lvl${Math.floor(lvl / 10) * 10}.png`;
-    //round in base 10
-    img.addEventListener("load", function() {
+    withImage("pj", `img/lvl${Math.floor(lvl / 10) * 10}.png`, (img) => {
         const ctx = pjCanvas.getContext("2d");
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
-    }, false);
+    });
 }
 
 // Draw the wizard with his normal sprite for his level.
@@ -136,9 +155,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     state.npc = npc;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
-    const img = new Image();
-    img.src = `img/${npc}.png`;
-    img.addEventListener("load", function() {
+    withImage("npc", `img/${npc}.png`, (img) => {
         const ctx = npcCanvas.getContext("2d");
         //medium size bosses (64x64px)
         if (state.npc === "arcangel" || state.npc === "doria" || state.npc === "midas" || state.npc === "kkck" || state.npc === "herbus" || state.npc === "skeleton" || state.npc === "medusa" || state.npc === "rainbow" || state.npc === "rojo") {
@@ -160,7 +177,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
         else {
             ctx.drawImage(img, squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn);
         }
-    }, false);
+    });
 }
 
 
@@ -220,6 +237,7 @@ function print(data) {
 };
 
 export {
+    withImage,
     clearNPC,
     drawWizard,
     showStage,

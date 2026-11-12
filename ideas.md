@@ -181,6 +181,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Stage 2 started, the endless animations
+
+- Measured first (10 and 30 virtual minutes, counting animation callbacks, images, sounds and console writes). The only big cost was the spell animations: up to 999 animation callbacks per second, growing with play time. Images, sounds and the console are small.
+- Spell animations now stop after their last frame; images are cached and a late-loading image can't overwrite a newer one.
+- 30-minute game: 72,329 → 3,730 animation callbacks, peak 646/s → 50/s. Wizard sprite verified pixel-identical; gameplay suite zero errors.
+
 ### 2026-11-11: Stage 1 step 8, tidy-ups; stage 1 done
 
 - 223 single-line concatenations became template strings (only where it can't change the text); `spell()` keeps its own animation counters instead of taking four constant arguments; `drawWizard()`, `clearNPC()` and `studyPhase()` replace repeated snippets. Stats page and all 8 layout cases verified identical.
