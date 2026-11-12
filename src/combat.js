@@ -20,197 +20,188 @@ import { el } from './ui/dom.js';
 
 
 
-// One round of the current fight, run by the event clock: announce it, then attack or heal
-// until the enemy or the wizard falls, and handle loot, XP, death and revival.
+// One step of the current fight, run by the event clock. The first step announces the
+// fight; every later step the wizard heals or attacks, then the fight may end.
 function battle() {
-    //stats
     run.multipleEventsCounter += 1;
-    let option = 1;
-    if (run.multipleEventsCounter > 1) {//special because is a loop in the second case until someone die
-        option = 2
-    }
-    let corruptedText;
-    switch (option) {
-    case 1:
-        //anounce the battle
-        if (fight.bossCombat) {
-            print(fight.enemyName + " releases the power and attack!" + " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")");
-        } else if (fight.hydraCombat){
-            print(fight.enemyName + " releases all its fury and attack with brutality!" + " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")");
-        }else {
-            print(fight.enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")");
-        }
-        break;
-    case 2:
-        //perform a loop until enemy or pj HP is 0
-        if(YesOrNot(stat("pHeal"),0) && (state.player.hp < state.player.hpBase)){
+    if (run.multipleEventsCounter == 1) {
+        announceBattle();
+    } else {
+        if (YesOrNot(stat("pHeal"), 0) && state.player.hp < state.player.hpBase) {
             healEV();
-        }else{
+        } else {
             attackEV();
         }
-        //if enemy dies
-        if (Math.round(fight.enemyHP) <= 0) {
-            if (fight.hydraCombat && (state.hydraHeads[fight.hydra] + 1) <= Number(zones[state.zone.current].headsMax)){
-                state.hydraHeads[fight.hydra] = state.hydraHeads[fight.hydra] + 1;
-                count("HydrasHeadCut");
-                getHydra();
-            }else{//end conditional hydra, here if die bosses and enemies
-                //stop clock of battle and reset bossMultiplier
-            endEvent();
-
-            
-            //kill capricor
-            if (fight.enemy == "el_capricor"){
-                logro.set(logro.logro_ultimocapricor);
-                zones.el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
-            }
-
-            fight.polymorphed = false;
-            if (fight.bossCombat){
-                count("BossesKilled");
-                logro.set(logro.logro_primerbossderrotado)
-            }else if(fight.hydraCombat){
-                count("HydrasKilled");
-                delete state.hydraHeads[fight.hydra]
-            }else{
-                if(enemySprites[fight.enemyAndNumber].rare == 1){
-                    count("rareEnemiesKilled");
-                }else{
-                    count("EnemiesKilled");
-                }
-            }
-            count("Combo");
-            if(state.counters.longestCombo === undefined){
-                state.counters.longestCombo = state.counters.Combo;
-            }else if(state.counters.longestCombo < state.counters.Combo){
-                state.counters.longestCombo = state.counters.Combo;
-            }
-            npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-            
-            
-            //add faith if the enemy is corrupted but only if not boss or hydra
-            if(!fight.bossCombat && !fight.hydraCombat){
-                if (enemySprites[fight.enemyAndNumber].corrupted == "1" && !state.player.inSin){
-                    run.feGanada = calculateFe() * 5;
-                    run.feGanada *= state.player.faithMultiplier
-                    state.player.faith = state.player.faith + run.feGanada;
-                    count("FeByCleanCorruption",Math.round(run.feGanada));
-                    corruptedText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption eradication";
-                }else {
-                    corruptedText = "";
-                }
-            }
-
-            //punish if the wizard is in sin (use the same corruptedText)
-            if(state.player.inSin){
-                const feperdida = calculateFe();
-                state.player.faith = state.player.faith - feperdida;
-                corruptedText = ", and reduce the faith " + ui.spiritIcon + " -" + roundNumbertoLetter(feperdida);
-
-            }
-
-            //print and add xp depent of the enemy
-            if (enemyTypes[fight.enemy].hasgold == "true") {
-                playSound("coins");
-                addGold();
-                if(fight.bossCombat){
-                    addXP(4);
-                    print(fight.enemyName + " was defeated and a big loot has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier));
-                }else if(fight.hydraCombat){
-                    addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
-                    print(fight.enemyName + " was defeated and a treasure has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * 15));
-                }else{
-                    addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
-                    print(fight.enemyName + " was defeated and looted " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold) + corruptedText);
-                }
-            } else {
-                if(fight.bossCombat){//kill no gold boss
-                    addXP(4);
-                    print(fight.enemyName + " was defeated");
-                }else if(fight.hydraCombat){
-                    addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
-                    print(fight.enemyName + " was defeated");
-                }else{
-                    addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
-                    print(fight.enemyName + " was defeated" + corruptedText);
-                }
-
-            }
-
-            fight.enemy = "";
-            fight.enemyAndNumber = "";
-            state.npc = "";
-                fight.bossMultiplier = 1;
-                fight.bossGoldMultiplier = 1;
-                nextEvent();
-            }
-            
-        }
-        //if pj dies
-        if (Math.round(state.player.hp) <= 0) {
-            //stop clock of battle and reset bossMultiplier
-            endEvent();
-            // If the enemy fell in this same round, its death above already restarted the
-            // event picker: stop it until the wizard is revived.
-            loop.stop("master");
-            //kiled by a sheep or chicken
-            if(fight.polymorphed){
-                switch (fight.polymorphedAnimal){
-                    case "gallina":
-                    logro.set(logro.logro_killedbychicken);
-                    break;
-                    case "oveja":
-                    logro.set(logro.logro_killedbysheep);
-                }
-            }
-
-            if(fight.bossCombat){logro.set(logro.logro_primeraderrotaporboss)}
-            
-            fight.polymorphed = false;
-            if(state.counters.longestCombo === undefined){
-                state.counters.longestCombo = state.counters.Combo;
-            }else if(state.counters.longestCombo < state.counters.Combo){
-                state.counters.longestCombo = state.counters.Combo;
-            }
-            state.counters.Combo = 0;
-            count("Deaths");
-            playSound("hurt" + getRandomInt(1,6));
-            fight.pjDead = true;
-            loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
-            let lootedText = "";
-            // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:
-            // fight.enemy was already empty. A fallen enemy can't take the wizard's gold.
-            if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold == "true"){
-            const goldLooted = getRandomInt(state.player.lastBattleGold,state.player.lastBattleGold * 2);
-            state.player.gold = state.player.gold - goldLooted;
-            lootedText = " and loses some gold" +  " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
-            count("goldLostInBattle", goldLooted);
-            }
-            print(wizardName() + " has fallen in battle" + lootedText);
-            npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
-            state.npc = "";
-            fight.enemy = "";
-            fight.enemyAndNumber = "";
-            fight.bossMultiplier = 1;
-            fight.bossGoldMultiplier = 1;
-            //Activate clock event //
-            fight.autorevive = setTimeout(function(){ 
-                run.previousEvent = "autorevive"
-                fight.autorevive = "";       
-                const feperdida = state.player.hpBase * 1.2454654;
-                state.player.faith = state.player.faith - feperdida;
-                print(wizardName() + " " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
-                fight.pjDead = false;
-                loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
-                count("selfRevive");
-                playSound("heal");
-                updateHeading();
-                nextEvent();
-            }, selfrevivetime);
-        }
+        if (Math.round(fight.enemyHP) <= 0) enemyFalls();
+        if (Math.round(state.player.hp) <= 0) wizardFalls();
     }
     updateHeading();
-};
+}
+
+// First message of a fight.
+function announceBattle() {
+    const hp = " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")";
+    if (fight.bossCombat) {
+        print(fight.enemyName + " releases the power and attack!" + hp);
+    } else if (fight.hydraCombat) {
+        print(fight.enemyName + " releases all its fury and attack with brutality!" + hp);
+    } else {
+        print(fight.enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + hp);
+    }
+}
+
+// The enemy reached 0 HP: a hydra grows another head (up to the zone's maximum), anything
+// else is defeated.
+function enemyFalls() {
+    if (fight.hydraCombat && (state.hydraHeads[fight.hydra] + 1) <= Number(zones[state.zone.current].headsMax)) {
+        state.hydraHeads[fight.hydra] = state.hydraHeads[fight.hydra] + 1;
+        count("HydrasHeadCut");
+        getHydra();
+    } else {
+        defeatEnemy();
+    }
+}
+
+// The fight is won: counters and achievements, faith, loot and XP, then back to the road.
+function defeatEnemy() {
+    endEvent();
+    if (fight.enemy == "el_capricor") {
+        logro.set(logro.logro_ultimocapricor);
+        zones.el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
+    }
+    fight.polymorphed = false;
+    if (fight.bossCombat) {
+        count("BossesKilled");
+        logro.set(logro.logro_primerbossderrotado);
+    } else if (fight.hydraCombat) {
+        count("HydrasKilled");
+        delete state.hydraHeads[fight.hydra];
+    } else if (enemySprites[fight.enemyAndNumber].rare == 1) {
+        count("rareEnemiesKilled");
+    } else {
+        count("EnemiesKilled");
+    }
+    count("Combo");
+    updateLongestCombo();
+    npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+
+    // faith: cleansing a corrupted enemy gains faith; while in sin every kill costs faith
+    let faithText;
+    if (!fight.bossCombat && !fight.hydraCombat) {
+        if (enemySprites[fight.enemyAndNumber].corrupted == "1" && !state.player.inSin) {
+            run.feGanada = calculateFe() * 5;
+            run.feGanada *= state.player.faithMultiplier;
+            state.player.faith = state.player.faith + run.feGanada;
+            count("FeByCleanCorruption", Math.round(run.feGanada));
+            faithText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption eradication";
+        } else {
+            faithText = "";
+        }
+    }
+    if (state.player.inSin) {
+        const faithLost = calculateFe();
+        state.player.faith = state.player.faith - faithLost;
+        faithText = ", and reduce the faith " + ui.spiritIcon + " -" + roundNumbertoLetter(faithLost);
+    }
+
+    victoryRewards(faithText);
+    clearFight();
+    nextEvent();
+}
+
+// Gold (if the enemy carries any) and XP for a won fight, with the victory message.
+function victoryRewards(faithText) {
+    if (enemyTypes[fight.enemy].hasgold == "true") {
+        playSound("coins");
+        addGold();
+        if (fight.bossCombat) {
+            addXP(4);
+            print(fight.enemyName + " was defeated and a big loot has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier));
+        } else if (fight.hydraCombat) {
+            addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
+            print(fight.enemyName + " was defeated and a treasure has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * 15));
+        } else {
+            addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+            print(fight.enemyName + " was defeated and looted " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold) + faithText);
+        }
+    } else if (fight.bossCombat) {
+        addXP(4);
+        print(fight.enemyName + " was defeated");
+    } else if (fight.hydraCombat) {
+        addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
+        print(fight.enemyName + " was defeated");
+    } else {
+        addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
+        print(fight.enemyName + " was defeated" + faithText);
+    }
+}
+
+// The wizard reached 0 HP: achievements, combo reset, maybe lose gold, then wait for a
+// divine touch or the self-revive.
+function wizardFalls() {
+    endEvent();
+    // If the enemy fell in this same round, its death above already restarted the
+    // event picker: stop it until the wizard is revived.
+    loop.stop("master");
+    if (fight.polymorphed) {
+        if (fight.polymorphedAnimal == "gallina") logro.set(logro.logro_killedbychicken);
+        if (fight.polymorphedAnimal == "oveja") logro.set(logro.logro_killedbysheep);
+    }
+    if (fight.bossCombat) logro.set(logro.logro_primeraderrotaporboss);
+    fight.polymorphed = false;
+    updateLongestCombo();
+    state.counters.Combo = 0;
+    count("Deaths");
+    playSound("hurt" + getRandomInt(1, 6));
+    fight.pjDead = true;
+    loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
+    let lootedText = "";
+    // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:
+    // fight.enemy was already empty. A fallen enemy can't take the wizard's gold.
+    if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold == "true") {
+        const goldLooted = getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 2);
+        state.player.gold = state.player.gold - goldLooted;
+        lootedText = " and loses some gold" + " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
+        count("goldLostInBattle", goldLooted);
+    }
+    print(wizardName() + " has fallen in battle" + lootedText);
+    npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
+    clearFight();
+    scheduleSelfRevive();
+}
+
+// If nobody revives him, the wizard gets up by himself after selfrevivetime, losing faith.
+function scheduleSelfRevive() {
+    fight.autorevive = setTimeout(function () {
+        run.previousEvent = "autorevive";
+        fight.autorevive = "";
+        const faithLost = state.player.hpBase * 1.2454654;
+        state.player.faith = state.player.faith - faithLost;
+        print(wizardName() + " " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
+        fight.pjDead = false;
+        loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+        count("selfRevive");
+        playSound("heal");
+        updateHeading();
+        nextEvent();
+    }, selfrevivetime);
+}
+
+// Keep the longest streak of fights won in a row.
+function updateLongestCombo() {
+    if (state.counters.longestCombo === undefined || state.counters.longestCombo < state.counters.Combo) {
+        state.counters.longestCombo = state.counters.Combo;
+    }
+}
+
+// Forget the enemy once a fight is over (won or lost).
+function clearFight() {
+    fight.enemy = "";
+    fight.enemyAndNumber = "";
+    state.npc = "";
+    fight.bossMultiplier = 1;
+    fight.bossGoldMultiplier = 1;
+}
 
 
 // Start a fight: a hydra (where the hydra mystery is solved), otherwise a normal enemy or a boss.
@@ -329,102 +320,116 @@ function getHydra(newEncounter = false){
 
 
 
-// The wizard attacks (maybe critic or polymorph) or misses, and the enemy hits back.
-function attackEV() {
-    let pjAttackWithCritic, spellId, pjHit, text;
-    if (YesOrNot(stat("pPolymorph"), 0) && !fight.hydraCombat && !fight.bossCombat && !fight.polymorphed && fight.enemy !== "baba" && fight.enemy !== "el_elemental" && fight.enemy !== "el_ent" && fight.enemy !== "el_espectro" && fight.enemy !== "el_esqueleto" && fight.enemy !== "el_golem" && fight.enemy !== "el_ojo" && fight.enemy !== "la_esencia"){
-        if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
-        fight.enemyHP = 1;
-        updateHeartNPC()
-        spell("spellPinBlue_16",false,frameWidth,frameHeight,currentFrame,shift);
-        count("school_" + spells.spellPinBlue_16.school)
-        fight.polymorphedAnimal = pickRandomItem("gallina,oveja");
-        playSound(fight.polymorphedAnimal);
-        loadNPC(fight.polymorphedAnimal);
-        print(wizardName() + " cast polymorphism!");
-        count("Polymorph_" + fight.polymorphedAnimal);
-        fight.polymorphed = true;
+// Enemies that can't be turned into a sheep or a chicken.
+const POLYMORPH_IMMUNE = ["baba", "el_elemental", "el_ent", "el_espectro", "el_esqueleto", "el_golem", "el_ojo", "la_esencia"];
+
+// The divine spells hit four times harder.
+function isDivineSpell(spellId) {
+    return spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16";
+}
+
+// Make the wizard hop, only while the page has focus.
+function hopWizard() {
+    if (document.hasFocus()) loop.every("animPJ", animatePJ, 100);
+}
+
+// Make the enemy hop, only while the page has focus.
+function hopEnemy() {
+    if (document.hasFocus()) loop.every("animNPC", animateNPC, 100);
+}
+
+// Take damage off the enemy, never below 0.
+function damageEnemy(damage) {
+    if (fight.enemyHP - damage < 0) {
+        fight.enemyHP = 0;
     } else {
-        if (YesOrNot(stat("pAttack"), 0)) {
-            //determine the prob of attack, if fail enemy attack
-            if (YesOrNot(stat("pCritic"), 0)) {
-                if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
-                //determine if is critical or not
-                pjAttackWithCritic = state.player.attack * stat("fCritic") * stat("fAttack");
-                pjAttackWithCritic *= config.balance.sacredDamageMultiplier;
-                spellId = getSpell();
-                if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
-                    pjAttackWithCritic = pjAttackWithCritic * 4 //if is one of the divine powers
-                }
-                if (fight.enemyHP - pjAttackWithCritic < 0) {//avoid -hp in enemy
-                    fight.enemyHP = 0;
-                } else {
-                    fight.enemyHP = Math.round(fight.enemyHP) - Math.round(pjAttackWithCritic);
-                }
-                updateHeartNPC()
-                count("school_" + spells[spellId].school)
-                spell(spellId,false,frameWidth,frameHeight,currentFrame,shift,true);
-                print(wizardName() + " performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
-                count("Critics");
-            } else {
-                if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
-                //attack with no critic
-                pjHit = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
-                pjHit *= config.balance.sacredDamageMultiplier;
-                spellId = getSpell();
-                if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
-                    pjHit *= 4 //if is one of the divine powers
-                }
-                if (fight.enemyHP - pjHit < 0) {//avoid -hp in enemy
-                    fight.enemyHP = 0;
-                } else {
-                    fight.enemyHP = Math.round(fight.enemyHP) - Math.round(pjHit);
-                }
-                updateHeartNPC()
-                count("school_" + spells[spellId].school)
-                const spellText = spells[spellId].name.toLowerCase()
-                
-                if (spells[spellId].school == "Physical"){
-                    text = pickRandomItem(" uses the , attacks with the ");
-                }else{
-                    text = pickRandomItem(" cast , attacks with ");
-                }
-
-                print(wizardName() + text + spellText + " (" + ui.attackIcon + roundNumbertoLetter(pjHit) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
-                spell(spellId,false,frameWidth,frameHeight,currentFrame,shift);
-
-                count("Attacks");
-
-            }
-            if(pjAttackWithCritic > 500 || pjHit > 500){logro.set(logro.logro_attack500)}
-            if(pjAttackWithCritic > 1000 || pjHit > 1000){logro.set(logro.logro_attack1000)}
-        } else {
-            //enemy attack
-            if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
-            let enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
-
-            if (fight.enemy == "midas"){enemyHit *= 2}//duplicate midas attack
-
-            if (fight.spellEnemy == "spellChispasMulti_12" || fight.spellEnemy == "spellRainMultiColor_24" || fight.spellEnemy == "spellColorSpin_16"){
-                enemyHit *= 4 //if is one of the divine powers
-            }
-
-            if (state.player.hp - enemyHit < 0) {
-                state.player.hp = 0;
-            } else {
-                state.player.hp = state.player.hp - enemyHit;
-            }
-            print(fight.enemyName + " attacks (" + ui.attackIcon + roundNumbertoLetter(enemyHit) + ")");
-            if (fight.bossCombat){
-                fight.spellEnemy = pickRandomItem(zones[state.zone.current].bossSpell);
-            }else if (fight.hydraCombat){
-                fight.spellEnemy = pickRandomItem(zones[state.zone.current].hidrasSpells);
-            }
-            spell(fight.spellEnemy,true,frameWidth,frameHeight,currentFrame,shift);
-            count("IncomingAttacks");
-        }
+        fight.enemyHP = Math.round(fight.enemyHP) - Math.round(damage);
     }
-};
+    updateHeartNPC();
+}
+
+// One exchange: the wizard may polymorph the enemy, or attacks (maybe a critic); if his
+// attack roll fails, the enemy hits him instead.
+function attackEV() {
+    const canPolymorph = !fight.hydraCombat && !fight.bossCombat && !fight.polymorphed && !POLYMORPH_IMMUNE.includes(fight.enemy);
+    if (YesOrNot(stat("pPolymorph"), 0) && canPolymorph) {
+        castPolymorph();
+    } else if (YesOrNot(stat("pAttack"), 0)) {
+        const damage = YesOrNot(stat("pCritic"), 0) ? criticAttack() : normalAttack();
+        if (damage > 500) logro.set(logro.logro_attack500);
+        if (damage > 1000) logro.set(logro.logro_attack1000);
+    } else {
+        enemyAttack();
+    }
+}
+
+// Turn the enemy into a sheep or a chicken with 1 HP.
+function castPolymorph() {
+    hopWizard();
+    fight.enemyHP = 1;
+    updateHeartNPC();
+    spell("spellPinBlue_16", false, frameWidth, frameHeight, currentFrame, shift);
+    count("school_" + spells.spellPinBlue_16.school);
+    fight.polymorphedAnimal = pickRandomItem("gallina,oveja");
+    playSound(fight.polymorphedAnimal);
+    loadNPC(fight.polymorphedAnimal);
+    print(wizardName() + " cast polymorphism!");
+    count("Polymorph_" + fight.polymorphedAnimal);
+    fight.polymorphed = true;
+}
+
+// A critic: full attack x critic multiplier x mastery. Returns the damage.
+function criticAttack() {
+    hopWizard();
+    let damage = state.player.attack * stat("fCritic") * stat("fAttack");
+    damage *= config.balance.sacredDamageMultiplier;
+    const spellId = getSpell();
+    if (isDivineSpell(spellId)) damage = damage * 4;
+    damageEnemy(damage);
+    count("school_" + spells[spellId].school);
+    spell(spellId, false, frameWidth, frameHeight, currentFrame, shift, true);
+    print(wizardName() + " performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
+    count("Critics");
+    return damage;
+}
+
+// A normal attack: 50-100% of the attack x mastery, with a spell or the staff. Returns the damage.
+function normalAttack() {
+    hopWizard();
+    let damage = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
+    damage *= config.balance.sacredDamageMultiplier;
+    const spellId = getSpell();
+    if (isDivineSpell(spellId)) damage *= 4;
+    damageEnemy(damage);
+    count("school_" + spells[spellId].school);
+    const spellText = spells[spellId].name.toLowerCase();
+    const verb = spells[spellId].school == "Physical" ? pickRandomItem(" uses the , attacks with the ") : pickRandomItem(" cast , attacks with ");
+    print(wizardName() + verb + spellText + " (" + ui.attackIcon + roundNumbertoLetter(damage) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
+    spell(spellId, false, frameWidth, frameHeight, currentFrame, shift);
+    count("Attacks");
+    return damage;
+}
+
+// The enemy hits the wizard (bosses harder, King Midas x2, divine spells x4).
+function enemyAttack() {
+    hopEnemy();
+    let enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
+    if (fight.enemy == "midas") enemyHit *= 2;
+    if (isDivineSpell(fight.spellEnemy)) enemyHit *= 4;
+    if (state.player.hp - enemyHit < 0) {
+        state.player.hp = 0;
+    } else {
+        state.player.hp = state.player.hp - enemyHit;
+    }
+    print(fight.enemyName + " attacks (" + ui.attackIcon + roundNumbertoLetter(enemyHit) + ")");
+    if (fight.bossCombat) {
+        fight.spellEnemy = pickRandomItem(zones[state.zone.current].bossSpell);
+    } else if (fight.hydraCombat) {
+        fight.spellEnemy = pickRandomItem(zones[state.zone.current].hidrasSpells);
+    }
+    spell(fight.spellEnemy, true, frameWidth, frameHeight, currentFrame, shift);
+    count("IncomingAttacks");
+}
 
 
 // The wizard heals himself instead of attacking.
@@ -496,6 +501,8 @@ function randomName() {
 ;
 
 export {
+    hopEnemy,
+    hopWizard,
     enemyEV,
     randomName,
 };

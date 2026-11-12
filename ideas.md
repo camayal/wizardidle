@@ -181,6 +181,14 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-11: Stage 1 step 6, long functions split
+
+- `battle()` 189 → 15 lines (announce, enemy falls, defeat, rewards, wizard falls, self-revive, plus `updateLongestCombo()` / `clearFight()` that were copied in two places).
+- `attackEV()` 95 → 12 lines (polymorph, critic, normal attack, enemy attack; helpers for divine spells, damage and hops).
+- `updateStats()` 123 lines → one helper per section with loops for zones, containers and schools; checked to produce the exact same HTML as before from a rich test save.
+- `rollDicesForSixfivefour()` 115 → 15 lines (roll, message, bank a die, show, skip; `diceImg()` for the repeated icon HTML). A dice-only test played ~80 games without errors.
+- Pace against v1 checked again: same spread of levels and the same ratios of attacks, critics and heals.
+
 ### 2026-11-11: Stage 1 step 5, comments
 
 - One short comment above each of the 95 functions; stale comments replaced (old storage API, "possible bug" note in studyEV, which was checked and is fine).

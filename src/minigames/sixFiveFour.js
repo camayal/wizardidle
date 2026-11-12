@@ -6,6 +6,7 @@ import { state } from '../state.js';
 import { run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { endEvent, event, nextEvent, startEvent } from '../events.js';
+import { hopEnemy, hopWizard } from '../combat.js';
 import { currentFrame, frameHeight, frameWidth, shift, spell } from '../spells.js';
 import { playSound } from '../audio.js';
 import { animateNPC, animatePJ, npcCanvas, print, showStage, updateHeading, wizardName } from '../ui/render.js';
@@ -63,121 +64,115 @@ function sixfivefour(){
 }
 
 
-// One roll of five dice for a player: find ship (6), captain (5) and crew (4),
-// then the cargo (the two remaining dice); reroll while the cargo is risky.
+// A small dice-game icon for the console (img/<name>.png).
+function diceImg(name) {
+    return "<img class='imgInConsole' height='" + ui.em + "' src='img/" + name + ".png'/>";
+}
+
+// The banked symbols in parentheses, or nothing.
+function inParens(symbols) {
+    return symbols != '' ? '(' + symbols + ')' : '';
+}
+
+// One step of a player's turn, run by the event clock. Steps alternate between rolling the
+// dice and showing the result, for up to three rolls.
 function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
     run.multipleEventsCounter += 1;
-    
-    //switch between rolling and results
-    isRolling = !isRolling
-
-    //detect if is rolling or presenting the result
-    if (isRolling){
-        //Roll if cargo is <= risknumber, this is usefull to skip the last rollings in case the player has a good amoung of points
-
-        if (cargo < riskinDice || cargo <= cargoFirstPlayer){
-
-            //animate thow dice
-            if (nameDicePlayer == gamblingManName){
-                if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
-            }else{
-                if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
-            }
-            spell("spellMiniDados_18",true,frameWidth,frameHeight,currentFrame,shift,false,true);
-            playSound("dice");
-
-
-            //Set a dialog if the risk is too high
-            if (riskinDice > cargo && ship && captain && crew){
-                print(nameDicePlayer + " feels risky and rolls the dice to try a better cargo")
-            }else if(cargo <= cargoFirstPlayer && ship && captain && crew){
-                print(nameDicePlayer + " rolls the dice to try to get more cargo")
-            }else{
-                if (run.multipleEventsCounter == 3){
-                    print(nameDicePlayer + " rolls the dice again " + ((symbolCurrentHand != '') ? '(' : '') + symbolCurrentHand + ((symbolCurrentHand != '') ? ')' : ''))
-                }else if (run.multipleEventsCounter == 5){
-                    print(nameDicePlayer + " plays the last turn " + ((symbolCurrentHand != '') ? '(' : '') + symbolCurrentHand + ((symbolCurrentHand != '') ? ')' : ''))
-                }else{
-                    print(nameDicePlayer + " rolls the dice")
-                }
-            }
-            
-
-            resultDice = "";
-            //for each element in the dicesToRoll object put a randon from 1 to 6
-            for (let elem in dicesToRoll) {
-                dicesToRoll[elem] = Math.floor(Math.random() * 6 + 1)
-                //save current roll (to avoid delete info in the next steps) with images
-                resultDice = resultDice + "<img class='imgInConsole' height='" + ui.em + "' src='img/d" + dicesToRoll[elem] +".png'/>"
-            }
-            
-
-        
-            //check if some dice is 6 an delete the dice and set ship true
-            for (let elem in dicesToRoll){
-                if(dicesToRoll[elem] == 6 && !ship){
-                    delete dicesToRoll[elem];
-                    ship = true
-                    currentHand = "<img class='imgInConsole' height='" + ui.em + "' src='img/d6.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/ship.png'/> "
-                    symbolCurrentHand = "<img class='imgInConsole' height='" + ui.em + "' src='img/ship.png'/>"
-                }
-            }
-            //check if some dice is 5 an delete the dice and set captain true
-            for (let elem in dicesToRoll){
-                if(dicesToRoll[elem] == 5 && ship && !captain){
-                    delete dicesToRoll[elem];
-                    captain = true
-                    currentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/d5.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/captain.png'/> "
-                    symbolCurrentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/captain.png'/>"
-                }
-            }
-            //check if some dice is 4 an delete the dice and set crew true
-            for (let elem in dicesToRoll){
-                if(dicesToRoll[elem] == 4 && ship && captain && !crew){
-                    delete dicesToRoll[elem];
-                    crew = true
-                    currentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/d4.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/crew.png'/> "
-                    symbolCurrentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/crew.png'/>"
-                }
-            }
-        
-            //check the cargo and roll if is less than 7 (most probable number for two dices)
-            if(ship && captain && crew ){
-                //reset cargo in case need a second rolling of risk
-                cargo = 0;
-                for (let elem in dicesToRoll){
-                        cargo = cargo + dicesToRoll[elem]
-                }
-            }
-
-        }else{
-            
-            loop.stop("event");
-            run.multipleEventsCounter = 0;
-            print(nameDicePlayer + " thinks the cargo is enought and skip")
-            // go to the evaluation step
-            startEvent(function() { evalSixFiveFour(enemyStart,nameDicePlayer); });
+    isRolling = !isRolling;
+    if (isRolling) {
+        // keep rolling while the cargo is risky or doesn't beat the first player's
+        if (cargo < riskinDice || cargo <= cargoFirstPlayer) {
+            rollTurn(nameDicePlayer);
+        } else {
+            skipRoll(enemyStart, nameDicePlayer);
         }
-
-
-}
-//display the results of each roll in a separate line of print
-else{
-
-    //print result
-    print(nameDicePlayer + " gets " + resultDice + ((currentHand != '') ? ' and banks ' +  currentHand : '') )
-
-    currentHand = "";
-    symbolCurrentHand = "";
-
-    if (run.multipleEventsCounter == 6){
-        loop.stop("event");
-        run.multipleEventsCounter = 0;
-        
-        //eval
-        startEvent(function() { evalSixFiveFour(enemyStart,nameDicePlayer); });
+    } else {
+        showRoll(enemyStart, nameDicePlayer);
     }
 }
+
+// Roll the dice that are still in play and bank ship (6), captain (5) and crew (4) in that order;
+// with all three banked, the two remaining dice are the cargo.
+function rollTurn(nameDicePlayer) {
+    if (nameDicePlayer == gamblingManName) {
+        hopEnemy();
+    } else {
+        hopWizard();
+    }
+    spell("spellMiniDados_18", true, frameWidth, frameHeight, currentFrame, shift, false, true);
+    playSound("dice");
+    rollMessage(nameDicePlayer);
+
+    resultDice = "";
+    for (let die in dicesToRoll) {
+        dicesToRoll[die] = Math.floor(Math.random() * 6 + 1);
+        resultDice = resultDice + diceImg("d" + dicesToRoll[die]);
+    }
+    if (!ship && bankDie(6)) {
+        ship = true;
+        currentHand = diceImg("d6") + ":" + diceImg("ship") + " ";
+        symbolCurrentHand = diceImg("ship");
+    }
+    if (ship && !captain && bankDie(5)) {
+        captain = true;
+        currentHand += diceImg("d5") + ":" + diceImg("captain") + " ";
+        symbolCurrentHand += diceImg("captain");
+    }
+    if (ship && captain && !crew && bankDie(4)) {
+        crew = true;
+        currentHand += diceImg("d4") + ":" + diceImg("crew") + " ";
+        symbolCurrentHand += diceImg("crew");
+    }
+    if (ship && captain && crew) {
+        cargo = 0;
+        for (let die in dicesToRoll) {
+            cargo = cargo + dicesToRoll[die];
+        }
+    }
+}
+
+// What the player says before rolling.
+function rollMessage(nameDicePlayer) {
+    if (riskinDice > cargo && ship && captain && crew) {
+        print(nameDicePlayer + " feels risky and rolls the dice to try a better cargo");
+    } else if (cargo <= cargoFirstPlayer && ship && captain && crew) {
+        print(nameDicePlayer + " rolls the dice to try to get more cargo");
+    } else if (run.multipleEventsCounter == 3) {
+        print(nameDicePlayer + " rolls the dice again " + inParens(symbolCurrentHand));
+    } else if (run.multipleEventsCounter == 5) {
+        print(nameDicePlayer + " plays the last turn " + inParens(symbolCurrentHand));
+    } else {
+        print(nameDicePlayer + " rolls the dice");
+    }
+}
+
+// Take the first die showing `face` out of play. Returns whether one was found.
+function bankDie(face) {
+    for (let die in dicesToRoll) {
+        if (dicesToRoll[die] == face) {
+            delete dicesToRoll[die];
+            return true;
+        }
+    }
+    return false;
+}
+
+// The cargo is good enough: end the turn early.
+function skipRoll(enemyStart, nameDicePlayer) {
+    endEvent();
+    print(nameDicePlayer + " thinks the cargo is enought and skip");
+    startEvent(function () { evalSixFiveFour(enemyStart, nameDicePlayer); });
+}
+
+// Show what was rolled and banked; after the third roll the turn ends.
+function showRoll(enemyStart, nameDicePlayer) {
+    print(nameDicePlayer + " gets " + resultDice + ((currentHand != '') ? ' and banks ' + currentHand : ''));
+    currentHand = "";
+    symbolCurrentHand = "";
+    if (run.multipleEventsCounter == 6) {
+        endEvent();
+        startEvent(function () { evalSixFiveFour(enemyStart, nameDicePlayer); });
+    }
 }
 
 

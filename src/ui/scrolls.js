@@ -200,129 +200,150 @@ function updateAchievements(){
 
 }
 
-// Fill the stats scroll from the wizard's counters.
-function updateStats(){
+// One "Label: value" line of the stats page.
+function statLine(label, value) {
+    return label + ": " + value + "<br>";
+}
 
-    const secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
-    const numLogrosGanados = countLogros();
-    ui.statsPage = "<div id='stats'><span class='titles' id='titleStats'>Stats</span><br>" + 
-    "<span class='subtitles'>Wizard</span><br>" + 
-    "Name: " + (state.player.name) + "<br>" +
-    "Level: " + roundNumbertoLetter(state.player.lvl) + "<br>" +
-    "Age: " + roundNumbertoLetter(state.player.age) + " yrs<br>" +
-    "Health points: " + roundNumbertoLetter(state.player.hpBase) + "<br>" + 
-    "Attack points: " + roundNumbertoLetter(state.player.attack) + "<br>" + 
-    "Critic multiplier: " + roundNumbertoLetter(stat("fCritic")) + "<br>" + 
-    "Exp. to next level: " + Math.round((state.player.xpNext - state.player.xp) * 100) + "<br>" + 
-    "Time of existence: " +  secsToHours(secondsIngameInstats) + "<br>" +
-    "<br><span class='subtitles'>Battles</span><br>" + 
-    "Attacks: " + counterText("Attacks") + "<br>" + 
-    "Critic attacks: " + counterText("Critics") + "<br>" + 
-    "Melee attacks: " + counterText("school_Physical") + "<br>" + 
-    "Magical attacks: " + (Number(counterText("Attacks")) - Number(counterText("school_Physical")))  + "<br>" + 
-    "Attacks received: " + counterText("IncomingAttacks") + "<br>" + 
-    "Enemy encounters: " + counterText("enemyEncounters") + "<br>" + 
-    "Enemies defeated: " + counterText("EnemiesKilled") + "<br>" + 
-    "Rare encounters: " + counterText("rareEnemyEncounters") + "<br>" + 
-    "Rare defeated: " + counterText("rareEnemiesKilled") + "<br>" + 
-    (counterText("enemyEncounters") > 0 ? "Types of enemies found: " + counterList("enemy_") + "<br>" : "") + 
-    "Bosses found: " + counterText("Bosses") + (counterText("Bosses") > 0 ? " {" + counterList("typeBoss_") + "}": "") + "<br>" + 
-    "Bosses defeated: " + counterText("BossesKilled") + "<br>" +
-    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras found: " + counterText("Hydras") + " {" + counterList("typeofHydras_") + "}<br>": "") +
-    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras defeated: " + counterText("HydrasKilled") + "<br>" : "") +
-    (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras heads chopped off: " + counterText("HydrasHeadCut") + "<br>" : "") +
-    "Falls: " + counterText("Deaths") + "<br>" + 
-    "Current flawless victory: " + counterText("Combo") + "<br>" + 
-    "Longest flawless victory: " + counterText("longestCombo") + "<br>" + 
-    "<br><span class='subtitles'>Magic</span><br>" + 
-    "Current magical level: " + Math.floor(state.player.lvl / 10) + "<br>" + 
-    "Known spells: " + countSpellKnown() + "<br>" + 
-    "Arcane spells cast: " + counterText("school_Arcane") + "<br>" + 
-    "Healing spells cast: " + counterText("Heal") + "<br>" + 
-    "Nature spells cast: " + counterText("school_Nature") + "<br>" + 
-    "Fire spells cast: " + counterText("school_Fire") + "<br>" + 
-    "Frost spells cast: " + counterText("school_Frost") + "<br>" + 
-    "Thunder spells cast: " + counterText("school_Thunder") + "<br>" + 
-    "Shadow spells cast: " + counterText("school_Shadow") + "<br>" + 
-    "Divine spells cast: " + counterText("school_Divine") + "<br>" + 
-    "Enemies polymorphed into a sheep: " + counterText("Polymorph_oveja") + "<br>" + 
-    "Enemies polymorphed into a chicken: " + counterText("Polymorph_gallina") + "<br>" + 
-    "<br><span class='subtitles'>Study</span><br>" + 
-    "Books found: " + counterText("book") + "<br>" + 
-    "Runes found: " + counterText("rune") + "<br>" + 
-    "Successful studies: " + counterText("sucessStudy") + "<br>" + 
-    "Failed studies: " + counterText("failStudy") + "<br>" + 
-    "Successful statue studies: " + counterText("sucessStudyStatue") + "<br>" + 
-    "Failed statue studies: " + counterText("failStudyStatue") + "<br>" + 
-    (counterText("sucessStudyStatue") > 0 ?  "Skills increased studying books or runes: " + counterList("study_", "statObj") + "<br>" : "") + 
-    "<br><span class='subtitles'>Exploration</span><br>" + 
-    "Current zone: " + "The " + zones[state.zone.current].name + "<br>" + 
-    "Last zone: " + "The " + zones[state.zone.last].name + "<br>" + 
-    "Changes of zones: " + counterText("zonesChanged") + "<br>" + 
-    "Times in the Prairie: " + counterText("zone_la_Pradera") + "<br>" + 
-    "Times in the City: " + counterText("zone_la_Ciudad") + "<br>" + 
-    "Times in the Castle: " + counterText("zone_el_Castillo") + "<br>" + 
-    "Times in the Town: " + counterText("zone_el_Poblado") + "<br>" + 
-    "Times in the Cave: " + counterText("zone_la_Cueva") + "<br>" + 
-    "Times in the Grotto: " + counterText("zone_la_Gruta") + "<br>" + 
-    "Times in the Tower: " + counterText("zone_la_Torre") + "<br>" + 
-    "Times in the Forest: " + counterText("zone_el_Bosque") + "<br>" + 
-    "Times in the Swamp: " + counterText("zone_el_Pantano") + "<br>" + 
-    "Times in the Dunes: " + counterText("zone_las_Dunas") + "<br>" + 
-    "Times in the Tundra: " + counterText("zone_la_Tundra") + "<br>" + 
-    "Times in the Volcano: " + counterText("zone_el_Volcan") + "<br>" + 
-    "Times in the Desert: " + counterText("zone_el_Desierto") + "<br>" + 
-    "Times in the Heidan: " + counterText("zone_el_Heidan") + "<br>" + 
-    "Times in the Duenon: " + counterText("zone_el_Duenon") + "<br>" + 
-    "Times in the Mine: " + counterText("zone_la_Mina") + "<br>" + 
-    "Bags found: " + counterText("BotinGot_bag") + "<br>" + 
-    "Chests found: " + counterText("BotinGot_chest") + "<br>" + 
-    "Pots found: " + counterText("BotinGot_pot") + "<br>" + 
-    "Barrels found: " + counterText("BotinGot_barrel") + "<br>" + 
-    "Boxes found: " + counterText("BotinGot_box") + "<br>" + 
-    "Total statues found: " + counterText("statuesFound") + "<br>" + 
-    (counterText("statuesFound") > 0 ? "Type of statues found: " + counterList("estatuas_", "statueObj") + "<br>" : "") + 
-    "<br><span class='subtitles'>Economy</span><br>" + 
-    "Current gold: " + roundNumbertoLetter(state.player.gold) + "<br>" + 
-    "Total gold looted: " + counterText("GoldFromEnemies") + "<br>" + 
-    "Total gold looted from bosses: " + counterText("GoldFromBosses") + "<br>" + 
-    "Total gold found: " + counterText("GoldFromBotin") + "<br>" + 
-    "Total gold lost in battles: " + counterText("goldLostInBattle") + "<br>" + 
-    "Gold found in bags: " + counterText("GoldFromBotin_bag") + "<br>" + 
-    "Gold found in chests: " + counterText("GoldFromBotin_chest") + "<br>" + 
-    "Gold found in pots: " + counterText("GoldFromBotin_pot") + "<br>" + 
-    "Gold found in barrels: " + counterText("GoldFromBotin_barrel") + "<br>" + 
-    "Gold found in boxes: " + counterText("GoldFromBotin_box") + "<br>" + 
-    "<br><span class='subtitles'>Leisure</span><br>" + 
-    "Rests in inns: " + counterText("taberna") + "<br>" + 
-    "Gold spend at inns: " + counterText("GoldSpendInn") + "<br>" + 
-    "Campings: " + counterText("camping") + "<br>" + 
-    "<br><span class='subtitles'>Spirituality</span><br>" + 
-    "Faith: " + roundNumbertoLetter(state.player.faith) + "<br>" + 
-    "Offers: " + counterText("offers") + "<br>" + 
-    "Tithe: " + counterText("GoldOffered") + "<br>" + 
-    "Faith obtained by gold: " + counterText("FeByGold") + "<br>" + 
-    "Faith obtained by pray: " + counterText("FeByPray") + "<br>" + 
-    "Faith obtained by corruption eradication: " + counterText("FeByCleanCorruption") + "<br>" + 
-    "Shrines visited: " + counterText("altar") + "<br>" + 
-    (counterText("altar") > 0 ? "Shrines visited in: " + counterList("altar_zone_") + "<br>" : "") + 
-    "Mandatory offers: " + counterText("DivineMandatoryOffers") + "<br>" + 
-    "Negations: " + counterText("negar") + "<br>" + 
-    "Self recovery: " + counterText("selfRevive")  + "<br>" + 
-    "Recovered by healer: " + counterText("hospital") + "<br>" + 
-    "Divine touches: " + counterText("divineTouch") + "<br>" + 
-    "Divine healings: " + counterText("DivineHeal") + "<br>" + 
-    "Divine punishments to enemies: " + counterText("DivineHit") + "<br>" + 
-    "<br><span class='subtitles'>Achievements</span><br>" + 
-    "Currenly won: " + numLogrosGanados + "<br>" + 
-    "Completion: " + Math.round((numLogrosGanados / Object.keys(logro).filter((key) => logro[key].name && !logro[key].planned).length) * 100) + "%<br>" + 
-    "</div>";   
-    el('innerTextScroll').innerHTML= ui.statsPage;  
+// A section title of the stats page.
+function statSection(title) {
+    return "<br><span class='subtitles'>" + title + "</span><br>";
+}
+
+// Zones in the order the stats page lists them.
+const STATS_ZONES = ["la_Pradera", "la_Ciudad", "el_Castillo", "el_Poblado", "la_Cueva", "la_Gruta", "la_Torre", "el_Bosque",
+    "el_Pantano", "las_Dunas", "la_Tundra", "el_Volcan", "el_Desierto", "el_Heidan", "el_Duenon", "la_Mina"];
+
+// Loot containers: counter suffix and plural label.
+const STATS_CONTAINERS = [["bag", "Bags"], ["chest", "Chests"], ["pot", "Pots"], ["barrel", "Barrels"], ["box", "Boxes"]];
+
+// Spell schools with a cast counter, and their label.
+const STATS_SCHOOLS = [["Nature", "Nature"], ["Fire", "Fire"], ["Frost", "Frost"], ["Thunder", "Thunder"], ["Shadow", "Shadow"], ["Divine", "Divine"]];
+
+function statsWizard(secondsInGame) {
+    return "<span class='subtitles'>Wizard</span><br>" +
+        statLine("Name", state.player.name) +
+        statLine("Level", roundNumbertoLetter(state.player.lvl)) +
+        "Age: " + roundNumbertoLetter(state.player.age) + " yrs<br>" +
+        statLine("Health points", roundNumbertoLetter(state.player.hpBase)) +
+        statLine("Attack points", roundNumbertoLetter(state.player.attack)) +
+        statLine("Critic multiplier", roundNumbertoLetter(stat("fCritic"))) +
+        statLine("Exp. to next level", Math.round((state.player.xpNext - state.player.xp) * 100)) +
+        statLine("Time of existence", secsToHours(secondsInGame));
+}
+
+function statsBattles() {
+    const hydras = state.hydraMysteryResolved && counterText("Hydras") > 0;
+    return statSection("Battles") +
+        statLine("Attacks", counterText("Attacks")) +
+        statLine("Critic attacks", counterText("Critics")) +
+        statLine("Melee attacks", counterText("school_Physical")) +
+        statLine("Magical attacks", Number(counterText("Attacks")) - Number(counterText("school_Physical"))) +
+        statLine("Attacks received", counterText("IncomingAttacks")) +
+        statLine("Enemy encounters", counterText("enemyEncounters")) +
+        statLine("Enemies defeated", counterText("EnemiesKilled")) +
+        statLine("Rare encounters", counterText("rareEnemyEncounters")) +
+        statLine("Rare defeated", counterText("rareEnemiesKilled")) +
+        (counterText("enemyEncounters") > 0 ? statLine("Types of enemies found", counterList("enemy_")) : "") +
+        "Bosses found: " + counterText("Bosses") + (counterText("Bosses") > 0 ? " {" + counterList("typeBoss_") + "}" : "") + "<br>" +
+        statLine("Bosses defeated", counterText("BossesKilled")) +
+        (hydras ? "Hydras found: " + counterText("Hydras") + " {" + counterList("typeofHydras_") + "}<br>" : "") +
+        (hydras ? statLine("Hydras defeated", counterText("HydrasKilled")) : "") +
+        (hydras ? statLine("Hydras heads chopped off", counterText("HydrasHeadCut")) : "") +
+        statLine("Falls", counterText("Deaths")) +
+        statLine("Current flawless victory", counterText("Combo")) +
+        statLine("Longest flawless victory", counterText("longestCombo"));
+}
+
+function statsMagic() {
+    return statSection("Magic") +
+        statLine("Current magical level", Math.floor(state.player.lvl / 10)) +
+        statLine("Known spells", countSpellKnown()) +
+        statLine("Arcane spells cast", counterText("school_Arcane")) +
+        statLine("Healing spells cast", counterText("Heal")) +
+        STATS_SCHOOLS.map(([school, label]) => statLine(label + " spells cast", counterText("school_" + school))).join("") +
+        statLine("Enemies polymorphed into a sheep", counterText("Polymorph_oveja")) +
+        statLine("Enemies polymorphed into a chicken", counterText("Polymorph_gallina"));
+}
+
+function statsStudy() {
+    return statSection("Study") +
+        statLine("Books found", counterText("book")) +
+        statLine("Runes found", counterText("rune")) +
+        statLine("Successful studies", counterText("sucessStudy")) +
+        statLine("Failed studies", counterText("failStudy")) +
+        statLine("Successful statue studies", counterText("sucessStudyStatue")) +
+        statLine("Failed statue studies", counterText("failStudyStatue")) +
+        (counterText("sucessStudyStatue") > 0 ? statLine("Skills increased studying books or runes", counterList("study_", "statObj")) : "");
+}
+
+function statsExploration() {
+    return statSection("Exploration") +
+        statLine("Current zone", "The " + zones[state.zone.current].name) +
+        statLine("Last zone", "The " + zones[state.zone.last].name) +
+        statLine("Changes of zones", counterText("zonesChanged")) +
+        STATS_ZONES.map((zone) => statLine("Times in the " + zones[zone].name, counterText("zone_" + zone))).join("") +
+        STATS_CONTAINERS.map(([container, label]) => statLine(label + " found", counterText("BotinGot_" + container))).join("") +
+        statLine("Total statues found", counterText("statuesFound")) +
+        (counterText("statuesFound") > 0 ? statLine("Type of statues found", counterList("estatuas_", "statueObj")) : "");
+}
+
+function statsEconomy() {
+    return statSection("Economy") +
+        statLine("Current gold", roundNumbertoLetter(state.player.gold)) +
+        statLine("Total gold looted", counterText("GoldFromEnemies")) +
+        statLine("Total gold looted from bosses", counterText("GoldFromBosses")) +
+        statLine("Total gold found", counterText("GoldFromBotin")) +
+        statLine("Total gold lost in battles", counterText("goldLostInBattle")) +
+        STATS_CONTAINERS.map(([container, label]) => statLine("Gold found in " + label.toLowerCase(), counterText("GoldFromBotin_" + container))).join("");
+}
+
+function statsLeisure() {
+    return statSection("Leisure") +
+        statLine("Rests in inns", counterText("taberna")) +
+        statLine("Gold spend at inns", counterText("GoldSpendInn")) +
+        statLine("Campings", counterText("camping"));
+}
+
+function statsSpirituality() {
+    return statSection("Spirituality") +
+        statLine("Faith", roundNumbertoLetter(state.player.faith)) +
+        statLine("Offers", counterText("offers")) +
+        statLine("Tithe", counterText("GoldOffered")) +
+        statLine("Faith obtained by gold", counterText("FeByGold")) +
+        statLine("Faith obtained by pray", counterText("FeByPray")) +
+        statLine("Faith obtained by corruption eradication", counterText("FeByCleanCorruption")) +
+        statLine("Shrines visited", counterText("altar")) +
+        (counterText("altar") > 0 ? statLine("Shrines visited in", counterList("altar_zone_")) : "") +
+        statLine("Mandatory offers", counterText("DivineMandatoryOffers")) +
+        statLine("Negations", counterText("negar")) +
+        statLine("Self recovery", counterText("selfRevive")) +
+        statLine("Recovered by healer", counterText("hospital")) +
+        statLine("Divine touches", counterText("divineTouch")) +
+        statLine("Divine healings", counterText("DivineHeal")) +
+        statLine("Divine punishments to enemies", counterText("DivineHit"));
+}
+
+function statsAchievements() {
+    const won = countLogros();
+    const total = Object.keys(logro).filter((key) => logro[key].name && !logro[key].planned).length;
+    return statSection("Achievements") +
+        statLine("Currenly won", won) +
+        "Completion: " + Math.round((won / total) * 100) + "%<br>";
+}
+
+// Fill the stats scroll from the wizard's counters, section by section.
+function updateStats(){
+    const secondsInGame = ((state.meta.playTimeMs + (performance.now() - run.timeStart)) / 1000).toFixed(0);
+    ui.statsPage = "<div id='stats'><span class='titles' id='titleStats'>Stats</span><br>" +
+        statsWizard(secondsInGame) + statsBattles() + statsMagic() + statsStudy() + statsExploration() +
+        statsEconomy() + statsLeisure() + statsSpirituality() + statsAchievements() +
+        "</div>";
+    el('innerTextScroll').innerHTML = ui.statsPage;
     el("stats").style.fontSize = ui.em + "px";
     el("stats").style.lineHeight = ui.em + "px";
     el("titleStats").style.fontSize = ui.em * 2.5 + "px";
-    el("titleStats").style.lineHeight = ui.em * 2.5 + "px";    
-
+    el("titleStats").style.lineHeight = ui.em * 2.5 + "px";
 }
 
 // Fill the help scroll (collapsible sections).
