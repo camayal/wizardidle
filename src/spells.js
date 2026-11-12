@@ -23,16 +23,12 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
     if(masterTime < 500){return}
 
 
-//    var t0 = performance.now();
-    //if (eval(img).school != "na"){
     let volume;
     if (spells[img].school != "na"){
         if(critic){volume = 1}
-        //playSound(eval(img).school, volume);
         playSound(spells[img].school, volume);
 
     }
-    //var totalFrames = eval(img).frames;
     const totalFrames = spells[img].frames;
     const canvas = document.querySelector("#spellCanvas");
     const context = canvas.getContext("2d");
@@ -83,7 +79,6 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
         requestFrame = requestAnimationFrame(animate);
     
         }
-//console.log(performance.now() - t0)
 };
 
 
@@ -102,10 +97,8 @@ function getSpell(lvlBase = knownTier()){
     let spellSelected = "";
     for (i = 0; i <= lvlBase; i++) { 
         if(spellSelected !== ""){
-            //spellSelected =  spellSelected + "," + eval("spellTier" + i);
             spellSelected =  spellSelected + "," + spellTiers[i];
         }else{
-        //spellSelected =  eval("spellTier" + i);
         spellSelected =  spellTiers[i];
         }
     }

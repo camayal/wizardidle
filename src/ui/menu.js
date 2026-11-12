@@ -80,7 +80,6 @@ function helpBtn(){
 
 //stats button funct
 function statsBtn(){
-    //el('innerTextScroll').innerHTML= statsPage;
     loop.every("stats", updateStats,masterTime);
     updateStats();
     el("innerTextScroll").style.display = "block";

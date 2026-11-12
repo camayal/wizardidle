@@ -12,12 +12,10 @@ import { loadBackground, print, showStage, wizardName } from './ui/render.js';
 //Change locality
 function changeLocality() {
     run.multipleEventsCounter += 1;
-    //console.log(multipleEventsCounter);
     switch (run.multipleEventsCounter) {
     case 1:
         //get new zone
         state.zone.last = state.zone.current;
-        //save in getLocal("currentZone")
         print(wizardName() + " left the " + zones[state.zone.last].name);
         
         getZone();
@@ -25,7 +23,6 @@ function changeLocality() {
         break;
     case 2:
         //change background
-        //pickRandomBackgroundForCurrentZone();
         showStage();
         print(wizardName() + " is entering to the " + zones[state.zone.current].name + ", " + pickRandomItem(zones[state.zone.current].legend));
         break;

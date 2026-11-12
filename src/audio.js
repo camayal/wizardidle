@@ -12,10 +12,7 @@ function playSound(ogg, volume = 0.3){
     if(masterTime < 500){return}
 
     ui.audio = new Audio("ogg/" + ogg + ".ogg");
-    //audio.volume = 0.3;
     ui.audio.volume = volume;
-    //audio.playbackRate = -1.0; 
-    //if (loop){audio.loop = true}
     const promise = ui.audio.play();
     //avoid autoplay policy error
     if (promise !== undefined) {

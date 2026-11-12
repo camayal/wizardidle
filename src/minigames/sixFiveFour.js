@@ -42,7 +42,6 @@ function sixfivefour(){
     betForDice = getRandomInt(state.player.gold * 0.1,state.player.gold * 0.5)
     playSound("coins");
 
-    //console.log("enemy start: " + enemyStart)
     if (enemyStart){
         nameDicePlayer = gamblingManName
     } else {
@@ -52,8 +51,6 @@ function sixfivefour(){
     
 
     countRounds++
-    //spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
-    //spell("spellCoins",true,frameWidth,frameHeight,currentFrame,shift);
     //set or equal the bet
     state.player.gold = state.player.gold - betForDice;
     updateHeading();
@@ -89,7 +86,6 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
             playSound("dice");
 
 
-            //console.log("risk: " + riskinDice)
             //Set a dialog if the risk is too high
             if (riskinDice > cargo && ship && captain && crew){
                 print(nameDicePlayer + " feels risky and rolls the dice to try a better cargo")
@@ -110,8 +106,6 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
             //for each element in the dicesToRoll object put a randon from 1 to 6
             for (let elem in dicesToRoll) {
                 dicesToRoll[elem] = Math.floor(Math.random() * 6 + 1)
-                // "dado: " + elem + " roll: " + dicesToRoll[elem]
-                //console.log("dado: " + elem + " roll: " + dicesToRoll[elem])
                 //save current roll (to avoid delete info in the next steps) with images
                 resultDice = resultDice + "<img class='imgInConsole' height='" + ui.em + "' src='img/d" + dicesToRoll[elem] +".png'/>"
             }
@@ -125,7 +119,6 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                     ship = true
                     currentHand = "<img class='imgInConsole' height='" + ui.em + "' src='img/d6.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/ship.png'/> "
                     symbolCurrentHand = "<img class='imgInConsole' height='" + ui.em + "' src='img/ship.png'/>"
-                    //console.log("ship: " + ship)
                 }
             }
             //check if some dice is 5 an delete the dice and set captain true
@@ -135,7 +128,6 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                     captain = true
                     currentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/d5.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/captain.png'/> "
                     symbolCurrentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/captain.png'/>"
-                    //console.log("captain: " + captain)
                 }
             }
             //check if some dice is 4 an delete the dice and set crew true
@@ -145,7 +137,6 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                     crew = true
                     currentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/d4.png'/>:<img class='imgInConsole' height='" + ui.em + "' src='img/crew.png'/> "
                     symbolCurrentHand += "<img class='imgInConsole' height='" + ui.em + "' src='img/crew.png'/>"
-                    //console.log("crew: " + crew)
                 }
             }
         
@@ -156,7 +147,6 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
                 for (let elem in dicesToRoll){
                         cargo = cargo + dicesToRoll[elem]
                 }
-                //console.log("cargo: " + cargo)
             }
 
         }else{
@@ -214,7 +204,6 @@ function evalSixFiveFour(enemyStart, nameDicePlayer){
             startEvent(function() { rollDicesForSixfivefour(!enemyStart,nameDicePlayer); });
         }else{
             //Final scoring call
-            //multipleEventsCounter = 0;
             loop.stop("event");
             startEvent(function() { finalScoreSixFiveFour(nameDicePlayer); });
         }
@@ -224,11 +213,7 @@ function evalSixFiveFour(enemyStart, nameDicePlayer){
 
 }
 
-/*
-spell("spellCoins",true,frameWidth,frameHeight,currentFrame,shift);
-setLocal("Gold", Number(getLocal("Gold")) - betForDice);
-updateHeading();
-*/
+
 
 //calculate the final result and check the winner
 function finalScoreSixFiveFour(nameDicePlayer){
@@ -262,7 +247,6 @@ function finalScoreSixFiveFour(nameDicePlayer){
 
             }else{
                 print("Nobody won (" + cargoFirstPlayer + " vs. " + cargo + ")")
-                //spell("spellCoins",true,frameWidth,frameHeight,currentFrame,shift);
                 state.player.gold = state.player.gold + betForDice;
                 updateHeading();
             }

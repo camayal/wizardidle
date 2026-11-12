@@ -107,7 +107,6 @@ function event() {
     switch (masterOption) {
     case 1:
         //Get an enemy and start a battle
-        //getEnemy();
         enemyEV();
         break;
     case 2:
@@ -134,7 +133,6 @@ function exploreEV() {
     //Evalue if booty or not
     let textDice;
     if (YesOrNot(stat("pBotin"), 0)) {
-        //getBotin();
         run.objectToBreak = "";
         print(wizardName() + " is searching...");
         startEvent(getBotin);
@@ -197,7 +195,6 @@ function reviveEV(){
         state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
         count("zonesChanged");
         count("zone_" + randomLocality);
-        //pickRandomBackgroundForCurrentZone();
         showStage();
         print(wizardName() + " leaves the healer's cabin")
         count("hospital");
@@ -270,7 +267,6 @@ function innEV(){
     }
 }
 
-//ToDo: agregar que un pillo lo robe y escape, bajon de gold
 
 
 //Main event: study and found statues
@@ -321,7 +317,6 @@ function findStatue(){
         loadBackground(state.zone.current + "_estatua");
         count("estatuas_statue_" + state.zone.current)
         count("statuesFound");
-        //print("<b>" + getLocal("pjName") + "</b> " + "finds a " + statueObj["statue_" + getLocal("currentZone")].name + " statue");
         if (run.previousEvent == "findStatue"){
             print(wizardName() + " " + "wants to try study the " + statueObj["statue_" + state.zone.current].name + " statue again");
         }else{
@@ -400,7 +395,6 @@ function findRuneOrBook(){
             spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
             learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
-            //var statToUP = pickRandomItem("pAttack,pPolymorph,fCritic,pCritic,pHeal,fHeal,pStudy,pBotin,pChangeZone,pFindCapel,pFindMaterials,pOfrenda,fOfrenda")
             const statToIncrease = statObj[statObj.random()];
             const learned = statObj.increase(statToIncrease.code);
             print(wizardName() + " " + learnTxt + " " + run.objectToStudy + " and increases the <i>" + learned + "</i>") 
@@ -459,11 +453,8 @@ function searchInn(){
             const textSleeps = "sleeps,replenishes energies,rests"
             if(placesWithInn){
                 // add event of fight if have not gold
-                //var innCost = getRandomInt(Number(localStorage.Gold) * 0.05,Number(localStorage.Gold) * 0.1);
                 const innCost = 1 + getRandomInt(state.player.lastBattleGold * 2,state.player.lastBattleGold * 3);
                 if ((state.player.gold - innCost) <= 0){
-                    //innCost = Number(getLocal("Gold"));
-                    //setLocal("Gold", 0);
                     //cannot affort
                     playSound("drink");
                     print(wizardName() + " " + "cannot afford pay a bed, but takes a free drink");
@@ -500,13 +491,11 @@ function searchInn(){
             if (Math.round(rested) <= 0){
                 textRecover = "couldn't rest well"
             };
-            //spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
             updateHeading();
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             state.npc = "";
             print(wizardName() + " " + pickRandomItem(textRecover) + " (" + ui.healIcon + roundNumbertoLetter(rested) + ")") 
             if(placesWithInn){
-                //pickRandomBackgroundForCurrentZone();
                 showStage();
             }
             run.restAtInn = false;
@@ -539,12 +528,10 @@ function doOffering(){
                 break;
             case 2:
                 //animation anks for pj
-                //playSound("pray");
                 spell("spellAnk_8",true,frameWidth,frameHeight,currentFrame,shift);
                 print(wizardName() + " leaves the shrine and continues the journey" + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
                 state.npc = "";
-                //pickRandomBackgroundForCurrentZone();
                 showStage();
                 endEvent();
                 run.disableCenterBtn = false;
@@ -577,7 +564,6 @@ function doOffering(){
                 print(wizardName() + " leaves the shrine and continues")
                 npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
                 state.npc = "";
-                //pickRandomBackgroundForCurrentZone();
                 showStage();
                 run.disableCenterBtn = false;
                 run.offer = false;

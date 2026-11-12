@@ -79,19 +79,6 @@ function loadBackground(back) {
     ui.currentBackGround = back;
     esceneCanvas.style.background = "url('img/" + back.toLowerCase() + ".png') no-repeat";
     esceneCanvas.style.backgroundSize = "contain";
-    // esceneCanvas.width = esceneCanvas.offsetWidth;
-    // esceneCanvas.height = esceneCanvas.offsetHeight;
-    // var img = new Image();
-    // img.src = "img/" + back.toLowerCase() + ".png";
-    // img.addEventListener("load", function() {
-    //     var ctx = esceneCanvas.getContext("2d");
-    //     ctx.mozImageSmoothingEnabled = false;
-    //     ctx.webkitImageSmoothingEnabled = false;
-    //     ctx.msImageSmoothingEnabled = false;
-    //     ctx.imageSmoothingEnabled = false;
-    //     ctx.clearRect(0, 0, esceneCanvas.width, esceneCanvas.height);
-    //     ctx.drawImage(img, 0, 0, esceneCanvas.width, esceneCanvas.height);
-    // }, false);
     //change bocadillo location
     localizarBocadillo();
 };
@@ -105,10 +92,6 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
     //round in base 10
     img.addEventListener("load", function() {
         const ctx = pjCanvas.getContext("2d");
-        // ctx.mozImageSmoothingEnabled = false;
-        // ctx.webkitImageSmoothingEnabled = false;
-        // ctx.msImageSmoothingEnabled = false;
-        // ctx.imageSmoothingEnabled = false;
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     }, false);
 }
@@ -133,10 +116,6 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
     img.src = "img/" + imagen + ".png";
     img.addEventListener("load", function() {
         const ctx = pjCanvas.getContext("2d");
-        // ctx.mozImageSmoothingEnabled = false;
-        // ctx.webkitImageSmoothingEnabled = false;
-        // ctx.msImageSmoothingEnabled = false;
-        // ctx.imageSmoothingEnabled = false;
         ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     }, false);
@@ -152,10 +131,6 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     img.src = "img/" + npc + ".png";
     img.addEventListener("load", function() {
         const ctx = npcCanvas.getContext("2d");
-        // ctx.mozImageSmoothingEnabled = false;
-        // ctx.webkitImageSmoothingEnabled = false;
-        // ctx.msImageSmoothingEnabled = false;
-        // ctx.imageSmoothingEnabled = false;
         //medium size bosses (64x64px)
         if (state.npc === "arcangel" || state.npc === "doria" || state.npc === "midas" || state.npc === "kkck" || state.npc === "herbus" || state.npc === "skeleton" || state.npc === "medusa" || state.npc === "rainbow" || state.npc === "rojo") {
             ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25);

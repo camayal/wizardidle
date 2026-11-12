@@ -32,8 +32,6 @@ function pjBtn(){
             startEvent(reviveEV);
         }else{
             //heal pj
-            // console.log("HP " + getLocal("HP"));
-            // console.log("HPBase " + getLocal("HPBase"));
             const healOperation = state.player.hpBase * stat("fHeal");
             let healHit = getRandomInt(healOperation * 0.5 ,healOperation * 2);
             if ( Math.round(state.player.hp) +  Math.round(healHit) >  Math.round(state.player.hpBase)){
@@ -54,16 +52,13 @@ function pjBtn(){
                 }else{
                     state.player.hp = state.player.hp + (healHit);
                 } 
-                //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - faithLost);
                 state.player.faith = state.player.faith - faithLost;
                 
-                // console.log("faithLost " + faithLost)
-                // console.log("healHit " + healHit)
                 updateHeading();
                 
                 playSound("heal");
                 spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print(wizardName() + " " + "feels a healing touch and recovers " + ui.healIcon + roundNumbertoLetter(healHit)/* + " (" + spiritIcon + " -" + roundNumbertoLetter(faithLost) + ")"*/);
+                print(wizardName() + " " + "feels a healing touch and recovers " + ui.healIcon + roundNumbertoLetter(healHit));
 
             }
 
@@ -111,12 +106,10 @@ function centerBtn(){
         if(state.player.gold > 0 && !!ui.currentBackGround.match(/altar/gi)){
             run.disableCenterBtn = true;
             const ofrendaGold = getRandomInt(state.player.gold * 0.25, state.player.gold * 0.75);
-            //feGanada = (ofrendaGold / getRandomInt(7,15)) * getLocal("fOfrenda");
             run.feGanada = (ofrendaGold * stat("fOfrenda"));
             run.feGanada *= state.player.faithMultiplier;
             state.player.faith = state.player.faith + run.feGanada;
             state.player.gold = state.player.gold - ofrendaGold;
-            //localStorage.idx_offers = Number(localStorage.idx_offers) + ofrendaGold;
             const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
             print(wizardName() + " " + pickRandomItem(textoffer) + " (" + ui.goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + ")");
             count("DivineMandatoryOffers");

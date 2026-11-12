@@ -143,6 +143,20 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   Practical note: done. Each layer is its own PNG in `wizardidle-old-ideas/layers/`, with names, visibility and opacity read exactly. To add or update a source file, re-run `python tools/pdn_extract.py <file or folder> wizardidle-old-ideas/layers`.
 - **Pixel-art UI: tiles for the bars and panels** (2026-11-10): the interface mixes two styles. The buttons, the heart HP icon (`heartMeter()`), the scroll and the frame are pixel-art images, but the **XP bar is a plain HTML `<meter>`** (`#XPprogressBar` in `index.html`, updated in `updateHeading()`), styled by the browser. Idea: draw a small set of pixel-art tiles (left cap, repeating middle, right cap, fill, maybe a sparkle when levelling up) and build the XP bar from them, then reuse the same kit for anything else still drawn in plain HTML, so the whole UI shares one hand-made look. Existing pieces to match: `img/emptyLongBtn.png`, `img/frame.png`, the scroll backgrounds, and the `Btn` / `Empty` / `regilla` / `tile000` source files in `wizardidle-old-ideas/layers/`.
 
+- **Ideas found in the v1 code comments** (2026-11-11, from commented-out code removed in stage 1; the original lines are in tag `v1.0.0`):
+  - *Robbery* ("robbed!", "rest: chance to be robbed", and in Spanish "a rogue robs him and escapes, gold drops"): a thief steals part of the wizard's gold, at random or while he rests.
+  - *Fight at the inn when he can't pay* ("add event of fight if have not gold"): today the inn just turns him away or lets him sleep; a brawl could be the price.
+  - *Quests*: "quest? check the scrolls" with a link to a fantasy tile set used as reference. Ties into the stats and NPC ideas above.
+  - *Achievements for every boss and for each hydra* ("todo logro de todos los boss", "todo logro de cada hidra").
+  - *"Hey guy look at me" achievement*: when `el_mediano14` appears (the shortie who shouts "HEY GUY LOOK AT ME!"). Original flavour line: "The world is losing its values, the un-polite enemies do not see the opponent in the face".
+  - *Dice game stats and achievements* ("TODO add idx for all this part and achievements" in the dice game). Fits the planned *jugón* / *dados cargados* / *full carga* achievements.
+  - *See-through ghosts*: enemies marked `translucid` in `src/data/enemies.js` (slime, spectre, ether) and the ghost-like bosses (cuboq, etymos, infraespectro) were meant to be drawn semi-transparent (opacity 0.7–0.8).
+  - *Locked achievements on the achievements page*: show not-yet-earned ones with a placeholder image (`img/no_logro.png` exists) instead of hiding them.
+  - *Only one game tab*: detect the game open in two tabs and warn ("Wizardidle is running in another tab!").
+  - *Android back button*: keep it from closing the app when installed.
+  - *Fade transitions* between the clouds, the name screen and the game.
+- **Story implementation notes live in the code** (from the v1 code): `var chapter` in `src/story.js` keeps the author's 2018 step-by-step plan for chapters III–XI and the ending, as Spanish comments inside each chapter: the 4-step red rune event (lvl 128), locking the wizard in the volcano, 5-second self-revive, the tower siege and Midas (139–140), the lynching (149) with flags and a special death chapter, refusing divine help, the healer's final battle and the game-over flag. Read them together with "Finish the story" above when stage 3 starts.
+
 ## Already built (from the old notes)
 
 Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0) · the per-sprite enemy table: all 669 sprites in `InformationByEnemy.xlsx` match `src/data/enemies.js` exactly (type, rare, corrupted, display name) · the zone boss and enemy table in `enemyLocation.xlsx` (2014): all 16 bosses match, and 14 of 16 enemy lists match exactly. The Castle's sorceress (`la_Hechicera`) was later dropped from the code, and the Forest's elf (`el_Elfo`) was added · the XP/HP/age/enemy-HP formulas in `infodexp.xlsx` (except the two differences noted in "Levelling pace").
@@ -166,6 +180,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-11: Stage 1 step 4, dead code removed
+
+- 117 lines of commented-out v1 code removed (old versions of live lines, debug `console.log`s, leftovers of the old storage API, unused layout lines). Every idea hidden in them was moved to the backlog first ("Ideas found in the v1 code comments").
+- Kept: the story plans in `src/story.js`, TODO notes that mark where a feature will hook in, the empty "guardians after level 190" branch.
+- Restored the disabled dev console block and the author's signature line, lost by the phase 3 module split (the splitter dropped the text attached to the old export list).
 
 ### 2026-11-11: New route, simpler changelog
 

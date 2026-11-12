@@ -25,7 +25,6 @@ export const achievements = {
     logro_muchapradera: {name:"logro_muchapradera", planned:true, title:"", description:""},
     logro_muchopoblado: {name:"logro_muchopoblado", planned:true, title:"", description:""},
     logro_primeraderrotaporboss: {name:"logro_primeraderrotaporboss", title:"Poor little creature", description:"A boss can not be underestimated, killed by a boss for first time"},//ok
-    //logro_primerboss: {name:"logro_primerboss", title:"", description:""},
     logro_primerbossderrotado: {name:"logro_primerbossderrotado", title:"Piece of cake", description:"Who is the boss now?, defeat a boss"},//ok
     logro_ricachon: {name:"logro_ricachon", planned:true, title:"", description:""},
     logro_runas: {name:"logro_runas", title:"Someone is throwing rocks", description:"Runemaster, found 1000 runes to study"},

@@ -102,7 +102,6 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
     el("scrollBackUp").style.opacity = 1;
     const sbd =  el("scrollBackDown");
     sbd.style.top = ui.objectSize * 0.02 + "px";
-    //sbd.style.visibility = "visible";
     sbd.style.opacity = 1;
 
 
@@ -148,25 +147,9 @@ function localizarBocadillo(){
     
 }
 
-// //start counting seconds of live of each wizard
-// window.addEventListener('load', function(event) {
-//     timeStart = performance.now()
-//     //avoid back key in android go works and exit the app
-//     window.history.pushState({ noBackExitsApp: true }, '')
-//   });
-
-//avoid back button in android exit app
-// window.addEventListener('popstate', function(event) {
-    // if (event.state && event.state.noBackExitsApp) {
-    //   window.history.pushState({ noBackExitsApp: true }, '')
-    // }
-//   })
 
 
 
-// v1 registered an offline-cache service worker here. v2 ships a self-removing
-// service-worker.js instead (so nobody gets stuck on cached v1 files); a proper
-// offline cache comes back before the 2.0.0 release.
 
 
 
@@ -209,7 +192,6 @@ function updateAchievements(){
 
     let txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
     txt += achievementList();
-    //txt += '<div class="divTableRow"><div class="divTableCell"><img src="img/no_logro.png" height="' + em * 4 + 'px" /></div><div class="divTableCell"><strong>?????????????</strong> <br></div></div>';
     txt += "</div>"
     el('innerTextScroll').innerHTML=txt;
     el("titleAchievements").style.fontSize = ui.em * 2.5 + "px";
@@ -230,7 +212,7 @@ function updateStats(){
     "Attack points: " + roundNumbertoLetter(state.player.attack) + "<br>" + 
     "Critic multiplier: " + roundNumbertoLetter(stat("fCritic")) + "<br>" + 
     "Exp. to next level: " + Math.round((state.player.xpNext - state.player.xp) * 100) + "<br>" + 
-    "Time of existence: " + /*roundNumbertoLetter(secondsIngameInstats) + "~" +*/ secsToHours(secondsIngameInstats) + "<br>" +
+    "Time of existence: " +  secsToHours(secondsIngameInstats) + "<br>" +
     "<br><span class='subtitles'>Battles</span><br>" + 
     "Attacks: " + counterText("Attacks") + "<br>" + 
     "Critic attacks: " + counterText("Critics") + "<br>" + 
@@ -242,7 +224,6 @@ function updateStats(){
     "Rare encounters: " + counterText("rareEnemyEncounters") + "<br>" + 
     "Rare defeated: " + counterText("rareEnemiesKilled") + "<br>" + 
     (counterText("enemyEncounters") > 0 ? "Types of enemies found: " + counterList("enemy_") + "<br>" : "") + 
-    //"Bosses found: " + check("idx_Bosses") + "<br>" + 
     "Bosses found: " + counterText("Bosses") + (counterText("Bosses") > 0 ? " {" + counterList("typeBoss_") + "}": "") + "<br>" + 
     "Bosses defeated: " + counterText("BossesKilled") + "<br>" +
     (state.hydraMysteryResolved &&  counterText("Hydras") > 0 ?  "Hydras found: " + counterText("Hydras") + " {" + counterList("typeofHydras_") + "}<br>": "") +
@@ -399,8 +380,6 @@ function updateHelp(){
    '<div class="faq">Version</div><div class="a">The current version is: <b>' + version + '</b></div>' +
    '</div>';
 
-   //'<div class="divTableRow"><div class="divTableCell"><img src="img/muerto.png" height="' + em * 3 + 'px" /></div><div class="divTableCell"></div></div>' +
-   //'</div>' +
 
     el('innerTextScroll').innerHTML=txt;
     el("help").style.fontSize = ui.em + "px";

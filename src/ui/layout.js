@@ -94,28 +94,8 @@ function responsiveLayout() {
     
     const orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
     //block for detect landscape in mobile and change the elements
-    // if (!orientation){ //add support for browsers that have not this property working like edge
-    //     if (window.matchMedia("(orientation: landscape)").matches && detectmob()) {
-    //         layoutLandscapeMobile();
-    //         if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
-    //             scrollClose()
-    //         }
-    //      } else {
-    //         layoutPortrait();
-    //      }
-    // }else{
-    // if (!window.screen.orientation.type.match("portrait") && detectmob()) {
-    //     layoutLandscapeMobile();
-    //     if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
-    //         scrollClose()
-    //     }
-    //  } else {
-    //     layoutPortrait();
-    //  }
-    // }
 
     
-    //if (orientation == "landscape-primary" && detectmob()){
     if (!!orientation.match("landscape") && detectmob()){//solved the problem that landscape-secondary does not trigger the landscape mode
         layoutLandscapeMobile();
         if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
@@ -148,14 +128,9 @@ let centerLauncher;
 //Define size of window
 function defineObjectSize() {
      if (!detectmob()) {
-        //var objectSize = 512;
         ui.objectSize = window.innerHeight / 2;//better adaptation 
-        // centerMain = (window.innerWidth / 2) - (objectSize * 1.0625 /2) + "px";
-        // centerLauncher = (window.innerWidth / 2) - ((objectSize / 0.9) /2) + "px";
     } else {
         ui.objectSize = window.innerWidth * 0.9;
-        // centerMain = (window.innerWidth  / 2) - (objectSize * 1.0625 /2) + "px";
-        // centerLauncher = "0px"
     }
     ;return ui.objectSize;
 }
@@ -181,9 +156,6 @@ function detectmob() {
 
 //Get em size
 function getEM(){
-    //em = window.innerHeight / 55
-    //em = parseInt(el("console").style.height) / 30;
-    //em = (window.innerHeight - (objectSize * 0.5225)) / 30;
     ui.em = ui.objectSize * 0.04;
     return ui.em;
 }
@@ -196,13 +168,9 @@ function layoutPortrait(){
     if(state.firstUse){
         el("nubes").style.display = "none" ;
         el("launcher").style.display = "block" ;
-        //fadeOut(el("nubes"))
-        //fadeIn(el("launcher"))
     }else{
         el("launcher").style.display = "none" ;
         el("main").style.display = "block" ;
-        //fadeOut(el("launcher"))
-        //fadeIn(el("main"))
     }
 
     
@@ -223,7 +191,6 @@ function layoutPortrait(){
     el("statusText").style.fontSize = ui.em * 2 + "px";
     el("inputName").style.fontSize = (ui.objectSize * 0.09375) * 1.5 + "px";
     el("labelInputName").style.fontSize = (ui.objectSize * 0.09375) * 0.5 + "px";
-    // document.querySelector(".longBtnText").style.fontSize = (objectSize * 0.09375) * 0.75 + "px";
     el("title1").style.fontSize = (ui.objectSize * 0.09375) * 2.5 + "px";
     el("title2").style.fontSize = (ui.objectSize * 0.09375) * 1.5 + "px";
     el("footer").style.fontSize = (ui.objectSize * 0.09375) * 0.6 + "px";
@@ -254,12 +221,10 @@ function layoutPortrait(){
     el("btn6").style.width  = ui.objectSize * 0.09375 + "px";  
     el("backConsole").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";
     el("launcher").style.width = ui.objectSize / 0.9 + "px";
-    //el("fondoLauncher").style.width = objectSize + (objectSize * 0.075) + "px";
     el("fondoLauncher").style.width = ui.objectSize / 0.9 + "px";
     el("inputName").style.width = ui.objectSize * 1.085 + "px";
     el("labelInputName").style.width = ui.objectSize * 1.085 + "px";
     const startBtnW = el("startBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
-    // el("btnBlackBack").style.width  = startBtnW;
     el("scroll").style.width = ui.objectSize + "px";  
     el("scrollBackCenter").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
     el("scrollBackUp").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
@@ -294,14 +259,9 @@ function layoutPortrait(){
     const consoleH = el("console").style.height = parseInt(backConsoleH) * 0.94 + "px";
     el("launcher").style.height = window.innerHeight + "px";
     el("fondoLauncher").style.height = window.innerHeight + "px";
-    //el("startBtn").style.height  = (objectSize * 0.09375) * 1.5 + "px"; 
     el("startBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
-    // el("btnBlackBack").style.height  = (objectSize * 0.09375) * 1.4 + "px"; 
-    //el("scrollBackCenter").style.height = window.innerHeight - parseInt(sceneCanvasH) * 1.5 + "px";
-    //el("scrollBackUp").style.height = window.innerHeight - parseInt(sceneCanvasH) * 0.25 + "px";
     el("main").style.height = window.innerHeight + "px";
     el("scrollText").style.height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) + "px";
-    //el("scrollBackCenter").style.height = (window.innerHeight - (objectSize * 0.25) * 1.5) + "px";
     
     el("pjDivineBtn").style.height = ui.objectSize * 0.25 + "px";
     el("npcDivineBtn").style.height = ui.objectSize * 0.25 + "px";
@@ -316,8 +276,6 @@ function layoutPortrait(){
     
 
     //lefts
-    //el("main").style.left = (window.innerWidth - objectSize) / 2 - (window.innerWidth * 0.025) + "px";
-    //el("main").style.left = centerMain;
     el("main").style.left = (window.innerWidth / 2) - (ui.objectSize * 1.0625 /2) + "px";
     el("console").style.left = ui.objectSize * 0.03 + "px";
     el("backConsole").style.left = (ui.objectSize * -0.01) + "px";
@@ -333,20 +291,15 @@ function layoutPortrait(){
     el("btn6").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
     el("statusText").style.left = ui.objectSize + "px";
     ////launcher
-    //el("launcher").style.left = (window.innerWidth - objectSize) / 2 - (window.innerWidth * 0.05) + "px";
-    //el("launcher").style.left = centerLauncher;
     el("launcher").style.left = (window.innerWidth / 2) - ((ui.objectSize / 0.9) /2) + "px";
     el("fondoLauncher").style.left = "0px";
     el("labelInputName").style.left = ui.objectSize * 0.03 + "px";
     el("startBtn").style.left = ((ui.objectSize * 1.085 - parseInt(startBtnW)) / 2) + "px";
-    // el("btnBlackBack").style.left = ((objectSize * 1.085 - parseInt(startBtnW)) / 2) + "px";
-    // el("textStartBtn").style.left = ((objectSize * 1.085 - parseInt(startBtnW)) / 2) * 1.115 + "px";
     
     el("title1").style.left = ui.objectSize * 0.16 + "px";
     el("title2").style.left = ui.objectSize * 0.7 + "px";
     el("footer").style.left = ui.objectSize * 0.1 + "px";
     ////scroll
-    //el("scroll").style.left = (window.innerWidth - objectSize) / 2 - (window.innerWidth * 0.025) + "px";
     el("scroll").style.left = (window.innerWidth / 2) - (ui.objectSize * 1.0625 /2) + "px";
     el("scrollBackCenter").style.left = (ui.objectSize * -0.01) + "px";
     el("scrollBackUp").style.left = (ui.objectSize * -0.01) + "px";
@@ -404,15 +357,12 @@ function layoutPortrait(){
     el("btn5").style.top = ui.objectSize * 0.11 + "px";
     el("btn3").style.top = ui.objectSize * 0.01 + "px";
     el("btn6").style.top = ui.objectSize * 0.11 + "px";
-    //el("nubes").style.top = "0px";
     el("title1").style.top = window.innerHeight * 0.1 + "px";
     el("title2").style.top = window.innerHeight * 0.20 + "px";
     el("labelInputName").style.top = window.innerHeight * 0.45 + "px";
     el("inputName").style.top = window.innerHeight * 0.5 + "px";
     el("fondoLauncher").style.top = "0px";
     el("startBtn").style.top = window.innerHeight * 0.7 + "px";
-    // el("btnBlackBack").style.top = window.innerHeight * 0.71 + "px";
-    // el("textStartBtn").style.top = window.innerHeight * 0.721 + "px";
 
     el("footer").style.top = window.innerHeight * 0.9 + "px";
     el("scroll").style.top = ui.objectSize * 0.02 + "px";
@@ -433,8 +383,6 @@ function layoutPortrait(){
     el("hpIcon").style.width = ui.objectSize * 0.045 + "px";
     el("goldIcon").style.width = ui.objectSize * 0.045 + "px";
     el("spiritIcon").style.width = ui.objectSize * 0.045 + "px";
-    //el("textStartBtn").style.padding = objectSize * 0.02 + "px";
-    //el("btnBlackBack").style.borderRadius = objectSize * 0.05859375 + "px";
     
 
  
@@ -448,13 +396,10 @@ function layoutLandscapeMobile(){
     if(state.firstUse){
         el("launcher").style.display = "none" ;
         el("nubes").style.display = "block" ;
-        //fadeOut(el("launcher"))
-        //fadeIn(el("nubes"))
     }else{
         el("launcher").style.display = "none" ;
         el("main").style.display = "block" ;
 
-        //fadeOut(el("launcher"))
     }
 
 
@@ -510,8 +455,6 @@ function layoutLandscapeMobile(){
     el("spellCanvas").style.height = ui.objectSize * 0.25 + "px";
     el("XPprogressBar").style.height  = ui.objectSize * 0.03  + "px";
     el("nubes").style.height  = window.innerHeight  + "px";
-    //el("scrollText").style.height  = window.innerHeight * 0.75  + "px";
-    //el("scrollBackCenter").style.height  = window.innerHeight * 0.9  + "px";
 
     if(parseInt(el("scrollBackCenter").style.minHeight) > 0){
         el("scrollBackCenter").style.minHeight = window.innerHeight * 0.8 + "px";

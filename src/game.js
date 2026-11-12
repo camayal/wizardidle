@@ -53,7 +53,6 @@ run.pause = false;
 run.afterChapterExe = false;
 //vars icons
 ui.goldIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/gold.png'/> ";
-//var heartIcon = "<img class='imgInConsole' height='" + em + "' src='img/heart.png'/> ";
 
 ui.spiritIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/spirit.png'/> ";
 ui.attackIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/attack.png'/> ";
@@ -76,7 +75,6 @@ function start() {
     if (state.player.hp <= 0){//perfom a weak revive if the player does not revive after reload, loss faith
         state.player.hp = state.player.hpBase * 0.1;
             const feperdida = state.player.hpBase * 0.25;
-            //localStorage[thx("fe")] = thx(Number(getLocal("fe")) - feperdida);
             state.player.faith = state.player.faith - feperdida
         print(wizardName() + " " + "loses hope in you and tries to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
     }
@@ -85,7 +83,6 @@ function start() {
     showStage();
     //load previous locality random scenaria
     nextEvent();
-    //statusClock = setInterval(cacheStatus, 5000);
     //trigger event selecter
 
 };
@@ -107,17 +104,6 @@ function setLiveTime(){
     run.timeStart = performance.now()
 }
 
-//Create the localStorage object if it does not exist and add 1 by default to the stats and return the current number
-
-
-
-//Do something probability Yes or Not
-;
-
-
-
-//Get random number in an interval
-;
 
 ///////////////////////////////////////////////
 //  ██████╗ ████████╗██╗  ██╗███████╗██████╗ //
@@ -131,14 +117,7 @@ function setLiveTime(){
 
 //Initial name, suggest the first name and put in the input and check if is first launch
 //if not first use run the game
-//var sessionID;
 function initialName(){
-    //add uniqueID for this session:
-    //sessionID = Math.random().toString(36).substr(2, 16);
-    // if(!localStorage[thx("uniqueSessionID")]){
-    //     setLocal("uniqueSessionID",sessionID)
-    // }
-    // if(getLocal("uniqueSessionID") === sessionID){
 
  
 
@@ -154,11 +133,6 @@ function initialName(){
     }else{
         start();
     }
-// }else{
-//     document.getElementsByTagName("BODY")[0].style.display = "none";
-//     window.location.href="about:blank";
-//     alert("Wizardidle is running in another tab!")
-// }
 
 }
 
@@ -171,11 +145,54 @@ function setName(){
         }
         el("launcher").style.display = "none" ;
         el("main").style.display = "block" ;
-        //fadeOut(el("launcher"))
-        //fadeIn(el("main"))
         state.meta.playTimeMs = 0;
         start();
 }
+
+/*
+ * v1 developer console - DISABLED in v2, kept for the record.
+ * Clicking name -> level -> faith icon opened a box that ran any typed text with eval().
+ * Not functional (it still uses the v1 storage API); safe to delete later.
+ * Its HTML is commented out at the end of index.html.
+ *
+ * function exe(){
+ *     try{
+ *     var exeString = document.getElementById("inputExe").value;
+ *     var exeResult = eval(exeString);
+ *     print("<span style='color:DarkRed'>DEV: " + exeResult + "</span>")
+ *     }catch(err){
+ *     print("<span style='color:Red'>DEV error: " + err.message+ "</span>")
+ *     }
+ *     }
+ *
+ * //dev acces clic in pjname>lvl>feIcon
+ * var devAccess;
+ * document.addEventListener("click",function(e){
+ * if(e.target.id == "pjName"){
+ *     devAccess = 1;
+ * }else if(e.target.id == "lvl" && devAccess == 1){
+ *     devAccess = 2;
+ * }else if(e.target.id == "spiritIcon" && devAccess == 2){
+ *     devAccess = undefined;
+ *     document.getElementById("exe").style.display = "block";
+ * } else {
+ *     devAccess = undefined;
+ * }
+ * });
+ *
+ * var commands = '<br>FUNCTIONS<br>\
+ * pauseToggle() \
+ * list(), \
+ * setLocal("property", value), \
+ * getLocal("property"), \
+ * addXP(#factor), \
+ * setLocal("forceEvent","#event,#event2"), \
+ * <br>VARS<br>\
+ * masterTime = #ms, \
+ * selfrevivetime = #ms';
+ */
+
+//This app is made by Carlos Alonso Maya Lastra by fun//
 
 export {
     initialName,

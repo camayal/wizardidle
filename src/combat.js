@@ -18,11 +18,6 @@ import { playSound } from './audio.js';
 import { animateNPC, animatePJ, loadAlterCanvasChar, loadCanvasChar, loadNPC, npcCanvas, pjCanvas, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { el } from './ui/dom.js';
 
-//ToDo:
-//robbed!
-//rest { chance to be robbed}
-//found materials
-//quest? check the scrolls at http://pousse.rapiere.free.fr/tome/tiles/DO/tome-doitemstiles.htm
 
 
 //Main event: BATTLE
@@ -73,11 +68,9 @@ function battle() {
             if (fight.bossCombat){
                 count("BossesKilled");
                 logro.set(logro.logro_primerbossderrotado)
-                //todo logro de todos los boss
             }else if(fight.hydraCombat){
                 count("HydrasKilled");
                 delete state.hydraHeads[fight.hydra]
-                //todo logro de cada hidra
             }else{
                 if(enemySprites[fight.enemyAndNumber].rare == 1){
                     count("rareEnemiesKilled");
@@ -92,7 +85,6 @@ function battle() {
                 state.counters.longestCombo = state.counters.Combo;
             }
             npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-            //addXP();
             
             
             //add faith if the enemy is corrupted but only if not boss or hydra
@@ -204,7 +196,6 @@ function battle() {
             fight.autorevive = setTimeout(function(){ 
                 run.previousEvent = "autorevive"
                 fight.autorevive = "";       
-                //var feperdida = Number(getLocal("HPBase")) * 0.75;
                 const feperdida = state.player.hpBase * 1.2454654;
                 state.player.faith = state.player.faith - feperdida;
                 print(wizardName() + " " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(feperdida) + ")") 
@@ -250,27 +241,15 @@ function getEnemy() {
         fight.bossMultiplier = 2.5;
         fight.bossGoldMultiplier = 5;
         const boss = zones[state.zone.current].boss;
-        // if (boss == "cuboq" || boss == "etymos" || boss == "infraespectro"){
-        //     el("npcCanvas").style.opacity = 0.7;
-        // }else{
-        //     el("npcCanvas").style.opacity = 1;
-        // }
         fight.enemy = boss;
         count("typeBoss_" + boss)
         loadNPC(boss);
         fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
         fight.enemyHPbase = Math.round(fight.enemyHP)
         updateHeartNPC()
-        //enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + em + "' src='img/boss.png'/>" + " " + boss.toUpperCase() + "</span>";
         fight.enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + ui.em + "' src='img/boss.png'/>" + " " + enemyTypes[boss].name.toUpperCase() + "</span>";
     } else {
-        //spellEnemy = pickRandomItem("spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush6,spellPush7,spellPush8,spellPush9,spellPush10");
         fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
-        // if (!!eval(enemy).translucid){
-        //     el("npcCanvas").style.opacity = 0.8;
-        // }else{
-        //     el("npcCanvas").style.opacity = 1;
-        // }
         count("enemy_" + fight.enemy);
         const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
         //random number of the image max    
@@ -290,7 +269,6 @@ function getEnemy() {
         
         if (fight.enemy == "baba" || fight.enemy == "el_esqueleto" || fight.enemy == "animalejo" || fight.enemy == "polipoide" || fight.enemy == "momia") {
             //avoid name creatures and others
-            //enemyName = "A " + enemyTypes[enemy].name;
             fight.enemyName = "A " + enemySprites[fight.enemy + number].altName + raretext;
         } else if (fight.enemy == "el_capricor"){
             fight.enemyName = "The " + capitalize(enemyTypes[fight.enemy].name) + raretext;
@@ -319,8 +297,6 @@ function getEnemy() {
 };
 
 
-//ToDo: cuando cargue el_mediano14, logro de Hey guy look at me.
-//The world is losing it's values, the un-polite enemies do not see the opponent in the face
 
 
 function getHydra(newEncounter = false){
@@ -370,7 +346,6 @@ function attackEV() {
         if (YesOrNot(stat("pAttack"), 0)) {
             //determine the prob of attack, if fail enemy attack
             if (YesOrNot(stat("pCritic"), 0)) {
-                //loop.every("animPJ", animatePJ, 100)                
                 if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 //determine if is critical or not
                 pjAttackWithCritic = state.player.attack * stat("fCritic") * stat("fAttack");
@@ -388,10 +363,8 @@ function attackEV() {
                 count("school_" + spells[spellId].school)
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift,true);
                 print(wizardName() + " performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
-                //if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 count("Critics");
             } else {
-                //loop.every("animPJ", animatePJ, 100)
                 if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 //attack with no critic
                 pjHit = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
@@ -418,7 +391,6 @@ function attackEV() {
                 print(wizardName() + text + spellText + " (" + ui.attackIcon + roundNumbertoLetter(pjHit) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
                 spell(spellId,false,frameWidth,frameHeight,currentFrame,shift);
 
-                //if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 count("Attacks");
 
             }
@@ -426,7 +398,6 @@ function attackEV() {
             if(pjAttackWithCritic > 1000 || pjHit > 1000){logro.set(logro.logro_attack1000)}
         } else {
             //enemy attack
-            //loop.every("animNPC", animateNPC, 100)
             if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
             let enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
 
@@ -449,7 +420,6 @@ function attackEV() {
             }
             spell(fight.spellEnemy,true,frameWidth,frameHeight,currentFrame,shift);
             count("IncomingAttacks");
-            //if (document.hasFocus()){loop.every("animNPC", animateNPC, 100)};
         }
     }
 };

@@ -47,7 +47,6 @@ const statObj = {
 //levelUP function
 function levelUP() {
     state.player.lvl = state.player.lvl + 1
-    //console.log("lvl" + getLocal("lvl"))
     if (state.player.lvl > 1){
         //achievement
         switch (state.player.lvl){
@@ -78,7 +77,6 @@ function levelUP() {
     state.player.enemyAttackRange = state.player.hpBase * 0.2;
     state.player.xpPerEnemy = ((Math.pow((state.player.lvl + 1), config.balance.rXP) * config.balance.factorHP) - state.player.xpNext) / config.balance.rEnemyXP;
     state.player.attack = state.player.hpBase * 0.2;
-    //loadCanvasChar(getLocal("lvl"), squareSide, headLevel);
     updateHeading();
 
     //call history if exists
@@ -111,7 +109,6 @@ function addGold(){
          state.player.gold = state.player.gold + (state.player.lastBattleGold * 15);
          count("GoldFromBosses", (state.player.lastBattleGold * (15)));
     }else{
-     //if (eval(enemy).hasgold == "true") {
         if (enemyTypes[fight.enemy].hasgold == "true") {
          possibleGold = state.player.hpBase * config.balance.rGold;
          const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
@@ -128,7 +125,6 @@ function addGold(){
 //Add XP after a battle or exploration
 function addXP(specialMultiplier = 1){
     const xpGained = ((state.player.xpPerEnemy * specialMultiplier));
-    //console.log(("\t" + getLocal("lvl")) +"\t"+ xpGained);
     state.player.xp = (xpGained + state.player.xp);
     updateHeading();
     if(state.player.xp >= state.player.xpNext){
