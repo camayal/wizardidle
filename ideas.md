@@ -206,6 +206,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: New session: artist
+
+- The author started an **artist** session: it draws and edits pixel-art sprites, UI tiles and backgrounds in the game's existing style, and hands them to dev to wire into the game. It works on the `artist/art` branch (worktree `.claude/worktrees/artist`, off `dev`); finished PNGs go in `img/` there and are merged into `dev` when the author says so. Working files (.pdn, drafts) stay outside the repo in `wizardidle-old-ideas/`.
+- First job waiting for it: the final art of the fallen wizard (a collapsed pose per tier), see "A fallen wizard sprite instead of the skull".
+
 ### 2026-11-12: Erasure plan
 
 - Wrote `docs/ERASURE.md` for the "god wins" ending (asked by the author via the story session): each erasure leaves a soul that helps the next wizard in the final battle.
