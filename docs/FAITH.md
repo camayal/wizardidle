@@ -104,6 +104,8 @@ The console announces each change ("starts to doubt his god", "no longer believe
 
 An Atheist is rescued faster (1 minute instead of 2): the world takes care of those who don't wait for gods.
 
+**And when nobody comes:** the author's idea "Death management" (`ideas.md`, 2026-11-12): in a rare case no rescuer comes and the wizard **dies for good**. A death chapter (*"for you, god, time is nothing; for the world it is everything"*), the cemetery, then back to the name screen. Not decided yet; its chance would be measured in the playtests.
+
 ### 3.3 Offerings don't snowball (option A, pending playtests: see 3.10)
 
 The offering and the tithe stay a share of his gold (the gold leaves the bag, which is a nice sink), but the **faith they give is capped at 20 g per offering** (40 g for the god's tithe). Spare gold becomes useless for faith past that point, so the snowball stops.

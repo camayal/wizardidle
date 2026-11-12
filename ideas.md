@@ -159,6 +159,12 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *Android back button*: keep it from closing the app when installed.
   - *Fade transitions* between the clouds, the name screen and the game.
 - **Story implementation notes live in the code** (from the v1 code): `var chapter` in `src/story.js` keeps the author's 2018 step-by-step plan for chapters III–XI and the ending, as Spanish comments inside each chapter: the 4-step red rune event (lvl 128), locking the wizard in the volcano, 5-second self-revive, the tower siege and Midas (139–140), the lynching (149) with flags and a special death chapter, refusing divine help, the healer's final battle and the game-over flag. Read them together with "Finish the story" above when stage 3 starts. The notes are in English since 2026-11-11. Watch out: the chapter keys have v1 typos (`lvl60`/`lvl90` twice, `lvl99`, `lv200`); see the roadmap, stage 3.
+- **Death management: a wizard can really die** (2026-11-12): when nobody rescues the fallen wizard, there's a **small chance the game ends and that wizard dies for good**. In the author's words: *"no rescuing, the wizard can have small chances of ending the game and that wizard will die."* It becomes **part of the story**: *"the story repeats again: for you, god, time is nothing; for the world it is everything."* Then the game **returns to the main screen** (the name screen) for a new wizard.
+  - *Today:* a fallen wizard always comes back: the god's touch revives him, otherwise he gets up alone after 2 minutes (`scheduleSelfRevive()` in `src/combat.js`). The faith plan replaces that self-revive with rescuers (pagan caravan, shaman, gravedigger, ghost of a fallen wizard; [docs/FAITH.md](docs/FAITH.md), 3.2). **True death would be the rare case where no rescuer comes.**
+  - *Already there to build on:* `realKill()` (`src/ui/menu.js`, the kill button) records the wizard in the cemetery (`world.cemetery`, which outlives every wizard), stops every clock, deletes the save and reloads to the name screen. A true death can reuse it, plus a farewell text and a cause of death in the cemetery record ("fell in the Swamp to a pybrya and nobody came").
+  - *Story:* a short death chapter shown before the reload, with the author's line about time. The next wizard's opening could echo it ("another wizard is exiled…"), and the fallen one can come back as a ghost rescuer or a legend ("Wizards from the past help in the story").
+  - *Ties to:* the faith plan (rescuers, belief levels, the free revive), the story's final battle (whose death is already meant to be final), stats (deaths, true deaths, the cause, kept per world), and achievements.
+  - *Open questions:* how small the chance is, and what changes it: belief level (does an atheist risk more, since he waits for no god?), level, zone, a boss kill, how long he has lain dead. Is the god warned (a last chance to touch him, a fading heart)? Can it happen before a certain level, or never in the first hours? Does the next wizard inherit anything (gold, a relic, a letter)? Playtests should measure how often it happens.
 
 ## Already built (from the old notes)
 
@@ -183,6 +189,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Idea: death management
+
+- Added "Death management: a wizard can really die" to the backlog, in the author's words: a small chance of true death when nobody rescues him, a story line about time ("for you, god, time is nothing; for the world it is everything"), then back to the name screen. Linked from the faith plan's rescuers.
 
 ### 2026-11-12: Stats and playtest tools plan
 
