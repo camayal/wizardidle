@@ -234,6 +234,7 @@ updateHeading();
 function finalScoreSixFiveFour(nameDicePlayer){
 
     run.multipleEventsCounter += 1;
+    let winnerDice;
     switch (run.multipleEventsCounter){
         case 1:
             countRounds = 0
@@ -243,10 +244,10 @@ function finalScoreSixFiveFour(nameDicePlayer){
                 firstPlayerWins = cargoFirstPlayer > cargo;
                 if(firstPlayerWins){
                     print(nameFirstPlayer + " wins " + ui.goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
-                    var winnerDice = nameFirstPlayer;
+                    winnerDice = nameFirstPlayer;
                 }else{
                     print(nameDicePlayer + " wins " + ui.goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
-                    var winnerDice = nameDicePlayer;
+                    winnerDice = nameDicePlayer;
                 }
 
                 if (winnerDice == gamblingManName){

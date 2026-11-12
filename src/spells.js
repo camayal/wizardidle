@@ -25,8 +25,9 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
 
 //    var t0 = performance.now();
     //if (eval(img).school != "na"){
+    let volume;
     if (spells[img].school != "na"){
-        if(critic){var volume = 1}
+        if(critic){volume = 1}
         //playSound(eval(img).school, volume);
         playSound(spells[img].school, volume);
 
@@ -36,26 +37,28 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
     const canvas = document.querySelector("#spellCanvas");
     const context = canvas.getContext("2d");
 
+    let mult;
     if(!pj){
-        var mult = 6;
+        mult = 6;
     }else{
-        var mult = 1;
+        mult = 1;
     }
 
     //Make big animation with Critics
+    let multiSize, topMultiHeadLocation, leftMultiHeadLocation;
     if(critic){
-        var multiSize = 1.5;
-        var topMultiHeadLocation = 0.5;
-        var leftMultiHeadLocation = 0.96;
+        multiSize = 1.5;
+        topMultiHeadLocation = 0.5;
+        leftMultiHeadLocation = 0.96;
     //center spell
     }else if(center){
-        var multiSize = 1;
-        var topMultiHeadLocation = 1;
-        var leftMultiHeadLocation = 3.5;
+        multiSize = 1;
+        topMultiHeadLocation = 1;
+        leftMultiHeadLocation = 3.5;
     }else{
-        var multiSize = 1;
-        var topMultiHeadLocation = 1;
-        var leftMultiHeadLocation = 1;
+        multiSize = 1;
+        topMultiHeadLocation = 1;
+        leftMultiHeadLocation = 1;
     }
 
     canvas.width = canvas.offsetWidth;

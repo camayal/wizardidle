@@ -98,10 +98,11 @@ function event() {
     afterChapter()//call special events after history
     }
 
+    let masterOption;
     if(state.forceEvent){//force some event for debugging and history
-        var masterOption = Number(pickRandomItem(state.forceEvent));
+        masterOption = Number(pickRandomItem(state.forceEvent));
     }else{
-        var masterOption = Math.floor((Math.random() * 5) + 1)
+        masterOption = Math.floor((Math.random() * 5) + 1)
     }
     switch (masterOption) {
     case 1:
@@ -131,6 +132,7 @@ function event() {
 //Main event: EXPLORE
 function exploreEV() {
     //Evalue if booty or not
+    let textDice;
     if (YesOrNot(stat("pBotin"), 0)) {
         //getBotin();
         run.objectToBreak = "";
@@ -142,9 +144,9 @@ function exploreEV() {
         if(state.player.gold > 0){
             //call the game function
             if (run.previousEvent == "sixfivefour"){
-                var textDice = pickRandomItem("decides come back to the gaming house, returns to the dice house,wants to spend more coins at the gaming house");
+                textDice = pickRandomItem("decides come back to the gaming house, returns to the dice house,wants to spend more coins at the gaming house");
             }else{
-                var textDice = pickRandomItem("finds a gamming house and enters,wants to play 6-5-4,wants to gambling");
+                textDice = pickRandomItem("finds a gamming house and enters,wants to play 6-5-4,wants to gambling");
             }
             print(wizardName() + " " + textDice);
             loadBackground(state.zone.current + "_casadados");
@@ -208,14 +210,15 @@ function reviveEV(){
 
 //Main event: PRAY
 function prayEV(){
+    let textCapel;
     if (YesOrNot(stat("pFindCapel"),0)){
         playSound("altar");
         count("altar");
         count("altar_zone_" + state.zone.current);
         if (run.previousEvent == "enterAltar"){
-            var textCapel = pickRandomItem("decides come back to the shrine, returns to the shrine,wants to spend more time at the temple");
+            textCapel = pickRandomItem("decides come back to the shrine, returns to the shrine,wants to spend more time at the temple");
         }else{
-            var textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
+            textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
         print(wizardName() + " " + textCapel);
         loadBackground(state.zone.current + "_altar");
@@ -231,9 +234,9 @@ function prayEV(){
     }else{
         count("negar");
         if (run.previousEvent == "negar"){
-            var textCapel = pickRandomItem("finds again the same shrine,sees the same shrine");
+            textCapel = pickRandomItem("finds again the same shrine,sees the same shrine");
         }else{
-            var textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
+            textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
         const faithLost = calculateFe();
         print(wizardName() + " " + textCapel + " but does not enter and continues (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
@@ -248,12 +251,13 @@ function prayEV(){
 
 //Main event: SLEEP OR INN
 function innEV(){
+    let textInn;
     if(Math.round(state.player.hp) < Math.round(state.player.hpBase)){
            
            if (run.previousEvent == "innEV"){
-            var textInn = "wants to rest a little more,still is tired"
+            textInn = "wants to rest a little more,still is tired"
            }else{
-            var textInn = "feels tired,wants to rest,is falling asleep"
+            textInn = "feels tired,wants to rest,is falling asleep"
            }
            print(wizardName() + " " + pickRandomItem(textInn)) 
            run.previousEvent = "innEV"
@@ -304,11 +308,13 @@ function studyEV() {
 //find statue
 function findStatue(){
     run.multipleEventsCounter += 1;
+    let optionTemp;
     if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
-        var optionTemp = 2;
+        optionTemp = 2;
     }else{
-        var optionTemp = run.multipleEventsCounter;
+        optionTemp = run.multipleEventsCounter;
     }
+    let learnTxt;
     switch(optionTemp){
         case 1:
         //found and change locality
@@ -328,7 +334,7 @@ function findStatue(){
         if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
             count("sucessStudyStatue");
             spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
-            var learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
+            learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
             const result = statueObj["statue_" + state.zone.current].event()
         if(result == "hydraMysteryResolved"){
             //play hydra sound
@@ -341,13 +347,13 @@ function findStatue(){
         }else{
             playSound("studyrune");
             spell("spellStudyTry_16",true,frameWidth,frameHeight,currentFrame,shift);
-            var learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
+            learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
             //fail study try again
             if(run.multipleEventsCounter == 4){
                 count("failStudyStatue");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
-                var learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
+                learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
             }
             print(wizardName() + " " + learnTxt) 
         }
@@ -366,11 +372,13 @@ function findStatue(){
 function findRuneOrBook(){
     const placesWithBooks = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Castillo" || state.zone.current == "la_Torre";
     run.multipleEventsCounter += 1;
+    let optionTemp;
     if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
-        var optionTemp = 2;
+        optionTemp = 2;
     }else{
-        var optionTemp = run.multipleEventsCounter;
+        optionTemp = run.multipleEventsCounter;
     }
+    let learnTxt;
     switch(optionTemp){
         case 1:
         const number = getRandomInt(1,10);
@@ -390,7 +398,7 @@ function findRuneOrBook(){
             playSound("statUp");
             count("sucessStudy");
             spell("spellStudyGood_15",true,frameWidth,frameHeight,currentFrame,shift);
-            var learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
+            learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
             //var statToUP = pickRandomItem("pAttack,pPolymorph,fCritic,pCritic,pHeal,fHeal,pStudy,pBotin,pChangeZone,pFindCapel,pFindMaterials,pOfrenda,fOfrenda")
             const statToIncrease = statObj[statObj.random()];
@@ -402,13 +410,13 @@ function findRuneOrBook(){
         }else{
             playSound("study" + run.objectToStudy);
             spell("spellStudyTry_16",true,frameWidth,frameHeight,currentFrame,shift);
-            var learnTxt = pickRandomItem("tries to understand what is written in the,reads the glyphs in the,analyzes the information in the,continues reading the");
+            learnTxt = pickRandomItem("tries to understand what is written in the,reads the glyphs in the,analyzes the information in the,continues reading the");
             //fail study try again
             if(run.multipleEventsCounter == 4){
                 count("failStudy");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,frameWidth,frameHeight,currentFrame,shift);
-                var learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
+                learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
             }
             print(wizardName() + " " + learnTxt + " " + run.objectToStudy) 
         }
@@ -430,6 +438,7 @@ function findRuneOrBook(){
 function searchInn(){
     const placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto"
     run.multipleEventsCounter += 1;
+    let rested, textRecover;
     switch(run.multipleEventsCounter){
         case 1:
             if(placesWithInn){
@@ -477,19 +486,19 @@ function searchInn(){
             break;
         case 3:
             if(placesWithInn && run.restAtInn){
-                var rested = state.player.hpBase - state.player.hp
+                rested = state.player.hpBase - state.player.hp
             }
             else{
-                var rested = (state.player.hpBase - state.player.hp) / getRandomInt(1,5)
+                rested = (state.player.hpBase - state.player.hp) / getRandomInt(1,5)
             }
             state.player.hp = state.player.hp + rested;
             if ((state.player.hp + rested) >= state.player.hpBase){
-                var textRecover = "feels totally renewed,feels well rested,has new energies,regained his health"
+                textRecover = "feels totally renewed,feels well rested,has new energies,regained his health"
             }else{
-                var textRecover = "feels slightly renewed,feels poorly rested,has some energies,regained some health"
+                textRecover = "feels slightly renewed,feels poorly rested,has some energies,regained some health"
             }
             if (Math.round(rested) <= 0){
-                var textRecover = "couldn't rest well"
+                textRecover = "couldn't rest well"
             };
             //spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
             updateHeading();
@@ -510,6 +519,7 @@ function searchInn(){
 //Pray and offer gold
 function doOffering(){
     
+    let optionTemp, textPray;
     if(run.offer){
         run.multipleEventsCounter += 1;
         switch(run.multipleEventsCounter){
@@ -544,13 +554,13 @@ function doOffering(){
     }else{
         run.multipleEventsCounter += 1;
         if (run.multipleEventsCounter >= 2 && run.multipleEventsCounter <= 4 ) {
-            var optionTemp = 2;
+            optionTemp = 2;
         }else{
-            var optionTemp = run.multipleEventsCounter;
+            optionTemp = run.multipleEventsCounter;
         }
         switch(optionTemp){
             case 1:
-                var textPray = pickRandomItem(" adore you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor")
+                textPray = pickRandomItem(" adore you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor")
                 print(wizardName() + textPray)
                 break;
             case 2:
@@ -560,7 +570,7 @@ function doOffering(){
                 run.feGanada *= state.player.faithMultiplier
                 state.player.faith = state.player.faith + run.feGanada;
                 count("FeByPray",Math.round(run.feGanada));
-                var textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
+                textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
                 print(wizardName() + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")")
             break;
             case 5:
@@ -585,6 +595,7 @@ updateHeading();
 //Get Botin
 function getBotin() {
     run.multipleEventsCounter += 1;
+    let number, botinTexts;
     switch (run.multipleEventsCounter){
         case 1:
             run.objectToBreak = pickRandomItem("bag,barrel,box,chest,pot")
@@ -599,11 +610,11 @@ function getBotin() {
                 loadNPC("box");
                     break;
                 case "chest":
-                    var number = getRandomInt(1,6);
+                    number = getRandomInt(1,6);
                     loadNPC("chest" + number);
                     break;
                 case "pot":
-                    var number = getRandomInt(1,4);
+                    number = getRandomInt(1,4);
                     loadNPC("pot" + number);
             }
             print(wizardName() + " sees " + (run.previousEvent == "getBotin" ? "another " : "a ")  + run.objectToBreak);
@@ -611,10 +622,10 @@ function getBotin() {
         case 2:
         if (run.objectToBreak == "bag"){
             playSound("coins");
-            var botinTexts = " takes the bag and finds ";
+            botinTexts = " takes the bag and finds ";
         }else if(run.objectToBreak == "chest"){
             playSound("unlock");
-            var botinTexts = " opens the chest and finds ";
+            botinTexts = " opens the chest and finds ";
             spell("spellKey_8",false,frameWidth,frameHeight,currentFrame,shift);
         }else{
             if (run.objectToBreak == "pot"){
@@ -622,7 +633,7 @@ function getBotin() {
             }else{
                 playSound("breakWood");
             }
-            var botinTexts = " breaks the " + run.objectToBreak +" and finds ";
+            botinTexts = " breaks the " + run.objectToBreak +" and finds ";
             spell("spellPush9",false,frameWidth,frameHeight,currentFrame,shift);
         }
         npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);

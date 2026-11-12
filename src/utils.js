@@ -1,12 +1,7 @@
 // Wizard Idle v2 - small pure helpers (no game state, no DOM). Bodies unchanged from v1.
 
 export function YesOrNot(probBase, probExtra) {
-    if (Math.random() <= Number(probBase) + Number(probExtra)) {
-        var result = true
-    } else {
-        var result = false
-    }
-    ;return result;
+    return Math.random() <= Number(probBase) + Number(probExtra);
 }
 
 export function getRandomInt(min, max) {

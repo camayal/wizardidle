@@ -33,6 +33,7 @@ function battle() {
     if (run.multipleEventsCounter > 1) {//special because is a loop in the second case until someone die
         option = 2
     }
+    let corruptedText;
     switch (option) {
     case 1:
         //anounce the battle
@@ -101,9 +102,9 @@ function battle() {
                     run.feGanada *= state.player.faithMultiplier
                     state.player.faith = state.player.faith + run.feGanada;
                     count("FeByCleanCorruption",Math.round(run.feGanada));
-                    var corruptedText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption eradication";
+                    corruptedText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption eradication";
                 }else {
-                    var corruptedText = "";
+                    corruptedText = "";
                 }
             }
 
@@ -111,7 +112,7 @@ function battle() {
             if(state.player.inSin){
                 const feperdida = calculateFe();
                 state.player.faith = state.player.faith - feperdida;
-                var corruptedText = ", and reduce the faith " + ui.spiritIcon + " -" + roundNumbertoLetter(feperdida);
+                corruptedText = ", and reduce the faith " + ui.spiritIcon + " -" + roundNumbertoLetter(feperdida);
 
             }
 
@@ -334,14 +335,15 @@ function getHydra(newEncounter = false){
     fight.enemyHPbase = Math.round(fight.enemyHP)
     updateHeartNPC();
     fight.enemyName = "<span style='color:DarkGreen'><img class='imgInConsole' height='" + ui.em + "' src='img/boss.png'/>" + " " + fight.hydra.toUpperCase() + "</span>";
+    let startBattleText;
     if (newEncounter){
         count("Hydras");
         count("typeofHydras_" + fight.hydra)
-        var startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
+        startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
         print(wizardName() + " " + pickRandomItem(startBattleText));
         startEvent(battle);
     } else {
-        var startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
+        startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
         print(wizardName() + " " + pickRandomItem(startBattleText));
     }
     
@@ -351,6 +353,7 @@ function getHydra(newEncounter = false){
 
 //Performs attack
 function attackEV() {
+    let pjAttackWithCritic, spellId, pjHit, text;
     if (YesOrNot(stat("pPolymorph"), 0) && !fight.hydraCombat && !fight.bossCombat && !fight.polymorphed && fight.enemy !== "baba" && fight.enemy !== "el_elemental" && fight.enemy !== "el_ent" && fight.enemy !== "el_espectro" && fight.enemy !== "el_esqueleto" && fight.enemy !== "el_golem" && fight.enemy !== "el_ojo" && fight.enemy !== "la_esencia"){
         if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
         fight.enemyHP = 1;
@@ -370,9 +373,9 @@ function attackEV() {
                 //loop.every("animPJ", animatePJ, 100)                
                 if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 //determine if is critical or not
-                var pjAttackWithCritic = state.player.attack * stat("fCritic") * stat("fAttack");
+                pjAttackWithCritic = state.player.attack * stat("fCritic") * stat("fAttack");
                 pjAttackWithCritic *= config.balance.sacredDamageMultiplier;
-                var spellId = getSpell();
+                spellId = getSpell();
                 if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                     pjAttackWithCritic = pjAttackWithCritic * 4 //if is one of the divine powers
                 }
@@ -391,9 +394,9 @@ function attackEV() {
                 //loop.every("animPJ", animatePJ, 100)
                 if (document.hasFocus()){loop.every("animPJ", animatePJ, 100)};
                 //attack with no critic
-                var pjHit = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
+                pjHit = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
                 pjHit *= config.balance.sacredDamageMultiplier;
-                var spellId = getSpell();
+                spellId = getSpell();
                 if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                     pjHit *= 4 //if is one of the divine powers
                 }
@@ -407,9 +410,9 @@ function attackEV() {
                 const spellText = spells[spellId].name.toLowerCase()
                 
                 if (spells[spellId].school == "Physical"){
-                    var text = pickRandomItem(" uses the , attacks with the ");
+                    text = pickRandomItem(" uses the , attacks with the ");
                 }else{
-                    var text = pickRandomItem(" cast , attacks with ");
+                    text = pickRandomItem(" cast , attacks with ");
                 }
 
                 print(wizardName() + text + spellText + " (" + ui.attackIcon + roundNumbertoLetter(pjHit) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));

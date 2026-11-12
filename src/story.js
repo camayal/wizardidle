@@ -43,10 +43,11 @@ const chapter = {
             count("altar_zone_" + state.zone.current);
             //multiplicador de fe 
             state.player.faithMultiplier = 2
+            let text;
             if (Number(counterText("divineTouch")) + Number(counterText("DivineHeal")) + Number(counterText("DivineHit")) > 200){
-                var text = "decides to devote himself to your consecration to retribute all your help";
+                text = "decides to devote himself to your consecration to retribute all your help";
             }else{
-                var text = "decides to devote himself to your consecration to get more divine attention";
+                text = "decides to devote himself to your consecration to get more divine attention";
             }
             print(wizardName() + " " + text + ", and obtain a Divine crosier")
             loadBackground(state.zone.current + "_altar");

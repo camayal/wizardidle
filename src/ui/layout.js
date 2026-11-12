@@ -62,9 +62,10 @@ function responsiveLayout() {
     ui.attackIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/attack.png'/> ";
     ui.healIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/heal.png'/> ";
 
+    let x, i;
     if (!!document.getElementsByClassName("imgInConsole")[0]){
-    var x = document.getElementsByClassName("imgInConsole");
-    var i;
+    x = document.getElementsByClassName("imgInConsole");
+    
     for (i = 0; i < x.length; i++) {
         x[i].style.height = ui.em + "px";
         x[i].style.width = ui.em + "px";
@@ -72,8 +73,8 @@ function responsiveLayout() {
     }
 
     if (!!document.getElementsByClassName("imgInConsoleSpecial")[0]){
-        var x = document.getElementsByClassName("imgInConsoleSpecial");
-        var i;
+        x = document.getElementsByClassName("imgInConsoleSpecial");
+        
         for (i = 0; i < x.length; i++) {
             x[i].style.height = ui.em * 1.5 + "px";
             x[i].style.width = ui.em * 1.5 + "px";
@@ -81,8 +82,8 @@ function responsiveLayout() {
         }
 
     if (!!document.getElementsByClassName("specialTextInConsole")[0]){
-    var x = document.getElementsByClassName("specialTextInConsole");
-    var i;
+    x = document.getElementsByClassName("specialTextInConsole");
+    
     for (i = 0; i < x.length; i++) {
         x[i].style.fontSize = ui.em * 1.5 + "px";
         x[i].style.lineHeight = ui.em *1.5 + "px";

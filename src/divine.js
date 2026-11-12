@@ -73,6 +73,7 @@ function pjBtn(){
 
 //npc divine button funct
 function npcBtn(){
+    let txt;
     if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 1){
         //hurt npc
         let divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
@@ -89,9 +90,9 @@ function npcBtn(){
             spell( spellId,false,frameWidth,frameHeight,currentFrame,shift);
             if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                 divineHit = Math.round(divineHit) * 8 //if is one of the divine powers
-                var txt = "sees how the god's wrath destroy the enemy - ";
+                txt = "sees how the god's wrath destroy the enemy - ";
             }else{
-                var txt = "feels the god's power over the enemy - ";
+                txt = "feels the god's power over the enemy - ";
             }
             fight.enemyHP = Math.round(fight.enemyHP) - (Math.round(divineHit));
             

@@ -49,12 +49,11 @@ function updateHeading() {
 };
 
 function heartMeter(hpPercent){
-    if(hpPercent > 0.75 /*&& hpPercent <= 1*/){var heartImg = "img/heart.png"};
-    if(hpPercent > 0.5 && hpPercent <= 0.75){var heartImg = "img/heart75.png"};
-    if(hpPercent > 0.1 && hpPercent <= 0.5){var heartImg = "img/heart50.png"};
-    if(hpPercent > 0 && hpPercent <= 0.1){var heartImg =  "img/heart10.png"};
-    if(hpPercent <= 0){var heartImg =  "img/heart0.png"};
-    return heartImg
+    if (hpPercent > 0.75) return "img/heart.png";
+    if (hpPercent > 0.5) return "img/heart75.png";
+    if (hpPercent > 0.1) return "img/heart50.png";
+    if (hpPercent > 0) return "img/heart10.png";
+    if (hpPercent <= 0) return "img/heart0.png";
 }
 
 //update the level of healt in NPC icon

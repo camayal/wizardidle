@@ -99,20 +99,21 @@ function levelUP() {
 
 //Add gold
 function addGold(){
+    let possibleGold;
     if (fight.bossCombat){
-         var possibleGold = state.player.hpBase * config.balance.rGold;
+         possibleGold = state.player.hpBase * config.balance.rGold;
          state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
          state.player.gold = state.player.gold + (state.player.lastBattleGold * fight.bossGoldMultiplier);
          count("GoldFromBosses", (state.player.lastBattleGold * (fight.bossGoldMultiplier)));
     }else if(fight.hydraCombat){
-        var possibleGold = state.player.hpBase * config.balance.rGold;
+        possibleGold = state.player.hpBase * config.balance.rGold;
          state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
          state.player.gold = state.player.gold + (state.player.lastBattleGold * 15);
          count("GoldFromBosses", (state.player.lastBattleGold * (15)));
     }else{
      //if (eval(enemy).hasgold == "true") {
         if (enemyTypes[fight.enemy].hasgold == "true") {
-         var possibleGold = state.player.hpBase * config.balance.rGold;
+         possibleGold = state.player.hpBase * config.balance.rGold;
          const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
          state.player.lastBattleGold = goldcurrentBattle;
          state.player.gold = state.player.gold + goldcurrentBattle;
