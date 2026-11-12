@@ -11,7 +11,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.0.0 live since 2026-11-11. **2.1.0 prepared on `dev`** (stages 1 and 2: cleanup and speed), waiting for the author's playtest and reviews before merging into `main`. **Next:** stage 3, the story.
+- **Released:** 2.0.0 live since 2026-11-11. **2.1.0 prepared on `dev`** (stages 1 and 2: cleanup and speed), waiting for the author's playtest and reviews before merging into `main`. **Next:** stage 3a, stats and playtest tools; then the story with the faith rebalance.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.0.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
@@ -41,6 +41,8 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-10 | Offline mode: network first for code, stored copy first for art and sound, new cache per release | Online players always get the newest version; offline still plays; old versions don't linger |
 | 2026-11-11 | Route after 2.0.0: 1 clean up the code, 2 modern and faster, 3 the story, 4 new features | The author's order: a clean, fast base before adding content |
 | 2026-11-11 | CHANGELOG is a flat list of short bullets per version, no narrative or subtitles | The author's preference for readability |
+| 2026-11-12 | Route after 2.1.0: stats and playtest tools, then the story with the faith rebalance, then professions, then the rest | The story depends on faith and professions; no balance number without a playtest |
+| 2026-11-12 | The .md docs (journal, roadmap, changelog, plans) stay published on the site | The repository is public anyway |
 
 ## Ideas backlog
 
