@@ -169,6 +169,16 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *Ties to:* the faith plan (rescuers, belief levels, the free revive), the story's final battle (whose death is already meant to be final), stats (deaths, true deaths, the cause, kept per world), and achievements.
   - *Open questions:* how small the chance is, and what changes it: belief level (does an atheist risk more, since he waits for no god?), level, zone, a boss kill, how long he has lain dead. Is the god warned (a last chance to touch him, a fading heart)? Can it happen before a certain level, or never in the first hours? Does the next wizard inherit anything (gold, a relic, a letter)? Playtests should measure how often it happens.
 
+- **A fallen wizard sprite instead of the skull** (2026-11-12, asked by the author via the story session): in the story a fall in battle is now **badly injured, almost dead**, and only a rare true death is final (see "Death management" above and the rescuers in [docs/FAITH.md](docs/FAITH.md)). *Today* the fallen wizard is drawn as a skull (`img/muerto.png`, 32×32, through `loadAlterCanvasChar("muerto")` in `src/combat.js` and `src/ui/layout.js`), which no longer fits. **The skull stays for a true death.**
+  - *Searched for a ready-made sprite* (2026-11-12): **none exists.** Checked `img/`, `wizardidle-old-ideas/layers/` (layer names of all 51 .pdn files: the only wizard layer, `lvl0: Background` in `mapa` and `pradera y bosque`, is the standing sprite placed for scale), `unorganzed_sprites/Sprites/` (`LVLs/`, `BASE/`, `imgBkp2/`, `dg_people32.gif`: everyone stands) and the full D.E. Gervais set in `unorganzed_sprites/Sprites/Tiles Gervais/` (3,571 files: AngbandTk sheets, DO Items / Monsters / Terrain / XR module, Silmar).
+  - *Parts that could help:* lying human skeletons and dark flattened corpse shapes in `Tiles Gervais/AngbandTk/dg_misc32.gif` (rows 6–8; Angband's "dead monster" tiles), `DO XR module/XR module/HB_BatCorpse.PNG` (32×32, a creature lying flat: the right pose, the wrong subject), `DO Items/Items/SkeletonHumanMedium.PNG`, blood pools `DO Terrain/Terrain/L1_Blood001–007.PNG` and `L2_PoolBlood.PNG` (54×54, would need scaling to 32), robes `DO Items/Items/RobeBlue/Green/Purple/Red.PNG`, and the sleeping bag `img/sleepingbag.png` (a lying shape in the game's own style). The wizard tiers are `img/lvl0.png`…`lvl200.png` (21 images, 32×32, a robed figure with a staff, recoloured per 10 levels).
+  - *Options:*
+    1. **Rotate the existing tier sprites** (recommended to start): turn each `lvlN.png` 90° so he lies on his side at the bottom of the 32×32 square, staff fallen beside him, optionally over a small blood pool. Lossless for pixel art, can be done by a script for all 21 tiers, keeps each tier's colours. Looks stiff, but it's ready in an hour and clearly "him".
+    2. **Draw a collapsed or kneeling pose** by hand in Paint.NET, like the other sprites: one base drawing, recoloured per tier (21 images) or one generic image. The most expressive; the most work.
+    3. **One generic fallen image** (robe and staff on the ground, no face), not per tier. Cheapest drawing, loses the tier look.
+  - *Size and frames:* 32×32 PNG, drawn like the tier sprites (`ui.charWidth` × `ui.charHeight` at `ui.squareSide`); a lying figure fits in the bottom 12–14 rows so he rests on the ground line. One frame is enough; two frames (a 1-pixel rise, "still breathing") would work on the existing `animPJ` clock if wanted. Name them `fallen0.png`…`fallen200.png` (or `fallen.png` if generic); the two `loadAlterCanvasChar("muerto")` calls switch to the fallen image, and `muerto.png` is used only when the death is final.
+  - *Open question for the author:* which option, and should the fallen sprite change with the rescuer (e.g. carried on the caravan) or stay the same?
+
 ## Already built (from the old notes)
 
 Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0) · the per-sprite enemy table: all 669 sprites in `InformationByEnemy.xlsx` match `src/data/enemies.js` exactly (type, rare, corrupted, display name) · the zone boss and enemy table in `enemyLocation.xlsx` (2014): all 16 bosses match, and 14 of 16 enemy lists match exactly. The Castle's sorceress (`la_Hechicera`) was later dropped from the code, and the Forest's elf (`el_Elfo`) was added · the XP/HP/age/enemy-HP formulas in `infodexp.xlsx` (except the two differences noted in "Levelling pace").
@@ -192,6 +202,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Fallen wizard sprite searched
+
+- Searched every art source for a wizard lying injured, to replace the skull for a fall that isn't a death (asked by the author via the story session). None exists; recorded the closest parts and three options (rotate the tier sprites, draw a collapsed pose, one generic image) in the backlog entry "A fallen wizard sprite instead of the skull".
 
 ### 2026-11-12: 2.1.0 released; the dev test bar
 - 2.1.0 released after the author's playtest: `main` fast-forwarded, tag `v2.1.0`, live site checked (version 2.1.0, worker stamped with the commit, offline list published).
