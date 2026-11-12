@@ -181,6 +181,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Stage 2, offline list at deploy; chapter race
+
+- The deploy workflow now writes `precache.json` (every file except legacy and docs, 1,074 today) and stamps the worker with the commit, so each deploy gets a fresh cache without editing `service-worker.js` (22 KB → 3 KB). Checked with a simulated deploy; the live site picks it up on the next merge into `main`.
+- Stress runs found a v1 race: a chapter opened while a scroll was open was read again after the scroll closed, by then possibly for the next level (crash). `openHistory()` now keeps the chapter it opened. Chapter-focused stress runs (levels 25 → 126) zero errors.
+
 ### 2026-11-12: Stage 2, tidy data and medium functions
 
 - Removed the `masterTime < 500` speed-debug branches (masterTime is a constant now, they could never run).

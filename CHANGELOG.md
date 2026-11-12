@@ -16,6 +16,8 @@
 - Code: removed the old speed-debug shortcuts that could no longer run.
 - Code: enemy data uses true/false instead of "true"/"1" text.
 - Code: the inn, shrine, loot, enemy choice and divine touch split into named steps.
+- Offline mode: the file list and the cache version are generated at every deploy (no more hand-kept list).
+- Fixed: a crash when two levels were gained at once while a scroll was open and the first level had a chapter.
 - Restored the disabled developer console notes, lost in the 2.0.0 module split.
 
 ## 2.0.0 — 2026-11-11

@@ -235,14 +235,19 @@ const chapter = {
 }
 
 
+// The chapter whose text is being shown. Kept because the scroll may need to close first,
+// and by then the wizard can already be a level higher (v1 read the new level and crashed).
+let shownChapter;
+
 // A chapter was reached: run its event and, if it has text, show it in the scroll.
 function openHistory(){
+    shownChapter = chapter[`lvl${state.player.lvl}`];
     // run the chapter's event
     run.afterChapterExe = true;//activate post chapter event
-    chapter[`lvl${state.player.lvl}`].event()
+    shownChapter.event()
 
     // show the scroll if the chapter has text
-    if (chapter[`lvl${state.player.lvl}`].text != "NA"){
+    if (shownChapter.text != "NA"){
         if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
             scrollClose()
             el("scrollBackCenter").addEventListener("transitionend", updateHistory);
@@ -256,7 +261,7 @@ function openHistory(){
 function updateHistory(){
    el("scrollBackCenter").removeEventListener("transitionend", updateHistory)
    pauseToggle();
-   el('innerTextScroll').innerHTML= chapter[`lvl${state.player.lvl}`].text;
+   el('innerTextScroll').innerHTML= shownChapter.text;
    el("innerTextScroll").style.display = "block";
    el("historyTitle").style.fontSize = `${ui.em * 2.5}px`;
    el("historyTitle").style.lineHeight = `${ui.em * 2.5}px`;
