@@ -36,6 +36,6 @@ export const achievements = {
     logro_killedbychicken: {name:"logro_killedbychicken", title:"The last cluck-cluck", description:"Badly defeated by a demonic chicken"},//ok
     logro_namesake: {name:"logro_namesake", title:"Tocayo", description:"Find a namesake, something almost impossible in these lands"},//ok -i
     logro_hategod:  {name:"logro_hategod", title:"Atheist!", description:"Found a new way to live the life, pure and real hate for god, reach -10K of faith"},//ok -i
-    //love god give setLocal("travelFavor",1)
+    // planned: when the god loves the wizard, unlock state.travelFavor (map travel)
     logro_hydramystery:  {name:"logro_hydramystery", title:"The hydra is awake", description:"Discover the mantra to wake up the ancient hydras"},//ok
 };

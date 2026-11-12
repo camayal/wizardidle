@@ -8,7 +8,6 @@ import { playSound } from './audio.js';
 import { print } from './ui/render.js';
 import { updateAchievements } from './ui/scrolls.js';
 
-// #endregion
 
 
 
@@ -21,7 +20,7 @@ const logro = {
     ...achievements,
     set: function(nameLogro){
         if(!state.achievements[nameLogro.name]){
-        //sonido de archivements
+        // achievement sound
         playSound("achivement");
         state.achievements[nameLogro.name] = true;
         print("<img class='imgInConsoleSpecial' height='" + ui.em * 1.5 + "' src='img/achivement.png'><span class='specialTextInConsole' style='font-size:" + ui.em * 1.5 + "px; line-height:" + ui.em * 1.5 + "px;'><b>" + nameLogro.title + "</b> - " + nameLogro.description + "</span>");
@@ -33,7 +32,7 @@ const logro = {
     }
 };
 
-// Table rows for every unlocked achievement
+// Table rows (icon, title, description) for every achievement the wizard has unlocked.
 function achievementList(){
     let out = "";
     for (const text of Object.keys(state.achievements)){
@@ -42,7 +41,7 @@ function achievementList(){
     return out;
 }
 
-//count logros
+// How many achievements this wizard has unlocked.
 function countLogros(){
     return Object.keys(state.achievements).length;
 }

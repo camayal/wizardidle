@@ -17,6 +17,7 @@ Gate before moving on: the whole code base is modern, measurably faster where it
 ## 3. The story
 
 - [ ] Implement the story from the ideas backlog in `ideas.md` ("Finish the story": chapters III–XI and the final battle, plus the related story ideas).
+- [ ] Fix the chapter keys in `src/story.js` first (a v1 bug, kept so stage 1 doesn't change gameplay): `lvl60` and `lvl90` appear twice, so the later entries (Chapter IX and X, meant for levels 160 and 190) replace the earlier ones and show at levels 60 and 90; Chapter IV never shows. `lvl99` should be `lvl199`, and `lv200` (missing an `l`) means Chapter XI never fires.
 
 ## 4. New features
 

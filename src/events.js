@@ -89,7 +89,7 @@ function nextEvent(){
     loop.every("master", event, masterTime);
 }
 
-//Select event, call in this way only:  nextEvent();    
+// The event picker, run by the master clock: forced events first (debug), else one of five at random.
 function event() {
     loop.stop("master");
     if(run.pause){return}//detect pause command
@@ -128,7 +128,7 @@ function event() {
 
 };
 
-//Main event: EXPLORE
+// Explore: maybe loot, maybe a dice house in town, maybe change zone, otherwise walk on.
 function exploreEV() {
     //Evalue if booty or not
     let textDice;
@@ -169,7 +169,7 @@ function exploreEV() {
     };
 };
 
-//Main event: REVIVE BY MISTERIOUS GUY
+// Steps of the mysterious healer who revives the wizard when he has fallen.
 function reviveEV(){
     run.multipleEventsCounter += 1;
     switch(run.multipleEventsCounter){
@@ -205,7 +205,7 @@ function reviveEV(){
 };
 
 
-//Main event: PRAY
+// Find a shrine: enter and offer gold, or pass by and lose a little faith.
 function prayEV(){
     let textCapel;
     if (YesOrNot(stat("pFindCapel"),0)){
@@ -246,7 +246,7 @@ function prayEV(){
 
 
 
-//Main event: SLEEP OR INN
+// Feel tired: look for an inn (or camp), or feel fine and keep going.
 function innEV(){
     let textInn;
     if(Math.round(state.player.hp) < Math.round(state.player.hpBase)){
@@ -269,8 +269,7 @@ function innEV(){
 
 
 
-//Main event: study and found statues
-//TODO:CHECK A POTENTIAL BUG, THE WIZARD NEVER WILL BE TRUE FOR THE TWO LAST STAIMENTS
+// See something: a statue to study (not in every zone), otherwise a rune or a book.
 function studyEV() {
      if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva"){//found statue, poblado and cueva has not statue
         if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
@@ -301,7 +300,7 @@ function studyEV() {
 ////////////////////////////////////////////////////////////////////////////////
 //Mechanisms
 
-//find statue
+// Steps of studying a statue; success raises a skill (each zone's statue has its own effect).
 function findStatue(){
     run.multipleEventsCounter += 1;
     let optionTemp;
@@ -363,7 +362,7 @@ function findStatue(){
 }
 
 
-//Find book or rune
+// Steps of studying a rune or a book; success raises a random skill.
 function findRuneOrBook(){
     const placesWithBooks = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Castillo" || state.zone.current == "la_Torre";
     run.multipleEventsCounter += 1;
@@ -428,7 +427,7 @@ function findRuneOrBook(){
 
 
 
-//Search an inn
+// Steps of resting: pay for an inn when possible, otherwise camp; recover HP.
 function searchInn(){
     const placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto"
     run.multipleEventsCounter += 1;
@@ -505,7 +504,7 @@ function searchInn(){
 }
 
 
-//Pray and offer gold
+// Steps at a shrine: pray, and give gold for faith (sometimes a mandatory offering).
 function doOffering(){
     
     let optionTemp, textPray;
@@ -578,7 +577,7 @@ updateHeading();
 }
 
 
-//Get Botin
+// Steps of looting a container (bag, chest, barrel, box or pot) for gold.
 function getBotin() {
     run.multipleEventsCounter += 1;
     let number, botinTexts;

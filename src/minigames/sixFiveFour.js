@@ -32,7 +32,7 @@ let resultDice = "";
 let betForDice = 0;
 
 
-//Start the game Six Five Four
+// Start a game of six-five-four against the gambler: decide who opens and place the bet.
 function sixfivefour(){
     //calculate the risk (amount of cargo that consider risky)
     riskinDice = Math.floor(Math.random() * (10 - 6) ) + 6;
@@ -63,7 +63,8 @@ function sixfivefour(){
 }
 
 
-//Mechanism for the game Six Five Four
+// One roll of five dice for a player: find ship (6), captain (5) and crew (4),
+// then the cargo (the two remaining dice); reroll while the cargo is risky.
 function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
     run.multipleEventsCounter += 1;
     
@@ -154,7 +155,7 @@ function rollDicesForSixfivefour(enemyStart, nameDicePlayer) {
             loop.stop("event");
             run.multipleEventsCounter = 0;
             print(nameDicePlayer + " thinks the cargo is enought and skip")
-            //va a eval
+            // go to the evaluation step
             startEvent(function() { evalSixFiveFour(enemyStart,nameDicePlayer); });
         }
 
@@ -184,7 +185,7 @@ else{
 
 
 
-//eval the game, if is the first round, pass to the next player
+// After a player's turn: hand over to the other player, or go to the final score.
 function evalSixFiveFour(enemyStart, nameDicePlayer){
     //Evaluate the current round
     if (ship && captain && crew){print(nameDicePlayer + " set sail with " + cargo + " of cargo")}
@@ -215,7 +216,7 @@ function evalSixFiveFour(enemyStart, nameDicePlayer){
 
 
 
-//calculate the final result and check the winner
+// Compare both cargos, pay the winner and go back to the road.
 function finalScoreSixFiveFour(nameDicePlayer){
 
     run.multipleEventsCounter += 1;
@@ -265,7 +266,7 @@ function finalScoreSixFiveFour(nameDicePlayer){
 }
 
 
-//reset game
+// Clear the dice game state for the next game.
 function resetSixFiveFour(){
     nameDicePlayer = ""
      currentHand = "";

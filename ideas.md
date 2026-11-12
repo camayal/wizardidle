@@ -155,7 +155,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *Only one game tab*: detect the game open in two tabs and warn ("Wizardidle is running in another tab!").
   - *Android back button*: keep it from closing the app when installed.
   - *Fade transitions* between the clouds, the name screen and the game.
-- **Story implementation notes live in the code** (from the v1 code): `var chapter` in `src/story.js` keeps the author's 2018 step-by-step plan for chapters III–XI and the ending, as Spanish comments inside each chapter: the 4-step red rune event (lvl 128), locking the wizard in the volcano, 5-second self-revive, the tower siege and Midas (139–140), the lynching (149) with flags and a special death chapter, refusing divine help, the healer's final battle and the game-over flag. Read them together with "Finish the story" above when stage 3 starts.
+- **Story implementation notes live in the code** (from the v1 code): `var chapter` in `src/story.js` keeps the author's 2018 step-by-step plan for chapters III–XI and the ending, as Spanish comments inside each chapter: the 4-step red rune event (lvl 128), locking the wizard in the volcano, 5-second self-revive, the tower siege and Midas (139–140), the lynching (149) with flags and a special death chapter, refusing divine help, the healer's final battle and the game-over flag. Read them together with "Finish the story" above when stage 3 starts. The notes are in English since 2026-11-11. Watch out: the chapter keys have v1 typos (`lvl60`/`lvl90` twice, `lvl99`, `lv200`); see the roadmap, stage 3.
 
 ## Already built (from the old notes)
 
@@ -180,6 +180,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-11: Stage 1 step 5, comments
+
+- One short comment above each of the 95 functions; stale comments replaced (old storage API, "possible bug" note in studyEV, which was checked and is fine).
+- The author's Spanish story plans in `src/story.js` translated line by line, plus the few other Spanish comments.
+- Found a v1 bug in the chapter keys (`lvl60`/`lvl90` twice, `lvl99`, `lv200`); left as is to keep gameplay identical, recorded in the roadmap for stage 3.
 
 ### 2026-11-11: Stage 1 step 4, dead code removed
 

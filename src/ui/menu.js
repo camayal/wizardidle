@@ -22,13 +22,14 @@ import { el } from './dom.js';
 ///////////////////////////////////////////////////////////////////
 //Buttons
 
-//Kill button funct
+// Toolbar: open the kill scroll.
 function killBtn(){
     updateKill();
     el("innerTextScroll").style.display = "block";
     scrollOpen("kill");    
 }
 
+// Kill the wizard for good: record him in the cemetery, stop every clock, delete the save, reload.
 function realKill(){
     world.cemetery.push({
         name: state.player.name,
@@ -44,7 +45,7 @@ function realKill(){
 }
 
 
-//control close button in the scroll
+// Close button of the scroll.
 function btnCloseEvent(){
     if (ui.scrollCurrentContent == "history"){//unpause game after history
        pauseToggle();
@@ -53,7 +54,7 @@ function btnCloseEvent(){
 }
 
 
-//map button funct
+// Toolbar: open the map with the wizard's position.
 function mapBtn(){
     if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
         el("backMapa").src = "img/mapaunderground.png";
@@ -70,7 +71,7 @@ function mapBtn(){
 }
 
 
-//help button funct
+// Toolbar: open the help scroll.
 function helpBtn(){
     updateHelp();
     el("innerTextScroll").style.display = "block";
@@ -78,7 +79,7 @@ function helpBtn(){
 }
 
 
-//stats button funct
+// Toolbar: open the stats scroll (refreshed while open).
 function statsBtn(){
     loop.every("stats", updateStats,masterTime);
     updateStats();
@@ -88,6 +89,7 @@ function statsBtn(){
 
 
 
+// Toolbar: open the achievements scroll.
 function archBtn(){
     updateAchievements();
     el("innerTextScroll").style.display = "block";

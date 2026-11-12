@@ -50,7 +50,7 @@ import { el } from './dom.js';
 ///////////////////////////////////////////////////////// 
 //Layout
 
-//Responsive layout
+// Size and place everything for the current window (portrait, or landscape on phones).
 function responsiveLayout() {
     
     ui.objectSize = defineObjectSize();
@@ -125,7 +125,7 @@ function responsiveLayout() {
 
 let centerMain;
 let centerLauncher;
-//Define size of window
+// Base size of the game square: half the window height on desktop, 90% of the width on phones.
 function defineObjectSize() {
      if (!detectmob()) {
         ui.objectSize = window.innerHeight / 2;//better adaptation 
@@ -136,7 +136,7 @@ function defineObjectSize() {
 }
 
 
-//Detect mobile
+// Is this a phone or tablet (by user agent)?
 function detectmob() { 
  if( navigator.userAgent.match(/Android/i)
  || navigator.userAgent.match(/webOS/i)
@@ -154,7 +154,7 @@ function detectmob() {
 }
 
 
-//Get em size
+// Base font size, proportional to the game square.
 function getEM(){
     ui.em = ui.objectSize * 0.04;
     return ui.em;
@@ -162,7 +162,7 @@ function getEM(){
 
 
 
-//Default layout for mobile and desktop
+// Layout for desktop and phones held upright: scene above the console.
 function layoutPortrait(){
 
     if(state.firstUse){
@@ -390,7 +390,7 @@ function layoutPortrait(){
 }
 
 
-//Change layout when is landscape in mobile only
+// Layout for phones held sideways.
 function layoutLandscapeMobile(){
 
     if(state.firstUse){

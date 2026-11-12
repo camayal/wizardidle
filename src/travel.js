@@ -9,7 +9,7 @@ import { endEvent, event, nextEvent } from './events.js';
 import { addXP } from './wizard.js';
 import { loadBackground, print, showStage, wizardName } from './ui/render.js';
 
-//Change locality
+// Steps of travelling: leave the zone, enter a new one and show its legend.
 function changeLocality() {
     run.multipleEventsCounter += 1;
     switch (run.multipleEventsCounter) {
@@ -39,14 +39,14 @@ function changeLocality() {
 
 
 
-//Select random background for currentZone
+// Move to another stage of the current zone.
 function pickRandomBackgroundForCurrentZone() {
     const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].moves)
     loadBackground(randomLocality);
 };
 
 
-//Search for a close zone to move
+// Pick the next zone and stage from the current stage's destinations.
 function getZone() {
     if (state.zone.current !== undefined) {
         count("zonesChanged");

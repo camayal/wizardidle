@@ -18,30 +18,30 @@ import { el } from './ui/dom.js';
 //██║  ██║██║███████║   ██║   ╚██████╔╝██║  ██║   ██║   //
 //╚═╝  ╚═╝╚═╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   //
 //////////////////////////////////////////////////////////                                                      
-//History
+// The story: one entry per level that has a chapter or a story event.
 
-//declaration of chapter object, if text is NA, considere only a event and not a history.
+// text "NA" means the level only runs an event, without showing a chapter scroll.
 const chapter = {
     lvl1:{
         text:'<span class="titles" id="historyTitle">Prologue</span>~~THE BEGINNING~~<br>',
         event: function(){
-            //just history reserve the event
+            // story text only, no event
         }
     },
     lvl10:{
         text:'<span class="titles" id="historyTitle">Chapter I</span>~~~~<br>',
         event: function(){
-            //just history reserve the event
+            // story text only, no event
         }
     },
     lvl30:{
         text:'<span class="titles" id="historyTitle">Chapter II</span>~~DEVOTION~~<br>',
         event: function(){
-            //teleport al altar de la zona
+            // teleport to the zone's altar
             playSound("altar");
             count("altar");
             count("altar_zone_" + state.zone.current);
-            //multiplicador de fe 
+            // faith multiplier
             state.player.faithMultiplier = 2
             let text;
             if (Number(counterText("divineTouch")) + Number(counterText("DivineHeal")) + Number(counterText("DivineHit")) > 200){
@@ -59,141 +59,141 @@ const chapter = {
     lvl50:{
         text:'<span class="titles" id="historyTitle">Chapter III</span>',
         event: function(){
-            //baja multiplicador de fe a la mitad, pero fe normal intacta
+            // halve the faith multiplier, but keep the current faith
             console.log("evento2")
         }
     },
     lvl60:{
         text:'NA',
         event: function(){
-            //print sobre nuevo staff encontrado
+            // message: a new staff is found
         }
     },
     lvl80:{
         text:'NA',
         event: function(){
-            //print sobre break staff
+            // message: the staff breaks
         }
     },
     lvl90:{
         text:'<span class="titles" id="historyTitle">Chapter IV</span>',
         event: function(){
-            //solo historia
+            // story text only
             console.log("evento2")
         }
     },
     lvl100:{
         text:'NA',
         event: function(){
-            //sacredDamageMultiplier agregar variable en localStorage para multiplciar daño x1.5
-            //pierde fe cada que mata a alguien, esto agregar una flag, pero desarrollar eso en battleEV cuando muere enemy - "inPecado"
-            //print control del staff sagrado
+            // sacredDamageMultiplier: a saved value that multiplies damage x1.5
+            // loses faith with every kill: a flag ("inPecado", now state.player.inSin) checked in battle() when an enemy dies
+            // message: he controls the sacred staff
         }
     },
     lvl110:{
         text:'<span class="titles" id="historyTitle">Chapter V</span>',
         event: function(){
-            //sacredDamageMultiplier variable de dañosagrado a 1 = sacredDamageMultiplier
-            //quita flag de perder fe - "inPecado"
+            // sacred damage multiplier back to 1
+            // remove the lose-faith flag ("inPecado" / inSin)
             console.log("evento2")
         }
     },
     lvl128:{
         text:'NA',
         event: function(){
-            //aparece runa (crear nuevo evento con 4 pasos)
-            //1 encuentra runa, ROJA, 
-            //2 intenta estudiarla
-            //3 encuentra una escritura 
-            //4 cree que se trata de un mapa
-            //Logro de runa roja
+            // a rune appears (new event with 4 steps)
+            // 1 finds a RED rune
+            // 2 tries to study it
+            // 3 finds some writing
+            // 4 believes it is a map
+            // red rune achievement
         }
     },
     lvl129:{
         text:'NA',
         event: function(){
-            //print de teleport al volcan
-            //teleport al volcal
-            //no salir volcan,
-            //reduce tiempo de selfrevive a 5 segundos e indicarlo en la consola, puede ser un clock cada 1.5s y al 5to ciclo, reviva.
-            //Niega ayuda, agregar en divinetouch un print de negación cada toque
-            //aumenta curación
+            // message: teleport to the volcano
+            // teleport to the volcano
+            // can't leave the volcano
+            // self-revive in 5 seconds, shown in the console (e.g. a clock every 1.5 s that revives on the 5th tick)
+            // refuses help: every divine touch prints a refusal
+            // heals more
         }
     },
     lvl130:{
         text:'<span class="titles" id="historyTitle">Chapter VI</span>',
         event: function(){
-            //normaliza tiempo selfrevive aunque no se use por ahora
-            //desbloquear otros eventos
-            //ya no muere, cuando llegba a 0, se teletransporta y sana completamente
-            //negación total, ninguna ayuda 
-            //inPecado = "true" en localstorage
-            //Daño sagrado x 3
+            // self-revive time back to normal (even if unused for now)
+            // unlock the other events
+            // no longer dies: at 0 HP he teleports away and heals completely
+            // total refusal, no help at all
+            // inPecado = true (now state.player.inSin)
+            // sacred damage x3
             console.log("evento2")
         }
     },
     lvl139:{
         text:'NA',
         event: function(){
-            //print de teleport a la torre
-            //teleport a la torre
-            //no salir de la torre,
-            //aumenta ligeramente la probabilidad de encotnrar boss, agregar a addXP funcion de porcentaje y si falta 25% para subir de nivel, subir a 1 prob de que aparezca boss
-            //crear condicional que luego de lvl139 no se seleccine boss en la torre
+            // message: teleport to the tower
+            // teleport to the tower
+            // can't leave the tower
+            // slightly raise the boss chance; in addXP, when less than 25% is left to level up, make the boss certain
+            // after level 139 the tower boss is no longer picked
         }
     }, 
     lvl140:{
         text:'<span class="titles" id="historyTitle">Chapter VII</span>',
         event: function(){
-            //bajar probabilidad de boss a la inicial
-            //desbloquear otros eventos
-            //hacer bandera para modificar enemigos en ciudad y torre que no aparezcan hechiceros
+            // boss chance back to the initial value
+            // unlock the other events
+            // flag so no wizards appear among the enemies in the city and the tower
             console.log("evento2")
         }
     },
     lvl149:{
         text:'<span class="titles" id="historyTitle">Chapter VIII Part I</span>',
         event: function(){
-            //viaja a la torre
-            //elimina bandera que modifica enemigos en ciudad y torre
-            //add bandera para nulificar la addXP de todos los enemigos
-            //load npc especial, con hechicera7 y varios magos juntos atras
-            //spell de maldición sobre PJ evita que se cure
-            //allowHeal * 0 para bajar la probabilidad de que se cure
-            //inicia linchamiento (agregar bandera). forzar solo batallas y cambios de escenario pero sin botines
-            //agregar idx en linchamiento
-            //agregar condicional de muerte y llamar chapter especial specialDeathLvl149
-                //no salga calavera muerte es pausa y carga especial chapter
+            // travels to the tower
+            // remove the flag that changes the city and tower enemies
+            // flag that cancels addXP from every enemy
+            // special npc: la_hechicera7 with several wizards behind her
+            // curse spell on the wizard: he can't heal
+            // allowHeal * 0 to remove the chance of healing
+            // the lynching starts (flag): only battles and scene changes, no loot
+            // count the lynching in the stats
+            // on death, call the special chapter specialDeathLvl149
+                // no skull: death pauses the game and loads the special chapter
             console.log("evento2")
         }
     },
     specialDeathLvl149:{
         text:'<span class="titles" id="historyTitle">Chapter VIII Part II</span>',
         event: function(){
-            //load npc dos sagrados
-            //denegateDivineHelp = 0
-            //desbloquear otros eventos
-                //incluido entrar altares
-                    //aplicar modificción, si fe > 0, no gana suma. Puede ser un letreo, cada que consiga fe, en el updateHeading, PJ siente como es ignorado (-FE)
-                    // si fe < 0 va sumando 
-            //reduce tiempo de selfrevive a 5 segundos e indicarlo en la consola, puede ser un clock cada 1.5s y al 5to ciclo, reviva. Poner textos como sabe que esta abandonado y no espera que le ayuden. Pero se puede revivir con toque divino si uno quiere
-            //subir a lvl150
-            //logro, linchado
+            // npc: the two sacred ones
+            // denegateDivineHelp = 0
+            // unlock the other events
+                // including entering altars
+                    // while faith > 0, gains add nothing; each time he would gain faith, a message says he feels ignored (-FE)
+                    // while faith < 0, gains add up
+            // self-revive in 5 seconds, shown in the console (a clock every 1.5 s, revive on the 5th tick); messages say he knows he's abandoned and expects no help, but a divine touch can still revive him
+            // level up to 150
+            // achievement: lynched
             console.log("evento2")
         }
     },
     lvl60:{
         text:'<span class="titles" id="historyTitle">Chapter IX</span>',
         event: function(){
-            //vuevle a ganar fe si es mayor a 0
+            // gains faith again while it is above 0
             console.log("evento2")
         }
     },
     lvl90:{
         text:'<span class="titles" id="historyTitle">Chapter X</span>',
         event: function(){
-            //ya no muere, cuando llegba a 0, se teletransporta y sana completamente
-            //negación total, ninguna ayuda denegateDivineHelp
+            // no longer dies: at 0 HP he teleports away and heals completely
+            // total refusal, no help (denegateDivineHelp)
             //
             console.log("evento2")
         }
@@ -201,47 +201,47 @@ const chapter = {
     lvl99:{
         text:'NA',
         event: function(){
-            //telepor a heidan
-            //print que va a heidan
-            //no sale de heidan
+            // teleport to Heidan
+            // message: he goes to Heidan
+            // can't leave Heidan
             console.log("evento2")
         }
     },
     lv200:{
         text:'<span class="titles" id="historyTitle">Chapter XI</span>',
         event: function(){
-            //daño sagrado 3x
-            //no entra a altares
-            //eliminar fe icon y valores
-            //barra xp se pone DarkRed llena
-            //addXP no funciona, ningun elemento sube xp
-            //add nuevo evento de aparecer curandero
-                //curandero con sangre igual a la del wizard
-                //ataques del curandero entre el 0.5 y 1 del wizard
-            //add evento de batalla del curandero con prob
-            //si mata el curandero add desenso y batalla con uno.
+            // sacred damage x3
+            // no longer enters altars
+            // remove the faith icon and values
+            // the XP bar turns full and dark red
+            // addXP stops working, nothing gives XP
+            // new event: the healer appears
+                // the healer has as much HP as the wizard
+                // the healer's attacks between 0.5x and 1x the wizard's
+            // the healer battle happens with some probability
+            // if he kills the healer, the god descends and fights him
             console.log("evento2")
         }
     },
     specialEnd:{
         text:'<span class="titles" id="historyTitle">Epilogue</span>',
         event: function(){
-            //pause end of game and final history.
-            //add flag para que en reload no aparezca nada, que en vez cambie randomly de paisaje
-            //en Kill, cambiar el texto y colocar boton que diga Game Over
+            // pause: end of the game and final story
+            // flag so after a reload nothing happens: only random scene changes
+            // in the kill scroll, change the text and show a "Game Over" button
             console.log("evento2")
         }
     },
 }
 
 
-//Open scroll for history closing if opened only ishas history, if not only event is triggered
+// A chapter was reached: run its event and, if it has text, show it in the scroll.
 function openHistory(){
-    //execute the action for each lvl
+    // run the chapter's event
     run.afterChapterExe = true;//activate post chapter event
     chapter["lvl" + state.player.lvl].event()
 
-    //if has writen history display it
+    // show the scroll if the chapter has text
     if (chapter["lvl" + state.player.lvl].text != "NA"){
         if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
             scrollClose()
@@ -252,7 +252,7 @@ function openHistory(){
     } 
 }
 
-//update content of history scroll
+// Write the current chapter's text into the scroll once it has opened.
 function updateHistory(){
    el("scrollBackCenter").removeEventListener("transitionend", updateHistory)
    pauseToggle();
@@ -264,6 +264,7 @@ function updateHistory(){
 }
 
 
+// Clean up after a chapter's event when the next event starts (e.g. leave the altar after chapter II).
 function afterChapter(){
     run.afterChapterExe = false;
     const lvl = state.player.lvl;

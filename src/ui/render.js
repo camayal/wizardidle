@@ -20,15 +20,13 @@ import { el } from './dom.js';
 // ██████╔╝███████╗██║     ██║██║ ╚████║██║   ██║   ██║╚██████╔╝██║ ╚████║███████║//
 // ╚═════╝ ╚══════╝╚═╝     ╚═╝╚═╝  ╚═══╝╚═╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝//
 ////////////////////////////////////////////////////////////////////////////////////
-//Definitions
 //Author:  Carlos Alonso Maya Lastra
-// #region Define vars
 const esceneCanvas = el("esceneCanvas");
 const pjCanvas = el("pjCanvas");
 const npcCanvas = el("npcCanvas");
 
 
-//Populate and update the headding
+// Refresh the heading: name, level, XP bar, HP, gold and faith.
 function updateHeading() {
     el('pjName').innerText = state.player.name;
     el('lvl').innerText = "Lv. " + state.player.lvl;
@@ -48,6 +46,7 @@ function updateHeading() {
 
 };
 
+// Heart icon for the enemy's remaining HP (fraction from 0 to 1).
 function heartMeter(hpPercent){
     if (hpPercent > 0.75) return "img/heart.png";
     if (hpPercent > 0.5) return "img/heart75.png";
@@ -56,7 +55,7 @@ function heartMeter(hpPercent){
     if (hpPercent <= 0) return "img/heart0.png";
 }
 
-//update the level of healt in NPC icon
+// Refresh the enemy heart icon used in console messages.
 function updateHeartNPC(){
 ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" height="' + ui.em + '" src="' + heartMeter(Math.round(fight.enemyHP) / fight.enemyHPbase) + '"/> ';
 }
@@ -74,7 +73,7 @@ ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 /////////////////////////////////////////////////////////
 //Graphics
 
-//Load locality
+// Draw a background (a zone stage, altar, inn...) and move the map marker.
 function loadBackground(back) {
     ui.currentBackGround = back;
     esceneCanvas.style.background = "url('img/" + back.toLowerCase() + ".png') no-repeat";
@@ -83,7 +82,7 @@ function loadBackground(back) {
     localizarBocadillo();
 };
 
-//Draw main char
+// Draw the wizard; his sprite changes with the level (img/lvl<N>.png, every 10 levels).
 function loadCanvasChar(lvl, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
@@ -101,14 +100,14 @@ function showStage() {
     loadBackground(state.zone.current + state.zone.stage);
 }
 
-// The wizard's name in bold, as every console message starts.
+// The wizard's name in bold, as most console messages start.
 function wizardName() {
     return "<b>" + state.player.name + "</b>";
 }
 
 
 
-//Draw alter main char for example death symbol
+// Draw another image in the wizard's place (e.g. the skull when he falls).
 function loadAlterCanvasChar(imagen, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
@@ -122,7 +121,7 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
 }
 
 
-//Draw NPC
+// Draw the enemy or object on the right, sized by type (bosses, objects, the rest).
 function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, charWidthIn=ui.charWidth, charHeightIn=ui.charHeight) {
     state.npc = npc;
     npcCanvas.width = npcCanvas.offsetWidth;
@@ -155,7 +154,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
 }
 
 
-//Animate pj execute as: loop.every("animPJ", animatePJ, 100);
+// Make the wizard hop for a few frames (run by the animPJ clock).
 function animatePJ() {
 
     //avoid  animation in high speed debug
@@ -175,7 +174,7 @@ function animatePJ() {
     }
 };
 
-//Animate npc execute as: loop.every("animNPC", animateNPC, 100);
+// Make the enemy hop for a few frames (run by the animNPC clock).
 function animateNPC() {  
 
     //avoid  animation in high speed debug
@@ -198,7 +197,7 @@ function animateNPC() {
 
 
 
-//Print in ingame-console and cut after 30 lines
+// Add a line at the top of the console, keeping at most MAXLINESINCONSOLE lines.
 function print(data) {
     setLiveTime(); //set seconds of game and add to total time
     el("console").innerHTML = data + "<br>" + el("console").innerHTML;

@@ -16,7 +16,7 @@ const currentFrame = 0, shift = 0;
 
 
 
-//Spell animation  //spell("spellRingYellow_8",true,frameWidth,frameHeight,currentFrame,shift)
+// Play a spell animation from img/<spell>.png on the wizard or the enemy (bigger on a critic) and its sound.
 function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=0){
 
     //avoid spell animation in high speed debug
@@ -84,13 +84,13 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
 
 
 
-// Highest spell tier the wizard knows: one tier every 10 levels, up to the last one.
-// (v1 asked for tier 21 at level 210, which doesn't exist, and every attack crashed.)
+// Highest spell tier the wizard knows: one tier every 10 levels, capped at the last one
+// (v1 asked for tier 21 at level 210, which doesn't exist, and every attack crashed).
 function knownTier(){
     return Math.min(Math.floor(state.player.lvl / 10), spellTiers.length - 1);
 }
 
-//Select random spell per level
+// A random spell from every tier the wizard knows.
 function getSpell(lvlBase = knownTier()){
     //spellTier0
     let i;
@@ -105,7 +105,7 @@ function getSpell(lvlBase = knownTier()){
     return pickRandomItem(spellSelected);
 }
 
-//count number of spells that know
+// How many spells the wizard knows (for the stats page).
 function countSpellKnown(){
     const lvlBase = knownTier()
     let numberSpells = 0;

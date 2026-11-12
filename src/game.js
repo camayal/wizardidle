@@ -60,7 +60,7 @@ ui.healIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/heal.pn
 
 
 
-//Start the game (load everything)
+// Load the wizard on screen and start the master clock (first run: level up from 0 to 1).
 function start() {
     run.timeStart = performance.now()
     
@@ -87,7 +87,7 @@ function start() {
 
 };
 
-//permits continue the action but stop in the next event, if paused trigger a new event
+// Pause the game after the current event, or resume it (a story chapter pauses it until its scroll is closed).
 function pauseToggle(){
     if (run.pause){
         run.pause = false;
@@ -98,7 +98,7 @@ function pauseToggle(){
     
 }
 
-//Set the timer to avoid loss seconds
+// Add the time since the last call to the wizard's total play time.
 function setLiveTime(){
     state.meta.playTimeMs += performance.now() - run.timeStart;
     run.timeStart = performance.now()
@@ -115,8 +115,7 @@ function setLiveTime(){
 ///////////////////////////////////////////////                                          
 //Other funcs
 
-//Initial name, suggest the first name and put in the input and check if is first launch
-//if not first use run the game
+// At page load: first visit shows the name screen with a suggested name, otherwise the game starts.
 function initialName(){
 
  
@@ -136,7 +135,7 @@ function initialName(){
 
 }
 
-//Only when start button is pressed
+// Start button on the name screen: keep the typed name (or a random one) and start.
 function setName(){
     if(el("inputName").value !== ""){
             if(!state.player.name){state.player.name = el("inputName").value};

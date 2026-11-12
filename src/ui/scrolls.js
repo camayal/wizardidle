@@ -20,15 +20,15 @@ import { el } from './dom.js';
 let scrollIDContent;
 
 
-//Stats page helpers (v1 scanned every localStorage key for these)
+// Stats page helpers
 
-// A counter formatted for the stats page, or 0 if it never happened (v1: check("idx_..."))
+// A stats counter formatted for the stats page, or 0 if it never happened.
 function counterText(name){
     return state.counters[name] ? roundNumbertoLetter(state.counters[name]) : 0;
 }
 
-// "Golem (3), Slime (5)" for every counter starting with prefix, e.g. "enemy_".
-// Names come from enemies/zones, or from statObj/statueObj when inObj says so.
+// "Golem (3), Slime (5)" for every counter starting with prefix (e.g. "enemy_"); names come
+// from enemies/zones, or from statObj/statueObj when inObj says so.
 function counterList(prefix, inObj = ""){
     let out = "";
     for (const [key, value] of Object.entries(state.counters)){
@@ -43,7 +43,7 @@ function counterList(prefix, inObj = ""){
 
 
 
-//hide content from scroll
+// When the scroll has finished closing: hide its content and put the scene back on top.
 function hideScrollContent(){
     loop.stop("stats");
     enableMainButtons()
@@ -61,7 +61,7 @@ function hideScrollContent(){
 	layoutPortrait()
 }
   
-// scroll close 
+// Close the scroll with its animation.
 function scrollClose(){
     ui.scrollCurrentContent = "";
     playSound("scroll");
@@ -80,13 +80,13 @@ function scrollClose(){
 	
   }
 
-//show the close button only when the scroll is totally opened
+// Show the close button once the scroll has finished opening.
 function showCloseButton(){
     el("btnClose").style.display = "block";
     el("scrollBackCenter").removeEventListener("transitionend", showCloseButton)
 }
 
-// scroll open
+// Open the scroll for a page ("stats", "help", ...) with its animation.
 function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5)){
     ui.scrollCurrentContent = currentContent;
     playSound("scroll");
@@ -118,7 +118,7 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
   }
 
 
-//Put the bocadillo in the right place in the map
+// Place the map marker (speech bubble) on the wizard's current stage.
 function localizarBocadillo(){
     if (ui.currentBackGround == "curanderobg"){
         el("bocadilloMapa").style.display ="none";
@@ -154,7 +154,7 @@ function localizarBocadillo(){
 
 
 
-//avoid clic when scroll is open
+// Block the toolbar while a scroll is open (remembers each button's handler).
   function disableMainButtons() {
     const eles = document.getElementsByClassName('dis');
     for (let i=0; i < eles.length; i++) {
@@ -163,13 +163,14 @@ function localizarBocadillo(){
     }
 }
 
+// Give the toolbar its handlers back.
 function enableMainButtons() {
     const eles = document.getElementsByClassName('dis');
     for (let i=0; i < eles.length; i++)
        eles[i].onclick = eles[i].prev_click;  // restore the previous value
     };
 
-// Cemetery lines as v1 wrote them: "Name (lvl: 12) died at the age of 23. May 3, 2026 - May 9, 2026"
+// Cemetery lines as v1 wrote them: "Name (lvl: 12) died at the age of 23. <born> - <died>".
 function cemeteryText(){
     const dateOptions = {year: 'numeric', month: 'long', day: 'numeric'};
     return world.cemetery.map(function(w){
@@ -187,7 +188,7 @@ function cemeteryText(){
 //     ██║   ███████╗██╔╝ ██╗   ██║   ███████║//
 //     ╚═╝   ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝//
 ////////////////////////////////////////////////
-//Texts
+// Fill the achievements scroll.
 function updateAchievements(){
 
     let txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
@@ -199,6 +200,7 @@ function updateAchievements(){
 
 }
 
+// Fill the stats scroll from the wizard's counters.
 function updateStats(){
 
     const secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
@@ -323,6 +325,7 @@ function updateStats(){
 
 }
 
+// Fill the help scroll (collapsible sections).
 function updateHelp(){
     const frequentQuestions = '<b>Why everyone has a name?</b> - All individuals of sentient species have one (Pybryas are very smart!)<br>' +
     '<b>Why the wizard knows all the names?</b> - The console is not what the wizard sees, is what you sees, and you are an omniscient god that know all the names<br>' +
@@ -406,6 +409,7 @@ function updateHelp(){
     }
 }
 
+// Fill the kill scroll: the warning, the kill button and the cemetery.
 function updateKill(){
     const secondsIngameInstats = ((state.meta.playTimeMs + (performance.now() - run.timeStart))/1000).toFixed(0);
     const txt = '<div id="kill"><span class="titles" id="titleKill">Kill</span><br>' +

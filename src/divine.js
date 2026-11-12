@@ -9,7 +9,7 @@ import { currentFrame, frameHeight, frameWidth, getSpell, shift, spell } from '.
 import { playSound } from './audio.js';
 import { loadBackground, loadCanvasChar, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
-//pj divine button funct
+// Touch on the wizard: revive him if dead, otherwise heal him, at a cost in faith.
 function pjBtn(){
     if (!run.disablePjBtn){
         if(fight.pjDead){
@@ -66,7 +66,7 @@ function pjBtn(){
 }
 }
 
-//npc divine button funct
+// Touch on the enemy: hurt it with divine wrath, at a cost in faith.
 function npcBtn(){
     let txt;
     if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 1){
@@ -99,7 +99,7 @@ function npcBtn(){
         }
     }
 
-//center divine button funct
+// Touch on the scene: ask the wizard for a tithe in gold, which becomes faith.
 function centerBtn(){
     //increase faith like offer
     if(!run.disableCenterBtn){

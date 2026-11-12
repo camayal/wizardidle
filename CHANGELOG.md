@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Code: all `var` replaced by `const`/`let`.
+- Code: small helpers for repeated snippets (`startEvent`, `endEvent`, `nextEvent`, `showStage`, `wizardName`, `el`).
+- Code: 117 lines of commented-out dead code removed; the ideas found in them moved to `ideas.md`.
+- Code: one short comment above every function; Spanish comments, including the story plans, translated to English.
+- Restored the disabled developer console notes, lost in the 2.0.0 module split.
+
 ## 2.0.0 — 2026-11-11
 
 - Code split from one 4,254-line file into ES modules under `src/`, one per system.

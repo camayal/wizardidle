@@ -5,7 +5,7 @@ import { ui } from './runtime.js';
 import { masterTime } from './config.js';
 
     
-//retorno a la anterior para evitar bug en background
+// Play ogg/<name>.ogg once. Browsers may block sound until the player interacts; that is ignored.
 function playSound(ogg, volume = 0.3){
     
     //avoid sound in speed debug

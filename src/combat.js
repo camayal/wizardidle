@@ -20,7 +20,8 @@ import { el } from './ui/dom.js';
 
 
 
-//Main event: BATTLE
+// One round of the current fight, run by the event clock: announce it, then attack or heal
+// until the enemy or the wizard falls, and handle loot, XP, death and revival.
 function battle() {
     //stats
     run.multipleEventsCounter += 1;
@@ -212,7 +213,7 @@ function battle() {
 };
 
 
-//Main event: start battle, getting enemy (or boss), or guardian or hydra
+// Start a fight: a hydra (where the hydra mystery is solved), otherwise a normal enemy or a boss.
 function enemyEV(){
     if ((YesOrNot(config.balance.pGetGuardian,0)) && (state.player.lvl > 190)){//get guardian
     //guardians in all the places
@@ -229,7 +230,7 @@ function enemyEV(){
 }
 
 
-//Get enemy by current locality and drow it
+// Pick the opponent for the current zone (sometimes the zone boss), draw it, name it and start the battle.
 function getEnemy() {
     //generate a unique type of attack for each enemy
     fight.bossCombat = false;
@@ -299,6 +300,7 @@ function getEnemy() {
 
 
 
+// Start a hydra fight, or regrow a head (newEncounter false) after one was cut off.
 function getHydra(newEncounter = false){
     fight.bossCombat = false;
     fight.hydraCombat = true;
@@ -327,7 +329,7 @@ function getHydra(newEncounter = false){
 
 
 
-//Performs attack
+// The wizard attacks (maybe critic or polymorph) or misses, and the enemy hits back.
 function attackEV() {
     let pjAttackWithCritic, spellId, pjHit, text;
     if (YesOrNot(stat("pPolymorph"), 0) && !fight.hydraCombat && !fight.bossCombat && !fight.polymorphed && fight.enemy !== "baba" && fight.enemy !== "el_elemental" && fight.enemy !== "el_ent" && fight.enemy !== "el_espectro" && fight.enemy !== "el_esqueleto" && fight.enemy !== "el_golem" && fight.enemy !== "el_ojo" && fight.enemy !== "la_esencia"){
@@ -425,7 +427,7 @@ function attackEV() {
 };
 
 
-//Performs healing
+// The wizard heals himself instead of attacking.
 function healEV() {
         count("Heal");
             const healOperation = state.player.hpBase * stat("fHeal");
@@ -448,14 +450,14 @@ function healEV() {
 
 
 
-//Card combat game
+// Placeholder for the tavern card game (never built in v1; see the ideas backlog).
 function cardCombat(){
 
 }
 
 
 
-//Get a random name
+// A random fantasy name for an enemy; the two sacred wizards always keep their first one.
 function randomName() {
     let name = pickRandomItem("B,C,D,F,G,H,J,K,L,M,N,P,Q,R,S,T,V,W,X,Y,Z,Sh,Kh,Th,Br,Tr,Mr,Zr,Xh,Sj,Cr,Kr,Yh,A,E,I,O,U");
     name += pickRandomItem("A,E,I,O,U").toLowerCase();

@@ -44,7 +44,7 @@ const statObj = {
 }
 
 
-//levelUP function
+// Level up: achievements, age, new XP/HP/attack values, and the chapter for this level if any.
 function levelUP() {
     state.player.lvl = state.player.lvl + 1
     if (state.player.lvl > 1){
@@ -95,7 +95,7 @@ function levelUP() {
 
 
 
-//Add gold
+// Gold from the fight just won (bosses and hydras pay more, rare enemies double).
 function addGold(){
     let possibleGold;
     if (fight.bossCombat){
@@ -122,7 +122,7 @@ function addGold(){
 };
 
 
-//Add XP after a battle or exploration
+// Add XP (a multiple of the XP per enemy) and level up when it reaches the next level.
 function addXP(specialMultiplier = 1){
     const xpGained = ((state.player.xpPerEnemy * specialMultiplier));
     state.player.xp = (xpGained + state.player.xp);
@@ -152,7 +152,7 @@ function addXP(specialMultiplier = 1){
 //Calcs 
 
 
-//Calculate fe per action (losses and gains)
+// A random amount of faith for one action, scaled to the wizard's level.
 function calculateFe(){
     return (getRandomInt(((state.player.hpBase * config.balance.rGold)),state.player.hpBase * config.balance.rGold * 5 ));
 }

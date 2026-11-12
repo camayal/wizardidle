@@ -1,21 +1,24 @@
 // Wizard Idle v2 - small pure helpers (no game state, no DOM). Bodies unchanged from v1.
 
+// True with the given probability (probBase + probExtra, from 0 to 1).
 export function YesOrNot(probBase, probExtra) {
     return Math.random() <= Number(probBase) + Number(probExtra);
 }
 
+// Random integer between min and max, both included.
 export function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// A random item from a comma-separated list ("a,b,c").
 export function pickRandomItem(localStorageItem) {
     const items = localStorageItem.split(",");
-    //convert localStorage string into var name, get destination item and split it by ,
     const randomItem = items[Math.floor(Math.random() * items.length)];
     //select a random item
     return randomItem;
 }
 
+// Short number for display: 950, 1.20k, 3.45M, 1.00G.
 export function roundNumbertoLetter(numberNoAbs) {
     const number = Math.abs(Number(numberNoAbs))
     let negative;
@@ -32,10 +35,12 @@ export function roundNumbertoLetter(numberNoAbs) {
 
 }
 
+// First letter in uppercase.
 export function capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// A random #RRGGBB colour.
 export function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -45,6 +50,7 @@ export function getRandomColor() {
     return color;
   }
 
+// Seconds as a short duration: "1w 2d 3h 4m 5s".
 export function secsToHours(segundos){
     const month_f = segundos / 2629750;
     const week_f = (month_f - parseInt(month_f)) * 4.34802865
