@@ -31,7 +31,7 @@ The loop has a built-in twist: **each time the god wins, the god brings his own 
 | **Earlier signs: small echoes** (decided) | **Only when `world.erasures.length > 0`** (at least one wizard erased; a true death or the kill button never counts). The **Prologue opens differently**: *"You have heard him before. You will hear him again. Time is nothing to you. To him, it is everything. Will this one win?"* A few **déjà vu lines** in the chapters (the stranger hesitates, Midas frowns as if he knew). The text lives in `docs/STORY.md` (branch `plan/story`). These are words only: **the souls and their help still appear only in the final battle.** |
 | **Faith** | **No change to the faith rules.** The loop changes the story text and the final battle, not the faith economy (FAITH.md stays as decided). |
 | **Saving** | World level, next to the cemetery: `world.erasures = [{ name, lvl, age, date, loop }]` and `world.loop` (how many times the god has gone back). Killing a wizard with the kill button or a true death never adds to it. The black museum is `world.omni = { name, date, … }`, and once it's set the world is locked. |
-| **Museum** | The museum after an erasure lists the earlier erasures too ("the god has erased 3 wizards"), so the player sees the loop growing. |
+| **Museum** | The museum after an erasure lists the earlier erasures too ("the god has erased 3 wizards"), so the player sees the loop growing. **Decided:** the final battle's snapshot shows the souls that fought, after either ending, each labelled with his reversed name. |
 
 ### Why it's special
 
@@ -43,9 +43,9 @@ The loop has a built-in twist: **each time the god wins, the god brings his own 
 
 - How strong is one soul's attack (a share of the wizard's, e.g. 30%?), and can a soul shield instead of striking? To playtest, like every number.
 - With 5 souls, can a very good player still win? The playtests should check the final battle at 0–5 souls.
-- Should the souls arrive one by one during the battle (a dramatic entrance) or all at the start?
+- ~~Should the souls arrive one by one or all at the start?~~ Decided: one by one (see Decisions).
 - ~~Déjà vu lines before the finale: add them or not?~~ Decided: small echoes (see Decisions).
-- The museum: does it show the souls that fought in the battle?
+- ~~The museum: does it show the souls that fought?~~ Decided: yes (see Decisions).
 
 ## Decisions
 
@@ -56,4 +56,6 @@ The loop has a built-in twist: **each time the god wins, the god brings his own 
 | 2026-11-12 | When the souls appear | **Only in the final battle.** *"In this moment the soul of the previous come to help."* |
 | 2026-11-12 | Small echoes (text before the finale) | **Yes, after at least one erasure** (`world.erasures.length > 0`): a different Prologue opening and a few déjà vu lines in the chapters, written in STORY.md. Text only; no help or boost before the final battle |
 | 2026-11-12 | Turn order | **The wizard attacks, then the soul or souls of the previous wizards attack, then the god (the player) takes a turn** |
+| 2026-11-12 | Souls' entrance | **One by one:** a new soul appears every few rounds of the final battle, with a console line naming him by his reversed name (e.g. *"The air cracks. A translucent wizard steps beside {name}. / nilreM. You erased him once. / He remembers."*; lines in STORY.md) |
+| 2026-11-12 | Museum | **Shows the souls:** the final battle's snapshot, after either ending, shows the souls that fought, each labelled with his reversed name |
 | 2026-11-12 | Faith | **No change:** the loop changes the story and the final battle, not the faith economy |
