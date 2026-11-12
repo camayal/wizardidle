@@ -5,7 +5,8 @@
 import { zones } from './data/zones.js';
 import { getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, masterTime, MAXSTAGES } from './config.js';
-import { count, stat, state } from './state.js';
+import { stat, state } from './state.js';
+import { stats } from './stats.js';
 import { run, ui } from './runtime.js';
 import * as loop from './loop.js';
 import { enemyEV } from './combat.js';
@@ -203,11 +204,11 @@ function reviveEV(){
         const randomLocality = pickRandomItem("el_Bosque,la_Pradera,el_Poblado,las_Dunas,el_Desierto,el_Pantano")
         state.zone.current = randomLocality;
         state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
-        count("zonesChanged");
-        count(`zone_${randomLocality}`);
+        stats.count("explore.zoneChanges");
+        stats.count(`explore.zone.${randomLocality}`);
         showStage();
         print(`${wizardName()} leaves the healer's cabin`)
-        count("hospital");
+        stats.count("death.healer");
         endEvent();
         run.disablePjBtn = false;
         nextEvent();
@@ -220,8 +221,8 @@ function prayEV(){
     let textCapel;
     if (YesOrNot(stat("pFindCapel"),0)){
         playSound("altar");
-        count("altar");
-        count(`altar_zone_${state.zone.current}`);
+        stats.count("faith.shrines");
+        stats.count(`faith.shrineZone.${state.zone.current}`);
         if (run.previousEvent == "enterAltar"){
             textCapel = pickRandomItem("decides to come back to the shrine, returns to the shrine,wants to spend more time at the temple");
         }else{
@@ -239,7 +240,7 @@ function prayEV(){
         run.previousEvent = "enterAltar"
         startEvent(doOffering);
     }else{
-        count("negar");
+        stats.count("faith.shrineSkipped");
         if (run.previousEvent == "negar"){
             textCapel = pickRandomItem("finds again the same shrine,sees the same shrine");
         }else{
@@ -318,8 +319,8 @@ function findStatue(){
         case 1:
         //found and change locality
         loadBackground(`${state.zone.current}_estatua`);
-        count(`estatuas_statue_${state.zone.current}`)
-        count("statuesFound");
+        stats.count(`explore.statue.statue_${state.zone.current}`)
+        stats.count("explore.statues");
         if (run.previousEvent == "findStatue"){
             print(`${wizardName()} wants to try study the ${statueObj["statue_" + state.zone.current].name} statue again`);
         }else{
@@ -330,7 +331,7 @@ function findStatue(){
         case 2:
         //examine and get or not
         if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
-            count("sucessStudyStatue");
+            stats.count("study.statueSuccess");
             spell("spellStudyGood_15",true);
             learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
             const result = statueObj[`statue_${state.zone.current}`].event()
@@ -348,7 +349,7 @@ function findStatue(){
             learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
             //fail study try again
             if(run.multipleEventsCounter == 4){
-                count("failStudyStatue");
+                stats.count("study.statueFail");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true);
                 learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
@@ -382,20 +383,20 @@ function findRuneOrBook(){
             loadNPC(`runa${number}`)
         }
         print(`${wizardName()} finds ${run.previousEvent == "findRuneorBook" ? "another " : "a "}${run.objectToStudy}`) 
-        count(run.objectToStudy)
+        stats.count(`study.found.${run.objectToStudy}`)
         run.previousEvent = "findRuneorBook"
         break;
         case 2:
         if (YesOrNot(stat("pStudy"),0)){
             playSound("statUp");
-            count("sucessStudy");
+            stats.count("study.success");
             spell("spellStudyGood_15",true);
             learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
             const statToIncrease = statObj[statObj.random()];
             const learned = statObj.increase(statToIncrease.code);
             print(`${wizardName()} ${learnTxt} ${run.objectToStudy} and increases the <i>${learned}</i>`) 
-            count(`study_${statToIncrease.code}`);
+            stats.count(`study.skill.${statToIncrease.code}`);
             
             run.multipleEventsCounter = 4;
         }else{
@@ -404,7 +405,7 @@ function findRuneOrBook(){
             learnTxt = pickRandomItem("tries to understand what is written in the,reads the glyphs in the,analyzes the information in the,continues reading the");
             //fail study try again
             if(run.multipleEventsCounter == 4){
-                count("failStudy");
+                stats.count("study.fail");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true);
                 learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
@@ -439,14 +440,14 @@ function searchInn(){
 function arriveToRest(placesWithInn) {
     if (placesWithInn) {
         loadBackground(`${state.zone.current}_taberna`);
-        count("taberna");
-        count(`taberna_zone_${state.zone.current}`);
+        stats.count("inn.rests");
+        stats.count(`inn.zone.${state.zone.current}`);
         print(`${wizardName()} enters in an inn`);
     } else {
         loadNPC("sleepingbag");
         const textCamping = "looks for a safe place too rest,hides to rest,falls asleep";
         print(`${wizardName()} ${pickRandomItem(textCamping)}`);
-        count("camping");
+        stats.count("inn.campings");
     }
 }
 
@@ -462,7 +463,7 @@ function sleep(placesWithInn) {
         } else {
             spell("spellSleep_24", true);
             state.player.gold = state.player.gold - innCost;
-            count("GoldSpendInn", Number(innCost));
+            stats.add("gold.spentAtInns", Number(innCost));
             playSound("coins");
             print(`${wizardName()} ${pickRandomItem(textSleeps)} (${ui.goldIcon}-${roundNumbertoLetter(innCost)})`);
             run.restAtInn = true;
@@ -538,9 +539,9 @@ function giveOffering() {
     run.feGanada *= state.player.faithMultiplier;
     state.player.faith = state.player.faith + run.feGanada;
     state.player.gold = state.player.gold - ofrendaGold;
-    count("offers");
-    count("GoldOffered", Math.round(ofrendaGold));
-    count("FeByGold", Math.round(run.feGanada));
+    stats.count("faith.offerings");
+    stats.add("gold.offered", Math.round(ofrendaGold));
+    stats.add("faith.gain.offering", Math.round(run.feGanada));
     playSound("coins");
     spell("spellCoins", false);
     const textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
@@ -554,7 +555,7 @@ function pray() {
     run.feGanada = calculateFe();
     run.feGanada *= state.player.faithMultiplier;
     state.player.faith = state.player.faith + run.feGanada;
-    count("FeByPray", Math.round(run.feGanada));
+    stats.add("faith.gain.prayer", Math.round(run.feGanada));
     const textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
     print(wizardName() + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
 }
@@ -610,13 +611,13 @@ function openLoot() {
     clearNPC();
     const goldBotin = 1 + getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 10);
     print(wizardName() + botinTexts + ui.goldIcon + roundNumbertoLetter(goldBotin));
-    count("BotinGot");
-    count("GoldFromBotin", goldBotin);
-    count(`GoldFromBotin_${run.objectToBreak}`, goldBotin);
-    count(`BotinGot_${run.objectToBreak}`);
+    stats.count("loot.containers");
+    stats.add("gold.fromLoot", goldBotin);
+    stats.add(`gold.loot.${run.objectToBreak}`, goldBotin);
+    stats.count(`loot.container.${run.objectToBreak}`);
     state.player.gold = state.player.gold + goldBotin;
-    if (Number(counterText("BotinGot_chest")) > 100) logro.set(logro.logro_botines);
-    if (Number(counterText("BotinGot_pot")) > 100) logro.set(logro.logro_pots);
+    if (Number(counterText("loot.container.chest")) > 100) logro.set(logro.logro_botines);
+    if (Number(counterText("loot.container.pot")) > 100) logro.set(logro.logro_pots);
     run.previousEvent = "getBotin";
     updateHeading();
     endEvent();

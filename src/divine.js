@@ -2,7 +2,8 @@
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
 import { getRandomInt, pickRandomItem, roundNumbertoLetter } from './utils.js';
-import { count, stat, state } from './state.js';
+import { stat, state } from './state.js';
+import { stats } from './stats.js';
 import { fight, run, ui } from './runtime.js';
 import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
@@ -21,7 +22,7 @@ function pjBtn(){
 
 // Bring the fallen wizard back at full HP; the healer's scene follows.
 function reviveByTouch() {
-    count("divineTouch");
+    stats.count("god.touches");
     run.disablePjBtn = true;
     playSound("revive");
     spell("spellMultiDivine_28", true);
@@ -52,7 +53,7 @@ function healByTouch() {
         healHit = faithLost / getRandomInt(1, 3);
     }
     if ((Math.round(state.player.hp) < Math.round(state.player.hpBase)) && (Math.round(state.player.faith) > 0)) {
-        count("DivineHeal");
+        stats.count("god.heals");
         if (state.player.hp + healHit > state.player.hpBase) {
             healHit = state.player.hpBase - state.player.hp;
             state.player.hp = state.player.hpBase;
@@ -97,7 +98,7 @@ function npcBtn(){
             state.player.faith = state.player.faith - faithLost;
             updateHeading();
             print(`${wizardName()} ${txt}${ui.heartIcon} ${roundNumbertoLetter(fight.enemyHP)}`)
-            count("DivineHit");
+            stats.count("god.hits");
         }
     }
 
@@ -114,9 +115,9 @@ function centerBtn(){
             state.player.gold = state.player.gold - ofrendaGold;
             const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
             print(`${wizardName()} ${pickRandomItem(textoffer)} (${ui.goldIcon} -${roundNumbertoLetter(ofrendaGold)}, ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)})`);
-            count("DivineMandatoryOffers");
-            count("GoldOffered", Math.round(ofrendaGold));
-            count("FeByGold",Math.round(run.feGanada));
+            stats.count("faith.mandatoryOffers");
+            stats.add("gold.offered", Math.round(ofrendaGold));
+            stats.add("faith.gain.offering", Math.round(run.feGanada));
             updateHeading();
             playSound("coins");
             spell("spellCoins",false);

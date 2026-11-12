@@ -2,7 +2,8 @@
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
 import { getRandomInt } from './utils.js';
-import { count, state } from './state.js';
+import { state } from './state.js';
+import { stats } from './stats.js';
 import { run, ui } from './runtime.js';
 import { pauseToggle } from './game.js';
 import { playSound } from './audio.js';
@@ -39,12 +40,12 @@ const chapter = {
         event: function(){
             // teleport to the zone's altar
             playSound("altar");
-            count("altar");
-            count(`altar_zone_${state.zone.current}`);
+            stats.count("faith.shrines");
+            stats.count(`faith.shrineZone.${state.zone.current}`);
             // faith multiplier
             state.player.faithMultiplier = 2
             let text;
-            if (Number(counterText("divineTouch")) + Number(counterText("DivineHeal")) + Number(counterText("DivineHit")) > 200){
+            if (Number(counterText("god.touches")) + Number(counterText("god.heals")) + Number(counterText("god.hits")) > 200){
                 text = "decides to devote himself to your consecration to retribute all your help";
             }else{
                 text = "decides to devote himself to your consecration to get more divine attention";

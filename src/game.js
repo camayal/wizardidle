@@ -5,6 +5,7 @@
 import { zones } from './data/zones.js';
 import { roundNumbertoLetter } from './utils.js';
 import { state } from './state.js';
+import { stats } from './stats.js';
 import { fight, run, ui } from './runtime.js';
 import { randomName } from './combat.js';
 import { event, nextEvent } from './events.js';
@@ -67,7 +68,7 @@ function start() {
     playSound("start");
     state.npc = "";
     if (state.firstUse) {
-        
+        stats.count("world.wizards", 1, { world: true });
         levelUP();
         //artificial levelUP from 0 to 1 to add some vars
         state.firstUse = false;

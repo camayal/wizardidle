@@ -56,7 +56,8 @@ function newState() {
         hydraHeads: {},               // hydra name -> current number of heads
         sacredNames: {},              // the two sacred wizards keep the name they first got
         statBonus: {},                // skill -> gained on top of config.baseStats
-        counters: { zone_la_Ciudad: 1, Combo: 0 },  // stats page numbers (v1: idx_*)
+        stats: { 'explore.zone.la_Ciudad': 1, 'combat.combo': 0 },  // see src/stats.js (v1: idx_*)
+        history: [],                  // one line per level-up (src/stats.js)
         achievements: {},             // achievement name -> true
     };
 }
@@ -65,6 +66,7 @@ function newWorld() {
     return {
         deviceId: Math.random().toString(36).substr(2, 16),
         cemetery: [],                 // { name, lvl, age, born, died } of every killed wizard
+        stats: {},                    // lifetime stats across wizards (src/stats.js)
     };
 }
 
@@ -131,8 +133,3 @@ export function stat(name) {
     return config.baseStats[name] + (state.statBonus[name] || 0);
 }
 
-// Add to a stats-page counter (v1: idx). Returns the new value.
-export function count(name, amount = 1) {
-    state.counters[name] = (state.counters[name] || 0) + amount;
-    return state.counters[name];
-}

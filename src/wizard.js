@@ -4,7 +4,8 @@
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { getRandomInt } from './utils.js';
 import { config, RAREMULTIPLIER } from './config.js';
-import { count, state } from './state.js';
+import { state } from './state.js';
+import { recordLevel, stats } from './stats.js';
 import { fight, ui } from './runtime.js';
 import { chapter, openHistory } from './story.js';
 import { logro } from './achievements.js';
@@ -82,6 +83,7 @@ function levelUP() {
 
 
     setLevelValues();
+    recordLevel();
     updateHeading();
 
     //call history if exists
@@ -107,19 +109,19 @@ function addGold(){
          possibleGold = state.player.hpBase * config.balance.rGold;
          state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
          state.player.gold = state.player.gold + (state.player.lastBattleGold * fight.bossGoldMultiplier);
-         count("GoldFromBosses", (state.player.lastBattleGold * (fight.bossGoldMultiplier)));
+         stats.add("gold.fromBosses", (state.player.lastBattleGold * (fight.bossGoldMultiplier)));
     }else if(fight.hydraCombat){
         possibleGold = state.player.hpBase * config.balance.rGold;
          state.player.lastBattleGold = getRandomInt(possibleGold,possibleGold * 2) + 1;
          state.player.gold = state.player.gold + (state.player.lastBattleGold * 15);
-         count("GoldFromBosses", (state.player.lastBattleGold * (15)));
+         stats.add("gold.fromBosses", (state.player.lastBattleGold * (15)));
     }else{
         if (enemyTypes[fight.enemy].hasgold) {
          possibleGold = state.player.hpBase * config.balance.rGold;
          const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1)
          state.player.lastBattleGold = goldcurrentBattle;
          state.player.gold = state.player.gold + goldcurrentBattle;
-         count("GoldFromEnemies", goldcurrentBattle);
+         stats.add("gold.fromEnemies", goldcurrentBattle);
          }else{
              //ToDo: add some material or resource
          }

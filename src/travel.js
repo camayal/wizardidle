@@ -3,7 +3,8 @@
 
 import { places, zones } from './data/zones.js';
 import { pickRandomItem } from './utils.js';
-import { count, state } from './state.js';
+import { state } from './state.js';
+import { stats } from './stats.js';
 import { run } from './runtime.js';
 import { endEvent, event, nextEvent } from './events.js';
 import { addXP } from './wizard.js';
@@ -49,11 +50,11 @@ function pickRandomBackgroundForCurrentZone() {
 // Pick the next zone and stage from the current stage's destinations.
 function getZone() {
     if (state.zone.current !== undefined) {
-        count("zonesChanged");
+        stats.count("explore.zoneChanges");
         const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].destinations)
         state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
-        count(`zone_${state.zone.current}`);
+        stats.count(`explore.zone.${state.zone.current}`);
         } else {
         state.zone.current = "la_Ciudad";//default start
     }
