@@ -25,7 +25,7 @@ Gate before moving on: the whole code base is modern, measurably faster where it
 
 ## 3. Stats, playtests, then the story with the faith rebalance
 
-Order decided by the author on 2026-11-12: the story depends on the faith rebalance (chapter X lock, the Last Escape scroll, belief levels) and on professions (the second trade unlocks at chapter III), and no balance number gets set without a playtest. Detailed plans: [STATS.md](STATS.md), [FAITH.md](FAITH.md), [PROFESSIONS.md](PROFESSIONS.md).
+Order decided by the author on 2026-11-12: the story depends on the faith rebalance (chapter X lock, the Last Escape scroll, belief levels) and on professions (the second trade unlocks at chapter III), and no balance number gets set without a playtest. Detailed plans: [STATS.md](STATS.md), [FAITH.md](FAITH.md), [PROFESSIONS.md](PROFESSIONS.md), [ERASURE.md](ERASURE.md) (the final battle's souls).
 
 **3a. Stats and playtest tools**
 - [x] Dev test bar (`src/dev/tests.js`, done 2026-11-12): a bar at the bottom of the screen while developing, with test scenarios (each prepares the wizard and forces the first event, then says what to check), quick actions (+1 level, gold, faith, speed x10, pause) and a command line. `DEV` in `src/config.js`; the deploy switches it off, so the live site never loads it.
