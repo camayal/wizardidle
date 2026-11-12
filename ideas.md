@@ -11,7 +11,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.0.0 is live since 2026-11-11 (tag `v2.0.0`). **Stage 1 (code cleanup) done. Next: stage 2**, modern and faster (first: the endless spell animations). Then stage 3 (the story), stage 4 (new features).
+- **Released:** 2.0.0 live since 2026-11-11. **2.1.0 prepared on `dev`** (stages 1 and 2: cleanup and speed), waiting for the author's playtest and reviews before merging into `main`. **Next:** stage 3, the story.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.0.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
@@ -180,6 +180,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: 2.1.0 prepared
+
+- Version set to 2.1.0; CHANGELOG "Unreleased" became the 2.1.0 entry, player-visible changes first. Stage 2 marked done in the roadmap.
+- Waiting for: the author's playtest, and reviews from the planner and historian sessions.
 
 ### 2026-11-12: Stage 2, offline list at deploy; chapter race
 

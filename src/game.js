@@ -14,7 +14,7 @@ import { drawWizard, print, showStage, updateHeading, wizardName } from './ui/re
 import { defineObjectSize, getEM } from './ui/layout.js';
 import { el } from './ui/dom.js';
 
-const version = "2.0.0"; // v1: "02nov2020_10pm"
+const version = "2.1.0"; // v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * 0.109375;//56;

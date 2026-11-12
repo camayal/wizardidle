@@ -1,23 +1,20 @@
 # Changelog
 
-## Unreleased
+## 2.1.0 — 2026-11-12
 
-- Code: all `var` replaced by `const`/`let`.
-- Code: small helpers for repeated snippets (`startEvent`, `endEvent`, `nextEvent`, `showStage`, `wizardName`, `el`).
-- Code: 117 lines of commented-out dead code removed; the ideas found in them moved to `ideas.md`.
-- Code: one short comment above every function; Spanish comments, including the story plans, translated to English.
-- Code: the longest functions split into named pieces (battle, attacks, stats page, dice rolls).
-- Code: screen layout rewritten as one line per element (352 → 139 lines), same positions and sizes.
-- Code: template strings instead of long + concatenations; more small helpers (`drawWizard`, `clearNPC`, `studyPhase`); `spell()` no longer takes four constant arguments.
-- Fixed typos: health points, Currently won, Gold spent at inns, Hydra heads, enough, decides to come back, gaming house, wants to gamble, a hydra, Divine polypoid.
 - Faster: spell animations stop after their last frame (before, every spell ever cast kept redrawing forever; 19x less drawing work over a 30-minute game).
 - Faster: images are loaded once and reused instead of on every redraw.
-- Fixed: an image that loaded late could be drawn over a newer one.
-- Code: removed the old speed-debug shortcuts that could no longer run.
-- Code: enemy data uses true/false instead of "true"/"1" text.
-- Code: the inn, shrine, loot, enemy choice and divine touch split into named steps.
-- Offline mode: the file list and the cache version are generated at every deploy (no more hand-kept list).
 - Fixed: a crash when two levels were gained at once while a scroll was open and the first level had a chapter.
+- Fixed: an image that loaded late could be drawn over a newer one.
+- Fixed typos: health points, Currently won, Gold spent at inns, Hydra heads, enough, decides to come back, gaming house, wants to gamble, a hydra, Divine polypoid.
+- Offline mode: the file list and the cache version are generated at every deploy (no more hand-kept list).
+- Code: all `var` replaced by `const`/`let`; template strings instead of long + concatenations.
+- Code: small helpers for repeated snippets (`startEvent`, `endEvent`, `nextEvent`, `showStage`, `wizardName`, `el`, `drawWizard`, `clearNPC`, `studyPhase`); `spell()` no longer takes four constant arguments.
+- Code: the longest functions split into named pieces (battle, attacks, stats page, dice rolls, inn, shrine, loot, enemy choice, divine touch).
+- Code: screen layout rewritten as one line per element (352 → 139 lines), same positions and sizes.
+- Code: enemy data uses true/false instead of "true"/"1" text.
+- Code: 117 lines of commented-out dead code and the old speed-debug shortcuts removed; the ideas found in the comments moved to `ideas.md`.
+- Code: one short comment above every function; Spanish comments, including the story plans, translated to English.
 - Restored the disabled developer console notes, lost in the 2.0.0 module split.
 
 ## 2.0.0 — 2026-11-11

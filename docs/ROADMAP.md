@@ -10,7 +10,7 @@ Work happens on `dev`; `main` is the live site and only gets playable versions. 
 - [x] Annotate each part of the code: a short comment per module and per function saying what it does. No excessive comments.
 - [x] Keep gameplay identical, checked with the same tests as the v2 rebuild.
 
-## 2. Modern, faster, less redundant
+## 2. Modern, faster, less redundant (done 2026-11-12, released as 2.1.0)
 
 Gate before moving on: the whole code base is modern, measurably faster where it matters (game loop, drawing, console output), and free of the redundancy found in stage 1.
 
