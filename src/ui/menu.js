@@ -62,7 +62,7 @@ function mapBtn(){
         el("backMapa").src = "img/mapa.png";
     }
     el("bocadilloMapa").src = "img/bocadillo.png";
-    el("pjMapa").src = "img/lvl" + Math.floor(state.player.lvl / 10) * 10 + ".png";
+    el("pjMapa").src = `img/lvl${Math.floor(state.player.lvl / 10) * 10}.png`;
     el("mapa").style.display = "block";
     localizarBocadillo()
     

@@ -2,25 +2,45 @@
 
 Work happens on `dev`; `main` is the live site and only gets playable versions. Each stage starts when the one before it is done.
 
-## 1. Clean up the code
+## 1. Clean up the code (done 2026-11-11)
 
-- [ ] Update the code to modern JavaScript (`let`/`const`, template strings, arrow functions where they help).
-- [ ] Remove redundancy: repeated blocks (e.g. the same "end of event, back to the event picker" code in many places), copy-pasted texts, duplicated constants.
-- [ ] Make it more manageable: smaller functions with clear names, related code together.
-- [ ] Annotate each part of the code: a short comment per module and per function saying what it does. No excessive comments.
-- [ ] Keep gameplay identical, checked with the same tests as the v2 rebuild.
+- [x] Update the code to modern JavaScript (`let`/`const`, template strings, arrow functions where they help).
+- [x] Remove redundancy: repeated blocks (e.g. the same "end of event, back to the event picker" code in many places), copy-pasted texts, duplicated constants.
+- [x] Make it more manageable: smaller functions with clear names, related code together.
+- [x] Annotate each part of the code: a short comment per module and per function saying what it does. No excessive comments.
+- [x] Keep gameplay identical, checked with the same tests as the v2 rebuild.
 
-## 2. Modern, faster, less redundant
+## 2. Modern, faster, less redundant (done 2026-11-12, released as 2.1.0)
 
 Gate before moving on: the whole code base is modern, measurably faster where it matters (game loop, drawing, console output), and free of the redundancy found in stage 1.
 
-## 3. The story
+*Result:* measured over 10- and 30-minute games (animation frames, images, sounds, console writes). Drawing was the only real cost and was fixed. The console was measured as cheap (30–60 writes a minute) and left as it is; a lighter `print()` (one element per line instead of rewriting the whole console) can come later if needed.
 
-- [ ] Implement the story from the ideas backlog in `ideas.md` ("Finish the story": chapters III–XI and the final battle, plus the related story ideas).
-- [ ] Fix the chapter keys in `src/story.js` first (a v1 bug, kept so stage 1 doesn't change gameplay): `lvl60` and `lvl90` appear twice, so the later entries (Chapter IX and X, meant for levels 160 and 190) replace the earlier ones and show at levels 60 and 90; Chapter IV never shows. `lvl99` should be `lvl199`, and `lv200` (missing an `l`) means Chapter XI never fires.
+- [x] Spell animations never stop (a v1 bug, found in stage 1): when the last frame is drawn, `spell()` cancels the frame request but then requests another one, so every spell ever cast keeps redrawing about 60 times per second, each loop clearing the shared spell canvas. Fix first: it costs CPU and can make spells flicker. *Fixed 2026-11-12: over a 30-minute game, 72,329 animation callbacks (peak 646/s) became 3,730 (peak 50/s).*
+- [x] Images loaded once and reused (v1 created a new image on every redraw), with stale late loads ignored.
+- [x] Dead speed-debug branches (`masterTime < 500`) removed; enemy flags are real booleans; the medium-length event functions split into named steps.
+- [x] Offline file list and cache version generated at deploy (`.github/scripts/precache.py`); `service-worker.js` went from 22 KB to 3 KB.
+- [ ] Later: the cache version is the commit, so every deploy (even docs-only) makes installed players re-download all ~6 MB. Derive it from a hash of the cached files, or keep art and sound in a long-lived cache of their own.
+- [x] Chapter race fixed: when the scroll had to close first, the chapter text was read for the level reached by then (two levels at once could crash).
 
-## 4. New features
+## 3. Stats, playtests, then the story with the faith rebalance
 
+Order decided by the author on 2026-11-12: the story depends on the faith rebalance (chapter X lock, the Last Escape scroll, belief levels) and on professions (the second trade unlocks at chapter III), and no balance number gets set without a playtest. Detailed plans are being written in the planner session (`docs/STATS.md`, `docs/FAITH.md`, `docs/PROFESSIONS.md` on branch `plan/professions`, to be linked here once merged).
+
+**3a. Stats and playtest tools**
+- [ ] A stats module (see "Track almost everything as stats" in `ideas.md`).
+- [ ] Playtest tools: a fast-forward mode (`?sim=1`), a fixed random seed, idle and active "god" bots, a runner driving headless Edge, 10 seeds played to level 200.
+
+**3b. The story, planned together with the faith rebalance**
+- [ ] Queue chapters first: with the keys fixed, consecutive levels will have chapters (128–129, 139–140, 149–150, 199–200). The chapter-race fix keeps one chapter at a time, so a second chapter opening while the scroll is still closing would replace the first one's text.
+- [ ] Fix the chapter keys in `src/story.js` (a v1 bug, kept so stage 1 doesn't change gameplay): `lvl60` and `lvl90` appear twice, so the later entries (Chapter IX and X, meant for levels 160 and 190) replace the earlier ones and show at levels 60 and 90; Chapter IV never shows. `lvl99` should be `lvl199`, and `lv200` (missing an `l`) means Chapter XI never fires.
+- [ ] Fix the rest message (v1 text bug): `wakeUp()` in `events.js` counts the recovered HP twice when choosing it, so "feels totally renewed" also shows after a partial rest.
+- [ ] Faith rebalance: belief levels, a free revive, rescuers instead of the self-revive, the chapter X lock, the Last Escape scroll (`docs/FAITH.md`).
+- [ ] Implement the story from the ideas backlog in `ideas.md` ("Finish the story": chapters III–XI and the final battle, plus the related story ideas), balanced with the playtest tools.
+
+## 4. Professions, then the rest
+
+- [ ] Professions (`docs/PROFESSIONS.md`); fix the Town dice house condition in the same change (see the v1 bugs below).
 - [ ] The rest of the ideas backlog in `ideas.md`, one feature at a time. This is the long part.
 
 ## Done: the v2 rebuild (2.0.0, live since 2026-11-11)
@@ -44,4 +64,5 @@ Phases 1-3 deliberately preserved v1 behavior, so these were written down first 
 - ~~**Typos in player-facing text.**~~ Fixed: explosion, tries, Cemetery, Grotto, increased studying, restoration, intellect, Completion, defeated, loses, eradication, environment, BEGINNING, shrine (was "shire").
 - ~~**Forest's Capricor is decided at load.**~~ Fixed in phase 2: the check moved into game start.
 - ~~**Clocks may survive a wizard's death.**~~ Fixed in phase 3: the game loop allows each named clock only once, and kill stops them all.
+- **Dice house in the Town** (still open; to fix together with the professions vendors, the author's decision): `YesOrNot(pDados) && zone == "la_Ciudad" || zone == "el_Poblado"` in `exploreEV()` reads as `(chance && City) || Town`, so in the Town every exploration without loot goes to the dice house (if he has gold) and the dice chance never applies there.
 - **Manifest paths** (found in phase 4): `manifest.json` pointed at `wizardidle/index.html`, which resolves to `/wizardidle/wizardidle/index.html`, so installing the app opened a broken page. Fixed with relative paths and 192/512 px icons.

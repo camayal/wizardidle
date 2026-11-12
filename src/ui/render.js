@@ -7,7 +7,7 @@ import { state } from '../state.js';
 import { fight, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { setLiveTime } from '../game.js';
-import { masterTime, MAXLINESINCONSOLE } from '../config.js';
+import { MAXLINESINCONSOLE } from '../config.js';
 import { logro } from '../achievements.js';
 import { localizarBocadillo } from './scrolls.js';
 import { el } from './dom.js';
@@ -29,7 +29,7 @@ const npcCanvas = el("npcCanvas");
 // Refresh the heading: name, level, XP bar, HP, gold and faith.
 function updateHeading() {
     el('pjName').innerText = state.player.name;
-    el('lvl').innerText = "Lv. " + state.player.lvl;
+    el('lvl').innerText = `Lv. ${state.player.lvl}`;
     el("XPprogressBar").max = state.player.xpNext;
     el("XPprogressBar").min = state.player.xpPast;
     el("XPprogressBar").value = state.player.xp;
@@ -57,7 +57,7 @@ function heartMeter(hpPercent){
 
 // Refresh the enemy heart icon used in console messages.
 function updateHeartNPC(){
-ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" height="' + ui.em + '" src="' + heartMeter(Math.round(fight.enemyHP) / fight.enemyHPbase) + '"/> ';
+ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" height="${ui.em}" src="${heartMeter(Math.round(fight.enemyHP) / fight.enemyHPbase)}"/> `;
 }
 
 
@@ -76,23 +76,53 @@ ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 // Draw a background (a zone stage, altar, inn...) and move the map marker.
 function loadBackground(back) {
     ui.currentBackGround = back;
-    esceneCanvas.style.background = "url('img/" + back.toLowerCase() + ".png') no-repeat";
+    esceneCanvas.style.background = `url('img/${back.toLowerCase()}.png') no-repeat`;
     esceneCanvas.style.backgroundSize = "contain";
     //change bocadillo location
     localizarBocadillo();
 };
 
+// Images are loaded once and reused (v1 created a new Image for every redraw).
+const imageCache = new Map();
+const latestDraw = {};
+
+// Call draw(img) with the image at src, now if it's already loaded, otherwise when it loads.
+// Each canvas only keeps its latest request: an older image that finishes loading late is
+// not drawn over a newer one.
+function withImage(canvasName, src, draw) {
+    const ticket = latestDraw[canvasName] = (latestDraw[canvasName] || 0) + 1;
+    let img = imageCache.get(src);
+    if (!img) {
+        img = new Image();
+        img.src = src;
+        imageCache.set(src, img);
+    }
+    if (img.complete && img.naturalWidth > 0) {
+        draw(img);
+    } else {
+        img.addEventListener("load", () => { if (latestDraw[canvasName] === ticket) draw(img); }, { once: true });
+    }
+}
+
 // Draw the wizard; his sprite changes with the level (img/lvl<N>.png, every 10 levels).
 function loadCanvasChar(lvl, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
-    const img = new Image();
-    img.src = "img/lvl" + Math.floor(lvl / 10) * 10 + ".png";
-    //round in base 10
-    img.addEventListener("load", function() {
+    withImage("pj", `img/lvl${Math.floor(lvl / 10) * 10}.png`, (img) => {
         const ctx = pjCanvas.getContext("2d");
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
-    }, false);
+    });
+}
+
+// Draw the wizard with his normal sprite for his level.
+function drawWizard() {
+    loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+}
+
+// Remove the enemy (or object) from the right side of the scene.
+function clearNPC() {
+    npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+    state.npc = "";
 }
 
 // Show the background of the stage the wizard is on.
@@ -102,7 +132,7 @@ function showStage() {
 
 // The wizard's name in bold, as most console messages start.
 function wizardName() {
-    return "<b>" + state.player.name + "</b>";
+    return `<b>${state.player.name}</b>`;
 }
 
 
@@ -112,7 +142,7 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
     const img = new Image();
-    img.src = "img/" + imagen + ".png";
+    img.src = `img/${imagen}.png`;
     img.addEventListener("load", function() {
         const ctx = pjCanvas.getContext("2d");
         ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
@@ -126,9 +156,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     state.npc = npc;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
-    const img = new Image();
-    img.src = "img/" + npc + ".png";
-    img.addEventListener("load", function() {
+    withImage("npc", `img/${npc}.png`, (img) => {
         const ctx = npcCanvas.getContext("2d");
         //medium size bosses (64x64px)
         if (state.npc === "arcangel" || state.npc === "doria" || state.npc === "midas" || state.npc === "kkck" || state.npc === "herbus" || state.npc === "skeleton" || state.npc === "medusa" || state.npc === "rainbow" || state.npc === "rojo") {
@@ -150,15 +178,12 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
         else {
             ctx.drawImage(img, squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn);
         }
-    }, false);
+    });
 }
 
 
 // Make the wizard hop for a few frames (run by the animPJ clock).
 function animatePJ() {
-
-    //avoid  animation in high speed debug
-    if(masterTime < 500){loop.stop("animPJ");return}
 
 
     ui.frameCounter += 1;
@@ -176,9 +201,6 @@ function animatePJ() {
 
 // Make the enemy hop for a few frames (run by the animNPC clock).
 function animateNPC() {  
-
-    //avoid  animation in high speed debug
-    if(masterTime < 500){loop.stop("animNPC");return}
 
 
     if (state.npc != ""){
@@ -200,7 +222,7 @@ function animateNPC() {
 // Add a line at the top of the console, keeping at most MAXLINESINCONSOLE lines.
 function print(data) {
     setLiveTime(); //set seconds of game and add to total time
-    el("console").innerHTML = data + "<br>" + el("console").innerHTML;
+    el("console").innerHTML = `${data}<br>${el("console").innerHTML}`;
     const brSplit = el('console').innerHTML.split("<br>")
     if (brSplit.length > MAXLINESINCONSOLE) {
         brSplit.splice(-1, 1);
@@ -210,6 +232,9 @@ function print(data) {
 };
 
 export {
+    withImage,
+    clearNPC,
+    drawWizard,
     showStage,
     wizardName,
     animateNPC,

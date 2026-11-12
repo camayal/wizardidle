@@ -23,7 +23,7 @@ const logro = {
         // achievement sound
         playSound("achivement");
         state.achievements[nameLogro.name] = true;
-        print("<img class='imgInConsoleSpecial' height='" + ui.em * 1.5 + "' src='img/achivement.png'><span class='specialTextInConsole' style='font-size:" + ui.em * 1.5 + "px; line-height:" + ui.em * 1.5 + "px;'><b>" + nameLogro.title + "</b> - " + nameLogro.description + "</span>");
+        print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='img/achivement.png'><span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'><b>${nameLogro.title}</b> - ${nameLogro.description}</span>`);
         
         if (ui.scrollCurrentContent == "achievements"){
         updateAchievements();
@@ -36,7 +36,7 @@ const logro = {
 function achievementList(){
     let out = "";
     for (const text of Object.keys(state.achievements)){
-        out += '<div class="divTableRow"><div class="divTableCell"><img src="img/' + logro[text].name + '.png" height="' + ui.em * 4 + 'px" /></div><div class="divTableCell"><strong>' + logro[text].title + '</strong> <br>' + logro[text].description + '</div></div>';
+        out += `<div class="divTableRow"><div class="divTableCell"><img src="img/${logro[text].name}.png" height="${ui.em * 4}px" /></div><div class="divTableCell"><strong>${logro[text].title}</strong> <br>${logro[text].description}</div></div>`;
     }
     return out;
 }

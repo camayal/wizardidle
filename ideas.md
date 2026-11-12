@@ -11,7 +11,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.0.0 is live since 2026-11-11 (tag `v2.0.0`). **Next: stage 1 of the roadmap**, clean up the code (modern JS, less redundancy, more manageable, short annotations). Then stage 2 (modern and faster), stage 3 (the story), stage 4 (new features).
+- **Released:** 2.0.0 live since 2026-11-11. **2.1.0 prepared on `dev`** (stages 1 and 2: cleanup and speed), waiting for the author's playtest and reviews before merging into `main`. **Next:** stage 3a, stats and playtest tools; then the story with the faith rebalance.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.0.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
@@ -41,9 +41,11 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-10 | Offline mode: network first for code, stored copy first for art and sound, new cache per release | Online players always get the newest version; offline still plays; old versions don't linger |
 | 2026-11-11 | Route after 2.0.0: 1 clean up the code, 2 modern and faster, 3 the story, 4 new features | The author's order: a clean, fast base before adding content |
 | 2026-11-11 | CHANGELOG is a flat list of short bullets per version, no narrative or subtitles | The author's preference for readability |
+| 2026-11-11 | Professions: one trade per wizard, a second at chapter III; the wizard asks the god for guidance (the god chooses only with faith above 0) | The old help's "one of three", with the god as guide rather than master. All 11 decisions in [docs/PROFESSIONS.md](docs/PROFESSIONS.md) |
 | 2026-11-12 | Stats: one `src/stats.js` (counters, totals, records, firsts; per wizard and per world); all counters renamed, no save migration in the dev phase; playtest tools in the repo, 10 seeds to lvl 200 per setting | Professions and faith need numbers, and no balance number is set without a playtest. Details in [docs/STATS.md](docs/STATS.md) |
 | 2026-11-12 | Faith: four belief levels, both ways until chapter X; the god's revive stays free and gives faith; other rescuers instead of the self-revive; offerings and all numbers decided only by playtests | The author's choices; details in [docs/FAITH.md](docs/FAITH.md) |
-| 2026-11-11 | Professions: one trade per wizard, a second at chapter III; the wizard asks the god for guidance (the god chooses only with faith above 0) | The old help's "one of three", with the god as guide rather than master. All 11 decisions in [docs/PROFESSIONS.md](docs/PROFESSIONS.md) |
+| 2026-11-12 | Route after 2.1.0: stats and playtest tools, then the story with the faith rebalance, then professions, then the rest | The story depends on faith and professions; no balance number without a playtest |
+| 2026-11-12 | The .md docs (journal, roadmap, changelog, plans) stay published on the site | The repository is public anyway |
 
 ## Ideas backlog
 
@@ -212,6 +214,30 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - The author decided: trainers appear by chance in cabins and huts (the god touches the trainer to accept, the door to leave; silence → the wizard decides); holy recipes only with a blessed craft; the Volcano gets a 7th reagent (proposed: brimstone for "infernal" items made while in sin).
 - Next plan: the faith rebalance.
 
+### 2026-11-12: 2.1.0 prepared
+
+- Version set to 2.1.0; CHANGELOG "Unreleased" became the 2.1.0 entry, player-visible changes first. Stage 2 marked done in the roadmap.
+- Waiting for: the author's playtest, and reviews from the planner and historian sessions.
+
+### 2026-11-12: Stage 2, offline list at deploy; chapter race
+
+- The deploy workflow now writes `precache.json` (every file except legacy and docs, 1,074 today) and stamps the worker with the commit, so each deploy gets a fresh cache without editing `service-worker.js` (22 KB → 3 KB). Checked with a simulated deploy; the live site picks it up on the next merge into `main`.
+- Stress runs found a v1 race: a chapter opened while a scroll was open was read again after the scroll closed, by then possibly for the next level (crash). `openHistory()` now keeps the chapter it opened. Chapter-focused stress runs (levels 25 → 126) zero errors.
+
+### 2026-11-12: Stage 2, tidy data and medium functions
+
+- Removed the `masterTime < 500` speed-debug branches (masterTime is a constant now, they could never run).
+- Enemy data: `hasgold`, `rare`, `corrupted` are booleans instead of "true"/"1" strings; the 10 checks read naturally.
+- Split `searchInn`, `doOffering`, `getBotin`, `getEnemy`, `pjBtn` into named steps; `clearNPC()` also forgets the npc (it always went together).
+- Pace re-checked over 4 runs of 10 game-minutes per version: 48 vs 48 encounters, 9 vs 9 deaths.
+- Noted a v1 text bug in `wakeUp()` (HP counted twice when choosing the message), recorded in the roadmap.
+
+### 2026-11-12: Stage 2 started, the endless animations
+
+- Measured first (10 and 30 virtual minutes, counting animation callbacks, images, sounds and console writes). The only big cost was the spell animations: up to 999 animation callbacks per second in the 10-minute baseline runs (646/s in the 30-minute comparison), growing with play time. Images, sounds and the console are small.
+- Spell animations now stop after their last frame; images are cached and a late-loading image can't overwrite a newer one.
+- 30-minute game: 72,329 → 3,730 animation callbacks, peak 646/s → 50/s. Wizard sprite verified pixel-identical; gameplay suite zero errors.
+
 ### 2026-11-11: Professions decided
 
 - The author decided the plan's open questions: one trade per wizard plus a second at chapter III; the wizard asks the god for guidance (the god chooses only with faith above 0, otherwise he decides by his skills); 2 zones per reagent (to revisit); rings wear out; all four god touches ship together; the Town dice quirk is fixed with the vendors; no mana; holy recipes later; vendors as scene events; divine binding refused by atheists and burnt at chapter X. Recorded in `docs/PROFESSIONS.md`.
@@ -221,6 +247,13 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - Wrote `docs/PROFESSIONS.md` from `Recetas.csv`, the old help and the code hooks: reagents and where they come from, one profession per wizard (the old help says "one of three"), the 15 items with effects tied to existing mechanics, level-scaled prices, new NPCs (travelling merchant, herbalist, jeweller, scribe, tavern keeper, fence), bag, stats, code plan, build order.
 - Found in the recipe sheet: each profession has a base reagent (Alchemy mushroom, Enchanting gem, Writing essence) in all five recipes; two bases = price 100 / hard, one base = 50 / easy. The sheet planned 1 zone per base reagent and 3 for the others; the code has 2 each.
 - Found in `exploreEV()`: the dice-house check `pDados && City || Town` sends every non-loot explore in the Town to the dice house (precedence). Not changed; noted in the plan.
+
+### 2026-11-11: Stage 1 step 8, tidy-ups; stage 1 done
+
+- 223 single-line concatenations became template strings (only where it can't change the text); `spell()` keeps its own animation counters instead of taking four constant arguments; `drawWizard()`, `clearNPC()` and `studyPhase()` replace repeated snippets. Stats page and all 8 layout cases verified identical.
+- Player-facing typos fixed (health points, Currently, spent, enough, gaming, gamble, a hydra, polypoid...). Internal names that live in saves or file names (`sucessStudy`, `polipoide`) left as they are.
+- Found a v1 performance bug: spell animations never stop and keep redrawing forever. First item of stage 2 in the roadmap.
+- **Stage 1 is done.** Next: stage 2 (modern and faster).
 
 ### 2026-11-11: Stage 1 step 7, layout
 
@@ -240,6 +273,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - One short comment above each of the 95 functions; stale comments replaced (old storage API, "possible bug" note in studyEV, which was checked and is fine).
 - The author's Spanish story plans in `src/story.js` translated line by line, plus the few other Spanish comments.
 - Found a v1 bug in the chapter keys (`lvl60`/`lvl90` twice, `lvl99`, `lv200`); left as is to keep gameplay identical, recorded in the roadmap for stage 3.
+
+### 2026-11-11: Stage 1 steps 1-3, var gone and helpers
+
+- Step 1: 157 `var` statements became `const`/`let` with a scope-aware tool that only converted what provably couldn't change behavior.
+- Step 2: helpers for repeated snippets (`startEvent`, `endEvent`, `nextEvent`, `showStage`, `wizardName`, `el`). The tests caught three mistakes in the replacement script (helpers calling themselves, `events.js` importing itself, a local variable named like the new `el`), fixed before pushing. The module checker now also checks that imports match exports, self-imports, duplicate names and shadowed imports.
+- Step 3: the 92 remaining `var` converted by hand (one `let` per name where first needed); `YesOrNot()` and `heartMeter()` rewritten.
 
 ### 2026-11-11: Stage 1 step 4, dead code removed
 

@@ -13,10 +13,9 @@ import * as loop from './loop.js';
 import { endEvent, event, nextEvent, startEvent } from './events.js';
 import { addGold, addXP, calculateFe } from './wizard.js';
 import { logro } from './achievements.js';
-import { currentFrame, frameHeight, frameWidth, getSpell, shift, spell } from './spells.js';
+import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { animateNPC, animatePJ, loadAlterCanvasChar, loadCanvasChar, loadNPC, npcCanvas, pjCanvas, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
-import { el } from './ui/dom.js';
+import { animateNPC, animatePJ, clearNPC, drawWizard, loadAlterCanvasChar, loadNPC, npcCanvas, pjCanvas, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
 
 
@@ -40,11 +39,11 @@ function battle() {
 
 // First message of a fight.
 function announceBattle() {
-    const hp = " (" + ui.heartIcon + roundNumbertoLetter(fight.enemyHP) + ")";
+    const hp = ` (${ui.heartIcon}${roundNumbertoLetter(fight.enemyHP)})`;
     if (fight.bossCombat) {
-        print(fight.enemyName + " releases the power and attack!" + hp);
+        print(`${fight.enemyName} releases the power and attack!${hp}`);
     } else if (fight.hydraCombat) {
-        print(fight.enemyName + " releases all its fury and attack with brutality!" + hp);
+        print(`${fight.enemyName} releases all its fury and attack with brutality!${hp}`);
     } else {
         print(fight.enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + hp);
     }
@@ -76,24 +75,24 @@ function defeatEnemy() {
     } else if (fight.hydraCombat) {
         count("HydrasKilled");
         delete state.hydraHeads[fight.hydra];
-    } else if (enemySprites[fight.enemyAndNumber].rare == 1) {
+    } else if (enemySprites[fight.enemyAndNumber].rare) {
         count("rareEnemiesKilled");
     } else {
         count("EnemiesKilled");
     }
     count("Combo");
     updateLongestCombo();
-    npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+    clearNPC();
 
     // faith: cleansing a corrupted enemy gains faith; while in sin every kill costs faith
     let faithText;
     if (!fight.bossCombat && !fight.hydraCombat) {
-        if (enemySprites[fight.enemyAndNumber].corrupted == "1" && !state.player.inSin) {
+        if (enemySprites[fight.enemyAndNumber].corrupted && !state.player.inSin) {
             run.feGanada = calculateFe() * 5;
             run.feGanada *= state.player.faithMultiplier;
             state.player.faith = state.player.faith + run.feGanada;
             count("FeByCleanCorruption", Math.round(run.feGanada));
-            faithText = ", also gained " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + " by corruption eradication";
+            faithText = `, also gained ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)} by corruption eradication`;
         } else {
             faithText = "";
         }
@@ -101,7 +100,7 @@ function defeatEnemy() {
     if (state.player.inSin) {
         const faithLost = calculateFe();
         state.player.faith = state.player.faith - faithLost;
-        faithText = ", and reduce the faith " + ui.spiritIcon + " -" + roundNumbertoLetter(faithLost);
+        faithText = `, and reduce the faith ${ui.spiritIcon} -${roundNumbertoLetter(faithLost)}`;
     }
 
     victoryRewards(faithText);
@@ -111,28 +110,28 @@ function defeatEnemy() {
 
 // Gold (if the enemy carries any) and XP for a won fight, with the victory message.
 function victoryRewards(faithText) {
-    if (enemyTypes[fight.enemy].hasgold == "true") {
+    if (enemyTypes[fight.enemy].hasgold) {
         playSound("coins");
         addGold();
         if (fight.bossCombat) {
             addXP(4);
-            print(fight.enemyName + " was defeated and a big loot has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier));
+            print(`${fight.enemyName} was defeated and a big loot has been found ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier)}`);
         } else if (fight.hydraCombat) {
             addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
-            print(fight.enemyName + " was defeated and a treasure has been found " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold * 15));
+            print(`${fight.enemyName} was defeated and a treasure has been found ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * 15)}`);
         } else {
-            addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
-            print(fight.enemyName + " was defeated and looted " + ui.goldIcon + roundNumbertoLetter(state.player.lastBattleGold) + faithText);
+            addXP(enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1.5);
+            print(`${fight.enemyName} was defeated and looted ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold)}${faithText}`);
         }
     } else if (fight.bossCombat) {
         addXP(4);
-        print(fight.enemyName + " was defeated");
+        print(`${fight.enemyName} was defeated`);
     } else if (fight.hydraCombat) {
         addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
-        print(fight.enemyName + " was defeated");
+        print(`${fight.enemyName} was defeated`);
     } else {
-        addXP(enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1.5);
-        print(fight.enemyName + " was defeated" + faithText);
+        addXP(enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1.5);
+        print(`${fight.enemyName} was defeated${faithText}`);
     }
 }
 
@@ -152,19 +151,19 @@ function wizardFalls() {
     updateLongestCombo();
     state.counters.Combo = 0;
     count("Deaths");
-    playSound("hurt" + getRandomInt(1, 6));
+    playSound(`hurt${getRandomInt(1, 6)}`);
     fight.pjDead = true;
     loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
     let lootedText = "";
     // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:
     // fight.enemy was already empty. A fallen enemy can't take the wizard's gold.
-    if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold == "true") {
+    if (state.player.gold > 0 && fight.enemy && enemyTypes[fight.enemy].hasgold) {
         const goldLooted = getRandomInt(state.player.lastBattleGold, state.player.lastBattleGold * 2);
         state.player.gold = state.player.gold - goldLooted;
-        lootedText = " and loses some gold" + " (" + ui.goldIcon + "-" + roundNumbertoLetter(goldLooted) + ")";
+        lootedText = ` and loses some gold (${ui.goldIcon}-${roundNumbertoLetter(goldLooted)})`;
         count("goldLostInBattle", goldLooted);
     }
-    print(wizardName() + " has fallen in battle" + lootedText);
+    print(`${wizardName()} has fallen in battle${lootedText}`);
     npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
     clearFight();
     scheduleSelfRevive();
@@ -177,9 +176,9 @@ function scheduleSelfRevive() {
         fight.autorevive = "";
         const faithLost = state.player.hpBase * 1.2454654;
         state.player.faith = state.player.faith - faithLost;
-        print(wizardName() + " " + "recovers himself but feels abandoned by his god (" + ui.spiritIcon + "-" + roundNumbertoLetter(faithLost) + ")");
+        print(`${wizardName()} recovers himself but feels abandoned by his god (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
         fight.pjDead = false;
-        loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+        drawWizard();
         count("selfRevive");
         playSound("heal");
         updateHeading();
@@ -221,72 +220,72 @@ function enemyEV(){
 }
 
 
+// Creatures that get no personal name ("A slime", not "Zubruwi the slime").
+const NAMELESS = ["baba", "el_esqueleto", "animalejo", "polipoide", "momia"];
+
 // Pick the opponent for the current zone (sometimes the zone boss), draw it, name it and start the battle.
 function getEnemy() {
-    //generate a unique type of attack for each enemy
     fight.bossCombat = false;
     fight.hydraCombat = false;
     if (YesOrNot(config.balance.pGetBoss, 0)) {
-        playSound("boss");
-        count("Bosses");
-        fight.bossCombat = true;
-        fight.bossMultiplier = 2.5;
-        fight.bossGoldMultiplier = 5;
-        const boss = zones[state.zone.current].boss;
-        fight.enemy = boss;
-        count("typeBoss_" + boss)
-        loadNPC(boss);
-        fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
-        fight.enemyHPbase = Math.round(fight.enemyHP)
-        updateHeartNPC()
-        fight.enemyName = "<span style='color:DarkRed'><img class='imgInConsole' height='" + ui.em + "' src='img/boss.png'/>" + " " + enemyTypes[boss].name.toUpperCase() + "</span>";
+        setUpBoss();
     } else {
-        fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
-        count("enemy_" + fight.enemy);
-        const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
-        //random number of the image max    
-        //select a spell based on the school of enemy
-        fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
-        fight.enemyAndNumber = fight.enemy + number;
-        if (enemySprites[fight.enemyAndNumber].rare == 1){
-            count("rareEnemyEncounters");
-        }else{
-            count("enemyEncounters");
-        }
-        loadNPC(fight.enemy + number);
-        fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
-        fight.enemyHPbase = Math.round(fight.enemyHP)
-        updateHeartNPC()
-        const raretext = (enemySprites[fight.enemy + number].rare == 1 ? " <b><small>(RARE)</small></b> " : "");
-        
-        if (fight.enemy == "baba" || fight.enemy == "el_esqueleto" || fight.enemy == "animalejo" || fight.enemy == "polipoide" || fight.enemy == "momia") {
-            //avoid name creatures and others
-            fight.enemyName = "A " + enemySprites[fight.enemy + number].altName + raretext;
-        } else if (fight.enemy == "el_capricor"){
-            fight.enemyName = "The " + capitalize(enemyTypes[fight.enemy].name) + raretext;
-        }
-        else {
-            if (enemySprites[fight.enemy + number].altName){//choose the altername if have some
-                fight.enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemySprites[fight.enemy + number].altName) + raretext;
-            }else{
-                fight.enemyName = "<i>" + randomName() + "</i> the " + capitalize(enemyTypes[fight.enemy].name) + raretext;
-            }
-        }
+        setUpEnemy();
     }
-    let startBattleText = "has entered in " + (run.previousEvent == "enemy" ? "another" : "a") + " battle!,finds " + (run.previousEvent == "enemy" ? "another" : "an") + " enemy!,start " + (run.previousEvent == "enemy" ? "another" : "a") + " fight!"
-    if (fight.bossCombat){
+    let startBattleText = `has entered in ${run.previousEvent == "enemy" ? "another" : "a"} battle!,finds ${run.previousEvent == "enemy" ? "another" : "an"} enemy!,start ${run.previousEvent == "enemy" ? "another" : "a"} fight!`;
+    if (fight.bossCombat) {
         // v1 overwrote previousEvent before reading it here, so this always said "a Boss"
-        const article = (run.previousEvent == "boss" ? "another" : "a")
-        startBattleText = "has entered in " + article + " battle with a Boss!,finds " + article + " Boss!,start " + article + " fight with a Boss!"
+        const article = (run.previousEvent == "boss" ? "another" : "a");
+        startBattleText = `has entered in ${article} battle with a Boss!,finds ${article} Boss!,start ${article} fight with a Boss!`;
         run.previousEvent = "boss";
-    }else{
-        if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!"
+    } else {
+        if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!";
         run.previousEvent = "enemy";
     }
-    print(wizardName() + " " + pickRandomItem(startBattleText));
-    
+    print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
     startEvent(battle);
-};
+}
+
+// The zone boss: 2.5x HP, 5x gold.
+function setUpBoss() {
+    playSound("boss");
+    count("Bosses");
+    fight.bossCombat = true;
+    fight.bossMultiplier = 2.5;
+    fight.bossGoldMultiplier = 5;
+    const boss = zones[state.zone.current].boss;
+    fight.enemy = boss;
+    count(`typeBoss_${boss}`);
+    loadNPC(boss);
+    fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
+    fight.enemyHPbase = Math.round(fight.enemyHP);
+    updateHeartNPC();
+    fight.enemyName = `<span style='color:DarkRed'><img class='imgInConsole' height='${ui.em}' src='img/boss.png'/> ${enemyTypes[boss].name.toUpperCase()}</span>`;
+}
+
+// A normal enemy of the zone: one of its family's sprites, with the spell of its type.
+function setUpEnemy() {
+    fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
+    count(`enemy_${fight.enemy}`);
+    const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
+    fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
+    fight.enemyAndNumber = fight.enemy + number;
+    count(enemySprites[fight.enemyAndNumber].rare ? "rareEnemyEncounters" : "enemyEncounters");
+    loadNPC(fight.enemy + number);
+    fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
+    fight.enemyHPbase = Math.round(fight.enemyHP);
+    updateHeartNPC();
+    fight.enemyName = enemyDisplayName(enemySprites[fight.enemyAndNumber]);
+}
+
+// "A slime", "The Capricor", or a random name plus the sprite's own name; rare ones are marked.
+function enemyDisplayName(sprite) {
+    const raretext = (sprite.rare ? " <b><small>(RARE)</small></b> " : "");
+    if (NAMELESS.includes(fight.enemy)) return `A ${sprite.altName}${raretext}`;
+    if (fight.enemy == "el_capricor") return `The ${capitalize(enemyTypes[fight.enemy].name)}${raretext}`;
+    if (sprite.altName) return `<i>${randomName()}</i> the ${capitalize(sprite.altName)}${raretext}`;
+    return `<i>${randomName()}</i> the ${capitalize(enemyTypes[fight.enemy].name)}${raretext}`;
+}
 
 
 
@@ -303,17 +302,17 @@ function getHydra(newEncounter = false){
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * (state.hydraHeads[fight.hydra]);
     fight.enemyHPbase = Math.round(fight.enemyHP)
     updateHeartNPC();
-    fight.enemyName = "<span style='color:DarkGreen'><img class='imgInConsole' height='" + ui.em + "' src='img/boss.png'/>" + " " + fight.hydra.toUpperCase() + "</span>";
+    fight.enemyName = `<span style='color:DarkGreen'><img class='imgInConsole' height='${ui.em}' src='img/boss.png'/> ${fight.hydra.toUpperCase()}</span>`;
     let startBattleText;
     if (newEncounter){
         count("Hydras");
-        count("typeofHydras_" + fight.hydra)
-        startBattleText = "has entered in a battle with a hydra!,finds an hydra!,start a fight with a hydra!"
-        print(wizardName() + " " + pickRandomItem(startBattleText));
+        count(`typeofHydras_${fight.hydra}`)
+        startBattleText = "has entered in a battle with a hydra!,finds a hydra!,start a fight with a hydra!"
+        print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
         startEvent(battle);
     } else {
-        startBattleText = "sees how another head grows!, sees how the hydra regenerates its heal points"
-        print(wizardName() + " " + pickRandomItem(startBattleText));
+        startBattleText = "sees how another head grows!, sees how the hydra regenerates its health points"
+        print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
     }
     
 }
@@ -368,13 +367,13 @@ function castPolymorph() {
     hopWizard();
     fight.enemyHP = 1;
     updateHeartNPC();
-    spell("spellPinBlue_16", false, frameWidth, frameHeight, currentFrame, shift);
-    count("school_" + spells.spellPinBlue_16.school);
+    spell("spellPinBlue_16", false);
+    count(`school_${spells.spellPinBlue_16.school}`);
     fight.polymorphedAnimal = pickRandomItem("gallina,oveja");
     playSound(fight.polymorphedAnimal);
     loadNPC(fight.polymorphedAnimal);
-    print(wizardName() + " cast polymorphism!");
-    count("Polymorph_" + fight.polymorphedAnimal);
+    print(`${wizardName()} cast polymorphism!`);
+    count(`Polymorph_${fight.polymorphedAnimal}`);
     fight.polymorphed = true;
 }
 
@@ -386,9 +385,9 @@ function criticAttack() {
     const spellId = getSpell();
     if (isDivineSpell(spellId)) damage = damage * 4;
     damageEnemy(damage);
-    count("school_" + spells[spellId].school);
-    spell(spellId, false, frameWidth, frameHeight, currentFrame, shift, true);
-    print(wizardName() + " performs a <b>critic attack!</b>" + " (" + ui.attackIcon + roundNumbertoLetter(state.player.attack * stat("fAttack")) + ") &times; " + Math.round(stat("fCritic")) + " - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
+    count(`school_${spells[spellId].school}`);
+    spell(spellId, false, true);
+    print(`${wizardName()} performs a <b>critic attack!</b> (${ui.attackIcon}${roundNumbertoLetter(state.player.attack * stat("fAttack"))}) &times; ${Math.round(stat("fCritic"))} - ${ui.heartIcon}${roundNumbertoLetter(fight.enemyHP)}`);
     count("Critics");
     return damage;
 }
@@ -401,11 +400,11 @@ function normalAttack() {
     const spellId = getSpell();
     if (isDivineSpell(spellId)) damage *= 4;
     damageEnemy(damage);
-    count("school_" + spells[spellId].school);
+    count(`school_${spells[spellId].school}`);
     const spellText = spells[spellId].name.toLowerCase();
     const verb = spells[spellId].school == "Physical" ? pickRandomItem(" uses the , attacks with the ") : pickRandomItem(" cast , attacks with ");
     print(wizardName() + verb + spellText + " (" + ui.attackIcon + roundNumbertoLetter(damage) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
-    spell(spellId, false, frameWidth, frameHeight, currentFrame, shift);
+    spell(spellId, false);
     count("Attacks");
     return damage;
 }
@@ -421,13 +420,13 @@ function enemyAttack() {
     } else {
         state.player.hp = state.player.hp - enemyHit;
     }
-    print(fight.enemyName + " attacks (" + ui.attackIcon + roundNumbertoLetter(enemyHit) + ")");
+    print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`);
     if (fight.bossCombat) {
         fight.spellEnemy = pickRandomItem(zones[state.zone.current].bossSpell);
     } else if (fight.hydraCombat) {
         fight.spellEnemy = pickRandomItem(zones[state.zone.current].hidrasSpells);
     }
-    spell(fight.spellEnemy, true, frameWidth, frameHeight, currentFrame, shift);
+    spell(fight.spellEnemy, true);
     count("IncomingAttacks");
 }
 
@@ -444,7 +443,7 @@ function healEV() {
                 state.player.hp = state.player.hp + healHit;
             }
         playSound("heal");
-        spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
+        spell("spellHeal_8",true);
         print(wizardName() + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    
          
         

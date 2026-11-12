@@ -24,6 +24,7 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
+          ref: main      # always publish main, even when the workflow is started by hand from another branch
           path: current
 
       - name: Checkout legacy v1.0.0
@@ -37,6 +38,10 @@ jobs:
           mkdir -p _site/legacy
           rsync -a --exclude '.git' --exclude '.github' current/ _site/
           rsync -a --exclude '.git' --exclude '.github' legacy/ _site/legacy/
+
+      # offline mode: list every file for the service worker and give this deploy its own cache
+      - name: Offline file list
+        run: python3 current/.github/scripts/precache.py _site "${GITHUB_SHA::7}"
 
       - uses: actions/upload-pages-artifact@v3
         with:

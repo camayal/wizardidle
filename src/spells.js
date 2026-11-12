@@ -5,22 +5,17 @@ import { spells, spellTiers } from './data/spells.js';
 import { pickRandomItem } from './utils.js';
 import { state } from './state.js';
 import { ui } from './runtime.js';
-import { masterTime } from './config.js';
 import { playSound } from './audio.js';
+import { withImage } from './ui/render.js';
 
-//vars spell animation
-const frameWidth = 30;
-const frameHeight = 30;
-const currentFrame = 0, shift = 0;
 
 
 
 
 // Play a spell animation from img/<spell>.png on the wizard or the enemy (bigger on a critic) and its sound.
-function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=0){
-
-    //avoid spell animation in high speed debug
-    if(masterTime < 500){return}
+function spell(img, pj, critic = 0, center = 0){
+    const frameWidth = 30, frameHeight = 30;    // size of one frame in the sprite sheet
+    let currentFrame = 0, shift = 0;            // animation position, advanced every frame
 
 
     let volume;
@@ -60,25 +55,21 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    const myImage = new Image();
-    myImage.src = "img/" + img + ".png";
-    myImage.addEventListener("load",animate)
-    let requestFrame;
+    let myImage;
+    withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, `img/${img}.png`, (image) => { myImage = image; animate(); });
 
+    // one frame per screen refresh; the last step draws past the end of the sprite sheet,
+    // which leaves the canvas clear, and then the animation stops
     function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
         //draw each frame + place them in the middle
         context.drawImage(myImage, shift, 0, frameWidth, 
             frameHeight, (ui.squareSide * mult) * leftMultiHeadLocation, ui.headLevel * topMultiHeadLocation, ui.squareSide * multiSize, ui.squareSide * multiSize);
         shift += frameWidth + 1;
-        if (currentFrame == totalFrames) {
-            window.cancelAnimationFrame(requestFrame);
-        }
+        if (currentFrame == totalFrames) return;    // v1 asked for another frame here, forever
         currentFrame++;
-    
-        requestFrame = requestAnimationFrame(animate);
-    
-        }
+        requestAnimationFrame(animate);
+    }
 };
 
 
@@ -97,7 +88,7 @@ function getSpell(lvlBase = knownTier()){
     let spellSelected = "";
     for (i = 0; i <= lvlBase; i++) { 
         if(spellSelected !== ""){
-            spellSelected =  spellSelected + "," + spellTiers[i];
+            spellSelected =  `${spellSelected},${spellTiers[i]}`;
         }else{
         spellSelected =  spellTiers[i];
         }
@@ -117,10 +108,6 @@ function countSpellKnown(){
 
 export {
     countSpellKnown,
-    currentFrame,
-    frameHeight,
-    frameWidth,
     getSpell,
-    shift,
     spell,
 };

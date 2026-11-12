@@ -9,7 +9,7 @@ import { fight, ui } from './runtime.js';
 import { chapter, openHistory } from './story.js';
 import { logro } from './achievements.js';
 import { playSound } from './audio.js';
-import { loadCanvasChar, print, updateHeading } from './ui/render.js';
+import { drawWizard, print, updateHeading } from './ui/render.js';
 
     
 
@@ -61,7 +61,7 @@ function levelUP() {
             break;
             default:
             playSound("lvlup");
-            print("<img class='imgInConsoleSpecial' height='" + ui.em * 1.5 + "' src='img/star.png'></img> " + "<span class='specialTextInConsole' style='font-size:" + ui.em * 1.5 + "px; line-height:" + ui.em * 1.5 + "px;'> <b>" + state.player.name + " level up</b></span>" + " <img class='imgInConsoleSpecial' height='" + ui.em * 1.5 + "' src='img/star.png'></img> ");
+            print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='img/star.png'></img> <span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'> <b>${state.player.name} level up</b></span> <img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='img/star.png'></img> `);
         }
     //calculate age
         state.player.age = state.player.age + (state.player.xpNext * 0.0005)
@@ -80,10 +80,10 @@ function levelUP() {
     updateHeading();
 
     //call history if exists
-    if(chapter["lvl" + state.player.lvl]){
+    if(chapter[`lvl${state.player.lvl}`]){
         openHistory()
     }else{//avoid change lvl skin automatically, for levels that needs some previous change (before get corruption staff, en 149, etc)
-        loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+        drawWizard();
     }
 
     //multilevel control (not expected)
@@ -109,9 +109,9 @@ function addGold(){
          state.player.gold = state.player.gold + (state.player.lastBattleGold * 15);
          count("GoldFromBosses", (state.player.lastBattleGold * (15)));
     }else{
-        if (enemyTypes[fight.enemy].hasgold == "true") {
+        if (enemyTypes[fight.enemy].hasgold) {
          possibleGold = state.player.hpBase * config.balance.rGold;
-         const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare == 1 ? RAREMULTIPLIER : 1)
+         const goldcurrentBattle = (getRandomInt(possibleGold,possibleGold * 2) + 1) * (enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1)
          state.player.lastBattleGold = goldcurrentBattle;
          state.player.gold = state.player.gold + goldcurrentBattle;
          count("GoldFromEnemies", goldcurrentBattle);

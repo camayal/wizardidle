@@ -58,11 +58,11 @@ export function secsToHours(segundos){
     const hour_f = (day_f - parseInt(day_f)) * 24
     const minutes_f = (hour_f - parseInt(hour_f)) * 60
     const seconds_f = (minutes_f - parseInt(minutes_f)) * 60
-    const result =  (month_f >= 1 ?  Math.floor(month_f) + "mo" : "") +
-    (week_f >= 1 ?  " " + Math.floor(week_f) + "w" : "") +
-    (day_f >= 1 ?  " " + Math.floor(day_f) + "d" : "") +
-    (hour_f >= 1 ?  " " + Math.floor(hour_f) + "h" : "") +
-    (minutes_f >= 1 ? " " + Math.floor(minutes_f) + "m" : "") +
-    (Math.round(seconds_f) >= 1 ?  " " + Math.round(seconds_f) + "s" : "");
+    const result =  (month_f >= 1 ?  `${Math.floor(month_f)}mo` : "") +
+    (week_f >= 1 ?  ` ${Math.floor(week_f)}w` : "") +
+    (day_f >= 1 ?  ` ${Math.floor(day_f)}d` : "") +
+    (hour_f >= 1 ?  ` ${Math.floor(hour_f)}h` : "") +
+    (minutes_f >= 1 ? ` ${Math.floor(minutes_f)}m` : "") +
+    (Math.round(seconds_f) >= 1 ?  ` ${Math.round(seconds_f)}s` : "");
    return result;
 }

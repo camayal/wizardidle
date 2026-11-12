@@ -16,7 +16,7 @@ function changeLocality() {
     case 1:
         //get new zone
         state.zone.last = state.zone.current;
-        print(wizardName() + " left the " + zones[state.zone.last].name);
+        print(`${wizardName()} left the ${zones[state.zone.last].name}`);
         
         getZone();
         //get a new zone
@@ -24,7 +24,7 @@ function changeLocality() {
     case 2:
         //change background
         showStage();
-        print(wizardName() + " is entering to the " + zones[state.zone.current].name + ", " + pickRandomItem(zones[state.zone.current].legend));
+        print(`${wizardName()} is entering to the ${zones[state.zone.current].name}, ${pickRandomItem(zones[state.zone.current].legend)}`);
         break;
     case 3:
         //cancel the Interval, put 0 to the counter and trigger a new event
@@ -53,7 +53,7 @@ function getZone() {
         const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].destinations)
         state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
-        count("zone_" + state.zone.current);
+        count(`zone_${state.zone.current}`);
         } else {
         state.zone.current = "la_Ciudad";//default start
     }
