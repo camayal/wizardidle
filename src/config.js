@@ -48,3 +48,7 @@ export const MAXLINESINCONSOLE = 50;
 export const RAREMULTIPLIER = 2;
 export const masterTime = 1500;
 export const selfrevivetime = 120000;
+
+// Dev tools (src/dev/): the test bar at the bottom of the screen. On while developing;
+// the deploy rewrites this line to false, so the live site never loads them.
+export const DEV = true;

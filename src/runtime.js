@@ -38,6 +38,8 @@ export const run = {
     afterChapterExe: undefined,
     disablePjBtn: undefined,       // divine buttons temporarily blocked
     disableCenterBtn: undefined,
+    forceOnce: undefined,          // dev tools: event number for the next event only
+    forceEnemy: undefined,         // dev tools: sprite for the next normal enemy, e.g. "animalejo13"
 };
 
 // Screen layout and what's on screen.

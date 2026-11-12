@@ -28,6 +28,7 @@ Gate before moving on: the whole code base is modern, measurably faster where it
 Order decided by the author on 2026-11-12: the story depends on the faith rebalance (chapter X lock, the Last Escape scroll, belief levels) and on professions (the second trade unlocks at chapter III), and no balance number gets set without a playtest. Detailed plans: [STATS.md](STATS.md), [FAITH.md](FAITH.md), [PROFESSIONS.md](PROFESSIONS.md).
 
 **3a. Stats and playtest tools**
+- [x] Dev test bar (`src/dev/tests.js`, done 2026-11-12): a bar at the bottom of the screen while developing, with test scenarios (each prepares the wizard and forces the first event, then says what to check), quick actions (+1 level, gold, faith, speed x10, pause) and a command line. `DEV` in `src/config.js`; the deploy switches it off, so the live site never loads it.
 - [ ] A stats module ([STATS.md](STATS.md); see "Track almost everything as stats" in `ideas.md`).
 - [ ] Playtest tools: a fast-forward mode (`?sim=1`), a fixed random seed, idle and active "god" bots, a runner driving headless Edge, 10 seeds played to level 200.
 
@@ -65,4 +66,5 @@ Phases 1-3 deliberately preserved v1 behavior, so these were written down first 
 - ~~**Forest's Capricor is decided at load.**~~ Fixed in phase 2: the check moved into game start.
 - ~~**Clocks may survive a wizard's death.**~~ Fixed in phase 3: the game loop allows each named clock only once, and kill stops them all.
 - **Dice house in the Town** (still open; to fix together with the professions vendors, the author's decision): `YesOrNot(pDados) && zone == "la_Ciudad" || zone == "el_Poblado"` in `exploreEV()` reads as `(chance && City) || Town`, so in the Town every exploration without loot goes to the dice house (if he has gold) and the dice chance never applies there.
+- **The game freezes above level 190** (found 2026-11-12, still open; the dev bar has a scenario for it): in `enemyEV()` the guardian branch (`pGetGuardian`, 10%, level 191+) is empty, a megaboss v1 never wrote. Nothing starts the next event, so about 2% of events stop the game until the page is reloaded. To fix with the story (the guardians, or skip the branch).
 - **Manifest paths** (found in phase 4): `manifest.json` pointed at `wizardidle/index.html`, which resolves to `/wizardidle/wizardidle/index.html`, so installing the app opened a broken page. Fixed with relative paths and 192/512 px icons.

@@ -39,6 +39,12 @@ jobs:
           rsync -a --exclude '.git' --exclude '.github' current/ _site/
           rsync -a --exclude '.git' --exclude '.github' legacy/ _site/legacy/
 
+      # dev tools (the test bar in src/dev/) are for local testing only: switch them off
+      - name: Switch off dev tools
+        run: |
+          sed -i 's/^export const DEV = true;/export const DEV = false;/' _site/src/config.js
+          grep -q '^export const DEV = false;' _site/src/config.js
+
       # offline mode: list every file for the service worker and give this deploy its own cache
       - name: Offline file list
         run: python3 current/.github/scripts/precache.py _site "${GITHUB_SHA::7}"

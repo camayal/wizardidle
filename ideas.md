@@ -11,8 +11,8 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.0.0 live since 2026-11-11. **2.1.0 prepared on `dev`** (stages 1 and 2: cleanup and speed), waiting for the author's playtest and reviews before merging into `main`. **Next:** stage 3a, stats and playtest tools; then the story with the faith rebalance.
-- **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.0.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
+- **Released:** 2.1.0 live since 2026-11-12 (stages 1 and 2: cleanup and speed). **Now:** stage 3a; the dev test bar is built. **Next:** the stats module and the playtest tools ([STATS.md](docs/STATS.md)); then the story with the faith rebalance.
+- **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.1.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
 
@@ -46,6 +46,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-12 | Faith: four belief levels, both ways until chapter X; the god's revive stays free and gives faith; other rescuers instead of the self-revive; offerings and all numbers decided only by playtests | The author's choices; details in [docs/FAITH.md](docs/FAITH.md) |
 | 2026-11-12 | Route after 2.1.0: stats and playtest tools, then the story with the faith rebalance, then professions, then the rest | The story depends on faith and professions; no balance number without a playtest |
 | 2026-11-12 | The .md docs (journal, roadmap, changelog, plans) stay published on the site | The repository is public anyway |
+| 2026-11-12 | A dev test bar replaces the old dev console: scenarios, quick actions and a command line, on while developing (`DEV` in config.js), switched off by the deploy | The author wants to test specific criteria quickly; players never load it |
 
 ## Ideas backlog
 
@@ -186,11 +187,19 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - ~~Professions: keep the old trio (Alchemy, Enchanting, Writing) and the 15 recipes, or rethink them? What should each item actually do (e.g. teleportation scroll ↔ map rework, divine binding ↔ faith)? Does the wizard pick one himself (free will) or does the player choose? One at a time or several, with their own levels? What do they produce: gold, faith, items, spell boosts? Do they tie into the faith rebalance or atheism?~~ **Decided 2026-11-11:** see "Decisions" in [docs/PROFESSIONS.md](docs/PROFESSIONS.md); a few smaller questions remain there.
 - Faith rebalance: what feels off today: too little faith, touches too expensive, too easy or too hard to fall into atheism? And should atheism stay a one-way fate, or could the wizard drift back and forth?
 - Map revamp: which places are known from the start for story reasons, and how are the others discovered (visiting, rumours, scrolls, the travel favour)? Which areas get an inner map first? Which ways should the character be able to move? (walking between neighbouring zones, teleporting, being pushed by events or bosses, choosing a destination...) And should the map itself look or behave differently, or only how the location changes?
-- Should the dev console (`exe()`, unlocked by clicking name → level → faith icon) stay in v2 as a secret, or move behind a debug flag?
+- ~~Should the dev console (`exe()`, unlocked by clicking name → level → faith icon) stay in v2 as a secret, or move behind a debug flag?~~ **Decided 2026-11-12:** behind a flag: the dev test bar (`src/dev/tests.js`), on while developing, switched off by the deploy.
 
 ---
 
 ## Journal
+
+### 2026-11-12: 2.1.0 released; the dev test bar
+- 2.1.0 released after the author's playtest: `main` fast-forwarded, tag `v2.1.0`, live site checked (version 2.1.0, worker stamped with the commit, offline list published).
+- The author asked for a way to test specific criteria, like the old dev console but with a list of scenarios, on while developing and off on the live site. Built `src/dev/tests.js`: a bar at the bottom of the screen with a dropdown (12 scenarios, 6 quick actions), a Run button, a "Check:" line saying what to look at, and a command line (`dev` gives the game objects).
+- A scenario saves the wizard, reloads, prepares him (level, zone, HP, gold), forces the first event and changes config chances only until that event is picked. Small hooks in the game: `run.forceOnce` (events.js), `run.forceEnemy` (combat.js), a clock speed in loop.js (also used by the self-revive), and `setLevelValues()` split out of `levelUP()`. With `DEV` false nothing changes.
+- `DEV` lives in `src/config.js`; the deploy rewrites it to false (and fails if it can't), so players never load the bar.
+- Found while writing scenarios: above level 190, the empty guardian branch in `enemyEV()` freezes the game on about 2% of events (also in v1). Recorded in the roadmap's v1 bugs, with a scenario that shows it.
+- Tests: every scenario run headless and checked (chapter, two levels at once, boss, fall, shrine, inn, dice, level 210, hydra, rare, corrupted, guardian freeze), overrides restored after each; the full gameplay suite with the bar on; layout and pixels identical to 2.1.0 with `DEV` false.
 
 ### 2026-11-12: Idea: death management
 

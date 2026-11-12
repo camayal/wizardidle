@@ -183,7 +183,7 @@ function scheduleSelfRevive() {
         playSound("heal");
         updateHeading();
         nextEvent();
-    }, selfrevivetime);
+    }, selfrevivetime / loop.getSpeed());
 }
 
 // Keep the longest streak of fights won in a row.
@@ -265,9 +265,11 @@ function setUpBoss() {
 
 // A normal enemy of the zone: one of its family's sprites, with the spell of its type.
 function setUpEnemy() {
-    fight.enemy = pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
+    const forced = run.forceEnemy;    // dev tools can ask for one sprite (src/dev/tests.js)
+    run.forceEnemy = undefined;
+    fight.enemy = forced ? forced.replace(/\d+$/, "") : pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
     count(`enemy_${fight.enemy}`);
-    const number = Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
+    const number = forced ? Number(forced.match(/\d+$/)[0]) : Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
     fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
     fight.enemyAndNumber = fight.enemy + number;
     count(enemySprites[fight.enemyAndNumber].rare ? "rareEnemyEncounters" : "enemyEncounters");

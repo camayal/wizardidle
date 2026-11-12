@@ -7,6 +7,7 @@ import { responsiveLayout } from './ui/layout.js';
 import { archBtn, statsBtn, killBtn, mapBtn, helpBtn, btnCloseEvent } from './ui/menu.js';
 import { pjBtn, centerBtn, npcBtn } from './divine.js';
 import { el } from './ui/dom.js';
+import { DEV } from './config.js';
 
 // Handlers are assigned as .onclick properties (not addEventListener) on purpose:
 // disableMainButtons()/enableMainButtons() in ui/scrolls.js temporarily swap .onclick
@@ -38,4 +39,7 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-initialName();
+// Dev tools: the test bar, only while developing (DEV is false on the live site). Loaded
+// before the game starts, so a test scenario can prepare the wizard first.
+if (DEV) import('./dev/tests.js').catch((error) => console.error('[dev] test bar failed', error)).then(() => initialName());
+else initialName();

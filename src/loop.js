@@ -16,9 +16,18 @@
 
 const TICK_MS = 50;
 const clocks = new Map();   // name -> { fn, ms, due }
+let speed = 1;              // dev tools only: 10 runs every clock ten times faster
+
+export function setSpeed(factor) {
+    speed = factor;
+}
+
+export function getSpeed() {
+    return speed;
+}
 
 export function every(name, fn, ms) {
-    clocks.set(name, { fn, ms, due: performance.now() + ms });
+    clocks.set(name, { fn, ms, due: performance.now() + ms / speed });
 }
 
 export function stop(name) {
@@ -39,7 +48,8 @@ function tick() {
         // a clock run earlier in this tick may have stopped or replaced this one
         if (clocks.get(name) !== clock || now < clock.due) continue;
         // keep the rhythm; if the tab was asleep, don't fire a burst to catch up
-        clock.due = clock.due + clock.ms > now ? clock.due + clock.ms : now + clock.ms;
+        const ms = clock.ms / speed;
+        clock.due = clock.due + ms > now ? clock.due + ms : now + ms;
         try {
             clock.fn();
         } catch (error) {

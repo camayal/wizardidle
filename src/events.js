@@ -107,7 +107,10 @@ function event() {
     }
 
     let masterOption;
-    if(state.forceEvent){//force some event for debugging and history
+    if(run.forceOnce){//dev tools: one forced event (src/dev/tests.js)
+        masterOption = run.forceOnce;
+        run.forceOnce = undefined;
+    }else if(state.forceEvent){//force some event for debugging and history
         masterOption = Number(pickRandomItem(state.forceEvent));
     }else{
         masterOption = Math.floor((Math.random() * 5) + 1)

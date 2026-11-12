@@ -44,6 +44,18 @@ const statObj = {
 }
 
 
+// XP, HP and attack for the wizard's current level (HP is filled up).
+function setLevelValues() {
+    state.player.xpNext = Math.pow(state.player.lvl, config.balance.rXP) * config.balance.factorHP;
+    state.player.xpPast = Math.pow((state.player.lvl - 1), config.balance.rXP) * config.balance.factorHP;
+    state.player.hpBase = state.player.xpNext * config.balance.rHP;
+    state.player.hp = Math.floor(state.player.hpBase);
+    state.player.enemyHpRange = state.player.hpBase * 1.2;
+    state.player.enemyAttackRange = state.player.hpBase * 0.2;
+    state.player.xpPerEnemy = ((Math.pow((state.player.lvl + 1), config.balance.rXP) * config.balance.factorHP) - state.player.xpNext) / config.balance.rEnemyXP;
+    state.player.attack = state.player.hpBase * 0.2;
+}
+
 // Level up: achievements, age, new XP/HP/attack values, and the chapter for this level if any.
 function levelUP() {
     state.player.lvl = state.player.lvl + 1
@@ -69,14 +81,7 @@ function levelUP() {
 
 
 
-    state.player.xpNext = Math.pow(state.player.lvl, config.balance.rXP) * config.balance.factorHP;
-    state.player.xpPast = Math.pow((state.player.lvl - 1), config.balance.rXP) * config.balance.factorHP;
-    state.player.hpBase = state.player.xpNext * config.balance.rHP;
-    state.player.hp = Math.floor(state.player.hpBase);
-    state.player.enemyHpRange = state.player.hpBase * 1.2;
-    state.player.enemyAttackRange = state.player.hpBase * 0.2;
-    state.player.xpPerEnemy = ((Math.pow((state.player.lvl + 1), config.balance.rXP) * config.balance.factorHP) - state.player.xpNext) / config.balance.rEnemyXP;
-    state.player.attack = state.player.hpBase * 0.2;
+    setLevelValues();
     updateHeading();
 
     //call history if exists
@@ -162,5 +167,6 @@ export {
     addXP,
     calculateFe,
     levelUP,
+    setLevelValues,
     statObj,
 };
