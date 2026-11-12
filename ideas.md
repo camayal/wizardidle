@@ -168,6 +168,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *Already there to build on:* `realKill()` (`src/ui/menu.js`, the kill button) records the wizard in the cemetery (`world.cemetery`, which outlives every wizard), stops every clock, deletes the save and reloads to the name screen. A true death can reuse it, plus a farewell text and a cause of death in the cemetery record ("fell in the Swamp to a pybrya and nobody came").
   - *Story:* a short death chapter shown before the reload, with the author's line about time. The next wizard's opening could echo it ("another wizard is exiled…"), and the fallen one can come back as a ghost rescuer or a legend ("Wizards from the past help in the story").
   - *Ties to:* the faith plan (rescuers, belief levels, the free revive), the story's final battle (whose death is already meant to be final), stats (deaths, true deaths, the cause, kept per world), and achievements.
+  - **Rule (the author, 2026-11-12):** a true death is possible **only while the god can click to revive him**. Wherever the story takes that click away (the corrupt staff in VI, the Last Escape scroll at X, the reforged staff *Nomaleatorio* after it burns in XI), **the story protects him**: no true death from chapter X until the final battle. See [docs/FAITH.md](docs/FAITH.md), 3.7.
   - *Open questions:* how small the chance is, and what changes it: belief level (does an atheist risk more, since he waits for no god?), level, zone, a boss kill, how long he has lain dead. Is the god warned (a last chance to touch him, a fading heart)? Can it happen before a certain level, or never in the first hours? Does the next wizard inherit anything (gold, a relic, a letter)? Playtests should measure how often it happens.
 
 - **A fallen wizard sprite instead of the skull** (2026-11-12, asked by the author via the story session): in the story a fall in battle is now **badly injured, almost dead**, and only a rare true death is final (see "Death management" above and the rescuers in [docs/FAITH.md](docs/FAITH.md)). *Today* the fallen wizard is drawn as a skull (`img/muerto.png`, 32×32, through `loadAlterCanvasChar("muerto")` in `src/combat.js` and `src/ui/layout.js`), which no longer fits. **The skull stays for a true death.**
@@ -205,6 +206,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Faith and story agree on chapter X
+
+- The author decided (via the story session) the two conflicts between FAITH.md and STORY.md: no afterlife gods in the death mechanics; the Last Escape scroll stays, written by the wizard himself at X and burnt at Heidan in XI; after that the reforged staff raises him. Rule: a true death only while the god can click to revive; where the story removes the click, the story protects him. FAITH.md 3.7 and the death-management entry updated.
 
 ### 2026-11-12: Erasure plan
 

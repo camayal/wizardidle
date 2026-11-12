@@ -16,7 +16,8 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 | 2026-11-12 | Atheism | **Both ways.** While atheist outside chapter X, **the god has actions to try to win him back** |
 | 2026-11-12 | Rescuers | **All four:** pagan caravan, shaman, gravedigger / necromancer, ghost of a fallen wizard (plus his own potion, and alone as the fallback) |
 | 2026-11-12 | Winning back | **All of them:** prayer in despair, a sign, a dream, a pilgrim, hidden blessings, **and rare scrolls or artefacts** (the author's addition, 3.6) |
-| 2026-11-12 | Escape item | **The Last Escape scroll:** found or written at chapter X, burnt a little by each use, burns to ash in chapter XI |
+| 2026-11-12 | Escape item | **The Last Escape scroll:** written by the wizard himself at chapter X, burnt a little by each use, burns to ash in chapter XI |
+| 2026-11-12 | True death and the story | **The author's rule: a true death is possible only while the god can click to revive him. Wherever the story takes that click away, the story must protect him.** Chapter VI–VIII: the corrupt staff raises him; X: the Last Escape scroll (he writes it himself); XI, after it burns: the reforged staff *Nomaleatorio*. No true death from X until the final battle. No afterlife gods in the death mechanics |
 | 2026-11-12 | Playtests also cover | Revive boost and farming, belief thresholds, shrine chance, professions touches |
 
 ---
@@ -156,7 +157,7 @@ The story notes already contain the mechanism twice:
 - **Chapter VI (lvl 130, Corruption):** *"when about to die he teleports away and heals"*, the power of the **staff of corruption**. At **chapter VIII (lvl 149)** the lynching mob **strips the corrupt staff** from him. That's the first "break".
 - **Chapter X (lvl 190, Disobedience):** *"no longer dies: at 0 HP he teleports away and heals completely"*, and he refuses all help.
 
-Proposal for X: when he breaks with the god he crafts or finds a **unique scroll**, the *Last Escape* (a master version of the Scroll of teleportation from professions, so a scribe wizard may write it himself). At 0 HP it tears him out of the fight and heals him. **The plot where it breaks:** each use leaves a burn on it (shown in the console); in **chapter XI** at Heidan, while he goes for the staff of *Nomaleatorio*, the scroll **burns to ash** (the god's last word, or the staff's price). From then on his deaths are real, which sets up the final battle.
+**Decided (2026-11-12):** when he breaks with the god at **chapter X** he **writes the *Last Escape* himself**, a unique master version of the Scroll of teleportation (console lines for writing and using it are in `docs/STORY.md`). At 0 HP it tears him out of the fight and heals him; each use leaves a burn on it. In **chapter XI** at Heidan it **burns to ash** when he takes the reforged staff and the crown. **From then on the reforged staff, *Nomaleatorio*, raises him when he falls**, as the corrupt staff did in chapter VI. So there is **no true death from chapter X until the final battle**, which alone decides his end. No afterlife gods carry him: they court him in the story, but they play no part in the death mechanics.
 
 ### 3.8 Atheism and the story
 
