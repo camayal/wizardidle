@@ -8,6 +8,17 @@ Written 2026-11-12. Nothing is built yet.
 
 ---
 
+## Decisions (2026-11-12, by the author)
+
+| Question | Decision |
+|---|---|
+| Where the tools live | **In the repo:** the `?sim=1` mode ships with the site (off unless asked for), the runner in `tools/`, results in `docs/playtests/` |
+| What the player sees | **A curated stats scroll plus a new records page** (bests, firsts, lifetime numbers); the rest stays hidden for achievements, quests and playtests |
+| Old counter names | **Rename them all to one dotted scheme. Old saves don't matter: we're in the dev phase.** No migration |
+| How sure a playtest is | **10 seeds per setting, from level 1 to 200** (the whole game, so late-game snowballs show) |
+
+---
+
 ## 1. Stats today
 
 - **`count(name, amount = 1)`** (`src/state.js`) adds to `state.counters[name]`. That's the only kind of stat: **55 distinct counters**, several split by a key (`zone_*`, `enemy_*`, `typeBoss_*`, `school_*`, `altar_zone_*`, `BotinGot_*`, `Polymorph_*`, `study_*`, `taberna_zone_*`…). Some are really totals (`GoldFromEnemies`, `FeByPray`, `GoldOffered` add amounts).
@@ -15,11 +26,11 @@ Written 2026-11-12. Nothing is built yet.
 - **The world save** (`wizardidle2:world`) keeps the cemetery and the device id, and **no stats across wizards**.
 - **Missing:** records (highest / lowest), firsts (when something first happened), per-level history, anything across wizards, and the **dice game tracks nothing**.
 - The stats scroll (`updateStats()`, `src/ui/scrolls.js`) shows a hand-picked set, built section by section.
-- **Saves live since 2.0.0** hold these counters, so the existing names must keep working.
+- Saves since 2.0.0 hold these counters. *Decided:* they don't need to keep working; the counters are renamed without a migration.
 
 ## 2. Four kinds of stat, one module
 
-A new `src/stats.js` replaces the bare `count()` (which stays as a thin alias so nothing breaks):
+A new `src/stats.js` replaces the bare `count()`:
 
 | Kind | Call | Stored as | Example |
 |---|---|---|---|
@@ -29,7 +40,7 @@ A new `src/stats.js` replaces the bare `count()` (which stays as a thin alias so
 | **First** | `stat.first("boss.firstKill")` | `{ lvl, age, date, playTimeMs }`, written once | first boss, first death, profession chosen |
 
 - **Per wizard** in `state.stats`, **per world** in `world.stats` (lifetime kills, wizards created, highest level ever, oldest wizard). One call can write both: `stat.count("kill.boss", 1, { world: true })`.
-- **Names:** new stats use dotted names by area (`faith.*`, `combat.*`, `prof.*`, `dice.*`, `explore.*`, `world.*`). The 55 existing counters keep their names, so saves from 2.0.0 load as they are. A name map lets the stats scroll show both.
+- **Names (decided):** every stat uses a dotted name by area (`faith.*`, `combat.*`, `prof.*`, `dice.*`, `explore.*`, `world.*`). The 55 existing counters are **renamed** (e.g. `GoldFromEnemies` → `gold.fromEnemies`, `negar` → `faith.shrineSkipped`, `taberna_zone_el_Poblado` → `inn.zone.el_Poblado`). No migration: a save from before simply starts its stats again.
 - **Per-level history:** at every level-up, one line is stored in `state.history`: `{ lvl, playTimeMs, faithG, goldG, belief, deaths, kills }` (amounts in g, the unit from FAITH.md). It's small (one line per level, 200 at most), and it serves the playtests now and a chart on the stats scroll later.
 
 ### What goes in first
@@ -74,16 +85,14 @@ From FAITH.md: offerings (share / cap / sqrt / level), the revive boost and fait
 
 ## 4. Build order
 
-1. `src/stats.js` with the four kinds, the alias for `count()`, `state.stats` / `world.stats`, per-level history. No gameplay change.
+1. `src/stats.js` with the four kinds, every `count()` call renamed, `state.stats` / `world.stats`, per-level history, the curated stats scroll and the records page. No gameplay change.
 2. Fast-forward loop, the self-revive clock, seed, mute: simulation mode. Check a seeded run plays the same twice.
 3. God bots and the URL settings; the report.
-4. `tools/playtest.py` and the first summary: today's game with the idle and active god (the baseline every later change is compared with).
+4. `tools/playtest.py` and the first summary: today's game with the idle and active god, 10 seeds to level 200 (the baseline every later change is compared with).
 5. `faithChange()` and the faith stats, then the faith playtests (FAITH.md, step 1 onwards).
 6. Professions and dice stats with their features; data-driven achievements.
 
 ## 5. Open questions
 
-- Should simulation code and `tools/playtest.py` live **in the repo** (and be published with the site, switched off unless `?sim=1`), or **outside** it, like the old notes and `pdn_extract.py`?
-- Which stats show on the stats scroll: all of them, a curated set with the rest hidden for achievements, or a new "records" page?
-- Keep the 55 old counter names forever, or rename them once with a save migration?
-- How many seeds per setting (more seeds = surer numbers, slower runs)?
+- Which stats make the curated scroll, and how the records page looks (it could reuse the scroll art).
+- Run time: 10 seeds × level 200 per setting may take a while; if it's too slow, the runner can run several Edge windows at once.
