@@ -182,6 +182,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Professions details
+
+- Added starting numbers (≈10 reagents per level), god-touch prices tied to the tithe rate, the vendor scene and the holy recipes to `docs/PROFESSIONS.md`.
+- The author decided: trainers appear by chance in cabins and huts (the god touches the trainer to accept, the door to leave; silence → the wizard decides); holy recipes only with a blessed craft; the Volcano gets a 7th reagent (proposed: brimstone for "infernal" items made while in sin).
+- Next plan: the faith rebalance.
+
 ### 2026-11-11: Professions decided
 
 - The author decided the plan's open questions: one trade per wizard plus a second at chapter III; the wizard asks the god for guidance (the god chooses only with faith above 0, otherwise he decides by his skills); 2 zones per reagent (to revisit); rings wear out; all four god touches ship together; the Town dice quirk is fixed with the vendors; no mana; holy recipes later; vendors as scene events; divine binding refused by atheists and burnt at chapter X. Recorded in `docs/PROFESSIONS.md`.

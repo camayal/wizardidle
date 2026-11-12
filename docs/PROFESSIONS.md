@@ -24,6 +24,9 @@ Sources:
 | Holy recipes | **Yes, later:** one per trade after the base 15 work |
 | Vendors and trainers | **Scene events** in the City and Town, like the dice house |
 | Divine binding | **An atheist wizard refuses it; at chapter X he burns the ones he carries** |
+| Meeting trainers (2026-11-12) | **Trainers appear by chance (RNG), not in fixed shops:** he enters a cabin or hut and finds a trainer, they talk briefly, he asks the god. **The god touches the trainer → he learns that trade; touches the door → he leaves.** No touch, or faith at 0 or below → he decides by his skills |
+| Holy recipes (2026-11-12) | **Only with a blessed craft** (the god's touch while he crafts) |
+| Dunes and Volcano (2026-11-12) | **The Volcano gets a 7th reagent**; the Dunes stay empty |
 
 The sections below are updated to match.
 
@@ -299,7 +302,82 @@ Each step is playable on its own and checked for pace against the previous versi
 
 ---
 
-## 12. Open questions
+## 12. Details (draft 2026-11-12)
+
+### Supply estimate
+
+The event picker (`event()` in `src/events.js`) chooses one of five events every cycle (`masterTime` 1.5 s), so fights and explores each come up about 1 time in 5. A level takes about 11–16 kills (`rEnemyXP` 16, normal kills ×1.5).
+
+- **From kills:** about a third of kills are against enemies with no gold, so about 4–5 kills per level × 1.5 reagents ≈ **6 reagents per level**.
+- **From gathering:** about 13 explores per level × 80% (no loot) × 20% (`pFindMaterials`) ≈ 2 gathers × 1.5 ≈ **3–4 per level**.
+- **Total ≈ 10 reagents per level**, mostly the two types of the zones he's in. That's 3–5 crafts per level at most, enough to keep a few potions in the bag without drowning in them. Vendors fill the gaps between zones.
+
+### Starting numbers (all in `src/config.js`)
+
+| Number | Start value | Why |
+|---|---|---|
+| Reagent from a no-gold kill | 1 (rare ×2); boss 3–5 + 25% chance of one random reagent from another zone | Every such kill pays something |
+| Gathering chance | `pFindMaterials` (0.2 + Dwarf statue), rolled in `exploreEV()` after loot fails | Uses the existing stat; no new event |
+| Gathering yield | 1–2 (bountiful harvest ×2) | |
+| Reagent in loot | 25% of chests and pots, 1 of the zone's reagent | |
+| Bag limits | 20 per reagent, 5 per item, 2 rings worn; big bag 30 / 8 | |
+| Craft success | `difficulty / 5 + skill / 200`, max 95% | 80% easy, 40% hard at skill 0 |
+| Skill gain | +2 easy success, +3 hard success, +1 failure | About 40 crafts to reach 100: roughly 10–15 levels of a focused trade |
+| Hard recipes unlock | skill 25 | |
+| Ring wear | 300 fights | About 20 levels per ring |
+| Item sell price | `price / 50 × goldPerKill × 3` | Easy ≈ 3 kills' gold, hard ≈ 6 |
+| Reagent price | buy ≈ 1 kill's gold, sell ≈ ⅓ | |
+| Second trade | chapter III (lvl 50); first trade from lvl 10 | Decided |
+
+**God's touches, priced against the tithe.** The tithe already sets an exchange rate between gold and faith (`fOfrenda`, "generosity"). The touches reuse it so faith and gold stay comparable:
+- *Bountiful harvest:* costs the faith of one tithe of a kill's gold.
+- *Blessed craft:* costs the faith equal to the item's gold value through the tithe rate (×2 for hard recipes).
+- *Generous merchant:* +30% on the deal; costs that bonus converted to faith at the tithe rate ×2 (buying gold with faith is dearer than buying faith with gold, so it isn't a loop).
+- *Item offering:* gains the item's gold value × tithe rate × 1.5 (blessed ×3).
+
+### The guidance scene: meeting a trainer (decided 2026-11-12)
+
+Trainers aren't shops in town: they **appear by chance**, the way the healer's cabin is placed at random in some zones. From lvl 10 (and again from chapter III for the second trade), an explore event can lead him into a **cabin, hut, tower room or cave** where a trainer lives. A multi-step event like the inn (`searchInn()`):
+
+1. **Entering:** *"finds a hut hidden among the trees and knocks"*. Interior background (built from the interior tiles and the healer's hut layers) and the trainer's sprite. Which trainer depends on the zone (herbalist in Forest or Swamp, jeweller in Cave or Mine, scribe in Tower or Heidan, the zones of each trade's base reagent), so the map itself steers which trade he's likely to meet.
+2. **Talking:** two or three lines. *"An old herbalist offers to teach him the secrets of potions."* *"— Mushrooms and essence, boy. Everything else is patience."*
+3. **Asking:** *"looks up and asks his god for guidance"*. For about 6 seconds (4 cycles) the god can touch:
+   - **the trainer** → he accepts and becomes an apprentice of that trade;
+   - **the door** → he thanks the trainer and leaves; this trade isn't for him (for now).
+   Only with faith above 0. With faith at 0 or below, the god can't answer.
+4. **Deciding alone** (no touch, or no faith): *"hears only silence and decides alone"*. He accepts with a chance weighted by his matching skill (*restoration knowledge* for Alchemy, *avarice* for Enchanting, *intellect* for Writing), otherwise he leaves.
+
+After he leaves, a trainer of a refused trade can appear again later. Counters: `trainer_met_<trade>`, `guidance_trainer`, `guidance_door`, `guidance_silent`; a "first" with level and age. Once he has a trade, meeting its trainer again gives a skill boost for gold; meeting another trainer before chapter III is only a chat.
+
+This replaces "trainers in the City and Town" from section 6: the **City and Town keep the vendors** (herbalist's, jeweller's and scribe's *shops* sell items), and the **trainers live in the wild**.
+
+### The 7th reagent: Volcano (decided 2026-11-12)
+
+The Volcano gets its own reagent. Proposal, to be decided: **brimstone** (`azufre`), dropped there and sold by nobody (only the travelling merchant, rarely). It mirrors the holy recipes: where holy items need the god's blessing, **infernal** items need brimstone and can only be made while he is **in sin** (`state.player.inSin`, the corruption chapters IV–VI and later):
+- **Alchemy:** *Fire draught* (mushroom + brimstone): huge damage for one fight, costs HP.
+- **Enchanting:** *Ring of wrath* (gem + brimstone): more damage, no healing from the god while worn.
+- **Writing:** *Scroll of the pit* (essence + brimstone): the next divine touch on him is refused, and he self-revives faster.
+
+A devout run gets holy items and a corrupt run gets infernal ones, so professions follow the story's road either way. Sprite: something from `dg_food32.gif` or a recolored gem.
+
+### The vendor scene
+
+Also a multi-step event, from `exploreEV()`:
+- **Where:** in the City and Town, after the loot roll: 30% of the remaining explores go to a shop (once the dice check has its brackets). Elsewhere the **travelling merchant** appears on 3% of explores.
+- **Steps:** (1) he enters / meets the merchant (background, NPC sprite); (2) he **sells** his surplus (one line with the gold earned), and the god can touch the vendor in this step for the generous merchant; (3) he **buys** what he's missing, and leaves.
+- **Merchant stock:** 2–3 reagents from zones far from where he is, so meeting the merchant in the Tundra can bring gems.
+
+### Holy recipes (later)
+
+One per trade. Proposal: they can **only be made with a blessed craft** (the god's touch while he crafts), so they exist only in a run where god and wizard work together:
+- **Holy water** (Alchemy: mushroom + essence): the next death needs no healer and costs no faith, or it cleanses a corrupted enemy for faith.
+- **Ring of devotion** (Enchanting: gem + essence): more faith from prayers and tithes, while worn.
+- **Scroll of prayer** (Writing: essence + herb): the next shrine is found for sure and gives double faith.
+- **Unlock:** after chapter II (Devotion), while faith is above a threshold.
+
+---
+
+## 13. Open questions
 
 Most questions were decided on 2026-11-11 (see "Decisions" at the top). Still open:
 
