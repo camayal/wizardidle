@@ -12,6 +12,11 @@ What happens to the next wizards after the god wins the final battle and **erase
 - **Easter egg (decided):** an erased wizard appears in the cemetery with his **name reversed and struck through** (~~nilreM~~).
 - **A true death is not an erasure.** A wizard who dies for good in play ("Death management" in `ideas.md`) goes to the cemetery as usual and can come back as a ghost rescuer ([FAITH.md](FAITH.md), 3.2).
 
+## Who is erased, and who is not (the author, 2026-11-12)
+
+- **Erased wizards are only those the god defeats in the final battle.** Only they leave a soul for the next final battles, appear in the cemetery with the name reversed and struck through, and count in `world.erasures`.
+- **Every other wizard who dies at some moment of the game** (a true death when nobody rescues him, or the kill button) is a **regular part of the cemetery**, written normally. **Their role is different:** they belong to the "wizards from the past" ideas (ghost rescuers in [FAITH.md](FAITH.md), letters, legends), never to the souls of the final battle.
+
 ## The idea: every erasure makes the next wizard stronger against you
 
 The loop has a built-in twist: **each time the god wins, the god brings his own end closer.** An erased wizard leaves no soul, but he leaves an **echo in time**, and the next wizard carries it. The god can keep winning, but each win tilts the next final battle toward the wizard, so the loop must end one day, the way the prophecy says.
