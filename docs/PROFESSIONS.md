@@ -193,6 +193,31 @@ The player never presses "craft" or "buy". The wizard follows simple rules, and 
 - **What to use:** the "when" column of the tables in section 4. One item per fight at most, so a fight doesn't become a list of potions.
 - **Faith twist:** below 0 faith he uses potions earlier (he trusts himself, not the god). Above a high faith he sometimes **offers** a crafted item at a shrine instead of gold (more faith than the same value in gold).
 
+### The god's part (the player)
+
+Today the god's only tool is the **touch**, always priced in faith (`src/divine.js`): touch the wizard to heal or revive him, touch the enemy to hurt it, touch the scene at a shrine to ask for a gold tithe (gold to faith). Professions use the same tool.
+
+**Rule: the god never gives orders, only blesses.** No "craft", "buy" or "sell" buttons, and the bag stays view-only. The god acts by touching the scene at the right moment, pays in faith, and a faithless wizard can refuse.
+
+| Moment | God's touch | Effect | Faith |
+|---|---|---|---|
+| He **gathers** (reagent sprite on screen) | Touch the reagent | **Bountiful harvest:** ×2 yield, sometimes a base reagent from another zone | small cost |
+| He **crafts** at rest | Touch the wizard | **Blessed craft:** success guaranteed and the item comes out *blessed* (stronger, golden name, sells for more) | medium cost, more for hard recipes |
+| He **trades** with a vendor | Touch the merchant | **Generous merchant:** better prices. The reverse of the tithe: faith becomes gold | cost grows with the deal |
+| He **visits a shrine** carrying items | Touch the shrine (the tithe touch) | He offers a **crafted item** instead of gold, worth more faith than its gold value; a blessed item is worth double | gains faith |
+| He **chooses his profession** | Touch one trainer | **Sways the choice** towards that trade; the god's only say in it. Only works with faith above 0 | large, once per wizard |
+| He'd **drink a potion** in a fight | Touch the wizard (existing heal) | A divine heal makes him keep the potion for later | same cost as today |
+
+Faith and the story:
+- **Below 0 faith he refuses:** blessing a craft does nothing ("I need no god for this"), and he never offers items at shrines. Crafting stays the faithless wizard's way to survive, so the atheist path keeps working.
+- **Scroll of divine binding** halves the cost of these touches for a while: the one item that makes him easier to help.
+- **Chapter X** (he breaks his bond): every blessed item he carries loses its blessing.
+- **Optional:** a sixth "holy" recipe per profession (holy water, a ring of devotion, a scroll of prayer) that he can only learn while faith is high. It would reward a devout run as potions reward an atheist one.
+
+The two touches that matter most are the **blessed craft** and the **generous merchant**: they spend faith in both directions (to craft better, or to trade for gold), so they have to be tuned together with the faith rebalance.
+
+Code: each touch is a new branch in the scene-touch handlers of `src/divine.js`, checking what is on screen (`run.previousEvent`, `state.npc`) the same way the shrine tithe does. Counters: `bless_gather`, `bless_craft`, `bless_trade`, `offerItem_<item>`, `blessRefused`.
+
 ---
 
 ## 8. The bag (inventory)
@@ -253,7 +278,8 @@ Each step is playable on its own and checked for pace against the previous versi
 ## 12. Open questions
 
 - **One profession or all three?** The old help says one of three, and this plan follows it. Should the wizard ever be able to change trade (at a cost) or learn a second one late in the story?
-- **Who chooses:** the wizard alone (recommended), weighted by his skills? Or should the god get one nudge, for faith?
+- **Who chooses:** the wizard, weighted by his skills, with the god's one paid nudge (the trainer touch)? Or the wizard alone?
+- **God's touches:** are the six in "The god's part" too many? Which ship first (recommended: blessed craft and generous merchant)? Should the holy recipes exist?
 - **Scarcity:** keep 2 zones per reagent (code today) or go back to the sheet's 1 zone for the bases and 3 for the rest?
 - **Dunes and Volcano** have no reagent: leave them empty, give them existing ones (bone for the Dunes, gem for the Volcano), or add a seventh reagent (ash, ember) for a later recipe?
 - **Rings wear out** (recommended, to keep the trade useful) or last forever?
