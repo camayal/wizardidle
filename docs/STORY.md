@@ -1,68 +1,77 @@
 # The story: script per chapter
 
-Stage 3 of the roadmap. This is the text for every chapter scroll and the console lines between chapters, revised from the author's 2018 arc (`wizardidle-old-ideas/historiaperlevel.txt`, summarised in [ideas.md](../ideas.md)). It is a script, not code: `src/story.js` still holds only the Prologue, I and II.
+Stage 3 of the roadmap. This is the text for every chapter scroll, the console lines between chapters, the deaths and the two endings, revised from the author's 2018 arc (`wizardidle-old-ideas/historiaperlevel.txt`, summarised in [ideas.md](../ideas.md)). It is a script, not code: `src/story.js` still holds only the Prologue, I and II. The final battle's mechanics (souls of erased wizards, the rewind) are planned in [ERASURE.md](ERASURE.md); faith, rescuers and true death in [FAITH.md](FAITH.md).
 
 ## Decisions
 
 Decided by the author on 2026-11-12, one question at a time.
 
-| Question | Decision | What it means for the text |
-|---|---|---|
-| Voice | **The scroll speaks to you, the god** | Second person. The player *is* the wizard's god (divine touch, faith), so when he turns on "you" it lands on the player. |
-| Arc | **Free to revise** | The 2018 beats are inspiration; the structure below reworks them. |
-| Hooks | **A secret behind the exile, a recurring stranger, a cliffhanger last line** | Every scroll ends on an open question or a threat. |
-| The secret | **A prophecy** | The seers foretold that an exile would kill a god. Midas exiled him instead of killing him, hoping exile would make him small. |
-| The stranger | **Your mask** | A hooded healer who keeps crossing his path is the god (the player) walking among mortals. |
-| Ending | **Two endings, by who dies** | The final heal-or-hit buttons decide: one epilogue if the wizard falls, another if the god falls. |
-| Length | **Short scrolls + console beats** | About 40–80 words per scroll, plus 1–2 console lines at the events between chapters. |
-| Staffs | **One staff that changes** | One relic for the whole game: cracked (60) → sacred (90) → corrupt (130) → torn away (149) → reforged as *Nomaleatorio* (200). Replaces the four separate staffs of 2018. |
-| Prophecy reveal | **In pieces, complete at VII** | A fragment in III, another on the red rune (128), sorceresses flee (139), dying Midas says it (VII); the full verse closes XI. |
-| IX → X | **He finds out who watched** | IX: the hooded healer nurses him back to faith. X: he recognises the hands that didn't move at the lynching. |
-| God's motive | **You fear the prophecy** | You keep him devoted so he never turns, and let the mob break him when he grows too strong. That abandonment is what makes him your killer. |
+| Question | Decision |
+|---|---|
+| Voice | **The scroll speaks to you, the god.** The player *is* the wizard's god (divine touch, faith), so when he turns on "you" it lands on the player. |
+| Arc | **Free to revise**; the 2018 beats are inspiration. |
+| Hooks | **A secret behind the exile, a recurring stranger, a cliffhanger last line.** |
+| The world | **Hyperpolytheist:** a hundred gods. Midas has his own; the wizard prays to you, the "wrong god". |
+| The secret | **A prophecy:** an exile heard by a single god will strike a god down and rise as **the Omni, god of gods**. The dead hunger for his soul, but **only a crown can feed them**, and the crown that bends his road is cursed forever. |
+| Why exile, not death | **Midas wanted no part in it:** killing him would feed the dead and bring the curse. He exiled him and never touched him. |
+| Midas's fate | **The curse found him:** exile counted as bending his road. The boy he spared kills him (VII). |
+| The stranger | **Your mask:** the hooded healer (already in the game: the divine revive leads to his cabin) is you, the god. |
+| Your motive | **He is your believer, and you believe prophecies can change.** |
+| The lynching | **A gamble to change fate:** you held back on purpose, betting a broken man would never strike a god, ready to catch him at the edge. |
+| The afterlife gods | **They court him:** they planted the staff, and after the lynching they whisper, "We would never have watched." |
+| The staff | **One staff that changes**, made by the dead: cracked (60), seems sacred (90), shows its makers in the lava (130), carried off by the seer (149), reforged as *Nomaleatorio* (200). |
+| Prophecy reveal | **In pieces:** III, the red rune (128), Midas at VII; the seer gives the last line at XI. |
+| Deaths in play | **Falls, not deaths:** he lies injured, almost dead (a new sprite on the ground; the planner is looking for one). Your touch sends the hooded healer; otherwise a rescuer (FAITH.md). Rarely nobody comes: a **true death**, and his soul waits in purgatory until the end of days. |
+| V vs IX | **V is a moral shock** (guilt for the harm he did). **IX is depression and questions:** why didn't you protect me? X answers it. |
+| The seer | **Guards the staff in Heidan** and gives it up at XI. **She sees the loops:** in echo games she counts your rewinds. |
+| The Tower at 139 | **The corrupt staff drags him there**, hungry for a king. |
+| Self-crowning (XI) | **A dark irony:** by crowning himself he bends his own road and calls the curse on himself (harder XI). |
+| Ending: you win | **You unmake his soul.** The game ends, a museum, then a new wizard: for a god time is nothing, so a new game is you going back in time. The cemetery shows his name **reversed and struck through**. |
+| Ending: he wins | **He becomes the Omni and engulfs the universe** to make a new one. The save becomes a **black museum, blocked forever**: chapter scrolls, snapshots of each chapter's moment, stats, map. |
+| Echoes | **Small echoes, only after an erasure:** a different Prologue and a few déjà vu lines. Never after a true death or the kill button. |
+| Final battle | The souls of erased wizards help him, **one by one** (ERASURE.md); the museum's final snapshot shows them. |
+| Length | **Short scrolls + console beats.** |
 
-**Small choices made while writing** (change any of them freely):
-- The rare sorceress who leads the lynching (`la_hechicera7`) is **the seer who wrote the prophecy**.
-- The reforged staff takes the old name ***Nomaleatorio*** ("not random"), and the text plays on it.
-- Midas misread the prophecy: the Tower calls him divine, so he thought *he* was the god.
-- The wizard is "he", as the existing code already prints.
-- Titles keep the 2018 ones where they existed; I is *The Exile*, III is *Knowledge*.
+**Small choices made while writing** (change any freely): the wizard is "he", as the code already prints; Midas's last words; the staff's name *Nomaleatorio* ("not random") and the line playing on it.
 
 ## The prophecy
 
-Revealed in pieces. Only the last chapter shows it whole.
-
-> The king shall cast him out.
-> A god alone will hear him.
-> And the hand that prayed
-> shall strike the one who answered.
+> An exile, heard by a single god,
+> shall strike a god down
+> and rise as the Omni, god of gods.
+> The dead will hunger for his soul,
+> but only a crown can feed them.
+> And the crown that bends his road
+> shall be hunted by chaos and misfortune, without end.
 
 | Where | What the player learns |
 |---|---|
-| I (10) | Midas read the sentence himself, which kings never do |
-| III (50) | A seers' mark on his exile scroll: *"A god alone will hear him."* |
-| 128 | The red rune: *"…the hand that prayed shall strike…"* |
-| 139 | Sorceresses see his face and flee, whispering a verse |
-| VII (140) | Dying Midas: *"They said you would kill a god."* |
-| XI (200) | The full verse: *"…the one who answered."* (you) |
+| I (10) | Midas read the sentence himself and never looked at him |
+| III (50) | On the exile scroll: *"An exile, heard by a single god…"* |
+| 128 | The red rune: *"…shall strike a god down…"* |
+| 139 | Sorceresses flee from his face, whispering a verse |
+| VII (140) | Midas: the crown that feeds the dead, the road that was bent |
+| XI (200) | The seer: *"…and rise as the Omni."* |
+| Museum | The whole verse |
 
-## The stranger
+## The stranger (you)
 
 | Where | Sighting |
 |---|---|
-| II (30) | A hooded stranger bandages his arm and smiles as if he already knew your name |
-| 40 | Watches from the edge of the forest |
-| 70 | Leaves bread and bandages at his camp |
-| V (110) | *"You pray well. Does anyone ever answer?"* |
+| I (10) | A hooded healer carries him to a cabin he can never find again |
+| II (30) | Bandages his arm, smiles as if he already knew your name |
+| 40, 70 | Watches from the forest; leaves bread and bandages |
+| V (110) | "Guilt is a kind of prayer. Who are you praying to now?" |
 | 120 | Kneels at a shrine. Who does he pray to? |
-| VIII (149) | Watches the lynching from behind the crowd and doesn't move |
-| IX (160) | Stays at his side as a healer and friend |
-| 170 | Hums a hymn of yours that the wizard never taught him |
+| VIII (149) | Watches the lynching, hands folded, and does not move |
+| IX (160) | Never leaves his side; becomes his friend |
+| 170 | Hums one of your hymns |
 | X (190) | The wizard recognises his hands |
-| Finale | The healer blocks the road; the hood falls; your face |
+| Final battle | Blocks the road; the hood falls; your face |
 
 ## Fitting the screen
 
-The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roughly 40–45 characters per line of centred Munro, and 22–25 lines under the title on desktop and phones. About 110–140 words fill it without scrolling. Every scroll below is 38–77 words, so it fits with room to breathe. Line breaks mark paragraphs (`<br><br>` in code); `{name}` is `wizardName()`.
+The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roughly 40–45 characters per line of centred Munro, and 22–25 lines under the title on desktop and phones. About 110–140 words fill it without scrolling; every scroll below is shorter. Line breaks mark paragraphs (`<br><br>` in code); `{name}` is `wizardName()`; *(echo)* lines show only when `world.erasures.length > 0`.
 
 ---
 
@@ -72,7 +81,7 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 
 > You heard him first.
 >
-> A whisper in the Tower of Midas, where magic is law and no one prays.
+> A whisper in the Tower of Midas, where a hundred gods are worshipped and you are not one of them.
 >
 > For that whisper, his king cast him out.
 >
@@ -82,22 +91,36 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 >
 > Are you?
 
+### Prologue, after an erasure (echo)
+
+> You have heard him before.
+>
+> You will hear him again.
+>
+> A whisper in the Tower of Midas. A king who will not touch him. A road beyond the gates.
+>
+> Time is nothing to you. To him, it is everything.
+>
+> Will this one win?
+
 ### Chapter I: The Exile (lvl 10)
 
-> Ten days beyond the gates, and the meadow has taught him what the Tower never did: hunger, fear, the weight of a staff swung in anger.
+> The meadow has taught him what the Tower never did: hunger, fear, the weight of a staff swung in anger.
 >
-> He talks to you at night. Small things. The cold. The wolves. Why Midas read the sentence himself, when kings never do.
+> He talks to you at night. Small things. The cold. The wolves. Why Midas read the sentence himself, and never once looked at him.
 >
-> You do not answer. Not yet.
+> Every time he falls, a hooded healer carries him to a cabin he can never find again.
 >
-> But every time he falls, something lifts him back up.
+> He doesn't know it's you.
 >
-> He has started to wonder who.
+> He has started to wonder.
+
+**Echo (console, first divine revive):** The hooded healer pauses at the door, as if he had done this before.
 
 ### Chapter II: Devotion (lvl 30)
 *Event (exists): the altar, faith ×2, the Divine crosier.*
 
-> He found your shrine half-buried in moss, in a land where no one remembers your name.
+> He found your shrine half-buried in moss, in a land of a hundred gods where no one remembers your name.
 >
 > He knelt, and for the first time you let him feel you. Warmth. A Divine crosier in his hands.
 >
@@ -118,83 +141,87 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 >
 > That is where he finds it. A seers' mark in red wax beneath the king's seal, and words too small to be meant for him:
 >
-> *"A god alone will hear him."*
+> *"An exile, heard by a single god…"*
 >
 > Seers do not sign the sentences of apprentices.
 >
 > Why was he worth a prophecy?
 
-**Console, lvl 60 (event):** {name} pulls a cracked staff from a dead man's grip. · The wood is cold, and old, and humming.
+**Console, lvl 60 (event):** {name} pulls a cracked staff from a dead man's grip. · The wood is cold, and old, and humming. · The dead man is smiling.
 
 **Console, lvl 70:** Someone left bread and bandages by {name}'s camp. · The footprints lead nowhere.
 
 **Console, lvl 80 (event):** The cracked staff splits in {name}'s hands. · Something inside it is glowing.
 
 ### Chapter IV: The Forbidden (lvl 90)
-*Event: the staff becomes sacred.*
+*Event: the staff seems sacred.*
 
 > The staff woke tonight.
 >
-> Light ran through the cracks like blood through veins, and the wood healed itself in his hands. Sacred. Older than the Tower, older than Midas.
+> Light ran through the cracks like blood through veins, and the wood healed itself in his hands. It feels sacred. It feels like you.
 >
-> You know this staff. It was made for your chosen. It was also made to kill.
+> It is not yours.
+>
+> You search every shrine and every memory, and you cannot say whose it is.
 >
 > {name} sleeps with it across his chest, and dreams of thrones.
 >
-> You watch him dream, and for the first time, you are uneasy.
+> You watch him dream, and for the first time, you are afraid.
 
-**Console, lvl 100 (event):** {name} masters the sacred staff. Enemies fall faster. · Every death costs him a little faith. He doesn't seem to notice.
+**Console, lvl 100 (event):** {name} masters the staff. Enemies fall faster. · Every death costs him a little faith. He doesn't seem to notice.
 
 ### Chapter V: Repentance (lvl 110)
-*Event: damage bonus and faith loss removed; faith rises again, less than in II.*
+*Event: damage bonus and faith loss removed; faith rises again, less than in II. A moral shock.*
 
-> The staff drinks a little of his faith with every life it takes. He noticed, at last.
+> Today he killed a creature that was only guarding its young.
 >
-> Tonight he buried the dead he made, and asked you to forgive him.
+> He saw it too late. The staff hummed with pleasure.
 >
-> The hooded stranger found him at the graves.
+> He buried every one he had killed that week, and said their names, not yours. He has no right to your forgiveness, he says. Only theirs.
 >
-> "You pray well," he said. "Does anyone ever answer?"
+> The hooded stranger watched him dig.
 >
-> {name} said yes.
+> "Guilt is a kind of prayer," he said. "Who are you praying to now?"
 >
-> The stranger looked up at the sky for a long time, as if he were listening for you too.
+> That night, the staff whispered back.
 
 **Console, lvl 120:** {name} sees the hooded stranger kneeling at a shrine. · Who does he pray to?
 
-**Console, lvl 128 (event, red rune):** {name} finds a red rune in the ash. · Half a verse is burned into it: *"…the hand that prayed shall strike…"* · On the back, a map: a mountain made of fire.
+**Console, lvl 128 (event, red rune):** {name} finds a red rune in the ash. · Words are burned into it: *"…shall strike a god down…"* · On the back, a map: a mountain made of fire.
 
 **Console, lvl 129 (event, volcano):** The rune burns in his palm and drags him into the Volcano. · He can't leave until the mountain gives back what it hid.
 
 ### Chapter VI: Corruption (lvl 130)
-*Event: ×2–3 damage, no altars, faith only falls, teleports and heals instead of dying.*
+*Event: ×2–3 damage, no altars, faith only falls; when he falls, the staff raises him.*
 
 > At the heart of the Volcano, he held the staff over the lava and let it drink.
 >
+> In the fire, the staff remembered who made it. Not you. The dead had been patient.
+>
 > It came out black and red, and it no longer asked for faith. It took it.
 >
-> He doesn't kneel at your shrines anymore. When death reaches for him, the staff tears him away and stitches him whole.
+> He doesn't kneel at your shrines anymore. When he falls, the staff drags him up again.
 >
-> He doesn't need you.
+> *…shall strike a god down.*
 >
-> Somewhere, a verse is finishing itself. *The hand that prayed shall strike…*
->
-> Strike whom?
+> Which god?
 
-**Console, lvl 139 (event, tower):** {name} appears in the Tower of Midas. The doors seal behind him. · Sorceresses see his face and flee, whispering a verse.
+**Console, lvl 139 (event, tower):** The staff pulls {name} through ash and stone. · He stands in the Tower of Midas. The doors seal. · The staff is hungry for a king. · Sorceresses see his face and flee, whispering a verse.
 
 ### Chapter VII: The Ascent (lvl 140)
-*Event: Midas is dead; the god can no longer revive him; no mages in the City or the Tower.*
+*Event: Midas is dead; no mages in the City or the Tower.*
 
 > Midas fell on the steps of his own throne.
 >
-> "They said you would kill a god," the king whispered. "The Tower calls me divine. I thought they meant me."
+> "I never touched you," the king whispered. "I only sent you away. I would not be the crown that fed you to the dead."
 >
-> He laughed, and blood ran into his beard. "I was wrong about which god."
+> He laughed, and blood ran into his beard. "The seers said *bends his road*. Exile is a road too."
 >
-> {name} drank the king's essence before it could rise. Now not even you can call him back from death.
+> The curse had come home, in the shape of the boy he spared.
 >
-> The mages are leaving the Tower. He is alone with a crown, and a question.
+> The mages are leaving the Tower. {name} sits below an empty throne, and wonders what else they hid from him.
+
+**Echo (console, when Midas appears):** Midas frowns at {name}, as if trying to remember a dream.
 
 ### Chapter VIII, Part I: Overthrow (lvl 149)
 *Event: the lynching. The seer's curse (no healing), only battles, no loot.*
@@ -207,33 +234,35 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 >
 > He calls your name between every blow.
 >
-> Far behind the crowd, a hooded figure watches, and does not move.
+> Far behind the crowd, a hooded figure watches, hands folded, and does not move.
+
+**Echo (console, as the lynching starts):** The seer stares at him a long moment. · "Again," she whispers. "How many times, god?" · *(if `world.loop` > 1: "This is the {loop}th.")*
 
 ### Chapter VIII, Part II: The Escape (on death during the lynching)
-*Event: up to lvl 150; the staff is lost; achievement "lynched".*
+*Event: up to lvl 150; the seer carries the staff away; achievement "lynched".*
 
-> They tore the staff from his hands. They were drinking his essence when he vanished with the last of his strength.
+> They tore the staff from his hands, and the seer carried it away.
 >
-> He woke in the mud, alive, and remembered nothing but the silence.
+> He crawled out of the mud at nightfall, alive, and remembered one thing: the folded hands of a hooded man who never moved.
 >
 > You could have stopped them. A word. A touch.
 >
-> But you have heard the seers too.
+> But a broken man might never strike a god, and you were ready to catch him at the edge.
 >
-> Better a broken believer than a god-killer.
+> You told yourself it was mercy.
 >
-> That is what you tell yourself.
+> It was a gamble.
 
-**Console, lvl 150–159 (at shrines, faith above 0):** {name} prays at the shrine. Nothing answers.
+**Console, lvl 150–159 (at shrines):** {name} prays at the shrine. Nothing answers.
 
 ### Chapter IX: Vindication (lvl 160)
-*Event: gains faith again, everything back to normal.*
+*Event: gains faith again, everything back to normal. Depression and questions.*
 
-> He came back to you on his knees, like the apprentice he once was.
+> He has stopped fighting the way he used to. He walks, he falls, he gets up.
 >
-> And this time, you answered. Faith filled him again.
+> At night he asks you one thing, again and again: why didn't you protect me?
 >
-> The hooded healer stays at his side now. He cleans the wounds, shares his bread, says little.
+> The hooded healer has not left his side since the mud. He cleans the wounds, shares his bread, says little.
 >
 > {name} calls him friend. The first since the Tower.
 >
@@ -244,72 +273,109 @@ The scroll font is `0.04 × objectSize`, so the scroll is about 25 em wide: roug
 **Console, lvl 170:** The healer hums a hymn while he works. · It's one of yours. {name} never taught it to him.
 
 ### Chapter X: Disobedience (lvl 190)
-*Event: refuses all help, no altars, no faith, teleports and heals instead of dying, more bosses.*
+*Event: refuses all help, no altars, no faith, more bosses.*
 
 > He knew those hands.
 >
-> They had not moved while the mob cursed him. They had not moved while he called your name.
+> Folded, behind the crowd, while the seer cursed him and he called your name.
+>
+> His question had an answer after all.
 >
 > The healer was gone by morning. So was his prayer.
 >
-> He is hunting for his staff now, and its true name. When death comes for him, he simply refuses it.
+> In the silence you left, a voice from below found him: "We would never have watched."
 >
-> He has stopped asking whether you are listening.
->
-> He hopes you are.
+> He has stopped asking whether you are listening. He hopes you are.
 
-**Console, lvl 199 (event, Heidan):** {name} learns where the mages hid his staff: Heidan. · He walks to Heidan. He will not leave without it.
+**Console, lvl 199 (event, Heidan):** {name} learns where the seer took his staff: Heidan. · He walks to Heidan. He will not leave without it.
 
 ### Chapter XI: The Return of the King (lvl 200)
-*Event: ×2–3 damage, faith icon gone, XP bar full and dark red, the healer can appear.*
+*Event: ×2–3 damage, faith icon gone, XP bar full and dark red, more bosses and the Megaboss (the curse), the healer can appear.*
 
-> In Heidan he found the staff in pieces, and reforged it in his own blood.
+> The seer was waiting in Heidan, the staff across her knees.
 >
-> It told him its true name: Nomaleatorio. Nothing about this was ever random.
+> "I wrote you," she said. "I cannot unwrite you." She told him its true name: Nomaleatorio. Nothing about this was ever random.
 >
-> He crowned himself in the ruins. King of the exiles. King of no one.
+> He reforged it in his own blood and set a crown of ash on his head.
 >
-> And now the whole verse is his:
+> "Take the crown and you take the curse," she warned. He put it on anyway.
 >
-> *The king shall cast him out. A god alone will hear him. And the hand that prayed shall strike the one who answered.*
+> *…and rise as the Omni.*
 >
 > He is coming for you.
 
-### The final battle (console)
+---
+
+## Falls and deaths (console)
+
+| Moment | Lines |
+|---|---|
+| He falls (any time) | {name} falls, broken, at the edge of the gray. |
+| Your touch | A hooded healer lifts him and carries him away. *(then the cabin event, as today)* |
+| A rescuer comes | One line per rescuer, in FAITH.md (caravan, shaman, gravedigger, ghost, potion, alone). |
+| He falls, after X | Something cold kneels beside him. "Let us carry you." · He gets up alone. |
+
+### True death (rare: nobody comes)
+*Skull sprite, cemetery record with the cause, back to the name screen (FAITH.md / ideas.md "a wizard can really die"). Not an erasure: no echoes.*
+
+> No one came.
+>
+> Not the caravans, not the shamans, not you.
+>
+> {name} lies still at the edge of the gray, where souls wait until the end of days.
+>
+> For you, god, time is nothing.
+>
+> For the world, it is everything.
+>
+> Somewhere, another apprentice is already whispering.
+
+## The final battle (console)
 
 - **The healer appears:** A hooded healer blocks the road. · "You don't have to do this," says a voice {name} knows.
-- **The healer dies:** The hood falls. Beneath it, your face. · The sky tears open. You step down to meet him.
-- **Heal-or-hit buttons:** the player chooses, every second, whether to save the wizard or strike.
+- **A soul enters** (one by one, one per erasure, up to 5; ERASURE.md): The air cracks. A translucent wizard steps beside {name}. · {reversedName}. You erased him once. · He remembers.
+- **The healer falls:** The hood falls. Beneath it, your face. · The sky tears open. You step down to meet him.
+- **Each round:** the wizard attacks, the souls attack, then you choose: heal or hit.
 
-### Epilogue: if the wizard falls
+### Epilogue: if you win
+
+*Then the museum (scrolls, snapshots, stats, map), the cemetery shows his name reversed and struck through, and a new wizard can begin: the echo game.*
 
 > He fell at your feet, still holding the staff.
 >
-> The seers were wrong. Or you made them wrong.
+> Below, the dead reached for him. You were faster. You always were.
 >
-> You lift him one last time, gently, the way you did when he was an apprentice who knew nothing.
+> You took his soul in your own hands, and unmade it.
 >
-> There is no one left who prays to you.
+> The prophecy is broken. You were right.
 >
-> You are alone again.
+> No one prays to you now.
+>
+> But time is nothing to you. You could hear him again.
 
-### Epilogue: if the god falls
+### Epilogue: if he wins
 
-> The prophecy is kept.
+*Then the black museum, blocked forever: outside a scroll, the scene and the console are one black mass.*
+
+> The hand that prayed has struck its god down.
 >
-> {name} sits on an empty throne at the top of the world, waiting for a voice that will never come again.
+> He rose as the Omni, and the dead came to collect him. He swallowed them. Then the gods. Then the Tower, the meadow, the stars, the last of the light.
 >
-> For the first time since the Tower, he prays.
+> Nothing is left but him, and a universe waiting to be made.
 >
-> No one hears him.
+> Your story ends here.
+>
+> His is just beginning.
 
 ---
 
 ## Notes for the code (stage 3)
 
 - **Fix the chapter keys:** `lvl60`/`lvl90` appear twice (the second pair is IX and X: `lvl160`, `lvl190`), `lvl99` → `lvl199`, `lv200` → `lvl200`. Already recorded in the roadmap.
-- **Console beats need their own entries:** levels 40, 70, 120, 150–159 (shrine) and 170 have no chapter today. Either add `text: 'NA'` entries that print, or a separate `beats` table keyed by level, so chapters stay readable.
-- **Two epilogues:** `specialEnd` becomes `endWizardFalls` and `endGodFalls`, picked by who dies in the final battle.
-- **One staff:** the 2018 events at 60/80/90/130/149/200 now refer to the same item; it can be shown in the stats or inventory with its current state.
-- **Chapter II already varies its console line** with the divine touches used; that stays, but the scroll text is the same for everyone (the author didn't pick "your play shapes the text").
-- **Scroll format:** title in `.titles`, the subtitle under it, then short `<br><br>` paragraphs; the cliffhanger line can use `.subtitles` (dark red, bold) for weight.
+- **Console beats** (40, 60, 70, 80, 100, 120, 128, 129, 139, 150–159, 170, 199) go in a separate `beats` table keyed by level, so chapters stay readable.
+- **Echo lines** read `world.erasures.length > 0` and `world.loop` (ERASURE.md). Never shown after a true death or the kill button.
+- **Falls:** the skull (`img/muerto.png`) is kept for a true death; a fall needs a sprite of the wizard lying injured (asked of the planner).
+- **Snapshots for the museums:** at each chapter save a small record (zone, background, NPC, level, key stats), not an image, so the save stays small. The final battle's snapshot includes the souls.
+- **Two epilogues:** `specialEnd` becomes `endGodWins` (museum, then a new wizard) and `endOmni` (black museum, the app blocked forever).
+- **Dropped from 2018:** drinking Midas's essence so the god can't revive him (the falls model replaces it); Midas becoming the Tower's boss.
+- **Scroll format:** title in `.titles`, the subtitle under it, short `<br><br>` paragraphs; the last line can use `.subtitles` (dark red, bold).

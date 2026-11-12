@@ -41,7 +41,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-10 | Offline mode: network first for code, stored copy first for art and sound, new cache per release | Online players always get the newest version; offline still plays; old versions don't linger |
 | 2026-11-11 | Route after 2.0.0: 1 clean up the code, 2 modern and faster, 3 the story, 4 new features | The author's order: a clean, fast base before adding content |
 | 2026-11-11 | CHANGELOG is a flat list of short bullets per version, no narrative or subtitles | The author's preference for readability |
-| 2026-11-12 | Story script revised: the scroll speaks to you (the god), a prophecy behind the exile, a hooded stranger who is your mask, one staff that changes, two endings by who dies | Decided one question at a time; full list and the text in [docs/STORY.md](docs/STORY.md) |
+| 2026-11-12 | Story script revised: the scroll speaks to you (the god), a prophecy of the Omni behind the exile, the hooded healer is your mask, one staff made by the dead, falls instead of deaths, two endings (you unmake him and rewind time, or he becomes the Omni) | Decided one question at a time; full list and the text in [docs/STORY.md](docs/STORY.md) |
 
 ## Ideas backlog
 
@@ -181,6 +181,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Story reviewed for plot holes, then rewritten
+- Recapped the arc and listed its weak spots (why Midas didn't kill him, who planted the staff, death rules, V and IX repeating, the seer vanishing, the Tower at 139, the self-crowning). The author answered each one; [docs/STORY.md](docs/STORY.md) rewritten with the decisions table.
+- New lore from the author: a hyperpolytheist world; the prophecy names **the Omni, god of gods**; the dead hunger for his soul but only a crown can feed them, and a crown that bends his road is cursed (so Midas exiled him and was cursed anyway); deaths in play are falls; a rare true death leaves the soul in purgatory; if the god wins he unmakes the soul and rewinds time (echo games, reversed struck-through names in the cemetery); if the wizard wins he engulfs the universe and the save becomes a black museum, blocked forever.
+- Coordinated with the planner: [docs/ERASURE.md](docs/ERASURE.md) (souls of erased wizards in the final battle, one by one, shown in the museum; echoes only after an erasure) and a request for a sprite of the wizard lying injured.
 
 ### 2026-11-12: The story is scripted
 - Wrote [docs/STORY.md](docs/STORY.md) on branch `plan/story`: the text of every chapter scroll (Prologue to XI, both epilogues) and the console lines between them. 38–77 words each, so every scroll fits the screen without scrolling (it holds about 110–140).
