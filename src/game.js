@@ -10,7 +10,7 @@ import { randomName } from './combat.js';
 import { event, nextEvent } from './events.js';
 import { levelUP } from './wizard.js';
 import { playSound } from './audio.js';
-import { loadCanvasChar, print, showStage, updateHeading, wizardName } from './ui/render.js';
+import { drawWizard, print, showStage, updateHeading, wizardName } from './ui/render.js';
 import { defineObjectSize, getEM } from './ui/layout.js';
 import { el } from './ui/dom.js';
 
@@ -52,11 +52,11 @@ run.pause = false;
 
 run.afterChapterExe = false;
 //vars icons
-ui.goldIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/gold.png'/> ";
+ui.goldIcon = `<img class='imgInConsole' height='${ui.em}' src='img/gold.png'/> `;
 
-ui.spiritIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/spirit.png'/> ";
-ui.attackIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/attack.png'/> ";
-ui.healIcon = "<img class='imgInConsole' height='" + ui.em + "' src='img/heal.png'/> ";
+ui.spiritIcon = `<img class='imgInConsole' height='${ui.em}' src='img/spirit.png'/> `;
+ui.attackIcon = `<img class='imgInConsole' height='${ui.em}' src='img/attack.png'/> `;
+ui.healIcon = `<img class='imgInConsole' height='${ui.em}' src='img/heal.png'/> `;
 
 
 
@@ -76,10 +76,10 @@ function start() {
         state.player.hp = state.player.hpBase * 0.1;
             const feperdida = state.player.hpBase * 0.25;
             state.player.faith = state.player.faith - feperdida
-        print(wizardName() + " " + "loses hope in you and tries to restore himself (" + ui.spiritIcon + "-" +  roundNumbertoLetter(feperdida) + ")");
+        print(`${wizardName()} loses hope in you and tries to restore himself (${ui.spiritIcon}-${roundNumbertoLetter(feperdida)})`);
     }
     updateHeading();
-    loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+    drawWizard();
     showStage();
     //load previous locality random scenaria
     nextEvent();

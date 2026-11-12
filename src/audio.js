@@ -11,7 +11,7 @@ function playSound(ogg, volume = 0.3){
     //avoid sound in speed debug
     if(masterTime < 500){return}
 
-    ui.audio = new Audio("ogg/" + ogg + ".ogg");
+    ui.audio = new Audio(`ogg/${ogg}.ogg`);
     ui.audio.volume = volume;
     const promise = ui.audio.play();
     //avoid autoplay policy error

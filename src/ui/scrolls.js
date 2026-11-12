@@ -35,7 +35,7 @@ function counterList(prefix, inObj = ""){
         if (!key.startsWith(prefix)) continue;
         const text = key.slice(prefix.length);
         const entry = inObj == "" ? (enemyTypes[text] || zones[text]) : { statObj, statueObj }[inObj][text];
-        out += capitalize(entry.name) + " (" + value + "), ";
+        out += `${capitalize(entry.name)} (${value}), `;
     }
     return out.slice(0,-2);
 }
@@ -66,14 +66,14 @@ function scrollClose(){
     ui.scrollCurrentContent = "";
     playSound("scroll");
     el("btnClose").style.display = "none";
-    el("btnClose").style.top = ui.objectSize * 0.065 + "px";
+    el("btnClose").style.top = `${ui.objectSize * 0.065}px`;
     const content = el("scrollText");
     const scrollBack = el("scrollBackCenter");
     const sbd =  el("scrollBackDown");
 
-    scrollBack.style.minHeight = 0 + "px";
-    content.style.minHeight = 0 + "px";
-    sbd.style.top = ui.objectSize * 0.02 + "px";
+    scrollBack.style.minHeight = `${0}px`;
+    content.style.minHeight = `${0}px`;
+    sbd.style.top = `${ui.objectSize * 0.02}px`;
 
     //crate a event that listen the css transition, and after that remove the listener in hideScrollContent
     scrollBack.addEventListener("transitionend", hideScrollContent);
@@ -101,14 +101,14 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
     disableMainButtons()
     el("scrollBackUp").style.opacity = 1;
     const sbd =  el("scrollBackDown");
-    sbd.style.top = ui.objectSize * 0.02 + "px";
+    sbd.style.top = `${ui.objectSize * 0.02}px`;
     sbd.style.opacity = 1;
 
 
     el("scroll").style.zIndex = 150;
-    scrollBack.style.minHeight = height * 0.97 + "px";
-    content.style.minHeight = height * 0.92 + "px";
-    sbd.style.top = height * 0.97 + "px";
+    scrollBack.style.minHeight = `${height * 0.97}px`;
+    content.style.minHeight = `${height * 0.92}px`;
+    sbd.style.top = `${height * 0.97}px`;
 
     scrollBack.addEventListener("transitionend", showCloseButton);
 	
@@ -131,14 +131,14 @@ function localizarBocadillo(){
         }
         if(!ui.currentBackGround.match(/_altar/) && !ui.currentBackGround.match(/_estatua/)){
         const localidad = places[ui.currentBackGround];
-        el("zoneMap").innerHTML= "The " + zones[state.zone.current].name;
+        el("zoneMap").innerHTML= `The ${zones[state.zone.current].name}`;
         const mapWidth = el("backMapa").style.width;
         el("bocadilloMapa").style.display ="block";
         el("pjMapa").style.display ="block";
-        el("bocadilloMapa").style.left = parseInt(mapWidth) * localidad.x + "px";
-        el("bocadilloMapa").style.top = parseInt(mapWidth) * localidad.y + "px";
-        el("pjMapa").style.left = parseInt(mapWidth) * localidad.x * 1.01 + "px";
-        el("pjMapa").style.top = parseInt(mapWidth) * localidad.y * 0.98 + "px";
+        el("bocadilloMapa").style.left = `${parseInt(mapWidth) * localidad.x}px`;
+        el("bocadilloMapa").style.top = `${parseInt(mapWidth) * localidad.y}px`;
+        el("pjMapa").style.left = `${parseInt(mapWidth) * localidad.x * 1.01}px`;
+        el("pjMapa").style.top = `${parseInt(mapWidth) * localidad.y * 0.98}px`;
         }else{
             el("bocadilloMapa").style.display ="none";
             el("pjMapa").style.display ="none";
@@ -174,7 +174,7 @@ function enableMainButtons() {
 function cemeteryText(){
     const dateOptions = {year: 'numeric', month: 'long', day: 'numeric'};
     return world.cemetery.map(function(w){
-        return w.name + " (lvl: " + roundNumbertoLetter(w.lvl) + ") died at the age of " + roundNumbertoLetter(w.age) + ". " +
+        return `${w.name} (lvl: ${roundNumbertoLetter(w.lvl)}) died at the age of ${roundNumbertoLetter(w.age)}. ` +
             new Date(w.born).toLocaleDateString("en", dateOptions) + " - " + new Date(w.died).toLocaleDateString("en", dateOptions) + "<br>";
     }).join("");
 }
@@ -195,19 +195,19 @@ function updateAchievements(){
     txt += achievementList();
     txt += "</div>"
     el('innerTextScroll').innerHTML=txt;
-    el("titleAchievements").style.fontSize = ui.em * 2.5 + "px";
-    el("titleAchievements").style.lineHeight = ui.em * 2.5 + "px";  
+    el("titleAchievements").style.fontSize = `${ui.em * 2.5}px`;
+    el("titleAchievements").style.lineHeight = `${ui.em * 2.5}px`;  
 
 }
 
 // One "Label: value" line of the stats page.
 function statLine(label, value) {
-    return label + ": " + value + "<br>";
+    return `${label}: ${value}<br>`;
 }
 
 // A section title of the stats page.
 function statSection(title) {
-    return "<br><span class='subtitles'>" + title + "</span><br>";
+    return `<br><span class='subtitles'>${title}</span><br>`;
 }
 
 // Zones in the order the stats page lists them.
@@ -245,9 +245,9 @@ function statsBattles() {
         statLine("Rare encounters", counterText("rareEnemyEncounters")) +
         statLine("Rare defeated", counterText("rareEnemiesKilled")) +
         (counterText("enemyEncounters") > 0 ? statLine("Types of enemies found", counterList("enemy_")) : "") +
-        "Bosses found: " + counterText("Bosses") + (counterText("Bosses") > 0 ? " {" + counterList("typeBoss_") + "}" : "") + "<br>" +
+        "Bosses found: " + counterText("Bosses") + (counterText("Bosses") > 0 ? ` {${counterList("typeBoss_")}}` : "") + "<br>" +
         statLine("Bosses defeated", counterText("BossesKilled")) +
-        (hydras ? "Hydras found: " + counterText("Hydras") + " {" + counterList("typeofHydras_") + "}<br>" : "") +
+        (hydras ? `Hydras found: ${counterText("Hydras")} {${counterList("typeofHydras_")}}<br>` : "") +
         (hydras ? statLine("Hydras defeated", counterText("HydrasKilled")) : "") +
         (hydras ? statLine("Hydras heads chopped off", counterText("HydrasHeadCut")) : "") +
         statLine("Falls", counterText("Deaths")) +
@@ -261,7 +261,7 @@ function statsMagic() {
         statLine("Known spells", countSpellKnown()) +
         statLine("Arcane spells cast", counterText("school_Arcane")) +
         statLine("Healing spells cast", counterText("Heal")) +
-        STATS_SCHOOLS.map(([school, label]) => statLine(label + " spells cast", counterText("school_" + school))).join("") +
+        STATS_SCHOOLS.map(([school, label]) => statLine(`${label} spells cast`, counterText(`school_${school}`))).join("") +
         statLine("Enemies polymorphed into a sheep", counterText("Polymorph_oveja")) +
         statLine("Enemies polymorphed into a chicken", counterText("Polymorph_gallina"));
 }
@@ -279,11 +279,11 @@ function statsStudy() {
 
 function statsExploration() {
     return statSection("Exploration") +
-        statLine("Current zone", "The " + zones[state.zone.current].name) +
-        statLine("Last zone", "The " + zones[state.zone.last].name) +
+        statLine("Current zone", `The ${zones[state.zone.current].name}`) +
+        statLine("Last zone", `The ${zones[state.zone.last].name}`) +
         statLine("Changes of zones", counterText("zonesChanged")) +
-        STATS_ZONES.map((zone) => statLine("Times in the " + zones[zone].name, counterText("zone_" + zone))).join("") +
-        STATS_CONTAINERS.map(([container, label]) => statLine(label + " found", counterText("BotinGot_" + container))).join("") +
+        STATS_ZONES.map((zone) => statLine(`Times in the ${zones[zone].name}`, counterText(`zone_${zone}`))).join("") +
+        STATS_CONTAINERS.map(([container, label]) => statLine(`${label} found`, counterText(`BotinGot_${container}`))).join("") +
         statLine("Total statues found", counterText("statuesFound")) +
         (counterText("statuesFound") > 0 ? statLine("Type of statues found", counterList("estatuas_", "statueObj")) : "");
 }
@@ -295,7 +295,7 @@ function statsEconomy() {
         statLine("Total gold looted from bosses", counterText("GoldFromBosses")) +
         statLine("Total gold found", counterText("GoldFromBotin")) +
         statLine("Total gold lost in battles", counterText("goldLostInBattle")) +
-        STATS_CONTAINERS.map(([container, label]) => statLine("Gold found in " + label.toLowerCase(), counterText("GoldFromBotin_" + container))).join("");
+        STATS_CONTAINERS.map(([container, label]) => statLine(`Gold found in ${label.toLowerCase()}`, counterText(`GoldFromBotin_${container}`))).join("");
 }
 
 function statsLeisure() {
@@ -340,10 +340,10 @@ function updateStats(){
         statsEconomy() + statsLeisure() + statsSpirituality() + statsAchievements() +
         "</div>";
     el('innerTextScroll').innerHTML = ui.statsPage;
-    el("stats").style.fontSize = ui.em + "px";
-    el("stats").style.lineHeight = ui.em + "px";
-    el("titleStats").style.fontSize = ui.em * 2.5 + "px";
-    el("titleStats").style.lineHeight = ui.em * 2.5 + "px";
+    el("stats").style.fontSize = `${ui.em}px`;
+    el("stats").style.lineHeight = `${ui.em}px`;
+    el("titleStats").style.fontSize = `${ui.em * 2.5}px`;
+    el("titleStats").style.lineHeight = `${ui.em * 2.5}px`;
 }
 
 // Fill the help scroll (collapsible sections).
@@ -406,10 +406,10 @@ function updateHelp(){
 
 
     el('innerTextScroll').innerHTML=txt;
-    el("help").style.fontSize = ui.em + "px";
-    el("help").style.lineHeight = ui.em + "px";
-    el("titleHelp").style.fontSize = ui.em * 2.5 + "px";
-    el("titleHelp").style.lineHeight = ui.em * 2.5 + "px";  
+    el("help").style.fontSize = `${ui.em}px`;
+    el("help").style.lineHeight = `${ui.em}px`;
+    el("titleHelp").style.fontSize = `${ui.em * 2.5}px`;
+    el("titleHelp").style.lineHeight = `${ui.em * 2.5}px`;  
 
 
     
@@ -417,14 +417,14 @@ function updateHelp(){
     const coll = document.getElementsByClassName("faq");
     let i;
     for (i = 0; i < coll.length; i++) {
-    coll[i].style.lineHeight = ui.em * 2 + "px";
+    coll[i].style.lineHeight = `${ui.em * 2}px`;
     coll[i].addEventListener("click", function() {
         this.classList.toggle("active");
         const content = this.nextElementSibling;
         if (content.style.maxHeight){
         content.style.maxHeight = null;
         } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+        content.style.maxHeight = `${content.scrollHeight}px`;
         } 
     });
     }
@@ -437,26 +437,26 @@ function updateKill(){
     '<div>' + 
     'Do you want to kill <b>' + state.player.name + '</b>?<br><br>' +
     'All progress, achievement and stats of this wizard will be lost forever (<b>this action cannot be undone</b>).<br><br>' +
-    '<b>' + state.player.name + '</b> has existed for ' + secsToHours(secondsIngameInstats) + ", he is on level " + roundNumbertoLetter(state.player.lvl) + (countLogros() > 0 ? " and has " + countLogros() + " achievements" : "") + "<br><br>" +
+    '<b>' + state.player.name + '</b> has existed for ' + secsToHours(secondsIngameInstats) + ", he is on level " + roundNumbertoLetter(state.player.lvl) + (countLogros() > 0 ? ` and has ${countLogros()} achievements` : "") + "<br><br>" +
     'For kill the wizard press Kill button below, otherwise just close this scroll.' +
     '</div>' +
     '<br><br><div>' + 
     '<img class="btn" id="realKillBtn" src="img/matar.png"/>' +
     '</div><br><br>' + 
     '<span class="titles" id="titleCementery">' + (world.cemetery.length == 0 ? "" : "Cemetery") + '</span>' + 
-    (world.cemetery.length == 0 ? "" : "<small>" + cemeteryText() + "</small>");
+    (world.cemetery.length == 0 ? "" : `<small>${cemeteryText()}</small>`);
     el('innerTextScroll').innerHTML=txt;
     el("realKillBtn").onclick = realKill;
-    el("kill").style.fontSize = ui.em + "px";
-    el("kill").style.lineHeight = ui.em + "px";
-    el("titleKill").style.fontSize = ui.em * 2.5 + "px";
-    el("titleKill").style.lineHeight = ui.em * 2.5 + "px";
-    el("titleCementery").style.fontSize = ui.em * 2.5 + "px";
-    el("titleCementery").style.lineHeight = ui.em * 2.5 + "px";
+    el("kill").style.fontSize = `${ui.em}px`;
+    el("kill").style.lineHeight = `${ui.em}px`;
+    el("titleKill").style.fontSize = `${ui.em * 2.5}px`;
+    el("titleKill").style.lineHeight = `${ui.em * 2.5}px`;
+    el("titleCementery").style.fontSize = `${ui.em * 2.5}px`;
+    el("titleCementery").style.lineHeight = `${ui.em * 2.5}px`;
     
-    const realKillBtnW = el("realKillBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
-    el("realKillBtn").style.left = ((ui.objectSize - parseInt(realKillBtnW)) / 2) + "px";
-    el("realKillBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
+    const realKillBtnW = el("realKillBtn").style.width  = `${((ui.objectSize * 0.09375) * 1.90625) * 1.5}px`;  
+    el("realKillBtn").style.left = `${(ui.objectSize - parseInt(realKillBtnW)) / 2}px`;
+    el("realKillBtn").style.height  = `${(ui.objectSize * 0.09375) * 1.5}px`; 
 
 }
 

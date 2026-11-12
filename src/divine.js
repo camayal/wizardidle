@@ -5,9 +5,9 @@ import { getRandomInt, pickRandomItem, roundNumbertoLetter } from './utils.js';
 import { count, stat, state } from './state.js';
 import { fight, run, ui } from './runtime.js';
 import { reviveEV, startEvent } from './events.js';
-import { currentFrame, frameHeight, frameWidth, getSpell, shift, spell } from './spells.js';
+import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { loadBackground, loadCanvasChar, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { drawWizard, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
 // Touch on the wizard: revive him if dead, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -16,8 +16,8 @@ function pjBtn(){
             count("divineTouch");
             run.disablePjBtn = true;
             playSound("revive")
-            spell("spellMultiDivine_28",true,frameWidth,frameHeight,currentFrame,shift);
-            print(wizardName() + " " + "feels the divine touch!");
+            spell("spellMultiDivine_28",true);
+            print(`${wizardName()} feels the divine touch!`);
             if (!!fight.autorevive){
                 clearTimeout(fight.autorevive);
                 fight.autorevive = "";
@@ -26,7 +26,7 @@ function pjBtn(){
             state.player.hp = state.player.hpBase;
             loadBackground("curanderobg");
             fight.pjDead = false;
-            loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+            drawWizard();
             loadNPC("curandero");
             //
             startEvent(reviveEV);
@@ -57,8 +57,8 @@ function pjBtn(){
                 updateHeading();
                 
                 playSound("heal");
-                spell("spellHeal_8",true,frameWidth,frameHeight,currentFrame,shift);
-                print(wizardName() + " " + "feels a healing touch and recovers " + ui.healIcon + roundNumbertoLetter(healHit));
+                spell("spellHeal_8",true);
+                print(`${wizardName()} feels a healing touch and recovers ${ui.healIcon}${roundNumbertoLetter(healHit)}`);
 
             }
 
@@ -82,7 +82,7 @@ function npcBtn(){
         }
 
             const spellId = getSpell(20);
-            spell( spellId,false,frameWidth,frameHeight,currentFrame,shift);
+            spell( spellId,false);
             if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                 divineHit = Math.round(divineHit) * 8 //if is one of the divine powers
                 txt = "sees how the god's wrath destroy the enemy - ";
@@ -94,7 +94,7 @@ function npcBtn(){
             updateHeartNPC()
             state.player.faith = state.player.faith - faithLost;
             updateHeading();
-            print(wizardName() + " " + txt + ui.heartIcon + " " + roundNumbertoLetter(fight.enemyHP))
+            print(`${wizardName()} ${txt}${ui.heartIcon} ${roundNumbertoLetter(fight.enemyHP)}`)
             count("DivineHit");
         }
     }
@@ -111,13 +111,13 @@ function centerBtn(){
             state.player.faith = state.player.faith + run.feGanada;
             state.player.gold = state.player.gold - ofrendaGold;
             const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
-            print(wizardName() + " " + pickRandomItem(textoffer) + " (" + ui.goldIcon + " -" + roundNumbertoLetter(ofrendaGold) + ", " + ui.spiritIcon + " " + roundNumbertoLetter(run.feGanada) + ")");
+            print(`${wizardName()} ${pickRandomItem(textoffer)} (${ui.goldIcon} -${roundNumbertoLetter(ofrendaGold)}, ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)})`);
             count("DivineMandatoryOffers");
             count("GoldOffered", Math.round(ofrendaGold));
             count("FeByGold",Math.round(run.feGanada));
             updateHeading();
             playSound("coins");
-            spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
+            spell("spellCoins",false);
         }
     }
 }

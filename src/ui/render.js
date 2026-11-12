@@ -29,7 +29,7 @@ const npcCanvas = el("npcCanvas");
 // Refresh the heading: name, level, XP bar, HP, gold and faith.
 function updateHeading() {
     el('pjName').innerText = state.player.name;
-    el('lvl').innerText = "Lv. " + state.player.lvl;
+    el('lvl').innerText = `Lv. ${state.player.lvl}`;
     el("XPprogressBar").max = state.player.xpNext;
     el("XPprogressBar").min = state.player.xpPast;
     el("XPprogressBar").value = state.player.xp;
@@ -57,7 +57,7 @@ function heartMeter(hpPercent){
 
 // Refresh the enemy heart icon used in console messages.
 function updateHeartNPC(){
-ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" height="' + ui.em + '" src="' + heartMeter(Math.round(fight.enemyHP) / fight.enemyHPbase) + '"/> ';
+ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" height="${ui.em}" src="${heartMeter(Math.round(fight.enemyHP) / fight.enemyHPbase)}"/> `;
 }
 
 
@@ -76,7 +76,7 @@ ui.heartIcon = '<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 // Draw a background (a zone stage, altar, inn...) and move the map marker.
 function loadBackground(back) {
     ui.currentBackGround = back;
-    esceneCanvas.style.background = "url('img/" + back.toLowerCase() + ".png') no-repeat";
+    esceneCanvas.style.background = `url('img/${back.toLowerCase()}.png') no-repeat`;
     esceneCanvas.style.backgroundSize = "contain";
     //change bocadillo location
     localizarBocadillo();
@@ -87,12 +87,22 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
     const img = new Image();
-    img.src = "img/lvl" + Math.floor(lvl / 10) * 10 + ".png";
+    img.src = `img/lvl${Math.floor(lvl / 10) * 10}.png`;
     //round in base 10
     img.addEventListener("load", function() {
         const ctx = pjCanvas.getContext("2d");
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     }, false);
+}
+
+// Draw the wizard with his normal sprite for his level.
+function drawWizard() {
+    loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+}
+
+// Remove the enemy (or object) from the right side of the scene.
+function clearNPC() {
+    npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
 }
 
 // Show the background of the stage the wizard is on.
@@ -102,7 +112,7 @@ function showStage() {
 
 // The wizard's name in bold, as most console messages start.
 function wizardName() {
-    return "<b>" + state.player.name + "</b>";
+    return `<b>${state.player.name}</b>`;
 }
 
 
@@ -112,7 +122,7 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
     const img = new Image();
-    img.src = "img/" + imagen + ".png";
+    img.src = `img/${imagen}.png`;
     img.addEventListener("load", function() {
         const ctx = pjCanvas.getContext("2d");
         ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
@@ -127,7 +137,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     const img = new Image();
-    img.src = "img/" + npc + ".png";
+    img.src = `img/${npc}.png`;
     img.addEventListener("load", function() {
         const ctx = npcCanvas.getContext("2d");
         //medium size bosses (64x64px)
@@ -200,7 +210,7 @@ function animateNPC() {
 // Add a line at the top of the console, keeping at most MAXLINESINCONSOLE lines.
 function print(data) {
     setLiveTime(); //set seconds of game and add to total time
-    el("console").innerHTML = data + "<br>" + el("console").innerHTML;
+    el("console").innerHTML = `${data}<br>${el("console").innerHTML}`;
     const brSplit = el('console').innerHTML.split("<br>")
     if (brSplit.length > MAXLINESINCONSOLE) {
         brSplit.splice(-1, 1);
@@ -210,6 +220,8 @@ function print(data) {
 };
 
 export {
+    clearNPC,
+    drawWizard,
     showStage,
     wizardName,
     animateNPC,

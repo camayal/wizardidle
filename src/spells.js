@@ -8,16 +8,14 @@ import { ui } from './runtime.js';
 import { masterTime } from './config.js';
 import { playSound } from './audio.js';
 
-//vars spell animation
-const frameWidth = 30;
-const frameHeight = 30;
-const currentFrame = 0, shift = 0;
 
 
 
 
 // Play a spell animation from img/<spell>.png on the wizard or the enemy (bigger on a critic) and its sound.
-function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=0){
+function spell(img, pj, critic = 0, center = 0){
+    const frameWidth = 30, frameHeight = 30;    // size of one frame in the sprite sheet
+    let currentFrame = 0, shift = 0;            // animation position, advanced every frame
 
     //avoid spell animation in high speed debug
     if(masterTime < 500){return}
@@ -61,7 +59,7 @@ function spell(img,pj,frameWidth,frameHeight,currentFrame,shift,critic=0,center=
     canvas.height = canvas.offsetHeight;
 
     const myImage = new Image();
-    myImage.src = "img/" + img + ".png";
+    myImage.src = `img/${img}.png`;
     myImage.addEventListener("load",animate)
     let requestFrame;
 
@@ -97,7 +95,7 @@ function getSpell(lvlBase = knownTier()){
     let spellSelected = "";
     for (i = 0; i <= lvlBase; i++) { 
         if(spellSelected !== ""){
-            spellSelected =  spellSelected + "," + spellTiers[i];
+            spellSelected =  `${spellSelected},${spellTiers[i]}`;
         }else{
         spellSelected =  spellTiers[i];
         }
@@ -117,10 +115,6 @@ function countSpellKnown(){
 
 export {
     countSpellKnown,
-    currentFrame,
-    frameHeight,
-    frameWidth,
     getSpell,
-    shift,
     spell,
 };

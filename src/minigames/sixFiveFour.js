@@ -7,9 +7,9 @@ import { run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { endEvent, event, nextEvent, startEvent } from '../events.js';
 import { hopEnemy, hopWizard } from '../combat.js';
-import { currentFrame, frameHeight, frameWidth, shift, spell } from '../spells.js';
+import { spell } from '../spells.js';
 import { playSound } from '../audio.js';
-import { animateNPC, animatePJ, npcCanvas, print, showStage, updateHeading, wizardName } from '../ui/render.js';
+import { clearNPC, print, showStage, updateHeading, wizardName } from '../ui/render.js';
 
 //TODO add idx for all this part and archievements
 //temp dicegame
@@ -46,7 +46,7 @@ function sixfivefour(){
     if (enemyStart){
         nameDicePlayer = gamblingManName
     } else {
-        nameDicePlayer = wizardName() + " "
+        nameDicePlayer = `${wizardName()} `
     }
 
     
@@ -55,7 +55,7 @@ function sixfivefour(){
     //set or equal the bet
     state.player.gold = state.player.gold - betForDice;
     updateHeading();
-    print(nameDicePlayer + " starts the game and suggest a bet of " + ui.goldIcon + roundNumbertoLetter(betForDice))
+    print(`${nameDicePlayer} starts the game and suggest a bet of ${ui.goldIcon}${roundNumbertoLetter(betForDice)}`)
 
     
 
@@ -66,12 +66,12 @@ function sixfivefour(){
 
 // A small dice-game icon for the console (img/<name>.png).
 function diceImg(name) {
-    return "<img class='imgInConsole' height='" + ui.em + "' src='img/" + name + ".png'/>";
+    return `<img class='imgInConsole' height='${ui.em}' src='img/${name}.png'/>`;
 }
 
 // The banked symbols in parentheses, or nothing.
 function inParens(symbols) {
-    return symbols != '' ? '(' + symbols + ')' : '';
+    return symbols != '' ? `(${symbols})` : '';
 }
 
 // One step of a player's turn, run by the event clock. Steps alternate between rolling the
@@ -99,28 +99,28 @@ function rollTurn(nameDicePlayer) {
     } else {
         hopWizard();
     }
-    spell("spellMiniDados_18", true, frameWidth, frameHeight, currentFrame, shift, false, true);
+    spell("spellMiniDados_18", true, false, true);
     playSound("dice");
     rollMessage(nameDicePlayer);
 
     resultDice = "";
     for (let die in dicesToRoll) {
         dicesToRoll[die] = Math.floor(Math.random() * 6 + 1);
-        resultDice = resultDice + diceImg("d" + dicesToRoll[die]);
+        resultDice = resultDice + diceImg(`d${dicesToRoll[die]}`);
     }
     if (!ship && bankDie(6)) {
         ship = true;
-        currentHand = diceImg("d6") + ":" + diceImg("ship") + " ";
+        currentHand = `${diceImg("d6")}:${diceImg("ship")} `;
         symbolCurrentHand = diceImg("ship");
     }
     if (ship && !captain && bankDie(5)) {
         captain = true;
-        currentHand += diceImg("d5") + ":" + diceImg("captain") + " ";
+        currentHand += `${diceImg("d5")}:${diceImg("captain")} `;
         symbolCurrentHand += diceImg("captain");
     }
     if (ship && captain && !crew && bankDie(4)) {
         crew = true;
-        currentHand += diceImg("d4") + ":" + diceImg("crew") + " ";
+        currentHand += `${diceImg("d4")}:${diceImg("crew")} `;
         symbolCurrentHand += diceImg("crew");
     }
     if (ship && captain && crew) {
@@ -134,15 +134,15 @@ function rollTurn(nameDicePlayer) {
 // What the player says before rolling.
 function rollMessage(nameDicePlayer) {
     if (riskinDice > cargo && ship && captain && crew) {
-        print(nameDicePlayer + " feels risky and rolls the dice to try a better cargo");
+        print(`${nameDicePlayer} feels risky and rolls the dice to try a better cargo`);
     } else if (cargo <= cargoFirstPlayer && ship && captain && crew) {
-        print(nameDicePlayer + " rolls the dice to try to get more cargo");
+        print(`${nameDicePlayer} rolls the dice to try to get more cargo`);
     } else if (run.multipleEventsCounter == 3) {
-        print(nameDicePlayer + " rolls the dice again " + inParens(symbolCurrentHand));
+        print(`${nameDicePlayer} rolls the dice again ${inParens(symbolCurrentHand)}`);
     } else if (run.multipleEventsCounter == 5) {
-        print(nameDicePlayer + " plays the last turn " + inParens(symbolCurrentHand));
+        print(`${nameDicePlayer} plays the last turn ${inParens(symbolCurrentHand)}`);
     } else {
-        print(nameDicePlayer + " rolls the dice");
+        print(`${nameDicePlayer} rolls the dice`);
     }
 }
 
@@ -160,13 +160,13 @@ function bankDie(face) {
 // The cargo is good enough: end the turn early.
 function skipRoll(enemyStart, nameDicePlayer) {
     endEvent();
-    print(nameDicePlayer + " thinks the cargo is enought and skip");
+    print(`${nameDicePlayer} thinks the cargo is enought and skip`);
     startEvent(function () { evalSixFiveFour(enemyStart, nameDicePlayer); });
 }
 
 // Show what was rolled and banked; after the third roll the turn ends.
 function showRoll(enemyStart, nameDicePlayer) {
-    print(nameDicePlayer + " gets " + resultDice + ((currentHand != '') ? ' and banks ' + currentHand : ''));
+    print(`${nameDicePlayer} gets ${resultDice}${(currentHand != '') ? ' and banks ' + currentHand : ''}`);
     currentHand = "";
     symbolCurrentHand = "";
     if (run.multipleEventsCounter == 6) {
@@ -183,10 +183,10 @@ function showRoll(enemyStart, nameDicePlayer) {
 // After a player's turn: hand over to the other player, or go to the final score.
 function evalSixFiveFour(enemyStart, nameDicePlayer){
     //Evaluate the current round
-    if (ship && captain && crew){print(nameDicePlayer + " set sail with " + cargo + " of cargo")}
-    if (ship && captain && !crew){print(nameDicePlayer + " got a ship and captain but no the crew, does not set sail (" + cargo + ")")}
-    if (ship && !captain && !crew){print(nameDicePlayer + " got a ship but neither captain nor crew were available, does not set sail (" + cargo + ")")}
-    if (!ship && !captain && !crew){print(nameDicePlayer + " got nothing (" + cargo + ")")}
+    if (ship && captain && crew){print(`${nameDicePlayer} set sail with ${cargo} of cargo`)}
+    if (ship && captain && !crew){print(`${nameDicePlayer} got a ship and captain but no the crew, does not set sail (${cargo})`)}
+    if (ship && !captain && !crew){print(`${nameDicePlayer} got a ship but neither captain nor crew were available, does not set sail (${cargo})`)}
+    if (!ship && !captain && !crew){print(`${nameDicePlayer} got nothing (${cargo})`)}
 
 
        //Start the second round
@@ -194,7 +194,7 @@ function evalSixFiveFour(enemyStart, nameDicePlayer){
             cargoFirstPlayer = cargo;
             nameFirstPlayer = nameDicePlayer;
             countRounds++
-            if (!enemyStart){nameDicePlayer = gamblingManName} else {nameDicePlayer = wizardName() + " "}
+            if (!enemyStart){nameDicePlayer = gamblingManName} else {nameDicePlayer = `${wizardName()} `}
             resetSixFiveFour()
             loop.stop("event");
             startEvent(function() { rollDicesForSixfivefour(!enemyStart,nameDicePlayer); });
@@ -224,34 +224,34 @@ function finalScoreSixFiveFour(nameDicePlayer){
             if (!tie){
                 firstPlayerWins = cargoFirstPlayer > cargo;
                 if(firstPlayerWins){
-                    print(nameFirstPlayer + " wins " + ui.goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
+                    print(`${nameFirstPlayer} wins ${ui.goldIcon}${roundNumbertoLetter(betForDice * 2)} (${cargoFirstPlayer} vs. ${cargo}) `)
                     winnerDice = nameFirstPlayer;
                 }else{
-                    print(nameDicePlayer + " wins " + ui.goldIcon + roundNumbertoLetter(betForDice * 2) + " (" + cargoFirstPlayer + " vs. " + cargo + ") ")
+                    print(`${nameDicePlayer} wins ${ui.goldIcon}${roundNumbertoLetter(betForDice * 2)} (${cargoFirstPlayer} vs. ${cargo}) `)
                     winnerDice = nameDicePlayer;
                 }
 
                 if (winnerDice == gamblingManName){
                     playSound("coins");
-                    spell("spellCoins",false,frameWidth,frameHeight,currentFrame,shift);
+                    spell("spellCoins",false);
                 }else{
                     playSound("coins");
-                    spell("spellCoins",true,frameWidth,frameHeight,currentFrame,shift);
+                    spell("spellCoins",true);
                     state.player.gold = state.player.gold + betForDice * 2;
                     updateHeading();
                 }
 
             }else{
-                print("Nobody won (" + cargoFirstPlayer + " vs. " + cargo + ")")
+                print(`Nobody won (${cargoFirstPlayer} vs. ${cargo})`)
                 state.player.gold = state.player.gold + betForDice;
                 updateHeading();
             }
         break;
         case 2:
-            print(wizardName() + " exits the gaming house");
+            print(`${wizardName()} exits the gaming house`);
             cargoFirstPlayer = 0;
             resetSixFiveFour()
-            npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+            clearNPC();
             state.npc = "";
             showStage();
             run.restAtInn = false;
