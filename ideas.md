@@ -181,6 +181,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-11: Stage 1 step 7, layout
+
+- `layoutPortrait()` 225 → 88 lines and `layoutLandscapeMobile()` 127 → 51: one `setStyles(id, {...})` call per element (numbers become px), grouped by area, with the shared sizes named once.
+- Verified by snapshotting every element's inline style in 8 cases (desktop and phone, normal, first visit, scroll open) for the old and new code: identical, property by property.
+
 ### 2026-11-11: Stage 1 step 6, long functions split
 
 - `battle()` 189 → 15 lines (announce, enemy falls, defeat, rewards, wizard falls, self-revive, plus `updateLongestCombo()` / `clearFight()` that were copied in two places).

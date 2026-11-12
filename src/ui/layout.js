@@ -162,362 +162,167 @@ function getEM(){
 
 
 
-// Layout for desktop and phones held upright: scene above the console.
+// Set inline styles on one element; numbers are written as pixels.
+function setStyles(id, styles) {
+    const style = el(id).style;
+    for (const [property, value] of Object.entries(styles)) {
+        style[property] = typeof value === "number" ? value + "px" : value;
+    }
+}
+
+// The same styles on several elements.
+function setEach(ids, styles) {
+    for (const id of ids) setStyles(id, styles);
+}
+
+const CANVASES = ["esceneCanvas", "pjCanvas", "npcCanvas", "spellCanvas"];
+const TOOLBAR = ["btn1", "btn2", "btn3", "btn4", "btn5", "btn6"];
+const HEADING_ICONS = ["hpIcon", "goldIcon", "spiritIcon"];
+
+// Layout for desktop and phones held upright: heading, scene, then the console.
+// Everything is proportional to ui.objectSize (s); the console fills the remaining height.
 function layoutPortrait(){
+    const s = ui.objectSize, em = ui.em, W = window.innerWidth, H = window.innerHeight;
+    const button = s * 0.09375;                      // toolbar button size, also the launcher's font unit
 
-    if(state.firstUse){
-        el("nubes").style.display = "none" ;
-        el("launcher").style.display = "block" ;
-    }else{
-        el("launcher").style.display = "none" ;
-        el("main").style.display = "block" ;
+    if (state.firstUse) {
+        setStyles("nubes", { display: "none" });
+        setStyles("launcher", { display: "block" });
+    } else {
+        setStyles("launcher", { display: "none" });
+        setStyles("main", { display: "block" });
     }
 
-    
-    el("console").style.display = "block" ;
-    el("XPprogressBar").style.display = "block" ;
-    el("backConsole").style.display = "block" ;
-    el("btn1").style.display = "block" ;
-    el("btn2").style.display = "block" ;
-    el("btn3").style.display = "block" ;
-    el("btn4").style.display = "block" ;
-    el("btn5").style.display = "block" ;
-    el("btn6").style.display = "block" ;
-    
-    //fonts
-    el("pjName").style.fontSize = ui.objectSize * 0.09375 + "px";
-    el("console").style.fontSize = ui.em + "px";
-    el("indicadores").style.fontSize = ui.objectSize * 0.045 + "px";
-    el("statusText").style.fontSize = ui.em * 2 + "px";
-    el("inputName").style.fontSize = (ui.objectSize * 0.09375) * 1.5 + "px";
-    el("labelInputName").style.fontSize = (ui.objectSize * 0.09375) * 0.5 + "px";
-    el("title1").style.fontSize = (ui.objectSize * 0.09375) * 2.5 + "px";
-    el("title2").style.fontSize = (ui.objectSize * 0.09375) * 1.5 + "px";
-    el("footer").style.fontSize = (ui.objectSize * 0.09375) * 0.6 + "px";
-    el("scrollText").style.fontSize = ui.em + "px";
-    
-    el("zoneMap").style.fontSize = ui.em * 2.5 + "px";
-    el("scrollText").style.margin = ui.em / 2 + "px";
+    // sizes everything else depends on
+    const headingH = s * 0.21;
+    const marcoH = s * 0.3125;
+    const sceneH = s * 0.25;
+    const backConsoleH = H - parseInt(sceneH) * 1.2 - parseInt(headingH) * 1.2;
+    const scrollH = H - (s * 0.25) * 1.5;
+    const sceneLeft = parseInt(marcoH) * 0.1;
+    const pjBtnW = s * 0.325, centerBtnW = s * 0.35;
+    const startBtnW = (button * 1.90625) * 1.5;
 
-    
+    // heading
+    setStyles("heading", { height: headingH });
+    setStyles("pjName", { fontSize: button, width: s * 0.7 });
+    setStyles("XPprogressBar", { display: "block", width: s * 0.7, height: s * 0.035, top: button * 1.125 });
+    setStyles("indicadores", { fontSize: s * 0.045, width: s * 0.7, top: button * 1.57, display: "flex", justifyContent: "space-between" });
+    setEach(HEADING_ICONS, { height: s * 0.045, width: s * 0.045 });
+    setEach(TOOLBAR, { display: "block", width: button });
+    setEach(["btn1", "btn4"], { left: s * 0.75 });
+    setEach(["btn2", "btn5"], { left: s * 0.75 + (s * 0.1) });
+    setEach(["btn3", "btn6"], { left: s * 0.75 + (s * 0.1) * 2 });
+    setEach(["btn1", "btn2", "btn3"], { top: s * 0.01 });
+    setEach(["btn4", "btn5", "btn6"], { top: s * 0.11 });
 
+    // game area, scene and console
+    setStyles("main", { width: s, height: H, left: (W / 2) - (s * 1.0625 / 2), top: H * 0.005 });
+    setStyles("marco", { width: s * 1.0625, height: marcoH });
+    setEach(CANVASES, { width: s, height: sceneH, left: sceneLeft });
+    setStyles("pjDivineBtn", { width: pjBtnW, height: s * 0.25, left: sceneLeft });
+    setStyles("centerDivineBtn", { width: centerBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW) });
+    setStyles("npcDivineBtn", { width: pjBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW) + parseInt(centerBtnW) });
+    setStyles("console", { display: "block", fontSize: em, width: s, height: parseInt(backConsoleH) * 0.94, left: s * 0.03 });
+    setStyles("backConsole", { display: "block", width: s + (s * 0.075), height: backConsoleH, left: (s * -0.01) });
+    setStyles("statusText", { fontSize: em * 2, left: s });
 
-    //widths
-    el("main").style.width = ui.objectSize + "px";
-    el("console").style.width = ui.objectSize + "px";
-    el("marco").style.width = ui.objectSize * 1.0625 + "px";
-    el("esceneCanvas").style.width = ui.objectSize + "px";
-    el("pjCanvas").style.width = ui.objectSize + "px";
-    el("npcCanvas").style.width = ui.objectSize + "px";
-    el("spellCanvas").style.width = ui.objectSize + "px";
-    el("XPprogressBar").style.width  = ui.objectSize * 0.7 + "px";
-    el("pjName").style.width  = ui.objectSize * 0.7 + "px";
-    el("indicadores").style.width  = ui.objectSize * 0.7 + "px";
-    el("btn1").style.width  = ui.objectSize * 0.09375 + "px";
-    el("btn2").style.width  = ui.objectSize * 0.09375 + "px";
-    el("btn3").style.width  = ui.objectSize * 0.09375 + "px";
-    el("btn4").style.width  = ui.objectSize * 0.09375 + "px";
-    el("btn5").style.width  = ui.objectSize * 0.09375 + "px";
-    el("btn6").style.width  = ui.objectSize * 0.09375 + "px";  
-    el("backConsole").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";
-    el("launcher").style.width = ui.objectSize / 0.9 + "px";
-    el("fondoLauncher").style.width = ui.objectSize / 0.9 + "px";
-    el("inputName").style.width = ui.objectSize * 1.085 + "px";
-    el("labelInputName").style.width = ui.objectSize * 1.085 + "px";
-    const startBtnW = el("startBtn").style.width  = ((ui.objectSize * 0.09375) * 1.90625) * 1.5 + "px";  
-    el("scroll").style.width = ui.objectSize + "px";  
-    el("scrollBackCenter").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
-    el("scrollBackUp").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
-    el("scrollBackDown").style.width = ui.objectSize + (ui.objectSize * 0.075) + "px";  
-
-    el("scrollText").style.width = ui.objectSize + "px";  
-    el("btnClose").style.width  = ui.objectSize * 0.09375 + "px";  
-    
-    const pjBtnWidth = el("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
-    el("npcDivineBtn").style.width = ui.objectSize * 0.325 + "px";
-    const centerDivineBtn = el("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
-
-    el("backMapa").style.width = ui.objectSize + "px"; 
-    el("bocadilloMapa").style.width  = ui.objectSize * 0.075 + "px";  
-    el("pjMapa").style.width  = ui.objectSize * 0.065 + "px";  
-
-    
-    
-    
-    
-
-
-    //heights
-    const headingH = el("heading").style.height = ui.objectSize * 0.21 + "px";
-    const marcoH = el("marco").style.height = ui.objectSize * 0.3125 + "px";
-    const sceneCanvasH = el("esceneCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("pjCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("npcCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("spellCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("XPprogressBar").style.height  = ui.objectSize * 0.035  + "px";
-    const backConsoleH = el("backConsole").style.height = window.innerHeight - parseInt(sceneCanvasH) * 1.2 - parseInt(headingH) * 1.2 + "px";
-    const consoleH = el("console").style.height = parseInt(backConsoleH) * 0.94 + "px";
-    el("launcher").style.height = window.innerHeight + "px";
-    el("fondoLauncher").style.height = window.innerHeight + "px";
-    el("startBtn").style.height  = (ui.objectSize * 0.09375) * 1.5 + "px"; 
-    el("main").style.height = window.innerHeight + "px";
-    el("scrollText").style.height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) + "px";
-    
-    el("pjDivineBtn").style.height = ui.objectSize * 0.25 + "px";
-    el("npcDivineBtn").style.height = ui.objectSize * 0.25 + "px";
-    el("centerDivineBtn").style.height = ui.objectSize * 0.25 + "px";
-
-    //auto resize scroll if is open
-    if(parseInt(el("scrollBackCenter").style.minHeight) > 0){
-    el("scrollBackCenter").style.minHeight = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) * 0.97 + "px";
-    el("scrollText").style.minHeight = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) * 0.92 + "px";
-    el("scrollBackDown").style.top = (window.innerHeight - (ui.objectSize * 0.25) * 1.5) * 0.97 + "px";
+    // vertical order: scene above the console, or below it while a scroll is open
+    const sceneDivine = ["pjDivineBtn", "npcDivineBtn", "centerDivineBtn"];
+    if (ui.sceneOnTop) {
+        setStyles("marco", { top: parseInt(headingH) + parseInt(headingH) * 0.1 });
+        setEach([...CANVASES, ...sceneDivine], { top: parseInt(headingH) + (parseInt(marcoH) * 0.165) });
+        setStyles("console", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) });
+        setStyles("backConsole", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.1) });
+        setStyles("statusText", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) + (parseInt(backConsoleH) * 0.925) });
+    } else {
+        setStyles("console", { top: parseInt(headingH) + parseInt(headingH) * 0.2 });
+        setStyles("backConsole", { top: headingH });
+        setStyles("marco", { top: parseInt(headingH) + parseInt(backConsoleH) });
+        setEach([...CANVASES, ...sceneDivine], { top: parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) });
+        setStyles("statusText", { top: parseInt(headingH) + (parseInt(backConsoleH) * 0.925) });
     }
-    
 
-    //lefts
-    el("main").style.left = (window.innerWidth / 2) - (ui.objectSize * 1.0625 /2) + "px";
-    el("console").style.left = ui.objectSize * 0.03 + "px";
-    el("backConsole").style.left = (ui.objectSize * -0.01) + "px";
-    el("esceneCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("pjCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("npcCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("spellCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("btn1").style.left = ui.objectSize * 0.75 + "px";
-    el("btn4").style.left = ui.objectSize * 0.75 + "px";
-    el("btn2").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) + "px";
-    el("btn5").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) + "px";
-    el("btn3").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 +"px";
-    el("btn6").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
-    el("statusText").style.left = ui.objectSize + "px";
-    ////launcher
-    el("launcher").style.left = (window.innerWidth / 2) - ((ui.objectSize / 0.9) /2) + "px";
-    el("fondoLauncher").style.left = "0px";
-    el("labelInputName").style.left = ui.objectSize * 0.03 + "px";
-    el("startBtn").style.left = ((ui.objectSize * 1.085 - parseInt(startBtnW)) / 2) + "px";
-    
-    el("title1").style.left = ui.objectSize * 0.16 + "px";
-    el("title2").style.left = ui.objectSize * 0.7 + "px";
-    el("footer").style.left = ui.objectSize * 0.1 + "px";
-    ////scroll
-    el("scroll").style.left = (window.innerWidth / 2) - (ui.objectSize * 1.0625 /2) + "px";
-    el("scrollBackCenter").style.left = (ui.objectSize * -0.01) + "px";
-    el("scrollBackUp").style.left = (ui.objectSize * -0.01) + "px";
-    el("scrollBackDown").style.left = (ui.objectSize * -0.01) + "px";
+    // name screen
+    setStyles("launcher", { width: s / 0.9, height: H, left: (W / 2) - ((s / 0.9) / 2) });
+    setStyles("fondoLauncher", { width: s / 0.9, height: H, left: 0, top: 0 });
+    setStyles("title1", { fontSize: button * 2.5, left: s * 0.16, top: H * 0.1 });
+    setStyles("title2", { fontSize: button * 1.5, left: s * 0.7, top: H * 0.20 });
+    setStyles("labelInputName", { fontSize: button * 0.5, width: s * 1.085, left: s * 0.03, top: H * 0.45 });
+    setStyles("inputName", { fontSize: button * 1.5, width: s * 1.085, top: H * 0.5 });
+    setStyles("startBtn", { width: startBtnW, height: button * 1.5, left: ((s * 1.085 - parseInt(startBtnW)) / 2), top: H * 0.7 });
+    setStyles("footer", { fontSize: button * 0.6, left: s * 0.1, top: H * 0.9 });
 
-    el("btnClose").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
-    el("scrollText").style.left = ui.objectSize * 0.03 + "px";
-
-    const pjBtnLeft = el("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("centerDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + "px";
-    el("npcDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + parseInt(centerDivineBtn) + "px";
-    
-    
-    el("backMapa").style.left = 0 + "px";
-    
-    
-
-    //tops
-    el("main").style.top = window.innerHeight * 0.005 + "px";
-
-    // define if scene is on top of console, if not invert (useful when scroll is desplayed)
-    if (ui.sceneOnTop){
-    	//test new organization, scene top
-    	el("marco").style.top = parseInt(headingH) + parseInt(headingH) * 0.1 + "px";
-    	el("esceneCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
-    	el("pjCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
-    	el("npcCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
-    	el("spellCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
-		el("pjDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
-		el("npcDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
-		el("centerDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.165) + "px";
-    	el("console").style.top = parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) + "px";
-    	el("backConsole").style.top = parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.1) + "px";
-		el("statusText").style.top = parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) + (parseInt(backConsoleH) * 0.925) + "px";
-	//end test new organization
-    }else {
-	    el("console").style.top = parseInt(headingH) + parseInt(headingH) * 0.2 + "px";
-	    el("backConsole").style.top = headingH;
-	    el("marco").style.top = parseInt(headingH) + parseInt(backConsoleH) + "px";
-	    el("esceneCanvas").style.top = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) + "px";
-	    el("pjCanvas").style.top = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) + "px";
-	    el("npcCanvas").style.top = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) + "px";
-	    el("spellCanvas").style.top = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) + "px";
-	    el("pjDivineBtn").style.top = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) + "px";
-	    el("npcDivineBtn").style.top = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) + "px";
-	    el("centerDivineBtn").style.top = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) + "px";
-	    el("statusText").style.top = parseInt(headingH) + (parseInt(backConsoleH) * 0.925) + "px";
+    // scroll and map
+    setStyles("scroll", { width: s, left: (W / 2) - (s * 1.0625 / 2), top: s * 0.02 });
+    setEach(["scrollBackCenter", "scrollBackUp", "scrollBackDown"], { width: s + (s * 0.075), left: (s * -0.01) });
+    setEach(["scrollBackCenter", "scrollBackUp"], { top: s * 0.02 });
+    setStyles("scrollText", { fontSize: em, margin: em / 2, width: s, height: scrollH, left: s * 0.03, top: s * 0.065 });
+    setStyles("btnClose", { width: button, left: s * 0.75 + (s * 0.1) * 2, top: s * 0.065 });
+    if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {     // the scroll is open: resize it too
+        setStyles("scrollBackCenter", { minHeight: scrollH * 0.97 });
+        setStyles("scrollText", { minHeight: scrollH * 0.92 });
+        setStyles("scrollBackDown", { top: scrollH * 0.97 });
     }
-	
-    el("indicadores").style.top = (ui.objectSize * 0.09375) * 1.57 + "px";
-    el("XPprogressBar").style.top = (ui.objectSize * 0.09375) * 1.125 + "px";
-    el("btn1").style.top = ui.objectSize * 0.01 + "px";
-    el("btn4").style.top = ui.objectSize * 0.11 + "px";
-    el("btn2").style.top = ui.objectSize * 0.01 + "px";
-    el("btn5").style.top = ui.objectSize * 0.11 + "px";
-    el("btn3").style.top = ui.objectSize * 0.01 + "px";
-    el("btn6").style.top = ui.objectSize * 0.11 + "px";
-    el("title1").style.top = window.innerHeight * 0.1 + "px";
-    el("title2").style.top = window.innerHeight * 0.20 + "px";
-    el("labelInputName").style.top = window.innerHeight * 0.45 + "px";
-    el("inputName").style.top = window.innerHeight * 0.5 + "px";
-    el("fondoLauncher").style.top = "0px";
-    el("startBtn").style.top = window.innerHeight * 0.7 + "px";
-
-    el("footer").style.top = window.innerHeight * 0.9 + "px";
-    el("scroll").style.top = ui.objectSize * 0.02 + "px";
-    el("scrollBackCenter").style.top = ui.objectSize * 0.02 + "px";
-    el("scrollBackUp").style.top = ui.objectSize * 0.02 + "px";
-    el("btnClose").style.top = ui.objectSize * 0.065 + "px";
-    el("scrollText").style.top = ui.objectSize * 0.065 + "px";
-
-    el("backMapa").style.top = ui.objectSize * 0.1 + "px";
-    
-    
-    //Others
-    el("indicadores").style.display = "flex";
-    el("indicadores").style.justifyContent = "space-between";
-    el("hpIcon").style.height = ui.objectSize * 0.045 + "px";
-    el("goldIcon").style.height = ui.objectSize * 0.045 + "px";
-    el("spiritIcon").style.height = ui.objectSize * 0.045 + "px";
-    el("hpIcon").style.width = ui.objectSize * 0.045 + "px";
-    el("goldIcon").style.width = ui.objectSize * 0.045 + "px";
-    el("spiritIcon").style.width = ui.objectSize * 0.045 + "px";
-    
-
- 
-
+    setStyles("zoneMap", { fontSize: em * 2.5 });
+    setStyles("backMapa", { width: s, left: 0, top: s * 0.1 });
+    setStyles("bocadilloMapa", { width: s * 0.075 });
+    setStyles("pjMapa", { width: s * 0.065 });
 }
 
 
-// Layout for phones held sideways.
+// Layout for phones held sideways: only the heading and the scene (no console, no toolbar).
 function layoutLandscapeMobile(){
+    const s = ui.objectSize, em = ui.em, W = window.innerWidth, H = window.innerHeight;
 
-    if(state.firstUse){
-        el("launcher").style.display = "none" ;
-        el("nubes").style.display = "block" ;
-    }else{
-        el("launcher").style.display = "none" ;
-        el("main").style.display = "block" ;
-
+    if (state.firstUse) {
+        setStyles("launcher", { display: "none" });
+        setStyles("nubes", { display: "block" });
+    } else {
+        setStyles("launcher", { display: "none" });
+        setStyles("main", { display: "block" });
     }
 
+    const headingH = s * 0.24;
+    const marcoH = s * 0.3125;
+    const sceneTop = parseInt(headingH) + (parseInt(marcoH) * 0.1);
+    const sceneLeft = parseInt(marcoH) * 0.1;
+    const pjBtnW = s * 0.325, centerBtnW = s * 0.35;
 
+    // hidden in landscape
+    setEach(["console", "backConsole", ...TOOLBAR], { display: "none" });
 
-    //hide
-    el("console").style.display = "none" ;
-    el("backConsole").style.display = "none" ;
-    el("btn1").style.display = "none" ;
-    el("btn2").style.display = "none" ;
-    el("btn3").style.display = "none" ;
-    el("btn4").style.display = "none" ;
-    el("btn5").style.display = "none" ;
-    el("btn6").style.display = "none" ;
+    // heading
+    setStyles("heading", { height: headingH });
+    setStyles("pjName", { fontSize: s * 0.11, width: W * 0.90 });
+    setStyles("XPprogressBar", { width: W * 0.95, height: s * 0.03, top: s * 0.13 });
+    setStyles("indicadores", { fontSize: s * 0.05, width: W * 0.95, top: s * 0.17, display: "flex", justifyContent: "space-between" });
+    setEach(HEADING_ICONS, { height: s * 0.05, width: s * 0.05 });
+    setStyles("statusText", { fontSize: em * 2, left: W * 0.925, top: s * 0.01 });
 
-    //fonts
-    el("pjName").style.fontSize = ui.objectSize * 0.11 + "px";
-    el("indicadores").style.fontSize = ui.objectSize * 0.05 + "px";
-    el("statusText").style.fontSize = ui.em * 2 + "px";
-    el("scrollText").style.fontSize = ui.objectSize * 0.05 + "px";
+    // scene
+    setStyles("main", { width: s, left: (W - s) / 2 - (W * 0.025) });
+    setStyles("marco", { width: s * 1.0625, height: marcoH, top: parseInt(headingH) });
+    setEach(CANVASES, { width: s, height: s * 0.25, left: sceneLeft, top: sceneTop });
+    setStyles("pjDivineBtn", { width: pjBtnW, height: s * 0.25, left: sceneLeft, top: sceneTop });
+    setStyles("centerDivineBtn", { width: centerBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW), top: sceneTop });
+    setStyles("npcDivineBtn", { width: pjBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW) + parseInt(centerBtnW), top: sceneTop });
 
-    
-    //widths
-    el("main").style.width = ui.objectSize + "px";
-    el("XPprogressBar").style.width  = window.innerWidth * 0.95  + "px";
-    el("pjName").style.width  = window.innerWidth * 0.90 + "px";
-    el("indicadores").style.width  = window.innerWidth * 0.95 + "px";
-    el("marco").style.width = ui.objectSize * 1.0625 + "px";
-    el("esceneCanvas").style.width = ui.objectSize + "px";
-    el("pjCanvas").style.width = ui.objectSize + "px";
-    el("npcCanvas").style.width = ui.objectSize + "px";
-    el("spellCanvas").style.width = ui.objectSize + "px";
-    el("nubes").style.width = window.innerWidth + "px";
-    el("scroll").style.width = window.innerWidth * 0.98 + "px";  
-    el("scrollBackCenter").style.width = window.innerWidth * 0.98 + "px";  
-    el("scrollBackUp").style.width = window.innerWidth * 0.98 + "px";
-    el("scrollBackDown").style.width = window.innerWidth * 0.98 + "px";  
-  
-    el("scrollText").style.width = window.innerWidth * 0.92 + "px";  
-    el("btnClose").style.width  = ui.objectSize * 0.09375 + "px";  
+    // clouds behind the name screen
+    setStyles("nubes", { width: W, height: H, left: 0, top: 0 });
 
-
-    const pjBtnWidth = el("pjDivineBtn").style.width = ui.objectSize * 0.325 + "px";
-    el("npcDivineBtn").style.width = ui.objectSize * 0.325 + "px";
-    const centerDivineBtn = el("centerDivineBtn").style.width = ui.objectSize * 0.35 + "px";
-
-
-    //heights
-    const headingH = el("heading").style.height = ui.objectSize * 0.24 + "px";
-    const marcoH = el("marco").style.height = ui.objectSize * 0.3125 + "px";
-    el("esceneCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("pjCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("npcCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("spellCanvas").style.height = ui.objectSize * 0.25 + "px";
-    el("XPprogressBar").style.height  = ui.objectSize * 0.03  + "px";
-    el("nubes").style.height  = window.innerHeight  + "px";
-
-    if(parseInt(el("scrollBackCenter").style.minHeight) > 0){
-        el("scrollBackCenter").style.minHeight = window.innerHeight * 0.8 + "px";
-        el("scrollText").style.minHeight = window.innerHeight * 0.7 + "px";
-        el("scrollBackDown").style.top = window.innerHeight * 0.8 + "px";
+    // scroll
+    setStyles("scroll", { width: W * 0.98, left: s * 0.01, top: s * 0.02 });
+    setEach(["scrollBackCenter", "scrollBackUp", "scrollBackDown"], { width: W * 0.98 });
+    setEach(["scrollBackCenter", "scrollBackUp"], { top: s * 0.02 });
+    setStyles("scrollText", { fontSize: s * 0.05, width: W * 0.92, left: s * 0.03, top: s * 0.06 });
+    setStyles("btnClose", { width: s * 0.09375, left: s * 0.75 + (s * 0.1) * 2, top: s * 0.065 });
+    if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {     // the scroll is open: resize it too
+        setStyles("scrollBackCenter", { minHeight: H * 0.8 });
+        setStyles("scrollText", { minHeight: H * 0.7 });
+        setStyles("scrollBackDown", { top: H * 0.8 });
     }
-
-
-
-    el("pjDivineBtn").style.height = ui.objectSize * 0.25 + "px";
-    el("npcDivineBtn").style.height = ui.objectSize * 0.25 + "px";
-    el("centerDivineBtn").style.height = ui.objectSize * 0.25 + "px";
-
-
-    //lefts
-    el("main").style.left = (window.innerWidth - ui.objectSize) / 2 - (window.innerWidth * 0.025) + "px";
-    el("esceneCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("pjCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("npcCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("spellCanvas").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("statusText").style.left = window.innerWidth * 0.925 + "px";
-    el("nubes").style.left = "0px";
-    el("btnClose").style.left = ui.objectSize * 0.75 + (ui.objectSize * 0.1) * 2 + "px";
-    el("scroll").style.left = ui.objectSize * 0.01 + "px";
-    el("scrollText").style.left = ui.objectSize * 0.03 + "px";
-
-    const pjBtnLeft = el("pjDivineBtn").style.left = (parseInt(marcoH) * 0.1) + "px";
-    el("centerDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + "px";
-    el("npcDivineBtn").style.left = parseInt(pjBtnLeft) + parseInt(pjBtnWidth) + parseInt(centerDivineBtn) + "px";
-
-
-    //tops
-    el("indicadores").style.top = ui.objectSize * 0.17 + "px";
-    el("XPprogressBar").style.top = ui.objectSize * 0.13 + "px";
-    el("statusText").style.top = ui.objectSize * 0.01 + "px";
-    el("marco").style.top = parseInt(headingH) + "px";
-    el("esceneCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
-    el("pjCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
-    el("npcCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
-    el("spellCanvas").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
-    el("nubes").style.top = "0px";
-    el("scroll").style.top = ui.objectSize * 0.02 + "px";
-    el("scrollBackCenter").style.top = ui.objectSize * 0.02 + "px";
-    el("scrollBackUp").style.top = ui.objectSize * 0.02 + "px";
-    el("btnClose").style.top = ui.objectSize * 0.065 + "px";
-    el("scrollText").style.top = ui.objectSize * 0.06 + "px";
-
-    el("pjDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
-    el("npcDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
-    el("centerDivineBtn").style.top = parseInt(headingH) + (parseInt(marcoH) * 0.1) + "px";
-
-
-    //Others
-    el("indicadores").style.display = "flex";
-    el("indicadores").style.justifyContent = "space-between";
-    el("hpIcon").style.height = ui.objectSize * 0.05 + "px";
-    el("goldIcon").style.height = ui.objectSize * 0.05 + "px";
-    el("spiritIcon").style.height = ui.objectSize * 0.05 + "px";
-    el("hpIcon").style.width = ui.objectSize * 0.05 + "px";
-    el("goldIcon").style.width = ui.objectSize * 0.05 + "px";
-    el("spiritIcon").style.width = ui.objectSize * 0.05 + "px";
-
-};
+}
 
 export {
     defineObjectSize,

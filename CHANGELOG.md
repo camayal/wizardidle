@@ -7,6 +7,7 @@
 - Code: 117 lines of commented-out dead code removed; the ideas found in them moved to `ideas.md`.
 - Code: one short comment above every function; Spanish comments, including the story plans, translated to English.
 - Code: the longest functions split into named pieces (battle, attacks, stats page, dice rolls).
+- Code: screen layout rewritten as one line per element (352 → 139 lines), same positions and sizes.
 - Restored the disabled developer console notes, lost in the 2.0.0 module split.
 
 ## 2.0.0 — 2026-11-11
