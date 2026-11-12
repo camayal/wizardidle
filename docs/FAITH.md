@@ -14,6 +14,10 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 | 2026-11-12 | When the god doesn't revive him | **Other rescuers** (a pagan caravan, a shaman, other ideas), **not the mysterious healer**, who stays the god's own |
 | 2026-11-12 | Offerings snowball | **Not decided without playtests:** the plan includes a test setup to compare the options |
 | 2026-11-12 | Atheism | **Both ways.** While atheist outside chapter X, **the god has actions to try to win him back** |
+| 2026-11-12 | Rescuers | **All four:** pagan caravan, shaman, gravedigger / necromancer, ghost of a fallen wizard (plus his own potion, and alone as the fallback) |
+| 2026-11-12 | Winning back | **All of them:** prayer in despair, a sign, a dream, a pilgrim, hidden blessings, **and rare scrolls or artefacts** (the author's addition, 3.6) |
+| 2026-11-12 | Escape item | **The Last Escape scroll:** found or written at chapter X, burnt a little by each use, burns to ash in chapter XI |
+| 2026-11-12 | Playtests also cover | Revive boost and farming, belief thresholds, shrine chance, professions touches |
 
 ---
 
@@ -133,6 +137,16 @@ Outside chapter X belief drifts both ways, and an Atheist **refuses the god's he
 | **A dream** | Touch the sleeping bag while he camps | A dream of the shrine: next time he finds one, he enters despite being Atheist |
 | **Hidden blessings** | The professions touches (harvest, blessed craft, generous merchant) still work, because he doesn't know it's the god | After several lucky moments: *"feels someone is watching over him"*, +faith |
 | **A pilgrim** | Touch the scene in a town | A believer NPC walks in and talks to him; small faith gain, more if he's a Doubter |
+| **Rare relics** | Touch a chest or pot while he loots (Atheist only) | The loot becomes a rare relic (below) instead of gold |
+
+**Rare relics** (the author's addition; a proposal). Each turns up only for an Atheist, when the god touches his loot, at most once every few levels. He keeps it in the bag (professions), and it works slowly, the way doubt does:
+
+| Relic | Kind | Effect |
+|---|---|---|
+| **Forgotten psalm** | Scroll | He reads it at the next rest: faith moves a third of the way back toward 0. *"reads a few lines and can't stop thinking about them"* |
+| **Pilgrim's medallion** | Worn (takes a ring slot) | While worn, every shrine he passes has a chance to make him enter, curious; each visit gives a little faith. He takes it off when he reaches Believer |
+| **Shard of the Divine crosier** | Keepsake | A piece of the crosier from chapter II (Devotion). Holding it reminds him of who he was: one big jump to Doubter, once per wizard. Only if he reached chapter II |
+| **Letter from a fallen wizard** | Scroll | Written by a wizard from the cemetery (by name) who died faithless and regretted it. A small faith gain and a story line |
 
 ### 3.7 The escape artefact and the story (decided: it exists, and it breaks)
 
