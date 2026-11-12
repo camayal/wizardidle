@@ -45,6 +45,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-12 | Stats: one `src/stats.js` (counters, totals, records, firsts; per wizard and per world); all counters renamed, no save migration in the dev phase; playtest tools in the repo, 10 seeds to lvl 200 per setting | Professions and faith need numbers, and no balance number is set without a playtest. Details in [docs/STATS.md](docs/STATS.md) |
 | 2026-11-12 | Faith: four belief levels, both ways until chapter X; the god's revive stays free and gives faith; other rescuers instead of the self-revive; offerings and all numbers decided only by playtests | The author's choices; details in [docs/FAITH.md](docs/FAITH.md) |
 | 2026-11-12 | Route after 2.1.0: stats and playtest tools, then the story with the faith rebalance, then professions, then the rest | The story depends on faith and professions; no balance number without a playtest |
+| 2026-11-12 | After an erasure, the souls of erased wizards fight beside the next wizard in the final battle (one per erasure, max 5; wizard → souls → god); no faith change | The god's wins bring his own end closer; details in [docs/ERASURE.md](docs/ERASURE.md) |
 | 2026-11-12 | The .md docs (journal, roadmap, changelog, plans) stay published on the site | The repository is public anyway |
 | 2026-11-12 | A dev test bar replaces the old dev console: scenarios, quick actions and a command line, on while developing (`DEV` in config.js), switched off by the deploy | The author wants to test specific criteria quickly; players never load it |
 
@@ -179,6 +180,8 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *Size and frames:* 32×32 PNG, drawn like the tier sprites (`ui.charWidth` × `ui.charHeight` at `ui.squareSide`); a lying figure fits in the bottom 12–14 rows so he rests on the ground line. One frame is enough; two frames (a 1-pixel rise, "still breathing") would work on the existing `animPJ` clock if wanted. Name them `fallen0.png`…`fallen200.png` (or `fallen.png` if generic); the two `loadAlterCanvasChar("muerto")` calls switch to the fallen image, and `muerto.png` is used only when the death is final.
   - *Open question for the author:* which option, and should the fallen sprite change with the rescuer (e.g. carried on the caravan) or stay the same?
 
+- **After an erasure: the souls of erased wizards help the next one** (2026-11-12, asked by the author via the story session; **plan → [docs/ERASURE.md](docs/ERASURE.md)**): when the god wins the final battle he erases the wizard (removed from existence, name reversed and struck through in the cemetery), a museum appears, and a new game is the god going back in time. Decided: in the next final battles **the souls of the erased wizards come to help**, one per erasure **up to 5**, in turn order **wizard → souls → god**; nothing shows before the finale; faith rules don't change. Saved per world (`world.erasures`, `world.loop`, next to the cemetery). Every win brings the god's own end closer, which is the prophecy. A true death is not an erasure.
+
 ## Already built (from the old notes)
 
 Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0) · the per-sprite enemy table: all 669 sprites in `InformationByEnemy.xlsx` match `src/data/enemies.js` exactly (type, rare, corrupted, display name) · the zone boss and enemy table in `enemyLocation.xlsx` (2014): all 16 bosses match, and 14 of 16 enemy lists match exactly. The Castle's sorceress (`la_Hechicera`) was later dropped from the code, and the Forest's elf (`el_Elfo`) was added · the XP/HP/age/enemy-HP formulas in `infodexp.xlsx` (except the two differences noted in "Levelling pace").
@@ -202,6 +205,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Erasure plan
+
+- Wrote `docs/ERASURE.md` for the "god wins" ending (asked by the author via the story session): each erasure leaves a soul that helps the next wizard in the final battle.
+- The author decided: souls that act, one per erasure capped at 5, turn order wizard → souls → god, only in the final battle, no faith change. Open: a soul's strength, entrance, déjà vu lines, the museum.
 
 ### 2026-11-12: Fallen wizard sprite searched
 
