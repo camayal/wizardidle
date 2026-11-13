@@ -9,7 +9,7 @@ import { endEvent, event, nextEvent, startEvent } from '../events.js';
 import { hopEnemy, hopWizard } from '../combat.js';
 import { spell } from '../spells.js';
 import { playSound } from '../audio.js';
-import { clearNPC, print, showStage, updateHeading, wizardName } from '../ui/render.js';
+import { clearNPC, leavePlace, print, showStage, updateHeading, wizardName } from '../ui/render.js';
 
 //TODO add idx for all this part and achievements
 //temp dicegame
@@ -252,10 +252,9 @@ function finalScoreSixFiveFour(nameDicePlayer){
             cargoFirstPlayer = 0;
             resetSixFiveFour()
             clearNPC();
-            showStage();
             run.restAtInn = false;
             endEvent();
-            nextEvent();
+            leavePlace(showStage, nextEvent);       // out through the dice house's door
     }
 }
 

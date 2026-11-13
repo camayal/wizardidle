@@ -83,8 +83,11 @@ ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 function loadBackground(back) {
     ui.currentBackGround = back;
     if (run.simulation) return;     // in a simulation only what's on the scene matters
-    esceneCanvas.style.background = `url('img/${back.toLowerCase()}.png') no-repeat`;
-    esceneCanvas.style.backgroundSize = "contain";
+    // the old background stays until the new image has loaded (no flash of the page behind)
+    withImage("background", `img/${back.toLowerCase()}.png`, () => {
+        esceneCanvas.style.background = `url('img/${back.toLowerCase()}.png') no-repeat`;
+        esceneCanvas.style.backgroundSize = "contain";
+    });
     //change bocadillo location
     localizarBocadillo();
 };
@@ -142,7 +145,20 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
 }
 
 // Draw the wizard with his normal sprite for his level.
+// Load the wizard's animation strips and poses for his tier ahead of time, so an animation
+// never waits for its image (and never leaves him blank).
+let preloadedTier = -1;
+function preloadWizardArt() {
+    const tier = wizardTier();
+    if (tier == preloadedTier || run.simulation) return;
+    preloadedTier = tier;
+    for (const name of Object.keys(WIZARD_ANIMS)) imageNow(`img/anim_${name}${tier}.png`);
+    for (const pose of ["fallen", "dead", "stone"]) imageNow(`img/${pose}${tier}.png`);
+    imageNow(`img/anim_walk${tier}.png`);
+}
+
 function drawWizard() {
+    preloadWizardArt();
     if (ui.petrified) return drawWizardPose("stone");     // still stone (Medusa), see ui/bossAttacks.js
     loop.stop("animPJ");        // a normal redraw ends any animation (ui/render.js, wizard animations)
     wizardAnim = "";
@@ -224,13 +240,13 @@ function playWizardAnim(name, spellId) {
     if (name == wizardAnim && anim.loopFrom !== undefined && loop.isRunning("animPJ")) return;
     wizardAnim = name;
     const tier = wizardTier(), total = anim.frames * (anim.repeat || 1);
+    if (pjCanvas.width != pjCanvas.offsetWidth) clearWizardCanvas();   // only when the size changed
     if (name == "cast" && spellId && spells[spellId]) {
         const school = spells[spellId].school;
         if (school == "Physical") imageNow("img/fx_slash.png");
         else if (school != "na") imageNow(`img/fx_spark_${school.toLowerCase()}.png`);
     }
     let step = 0;
-    clearWizardCanvas();
     const next = () => {
         let frame;
         if (step < total) frame = step % anim.frames;
@@ -286,7 +302,7 @@ function looksRandom() {
     return looks / 2147483647;
 }
 
-const WALK_STEP = 16;               // sprite px per 100 ms frame
+const WALK_STEP = 11;               // sprite px per 100 ms frame (the author found 16 too fast)
 const OFF_RIGHT = 240, OFF_LEFT = -72;   // offsets just past the right and left edges of the scene
 
 // Walk out of the scene to the right, change the scene, walk in from the left to his place
@@ -306,8 +322,10 @@ function wizardX() {
 // Walk to an offset (sprite px), playing the walk strip (mirrored when going back), then call
 // onArrive. Without drawing (simulation, page in the background) he is simply there.
 function walkWizardTo(target, onArrive) {
+    let froze = false;
     const arrive = () => {
         loop.stop("walkPJ");
+        if (froze) loop.thawGame();
         ui.wizardOffset = target;
         if (!run.simulation) drawWizard();
         if (onArrive) onArrive();
@@ -316,6 +334,8 @@ function walkWizardTo(target, onArrive) {
     if (run.simulation || !document.hasFocus() || !dir) return arrive();
     loop.stop("animPJ");
     wizardAnim = "";
+    loop.freezeGame();
+    froze = true;
     const tier = wizardTier();
     let step = 0;
     clearWizardCanvas();
@@ -349,6 +369,86 @@ function showBlink(spotX) {
         ctx.fillRect(cx - unit / 2, cy - (r + 0.5) * unit, unit, (2 * r + 1) * unit);    // a little 4-point star
         ctx.fillRect(cx - (r + 0.5) * unit, cy - unit / 2, (2 * r + 1) * unit, unit);
     }, 120);
+}
+
+// ------------------------------------------------------------------ scene transitions
+// Every change of scene goes through here (option B, chosen by the author): he walks out and
+// in when he goes somewhere, and a quick fade brings a place (shrine, inn, dice house, the
+// healer's cabin) around him; where a place has a door he comes in and goes out through it.
+// While a transition plays the game's clocks wait (loop.freezeGame), so nothing overlaps; in
+// a simulation nothing is drawn and everything happens at once, in the same order.
+
+// Doors in the place backgrounds: scene x of the door's middle, in sprite px.
+const DOORS = { el_poblado_casadados: 16, la_ciudad_casadados: 16, el_poblado_taberna: 40, la_ciudad_taberna: 52 };
+
+let fadeCanvas;
+function fadeLayer() {
+    if (!fadeCanvas) {
+        fadeCanvas = document.createElement("canvas");
+        fadeCanvas.id = "fadeCanvas";
+        fadeCanvas.style.position = "absolute";
+        fadeCanvas.style.pointerEvents = "none";
+        el("spellCanvas").after(fadeCanvas);
+    }
+    const scene = el("esceneCanvas").style;
+    Object.assign(fadeCanvas.style, { left: scene.left, top: scene.top, width: scene.width, height: scene.height, zIndex: 50 });
+    fadeCanvas.width = el("esceneCanvas").offsetWidth;
+    fadeCanvas.height = el("esceneCanvas").offsetHeight;
+    return fadeCanvas;
+}
+
+const FADE_STEP_MS = 80;            // the fade has 9 steps: about 0.7 s
+
+// Fade the scene to dark, change it, fade back in (about 0.7 s), then done(). With
+// ready, it stays dark until ready() says the new scene can show (its image has loaded).
+function fadeScene(change, done, ready) {
+    if (run.simulation || !document.hasFocus()) {
+        change();
+        if (done) done();
+        return;
+    }
+    loop.freezeGame();
+    const layer = fadeLayer(), ctx = layer.getContext("2d");
+    const steps = [0.3, 0.6, 0.85, 1, 1, 0.75, 0.45, 0.2, 0];
+    let k = 0, waited = 0;
+    loop.every("fade", () => {
+        if (k == 4) change();                       // at full dark
+        if (k == 5 && ready && !ready() && waited++ < 62) return;     // hold the dark while it loads (5 s at most)
+        ctx.clearRect(0, 0, layer.width, layer.height);
+        ctx.fillStyle = `rgba(12, 8, 6, ${steps[k]})`;
+        ctx.fillRect(0, 0, layer.width, layer.height);
+        if (++k >= steps.length) {
+            loop.stop("fade");
+            ctx.clearRect(0, 0, layer.width, layer.height);
+            loop.thawGame();
+            if (done) done();
+        }
+    }, FADE_STEP_MS);
+}
+
+// A place appears around him: the fade, then (if it has a door) he comes in through it and
+// walks to his spot. npc is who is there (e.g. the shrine's mystic), shown at the same moment.
+function enterPlace(bg, npc, done) {
+    const door = DOORS[bg.toLowerCase()], src = `img/${bg.toLowerCase()}.png`;
+    imageNow(src);                                  // start loading it during the fade
+    fadeScene(() => {
+        loadBackground(bg);
+        if (npc) loadNPC(npc);
+        if (door != null) ui.wizardOffset = door - 48;
+        if (!run.simulation) drawWizard();
+    }, () => (door != null ? walkWizardTo(0, done) : done && done()), () => imageNow(src) != null);
+}
+
+// He leaves the place: out through its door and a fade back outside (changeScene draws the
+// outside), or, where there is no door, he walks out of the scene to the right and in again.
+function leavePlace(changeScene, done) {
+    const door = DOORS[(ui.currentBackGround || "").toLowerCase()];
+    if (door == null) return walkThroughScene(changeScene, done);
+    walkWizardTo(door - 48, () => fadeScene(() => {
+        ui.wizardOffset = 0;
+        changeScene();
+        if (!run.simulation) drawWizard();
+    }, done));
 }
 
 // Remove the enemy (or object) from the right side of the scene.
@@ -471,6 +571,9 @@ function print(data) {
 };
 
 export {
+    enterPlace,
+    fadeScene,
+    leavePlace,
     walkThroughScene,
     npcBox,
     looksRandom,
