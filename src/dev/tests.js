@@ -191,6 +191,10 @@ const actions = [
     { name: 'Enemy move: slash (warrior)', run() { previewEnemy('el_guerrero11', { kind: 'slash' }); } },
     { name: 'Enemy move: pounce (creature)', run() { previewEnemy('animalejo24', { kind: 'pounce' }); } },
     { name: 'Enemy move: slam (ent)', run() { previewEnemy('el_ent3', { kind: 'slam' }); } },
+    { name: 'Enemy move: shoot (elf)', run() { previewEnemy('el_elfo1', { kind: 'shoot' }); } },
+    { name: 'Enemy move: thrust (warrior)', run() { previewEnemy('el_guerrero2', { kind: 'thrust' }); } },
+    { name: 'Enemy move: smash (ogre)', run() { previewEnemy('el_ogro3', { kind: 'smash' }); } },
+    { name: 'Enemy move: charge (cowren)', run() { previewEnemy('el_tauren1', { kind: 'charge' }); } },
     { name: 'Enemy move: cast frost (wizard)', run() { previewEnemy('el_hechicero2', { kind: 'cast', school: 'frost' }); } },
     { name: 'Crisp pixels on / off', run() {
         ui.crisp = !ui.crisp;

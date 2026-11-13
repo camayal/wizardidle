@@ -12,11 +12,16 @@ import * as loop from '../loop.js';
 import { enemySprites } from '../data/enemies.js';
 import { imageNow, loadNPC, npcCanvas, pixelContext } from './render.js';
 
-// Melee families by how they fight (reviewed with the author): weapon users slash, beasts
-// pounce, heavy bodies slam. Families that only cast never need an entry.
+// Melee families by the attack their sprites make (approved by the author): swords slash,
+// bows shoot, spears thrust, heavy weapons smash, horns charge, beasts pounce, heavy bodies
+// slam. Each family takes its most common attack; families that only cast need no entry.
 const MELEE = {
-    animalejo: "pounce", el_capricor: "pounce", el_diabillo: "pounce", la_hidra: "pounce",
+    animalejo: "pounce", el_diabillo: "pounce", la_hidra: "pounce",
     el_ent: "slam", el_umigubi: "slam", el_golem: "slam", momia: "slam", el_roco: "slam",
+    el_elfo: "shoot",
+    el_guerrero: "thrust", el_dare: "thrust",
+    el_ogro: "smash", el_enano: "smash", el_herbo: "smash", el_cornovit: "smash",
+    el_capricor: "charge", el_tauren: "charge",
 };
 const DEFAULT_MELEE = "slash";
 
@@ -25,12 +30,41 @@ const SPELL_SCHOOL = { spellPush1: "arcane", spellPush2: "arcane", spellPush3: "
     spellPush4: "fire", spellPush5: "thunder", spellPush8: "frost", spellChispasMulti_12: "divine" };
 
 // Overlay strips: frame width and height in sprite pixels (school sparks are 16 x 16).
-const FX_SIZE = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8] };
+const FX_SIZE = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8], fx_arrow: [12, 5],
+    fx_thrust: [28, 10], fx_smash: [24, 40], fx_impact: [16, 16] };
+const WIZARD_DISTANCE = 160;        // sprite px from the enemy's box to the wizard's (5 squares)
 
 // One entry per 100 ms frame: sprite offset dx/dy and squash/stretch sx/sy (anchored at the
 // feet), the overlay [strip, frame, x, y] relative to the enemy's 32 x 32 box, and a shake.
+// The blow lands on the frame marked hit (by default the one before last). The frame lists of
+// shoot, thrust, smash and charge are the artist's.
 function frames(kind, school) {
     const f = (dx = 0, dy = 0, sx = 1, sy = 1, fx = null, shake = 0) => ({ dx, dy, sx, sy, fx, shake });
+    if (kind == "shoot") {          // draw, release, recoil; the arrow flies 16 px a frame to the wizard
+        const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];
+        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 16) seq.push(f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]));
+        seq[seq.length - 1].hit = true;
+        seq.push(f());
+        return seq;
+    }
+    if (kind == "thrust") return [f(), f(2, 0), f(-6, 0, 1.04, 0.97, ["fx_thrust", 0, -26, 11]), f(-7, 0, 1, 1, ["fx_thrust", 1, -26, 11]),
+        f(-6, 0, 1, 1, ["fx_thrust", 2, -26, 11]), f(-3, 0, 1, 1, ["fx_thrust", 3, -26, 11]), f()];
+    if (kind == "smash") return [f(), f(1, -1, 0.97, 1.08), f(2, -2, 0.95, 1.12, ["fx_smash", 0, -14, -8]), f(0, -1, 1, 1.05, ["fx_smash", 1, -14, -8]),
+        f(-3, 0, 1.08, 0.9, ["fx_smash", 2, -14, -8]), f(-3, 0, 1.1, 0.86, ["fx_smash", 3, -14, -8], 1),
+        f(-2, 0, 1.04, 0.95, ["fx_smash", 4, -14, -8], -1), f(-1, 0, 1, 1, ["fx_dust", 0, -14, 25]), f(0, 0, 1, 1, ["fx_dust", 1, -14, 25]),
+        f(0, 0, 1, 1, ["fx_dust", 2, -14, 25]), f()];
+    if (kind == "charge") {         // across the scene: paw the ground, dash to the wizard, hit, trot back
+        const reach = 26 - WIZARD_DISTANCE;                     // stops just in front of the wizard
+        const dust = (i) => ["fx_dust", i, 20, 25];
+        const seq = [f(), f(1, 0, 1.04, 0.94, dust(0)), f(), f(1, 0, 1.04, 0.94, dust(1)), f(2, 0, 1.05, 0.92)];
+        for (const t of [0.2, 0.42, 0.64, 0.84, 0.97]) seq.push({ ...f(Math.round(reach * t), 0, 1.04, 0.96, dust(seq.length % 3)), pose: "run" });
+        seq.push({ ...f(reach, 0, 1.06, 0.96, ["fx_impact", 0, -10, 8], 2), hit: true },
+            f(reach + 2, 0, 1.04, 0.97, ["fx_impact", 1, -10, 8], -2), f(reach + 8, 0, 1, 1, ["fx_impact", 2, -10, 8], 1),
+            f(reach + 14, 0, 1, 1, ["fx_impact", 3, -10, 8]));
+        for (const t of [0.75, 0.55, 0.35, 0.17, 0.05]) seq.push({ ...f(Math.round(reach * t), seq.length % 2 ? -1 : 0), pose: "back" });
+        seq.push(f());
+        return seq;
+    }
     if (kind == "slash") return [f(), f(1, 0, 1, 1), f(2, 0, 1.02, 0.97), f(-3, 0, 1, 1, ["fx_slash", 0, -14, 0]),
         f(-3, 0, 1, 1, ["fx_slash", 1, -14, 0]), f(-3, 0, 1, 1, ["fx_slash", 2, -14, 0]), f(-2, 0, 1, 1, ["fx_slash", 3, -14, 0]),
         f(-1, 0, 1, 1, ["fx_slash", 4, -14, 0]), f()];
@@ -52,15 +86,33 @@ export function enemyMove() {
     return { kind: MELEE[fight.enemy] || DEFAULT_MELEE };
 }
 
+// The artist's running frames for chargers (img/run_<sprite>.png, 32 x 32 frames facing
+// left); without them the standing sprite slides.
+let runStep = 0;
+function poseImage(npc, frame) {
+    if (!frame.pose) return null;
+    const strip = imageNow(`img/run_${npc}.png`);
+    return strip ? { img: strip, index: runStep++ % Math.max(1, strip.naturalWidth / 32), mirror: frame.pose == "back" } : null;
+}
+
 function drawFrame(npc, frame) {
     const sprite = imageNow(`img/${npc}.png`);
     if (!sprite) return;
+    const pose = poseImage(npc, frame);
     const unit = ui.charWidth / 32;                             // one sprite pixel on screen
     const ex = ui.squareSide * 6 + frame.shake * unit, ey = ui.headLevel;
     const ctx = pixelContext(npcCanvas);
     ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
     const w = ui.charWidth * frame.sx, h = ui.charWidth * frame.sy;
-    ctx.drawImage(sprite, ex + frame.dx * unit + (ui.charWidth - w) / 2, ey + frame.dy * unit + ui.charWidth - h, w, h);
+    const x = ex + frame.dx * unit + (ui.charWidth - w) / 2, y = ey + frame.dy * unit + ui.charWidth - h;
+    if (pose) {
+        ctx.save();
+        if (pose.mirror) { ctx.translate(x + w, y); ctx.scale(-1, 1); } else ctx.translate(x, y);
+        ctx.drawImage(pose.img, pose.index * 32, 0, 32, 32, 0, 0, w, h);
+        ctx.restore();
+    } else {
+        ctx.drawImage(sprite, x, y, w, h);
+    }
     if (!frame.fx) return;
     const [strip, index, ox, oy] = frame.fx;
     const fx = imageNow(`img/${strip}.png`);
@@ -74,7 +126,8 @@ export function playEnemyMove(move, onHit) {
     let hit = false;
     const land = () => { if (!hit) { hit = true; onHit(); } };
     if (run.simulation || !document.hasFocus() || !state.npc) return land();
-    const npc = state.npc, seq = frames(move.kind, move.school), hitAt = seq.length - 2;
+    const npc = state.npc, seq = frames(move.kind, move.school);
+    const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
     imageNow(`img/${npc}.png`);
     for (const frame of seq) if (frame.fx) imageNow(`img/${frame.fx[0]}.png`);   // start loading
     npcCanvas.width = npcCanvas.offsetWidth;
