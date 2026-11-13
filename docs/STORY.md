@@ -26,6 +26,7 @@ Decided by the author on 2026-11-12, one question at a time.
 | V vs IX | **V is a moral shock** (guilt for the harm he did). **IX is depression and questions:** why didn't you protect me? X answers it. |
 | The seer | **Guards the staff in Heidan** and gives it up at XI. **She sees the loops:** in echo games she counts your rewinds. |
 | The Tower at 139 | **The corrupt staff drags him there**, hungry for a king. |
+| Your shrine | **He destroys it in X.** After breaking with you he walks back to the shrine he found in II and breaks it with his bare hands; the candle goes out. Animated. From then on it stays broken (and the museum shows it broken). |
 | Self-crowning (XI) | **A dark irony:** by crowning himself he bends his own road and calls the curse on himself (harder XI). |
 | Ending: you win | **You unmake his soul.** The game ends, a museum, then a new wizard: for a god time is nothing, so a new game is you going back in time. The cemetery shows his name **reversed and struck through**. |
 | Ending: he wins | **He becomes the Omni and engulfs the universe** to make a new one. The save becomes a **black museum, blocked forever**: chapter scrolls, snapshots of each chapter's moment, stats, map. |
@@ -83,6 +84,7 @@ Each scroll has a fixed text with at most three slots, filled when the scroll op
 |---|---|---|
 | `{name}` | `wizardName()` | |
 | `{zone}` | the current zone's display name | |
+| `{shrineZone}` | the zone where he found your shrine in Chapter II (saved then, `state.story.shrineZone`) | |
 | `{staffName}` | the staff's true name: a random name made once, in the first game of the world, and kept in every loop (`world.staffName`) | |
 | **⟨place⟩** | the current zone's **scenery** (a new field in `src/data/zones.js`) | 6, below |
 | **⟨faith⟩** | the **belief level** at that moment (FAITH.md 3.1) | Devout · Believer · Doubter · Atheist |
@@ -444,7 +446,11 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
   - *normal:* So was his prayer.
   - *echo:* So was his prayer. You have watched it go before. It does not get easier.
 
-**Console, lvl 190 (event, the Last Escape):** {name} writes one last scroll, for himself alone. · No god will carry him now. He will carry himself.
+**Console, lvl 190 (event, the broken shrine), step by step:** {name} leaves the road. He knows where he is going. · He walks back to the {shrineZone}, to the shrine where he first felt you. · It is still there. The candle is still lit. · He breaks the cross with his bare hands. *(destruction animation)* · The candle goes out. Somewhere, you feel it.
+
+**Echo (console, as the candle goes out):** You have watched this candle go out before.
+
+**Console, lvl 190 (event, the Last Escape, right after the shrine):** {name} writes one last scroll, for himself alone. · No god will carry him now. He will carry himself.
 
 **Console, Last Escape used:** The scroll tears {name} out of the fight and closes his wounds. · A new burn spreads across its edge.
 
@@ -561,6 +567,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 - **Midas is gone forever after VII:** zone bosses keep returning in play, but Midas never appears again once he dies in the Tower; the Tower has no boss, and his golden-ray heal exists only before VII (ideas.md, "Bosses return, except Midas").
 - **The Tower's people:** no mages in the City or the Tower from VII until the lynching (149); after it the Tower is full of mages again.
 - **The staff's name:** `world.staffName`, a random name generated in the first game and kept across every loop and new wizard.
-- **Art for the story:** the god's own shrine (II); a hooded stranger sprite distinct from the ordinary hooded figures (II onward); the wizard lying injured (falls).
+- **The broken shrine (X):** save the zone of the Chapter II shrine; at 190, after the scroll, he travels there (like the Volcano and Tower pulls), the shrine is shown lit, the destruction animation plays, then the Last Escape event. Afterwards the shrine is drawn broken, candle out, wherever it appears (later visits, the museum).
+- **Art for the story:** the god's own shrine (II), its destruction animation and its broken state (X); a hooded stranger sprite distinct from the ordinary hooded figures (II onward); the wizard lying injured (falls).
 - **Dropped from 2018:** drinking Midas's essence so the god can't revive him (the falls model replaces it); Midas becoming the Tower's boss.
 - **Scroll format:** title in `.titles`, the subtitle under it, short `<br><br>` paragraphs; the last line can use `.subtitles` (dark red, bold).

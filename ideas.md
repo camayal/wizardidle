@@ -182,6 +182,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: The broken shrine
+- The author decided the god's shrine is destroyed in Chapter X: after breaking with the god, the wizard walks back to the shrine he found in Chapter II and breaks it with his bare hands; the candle goes out. Then he writes the Last Escape scroll. Step-by-step console lines and an echo line in [docs/STORY.md](docs/STORY.md); the Chapter II shrine's zone is saved (`{shrineZone}`). The shrine stays broken afterwards, in the museum too.
+- Art: the destruction animation and the broken state requested from the artist.
+
 ### 2026-11-13: Story scrolls, the author's review
 - The author read every scroll and left a verdict and note per scroll. Kept as written: III, VI, VIII part II, X, XI.
 - Changed: "Midas's Tower"; Chapter I has slimes instead of wolves (no wolves in the game) and no longer reveals that the healer is the god ("he never sees the healer's face"); Chapter V's moral shock is stronger (he wakes among the dead of a pilgrim camp, the staff warm in his hand, and prays to their gods); the epilogues are now *The Unmaking* and *The Last Light*.
