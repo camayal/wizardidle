@@ -11,7 +11,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 ## Where we are
 
 - **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.1.0 live since 2026-11-12 (stages 1 and 2: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the curated stats scroll and records page, then the faith stats and playtests ([FAITH.md](docs/FAITH.md)); then the story with the faith rebalance.
+- **Released:** 2.1.0 live since 2026-11-12 (stages 1 and 2: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the faith stats and playtests ([FAITH.md](docs/FAITH.md)); then the story with the faith rebalance.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.1.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Decisions (and why)
@@ -206,6 +206,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Stats scroll: curated page and Records
+- Built mockups of three options with a simulated level-120 wizard and three earlier ones (local preview in `wizardidle-old-ideas/tools/stats-preview/`). The author chose **A + B**.
+- **Stats** (curated): Wizard, Battles, Magic, Travels, Gold, Faith, Achievements, about 35 lines; totals instead of long lists (enemies defeated with rare, bosses defeated of met, favourite school and zone, zones visited of 16, critical hit %, your touches in one line).
+- **Records** (tab in the same scroll): this wizard's bests (longest streak, biggest hit, most faith at once, richest; the last three are new records), firsts, a chart of hours played per level, numbers across all wizards, and a Hall of wizards. Records now keep the wizard's name; cemetery entries keep kills and falls.
+- v1 bug gone with the old page: "Magical attacks" showed NaN past 1,000 attacks (it subtracted numbers already formatted as "2.35k").
 
 ### 2026-11-12: Stats module, simulation mode, god bots, runner, baseline
 - **Stats** (`src/stats.js`): counters, totals, records and firsts, per wizard (`state.stats`) and per world (`world.stats`); all 55 old counters renamed to dotted names (no migration); one history line per level. Stats, achievements, help and kill pages byte-identical before and after.

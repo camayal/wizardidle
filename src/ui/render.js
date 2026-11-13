@@ -11,6 +11,7 @@ import { MAXLINESINCONSOLE } from '../config.js';
 import { logro } from '../achievements.js';
 import { localizarBocadillo } from './scrolls.js';
 import { el } from './dom.js';
+import { stats } from '../stats.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -30,6 +31,8 @@ const npcCanvas = el("npcCanvas");
 function updateHeading() {
     if (!run.simulation) showHeading();
     if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
+    stats.max("faith.highest", Math.round(state.player.faith));
+    stats.max("gold.highest", Math.round(state.player.gold));
     //calcule % of xp bar
     ui.xpPercent = 1 - (state.player.xpNext - state.player.xp) / (state.player.xpNext - state.player.xpPast)
 };

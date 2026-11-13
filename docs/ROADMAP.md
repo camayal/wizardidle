@@ -30,7 +30,7 @@ Order decided by the author on 2026-11-12: the story depends on the faith rebala
 **3a. Stats and playtest tools**
 - [x] Dev test bar (`src/dev/tests.js`, done 2026-11-12): a bar at the bottom of the screen while developing, with test scenarios (each prepares the wizard and forces the first event, then says what to check), quick actions (+1 level, gold, faith, speed x10, pause) and a command line. `DEV` in `src/config.js`; the deploy switches it off, so the live site never loads it.
 - [x] A stats module (`src/stats.js`, done 2026-11-12): counters, totals, records and firsts under dotted names, per wizard and per world, one history line per level ([STATS.md](STATS.md)).
-- [ ] The curated stats scroll and the records page (open question in [STATS.md](STATS.md)).
+- [x] The curated stats scroll and the Records page (done 2026-11-12, `src/ui/statsPages.js`; chosen from mockups, options A + B).
 - [x] Playtest tools (done 2026-11-12): simulation mode (`?sim=1`, `src/dev/sim.js`: virtual clock, seeded random, no sound or drawing), god bots (`src/dev/bots.js`), the runner `tools/playtest.py`, results in `docs/playtests/`. A level-200 run takes about 2 real seconds.
 - [ ] Faith stats (`faithChange()`), then the faith playtests ([FAITH.md](FAITH.md)); professions and dice stats with their features; data-driven achievements.
 

@@ -347,6 +347,7 @@ function hopEnemy() {
 
 // Take damage off the enemy, never below 0.
 function damageEnemy(damage) {
+    stats.max("combat.biggestHit", Math.round(damage));
     if (fight.enemyHP - damage < 0) {
         fight.enemyHP = 0;
     } else {

@@ -4,7 +4,7 @@ The technical base the professions plan ([PROFESSIONS.md](PROFESSIONS.md)) and t
 1. **Stats:** record almost everything that happens, so achievements, quests, the story and balance decisions have numbers to work from. This is the "Track almost everything as stats" backlog entry in `ideas.md`.
 2. **Playtest tools:** fast, repeatable simulated runs with god bots, because the author decided that **no balance number is set without a playtest**.
 
-Written 2026-11-12. **Built 2026-11-12:** steps 1–4 below (the stats module, simulation mode, god bots and the runner, and the baseline in `docs/playtests/`); the curated scroll and records page are still open.
+Written 2026-11-12. **Built 2026-11-12:** steps 1–4 below (the stats module, simulation mode, god bots and the runner, and the baseline in `docs/playtests/`); the curated stats scroll and the Records page are built too (the author chose options A + B from mockups).
 
 ---
 
@@ -94,5 +94,5 @@ From FAITH.md: offerings (share / cap / sqrt / level), the revive boost and fait
 
 ## 5. Open questions
 
-- Which stats make the curated scroll, and how the records page looks (it could reuse the scroll art).
+- ~~Which stats make the curated scroll, and how the records page looks.~~ **Decided 2026-11-12:** curated Stats page plus a Records page in the same scroll (tabs), from mockups.
 - Run time: 10 seeds × level 200 per setting may take a while; if it's too slow, the runner can run several Edge windows at once.

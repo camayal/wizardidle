@@ -8,6 +8,7 @@ import { pauseToggle } from '../game.js';
 import { masterTime } from '../config.js';
 import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, updateHelp, updateKill, updateStats } from './scrolls.js';
 import { el } from './dom.js';
+import { stats } from '../stats.js';
 
 //////////////////////////////END OTHER REGION//////////////////////////////////
 //------------------------------------------------------------------------------//
@@ -37,6 +38,8 @@ function realKill(){
         age: state.player.age,
         born: state.meta.createdAt,
         died: new Date().toISOString(),
+        kills: stats.get("kill.enemies") + stats.get("kill.rare"),
+        falls: stats.get("death.falls"),
     });
     loop.stopAll(); // every clock, including any v1 would have leaked
     run.multipleEventsCounter = 0;
@@ -81,6 +84,7 @@ function helpBtn(){
 
 // Toolbar: open the stats scroll (refreshed while open).
 function statsBtn(){
+    ui.statsView = "stats";
     loop.every("stats", updateStats,masterTime);
     updateStats();
     el("innerTextScroll").style.display = "block";

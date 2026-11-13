@@ -25,7 +25,7 @@ export function playTime() {
 }
 
 function when(value) {
-    return { value, lvl: state.player.lvl, age: Math.round(state.player.age * 10) / 10, date: new Date().toISOString(), playTimeMs: playTime() };
+    return { value, name: state.player.name, lvl: state.player.lvl, age: Math.round(state.player.age * 10) / 10, date: new Date().toISOString(), playTimeMs: playTime() };
 }
 
 function stores(name, options) {
