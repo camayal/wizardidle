@@ -478,7 +478,36 @@ function sleepInDark(dream, done) {
 // change of scene (the author's request); fade = true keeps the plain fade (waking up in the
 // healer's cabin). Already there (back to the same shrine): only who is there changes.
 // npc is who is there (e.g. the shrine's mystic), shown with the place.
+// The doors of those places from the street (the author: he stops at the door before going
+// in): the street background that shows it and the door's centre in scene px. Doors already
+// in the art: the Town's open doorways, the City's saloon doors (beer poster) and the door by
+// the dice sign.
+const STREET_DOORS = {
+    el_poblado_taberna: ["el_Poblado4", 120], el_poblado_casadados: ["el_Poblado5", 119],
+    la_ciudad_taberna: ["la_Ciudad4", 52], la_ciudad_casadados: ["la_Ciudad1", 149],
+};
+const DOOR_PAUSE_MS = 400;
+
 function enterPlace(bg, npc, done, fade = false) {
+    const street = STREET_DOORS[bg.toLowerCase()];
+    if (street && !run.simulation && document.hasFocus()) {
+        const [streetBg, x] = street;
+        const toDoor = () => walkWizardTo(x - 48, () => {
+            loop.freezeGame();                      // a short stop at the door, then in
+            loop.every("doorPause", () => {
+                loop.stop("doorPause");
+                loop.thawGame();
+                goInside(bg, npc, done, fade);
+            }, DOOR_PAUSE_MS);
+        });
+        imageNow(`img/${streetBg.toLowerCase()}.png`);
+        if ((ui.currentBackGround || "").toLowerCase() == streetBg.toLowerCase()) return toDoor();
+        return walkThroughScene(() => loadBackground(streetBg), toDoor);
+    }
+    goInside(bg, npc, done, fade);
+}
+
+function goInside(bg, npc, done, fade) {
     const door = DOORS[bg.toLowerCase()], src = `img/${bg.toLowerCase()}.png`;
     imageNow(src);                                  // start loading it on the way
     const change = () => {

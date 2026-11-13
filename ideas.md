@@ -255,6 +255,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: He stops at the door before going in
+- The author (playtest notes, then "doors outside too"): before entering an inn or a dice house in the Town or the City, he walks to the street that shows its door (if he isn't on it), walks to the door, stops a moment (0.4 s), then the fade takes him inside. The doors were already in the street art: the Town's open doorways (stages 4 and 5), the City's saloon doors by the beer poster (stage 4) and the door by the dice sign (stage 1). `STREET_DOORS` in render.js; no art needed. Simulations and the page in the background go straight in, as before.
+- Tests: real-browser trace of the Town inn (street, doorway, stop, inside, sleep, out); gameplay suite 0 errors.
+
 ### 2026-11-13: Belief levels: two meters (decision)
 - From the author's playtest notes, the author chose **two meters**: faith stays the currency the god spends; belief becomes its own bounded meter moved by moments (a critical heal or the final blow a lot, normal touches a little, leaving him to revive alone a lot down), the four levels read from it, and the story can lock it at "lost" (a symbol, not -inf). Recorded in docs/FAITH.md Decisions; the planner details weights, bounds and what counts as critical before it is built.
 
