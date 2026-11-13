@@ -20,7 +20,7 @@ Scene spells are full-scene animations (the size of a zone background, ground ef
 
 **The wizard's super-critic** (in `attackEV()`, `src/combat.js`, where critics are rolled today):
 - When a critic is rolled, a second roll decides whether it becomes a super-critic. Starting values to playtest: **1 in 50 critics before level 90**, **1 in 10 once he has a staff**.
-- Before he has a staff, the super-critic casts the boss scene spell of **his strongest school** (the `school_*` counters already exist): Nature → vines, Frost → ice spikes, Fire → fire rain, Arcane → arcane rain, Thunder → lightning, Physical → earth spikes.
+- Before he has a staff, the super-critic casts the boss scene spell of **his strongest school** (the `school_*` counters already exist): Nature → vines, Frost → ice spikes, Fire → fire rain, Arcane → arcane rain, Thunder → lightning, Physical → earth spikes, Shadow → arcane rain (the darkest of the boss ones). Divine is left out: those are the god's own spells (his touch), so they never count as the wizard's school.
 - With a staff, it casts the staff's scene spell (below). Damage: very high, e.g. 3× a critic, but **never a one-shot on a boss or hydra** (capped below their remaining HP, the way the god's touch never kills today).
 
 **The staff scene spells** (proposal, to decide): the sacred staff → **lightning** (holy thunder), the corrupt staff → **flame pillar** (the Volcano where it was found), *Nomaleatorio* → **all of them, picked by school**, plus the meteor shower in the final battle.
