@@ -143,9 +143,10 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
 
 // Draw the wizard with his normal sprite for his level.
 function drawWizard() {
+    if (ui.petrified) return drawWizardPose("stone");     // still stone (Medusa), see ui/bossAttacks.js
     loop.stop("animPJ");        // a normal redraw ends any animation (ui/render.js, wizard animations)
     wizardAnim = "";
-    loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+    loadCanvasChar(state.player.lvl, wizardX(), ui.headLevel);
 }
 
 // ------------------------------------------------------------------ wizard animations
@@ -158,6 +159,8 @@ const WIZARD_ANIMS = {
     pray: { frames: 6, ms: 100, loopFrom: 3 },          // frames 3-5 loop until he stands up
     fall_sit: { frames: 6, ms: 100, then: "fallen" },   // a fall he can be revived from
     fall_dead: { frames: 6, ms: 110, then: "dead" },    // true death
+    petrify: { frames: 8, ms: 100, then: "stone" },      // Medusa's gaze: stone climbs from the feet
+    unpetrify: { frames: 10, ms: 100 },                  // the stone cracks and bursts off
 };
 let wizardAnim = "";
 
@@ -194,7 +197,7 @@ function staffTip(img, tier) {
 // slash in front of him; heals and other non-attacks keep the glint.
 function castEffect(ctx, frame, img, tier, spellId) {
     const school = spellId && spells[spellId] ? spells[spellId].school : "na";
-    const unit = ui.charWidth / 32, x0 = ui.squareSide, y0 = ui.headLevel;
+    const unit = ui.charWidth / 32, x0 = wizardX(), y0 = ui.headLevel;
     if (school == "Physical") {
         const slash = imageNow("img/fx_slash.png");
         if (!slash || frame < 2) return;
@@ -215,6 +218,8 @@ function castEffect(ctx, frame, img, tier, spellId) {
 // For "cast", spellId says what he casts (see castEffect).
 function playWizardAnim(name, spellId) {
     if (run.simulation) return;
+    if (ui.petrified && (name == "cast" || name == "walk" || name == "pray")) return;    // stone can't move
+    if (name.startsWith("fall")) { ui.petrified = false; loop.stop("stone"); }          // a fall breaks the stone
     const anim = WIZARD_ANIMS[name];
     if (name == wizardAnim && anim.loopFrom !== undefined && loop.isRunning("animPJ")) return;
     wizardAnim = name;
@@ -233,6 +238,7 @@ function playWizardAnim(name, spellId) {
         else {
             loop.stop("animPJ");
             wizardAnim = "";
+            if (name == "unpetrify") ui.petrified = false;
             if (anim.then) drawWizardPose(anim.then); else drawWizard();
             return;
         }
@@ -240,7 +246,7 @@ function playWizardAnim(name, spellId) {
         withImage("pj", `img/anim_${name}${tier}.png`, (img) => {
             const ctx = pixelContext(pjCanvas);
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
-            ctx.drawImage(img, frame * 32, 0, 32, 32, ui.squareSide, ui.headLevel, ui.charWidth, ui.charHeight);
+            ctx.drawImage(img, frame * 32, 0, 32, 32, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
             if (name == "cast") castEffect(ctx, frame, img, tier, spellId);
         });
     };
@@ -256,15 +262,80 @@ function drawWizardPose(pose) {
     clearWizardCanvas();
     withImage("pj", `img/${pose}${wizardTier()}.png`, (img) => {
         const ctx = pixelContext(pjCanvas);
-        ctx.drawImage(img, ui.squareSide, ui.headLevel, ui.charWidth, ui.charHeight);
+        ctx.drawImage(img, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
         if (pose != "fallen") return;
         withImage("pjSkull", "img/muerto.png", (skull) => {
             // half his size, 12 sprite px right and 10 up from his top-left (the artist's spot,
             // clear of every staff top and crown)
-            pixelContext(pjCanvas).drawImage(skull, ui.squareSide + ui.charWidth * 0.375, ui.headLevel - ui.charHeight * 0.3125,
+            pixelContext(pjCanvas).drawImage(skull, wizardX() + ui.charWidth * 0.375, ui.headLevel - ui.charHeight * 0.3125,
                 ui.charWidth / 2, ui.charHeight / 2);
         });
     });
+}
+
+// ------------------------------------------------------------------ walking in the scene
+// The wizard can leave his place to reach something (a find, a statue) and come back.
+// ui.wizardOffset is how far right of his place he is, in sprite pixels (the 256 x 64 scene
+// has the wizard's place at x 32). Everything drawn on him follows it.
+
+// Randomness for the looks only (where a blink appears): never the game's Math.random, so a
+// seeded simulation plays the same whatever is drawn.
+let looks = (Date.now() % 2147483647) || 1;
+function looksRandom() {
+    looks = (looks * 48271) % 2147483647;
+    return looks / 2147483647;
+}
+
+function wizardX() {
+    return ui.squareSide + (ui.wizardOffset || 0) * ui.charWidth / 32;
+}
+
+// Walk to an offset (sprite px), playing the walk strip (mirrored when going back), then call
+// onArrive. Without drawing (simulation, page in the background) he is simply there.
+function walkWizardTo(target, onArrive) {
+    const arrive = () => {
+        loop.stop("walkPJ");
+        ui.wizardOffset = target;
+        if (!run.simulation) drawWizard();
+        if (onArrive) onArrive();
+    };
+    const from = ui.wizardOffset || 0, dir = Math.sign(target - from);
+    if (run.simulation || !document.hasFocus() || !dir) return arrive();
+    loop.stop("animPJ");
+    wizardAnim = "";
+    const tier = wizardTier();
+    let step = 0;
+    clearWizardCanvas();
+    loop.every("walkPJ", () => {
+        ui.wizardOffset = (ui.wizardOffset || 0) + dir * 9;
+        if ((target - ui.wizardOffset) * dir <= 0) return arrive();
+        const frame = step++ % 4;
+        withImage("pj", `img/anim_walk${tier}.png`, (img) => {
+            const ctx = pixelContext(pjCanvas), x = wizardX();
+            ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
+            ctx.save();
+            if (dir < 0) { ctx.translate(x + ui.charWidth, ui.headLevel); ctx.scale(-1, 1); } else ctx.translate(x, ui.headLevel);
+            ctx.drawImage(img, frame * 32, 0, 32, 32, 0, 0, ui.charWidth, ui.charHeight);
+            ctx.restore();
+        });
+    }, 100);
+}
+
+// A small twinkle on the ground where something can be found (scene x in sprite px), until
+// the find is drawn there (loadNPC stops it).
+function showBlink(spotX) {
+    if (run.simulation) return;
+    npcCanvas.width = npcCanvas.offsetWidth;
+    npcCanvas.height = npcCanvas.offsetHeight;
+    const unit = ui.charWidth / 32, cx = (spotX + 5) * unit, cy = 50 * unit;
+    let k = 0;
+    loop.every("blink", () => {
+        const ctx = npcCanvas.getContext("2d"), r = [1, 2, 3, 2][k++ % 4];
+        ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        ctx.fillStyle = "#fffbe0";
+        ctx.fillRect(cx - unit / 2, cy - (r + 0.5) * unit, unit, (2 * r + 1) * unit);    // a little 4-point star
+        ctx.fillRect(cx - (r + 0.5) * unit, cy - unit / 2, (2 * r + 1) * unit, unit);
+    }, 120);
 }
 
 // Remove the enemy (or object) from the right side of the scene.
@@ -300,9 +371,10 @@ function npcBox(npc, squareSideIn = ui.squareSide, headLevelIn = ui.headLevel, c
     if (npc.match("mother") || npc.match("guardian")) {
         return [squareSideIn * 6, headLevelIn - (ui.objectSize * 0.113), charWidthIn * 1.33, charHeightIn * 1.9];
     }
-    //objects to get (20x20px)
+    //objects to get (20x20px), where the blink was (ui.findSpot, scene x in sprite px)
     if (npc.match("libro") || npc.match("runa")) {
-        return [squareSideIn * 2, headLevelIn * 1.6, charWidthIn / 3, charHeightIn / 3];
+        const x = ui.findSpot != null ? ui.findSpot * charWidthIn / 32 : squareSideIn * 2;
+        return [x, headLevelIn * 1.6, charWidthIn / 3, charHeightIn / 3];
     }
     //the remaining (32x32px)
     return [squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn];
@@ -312,6 +384,7 @@ function npcBox(npc, squareSideIn = ui.squareSide, headLevelIn = ui.headLevel, c
 function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, charWidthIn=ui.charWidth, charHeightIn=ui.charHeight) {
     state.npc = npc;
     if (run.simulation) return;
+    loop.stop("blink");
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     withImage("npc", `img/${npc}.png`, (img) => {
@@ -385,6 +458,10 @@ function print(data) {
 };
 
 export {
+    npcBox,
+    looksRandom,
+    showBlink,
+    walkWizardTo,
     playHydraGrow,
     imageNow,
     drawWizardPose,

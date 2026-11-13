@@ -2,10 +2,11 @@
 
 Scene spells are full-scene animations (the size of a zone background, ground effects translucent over the zone's own soil), drafted by the artist for boss attacks (`ideas.md`, "Scene spells"; art in `wizardidle-old-ideas/tools/scene_spells/`, not in the game yet). This plan covers the author's request: **our wizard uses scene spells when he is very powerful**, and the spare ones go **to the story and other powers**. Decided on 2026-11-13. Nothing is built yet.
 
-## The sixteen scene spells
+## The scene spells
 
 - *Used by bosses:* earth spikes (protromus), ice spikes and blizzard (rainbow), fire rain (rojo), arcane rain (doria, king skeleton), lightning (arcangel), entangling vines (herbus), flame pillar (fenix).
-- *Spare:* meteor shower, earthquake, divine light, eclipse, sandstorm, whirlwind, healing rain.
+- *More boss ones after the author's boss reviews* (35 scene spells in all, in the game since 2026-11-13): see the "Scene spells" backlog entry in `ideas.md`. The **earthquake now follows protromus's ground punch** and shakes the scene.
+- *Spare (used by no boss):* meteor shower, divine light, eclipse, sandstorm, whirlwind, healing rain.
 
 ## Decisions (the author, 2026-11-13)
 
@@ -31,7 +32,7 @@ Scene spells are full-scene animations (the size of a zone background, ground ef
 
 **The story's scene spells** (scripted, in the story script `docs/STORY.md`):
 - **Eclipse:** chapter VI, Corruption.
-- **Earthquake:** the Tower siege (139) and chapter VII.
+- **Earthquake** (protromus's, reused): the Tower siege (139) and chapter VII.
 - **Sandstorm / whirlwind:** the road to Heidan (199) and chapter XI.
 - **Divine light:** the final battle, when the hood falls.
 

@@ -18,6 +18,7 @@ import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
+import { hasBossAttacks, playBossAttack } from './ui/bossAttacks.js';
 
 
 
@@ -218,7 +219,9 @@ function clearFight() {
 // Start a fight: a hydra (where the hydra mystery is solved), otherwise a normal enemy or a boss.
 function enemyEV(){
     if ((YesOrNot(config.balance.pGetGuardian,0)) && (state.player.lvl > 190)){//get guardian
-    //guardians in all the places
+        // guardians in all the places: never written in v1, where this branch did nothing and
+        // the game stopped until a reload. Until the story adds them, a normal fight.
+        getEnemy();
     }else if ((YesOrNot(config.balance.pGetHydra,0)) && (state.hydraMysteryResolved)){//get hydra
     //hydra in some localities
         if(state.zone.current == "el_Pantano" || state.zone.current == "las_Dunas" || state.zone.current == "la_Tundra"){
@@ -442,8 +445,13 @@ function enemyAttack() {
     print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`);
     if (fight.bossCombat || fight.hydraCombat) {
         fight.spellEnemy = pickRandomItem(zones[state.zone.current][fight.bossCombat ? "bossSpell" : "hidrasSpells"]);
-        hopEnemy();                 // bosses and hydras keep their hop until they get their own animations
-        spell(fight.spellEnemy, true);
+        const spellId = fight.spellEnemy;
+        if (fight.bossCombat && hasBossAttacks(fight.enemy)) {
+            playBossAttack(fight.enemy, () => spell(spellId, true));    // the boss's own attack, then its effect
+        } else {
+            hopEnemy();             // hydras keep their hop until they get their own attacks
+            spell(spellId, true);
+        }
     } else {
         const spellId = fight.spellEnemy;
         playEnemyMove(enemyMove(), () => spell(spellId, true));     // the blow lands, then its effect
