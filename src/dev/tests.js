@@ -17,10 +17,8 @@ import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { drawWizard, loadNPC, playHydraGrow, playWizardAnim, print, updateHeading } from '../ui/render.js';
-import { playEnemyMove } from '../ui/enemyMoves.js';
-import { spell } from '../spells.js';
-import { playBossAttack } from '../ui/bossAttacks.js';
+import { clearNPC, drawWizard, loadNPC, playHydraGrow, playWizardAnim, print, showStage, updateHeading } from '../ui/render.js';
+import { endEvent, nextEvent } from '../events.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
@@ -187,20 +185,25 @@ const actions = [
     { name: 'Stand up (normal sprite)', run() { drawWizard(); } },
     { name: 'Wizard cast: fire spell', run() { playWizardAnim('cast', 'spellSparkYellow_8'); } },
     { name: 'Wizard cast: staff hit', run() { playWizardAnim('cast', 'spellPush9'); } },
-    { name: 'Boss attack: Medusa (zone boss)', run() { previewBoss('medusa'); } },
-    { name: 'Boss attack: Protromus (earthquake)', run() { previewBoss('protromus'); } },
-    { name: 'Boss attack: Goro (charge)', run() { previewBoss('goro'); } },
-    { name: 'Boss attack: Fenix', run() { previewBoss('fenix'); } },
-    { name: 'Hydra grows a head (Swamp mother, 3 to 4)', run() { loadNPC('mother4'); playHydraGrow('mother', 3); } },
-    { name: 'Hydra grows a head (ice hydra, 1 to 2)', run() { loadNPC('icedra2'); playHydraGrow('icedra', 1); } },
-    { name: 'Enemy move: slash (warrior)', run() { previewEnemy('el_guerrero11', { kind: 'slash' }); } },
-    { name: 'Enemy move: pounce (creature)', run() { previewEnemy('animalejo24', { kind: 'pounce' }); } },
-    { name: 'Enemy move: slam (ent)', run() { previewEnemy('el_ent3', { kind: 'slam' }); } },
-    { name: 'Enemy move: shoot (elf)', run() { previewEnemy('el_elfo1', { kind: 'shoot' }); } },
-    { name: 'Enemy move: thrust (warrior)', run() { previewEnemy('el_guerrero2', { kind: 'thrust' }); } },
-    { name: 'Enemy move: smash (ogre)', run() { previewEnemy('el_ogro3', { kind: 'smash' }); } },
-    { name: 'Enemy move: charge (cowren)', run() { previewEnemy('el_tauren1', { kind: 'charge' }); } },
-    { name: 'Enemy move: cast frost (wizard)', run() { previewEnemy('el_hechicero2', { kind: 'cast', school: 'frost' }); } },
+    // real fights: the current event ends and this one starts (the game's own fight code)
+    { name: 'Fight now: Medusa (Desert boss)', run() { liveFight(() => bossIn('el_Desierto')); } },
+    { name: 'Fight now: Protromus (Cave boss, earthquake)', run() { liveFight(() => bossIn('la_Cueva')); } },
+    { name: 'Fight now: Goro (Prairie boss, charge)', run() { liveFight(() => bossIn('la_Pradera')); } },
+    { name: 'Fight now: Fenix (Volcano boss)', run() { liveFight(() => bossIn('el_Volcan')); } },
+    { name: 'Fight now: King Midas (Tower boss)', run() { liveFight(() => bossIn('la_Torre')); } },
+    { name: 'Fight now: Swamp hydra, 4 heads', run() { liveFight(() => hydraIn('el_Pantano', 'mother', 4)); } },
+    { name: 'Fight now: ice hydra, 3 heads', run() { liveFight(() => hydraIn('la_Tundra', 'icedra', 3)); } },
+    { name: 'Fight now: Dunes hydra, 2 heads', run() { liveFight(() => hydraIn('las_Dunas', 'hydskon', 2)); } },
+    { name: 'Fight now: warrior (thrust)', run() { liveFight(() => enemyNamed('el_guerrero2')); } },
+    { name: 'Fight now: creature (pounce)', run() { liveFight(() => enemyNamed('animalejo24')); } },
+    { name: 'Fight now: ent (slam)', run() { liveFight(() => enemyNamed('el_ent3')); } },
+    { name: 'Fight now: elf (shoot)', run() { liveFight(() => enemyNamed('el_elfo1')); } },
+    { name: 'Fight now: ogre (smash)', run() { liveFight(() => enemyNamed('el_ogro3')); } },
+    { name: 'Fight now: cowren (charge)', run() { liveFight(() => enemyNamed('el_tauren1')); } },
+    { name: 'Fight now: rogue (slash)', run() { liveFight(() => enemyNamed('el_pillo3')); } },
+    { name: 'Fight now: wizard (caster)', run() { liveFight(() => enemyNamed('el_hechicero2')); } },
+    { name: 'Hydra grows a head (Swamp mother, 3 to 4)', run() { resetScene(); loadNPC('mother4'); playHydraGrow('mother', 3); } },
+    { name: 'Hydra grows a head (ice hydra, 1 to 2)', run() { resetScene(); loadNPC('icedra2'); playHydraGrow('icedra', 1); } },
     { name: 'Crisp pixels on / off', run() {
         ui.crisp = !ui.crisp;
         document.documentElement.classList.toggle('crisp', ui.crisp);
@@ -212,16 +215,53 @@ const actions = [
     { name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
 ];
 
-// Show a boss and play one of its attacks (random), the way the fight does.
-function previewBoss(boss) {
-    loadNPC(boss);
-    setTimeout(() => playBossAttack(boss, () => spell('spellPush1', true)), 300);
+// End whatever is happening (event, fight, walk, fade, scroll clocks) and put the wizard back
+// in his place at full health, with no enemy on the scene.
+function resetScene() {
+    loop.stopAll();
+    endEvent();
+    Object.assign(fight, { bossCombat: false, hydraCombat: false, enemy: '', enemyAndNumber: '', enemyHP: 0,
+        polymorphed: false, pjDead: false, autorevive: '', bossMultiplier: 1, bossGoldMultiplier: 1 });
+    Object.assign(ui, { petrified: false, wizardOffset: 0, findSpot: null });
+    run.pause = false;
+    state.player.hp = Math.floor(state.player.hpBase);
+    clearNPC();
+    showStage();
+    drawWizard();
+    updateHeading();
 }
 
-// Show an enemy and play one of its attack moves (the spell effect lands on the wizard).
-function previewEnemy(sprite, move) {
-    loadNPC(sprite);
-    setTimeout(() => playEnemyMove(move, () => spell(move.kind == 'cast' ? { frost: 'spellPush8' }[move.school] || 'spellPush1' : 'spellPush9', true)), 300);
+// A real fight now: the current event ends, setup() prepares it (zone, chances) and returns
+// the event to force, which starts right away; config changes last until it is picked.
+function liveFight(setup) {
+    resetScene();
+    const first = setup();
+    showStage();
+    run.forceOnce = first.event;
+    run.forceEnemy = first.enemy;
+    const watch = setInterval(() => {
+        if (run.forceOnce === undefined) { restoreOverrides(); clearInterval(watch); }
+    }, 50);
+    nextEvent();
+}
+
+function bossIn(zone) {
+    moveTo(zone);
+    override('balance', { pGetBoss: 1, pGetGuardian: 0, pGetHydra: 0 });
+    return { event: EVENT.enemy };
+}
+
+// (this marks the hydra mystery solved for the current wizard)
+function hydraIn(zone, hydra, heads) {
+    moveTo(zone);
+    state.hydraMysteryResolved = true;
+    state.hydraHeads[hydra] = heads;
+    override('balance', { pGetHydra: 1, pGetGuardian: 0 });
+    return { event: EVENT.enemy };
+}
+
+function enemyNamed(sprite) {
+    return { event: normalEnemy(), enemy: sprite };
 }
 
 function setSpeed(factor) {

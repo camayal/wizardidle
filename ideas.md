@@ -246,6 +246,18 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Dev bar: real fights instead of drawn previews
+- Bug (the author): the boss, hydra and enemy previews drew the creature on top of whatever fight was running. They are now **"Fight now"** actions: the current event ends (every clock stops, the fight and the scene are cleared, the wizard is back in his place at full HP) and a real fight starts with the game's own code (forced event and chances, like the scenarios, but without a reload): 5 bosses, the 3 hydras, and one enemy for each attack move. The two hydra growth previews reset the scene first.
+
+### 2026-11-13: Hydra attacks and weaving heads
+- Merged the artist's hydra art (approved by the author) and wired it: while a hydra is on screen its heads weave (idle strip for its head count); it attacks with a strike (the front heads bite) or, half of the time when its spell has one, a cast with a scene spell from frame 5: the Swamp mother's poison rain, poison cloud or earth spikes, the Dunes hydra's curse, fire rain or fire tornado, the ice hydra's new frost breath, blizzard or ice spikes. A new head still grows in with its animation, then the weaving goes on at the new size. The strike or cast is picked for the looks only (never the game's random).
+
+### 2026-11-13: Hydra attacks and moving heads (artist)
+
+- The author asked for hydra attacks (some ordinary, some scene spells) and heads that move. Tried three head motions (sway, bob, weave); **the author chose weave**: each head traces a small circle, out of step, bending from where its neck meets the body.
+- For every head stage of the three hydras: idle (weave), strike (the heads lunge in turn and bite: venom for mother, dark sparks for hydskon, frost shards for icedra) and cast (heads rear up glowing, then thrust into a scene spell). Scene spells match each hydra's spells: mother poison rain, poison cloud, earth spikes; hydskon curse, fire rain, fire tornado; icedra a new frost breath, blizzard, ice spikes.
+- Added to the review page (`wizardidle-old-ideas/tools/boss_review/index.html`, "Hydras" section). The author approved them all and they were sent to dev.
+
 ### 2026-11-13: Scene transitions (option B) and a scene director
 - The author found scene changes unreliable (shrines, for example). Review: 12 scene changes behaved differently (some walked, most snapped), walks ran on their own clock while events kept going every 1.5 s (zone changes jumped, the next event could start mid-walk), and nothing kept transitions from overlapping.
 - Chosen: **B, walk for travel, fade for places**. Every scene change goes through one place in `ui/render.js`: he walks out right and in from the left when he goes somewhere (the plain walk to the next spot, leaving a shrine, a find or a statue, changing zone); a quick fade brings a place around him (shrine, inn, dice house, the healer's cabin, a statue's scene); places with a door (both dice houses, the Town and City inns) have him come in and go out through it (a door table of scene x positions).

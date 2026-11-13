@@ -18,7 +18,7 @@ import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
-import { hasBossAttacks, playBossAttack } from './ui/bossAttacks.js';
+import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
 
 
 
@@ -319,6 +319,7 @@ function getHydra(newEncounter = false){
     fight.enemy = fight.hydra;
     loadNPC(fight.hydra + state.hydraHeads[fight.hydra]);
     if (!newEncounter) playHydraGrow(fight.hydra, state.hydraHeads[fight.hydra] - 1);   // the new head grows in
+    startHydraIdle();                                                                   // then the heads weave
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * (state.hydraHeads[fight.hydra]);
     fight.enemyHPbase = Math.round(fight.enemyHP)
     updateHeartNPC();
@@ -449,8 +450,7 @@ function enemyAttack() {
         if (fight.bossCombat && hasBossAttacks(fight.enemy)) {
             playBossAttack(fight.enemy, () => spell(spellId, true));    // the boss's own attack, then its effect
         } else {
-            hopEnemy();             // hydras keep their hop until they get their own attacks
-            spell(spellId, true);
+            playHydraAttack(spellId, () => spell(spellId, true));     // a strike, or a cast with its scene spell
         }
     } else {
         const spellId = fight.spellEnemy;
