@@ -234,6 +234,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Hydra attacks and moving heads (artist)
+
+- The author asked for hydra attacks (some ordinary, some scene spells) and heads that move. Tried three head motions (sway, bob, weave); **the author chose weave**: each head traces a small circle, out of step, bending from where its neck meets the body.
+- For every head stage of the three hydras: idle (weave), strike (the heads lunge in turn and bite: venom for mother, dark sparks for hydskon, frost shards for icedra) and cast (heads rear up glowing, then thrust into a scene spell). Scene spells match each hydra's spells: mother poison rain, poison cloud, earth spikes; hydskon curse, fire rain, fire tornado; icedra a new frost breath, blizzard, ice spikes.
+- Added to the review page (`wizardidle-old-ideas/tools/boss_review/index.html`, "Hydras" section). The author approved them all and they were sent to dev.
+
 ### 2026-11-13: Scene transitions (option B) and a scene director
 - The author found scene changes unreliable (shrines, for example). Review: 12 scene changes behaved differently (some walked, most snapped), walks ran on their own clock while events kept going every 1.5 s (zone changes jumped, the next event could start mid-walk), and nothing kept transitions from overlapping.
 - Chosen: **B, walk for travel, fade for places**. Every scene change goes through one place in `ui/render.js`: he walks out right and in from the left when he goes somewhere (the plain walk to the next spot, leaving a shrine, a find or a statue, changing zone); a quick fade brings a place around him (shrine, inn, dice house, the healer's cabin, a statue's scene); places with a door (both dice houses, the Town and City inns) have him come in and go out through it (a door table of scene x positions).
