@@ -9,7 +9,7 @@ import * as loop from './loop.js';
 import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { drawWizard, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { drawWizard, enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -33,10 +33,9 @@ function reviveByTouch() {
         fight.autorevive = "";
     }
     state.player.hp = state.player.hpBase;
-    loadBackground("curanderobg");
     fight.pjDead = false;
     drawWizard();
-    loadNPC("curandero");
+    enterPlace("curanderobg", "curandero");    // he wakes up in the healer's cabin
     startEvent(reviveEV);
 }
 

@@ -232,6 +232,13 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Scene transitions (option B) and a scene director
+- The author found scene changes unreliable (shrines, for example). Review: 12 scene changes behaved differently (some walked, most snapped), walks ran on their own clock while events kept going every 1.5 s (zone changes jumped, the next event could start mid-walk), and nothing kept transitions from overlapping.
+- Chosen: **B, walk for travel, fade for places**. Every scene change goes through one place in `ui/render.js`: he walks out right and in from the left when he goes somewhere (the plain walk to the next spot, leaving a shrine, a find or a statue, changing zone); a quick fade brings a place around him (shrine, inn, dice house, the healer's cabin, a statue's scene); places with a door (both dice houses, the Town and City inns) have him come in and go out through it (a door table of scene x positions).
+- While a transition plays the game's clocks wait (`loop.freezeGame`/`thawGame`), so events never overlap it. In a simulation nothing is drawn and everything happens at once in the same order: seeded runs unchanged.
+- Fixed on the way: backgrounds no longer flash the page behind while the new image loads (the old one stays until the new has loaded; a fade holds the dark until the place is ready, 5 s at most); an animation no longer wipes the wizard before its first frame is ready (he went blank while praying until the strip arrived); his strips and poses for the tier are preloaded.
+- The author's plan for later: more dynamic scenes (walking with background layers scrolling right to left). That needs layered art per zone; the director is where it would replace the walk out and in.
+
 ### 2026-11-13: Walking through scene changes; capricor in the bestiary
 - The author found the walk back after a find cut off by the scene change. Now, when he leaves a find or a statue, he walks on out of the scene to the right, the scene changes to another spot of the zone, and he walks in from the left to his place; changing zone works the same way (walks out, the new zone appears, walks in). Walking is faster (16 sprite px a frame). The new spot is for the looks only: a simulation keeps its stage, so seeded runs are unchanged.
 - Bug (the author): a defeated capricor didn't show in the bestiary. The last capricor's death takes it off the Forest's enemy list, and the bestiary built its families from those lists; it now takes them as they are when the game loads.

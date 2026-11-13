@@ -16,7 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, updateHeading, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, updateHeading, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 
@@ -159,8 +159,7 @@ function exploreEV() {
                 textDice = pickRandomItem("finds a gaming house and enters,wants to play 6-5-4,wants to gamble");
             }
             print(`${wizardName()} ${textDice}`);
-            loadBackground(`${state.zone.current}_casadados`);
-            loadNPC("jugon");
+            enterPlace(`${state.zone.current}_casadados`, "jugon");
             run.previousEvent = "sixfivefour"
             startEvent(sixfivefour);       
         }else{
@@ -173,10 +172,10 @@ function exploreEV() {
             startEvent(changeLocality);
         } else {
             print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
-            pickRandomBackgroundForCurrentZone();
-            playWizardAnim("walk");
-            addXP(0.5);
-            nextEvent();
+            walkThroughScene(pickRandomBackgroundForCurrentZone, () => {   // walks on to the next spot
+                addXP(0.5);
+                nextEvent();
+            });
             //trigger event selecter
         };
     };
@@ -207,12 +206,11 @@ function reviveEV(){
         state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
         stats.count("explore.zoneChanges");
         stats.count(`explore.zone.${randomLocality}`);
-        showStage();
         print(`${wizardName()} leaves the healer's cabin`)
         stats.count("death.healer");
         endEvent();
         run.disablePjBtn = false;
-        nextEvent();
+        leavePlace(showStage, nextEvent);
     }
 };
 
@@ -230,9 +228,8 @@ function prayEV(){
             textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
         print(`${wizardName()} ${textCapel}`);
-        loadBackground(`${state.zone.current}_altar`);
         const mistico = `mistico${getRandomInt(1,3)}`;
-        loadNPC(mistico);
+        enterPlace(`${state.zone.current}_altar`, mistico);
         if (YesOrNot(stat("pOfrenda"),0) && state.player.gold > 0){
             run.offer = true;
         }else{
@@ -305,8 +302,7 @@ function overStatue() {
 // Another spot of the same zone, for the looks only: in a simulation nothing changes, so a
 // seeded run plays the same (the stage only decides the background and the map marker).
 function newStage() {
-    if (run.simulation) return;
-    state.zone.stage = 1 + Math.floor(looksRandom() * MAXSTAGES);
+    if (!run.simulation) state.zone.stage = 1 + Math.floor(looksRandom() * MAXSTAGES);
     showStage();
 }
 
@@ -354,8 +350,7 @@ function findStatue(){
     switch(optionTemp){
         case 1:
         //found and change locality
-        loadBackground(`${state.zone.current}_estatua`);
-        walkWizardTo((STATUE_X[state.zone.current] || 190) - 88);   // stops just left of the statue
+        enterPlace(`${state.zone.current}_estatua`, null, () => walkWizardTo((STATUE_X[state.zone.current] || 190) - 88));
         stats.count(`explore.statue.statue_${state.zone.current}`)
         stats.count("explore.statues");
         if (run.previousEvent == "findStatue"){
@@ -476,7 +471,7 @@ function searchInn(){
 // Enter an inn, or find a place to camp.
 function arriveToRest(placesWithInn) {
     if (placesWithInn) {
-        loadBackground(`${state.zone.current}_taberna`);
+        enterPlace(`${state.zone.current}_taberna`);
         stats.count("inn.rests");
         stats.count(`inn.zone.${state.zone.current}`);
         print(`${wizardName()} enters in an inn`);
@@ -534,12 +529,10 @@ function wakeUp(placesWithInn) {
     updateHeading();
     clearNPC();
     print(`${wizardName()} ${pickRandomItem(textRecover)} (${ui.healIcon}${roundNumbertoLetter(rested)})`);
-    if (placesWithInn) {
-        showStage();
-    }
     run.restAtInn = false;
     endEvent();
-    nextEvent();
+    if (placesWithInn) leavePlace(showStage, nextEvent);    // out through the door
+    else nextEvent();
 }
 
 
@@ -602,11 +595,10 @@ function pray() {
 function leaveShrine() {
     drawWizard();               // stands up again
     clearNPC();
-    showStage();
     endEvent();
     run.disableCenterBtn = false;
     run.offer = false;
-    nextEvent();
+    walkThroughScene(newStage, nextEvent);  // walks on out of the scene, into the next one
 }
 
 

@@ -19,6 +19,21 @@ const clocks = new Map();   // name -> { fn, ms, due }
 let speed = 1;              // dev tools only: 10 runs every clock ten times faster
 let simulated = false;      // simulation mode (src/dev/sim.js): a virtual clock
 let virtualNow = 0;
+let frozen = 0, frozenAt = 0;       // scene transitions: the game's clocks wait (nested ok)
+const GAME_CLOCKS = new Set(["master", "event", "selfRevive"]);
+
+// While frozen, the game's events don't advance (animations still run); when thawed they go on
+// from where they were, as if no time had passed.
+export function freezeGame() {
+    if (frozen++ == 0) frozenAt = now();
+}
+export function thawGame() {
+    if (frozen == 0) return;
+    if (--frozen == 0) {
+        const paused = now() - frozenAt;
+        for (const [name, clock] of clocks) if (GAME_CLOCKS.has(name)) clock.due += paused;
+    }
+}
 
 // The time clocks are measured in: real time, or the virtual time of a simulation.
 export function now() {
@@ -60,6 +75,7 @@ export function stop(name) {
 
 export function stopAll() {
     clocks.clear();
+    frozen = 0;
 }
 
 export function isRunning(name) {
@@ -71,6 +87,7 @@ function tick() {
     for (const [name, clock] of clocks) {
         // a clock run earlier in this tick may have stopped or replaced this one
         if (clocks.get(name) !== clock || time < clock.due) continue;
+        if (frozen && GAME_CLOCKS.has(name)) continue;
         // keep the rhythm; if the tab was asleep, don't fire a burst to catch up
         const ms = clock.ms / speed;
         clock.due = clock.due + ms > time ? clock.due + ms : time + ms;
