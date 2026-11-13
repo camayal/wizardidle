@@ -12,7 +12,7 @@ Scene spells are full-scene animations (the size of a zone background, ground ef
 
 | Question | Decision |
 |---|---|
-| When the wizard earns them | **With the staff's story:** the sacred staff (lvl 90) unlocks one, the corrupt staff (chapter VI, 130) a darker one, the reforged *Nomaleatorio* (chapter XI, 200) the strongest |
+| When the wizard earns them | **With the staff's story:** the sacred staff (lvl 90) unlocks one, the corrupt staff (chapter VI, 130) a darker one, the reforged staff *{staffName}* (chapter XI, 200; its random true name, `world.staffName`) the strongest |
 | Super-critic | **Sometimes a critic becomes a super-critic:** instead of the normal spell he casts a scene spell with very high damage. **Very rare before level 90, rare once he has a staff** |
 | The god's touches | **A god touch-critic is a scene spell, as a regular critic:** when the god's touch lands a critical, it plays a scene spell (replacing today's ×8 "god's wrath" effects in `npcBtn()`), with no extra faith cost |
 | The spare ones | **The god's critics and the story** (below) |
@@ -24,7 +24,7 @@ Scene spells are full-scene animations (the size of a zone background, ground ef
 - Before he has a staff, the super-critic casts the boss scene spell of **his strongest school** (the `school_*` counters already exist): Nature → vines, Frost → ice spikes, Fire → fire rain, Arcane → arcane rain, Thunder → lightning, Physical → earth spikes, Shadow → arcane rain (the darkest of the boss ones). Divine is left out: those are the god's own spells (his touch), so they never count as the wizard's school.
 - With a staff, it casts the staff's scene spell (below). Damage: very high, e.g. 3× a critic, but **never a one-shot on a boss or hydra** (capped below their remaining HP, the way the god's touch never kills today).
 
-**The staff scene spells** (proposal, to decide): the sacred staff → **lightning** (holy thunder), the corrupt staff → **flame pillar** (the Volcano where it was found), *Nomaleatorio* → **all of them, picked by school**, plus the meteor shower in the final battle.
+**The staff scene spells** (proposal, to decide): the sacred staff → **lightning** (holy thunder), the corrupt staff → **flame pillar** (the Volcano where it was found), *{staffName}* → **all of them, picked by school**, plus the meteor shower in the final battle.
 
 **The god's critics** (the touches in `src/divine.js`, already paid in faith):
 - Touch on the enemy, critical → **divine light** or **meteor shower**.
