@@ -15,6 +15,7 @@ import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { statsPageHtml } from './statsPages.js';
 import { DEV } from '../config.js';
+import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 
 let scrollIDContent;
 
@@ -52,7 +53,7 @@ function hideScrollContent(){
 // Close the scroll with its animation.
 function scrollClose(){
     ui.scrollCurrentContent = "";
-    placeScrollTab(false);
+    placeScrollTabs(null);
     playSound("scroll");
     el("btnClose").style.display = "none";
     el("btnClose").style.top = `${ui.objectSize * 0.065}px`;
@@ -100,7 +101,7 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
     sbd.style.top = `${height * 0.97}px`;
 
     scrollBack.addEventListener("transitionend", showCloseButton);
-    placeScrollTab(currentContent == "stats");
+    placeScrollTabs(currentContent);
 	
 		//switch positions scene and console
 	ui.sceneOnTop = false;
@@ -164,7 +165,8 @@ function enableMainButtons() {
 function cemeteryText(){
     const dateOptions = {year: 'numeric', month: 'long', day: 'numeric'};
     return world.cemetery.map(function(w){
-        return `${w.name} (lvl: ${roundNumbertoLetter(w.lvl)}) died at the age of ${roundNumbertoLetter(w.age)}. ` +
+        return `${w.name} (lvl: ${roundNumbertoLetter(w.lvl)}) died at the age of ${roundNumbertoLetter(w.age)}` +
+            (w.kills !== undefined ? `, after ${roundNumbertoLetter(w.kills)} victories and ${roundNumbertoLetter(w.falls)} falls` : "") + ". " +
             new Date(w.born).toLocaleDateString("en", dateOptions) + " - " + new Date(w.died).toLocaleDateString("en", dateOptions) + "<br>";
     }).join("");
 }
@@ -190,53 +192,72 @@ function updateAchievements(){
 
 }
 
-// ------------------------------------------------------------------ stats scroll tabs
-// The stats scroll has two pages (Stats and Records). The other page's scroll lies behind
-// and peeks out above the front one; clicking it brings that page to the front (option (a),
-// chosen by the author on 2026-11-12 from the artist's mockups). The front scroll moves down
-// by the tab and gets shorter by the same amount, so its bottom roll stays where it was.
-const TAB_RATIO = 0.092;            // visible strip of the back scroll, of the scroll width
+// ------------------------------------------------------------------ tabbed scrolls
+// Some scrolls have several pages (Stats / Records, and Kill / Cemetery / Bestiary). The
+// other pages' scrolls lie behind and peek out above the front one, each as a strip with its
+// name; clicking a strip brings that page to the front (option (a), chosen by the author on
+// 2026-11-12 from the artist's mockups). The front scroll moves down by the strips and gets
+// shorter by the same amount, so its bottom roll stays where it was.
+const TAB_SETS = { stats: ["stats", "records"], kill: ["kill", "cemetery", "bestiary"] };
+const PAGE_NAMES = { stats: "Stats", records: "Records", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary" };
+const TAB_RATIO = 0.092;            // visible strip of each back scroll, of the scroll width
 const TAB_LABEL_RATIO = 0.046;      // its page name, of the scroll width
 const FRONT_PARTS = ["scrollBackUp", "scrollBackCenter", "scrollText", "btnClose"];
-let scrollTab;
-let tabBase = null, tabApplied = null;   // heights the layout set, and the ones the tab set
+const strips = [];
+let tabBase = null, tabApplied = null;   // heights the layout set, and the ones the tabs set
 
-function buildScrollTab() {
-    scrollTab = document.createElement("div");
-    scrollTab.id = "scrollTab";
-    scrollTab.style.cssText = "position:absolute; display:none; cursor:pointer; overflow:hidden;";
-    scrollTab.innerHTML = '<img id="scrollTabPaper" src="img/scrollBackCenterShade.png" style="position:absolute; left:0; width:100%">' +
-        '<img id="scrollTabRoll" src="img/scrollBackUpShade.png" style="position:absolute; left:0; top:0; width:100%">' +
-        '<span id="scrollTabLabel" style="position:absolute; left:0; width:100%; text-align:center; font-family:pixeled_english_fontregular; color:#462808"></span>';
-    scrollTab.onclick = () => {
-        ui.statsView = ui.statsView == "records" ? "stats" : "records";
-        playSound("scroll");
-        updateStats();
-    };
-    el("scroll").insertBefore(scrollTab, el("scroll").firstChild);
+function stripAt(index) {
+    while (strips.length <= index) {
+        const strip = document.createElement("div");
+        strip.className = "scrollTab";
+        strip.style.cssText = "position:absolute; display:none; cursor:pointer; overflow:hidden;";
+        strip.innerHTML = '<img class="scrollTabPaper" src="img/scrollBackCenterShade.png" style="position:absolute; left:0; width:100%">' +
+            '<img class="scrollTabRoll" src="img/scrollBackUpShade.png" style="position:absolute; left:0; top:0; width:100%">' +
+            '<span class="scrollTabLabel" style="position:absolute; left:0; width:100%; text-align:center; font-family:pixeled_english_fontregular; color:#462808"></span>';
+        strip.onclick = () => {
+            const set = ui.scrollCurrentContent;
+            if (!TAB_SETS[set]) return;
+            ui.scrollViews[set] = strip.dataset.page;
+            playSound("scroll");
+            PAGE_RENDER[set]();
+        };
+        // each new strip lies above the earlier ones and below the front scroll
+        const before = strips.length ? strips[strips.length - 1].nextSibling : el("scroll").firstChild;
+        el("scroll").insertBefore(strip, before);
+        strips.push(strip);
+    }
+    return strips[index];
 }
 
-// Show the tab and move the front scroll down (only for the stats scroll), or put it back.
-function placeScrollTab(show) {
-    if (!scrollTab) buildScrollTab();
-    if (!show) {
-        scrollTab.style.display = "none";
+// Show the strips of the scroll's other pages and move the front scroll down, or put it back.
+function placeScrollTabs(set) {
+    const pages = TAB_SETS[set];
+    const back = pages ? pages.filter((page) => page != ui.scrollViews[set]) : [];
+    strips.forEach((strip, i) => { if (i >= back.length) strip.style.display = "none"; });
+    if (!back.length) {
         for (const id of FRONT_PARTS) el(id).style.transform = "";
         tabBase = tabApplied = null;
         return;
     }
     const up = el("scrollBackUp");
     const width = parseFloat(up.style.width);
-    const offset = width * TAB_RATIO;
+    const strip = width * TAB_RATIO;
     const roll = width * 10 / 320;              // the roll image is 320 x 10
-    Object.assign(scrollTab.style, { display: "block", left: up.style.left, top: up.style.top, width: up.style.width, height: `${offset + roll}px` });
-    Object.assign(el("scrollTabPaper").style, { top: `${roll}px`, height: `${offset + roll}px` });
-    Object.assign(el("scrollTabLabel").style, { top: `${roll + (offset - width * TAB_LABEL_RATIO) / 2}px`,
-        fontSize: `${width * TAB_LABEL_RATIO}px`, lineHeight: `${width * TAB_LABEL_RATIO}px` });
-    el("scrollTabLabel").textContent = ui.statsView == "records" ? "Stats" : "Records";
+    const label = width * TAB_LABEL_RATIO;
+    back.forEach((page, i) => {
+        const tab = stripAt(i);
+        tab.dataset.page = page;
+        Object.assign(tab.style, { display: "block", left: up.style.left, width: up.style.width,
+            top: `${parseFloat(up.style.top) + i * strip}px`, height: `${strip + roll}px` });
+        Object.assign(tab.querySelector(".scrollTabPaper").style, { top: `${roll}px`, height: `${strip + roll}px` });
+        Object.assign(tab.querySelector(".scrollTabLabel").style, { top: `${roll + (strip - label) / 2}px`,
+            fontSize: `${label}px`, lineHeight: `${label}px` });
+        tab.querySelector(".scrollTabLabel").textContent = PAGE_NAMES[page];
+    });
+    const offset = back.length * strip;
     for (const id of FRONT_PARTS) el(id).style.transform = `translateY(${offset}px)`;
-    // Shorten the front paper and text by the strip, from the heights the layout chose. If
-    // the layout set new ones since (scroll opened, window resized), those are the new base.
+    // Shorten the front paper and text from the heights the layout chose. If the layout set
+    // new ones since (scroll opened, window resized), those are the new base.
     const paper = el("scrollBackCenter").style, text = el("scrollText").style;
     const now = { paper: parseFloat(paper.minHeight), text: parseFloat(text.minHeight) };
     if (!tabApplied || now.paper !== tabApplied.paper || now.text !== tabApplied.text) tabBase = now;
@@ -245,9 +266,9 @@ function placeScrollTab(show) {
     tabApplied = { paper: parseFloat(paper.minHeight), text: parseFloat(text.minHeight) };
 }
 
-// The layout was redone (window resized or rotated): fit the tab and the front scroll again.
+// The layout was redone (window resized or rotated): fit the strips and the front scroll again.
 document.addEventListener("wizardidle:layout", () => {
-    if (ui.scrollCurrentContent == "stats") placeScrollTab(true);
+    if (TAB_SETS[ui.scrollCurrentContent]) placeScrollTabs(ui.scrollCurrentContent);
 });
 
 // Fill the stats scroll (two pages, Stats and Records: ui/statsPages.js).
@@ -259,7 +280,7 @@ function updateStats(){
     el("stats").style.lineHeight = `${ui.em}px`;
     el("titleStats").style.fontSize = `${ui.em * 2.5}px`;
     el("titleStats").style.lineHeight = `${ui.em * 2.5}px`;
-    if (ui.scrollCurrentContent == "stats") placeScrollTab(true);
+    if (ui.scrollCurrentContent == "stats") placeScrollTabs("stats");
 }
 
 // The dev bar switch in Help (src/dev/tests.js listens for the event; the game never
@@ -353,35 +374,44 @@ function updateHelp(){
     }
 }
 
-// Fill the kill scroll: the warning, the kill button and the cemetery.
+// Fill the kill scroll: one of its three pages (Kill, Cemetery, Bestiary).
 function updateKill(){
-    const secondsIngameInstats = ((state.meta.playTimeMs + (loop.now() - run.timeStart))/1000).toFixed(0);
-    const txt = '<div id="kill"><span class="titles" id="titleKill">Kill</span><br>' +
-    '<div>' + 
-    'Do you want to kill <b>' + state.player.name + '</b>?<br><br>' +
-    'All progress, achievement and stats of this wizard will be lost forever (<b>this action cannot be undone</b>).<br><br>' +
-    '<b>' + state.player.name + '</b> has existed for ' + secsToHours(secondsIngameInstats) + ", he is on level " + roundNumbertoLetter(state.player.lvl) + (countLogros() > 0 ? ` and has ${countLogros()} achievements` : "") + "<br><br>" +
-    'For kill the wizard press Kill button below, otherwise just close this scroll.' +
-    '</div>' +
-    '<br><br><div>' + 
-    '<img class="btn" id="realKillBtn" src="img/matar.png"/>' +
-    '</div><br><br>' + 
-    '<span class="titles" id="titleCementery">' + (world.cemetery.length == 0 ? "" : "Cemetery") + '</span>' + 
-    (world.cemetery.length == 0 ? "" : `<small>${cemeteryText()}</small>`);
-    el('innerTextScroll').innerHTML=txt;
-    el("realKillBtn").onclick = realKill;
+    const page = ui.scrollViews.kill;
+    const title = `<span class="titles" id="titleKill">${PAGE_NAMES[page]}</span>`;
+    let body;
+    if (page == "cemetery") {
+        body = world.cemetery.length == 0 ? "<br>Nobody rests here yet." : `<br>${cemeteryText()}`;
+    } else if (page == "bestiary") {
+        body = bestiaryPageHtml();
+    } else {
+        const secondsIngameInstats = ((state.meta.playTimeMs + (loop.now() - run.timeStart))/1000).toFixed(0);
+        body = '<br><div>' +
+        'Do you want to kill <b>' + state.player.name + '</b>?<br><br>' +
+        'All progress, achievement and stats of this wizard will be lost forever (<b>this action cannot be undone</b>).<br><br>' +
+        '<b>' + state.player.name + '</b> has existed for ' + secsToHours(secondsIngameInstats) + ", he is on level " + roundNumbertoLetter(state.player.lvl) + (countLogros() > 0 ? ` and has ${countLogros()} achievements` : "") + "<br><br>" +
+        'For kill the wizard press Kill button below, otherwise just close this scroll.' +
+        '</div>' +
+        '<br><br><div>' +
+        '<img class="btn" id="realKillBtn" src="img/matar.png"/>' +
+        '</div><br><br>';
+    }
+    el('innerTextScroll').innerHTML = `<div id="kill">${title}${body}</div>`;
     el("kill").style.fontSize = `${ui.em}px`;
     el("kill").style.lineHeight = `${ui.em}px`;
     el("titleKill").style.fontSize = `${ui.em * 2.5}px`;
     el("titleKill").style.lineHeight = `${ui.em * 2.5}px`;
-    el("titleCementery").style.fontSize = `${ui.em * 2.5}px`;
-    el("titleCementery").style.lineHeight = `${ui.em * 2.5}px`;
-    
-    const realKillBtnW = el("realKillBtn").style.width  = `${((ui.objectSize * 0.09375) * 1.90625) * 1.5}px`;  
-    el("realKillBtn").style.left = `${(ui.objectSize - parseInt(realKillBtnW)) / 2}px`;
-    el("realKillBtn").style.height  = `${(ui.objectSize * 0.09375) * 1.5}px`; 
-
+    if (page == "kill") {
+        el("realKillBtn").onclick = realKill;
+        const realKillBtnW = el("realKillBtn").style.width  = `${((ui.objectSize * 0.09375) * 1.90625) * 1.5}px`;
+        el("realKillBtn").style.left = `${(ui.objectSize - parseInt(realKillBtnW)) / 2}px`;
+        el("realKillBtn").style.height  = `${(ui.objectSize * 0.09375) * 1.5}px`;
+    }
+    if (page == "bestiary") paintInkStains(el('innerTextScroll'));
+    if (ui.scrollCurrentContent == "kill") placeScrollTabs("kill");
 }
+
+// How each tabbed scroll redraws its front page.
+const PAGE_RENDER = { stats: updateStats, kill: updateKill };
 
 export {
     counterText,

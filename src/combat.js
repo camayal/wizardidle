@@ -72,17 +72,21 @@ function defeatEnemy() {
     fight.polymorphed = false;
     if (fight.bossCombat) {
         stats.count("kill.bosses", 1, { world: true });
+        stats.count(`kill.boss.${fight.enemy}`);
         stats.first("first.bossKill");
         logro.set(logro.logro_primerbossderrotado);
     } else if (fight.hydraCombat) {
         stats.count("kill.hydras", 1, { world: true });
+        stats.count(`kill.hydra.${fight.hydra}`);
         stats.first("first.hydraKill");
         delete state.hydraHeads[fight.hydra];
     } else if (enemySprites[fight.enemyAndNumber].rare) {
         stats.count("kill.rare", 1, { world: true });
+        stats.count(`kill.sprite.${fight.enemyAndNumber}`);
         stats.first("first.rareKill");
     } else {
         stats.count("kill.enemies", 1, { world: true });
+        stats.count(`kill.sprite.${fight.enemyAndNumber}`);
     }
     stats.count("combat.combo");
     updateLongestCombo();

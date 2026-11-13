@@ -178,7 +178,7 @@ function recordsPage() {
 // ------------------------------------------------------------------ the page
 
 export function statsPageHtml(secondsInGame) {
-    const records = ui.statsView == 'records';
+    const records = ui.scrollViews.stats == 'records';
     return `<div id='stats'><span class='titles' id='titleStats'>${records ? 'Records' : 'Stats'}</span>` +
         (records ? recordsPage()
             : wizardSection(secondsInGame) + battlesSection() + magicSection() + travelsSection() +

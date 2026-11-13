@@ -25,6 +25,7 @@ import { stats } from '../stats.js';
 
 // Toolbar: open the kill scroll.
 function killBtn(){
+    ui.scrollViews.kill = "kill";
     updateKill();
     el("innerTextScroll").style.display = "block";
     scrollOpen("kill");    
@@ -84,7 +85,7 @@ function helpBtn(){
 
 // Toolbar: open the stats scroll (refreshed while open).
 function statsBtn(){
-    ui.statsView = "stats";
+    ui.scrollViews.stats = "stats";
     loop.every("stats", updateStats,masterTime);
     updateStats();
     el("innerTextScroll").style.display = "block";
