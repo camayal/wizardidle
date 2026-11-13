@@ -446,7 +446,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
   - *normal:* So was his prayer.
   - *echo:* So was his prayer. You have watched it go before. It does not get easier.
 
-**Console, lvl 190 (event, the broken shrine), step by step:** {name} leaves the road. He knows where he is going. · He walks back to the {shrineZone}, to the shrine where he first felt you. · It is still there. The candle is still lit. · He breaks the cross with his bare hands. *(destruction animation)* · The candle goes out. Somewhere, you feel it.
+**Console, lvl 190 (event, the broken shrine), step by step:** {name} leaves the road. He knows where he is going. · He walks back to the {shrineZone}, to the shrine where he first felt you. · It is still there. The candle is still lit. · He breaks the cross with his bare hands. Cracks run through the stone, and it bursts apart. *(the shattering animation)* · The candle gutters and goes out. A thin smoke rises. · Somewhere, you feel it.
 
 **Echo (console, as the candle goes out):** You have watched this candle go out before.
 
@@ -513,7 +513,9 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 
 - **The healer appears:** A hooded healer blocks the road. · "You don't have to do this," says a voice {name} knows.
 - **A soul enters** (one by one, one per erasure, up to 5; ERASURE.md): The air cracks. A translucent wizard steps beside {name}. · {reversedName}. You erased him once. · He remembers.
-- **The healer falls:** The hood falls. Beneath it, your face. · The sky tears open. You step down to meet him.
+- **The healer falls (the reveal):** The healer's hood catches fire. · White-gold flame climbs his cape and burns it away. · When the light fades, your face looks back at {name}. · Golden rays break behind you. Your wings open.
+- **Phase 2, the wings burn:** Your wings catch fire. Light drips from them like smoke.
+- **Phase 3, no wings:** The last of your wings falls away in ash. · Only you are left, and him.
 - **Each round:** the wizard attacks, the souls attack, then you choose: heal or hit.
 
 ### Epilogue: The Unmaking (if you win)
@@ -567,6 +569,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 - **Midas is gone forever after VII:** zone bosses keep returning in play, but Midas never appears again once he dies in the Tower; the Tower has no boss, and his golden-ray heal exists only before VII (ideas.md, "Bosses return, except Midas").
 - **The Tower's people:** no mages in the City or the Tower from VII until the lynching (149); after it the Tower is full of mages again.
 - **The staff's name:** `world.staffName`, a random name generated in the first game and kept across every loop and new wizard.
+- **The art (chosen by the author):** the stranger is today's healer in a snug hood of his cape greens; the reveal burns hood and cape in holy fire into the true form (white and gold, halo, rays). Final battle in three phases: great wings of light, wings burning, no wings with charred remnants. The shrine breaks as D3, shattered (cracks, a burst of stone, a stub on the base, the candle out); the broken state stays.
 - **The broken shrine (X):** save the zone of the Chapter II shrine; at 190, after the scroll, he travels there (like the Volcano and Tower pulls), the shrine is shown lit, the destruction animation plays, then the Last Escape event. Afterwards the shrine is drawn broken, candle out, wherever it appears (later visits, the museum).
 - **Art for the story:** the god's own shrine (II), its destruction animation and its broken state (X); a hooded stranger sprite distinct from the ordinary hooded figures (II onward); the wizard lying injured (falls).
 - **Dropped from 2018:** drinking Midas's essence so the god can't revive him (the falls model replaces it); Midas becoming the Tower's boss.
