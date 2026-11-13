@@ -101,6 +101,17 @@ function pixelContext(canvas) {
 }
 
 // Images are loaded once and reused (v1 created a new Image for every redraw).
+
+// Draw one frame of a strip: copied out at 1:1 first, so scaling it up can't sample the frames
+// next to it (a sliver of the neighbour on the edge, worst at odd screen sizes).
+const frameCell = document.createElement("canvas");
+function drawFrame(ctx, img, sx, sy, sw, sh, dx, dy, dw, dh) {
+    if (frameCell.width != sw || frameCell.height != sh) { frameCell.width = sw; frameCell.height = sh; }
+    const cell = frameCell.getContext("2d");
+    cell.clearRect(0, 0, sw, sh);
+    cell.drawImage(img, sx, sy, sw, sh, 0, 0, sw, sh);
+    ctx.drawImage(frameCell, dx, dy, dw, dh);
+}
 const imageCache = new Map();
 const latestDraw = {};
 
@@ -136,9 +147,8 @@ function withImage(canvasName, src, draw) {
 // Draw the wizard; his sprite changes with the level (img/lvl<N>.png, every 10 levels).
 function loadCanvasChar(lvl, squareSide, headLevel) {
     if (run.simulation) return;
-    pjCanvas.width = pjCanvas.offsetWidth;
-    pjCanvas.height = pjCanvas.offsetHeight;
     withImage("pj", `img/lvl${Math.floor(lvl / 10) * 10}.png`, (img) => {
+        clearWizardCanvas();        // cleared only when the new image is ready (no blank flash)
         const ctx = pixelContext(pjCanvas);
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     });
@@ -262,7 +272,7 @@ function playWizardAnim(name, spellId) {
         withImage("pj", `img/anim_${name}${tier}.png`, (img) => {
             const ctx = pixelContext(pjCanvas);
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
-            ctx.drawImage(img, frame * 32, 0, 32, 32, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
+            drawFrame(ctx, img, frame * 32, 0, 32, 32, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
             if (name == "cast") castEffect(ctx, frame, img, tier, spellId);
         });
     };
@@ -275,8 +285,8 @@ function drawWizardPose(pose) {
     if (run.simulation) return;
     loop.stop("animPJ");
     wizardAnim = "";
-    clearWizardCanvas();
     withImage("pj", `img/${pose}${wizardTier()}.png`, (img) => {
+        clearWizardCanvas();        // cleared only when the pose is ready (no blank flash)
         const ctx = pixelContext(pjCanvas);
         ctx.drawImage(img, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
         if (pose != "fallen") return;
@@ -348,7 +358,7 @@ function walkWizardTo(target, onArrive) {
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             ctx.save();
             if (dir < 0) { ctx.translate(x + ui.charWidth, ui.headLevel); ctx.scale(-1, 1); } else ctx.translate(x, ui.headLevel);
-            ctx.drawImage(img, frame * 32, 0, 32, 32, 0, 0, ui.charWidth, ui.charHeight);
+            drawFrame(ctx, img, frame * 32, 0, 32, 32, 0, 0, ui.charWidth, ui.charHeight);
             ctx.restore();
         });
     }, 100);
@@ -504,9 +514,10 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     state.npc = npc;
     if (run.simulation) return;
     loop.stop("blink");
-    npcCanvas.width = npcCanvas.offsetWidth;
-    npcCanvas.height = npcCanvas.offsetHeight;
     withImage("npc", `img/${npc}.png`, (img) => {
+        if (state.npc != npc) return;               // cleared or replaced while it loaded
+        npcCanvas.width = npcCanvas.offsetWidth;    // cleared only when the new image is ready
+        npcCanvas.height = npcCanvas.offsetHeight;
         const [x, y, w, h] = npcBox(state.npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn);
         pixelContext(npcCanvas).drawImage(img, x, y, w, h);
     });
@@ -533,7 +544,7 @@ function playHydraGrow(hydra, fromHeads) {
         const [x, y, w, h] = npcBox(npc);
         const ctx = pixelContext(npcCanvas);
         ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-        ctx.drawImage(strip, k * frameW, 0, frameW, frameH, x, y, w, h);
+        drawFrame(ctx, strip, k * frameW, 0, frameW, frameH, x, y, w, h);
         k++;
     };
     next();
@@ -577,6 +588,7 @@ function print(data) {
 };
 
 export {
+    drawFrame,
     enterPlace,
     fadeScene,
     leavePlace,

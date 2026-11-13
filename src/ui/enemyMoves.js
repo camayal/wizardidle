@@ -10,7 +10,7 @@ import { ui, run, fight } from '../runtime.js';
 import { state } from '../state.js';
 import * as loop from '../loop.js';
 import { enemySprites } from '../data/enemies.js';
-import { imageNow, loadNPC, npcCanvas, pixelContext } from './render.js';
+import { drawFrame as drawStripFrame, imageNow, loadNPC, npcCanvas, pixelContext } from './render.js';
 
 // Melee families by the attack their sprites make (approved by the author): swords slash,
 // bows shoot, spears thrust, heavy weapons smash, horns charge, beasts pounce, heavy bodies
@@ -113,7 +113,7 @@ function drawFrame(npc, frame) {
     if (pose) {
         ctx.save();
         if (pose.mirror) { ctx.translate(x + w, y); ctx.scale(-1, 1); } else ctx.translate(x, y);
-        ctx.drawImage(pose.img, pose.index * 32, 0, 32, 32, 0, 0, w, h);
+        drawStripFrame(ctx, pose.img, pose.index * 32, 0, 32, 32, 0, 0, w, h);
         ctx.restore();
     } else {
         ctx.drawImage(sprite, x, y, w, h);
@@ -123,7 +123,7 @@ function drawFrame(npc, frame) {
     const fx = imageNow(`img/${strip}.png`);
     if (!fx) return;
     const [fw, fh] = FX_SIZE[strip] || [16, 16];
-    ctx.drawImage(fx, index * fw, 0, fw, fh, ex + (frame.dx + ox) * unit, ey + (frame.dy + oy) * unit, fw * unit, fh * unit);
+    drawStripFrame(ctx, fx, index * fw, 0, fw, fh, ex + (frame.dx + ox) * unit, ey + (frame.dy + oy) * unit, fw * unit, fh * unit);
 }
 
 // Play the enemy's attack; onHit runs once, when the blow lands (at once if nothing is drawn).

@@ -57,22 +57,28 @@ function spell(img, pj, critic = 0, center = 0, at = null){
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
+    // each frame is copied out at 1:1 first, so scaling it up can't sample the cells around it
+    const cell = document.createElement("canvas");
+    cell.width = frameWidth; cell.height = frameHeight;
+    const cellCtx = cell.getContext("2d");
     let myImage;
     withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, `img/${img}.png`, (image) => { myImage = image; animate(); });
 
-    // one frame per screen refresh; the last step draws past the end of the sprite sheet,
-    // which leaves the canvas clear, and then the animation stops
+    // one frame per screen refresh; the last step only clears the canvas, then the animation
+    // stops (v1 drew one step past the last frame, which could leave a sliver of the next cell or
+    // of the sheet's 1-px gutters on screen: the author's two stray lines by the fallen wizard)
     function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+        if (currentFrame >= totalFrames) return;
         context.imageSmoothingEnabled = !ui.crisp;   // resizing the canvas resets it
         //draw each frame + place them in the middle
         const unit = ui.charWidth / 32;
         const x = at ? at.x * unit : (ui.squareSide * mult) * leftMultiHeadLocation + (pj ? (ui.wizardOffset || 0) * unit : 0);
         const y = at ? at.y * unit : ui.headLevel * topMultiHeadLocation;
-        context.drawImage(myImage, shift, 0, frameWidth,
-            frameHeight, x, y, ui.squareSide * multiSize, ui.squareSide * multiSize);
+        cellCtx.clearRect(0, 0, frameWidth, frameHeight);
+        cellCtx.drawImage(myImage, shift, 0, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
+        context.drawImage(cell, x, y, ui.squareSide * multiSize, ui.squareSide * multiSize);
         shift += frameWidth + 1;
-        if (currentFrame == totalFrames) return;    // v1 asked for another frame here, forever
         currentFrame++;
         requestAnimationFrame(animate);
     }

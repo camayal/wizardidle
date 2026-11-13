@@ -11,7 +11,7 @@ import { ui, run, fight } from '../runtime.js';
 import { state } from '../state.js';
 import * as loop from '../loop.js';
 import { bossAttacks, sceneSpells } from '../data/bossAttacks.js';
-import { imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext, playWizardAnim } from './render.js';
+import { drawFrame, imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext, playWizardAnim } from './render.js';
 import { el } from './dom.js';
 
 const FW = 104, FH = 80;            // a boss frame; the 64 x 64 boss rests at (36, 12) in it
@@ -92,7 +92,7 @@ export function playBossAttack(boss, chosen, stone, onHit) {
             const dx = attack.path && i < attack.frames ? attack.path[f] * ui.charWidth / 32 : 0;
             const ctx = pixelContext(npcCanvas);
             ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-            ctx.drawImage(img, f * FW, 0, FW, FH, bx - 36 * k + dx, by - 12 * k, FW * k, FH * k);
+            drawFrame(ctx, img, f * FW, 0, FW, FH, bx - 36 * k + dx, by - 12 * k, FW * k, FH * k);
         }
         if (layer) {
             const ctx = pixelContext(layer), s = i - attack.sceneAt, spell = imageNow(scene);
@@ -139,7 +139,7 @@ function drawHydraFrame(npc, strip, index) {
     const kx = bw / 64, ky = bh / HYDRA_SPRITE_H[parts.hydra];
     const ctx = pixelContext(npcCanvas);
     ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-    ctx.drawImage(img, index * frameW, 0, frameW, frameH, bx - 12 * kx, by - 6 * ky, frameW * kx, frameH * ky);
+    drawFrame(ctx, img, index * frameW, 0, frameW, frameH, bx - 12 * kx, by - 6 * ky, frameW * kx, frameH * ky);
 }
 
 // The heads weave while the hydra is on screen; other animations (attacks, a growing head)
