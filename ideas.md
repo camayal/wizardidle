@@ -180,7 +180,12 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
     2. **Draw a collapsed or kneeling pose** by hand in Paint.NET, like the other sprites: one base drawing, recoloured per tier (21 images) or one generic image. The most expressive; the most work.
     3. **One generic fallen image** (robe and staff on the ground, no face), not per tier. Cheapest drawing, loses the tier look.
   - *Size and frames:* 32×32 PNG, drawn like the tier sprites (`ui.charWidth` × `ui.charHeight` at `ui.squareSide`); a lying figure fits in the bottom 12–14 rows so he rests on the ground line. One frame is enough; two frames (a 1-pixel rise, "still breathing") would work on the existing `animPJ` clock if wanted. Name them `fallen0.png`…`fallen200.png` (or `fallen.png` if generic); the two `loadAlterCanvasChar("muerto")` calls switch to the fallen image, and `muerto.png` is used only when the death is final.
-  - **Decided (2026-11-12):** option 2, **a collapsed pose drawn per tier** (not the rotation); dev is prototyping it, and an "artist" session may do the final art. *Still open:* should the fallen sprite change with the rescuer (e.g. carried on the caravan) or stay the same?
+  - **Decided (2026-11-12):** option 2, **a collapsed pose drawn per tier** (not the rotation); dev is prototyping it, and an "artist" session may do the final art.
+  - **Poses chosen (2026-11-12, by the author)** from five hand-drawn sketches (crawling, sitting, one knee, on all fours, on his back); a first kneeling version was rejected:
+    - **Fallen (regular fall, a death he can be revived from): sitting slumped, his staff leaning on his shoulder, head down** → `img/fallen0.png … fallen200.png`.
+    - **Permadeath (true death): flat on his back, staff on the ground** → `img/dead0.png … dead200.png`. *For the planner:* the author decided this sprite is the true death (see "Death management" and the rescuers in [docs/FAITH.md](docs/FAITH.md)).
+    - **The skull stays, as an "attention needed" sign** (the author): the fallen wizard is drawn with the new sprite, and the skull (`img/muerto.png`) **appears above the wizard** to tell the player something is wrong, no longer as his body. *For the planner:* exactly when it shows (and whether it also shows over the permadeath sprite) is still open.
+    - Each tier keeps its own robe, skin, hair, staff and crown (140, 200). Drawn by the artist session on branch `artist/art`, waiting for dev to wire in. *Still open:* should the fallen sprite change with the rescuer (e.g. carried on the caravan) or stay the same?
 
 - **After an erasure: the souls of erased wizards help the next one** (2026-11-12, asked by the author via the story session; **plan → [docs/ERASURE.md](docs/ERASURE.md)**): when the god wins the final battle he erases the wizard (removed from existence, name reversed and struck through in the cemetery), a museum appears, and a new game is the god going back in time. Decided: in the next final battles **the souls of the erased wizards come to help**, one per erasure **up to 5**, **entering one by one** every few rounds (each named by his reversed name), shown in the museum's final-battle snapshot, in turn order **wizard → souls → god**; the souls act only in the final battle, but after at least one erasure the next game's text shows **small echoes** (a different Prologue opening: *"You have heard him before. You will hear him again. Time is nothing to you. To him, it is everything. Will this one win?"*, and a few déjà vu lines in the chapters); faith rules don't change. Saved per world (`world.erasures`, `world.loop`, next to the cemetery). Every win brings the god's own end closer, which is the prophecy. **Only wizards defeated by the god in the final battle are erased** (the author, 2026-11-12); wizards who die at any other moment are a regular part of the cemetery and have a different role (ghost rescuers, letters, legends: "Wizards from the past help in the story").
 
@@ -236,6 +241,24 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ### 2026-11-12: Faith and story agree on chapter X
 
 - The author decided (via the story session) the two conflicts between FAITH.md and STORY.md: no afterlife gods in the death mechanics; the Last Escape scroll stays, written by the wizard himself at X and burnt at Heidan in XI; after that the reforged staff raises him. Rule: a true death only while the god can click to revive; where the story removes the click, the story protects him. FAITH.md 3.7 and the death-management entry updated.
+
+### 2026-11-12: Stats scroll tabs, art and mockups (artist)
+
+- Asked by the author via dev: real tabs for the Stats / Records scroll, as two scrolls, one behind the other. Two options to test: (a) the back scroll peeks out above, (b) its edge shows at the side.
+- Drew the back scroll's art: `img/scrollBackUpShade.png` and `img/scrollBackCenterShade.png` (the same paper in warm shadow), plus `img/scrollShadowV.png` / `scrollShadowH.png` (a hard 2 px shadow from the front scroll).
+- Mockups at 400×760 with the game fonts, offsets and swap notes: `wizardidle-old-ideas/tools/scroll_tabs/` (local only: `out/mockups_board.png`, `NOTES.md`, `make_tabs.py`). **The author picked (a)**, with the close button on the front scroll; dev builds it for the next version.
+
+### 2026-11-12: Fallen and dead wizard sprites drawn (artist)
+
+- Dev handed over the fallen sprite. A first kneeling version (all 21 tiers) didn't meet the author's standard and was replaced.
+- Drew five poses on tier 0 by hand; the author picked two: **sitting slumped** for a fall and **flat on his back** for permadeath. The skull stays as a sign that the wizard needs attention.
+- Made both for all 21 tiers: `img/fallen0…200.png` and `img/dead0…200.png` (32×32), hand-drawn bodies recoloured per tier, with each tier's own staff (slanted, ornament upright), hair, skin and crown.
+- Generator and previews are local only, in `wizardidle-old-ideas/tools/fallen/artist/` (`make_fallen2.py`, `poses/`, `sheet2.png`, `preview_B_E.png`). Next: dev wires them in; the planner designs when the skull shows. No planner session was running, so the two decisions are noted in the backlog entry.
+
+### 2026-11-12: New session: artist
+
+- The author started an **artist** session: it draws and edits pixel-art sprites, UI tiles and backgrounds in the game's existing style, and hands them to dev to wire into the game. It works on the `artist/art` branch (off `dev`); finished PNGs go in `img/` there and are merged into `dev` when the author says so. Working files (.pdn, drafts) stay outside the repo in `wizardidle-old-ideas/`.
+- First job waiting for it: the final art of the fallen wizard (a collapsed pose per tier), see "A fallen wizard sprite instead of the skull".
 
 ### 2026-11-12: Erasure plan
 
