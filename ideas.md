@@ -213,6 +213,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Bestiary secrets; stale code while testing
+- Bestiary: the hydras are secret characters, so their section is "Secrets", shown from the start as ink stains labelled "Secret" until met. Only enemies are listed (never the healer). The total no longer counts two old sprite families that live in no zone (`la_guerrera`, `la_pilla`).
+- The author still saw the scroll text run long on open, fixed after interacting: that is how the code behaved before the fix, so the browser most likely ran stale code. Real-time captures (driving Edge through its debugging protocol) at desktop, big-monitor and phone sizes show the right size after the opening animation. Two fixes against stale code: the offline worker now re-checks code files with the server every time (`cache: 'no-cache'`), so players also get new code right after a release; and while developing (`DEV`) no offline worker is installed (an old one is removed).
+
 ### 2026-11-12: Kill scroll: Kill / Cemetery / Bestiary
 - The author asked for the kill scroll as tabbed scrolls, with a bestiary. The tab code is now shared: Stats / Records, and Kill / Cemetery / Bestiary (two strips stacked above the front scroll).
 - **Cemetery** gets its own page; entries now say how many victories and falls the wizard had (for wizards killed from now on).

@@ -33,10 +33,16 @@ window.addEventListener('load', () => responsiveLayout());
 
 // Offline mode (service-worker.js). Registered after load so storing ~6 MB of art and
 // sound doesn't slow down the first visit.
+// While developing (DEV) there is no offline worker, and one left from earlier is removed, so
+// the game always runs the files on disk.
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js').catch((error) => console.warn('[offline] not available:', error));
-    });
+    if (DEV) {
+        navigator.serviceWorker.getRegistrations().then((all) => all.forEach((registration) => registration.unregister()));
+    } else {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('service-worker.js').catch((error) => console.warn('[offline] not available:', error));
+        });
+    }
 }
 
 // Dev tools: the test bar, only while developing (DEV is false on the live site). Loaded

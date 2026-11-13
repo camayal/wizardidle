@@ -54,7 +54,9 @@ self.addEventListener('fetch', (event) => {
         event.respondWith((async () => {
             const cache = await caches.open(CACHE);
             try {
-                const response = await fetch(request);
+                // 'no-cache': always ask the server whether the file changed (a quick check when
+                // it didn't), so the browser's own cache never hands out an old copy of the code
+                const response = await fetch(request.url, { cache: 'no-cache', credentials: 'same-origin' });
                 if (response.ok) cache.put(request, response.clone());
                 return response;
             } catch (e) {
