@@ -213,6 +213,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Kill scroll: Kill / Cemetery / Bestiary
+- The author asked for the kill scroll as tabbed scrolls, with a bestiary. The tab code is now shared: Stats / Records, and Kill / Cemetery / Bestiary (two strips stacked above the front scroll).
+- **Cemetery** gets its own page; entries now say how many victories and falls the wizard had (for wizards killed from now on).
+- **Bestiary** (layout A from three mockups): families he has met, every sprite with how many he defeated (★ = rare); never defeated as an **ink stain** (grainy dotted shape with a ragged rim, chosen from three silhouette mockups), drawn in the browser from the sprite itself. Bosses and hydras have their own sections; "X of 632 creatures discovered" on top.
+- New stats for it: `kill.sprite.<sprite>`, `kill.boss.<boss>`, `kill.hydra.<hydra>` (start counting now).
+
 ### 2026-11-12: Crisp pixels; scroll text overflow fixed
 - The author chose crisp pixels: images are enlarged as sharp squares instead of blurred (`image-rendering: pixelated` on images and the scene, `imageSmoothingEnabled = false` on the canvases). No image files changed. The dev bar has "Crisp pixels on / off" to compare.
 - Bug (found by the author): on the stats scroll the text ran past the bottom roll over the scene. The layout redoes the scroll right after it opens (and on resize), which reset the front scroll's height until the next stats refresh. The layout now announces it (`wizardidle:layout`) and the tab refits at once.

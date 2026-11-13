@@ -59,7 +59,7 @@ export const ui = {
     scrollCurrentContent: undefined, // which scroll is open: "stats", "achievements", ...
     statsPage: undefined,
     crisp: true,                   // sprites drawn as sharp pixels (dev bar can switch it off to compare)
-    statsView: "stats",            // page of the stats scroll: "stats" or "records"
+    scrollViews: { stats: "stats", kill: "kill" },  // front page of each tabbed scroll (ui/scrolls.js)
     audio: undefined,              // last sound played
     goldIcon: undefined,           // <img> snippets sized to em, used in console messages
     spiritIcon: undefined,
