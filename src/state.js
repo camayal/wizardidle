@@ -56,6 +56,8 @@ function newState() {
         petrifyImmune: false,         // he found the artefact against her gaze
         travelFavor: false,           // planned in v1 (map travel once god loves the wizard), never unlocked
         hydraHeads: {},               // hydra name -> current number of heads
+        hydraHealth: {},              // hydra name -> share of its HP left after a fight it survived
+                                      //   (the author: its wounds stay; it heals only when a head grows)
         sacredNames: {},              // the two sacred wizards keep the name they first got
         statBonus: {},                // skill -> gained on top of config.baseStats
         stats: { 'explore.zone.la_Ciudad': 1, 'combat.combo': 0 },  // see src/stats.js (v1: idx_*)

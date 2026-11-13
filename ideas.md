@@ -255,6 +255,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Hydras: their wounds stay, a word on the heads
+- The author: a hydra doesn't heal from one battle to the next, only when a new head grows. When the wizard falls against a hydra, the share of its HP left is kept (`state.hydraHealth`); the next encounter with that hydra starts with that share of its new HP ("The hydra still bears the wounds of their last battle"). A growing head brings its HP back in full, and killing it forgets the wound. The share (not the HP) is kept so a wound from many levels ago still means something.
+- The author: short info on the heads. When a head grows: "Each head cut off grows back with more life: 3 of 5 heads", or at the last head "the next one cut off is for good". The bestiary's Secrets section explains it in one line once a hydra has been met.
+- Gameplay change from the author's own rule (no new number). Tests: a real-browser run (wounded at 36%, back at 36% next fight, full again after a head grew).
+
 ### 2026-11-13: The revive in order: rings, fade, cabin
 - Bug (the author): the divine rings of a revive played over the wizard already standing and the fade started at once. Now the rings play over him where he fell (the game frozen for 0.65 s), then the fade, then he is in the healer's cabin, and the cabin's event starts after the fade. In a simulation or in the background it goes straight to the cabin, as before.
 - Tests: a real-browser capture over 3 s (rings over the fallen pose, the dark, the cabin, "wakes up perplexed").

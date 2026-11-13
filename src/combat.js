@@ -86,6 +86,7 @@ function defeatEnemy() {
         stats.count(`kill.hydra.${fight.hydra}`);
         stats.first("first.hydraKill");
         delete state.hydraHeads[fight.hydra];
+        delete state.hydraHealth[fight.hydra];
     } else if (enemySprites[fight.enemyAndNumber].rare) {
         stats.count("kill.rare", 1, { world: true });
         stats.count(`kill.sprite.${fight.enemyAndNumber}`);
@@ -179,6 +180,9 @@ function wizardFalls() {
         stats.add("gold.lostInBattle", goldLooted);
     }
     print(`${wizardName()} has fallen in battle${lootedText}`);
+    if (fight.hydraCombat && fight.enemyHP > 0) {       // the hydra keeps its wounds for next time
+        state.hydraHealth[fight.hydra] = Math.min(1, fight.enemyHP / fight.enemyHPbase);
+    }
     npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
     clearFight();
     scheduleSelfRevive();
@@ -327,6 +331,10 @@ function getHydra(newEncounter = false){
     startHydraIdle();                                                                   // then the heads weave
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * (state.hydraHeads[fight.hydra]);
     fight.enemyHPbase = Math.round(fight.enemyHP)
+    // the author: a hydra doesn't heal between battles, only when a new head grows
+    const wounded = newEncounter ? state.hydraHealth[fight.hydra] : undefined;
+    if (wounded !== undefined) fight.enemyHP = Math.max(1, Math.round(fight.enemyHPbase * wounded));
+    else delete state.hydraHealth[fight.hydra];
     updateHeartNPC();
     fight.enemyName = `<span style='color:DarkGreen'><img class='imgInConsole' height='${ui.em}' src='img/boss.png'/> ${fight.hydra.toUpperCase()}</span>`;
     let startBattleText;
@@ -336,10 +344,15 @@ function getHydra(newEncounter = false){
         stats.count(`seen.hydra.${fight.hydra}`);
         startBattleText = "has entered in a battle with a hydra!,finds a hydra!,start a fight with a hydra!"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
+        if (wounded !== undefined) print(`The hydra still bears the wounds of their last battle`);
         startEvent(battle);
     } else {
         startBattleText = "sees how another head grows!, sees how the hydra regenerates its health points"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
+        // the author: a short word on the heads (how many, and when it can be killed)
+        const heads = state.hydraHeads[fight.hydra], max = Number(zones[state.zone.current].headsMax);
+        print(heads < max ? `<i>Each head cut off grows back with more life: ${heads} of ${max} heads</i>`
+            : `<i>The hydra has all its ${max} heads: the next one cut off is for good</i>`);
     }
     
 }

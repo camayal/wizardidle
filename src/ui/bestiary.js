@@ -69,7 +69,10 @@ export function bestiaryPageHtml() {
         bosses.map((b) => cell(b, stats.get(`seen.boss.${b}`), stats.get(`kill.boss.${b}`), 1.25)).join('') +
         // the hydras are a secret (they only come after the hydra mystery): stains until met
         "<br><span class='subtitles'>Secrets</span><br>" +
-        hydras.map((h) => cell(`${h}${hydraHeads(h)}`, stats.get(`seen.hydra.${h}`), stats.get(`kill.hydra.${h}`), 1.25, 'Secret')).join('');
+        hydras.map((h) => cell(`${h}${hydraHeads(h)}`, stats.get(`seen.hydra.${h}`), stats.get(`kill.hydra.${h}`), 1.25, 'Secret')).join('') +
+        // once one is met, a short word on how they work (the author's request)
+        (hydras.some((h) => stats.get(`seen.hydra.${h}`)) ? "<br><i>Cut a hydra down and a new head grows, with its life back and more of it, " +
+            "until it has all its heads; then the next blow is for good. It doesn't heal between battles.</i><br>" : '');
 }
 
 // ------------------------------------------------------------------ the ink stains
