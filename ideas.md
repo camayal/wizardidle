@@ -213,6 +213,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Enemy moves matched to their weapons
+- The author asked for each family's move to match the attack its sprites make; the artist drew the four missing overlays (arrow, thrust, smash, impact) with frame lists. New moves: **shoot** (elves: draw, release, the arrow flies 16 px a frame to the wizard), **thrust** (warriors, dares: spears), **smash** (ogres, dwarves, herbos, cornovits: heavy overhead weapons, then dust), **charge** (capricor, cowrens: horns, impact burst). Slash for the other sword users, pounce for beasts, slam for heavy bodies. Each family uses its most common attack; per-sprite moves could come later.
+
 ### 2026-11-12: Hydras grow their heads
 - The artist's head-growth strips (approved by the author) play when a hydra grows its next head: the Dunes hydra's neck grows with a shimmer, the ice hydra's head forms in an ice block that shatters, the Swamp mother's neck rises from a green splash. 90 ms per frame, at the hydra's size and place (loadNPC's size rules are now `npcBox()`, shared by both).
 
