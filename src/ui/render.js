@@ -302,7 +302,7 @@ function looksRandom() {
     return looks / 2147483647;
 }
 
-const WALK_STEP = 16;               // sprite px per 100 ms frame
+const WALK_STEP = 11;               // sprite px per 100 ms frame (the author found 16 too fast)
 const OFF_RIGHT = 240, OFF_LEFT = -72;   // offsets just past the right and left edges of the scene
 
 // Walk out of the scene to the right, change the scene, walk in from the left to his place
@@ -397,7 +397,9 @@ function fadeLayer() {
     return fadeCanvas;
 }
 
-// Fade the scene to dark, change it, fade back in (about half a second), then done(). With
+const FADE_STEP_MS = 80;            // the fade has 9 steps: about 0.7 s
+
+// Fade the scene to dark, change it, fade back in (about 0.7 s), then done(). With
 // ready, it stays dark until ready() says the new scene can show (its image has loaded).
 function fadeScene(change, done, ready) {
     if (run.simulation || !document.hasFocus()) {
@@ -411,7 +413,7 @@ function fadeScene(change, done, ready) {
     let k = 0, waited = 0;
     loop.every("fade", () => {
         if (k == 4) change();                       // at full dark
-        if (k == 5 && ready && !ready() && waited++ < 80) return;     // hold the dark while it loads (5 s at most)
+        if (k == 5 && ready && !ready() && waited++ < 62) return;     // hold the dark while it loads (5 s at most)
         ctx.clearRect(0, 0, layer.width, layer.height);
         ctx.fillStyle = `rgba(12, 8, 6, ${steps[k]})`;
         ctx.fillRect(0, 0, layer.width, layer.height);
@@ -421,7 +423,7 @@ function fadeScene(change, done, ready) {
             loop.thawGame();
             if (done) done();
         }
-    }, 60);
+    }, FADE_STEP_MS);
 }
 
 // A place appears around him: the fade, then (if it has a door) he comes in through it and
