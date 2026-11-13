@@ -53,8 +53,18 @@ function frames(kind, school) {
         f(-3, 0, 1.08, 0.9, ["fx_smash", 2, -14, -8]), f(-3, 0, 1.1, 0.86, ["fx_smash", 3, -14, -8], 1),
         f(-2, 0, 1.04, 0.95, ["fx_smash", 4, -14, -8], -1), f(-1, 0, 1, 1, ["fx_dust", 0, -14, 25]), f(0, 0, 1, 1, ["fx_dust", 1, -14, 25]),
         f(0, 0, 1, 1, ["fx_dust", 2, -14, 25]), f()];
-    if (kind == "charge") return [f(), f(2, 0, 1.04, 0.94), f(-5, 0), f(-10, 0, 1.06, 0.96, ["fx_impact", 0, -10, 8]),
-        f(-11, 0, 1.04, 0.97, ["fx_impact", 1, -10, 8], 1), f(-9, 0, 1, 1, ["fx_impact", 2, -10, 8]), f(-5, 0, 1, 1, ["fx_impact", 3, -10, 8]), f(-2, 0), f()];
+    if (kind == "charge") {         // across the scene: paw the ground, dash to the wizard, hit, trot back
+        const reach = 26 - WIZARD_DISTANCE;                     // stops just in front of the wizard
+        const dust = (i) => ["fx_dust", i, 20, 25];
+        const seq = [f(), f(1, 0, 1.04, 0.94, dust(0)), f(), f(1, 0, 1.04, 0.94, dust(1)), f(2, 0, 1.05, 0.92)];
+        for (const t of [0.2, 0.42, 0.64, 0.84, 0.97]) seq.push({ ...f(Math.round(reach * t), 0, 1.04, 0.96, dust(seq.length % 3)), pose: "run" });
+        seq.push({ ...f(reach, 0, 1.06, 0.96, ["fx_impact", 0, -10, 8], 2), hit: true },
+            f(reach + 2, 0, 1.04, 0.97, ["fx_impact", 1, -10, 8], -2), f(reach + 8, 0, 1, 1, ["fx_impact", 2, -10, 8], 1),
+            f(reach + 14, 0, 1, 1, ["fx_impact", 3, -10, 8]));
+        for (const t of [0.75, 0.55, 0.35, 0.17, 0.05]) seq.push({ ...f(Math.round(reach * t), seq.length % 2 ? -1 : 0), pose: "back" });
+        seq.push(f());
+        return seq;
+    }
     if (kind == "slash") return [f(), f(1, 0, 1, 1), f(2, 0, 1.02, 0.97), f(-3, 0, 1, 1, ["fx_slash", 0, -14, 0]),
         f(-3, 0, 1, 1, ["fx_slash", 1, -14, 0]), f(-3, 0, 1, 1, ["fx_slash", 2, -14, 0]), f(-2, 0, 1, 1, ["fx_slash", 3, -14, 0]),
         f(-1, 0, 1, 1, ["fx_slash", 4, -14, 0]), f()];
@@ -76,15 +86,33 @@ export function enemyMove() {
     return { kind: MELEE[fight.enemy] || DEFAULT_MELEE };
 }
 
+// The artist's running frames for chargers (img/run_<sprite>.png, 32 x 32 frames facing
+// left); without them the standing sprite slides.
+let runStep = 0;
+function poseImage(npc, frame) {
+    if (!frame.pose) return null;
+    const strip = imageNow(`img/run_${npc}.png`);
+    return strip ? { img: strip, index: runStep++ % Math.max(1, strip.naturalWidth / 32), mirror: frame.pose == "back" } : null;
+}
+
 function drawFrame(npc, frame) {
     const sprite = imageNow(`img/${npc}.png`);
     if (!sprite) return;
+    const pose = poseImage(npc, frame);
     const unit = ui.charWidth / 32;                             // one sprite pixel on screen
     const ex = ui.squareSide * 6 + frame.shake * unit, ey = ui.headLevel;
     const ctx = pixelContext(npcCanvas);
     ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
     const w = ui.charWidth * frame.sx, h = ui.charWidth * frame.sy;
-    ctx.drawImage(sprite, ex + frame.dx * unit + (ui.charWidth - w) / 2, ey + frame.dy * unit + ui.charWidth - h, w, h);
+    const x = ex + frame.dx * unit + (ui.charWidth - w) / 2, y = ey + frame.dy * unit + ui.charWidth - h;
+    if (pose) {
+        ctx.save();
+        if (pose.mirror) { ctx.translate(x + w, y); ctx.scale(-1, 1); } else ctx.translate(x, y);
+        ctx.drawImage(pose.img, pose.index * 32, 0, 32, 32, 0, 0, w, h);
+        ctx.restore();
+    } else {
+        ctx.drawImage(sprite, x, y, w, h);
+    }
     if (!frame.fx) return;
     const [strip, index, ox, oy] = frame.fx;
     const fx = imageNow(`img/${strip}.png`);

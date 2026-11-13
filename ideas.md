@@ -213,6 +213,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: The charge crosses the scene
+- The author agreed: the horned chargers (capricor, cowrens) now paw the ground, dash across the scene to the wizard with a dust trail, hit (impact burst, shake, the spell effect), recoil and trot back (about 2 s). The artist was asked for running frames (`img/run_<sprite>.png`, 32x32 frames facing left); the code uses them automatically when they exist (mirrored for the trot back) and the standing sprite until then.
+
 ### 2026-11-12: Enemy moves matched to their weapons
 - The author asked for each family's move to match the attack its sprites make; the artist drew the four missing overlays (arrow, thrust, smash, impact) with frame lists. New moves: **shoot** (elves: draw, release, the arrow flies 16 px a frame to the wizard), **thrust** (warriors, dares: spears), **smash** (ogres, dwarves, herbos, cornovits: heavy overhead weapons, then dust), **charge** (capricor, cowrens: horns, impact burst). Slash for the other sword users, pounce for beasts, slam for heavy bodies. Each family uses its most common attack; per-sprite moves could come later.
 
