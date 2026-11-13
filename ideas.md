@@ -255,6 +255,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: The revive in order: rings, fade, cabin
+- Bug (the author): the divine rings of a revive played over the wizard already standing and the fade started at once. Now the rings play over him where he fell (the game frozen for 0.65 s), then the fade, then he is in the healer's cabin, and the cabin's event starts after the fade. In a simulation or in the background it goes straight to the cabin, as before.
+- Tests: a real-browser capture over 3 s (rings over the fallen pose, the dark, the cabin, "wakes up perplexed").
+
 ### 2026-11-13: Author's playtest notes: stray lines and flicker
 - Bug (the author): two lines of pixels by the fallen wizard, left and bottom. Each spell effect drew one step past its last frame to "leave the canvas clear"; 6 sheets have spare cells, and many have pixels in their 1-px gutters, so a sliver (or a whole spare cell) could stay on the spell canvas. The last step now only clears, and each frame is copied out at 1:1 before scaling, so no neighbour cell or gutter is sampled.
 - Bug (the author): flicker when animations change. The wizard, his poses and the enemy wiped their canvas before the new image was ready, so an image not yet cached left a blank frame. They now clear only when the image is ready (and a late image for an enemy that is gone is not drawn). Animation strips (wizard, walk, hydras, bosses, enemy moves) also use the 1:1 copy (`drawFrame` in render.js).

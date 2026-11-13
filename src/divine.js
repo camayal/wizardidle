@@ -9,7 +9,7 @@ import * as loop from './loop.js';
 import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { drawWizard, enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { interruptMidasHeal } from './bossEffects.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
@@ -22,7 +22,12 @@ function pjBtn(){
     }
 }
 
-// Bring the fallen wizard back at full HP; the healer's scene follows.
+// The divine rings play over the fallen wizard before the scene fades (28 frames at the screen's
+// refresh, a little under half a second, plus a short beat).
+const RINGS_MS = 650;
+
+// Bring the fallen wizard back at full HP; the healer's scene follows. The author's order: the
+// rings over him where he fell, the fade, then he is in the healer's cabin.
 function reviveByTouch() {
     stats.count("god.touches");
     run.disablePjBtn = true;
@@ -35,9 +40,14 @@ function reviveByTouch() {
     }
     state.player.hp = state.player.hpBase;
     fight.pjDead = false;
-    drawWizard();
-    enterPlace("curanderobg", "curandero");    // he wakes up in the healer's cabin
-    startEvent(reviveEV);
+    const toCabin = () => enterPlace("curanderobg", "curandero", () => startEvent(reviveEV));   // he wakes up there
+    if (run.simulation || !document.hasFocus()) return toCabin();
+    loop.freezeGame();                          // nothing moves on while the rings play
+    loop.every("reviveRings", () => {
+        loop.stop("reviveRings");
+        loop.thawGame();
+        toCabin();
+    }, RINGS_MS);
 }
 
 // Heal 50-200% of his restoration knowledge, paying 1-3 faith per HP; never above full HP,
