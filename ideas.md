@@ -224,6 +224,14 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - New stats for it: `kill.sprite.<sprite>`, `kill.boss.<boss>`, `kill.hydra.<hydra>` (start counting now).
 - Then (the author): a creature shows as soon as he **sees** it, and the number counts defeats (0 until the first). New stats `seen.sprite.<sprite>`, `seen.boss.<boss>`, `seen.hydra.<hydra>`; the header reads "X of 632 creatures seen, Y defeated".
 
+### 2026-11-12: Wizard animations (artist)
+
+- The author asked for five animations: fall to sitting, fall to lying (permadeath), moving the staff (also for casting), dropping the staff to pray, and walking. Drafted on tier 0, the author asked for polish, then all tiers.
+- Made all five for every tier as frame strips (32×32 frames side by side, for the 100 ms animation clock): `img/anim_cast<tier>.png` (7 frames), `anim_walk` (4, loop), `anim_fall_sit` (6, ends on `fallen<tier>`), `anim_fall_dead` (6, ends on `dead<tier>`), `anim_pray` (6; frames 3–5 can loop). Built from each tier's own sprite (staff, gripping hand, body), so the style matches.
+- Known: tiers with the staff on the right end the sitting fall with the staff on the left (the approved sitting pose), so it jumps across on the last frames.
+- Previews (local only): `wizardidle-old-ideas/tools/anim/out/` (GIFs for tier 0, a board per tier; review GIFs of every tier in `review/`) and the generator `anim.py`. Not wired into the game yet.
+- Fixed after the author's review: in the pray loop only the head bows; the body no longer bobs.
+
 ### 2026-11-12: Crisp pixels; scroll text overflow fixed
 - The author chose crisp pixels: images are enlarged as sharp squares instead of blurred (`image-rendering: pixelated` on images and the scene, `imageSmoothingEnabled = false` on the canvases). No image files changed. The dev bar has "Crisp pixels on / off" to compare.
 - Bug (found by the author): on the stats scroll the text ran past the bottom roll over the scene. The layout redoes the scroll right after it opens (and on resize), which reset the front scroll's height until the next stats refresh. The layout now announces it (`wizardidle:layout`) and the tab refits at once.
