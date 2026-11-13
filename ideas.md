@@ -211,6 +211,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Stats scroll tabs, art and mockups (artist)
+
+- Asked by the author via dev: real tabs for the Stats / Records scroll, as two scrolls, one behind the other. Two options to test: (a) the back scroll peeks out above, (b) its edge shows at the side.
+- Drew the back scroll's art: `img/scrollBackUpShade.png` and `img/scrollBackCenterShade.png` (the same paper in warm shadow), plus `img/scrollShadowV.png` / `scrollShadowH.png` (a hard 2 px shadow from the front scroll).
+- Mockups at 400×760 with the game fonts, offsets and swap notes: `wizardidle-old-ideas/tools/scroll_tabs/` (local only: `out/mockups_board.png`, `NOTES.md`, `make_tabs.py`). Waiting for the author to pick (a) or (b); dev builds it.
+
 ### 2026-11-12: Fallen and dead wizard sprites drawn (artist)
 
 - Dev handed over the fallen sprite. A first kneeling version (all 21 tiers) didn't meet the author's standard and was replaced.
