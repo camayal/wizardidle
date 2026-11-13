@@ -245,6 +245,7 @@ function openHistory(){
     shownChapter = chapter[`lvl${state.player.lvl}`];
     // run the chapter's event
     run.afterChapterExe = true;//activate post chapter event
+    run.storyDream = "chapter";     // the next rest dreams of it (docs/SLEEP.md)
     shownChapter.event()
 
     // show the scroll if the chapter has text

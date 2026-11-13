@@ -436,6 +436,43 @@ function fadeScene(change, done, ready) {
     }, FADE_STEP_MS);
 }
 
+// Sleep (docs/SLEEP.md): the scene fades to dark and stays dark a moment; a dream's lines
+// (1-3) appear softly over the dark one after the other, then it fades back. done runs after.
+const SLEEP_DARK_MS = 2000, DREAM_LINE_MS = 1800;
+function sleepInDark(dream, done) {
+    if (run.simulation || !document.hasFocus()) return done && done();
+    loop.freezeGame();
+    const layer = fadeLayer(), ctx = layer.getContext("2d");
+    const lines = dream ? dream.lines : [];
+    const hold = Math.round((SLEEP_DARK_MS + lines.length * DREAM_LINE_MS) / FADE_STEP_MS);
+    const steps = [0.3, 0.6, 0.85, ...Array(hold).fill(1), 0.75, 0.45, 0.2, 0];
+    const size = Math.max(10, Math.round(layer.height / 7));
+    let k = 0;
+    loop.every("sleep", () => {
+        ctx.clearRect(0, 0, layer.width, layer.height);
+        ctx.fillStyle = `rgba(6, 4, 12, ${steps[k]})`;
+        ctx.fillRect(0, 0, layer.width, layer.height);
+        const t = (k - 3) * FADE_STEP_MS - 500;     // ms into the dark, after a short beat
+        if (lines.length && k >= 3 && k < 3 + hold) {
+            ctx.font = `${size}px munroregular, monospace`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            const top = layer.height / 2 - (lines.length - 1) * size * 0.6;
+            lines.forEach((line, i) => {
+                const a = Math.max(0, Math.min(1, (t - i * DREAM_LINE_MS) / 500));
+                ctx.fillStyle = dream.nightmare ? `rgba(255, 150, 130, ${a})` : `rgba(230, 222, 255, ${a})`;
+                ctx.fillText(line, layer.width / 2, top + i * size * 1.2);
+            });
+        }
+        if (++k >= steps.length) {
+            loop.stop("sleep");
+            ctx.clearRect(0, 0, layer.width, layer.height);
+            loop.thawGame();
+            if (done) done();
+        }
+    }, FADE_STEP_MS);
+}
+
 // He goes into a place. With a door: the fade, then he comes in through it and walks to his
 // spot. Without one (a shrine, a statue): he walks out of the scene and into the place, like any
 // change of scene (the author's request); fade = true keeps the plain fade (waking up in the
@@ -601,6 +638,7 @@ function print(data) {
 
 export {
     drawFrame,
+    sleepInDark,
     enterPlace,
     fadeScene,
     leavePlace,

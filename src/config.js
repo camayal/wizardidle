@@ -17,6 +17,7 @@ export const config = {
         pGetBoss: 0.015,           // chance a fight is against the zone boss
         pGetGuardian: 0.1,         // megabosses
         pGetStatue: 0.08,
+        dreamChance: 0.15,         // a rest has a random dream or nightmare (looks only, docs/SLEEP.md; how rare is to decide)
         pGetHydra: 0.1,            // only once the hydra mystery is solved
         pDados: 0.1,               // was 0.2: too easy to get stuck in the dice game
         allowChangeZone: 1,        // 1 = use pChangeZone as is, 0 = never change zone

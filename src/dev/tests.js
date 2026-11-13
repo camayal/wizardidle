@@ -128,6 +128,27 @@ const scenarios = [
         setup() { moveTo('la_Ciudad'); state.player.hp = Math.floor(state.player.hpBase / 2); return { event: EVENT.inn }; },
     },
     {
+        name: 'Sleep: Town inn, with a dream',
+        check: 'Walks in, pays, walks to the door to the rooms, the scene goes dark, the chapter dream shows over the dark, wakes, walks out.',
+        setup() {
+            moveTo('el_Poblado');
+            run.storyDream = 'chapter';
+            state.player.gold = Math.max(state.player.gold, 1000);
+            state.player.hp = Math.floor(state.player.hpBase / 2);
+            return { event: EVENT.inn };
+        },
+    },
+    {
+        name: 'Sleep: camping, with a dream',
+        check: 'The sleeping bag, he walks to it, the dark with the dream after a fall (a nightmare, reddish), wakes, walks back.',
+        setup() {
+            moveTo('el_Bosque');
+            run.storyDream = 'fall';
+            state.player.hp = Math.floor(state.player.hpBase / 2);
+            return { event: EVENT.inn };
+        },
+    },
+    {
         name: 'Dice house 6-5-4 (City)',
         check: 'Enters the gaming house; the 6-5-4 game plays and ends, gold changes.',
         setup() {

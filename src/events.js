@@ -16,10 +16,11 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, updateHeading, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, sleepInDark, updateHeading, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
+import { dreams } from './data/dreams.js';
 
 //define statueobj
 const statueObj = {
@@ -494,6 +495,42 @@ function arriveToRest(placesWithInn) {
     }
 }
 
+// Where he sleeps (docs/SLEEP.md), as the centre of his sprite in scene px (256 x 64). STAND-INS
+// until the artist draws beds in the inns: the Town inn's door to the rooms, a free spot in the
+// City inn, the Desert inn's carpet; camping, next to the sleeping bag (drawn at x 192).
+const BED_X = { el_Poblado: 107, la_Ciudad: 150, el_Desierto: 155 };
+const BAG_X = 176;
+
+// A dream for tonight, or none: a story dream on the first rest after a fall or a chapter,
+// otherwise now and then a random dream (more for believers) or nightmare (more for doubters).
+// Looks only: picked with looksRandom, never the game's Math.random, and only when it is shown.
+function pickDream() {
+    const pick = (list) => list[Math.floor(looksRandom() * list.length)];
+    if (run.storyDream) {
+        const kind = run.storyDream;
+        run.storyDream = "";
+        stats.count("dream.story");
+        return { lines: pick(dreams[kind]), nightmare: kind == "fall" };
+    }
+    if (looksRandom() >= config.balance.dreamChance) return null;
+    const nightmare = looksRandom() < (state.player.faith > 0 ? 0.25 : 0.75);
+    stats.count(nightmare ? "nightmare.random" : "dream.random");
+    return { lines: pick(dreams[nightmare ? "nightmare" : "dream"]), nightmare };
+}
+
+// He walks to his bed or sleeping bag, the sleep spell, the dark (with tonight's dream, kept in
+// the console too). Without drawing (simulation, page in the background) none of it plays.
+function goToBed(placesWithInn) {
+    stats.count(placesWithInn ? "sleep.inn" : "sleep.camping");
+    if (run.simulation || !document.hasFocus()) return spell("spellSleep_24", true);
+    const dream = pickDream();
+    walkWizardTo((placesWithInn ? BED_X[state.zone.current] || 150 : BAG_X) - 48, () => {
+        spell("spellSleep_24", true);
+        if (dream) print(`<i>${wizardName()} dreams: ${dream.lines.join(" ")}</i>`);
+        sleepInDark(dream);
+    });
+}
+
 // Pay for a bed if he can (a full rest), otherwise sleep for free (a partial rest).
 function sleep(placesWithInn) {
     const textSleeps = "sleeps,replenishes energies,rests";
@@ -504,7 +541,7 @@ function sleep(placesWithInn) {
             print(`${wizardName()} cannot afford pay a bed, but takes a free drink`);
             run.restAtInn = false;
         } else {
-            spell("spellSleep_24", true);
+            goToBed(true);
             state.player.gold = state.player.gold - innCost;
             stats.add("gold.spentAtInns", Number(innCost));
             playSound("coins");
@@ -512,7 +549,7 @@ function sleep(placesWithInn) {
             run.restAtInn = true;
         }
     } else {
-        spell("spellSleep_24", true);
+        goToBed(false);
         print(`${wizardName()} ${pickRandomItem(textSleeps)}`);
         run.restAtInn = false;
     }
@@ -543,7 +580,7 @@ function wakeUp(placesWithInn) {
     run.restAtInn = false;
     endEvent();
     if (placesWithInn) leavePlace(showStage, nextEvent);    // out through the door
-    else nextEvent();
+    else walkWizardTo(0, nextEvent);                       // back from the sleeping bag
 }
 
 

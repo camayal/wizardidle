@@ -255,6 +255,13 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Sleep and dreams (docs/SLEEP.md), first version
+- The planner's sleep plan, asked for by the author: when he rests he walks to his bed or to the sleeping bag, the sleep spell plays, the scene fades to dark (about 2 s), and when tonight has a dream its 1-3 lines appear softly over the dark one after the other (pale for dreams, reddish for nightmares) and stay in the console; then it fades back and he wakes as before (camping: he walks back from the bag).
+- Dreams: a story dream on the first rest after a fall or a chapter (`run.storyDream`); otherwise `config.balance.dreamChance` (0.15, to decide: "how rare" is open) of a random dream or nightmare, nightmares more likely when faith is not positive (until belief levels exist). Pure story: picked with the looks' random, only when drawn, no effect on play; simulations unchanged. Stats: `sleep.inn`, `sleep.camping`, `dream.story`, `dream.random`, `nightmare.random`.
+- STAND-INS until the art and the story script: the inns have no beds, so he goes to the Town inn's door to the rooms, a free spot in the City inn, the Desert inn's carpet; he doesn't lie down (no sleeping pose yet); the dream lines in `src/data/dreams.js` are placeholders for the story script. Asks for the artist: beds in the inn backgrounds (or a bed sprite), the wizard lying in bed / in the sleeping bag, optional faint dream images.
+- Dev bar: "Sleep: Town inn, with a dream" and "Sleep: camping, with a dream".
+- Tests: real-browser capture of the camping scene (walk, dark, the fall dream over the dark, wake, walk back); gameplay suite 0 errors; seeded simulation runs fine.
+
 ### 2026-11-13: Into a shrine on foot
 - The author: entering a shrine should be a walk, like a change of scene, not a fade. Every place without a door (shrines, statues, inns outside the towns) now works that way: he walks out to the right, the place appears, he walks in from the left (`enterPlace`). Places with a door keep the fade and the door; waking up in the healer's cabin keeps its plain fade (`fade = true`). When he is already in the place (back to the same shrine), only who is there changes, with no walk.
 - Tests: real-browser trace of the shrine scenario (out, into the shrine with the mystic, the offering, out again); gameplay suite 0 errors.
