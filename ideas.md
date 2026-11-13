@@ -246,6 +246,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Boss effects built
+- The planner's "Boss effects" (docs/SCENE_SPELLS.md) are in the game (`src/bossEffects.js`, numbers in `config.balance` to tune): Medusa's gaze turns him to stone for 2 turns, 1 in 4 gazes (she hits freely; he breaks free after); after his first stone, 1 find in 20 is the mirror shield that makes him immune for good (art asked from the artist); King Midas's golden rays heal him 15% of his max HP at most twice per fight, and the god's touch while they spin stops the heal; the blizzard (Rainbow) makes him skip his next attack half of the time, the earthquake (Protromus) makes his next spell miss half of the time, the poison cloud (Kkck) hurts him 4% of his max HP for 2 turns.
+- The boss's attack now follows from the spell the game picks (its place in the zone's list), so the effects are part of the game and the simulations play them; the looks play that same attack. The stone ends when the game says (no more 2.5 s timer).
+- Playtest `docs/playtests/2026-11-13-boss-effects` vs the baseline: pace barely changes (idle ~41 h, active ~16 h to level 200), since bosses are rare (1.5% of fights). With bosses at 50% in test runs every effect fires; the artefact came after 1-3 stones each time.
+
 ### 2026-11-13: Dev bar: real fights instead of drawn previews
 - Bug (the author): the boss, hydra and enemy previews drew the creature on top of whatever fight was running. They are now **"Fight now"** actions: the current event ends (every clock stops, the fight and the scene are cleared, the wizard is back in his place at full HP) and a real fight starts with the game's own code (forced event and chances, like the scenarios, but without a reload): 5 bosses, the 3 hydras, and one enemy for each attack move. The two hydra growth previews reset the scene first.
 

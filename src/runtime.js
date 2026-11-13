@@ -22,6 +22,12 @@ export const fight = {
     polymorphedAnimal: undefined,
     pjDead: undefined,             // the wizard has fallen
     autorevive: undefined,         // timer for the wizard's self-revive
+    stoneTurns: 0,                 // boss effects (src/bossEffects.js): turns left as stone,
+    skipAttack: false,             //   the blizzard's lost attack, the quake's missed spell,
+    missSpell: false,              //   poison turns left, Midas's heals and the one coming
+    poisonTurns: 0,
+    midasHeals: 0,
+    midasPendingHeal: 0,
 };
 
 // The flow of the current session.

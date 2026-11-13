@@ -17,7 +17,6 @@ import { el } from './dom.js';
 const FW = 104, FH = 80;            // a boss frame; the 64 x 64 boss rests at (36, 12) in it
 const SHAKE = [0, 1, -1, 2, -2, 2, -2, 1, -1, 2, -2, 1, -1, 1, 0, 0];     // the earthquake, px per frame
 const SHAKEN = ["esceneCanvas", "pjCanvas", "npcCanvas", "spellCanvas"];
-const STONE_MS = 2500;              // how long the wizard stays stone (to be decided by the planner)
 
 // The canvas for scene spells: over the whole scene, above the characters.
 let sceneCanvas;
@@ -45,11 +44,7 @@ function shakeScene(px) {
 // Medusa's gaze: the wizard turns to stone, stays a while, then breaks free.
 function petrify() {
     ui.petrified = true;
-    playWizardAnim("petrify");
-    loop.every("stone", () => {
-        loop.stop("stone");
-        playWizardAnim("unpetrify");
-    }, STONE_MS);
+    playWizardAnim("petrify");      // he breaks free when the game says (src/bossEffects.js)
 }
 
 // Does this boss have its own attacks?
@@ -57,14 +52,17 @@ export function hasBossAttacks(boss) {
     return !!bossAttacks[boss];
 }
 
-// Play one of the boss's attacks; onHit runs once, when the blow lands (at once if nothing is
-// drawn). The attack is picked at random for the looks only (not the game's Math.random).
-export function playBossAttack(boss, onHit) {
+// Play the boss's attack (chosen by the game, src/bossEffects.js); stone says whether this gaze
+// turns him to stone. onHit runs once, when the blow lands (at once if nothing is drawn).
+export function playBossAttack(boss, chosen, stone, onHit) {
     let hit = false;
     const land = () => { if (!hit) { hit = true; onHit(); } };
     const attacks = bossAttacks[boss];
-    if (run.simulation || !document.hasFocus() || !attacks || state.npc != boss) return land();
-    const attack = attacks[Math.floor(looksRandom() * attacks.length)];
+    if (run.simulation || !document.hasFocus() || !attacks || state.npc != boss) {
+        if (stone && !run.simulation) ui.petrified = true;
+        return land();
+    }
+    const attack = chosen || attacks[Math.floor(looksRandom() * attacks.length)];
     const strip = `img/anim_${boss}_${attack.id}.png`, scene = attack.scene ? `img/scene_${attack.scene}.png` : null;
     imageNow(strip);
     if (scene) imageNow(scene);
@@ -102,7 +100,7 @@ export function playBossAttack(boss, onHit) {
             if (spell && s >= 0 && s < sceneFrames) ctx.drawImage(spell, s * 256, 0, 256, 64, 0, 0, layer.width, layer.height);
             if (attack.scene == "earthquake") shakeScene(s >= 0 && s < SHAKE.length ? SHAKE[s] : 0);
         }
-        if (attack.wizard && attack.wizard[0] == "petrify" && i == attack.wizard[1] && !fight.pjDead) petrify();
+        if (stone && attack.wizard && attack.wizard[0] == "petrify" && i == attack.wizard[1] && !fight.pjDead) petrify();
         if (i == hitAt) land();
         i++;
     };

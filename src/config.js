@@ -20,6 +20,16 @@ export const config = {
         pGetHydra: 0.1,            // only once the hydra mystery is solved
         pDados: 0.1,               // was 0.2: too easy to get stuck in the dice game
         allowChangeZone: 1,        // 1 = use pChangeZone as is, 0 = never change zone
+        // boss effects (docs/SCENE_SPELLS.md; starting values, to playtest)
+        petrifyChance: 0.25,       // Medusa's gaze turns him to stone
+        petrifyTurns: 2,
+        artefactChance: 0.05,      // a find is the artefact against her gaze (after his first stone)
+        midasHeal: 0.15,           // of Midas's max HP, per golden-rays heal
+        midasHealsPerFight: 2,
+        blizzardChance: 0.5,       // he skips his next attack
+        earthquakeChance: 0.5,     // his next spell misses
+        poisonTurns: 2,
+        poisonDamage: 0.04,        // of his max HP, per turn
     },
 
     // Starting value of each trainable skill. Statues, runes and books raise them per

@@ -10,6 +10,7 @@ import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { drawWizard, enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { interruptMidasHeal } from './bossEffects.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -74,6 +75,7 @@ function npcBtn(){
     let txt;
     if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 1){
         //hurt npc
+        interruptMidasHeal();
         let divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
         if ( Math.round(fight.enemyHP) -  Math.round(divineHit) <= 0){//modify the divineHit to avoid god kills
             divineHit = ( Math.round(fight.enemyHP) - 1);

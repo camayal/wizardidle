@@ -52,6 +52,8 @@ function newState() {
         npc: '',                      // sprite currently on the right side of the scene
         forceEvent: '',               // debug: comma-separated event numbers to force
         hydraMysteryResolved: false,
+        petrifiedOnce: false,         // Medusa turned him to stone at least once (src/bossEffects.js)
+        petrifyImmune: false,         // he found the artefact against her gaze
         travelFavor: false,           // planned in v1 (map travel once god loves the wizard), never unlocked
         hydraHeads: {},               // hydra name -> current number of heads
         sacredNames: {},              // the two sacred wizards keep the name they first got

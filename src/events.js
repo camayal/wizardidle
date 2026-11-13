@@ -19,6 +19,7 @@ import { playSound } from './audio.js';
 import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, updateHeading, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
+import { artefactFound } from './bossEffects.js';
 
 //define statueobj
 const statueObj = {
@@ -405,6 +406,13 @@ function findRuneOrBook(){
     let learnTxt;
     switch(optionTemp){
         case 1:
+        if (artefactFound()) {      // the rare artefact against Medusa's gaze (src/bossEffects.js)
+            run.objectToStudy = "artefact";
+            loadNPC("item_mirrorshield");
+            print(`${wizardName()} finds a mirror shield! Medusa's gaze will never turn him to stone again`);
+            run.multipleEventsCounter = 4;
+            break;
+        }
         const number = getRandomInt(1,10);
         if(placesWithBooks){
             run.objectToStudy = "book";
@@ -445,7 +453,7 @@ function findRuneOrBook(){
         }
         break;
         case 5:
-        print(`${wizardName()} leaves the ${run.objectToStudy} and continues`)
+        print(run.objectToStudy == "artefact" ? `${wizardName()} takes the mirror shield and continues` : `${wizardName()} leaves the ${run.objectToStudy} and continues`) 
         clearNPC();
         run.objectToStudy = "";
         ui.findSpot = null;

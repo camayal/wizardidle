@@ -19,6 +19,7 @@ import { playSound } from './audio.js';
 import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
+import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
 
 
 
@@ -29,7 +30,9 @@ function battle() {
     if (run.multipleEventsCounter == 1) {
         announceBattle();
     } else {
-        if (YesOrNot(stat("pHeal"), 0) && state.player.hp < state.player.hpBase) {
+        if (startOfTurn()) {
+            enemyAttack();          // he is stone: the boss hits freely
+        } else if (YesOrNot(stat("pHeal"), 0) && state.player.hp < state.player.hpBase) {
             healEV();
         } else {
             attackEV();
@@ -208,6 +211,7 @@ function updateLongestCombo() {
 
 // Forget the enemy once a fight is over (won or lost).
 function clearFight() {
+    resetBossEffects();
     fight.enemy = "";
     fight.enemyAndNumber = "";
     state.npc = "";
@@ -263,6 +267,7 @@ function getEnemy() {
 
 // The zone boss: 2.5x HP, 5x gold.
 function setUpBoss() {
+    resetBossEffects();
     playSound("boss");
     stats.count("combat.bosses");
     fight.bossCombat = true;
@@ -378,6 +383,7 @@ function attackEV() {
     if (YesOrNot(stat("pPolymorph"), 0) && canPolymorph) {
         castPolymorph();
     } else if (YesOrNot(stat("pAttack"), 0)) {
+        if (attackPrevented()) return;
         const damage = YesOrNot(stat("pCritic"), 0) ? criticAttack() : normalAttack();
         if (damage > 500) logro.set(logro.logro_attack500);
         if (damage > 1000) logro.set(logro.logro_attack1000);
@@ -448,7 +454,9 @@ function enemyAttack() {
         fight.spellEnemy = pickRandomItem(zones[state.zone.current][fight.bossCombat ? "bossSpell" : "hidrasSpells"]);
         const spellId = fight.spellEnemy;
         if (fight.bossCombat && hasBossAttacks(fight.enemy)) {
-            playBossAttack(fight.enemy, () => spell(spellId, true));    // the boss's own attack, then its effect
+            const attack = bossAttackFor(fight.enemy, spellId);
+            const stone = applyBossEffect(attack);                       // what it does besides the damage
+            playBossAttack(fight.enemy, attack, stone, () => spell(spellId, true));    // the boss's own attack, then its effect
         } else {
             playHydraAttack(spellId, () => spell(spellId, true));     // a strike, or a cast with its scene spell
         }
