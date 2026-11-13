@@ -228,6 +228,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Boss attacks, scene spells, Medusa's stone
+- Merged the artist's boss art (approved by the author): 16 bosses with 2-3 attacks each, 35 scene spells (256x64 frames over the whole scene), the petrify set for every tier. `src/data/bossAttacks.js` holds the attacks (frames, scene spell and its start frame, travel paths, Medusa's petrify frame); `src/ui/bossAttacks.js` plays them: the boss strip at its usual box (goro and bicaptop charge, kkck rolls, the king skeleton's great slash travels), the scene spell on a new layer above everyone, the earthquake shakes the scene, Medusa's gaze turns the wizard to stone (2.5 s for now, then he breaks free; the stone can't cast or walk; a fall ends it). The attack is picked at random for the looks (never the game's random). Hydras keep the hop.
+- Open for the planner: how long the stone lasts and whether it costs turns; whether scene spells should have game effects.
+
 ### 2026-11-13: The level-190 freeze fixed; new baseline
 - Above level 190 the guardian chance (10% of fights, guardians never written in v1) did nothing and the game stopped until a reload. Until the story adds guardians, it starts a normal fight. The dev bar scenario now checks that.
 - New baseline in `docs/playtests/2026-11-13-baseline` (no freezes): idle god ~43 h to level 200, active ~16 h, much as before. Negative gold appears again in active runs (as low as -1,041): still to look into with the faith stats.

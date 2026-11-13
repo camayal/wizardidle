@@ -143,6 +143,7 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
 
 // Draw the wizard with his normal sprite for his level.
 function drawWizard() {
+    if (ui.petrified) return drawWizardPose("stone");     // still stone (Medusa), see ui/bossAttacks.js
     loop.stop("animPJ");        // a normal redraw ends any animation (ui/render.js, wizard animations)
     wizardAnim = "";
     loadCanvasChar(state.player.lvl, wizardX(), ui.headLevel);
@@ -158,6 +159,8 @@ const WIZARD_ANIMS = {
     pray: { frames: 6, ms: 100, loopFrom: 3 },          // frames 3-5 loop until he stands up
     fall_sit: { frames: 6, ms: 100, then: "fallen" },   // a fall he can be revived from
     fall_dead: { frames: 6, ms: 110, then: "dead" },    // true death
+    petrify: { frames: 8, ms: 100, then: "stone" },      // Medusa's gaze: stone climbs from the feet
+    unpetrify: { frames: 10, ms: 100 },                  // the stone cracks and bursts off
 };
 let wizardAnim = "";
 
@@ -215,6 +218,8 @@ function castEffect(ctx, frame, img, tier, spellId) {
 // For "cast", spellId says what he casts (see castEffect).
 function playWizardAnim(name, spellId) {
     if (run.simulation) return;
+    if (ui.petrified && (name == "cast" || name == "walk" || name == "pray")) return;    // stone can't move
+    if (name.startsWith("fall")) { ui.petrified = false; loop.stop("stone"); }          // a fall breaks the stone
     const anim = WIZARD_ANIMS[name];
     if (name == wizardAnim && anim.loopFrom !== undefined && loop.isRunning("animPJ")) return;
     wizardAnim = name;
@@ -233,6 +238,7 @@ function playWizardAnim(name, spellId) {
         else {
             loop.stop("animPJ");
             wizardAnim = "";
+            if (name == "unpetrify") ui.petrified = false;
             if (anim.then) drawWizardPose(anim.then); else drawWizard();
             return;
         }
@@ -452,6 +458,7 @@ function print(data) {
 };
 
 export {
+    npcBox,
     looksRandom,
     showBlink,
     walkWizardTo,

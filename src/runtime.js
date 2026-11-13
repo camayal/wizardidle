@@ -58,6 +58,7 @@ export const ui = {
     currentBackGround: undefined,
     scrollCurrentContent: undefined, // which scroll is open: "stats", "achievements", ...
     statsPage: undefined,
+    petrified: false,              // turned to stone by Medusa's gaze (ui/bossAttacks.js)
     wizardOffset: 0,               // how far right of his place the wizard walked (sprite px)
     findSpot: null,                // where a find lies in the scene (sprite px), see events.js
     crisp: true,                   // sprites drawn as sharp pixels (dev bar can switch it off to compare)

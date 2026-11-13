@@ -20,6 +20,7 @@ import { pauseToggle } from '../game.js';
 import { drawWizard, loadNPC, playHydraGrow, playWizardAnim, print, updateHeading } from '../ui/render.js';
 import { playEnemyMove } from '../ui/enemyMoves.js';
 import { spell } from '../spells.js';
+import { playBossAttack } from '../ui/bossAttacks.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
@@ -186,6 +187,10 @@ const actions = [
     { name: 'Stand up (normal sprite)', run() { drawWizard(); } },
     { name: 'Wizard cast: fire spell', run() { playWizardAnim('cast', 'spellSparkYellow_8'); } },
     { name: 'Wizard cast: staff hit', run() { playWizardAnim('cast', 'spellPush9'); } },
+    { name: 'Boss attack: Medusa (zone boss)', run() { previewBoss('medusa'); } },
+    { name: 'Boss attack: Protromus (earthquake)', run() { previewBoss('protromus'); } },
+    { name: 'Boss attack: Goro (charge)', run() { previewBoss('goro'); } },
+    { name: 'Boss attack: Fenix', run() { previewBoss('fenix'); } },
     { name: 'Hydra grows a head (Swamp mother, 3 to 4)', run() { loadNPC('mother4'); playHydraGrow('mother', 3); } },
     { name: 'Hydra grows a head (ice hydra, 1 to 2)', run() { loadNPC('icedra2'); playHydraGrow('icedra', 1); } },
     { name: 'Enemy move: slash (warrior)', run() { previewEnemy('el_guerrero11', { kind: 'slash' }); } },
@@ -206,6 +211,12 @@ const actions = [
     { name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
 ];
+
+// Show a boss and play one of its attacks (random), the way the fight does.
+function previewBoss(boss) {
+    loadNPC(boss);
+    setTimeout(() => playBossAttack(boss, () => spell('spellPush1', true)), 300);
+}
 
 // Show an enemy and play one of its attack moves (the spell effect lands on the wizard).
 function previewEnemy(sprite, move) {
