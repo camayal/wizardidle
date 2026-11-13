@@ -17,7 +17,7 @@ import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { drawWizard, loadNPC, playWizardAnim, print, updateHeading } from '../ui/render.js';
+import { drawWizard, loadNPC, playHydraGrow, playWizardAnim, print, updateHeading } from '../ui/render.js';
 import { playEnemyMove } from '../ui/enemyMoves.js';
 import { spell } from '../spells.js';
 
@@ -186,6 +186,8 @@ const actions = [
     { name: 'Stand up (normal sprite)', run() { drawWizard(); } },
     { name: 'Wizard cast: fire spell', run() { playWizardAnim('cast', 'spellSparkYellow_8'); } },
     { name: 'Wizard cast: staff hit', run() { playWizardAnim('cast', 'spellPush9'); } },
+    { name: 'Hydra grows a head (Swamp mother, 3 to 4)', run() { loadNPC('mother4'); playHydraGrow('mother', 3); } },
+    { name: 'Hydra grows a head (ice hydra, 1 to 2)', run() { loadNPC('icedra2'); playHydraGrow('icedra', 1); } },
     { name: 'Enemy move: slash (warrior)', run() { previewEnemy('el_guerrero11', { kind: 'slash' }); } },
     { name: 'Enemy move: pounce (creature)', run() { previewEnemy('animalejo24', { kind: 'pounce' }); } },
     { name: 'Enemy move: slam (ent)', run() { previewEnemy('el_ent3', { kind: 'slam' }); } },

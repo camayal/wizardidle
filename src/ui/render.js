@@ -285,35 +285,67 @@ function wizardName() {
 
 
 
-// Draw the enemy or object on the right, sized by type (bosses, objects, the rest).
+// Where and how big the enemy or object on the right is drawn, by type (bosses, objects, the
+// rest): [x, y, width, height].
+function npcBox(npc, squareSideIn = ui.squareSide, headLevelIn = ui.headLevel, charWidthIn = ui.charWidth, charHeightIn = ui.charHeight) {
+    //medium size bosses (64x64px)
+    if (npc === "arcangel" || npc === "doria" || npc === "midas" || npc === "kkck" || npc === "herbus" || npc === "skeleton" || npc === "medusa" || npc === "rainbow" || npc === "rojo") {
+        return [squareSideIn * 6, headLevelIn - (ui.objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25];
+    }
+    //big bosses (64x64px)
+    if (npc === "bicaptop" || npc === "cuboq" || npc === "etymos" || npc === "fenix" || npc === "goro" || npc === "infraespectro" || npc === "protromus" || npc.match("hydskon") || npc.match("icedra")) {
+        return [squareSideIn * 6, headLevelIn - (ui.objectSize * 0.0625), charWidthIn * 1.5, charHeightIn * 1.5];
+    }
+    //huge bosses (64x96px)
+    if (npc.match("mother") || npc.match("guardian")) {
+        return [squareSideIn * 6, headLevelIn - (ui.objectSize * 0.113), charWidthIn * 1.33, charHeightIn * 1.9];
+    }
+    //objects to get (20x20px)
+    if (npc.match("libro") || npc.match("runa")) {
+        return [squareSideIn * 2, headLevelIn * 1.6, charWidthIn / 3, charHeightIn / 3];
+    }
+    //the remaining (32x32px)
+    return [squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn];
+}
+
+// Draw the enemy or object on the right, sized by type (npcBox).
 function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, charWidthIn=ui.charWidth, charHeightIn=ui.charHeight) {
     state.npc = npc;
     if (run.simulation) return;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     withImage("npc", `img/${npc}.png`, (img) => {
-        const ctx = pixelContext(npcCanvas);
-        //medium size bosses (64x64px)
-        if (state.npc === "arcangel" || state.npc === "doria" || state.npc === "midas" || state.npc === "kkck" || state.npc === "herbus" || state.npc === "skeleton" || state.npc === "medusa" || state.npc === "rainbow" || state.npc === "rojo") {
-            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25);
-        }
-        //big bosses (64x64px)
-        else if (state.npc === "bicaptop" || state.npc === "cuboq" || state.npc === "etymos" || state.npc === "fenix" || state.npc === "goro" || state.npc === "infraespectro" || state.npc === "protromus" || state.npc.match("hydskon") || state.npc.match("icedra")) {
-            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.0625), charWidthIn * 1.5, charHeightIn * 1.5);
-        }
-        //huge bosses (64x96px)
-        else if (state.npc.match("mother") || state.npc.match("guardian")){
-            ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.113), charWidthIn * 1.33, charHeightIn * 1.9);
-        }
-        //objects to get (20x20px)
-        else if(state.npc.match("libro") || state.npc.match("runa")){
-            ctx.drawImage(img, squareSideIn * 2, headLevelIn * 1.6, charWidthIn / 3, charHeightIn / 3);
-        }
-        //the remaining (32x32px)
-        else {
-            ctx.drawImage(img, squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn);
-        }
+        const [x, y, w, h] = npcBox(state.npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn);
+        pixelContext(npcCanvas).drawImage(img, x, y, w, h);
     });
+}
+
+// A hydra grows its next head (the artist's strips img/anim_<hydra>_grow<N>.png, from N heads
+// to N+1, frames the size of the hydra sprite), drawn where the hydra is.
+function playHydraGrow(hydra, fromHeads) {
+    if (run.simulation || !document.hasFocus()) return;
+    const npc = `${hydra}${fromHeads + 1}`, src = `img/anim_${hydra}_grow${fromHeads}.png`;
+    const frameW = 64, frameH = hydra == "mother" ? 96 : 64;
+    let k = 0, waited = 0;
+    const next = () => {
+        const strip = imageNow(src);
+        if (!strip) {                                   // still loading: wait a little, then give up
+            if (++waited > 20) { loop.stop("animNPC"); if (state.npc == npc) loadNPC(npc); }
+            return;
+        }
+        if (k >= strip.naturalWidth / frameW || state.npc != npc) {
+            loop.stop("animNPC");
+            if (state.npc == npc) loadNPC(npc);
+            return;
+        }
+        const [x, y, w, h] = npcBox(npc);
+        const ctx = pixelContext(npcCanvas);
+        ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        ctx.drawImage(strip, k * frameW, 0, frameW, frameH, x, y, w, h);
+        k++;
+    };
+    next();
+    loop.every("animNPC", next, 90);
 }
 
 
@@ -353,6 +385,7 @@ function print(data) {
 };
 
 export {
+    playHydraGrow,
     imageNow,
     drawWizardPose,
     playWizardAnim,

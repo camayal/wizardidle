@@ -213,6 +213,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Hydras grow their heads
+- The artist's head-growth strips (approved by the author) play when a hydra grows its next head: the Dunes hydra's neck grows with a shimmer, the ice hydra's head forms in an ice block that shatters, the Swamp mother's neck rises from a green splash. 90 ms per frame, at the hydra's size and place (loadNPC's size rules are now `npcBox()`, shared by both).
+
 ### 2026-11-12: Enemy attack moves; the wizard's spark by school
 - Asked by the author via the artist: normal enemies no longer hop. Their plain sprite moves by code (`src/ui/enemyMoves.js`, from the artist's reference): **slash** (weapon users), **pounce** (beasts), **slam** (heavy bodies), or **cast** with the spark of their spell's school for casters (from the sprite's type); a reusable overlay (spark, slash, bite, dust) plays in front, and when the blow lands the game's spell effect plays on the wizard. Bosses and hydras keep the hop until they get their own animations. Polymorphed enemies (sheep, chicken) pounce.
 - Move per family, decided by dev from the sprites (to review with the author): pounce for creatures, capricor, imps and pybryas; slam for ents, umigubis, golems, mummies and rock men; slash for the other 28 melee families.

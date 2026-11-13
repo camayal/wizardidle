@@ -16,7 +16,7 @@ import { addGold, addXP, calculateFe } from './wizard.js';
 import { logro } from './achievements.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 
 
@@ -315,6 +315,7 @@ function getHydra(newEncounter = false){
     if(!state.hydraHeads[fight.hydra]){state.hydraHeads[fight.hydra] = 1};
     fight.enemy = fight.hydra;
     loadNPC(fight.hydra + state.hydraHeads[fight.hydra]);
+    if (!newEncounter) playHydraGrow(fight.hydra, state.hydraHeads[fight.hydra] - 1);   // the new head grows in
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * (state.hydraHeads[fight.hydra]);
     fight.enemyHPbase = Math.round(fight.enemyHP)
     updateHeartNPC();
