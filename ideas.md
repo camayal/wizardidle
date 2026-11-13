@@ -191,7 +191,12 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 
 - **Scene spells: attacks that cover the whole scene** (2026-11-12, the author, via the artist session). Boss fights are special, so some boss attacks play over the **whole scene**, not just on the wizard: spikes erupting from the ground toward him, rains, lightning, a blizzard, a pillar of fire. They are drawn as independent full-scene animations (the size of a zone background) whose ground effects are translucent, so a spike bursts out of a bit of that zone's own soil. Drafted by the artist (art in `wizardidle-old-ideas/tools/scene_spells/`, not in the game yet):
   - *Used by bosses:* earth spikes (protromus), ice spikes and blizzard (rainbow), fire rain (rojo), arcane rain (doria, king skeleton), lightning (arcangel), entangling vines (herbus), flame pillar (fenix).
-  - *Kept for later, not used by anyone yet:* meteor shower, earthquake, divine light, eclipse, sandstorm, whirlwind, healing rain.
+  - *Added after the author's boss review (round 2):* sonic boom and rune circle (doria), poison cloud (kkck), golden touch, rainbow orbs and golden rays (king midas), spore storm (herbus), slime spit (cuboq), curse (king skeleton), fire tornado and fire breath (fenix), petrifying gaze and poison dart (medusa), golden storm (arcangel), prism pulse and colour burst (etymos), fire fist and fire peak (rojo); the earthquake now follows protromus's ground punch. 34 scene spells in all.
+  - *Kept for later, not used by anyone yet:* meteor shower, divine light, eclipse, sandstorm, whirlwind, healing rain.
+  - *For the planner (the author, round 3):* **king midas's golden rays heal him** (the rays spinning around him are a self-heal, not an attack).
+  - *For the planner (the author, round 3):* **medusa's gaze turns the wizard to stone for a couple of turns.** It needs to be rare, or, better (the author prefers it), the wizard can **find an artefact that makes him immune** to it. Art drawn for every tier (not in the game yet): the wizard turning to stone, a stone wizard held while he is petrified, and the stone cracking and bursting off him (`wizardidle-old-ideas/tools/anim/stone/`).
+  - Infraespectro's curse and arcane flare are scene spells too (a new "arcane flare": a blinding burst that races over the scene).
+  - *For the planner (the author's words): the scene must shake.* The earthquake (and big hits like slams and the meteor shower) needs **the whole scene to shake** for a moment, which art alone can't do: the game moves the scene canvas a pixel or two each frame (suggested for the earthquake: 0, 1, −1, 2, −2, 2, −2, 1, −1, 2, −2, 1, −1, 1, 0, 0 px).
   - *For the planner (the author's words):* add notes for **our wizard to use scene spells when he is very powerful**, and use the spare ones **for the story and for other powers**. Open: at what level or chapter he earns them, which god actions or story moments trigger the "kept for later" ones (an eclipse at a dark chapter, divine light for a miracle, an earthquake, healing rain from the god…), and whether they cost faith.
 
 - **Soft sleep, dreams and nightmares** (2026-11-12, the author; **for the planner**): resting today plays a sleep effect over the wizard and prints a few lines (`searchInn` in `src/events.js`: arrive, sleep, wake up, at an inn or camping). The author wants something soft: the scene goes dark for a couple of seconds, then he wakes. Sleep is also the natural place for the story's **dreams and nightmares**. Leave sleeping untouched until it's planned.
@@ -231,6 +236,16 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - The author's idea, built: before a book or rune is found, a small twinkle appears at a random spot on the ground; the wizard walks there (walk animation) and the find lies there; the study effects play at their usual size right above it; afterwards he walks back to his place before the next event. Statues: he walks to the statue (a table of where each zone's statue stands) and the effects play over it. Shrines: no walk; the prayer sparkle appears here and there around the cross.
 - The wizard can now leave his place (`ui.wizardOffset`); every drawing of him follows it. The random spot uses its own randomness (never the game's `Math.random`), so seeded simulations play exactly the same.
 - Stress tests: the slow runs were the known freeze above level 190 (the empty guardian branch), caught by a new stall detector in the test page; not related to this change.
+
+### 2026-11-12: Boss review, round 3; the wizard turned to stone (artist)
+
+- Infraespectro's curse and arcane flare became scene spells; kkck now curls into a dung ball, rolls to the wizard, hits, jumps back and lands in its own shape; king skeleton runs in with the sword raised and swings it down into the slash.
+- Drew the wizard turning to stone, staying stone, and breaking free, for all 21 tiers; medusa's gaze uses it in the review page. Noted for the planner: midas's golden rays heal him; medusa's gaze petrifies the wizard for a couple of turns (rare, or better, an artefact for immunity). Nothing sent to dev.
+
+### 2026-11-12: Boss review, round 2 (artist)
+
+- Applied the author's notes on every boss: 18 more boss attacks became scene spells (see "Scene spells" in the backlog); goro's four arms flail; goro and bicaptop run across the scene to ram the wizard; kkck rolls to him like a dung ball; king skeleton runs up for the great slash; cuboq bounces three times; protromus punches the ground into an earthquake; rojo's slam raises a fiery stone peak under the wizard; the last ice spike explodes; meteors, earthquake and whirlwind are stronger.
+- The review page (`wizardidle-old-ideas/tools/boss_review/index.html`) is updated for the next round of comments. Noted for the planner: the scene must shake. Nothing sent to dev.
 
 ### 2026-11-12: Chargers get running frames (artist)
 
