@@ -194,7 +194,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *Kept for later, not used by anyone yet:* meteor shower, earthquake, divine light, eclipse, sandstorm, whirlwind, healing rain.
   - *For the planner (the author's words):* add notes for **our wizard to use scene spells when he is very powerful**, and use the spare ones **for the story and for other powers**. Open: at what level or chapter he earns them, which god actions or story moments trigger the "kept for later" ones (an eclipse at a dark chapter, divine light for a miracle, an earthquake, healing rain from the god…), and whether they cost faith.
 
-- **Soft sleep, dreams and nightmares** (2026-11-12, the author; **for the planner**): resting today plays a sleep effect over the wizard and prints a few lines (`searchInn` in `src/events.js`: arrive, sleep, wake up, at an inn or camping). The author wants something soft: the scene goes dark for a couple of seconds, then he wakes. Sleep is also the natural place for the story's **dreams and nightmares**. Leave sleeping untouched until it's planned.
+- **Soft sleep, dreams and nightmares** (2026-11-12, the author; **plan → [docs/SLEEP.md](docs/SLEEP.md)**, decided 2026-11-13: he walks to the bed or sleeping bag, the scene fades to dark; dreams are rare visions over the dark plus story nights; pure story for now): resting today plays a sleep effect over the wizard and prints a few lines (`searchInn` in `src/events.js`: arrive, sleep, wake up, at an inn or camping). The author wants something soft: the scene goes dark for a couple of seconds, then he wakes. Sleep is also the natural place for the story's **dreams and nightmares**. Leave sleeping untouched until it's planned.
   - *To decide:* how the darkness looks and how long; what a dream or nightmare is (console text, a short scroll, a vision over the dark scene); when they come (chance, level, chapter, belief level, after a fall, near the final battle); what they do (pure story, hints, a rest bonus, faith changes, ties to the erasure echoes and souls); whether nightmares belong to atheism and dreams to faith. The artist can help with the visuals once it's decided.
 
 - **Discoveries in the scene** (2026-11-12, the author; **for the planner** about ingredients): a small blink appears at a random reachable spot in the scene; the wizard walks to it and discovers what is there: a rune or a book today, and later the professions' **ingredients** (gathering, `docs/PROFESSIONS.md`). The study or find effect plays at its current size right above the found item. Statues: he walks to the statue to study it. Shrines: no walk; the prayer effect appears around the big cross. Dev builds the runes, books, statues and shrines part; ingredients come with professions.
@@ -222,6 +222,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-13: Planner items
+
+- Professions: gathering plays as a discovery in the scene (blink, walk, the reagent appears; bountiful harvest is a touch on it).
+- Skull alert decided: it floats above the fallen wizard only while the god can still act, never over a true death (FAITH.md 3.2).
+- Sleep plan written (`docs/SLEEP.md`): walk to the bed or sleeping bag, fade to dark; dreams are rare visions over the dark plus story nights; pure story for now.
 
 ### 2026-11-12: Chargers get running frames (artist)
 
