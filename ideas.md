@@ -214,6 +214,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ## Journal
 
 ### 2026-11-12: The charge crosses the scene
+- One stress run (of about fifteen today) stalled after the level 10 chapter; four reruns reached level 200+. Recorded in the roadmap's bugs as a likely chapter/scroll race, to investigate. The author asked to leave the outline question as is for now; boss comments go in the boss review.
 - The author agreed: the horned chargers (capricor, cowrens) now paw the ground, dash across the scene to the wizard with a dust trail, hit (impact burst, shake, the spell effect), recoil and trot back (about 2 s). The artist was asked for running frames (`img/run_<sprite>.png`, 32x32 frames facing left); the code uses them automatically when they exist (mirrored for the trot back) and the standing sprite until then.
 
 ### 2026-11-12: Enemy moves matched to their weapons
