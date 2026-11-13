@@ -14,6 +14,7 @@ import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { statsPageHtml } from './statsPages.js';
+import { DEV } from '../config.js';
 
 let scrollIDContent;
 
@@ -198,8 +199,10 @@ function updateStats(){
     el("titleStats").style.lineHeight = `${ui.em * 2.5}px`;
 }
 
-// The Stats / Records tabs at the top of the stats scroll.
+// Clicks inside the scroll: the Stats / Records tabs, and the dev bar switch in Help
+// (src/dev/tests.js listens for the event; the game never imports the dev tools).
 el('innerTextScroll').addEventListener('click', (e) => {
+    if (e.target.closest('.devToggle')) return document.dispatchEvent(new Event('wizardidle:toggleDevBar'));
     const tab = e.target.closest('[data-stats-view]');
     if (!tab) return;
     ui.statsView = tab.dataset.statsView;
@@ -261,6 +264,7 @@ function updateHelp(){
    '<div class="faq">Licences</div><div class="a">' + 
    'All media included in this game was provided by the authors under Creative Commons licenses or Public domain (included: CC0,CC-BY 3.0, CC-BY-SA 3.0).<br><br>The vast majority of the graphics was created by: David E. Gervais found in the follow repository <a href="http://pousse.rapiere.free.fr/tome/" target="_blank">http://pousse.rapiere.free.fr/tome/</a>.  <br>Some other graphics was created by multiple artist and distributed by Crawl Stone Soup team (<a href="http://crawl.develz.org/wordpress/" target="_blank">http://crawl.develz.org/wordpress/</a>) based on the work rltiles (<a href="http://rltiles.sourceforge.net/" target="_blank">http://rltiles.sourceforge.net/</a>). The repository can be found at <a href="https://github.com/crawl/tiles" target="_blank">https://github.com/crawl/tiles</a> <br><br>Some of the sounds was created by:<br>David McKee (VIRiX Dreamcore) (<a href="https://soundcloud.com/virix" target="_blank">https://soundcloud.com/virix</a>) <br>Little Robot Sound Factory (<a href="http://www.littlerobotsoundfactory.com/" target="_blank">http://www.littlerobotsoundfactory.com/</a>) <br>p0ss (<a href="https://opengameart.org/users/p" target="_blank">https://opengameart.org/users/p</a>) 0ss) <br>wobbleboxx (<a href="http://wobbleboxx.com" target="_blank">http://wobbleboxx.com</a>) <br>kenney (<a href="http://kenney.nl" target="_blank">http://kenney.nl</a>) <br>Iwan Gabovitch (<a href="http://qubodup.net" target="_blank">http://qubodup.net</a>) <br>Bart Kelsey (<a href="https://opengameart.org/users/bart" target="_blank">https://opengameart.org/users/bart</a>) <br>spookymodem (<a href="https://opengameart.org/users/spookymodem" target="_blank">https://opengameart.org/users/spookymodem</a>) <br>artisticdude (<a href="https://opengameart.org/users/artisticdude" target="_blank">https://opengameart.org/users/artisticdude</a>) <br>DoKashiteru (<a href="https://opengameart.org/users/dokashiteru" target="_blank">https://opengameart.org/users/dokashiteru</a>) <br>Vehicle (<a href="http://www.vehiclemusic.eu" target="_blank">http://www.vehiclemusic.eu</a>) <br>Ogrebane (<a href="https://opengameart.org/users/ogrebane" target="_blank">https://opengameart.org/users/ogrebane</a>) <br><br>Thanks to all kind artist to share their art for other people projects' +
    '</div>' +
+   (DEV ? '<div class="faq">Developer tools</div><div class="a">Only while developing (never on the live site): the test bar at the bottom of the screen, with test scenarios, quick actions and a command line.<br><br><span class="devToggle" style="text-decoration:underline;cursor:pointer">Show or hide the dev bar</span></div>' : '') +
    '<div class="faq">Version</div><div class="a">The current version is: <b>' + version + '</b></div>' +
    '</div>';
 

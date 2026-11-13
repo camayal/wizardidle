@@ -207,6 +207,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Author's playtest of stage 3a
+- Everything tested fine on localhost. Notes: the dev bar can now be hidden and shown from Help > Developer tools (only while developing; remembered per browser).
+- Stats: the author likes Records, and wants real tabs: two scrolls, one behind the other, offset at the top or to the side so the back one shows. Asked the artist for mockups of both versions; dev builds it after the author picks.
+- Simulation mode: the author isn't sure yet that it works as intended; to check together later.
+- Next: the author's ideas about how sprites are drawn (opinion and tests first).
+
 ### 2026-11-12: Stats scroll: curated page and Records
 - Built mockups of three options with a simulated level-120 wizard and three earlier ones (local preview in `wizardidle-old-ideas/tools/stats-preview/`). The author chose **A + B**.
 - **Stats** (curated): Wizard, Battles, Magic, Travels, Gold, Faith, Achievements, about 35 lines; totals instead of long lists (enemies defeated with rare, bosses defeated of met, favourite school and zone, zones visited of 16, critical hit %, your touches in one line).

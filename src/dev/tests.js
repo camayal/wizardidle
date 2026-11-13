@@ -21,6 +21,7 @@ import { print, updateHeading } from '../ui/render.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
+const HIDDEN_KEY = 'wizardidle2:devBarHidden';    // hidden from Help > Developer tools
 const EVENT = { enemy: 1, explore: 2, shrine: 3, inn: 4, study: 5 };
 
 // ---------------------------------------------------------------- helpers for scenarios
@@ -280,6 +281,16 @@ function buildBar(prepared) {
         if (e.key == 'Enter' && e.target.value.trim()) { runCommand(e.target.value); e.target.select(); }
     };
     root.querySelector('.devTag').onclick = () => root.classList.toggle('devClosed');
+
+    // Help > Developer tools hides or shows the whole bar, remembered in this browser
+    let hidden = false;
+    try { hidden = localStorage.getItem(HIDDEN_KEY) == '1'; } catch (e) { /* private mode */ }
+    root.style.display = hidden ? 'none' : '';
+    document.addEventListener('wizardidle:toggleDevBar', () => {
+        hidden = !hidden;
+        root.style.display = hidden ? 'none' : '';
+        try { localStorage.setItem(HIDDEN_KEY, hidden ? '1' : '0'); } catch (e) { /* private mode */ }
+    });
 
     if (prepared) {
         bar.select.value = `s${scenarios.indexOf(prepared)}`;
