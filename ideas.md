@@ -223,6 +223,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: The level-190 freeze fixed; new baseline
+- Above level 190 the guardian chance (10% of fights, guardians never written in v1) did nothing and the game stopped until a reload. Until the story adds guardians, it starts a normal fight. The dev bar scenario now checks that.
+- New baseline in `docs/playtests/2026-11-13-baseline` (no freezes): idle god ~43 h to level 200, active ~16 h, much as before. Negative gold appears again in active runs (as low as -1,041): still to look into with the faith stats.
+
 ### 2026-11-13: Discoveries in the scene: blink, walk, find
 - The author's idea, built: before a book or rune is found, a small twinkle appears at a random spot on the ground; the wizard walks there (walk animation) and the find lies there; the study effects play at their usual size right above it; afterwards he walks back to his place before the next event. Statues: he walks to the statue (a table of where each zone's statue stands) and the effects play over it. Shrines: no walk; the prayer sparkle appears here and there around the cross.
 - The wizard can now leave his place (`ui.wizardOffset`); every drawing of him follows it. The random spot uses its own randomness (never the game's `Math.random`), so seeded simulations play exactly the same.

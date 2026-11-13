@@ -165,8 +165,8 @@ const scenarios = [
         setup() { const f = findSprite('corrupted'); moveTo(f.zone); return { event: normalEnemy(), enemy: f.sprite }; },
     },
     {
-        name: 'Guardian freeze (level 191, v1 bug)',
-        check: 'Known v1 bug: above level 190 a "guardian" fight does nothing and the game stops until reload. Fix planned.',
+        name: 'Guardian chance (level 191)',
+        check: 'Above level 190 the guardian chance starts a normal fight (v1 froze here until a reload).',
         setup() { setLevel(191); override('balance', { pGetGuardian: 1 }); return { event: EVENT.enemy }; },
     },
 ];

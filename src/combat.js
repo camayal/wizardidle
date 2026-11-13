@@ -218,7 +218,9 @@ function clearFight() {
 // Start a fight: a hydra (where the hydra mystery is solved), otherwise a normal enemy or a boss.
 function enemyEV(){
     if ((YesOrNot(config.balance.pGetGuardian,0)) && (state.player.lvl > 190)){//get guardian
-    //guardians in all the places
+        // guardians in all the places: never written in v1, where this branch did nothing and
+        // the game stopped until a reload. Until the story adds them, a normal fight.
+        getEnemy();
     }else if ((YesOrNot(config.balance.pGetHydra,0)) && (state.hydraMysteryResolved)){//get hydra
     //hydra in some localities
         if(state.zone.current == "el_Pantano" || state.zone.current == "las_Dunas" || state.zone.current == "la_Tundra"){
