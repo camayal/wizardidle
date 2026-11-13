@@ -187,6 +187,7 @@ const actions = [
     { name: 'Wizard cast: staff hit', run() { playWizardAnim('cast', 'spellPush9'); } },
     // real fights: the current event ends and this one starts (the game's own fight code)
     { name: 'Fight now: Medusa (Desert boss)', run() { liveFight(() => bossIn('el_Desierto')); } },
+    { name: 'Fight now: Medusa, her gaze always petrifies', run() { liveFight(() => { override('balance', { petrifyChance: 1 }); return bossIn('el_Desierto'); }); } },
     { name: 'Fight now: Protromus (Cave boss, earthquake)', run() { liveFight(() => bossIn('la_Cueva')); } },
     { name: 'Fight now: Goro (Prairie boss, charge)', run() { liveFight(() => bossIn('la_Pradera')); } },
     { name: 'Fight now: Fenix (Volcano boss)', run() { liveFight(() => bossIn('el_Volcan')); } },
