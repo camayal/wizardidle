@@ -1,6 +1,7 @@
 // Wizard Idle v2 - the stats scroll: two pages, Stats and Records.
 //
 // Stats is the curated page: a few lines per area, totals instead of long lists.
+// The other page's scroll peeks out above (ui/scrolls.js, stats scroll tabs).
 // Records shows this wizard's bests and firsts (with the level they happened at), a chart
 // of his journey, and numbers across every wizard of this world (src/stats.js).
 // Everything else that is recorded stays hidden, for achievements, quests and playtests.
@@ -39,13 +40,6 @@ function favourite(prefix) {
 
 function count(prefix) {
     return Object.keys(state.stats).filter((key) => key.startsWith(prefix)).length;
-}
-
-// The two tabs at the top; clicks are handled in ui/scrolls.js.
-function tabs() {
-    const tab = (view, label) => ui.statsView == view
-        ? `<b>${label}</b>` : `<span class='statsTab' data-stats-view='${view}' style='text-decoration:underline;cursor:pointer'>${label}</span>`;
-    return `<div class='statsTabs'>${tab('stats', 'Stats')} &middot; ${tab('records', 'Records')}</div>`;
 }
 
 // ------------------------------------------------------------------ Stats
@@ -185,7 +179,7 @@ function recordsPage() {
 
 export function statsPageHtml(secondsInGame) {
     const records = ui.statsView == 'records';
-    return `<div id='stats'><span class='titles' id='titleStats'>${records ? 'Records' : 'Stats'}</span><br>` + tabs() +
+    return `<div id='stats'><span class='titles' id='titleStats'>${records ? 'Records' : 'Stats'}</span>` +
         (records ? recordsPage()
             : wizardSection(secondsInGame) + battlesSection() + magicSection() + travelsSection() +
               goldSection() + faithSection() + achievementsSection()) +

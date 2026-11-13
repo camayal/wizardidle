@@ -52,6 +52,7 @@ function hideScrollContent(){
 // Close the scroll with its animation.
 function scrollClose(){
     ui.scrollCurrentContent = "";
+    placeScrollTab(false);
     playSound("scroll");
     el("btnClose").style.display = "none";
     el("btnClose").style.top = `${ui.objectSize * 0.065}px`;
@@ -99,6 +100,7 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
     sbd.style.top = `${height * 0.97}px`;
 
     scrollBack.addEventListener("transitionend", showCloseButton);
+    placeScrollTab(currentContent == "stats");
 	
 		//switch positions scene and console
 	ui.sceneOnTop = false;
@@ -188,6 +190,57 @@ function updateAchievements(){
 
 }
 
+// ------------------------------------------------------------------ stats scroll tabs
+// The stats scroll has two pages (Stats and Records). The other page's scroll lies behind
+// and peeks out above the front one; clicking it brings that page to the front (option (a),
+// chosen by the author on 2026-11-12 from the artist's mockups). The front scroll moves down
+// by the tab and gets shorter by the same amount, so its bottom roll stays where it was.
+const TAB_RATIO = 0.092;            // visible strip of the back scroll, of the scroll width
+const TAB_LABEL_RATIO = 0.046;      // its page name, of the scroll width
+const FRONT_PARTS = ["scrollBackUp", "scrollBackCenter", "scrollText", "btnClose"];
+let scrollTab;
+
+function buildScrollTab() {
+    scrollTab = document.createElement("div");
+    scrollTab.id = "scrollTab";
+    scrollTab.style.cssText = "position:absolute; display:none; cursor:pointer; overflow:hidden;";
+    scrollTab.innerHTML = '<img id="scrollTabPaper" src="img/scrollBackCenterShade.png" style="position:absolute; left:0; width:100%">' +
+        '<img id="scrollTabRoll" src="img/scrollBackUpShade.png" style="position:absolute; left:0; top:0; width:100%">' +
+        '<span id="scrollTabLabel" style="position:absolute; left:0; width:100%; text-align:center; font-family:pixeled_english_fontregular; color:#462808"></span>';
+    scrollTab.onclick = () => {
+        ui.statsView = ui.statsView == "records" ? "stats" : "records";
+        playSound("scroll");
+        updateStats();
+    };
+    el("scroll").insertBefore(scrollTab, el("scroll").firstChild);
+}
+
+// Show the tab and move the front scroll down (only for the stats scroll), or put it back.
+function placeScrollTab(show) {
+    if (!scrollTab) buildScrollTab();
+    if (!show) {
+        scrollTab.style.display = "none";
+        for (const id of FRONT_PARTS) el(id).style.transform = "";
+        return;
+    }
+    const up = el("scrollBackUp");
+    const width = parseFloat(up.style.width);
+    const offset = width * TAB_RATIO;
+    const roll = width * 10 / 320;              // the roll image is 320 x 10
+    Object.assign(scrollTab.style, { display: "block", left: up.style.left, top: up.style.top, width: up.style.width, height: `${offset + roll}px` });
+    Object.assign(el("scrollTabPaper").style, { top: `${roll}px`, height: `${offset + roll}px` });
+    Object.assign(el("scrollTabLabel").style, { top: `${roll + (offset - width * TAB_LABEL_RATIO) / 2}px`,
+        fontSize: `${width * TAB_LABEL_RATIO}px`, lineHeight: `${width * TAB_LABEL_RATIO}px` });
+    el("scrollTabLabel").textContent = ui.statsView == "records" ? "Stats" : "Records";
+    for (const id of FRONT_PARTS) el(id).style.transform = `translateY(${offset}px)`;
+    // the front paper ends where the bottom roll is (its top), minus the strip it moved down
+    const bottom = parseFloat(el("scrollBackDown").style.top);
+    if (bottom > 0) {
+        el("scrollBackCenter").style.minHeight = `${bottom - offset}px`;
+        el("scrollText").style.minHeight = `${(bottom - offset) * 0.92 / 0.97}px`;
+    }
+}
+
 // Fill the stats scroll (two pages, Stats and Records: ui/statsPages.js).
 function updateStats(){
     const secondsInGame = ((state.meta.playTimeMs + (loop.now() - run.timeStart)) / 1000).toFixed(0);
@@ -197,16 +250,13 @@ function updateStats(){
     el("stats").style.lineHeight = `${ui.em}px`;
     el("titleStats").style.fontSize = `${ui.em * 2.5}px`;
     el("titleStats").style.lineHeight = `${ui.em * 2.5}px`;
+    if (ui.scrollCurrentContent == "stats") placeScrollTab(true);
 }
 
-// Clicks inside the scroll: the Stats / Records tabs, and the dev bar switch in Help
-// (src/dev/tests.js listens for the event; the game never imports the dev tools).
+// The dev bar switch in Help (src/dev/tests.js listens for the event; the game never
+// imports the dev tools).
 el('innerTextScroll').addEventListener('click', (e) => {
-    if (e.target.closest('.devToggle')) return document.dispatchEvent(new Event('wizardidle:toggleDevBar'));
-    const tab = e.target.closest('[data-stats-view]');
-    if (!tab) return;
-    ui.statsView = tab.dataset.statsView;
-    updateStats();
+    if (e.target.closest('.devToggle')) document.dispatchEvent(new Event('wizardidle:toggleDevBar'));
 });
 
 // Fill the help scroll (collapsible sections).

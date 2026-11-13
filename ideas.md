@@ -213,6 +213,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Stats scroll tabs built (option a)
+- Merged `artist/art` (fallen and dead sprites, not wired yet; the shaded scroll art). Removed a worktree path from the artist's journal line.
+- The stats scroll's other page now lies behind and peeks out above (the back roll and a strip of shaded paper with the page name, Pixeled, #462808); clicking it swaps Stats and Records. The front scroll, with the close button, moves down by the strip (0.092 of the scroll width) and gets shorter by the same, so the bottom roll stays put. Only on the stats scroll; the plain "Stats · Records" text line is gone.
+
 ### 2026-11-12: Sprite sheets measured, decided against for now
 - The author asked whether to convert the ~1,000 images into sheets. Measured: 1,008 images, 2.25 MB (the 679 sprites of 32x32 are 262 KB; the 117 backgrounds are half the bytes). Sheets don't save space (one sheet of the 679 sprites is ~310 KB), they save requests: from the live site, 679 files took ~4 s (6-7 s with 6 connections) vs ~0.2 s for the same bytes in 5 files. That cost is paid at the first visit and after every release (the offline copy re-downloads everything); during play images come from the cache.
 - With the game's smoothing on, sprites drawn from a sheet differ at the edges; with smoothing off they match exactly. Smoothing off also looks sharper (`wizardidle-old-ideas/tools/sheets-test/smooth_vs_crisp.png`).
