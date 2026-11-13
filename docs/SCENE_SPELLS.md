@@ -1,6 +1,6 @@
 # Scene spells for the wizard, the god and the story
 
-Scene spells are full-scene animations (the size of a zone background, ground effects translucent over the zone's own soil), drafted by the artist for boss attacks (`ideas.md`, "Scene spells"; art in `wizardidle-old-ideas/tools/scene_spells/`, not in the game yet). This plan covers the author's request: **our wizard uses scene spells when he is very powerful**, and the spare ones go **to the story and other powers**. Decided on 2026-11-13. Nothing is built yet.
+Scene spells are full-scene animations (the size of a zone background, ground effects translucent over the zone's own soil), drafted by the artist for boss attacks (`ideas.md`, "Scene spells"; the boss ones are in the game since 2026-11-13: `src/data/bossAttacks.js`, played by `src/ui/bossAttacks.js`). This plan covers the author's request: **our wizard uses scene spells when he is very powerful**, and the spare ones go **to the story and other powers**. Decided on 2026-11-13. Nothing is built yet.
 
 ## The scene spells
 
@@ -38,7 +38,7 @@ Scene spells are full-scene animations (the size of a zone background, ground ef
 
 ## Needs
 
-- Art: the spare scene spells (artist).
+- Art: the spare scene spells are already drawn by the artist (not in the game yet); the wizard's own versions may need the wizard's side of the animation.
 - Stats ([STATS.md](STATS.md)): `combat.superCritic`, `combat.superCritic.<spell>`, `god.critic.<spell>`; a record for the biggest super-critic.
 - An achievement for the first super-critic, and one for each staff scene spell.
 
