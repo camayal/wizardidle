@@ -19,7 +19,7 @@ Decided by the author on 2026-11-12, one question at a time.
 | Your motive | **He is your believer, and you believe prophecies can change.** |
 | The lynching | **A gamble to change fate:** you held back on purpose, betting a broken man would never strike a god, ready to catch him at the edge. |
 | The afterlife gods | **They court him:** they planted the staff, and after the lynching they whisper, "We would never have watched." |
-| The staff | **One staff that changes**, made by the dead: cracked (60), seems sacred (90), shows its makers in the lava (130), carried off by the seer (149), reforged as *Nomaleatorio* (200). |
+| The staff | **One staff that changes**, made by the dead: cracked (60), seems sacred (90), shows its makers in the lava (130), carried off by the seer (149), reforged at 200 under its true name, `{staffName}`: a random name made in the first game and kept in every loop. |
 | Prophecy reveal | **In pieces:** III, the red rune (128), Midas at VII; the seer gives the last line at XI. |
 | Deaths in play | **Falls, not deaths:** he lies injured, almost dead (a new sprite on the ground, still to find or draw). Your touch sends the hooded healer; otherwise a rescuer (FAITH.md). Rarely nobody comes: a **true death**, and his soul waits in purgatory until the end of days. |
 | True death rule | **Always possible while you can click to revive him.** Where the story takes that click away, the story protects him: the corrupt staff (VI), the scripted escape (VIII), the Last Escape scroll (X, FAITH.md), the reforged staff (XI until the final battle). |
@@ -34,7 +34,7 @@ Decided by the author on 2026-11-12, one question at a time.
 | Length | **Short scrolls + console beats.** |
 | Variable phrases | **Each scroll changes a little with the moment:** one phrase by the wizard's belief level, one by the place he is in, and one déjà vu line in echo games (see *How the variables work*). |
 
-**Small choices made while writing** (change any freely): the wizard is "he", as the code already prints; Midas's last words; the staff's name *Nomaleatorio* ("not random") and the line playing on it.
+**Small choices made while writing** (change any freely): the wizard is "he", as the code already prints; Midas's last words.
 
 ## The prophecy
 
@@ -60,7 +60,7 @@ Decided by the author on 2026-11-12, one question at a time.
 
 | Where | Sighting |
 |---|---|
-| I (10) | A hooded healer carries him to a cabin he can never find again |
+| I (10) | A hooded healer carries him to a cabin he can never find again; he never sees his face |
 | II (30) | Bandages his arm, smiles as if he already knew your name |
 | 40, 70 | Watches from the forest; leaves bread and bandages |
 | V (110) | "Guilt is a kind of prayer. Who are you praying to now?" |
@@ -83,6 +83,7 @@ Each scroll has a fixed text with at most three slots, filled when the scroll op
 |---|---|---|
 | `{name}` | `wizardName()` | |
 | `{zone}` | the current zone's display name | |
+| `{staffName}` | the staff's true name: a random name made once, in the first game of the world, and kept in every loop (`world.staffName`) | |
 | **⟨place⟩** | the current zone's **scenery** (a new field in `src/data/zones.js`) | 6, below |
 | **⟨faith⟩** | the **belief level** at that moment (FAITH.md 3.1) | Devout · Believer · Doubter · Atheist |
 | **⟨echo⟩** | `world.erasures.length > 0` (ERASURE.md) | *normal* · *echo*; `{loop}` = `world.loop` |
@@ -109,7 +110,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 
 > You heard him first.
 >
-> A whisper in the Tower of Midas, where a hundred gods are worshipped and you are not one of them.
+> A whisper in Midas's Tower, where a hundred gods are worshipped and you are not one of them.
 >
 > For that whisper, his king cast him out.
 >
@@ -126,7 +127,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 >
 > You will hear him again.
 >
-> A whisper in the Tower of Midas. A king who will not touch him. A road beyond the gates.
+> A whisper in Midas's Tower. A king who will not touch him. A road beyond the gates.
 >
 > Time is nothing to you. To him, it is everything.
 >
@@ -136,11 +137,11 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 
 > ⟨place⟩ has taught him what the Tower never did: hunger, fear, the weight of a staff swung in anger.
 >
-> He talks to you at night. Small things. The cold. The wolves. Why Midas read the sentence himself, and never once looked at him.
+> He talks to you at night. Small things. The cold. The slimes. Why Midas read the sentence himself, and never once looked at him.
 >
 > Every time he falls, a hooded healer carries him to a cabin he can never find again.
 >
-> He doesn't know it's you. ⟨echo⟩
+> He never sees the healer's face. ⟨echo⟩
 >
 > ⟨faith⟩
 
@@ -161,7 +162,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
   - *Atheist:* He has decided that no one is. He is wrong.
 
 ### Chapter II: Devotion (lvl 30)
-*Event (exists): the altar, faith ×2, the Divine crosier. Its console line already changes with the divine touches used.*
+*Event (exists): the altar, faith ×2, the Divine crosier. Its console line already changes with the divine touches used. Art needed: your own shrine (the god's, half-forgotten), and a hooded stranger sprite that is clearly different from the ordinary hooded figures.*
 
 > He found your shrine ⟨place⟩, in a land of a hundred gods where no one remembers your name.
 >
@@ -257,11 +258,11 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 ### Chapter V: Repentance (lvl 110)
 *Event: damage bonus and faith loss removed; faith rises again, less than in II. A moral shock.*
 
-> Today he killed a creature that was only guarding its young.
+> He woke among the dead of a pilgrim camp, the staff warm in his hand.
 >
-> He saw it too late. The staff hummed with pleasure.
+> He does not remember the fight. He remembers the silence after it.
 >
-> He buried every one he had killed that week ⟨place⟩, and said their names, not yours. ⟨faith⟩
+> He buried every one of them ⟨place⟩, and prayed to their gods, not to you. ⟨faith⟩
 >
 > The hooded stranger watched him dig. ⟨echo⟩
 >
@@ -315,10 +316,10 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
   - *normal:* Which god?
   - *echo:* Which god? This time, you almost say it out loud.
 
-**Console, lvl 139 (event, tower):** The staff pulls {name} through ash and stone. · He stands in the Tower of Midas. The doors seal. · The staff is hungry for a king. · Sorceresses see his face and flee, whispering a verse.
+**Console, lvl 139 (event, tower):** The staff pulls {name} through ash and stone. · He stands in Midas's Tower. The doors seal. · The staff is hungry for a king. · Sorceresses see his face and flee, whispering a verse.
 
 ### Chapter VII: The Ascent (lvl 140)
-*Event: Midas is dead; no mages in the City or the Tower. Always the Tower; faith is falling: echo slot only.*
+*Event: Midas is dead and gone for good (he never returns; the Tower has no boss from now on). No mages in the City or the Tower until the lynching. Always the Tower; faith is falling: echo slot only.*
 
 > Midas fell on the steps of his own throne. ⟨echo⟩
 >
@@ -335,7 +336,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
   - *echo:* "I dream of these steps," he said. "Every time."
 
 ### Chapter VIII, Part I: Overthrow (lvl 149)
-*Event: the lynching, wherever he is. The seer's curse (no healing), only battles, no loot.*
+*Event: the lynching, wherever he is. The seer's curse (no healing), only battles, no loot. After it the mages return: the Tower is full of mages again.*
 
 > They came at dawn, ⟨place⟩: every mage who fled the Tower, and a sorceress with a seer's red eyes.
 >
@@ -450,11 +451,11 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 **Console, lvl 199 (event, Heidan):** {name} learns where the seer took his staff: Heidan. · He walks to Heidan. He will not leave without it.
 
 ### Chapter XI: The Return of the King (lvl 200)
-*Event: the Last Escape scroll burns to ash as he takes the staff; from now on Nomaleatorio raises him when he falls (no true death until the final battle). ×2–3 damage, faith icon gone, XP bar full and dark red, more bosses and the Megaboss (the curse), the healer can appear. Always Heidan, faith locked: echo slot only.*
+*Event: the Last Escape scroll burns to ash as he takes the staff; from now on {staffName} raises him when he falls (no true death until the final battle). ×2–3 damage, faith icon gone, XP bar full and dark red, more bosses and the Megaboss (the curse), the healer can appear. Always Heidan, faith locked: echo slot only.*
 
 > The seer was waiting in Heidan, the staff across her knees.
 >
-> "I wrote you," she said. "I cannot unwrite you. ⟨echo⟩" She told him its true name: Nomaleatorio. Nothing about this was ever random.
+> "I wrote you," she said. "I cannot unwrite you. ⟨echo⟩" She told him its true name: {staffName}. He had heard it before, in the voice from below.
 >
 > He reforged it in his own blood and set a crown of ash on his head.
 >
@@ -479,7 +480,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 | A rescuer comes | One line per rescuer, in FAITH.md (caravan, shaman, gravedigger, ghost, potion, alone). |
 | He falls in VI | The staff drags {name} up before he touches the ground. |
 | He falls in X | The Last Escape scroll (see Chapter X). |
-| He falls in XI | Nomaleatorio drags {name} up, burning. · He does not thank it. |
+| He falls in XI | {staffName} drags {name} up, burning. · He does not thank it. |
 
 ### True death (rare: nobody comes)
 *Only where you could have revived him: never in VI, VIII, X or XI (see the true death rule). Skull sprite, cemetery record with the cause, back to the name screen (FAITH.md). A regular cemetery death, not an erasure: no echo slot.*
@@ -509,7 +510,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 - **The healer falls:** The hood falls. Beneath it, your face. · The sky tears open. You step down to meet him.
 - **Each round:** the wizard attacks, the souls attack, then you choose: heal or hit.
 
-### Epilogue: if you win
+### Epilogue: The Unmaking (if you win)
 *Then the museum (scrolls, snapshots, stats, map), the cemetery shows his name reversed and struck through, and a new wizard can begin: the echo game.*
 
 > He fell at your feet, still holding the staff.
@@ -528,7 +529,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
   - *first erasure:* But time is nothing to you. You could hear him again.
   - *later erasures:* But time is nothing to you. You have unmade {loop} of them. You could hear him again.
 
-### Epilogue: if he wins
+### Epilogue: The Last Light (if he wins)
 *Then the black museum, blocked forever: outside a scroll, the scene and the console are one black mass.*
 
 > The hand that prayed has struck its god down.
@@ -557,5 +558,9 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 - **Falls:** the skull (`img/muerto.png`) is kept for a true death; a fall needs a new sprite of the wizard lying injured.
 - **Snapshots for the museums:** at each chapter save a small record (zone, background, NPC, level, key stats, the filled scroll text), not an image, so the save stays small. The final battle's snapshot includes the souls.
 - **Two epilogues:** `specialEnd` becomes `endGodWins` (museum, then a new wizard) and `endOmni` (black museum, the app blocked forever).
+- **Midas is gone forever after VII:** zone bosses keep returning in play, but Midas never appears again once he dies in the Tower; the Tower has no boss, and his golden-ray heal exists only before VII (ideas.md, "Bosses return, except Midas").
+- **The Tower's people:** no mages in the City or the Tower from VII until the lynching (149); after it the Tower is full of mages again.
+- **The staff's name:** `world.staffName`, a random name generated in the first game and kept across every loop and new wizard.
+- **Art for the story:** the god's own shrine (II); a hooded stranger sprite distinct from the ordinary hooded figures (II onward); the wizard lying injured (falls).
 - **Dropped from 2018:** drinking Midas's essence so the god can't revive him (the falls model replaces it); Midas becoming the Tower's boss.
 - **Scroll format:** title in `.titles`, the subtitle under it, short `<br><br>` paragraphs; the last line can use `.subtitles` (dark red, bold).

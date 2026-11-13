@@ -182,6 +182,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Story scrolls, the author's review
+- The author read every scroll and left a verdict and note per scroll. Kept as written: III, VI, VIII part II, X, XI.
+- Changed: "Midas's Tower"; Chapter I has slimes instead of wolves (no wolves in the game) and no longer reveals that the healer is the god ("he never sees the healer's face"); Chapter V's moral shock is stronger (he wakes among the dead of a pilgrim camp, the staff warm in his hand, and prays to their gods); the epilogues are now *The Unmaking* and *The Last Light*.
+- The staff's true name was never meant to be "Nomaleatorio": it is a random name (`{staffName}`), made in the first game and kept in every loop.
+- Notes for the code: Midas gone forever after VII (bosses return otherwise); the Tower full of mages again after the lynching; art needed for the god's shrine and a distinct hooded stranger.
+
 ### 2026-11-12: Story scrolls get echoes and variable phrases
 - Every chapter scroll in [docs/STORY.md](docs/STORY.md) now has slots filled when it opens: one phrase by the belief level (Devout, Believer, Doubter, Atheist; FAITH.md), one by the place (16 zones in 6 sceneries: open, wild, cold, hot, deep, walls), and one déjà vu line in echo games (after an erasure). Faith slots are skipped where the story locks faith (VII, X, XI), place slots where the place is fixed (Volcano, Tower, Heidan).
 - New echoes: the healer's pause (I), the stranger's slipping smile (II), the seer's tally on the exile scroll (III), the staff you always swear to take (IV), Midas dreaming the steps (VII), "How many times, god?" (VIII), "I have tried" (XI), and both epilogues.
