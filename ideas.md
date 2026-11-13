@@ -197,6 +197,7 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - *For the planner (the author, round 3):* **medusa's gaze turns the wizard to stone for a couple of turns.** It needs to be rare, or, better (the author prefers it), the wizard can **find an artefact that makes him immune** to it. Art drawn for every tier (not in the game yet): the wizard turning to stone, a stone wizard held while he is petrified, and the stone cracking and bursting off him (`wizardidle-old-ideas/tools/anim/stone/`).
   - Infraespectro's curse and arcane flare are scene spells too (a new "arcane flare": a blinding burst that races over the scene).
   - *For the planner (the author's words): the scene must shake.* The earthquake (and big hits like slams and the meteor shower) needs **the whole scene to shake** for a moment, which art alone can't do: the game moves the scene canvas a pixel or two each frame (suggested for the earthquake: 0, 1, −1, 2, −2, 2, −2, 1, −1, 2, −2, 1, −1, 1, 0, 0 px).
+  - **Boss effects decided (2026-11-13, [docs/SCENE_SPELLS.md](docs/SCENE_SPELLS.md)):** Medusa's gaze petrifies rarely (about 1 in 4 gazes, 2 turns) and after the first time he can find an artefact for permanent immunity; Midas's golden rays heal him about 15%, at most twice per fight, and the god's touch interrupts them; a few signature effects (blizzard: skip an attack; poison cloud: damage over 2 turns; earthquake: miss a spell), the rest looks only.
   - **Plan → [docs/SCENE_SPELLS.md](docs/SCENE_SPELLS.md)** (decided 2026-11-13): the wizard earns them with the staff (90, VI, XI); a critic can become a **super-critic** that casts a scene spell (very rare before 90, rare with a staff); the god's touch-critics play divine light, meteor shower or healing rain; eclipse, sandstorm/whirlwind and divine light go to story moments, and the earthquake (now protromus's) is reused at the Tower siege.
   - *For the planner (the author's words):* add notes for **our wizard to use scene spells when he is very powerful**, and use the spare ones **for the story and for other powers**. Open: at what level or chapter he earns them, which god actions or story moments trigger the "kept for later" ones (an eclipse at a dark chapter, divine light for a miracle, an earthquake, healing rain from the god…), and whether they cost faith.
 
@@ -236,6 +237,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ### 2026-11-13: Planner items
 
+- Boss effects decided: Medusa's stone rare plus an immunity artefact; Midas heals about 15% at most twice, interruptible by the god; blizzard, poison cloud and earthquake get one effect each (SCENE_SPELLS.md).
 - Professions: gathering plays as a discovery in the scene (blink, walk, the reagent appears; bountiful harvest is a touch on it).
 - Skull alert decided: it floats above the fallen wizard only while the god can still act, never over a true death (FAITH.md 3.2).
 - Scene spells plan written (`docs/SCENE_SPELLS.md`): staff unlocks, super-critic, god's critics, story moments.
