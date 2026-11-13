@@ -17,6 +17,7 @@ import { logro } from './achievements.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 
 
 
@@ -343,9 +344,10 @@ function isDivineSpell(spellId) {
     return spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16";
 }
 
-// The wizard swings his staff (the artist's cast animation), only while the page has focus.
-function hopWizard() {
-    if (document.hasFocus()) playWizardAnim("cast");
+// The wizard swings his staff (the artist's cast animation, with the spark of the spell's
+// school or a slash for a staff hit), only while the page has focus.
+function hopWizard(spellId) {
+    if (document.hasFocus()) playWizardAnim("cast", spellId);
 }
 
 // Make the enemy hop, only while the page has focus (never in a simulation).
@@ -381,7 +383,7 @@ function attackEV() {
 
 // Turn the enemy into a sheep or a chicken with 1 HP.
 function castPolymorph() {
-    hopWizard();
+    hopWizard("spellPinBlue_16");
     fight.enemyHP = 1;
     updateHeartNPC();
     spell("spellPinBlue_16", false);
@@ -396,10 +398,10 @@ function castPolymorph() {
 
 // A critic: full attack x critic multiplier x mastery. Returns the damage.
 function criticAttack() {
-    hopWizard();
     let damage = state.player.attack * stat("fCritic") * stat("fAttack");
     damage *= config.balance.sacredDamageMultiplier;
     const spellId = getSpell();
+    hopWizard(spellId);
     if (isDivineSpell(spellId)) damage = damage * 4;
     damageEnemy(damage);
     stats.count(`spell.school.${spells[spellId].school}`);
@@ -411,10 +413,10 @@ function criticAttack() {
 
 // A normal attack: 50-100% of the attack x mastery, with a spell or the staff. Returns the damage.
 function normalAttack() {
-    hopWizard();
     let damage = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
     damage *= config.balance.sacredDamageMultiplier;
     const spellId = getSpell();
+    hopWizard(spellId);
     if (isDivineSpell(spellId)) damage *= 4;
     damageEnemy(damage);
     stats.count(`spell.school.${spells[spellId].school}`);
@@ -428,7 +430,6 @@ function normalAttack() {
 
 // The enemy hits the wizard (bosses harder, King Midas x2, divine spells x4).
 function enemyAttack() {
-    hopEnemy();
     let enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
     if (fight.enemy == "midas") enemyHit *= 2;
     if (isDivineSpell(fight.spellEnemy)) enemyHit *= 4;
@@ -438,12 +439,14 @@ function enemyAttack() {
         state.player.hp = state.player.hp - enemyHit;
     }
     print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`);
-    if (fight.bossCombat) {
-        fight.spellEnemy = pickRandomItem(zones[state.zone.current].bossSpell);
-    } else if (fight.hydraCombat) {
-        fight.spellEnemy = pickRandomItem(zones[state.zone.current].hidrasSpells);
+    if (fight.bossCombat || fight.hydraCombat) {
+        fight.spellEnemy = pickRandomItem(zones[state.zone.current][fight.bossCombat ? "bossSpell" : "hidrasSpells"]);
+        hopEnemy();                 // bosses and hydras keep their hop until they get their own animations
+        spell(fight.spellEnemy, true);
+    } else {
+        const spellId = fight.spellEnemy;
+        playEnemyMove(enemyMove(), () => spell(spellId, true));     // the blow lands, then its effect
     }
-    spell(fight.spellEnemy, true);
     stats.count("combat.attacksReceived");
 }
 

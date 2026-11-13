@@ -213,6 +213,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Enemy attack moves; the wizard's spark by school
+- Asked by the author via the artist: normal enemies no longer hop. Their plain sprite moves by code (`src/ui/enemyMoves.js`, from the artist's reference): **slash** (weapon users), **pounce** (beasts), **slam** (heavy bodies), or **cast** with the spark of their spell's school for casters (from the sprite's type); a reusable overlay (spark, slash, bite, dust) plays in front, and when the blow lands the game's spell effect plays on the wizard. Bosses and hydras keep the hop until they get their own animations. Polymorphed enemies (sheep, chicken) pounce.
+- Move per family, decided by dev from the sprites (to review with the author): pounce for creatures, capricor, imps and pybryas; slam for ents, umigubis, golems, mummies and rock men; slash for the other 28 melee families.
+- The wizard's cast now shows what he casts: the spark of the spell's school at the staff tip on the glint frames (found from each tier's art), a mirrored weapon slash for staff hits, the plain glint for heals and other non-attacks.
+
 ### 2026-11-12: Hydras in the bestiary; a no-cache local server
 - Bestiary: a hydra shows as it is now (its picture grows with each head cut off), or after it was defeated, as the most heads it ever had (new record `hydra.maxHeads.<hydra>`). Pictures keep their proportions (the swamp hydra is taller than wide).
 - The author couldn't test some animations: most likely the browser reused old code files, because `python -m http.server` sends no cache rules. New `tools/serve.py` serves the game with `Cache-Control: no-store` (`python tools/serve.py`, then http://localhost:8000).

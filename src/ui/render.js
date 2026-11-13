@@ -12,6 +12,7 @@ import { logro } from '../achievements.js';
 import { localizarBocadillo } from './scrolls.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
+import { spells } from '../data/spells.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -100,6 +101,17 @@ function pixelContext(canvas) {
 const imageCache = new Map();
 const latestDraw = {};
 
+// The image at src if it has loaded, otherwise null (and it starts loading).
+function imageNow(src) {
+    let img = imageCache.get(src);
+    if (!img) {
+        img = new Image();
+        img.src = src;
+        imageCache.set(src, img);
+    }
+    return img.complete && img.naturalWidth > 0 ? img : null;
+}
+
 // Call draw(img) with the image at src, now if it's already loaded, otherwise when it loads.
 // Each canvas only keeps its latest request: an older image that finishes loading late is
 // not drawn over a newer one.
@@ -158,13 +170,60 @@ function clearWizardCanvas() {
     pjCanvas.height = pjCanvas.offsetHeight;
 }
 
+// Where the glint at the staff tip is in a cast strip (frame 3), in sprite pixels; found once
+// per tier from the art itself, since the staff is on the left or the right depending on the tier.
+const glints = new Map();
+function staffTip(img, tier) {
+    if (glints.has(tier)) return glints.get(tier);
+    const c = document.createElement("canvas");
+    c.width = 32; c.height = 32;
+    const ctx = c.getContext("2d");
+    ctx.drawImage(img, 3 * 32, 0, 32, 32, 0, 0, 32, 32);
+    const data = ctx.getImageData(0, 0, 32, 32).data;
+    let x = 0, y = 0, n = 0;
+    for (let i = 0; i < data.length; i += 4) {
+        if (data[i + 3] > 200 && Math.min(data[i], data[i + 1], data[i + 2]) >= 225) { x += (i / 4) % 32; y += Math.floor(i / 4 / 32); n++; }
+    }
+    const tip = n ? [x / n, y / n] : [16, 2];
+    glints.set(tier, tip);
+    return tip;
+}
+
+// On the cast animation, show what he casts (the author's "spark by school"): the school's
+// spark at the staff tip on frames 3-4 instead of the plain glint, or for a staff hit a weapon
+// slash in front of him; heals and other non-attacks keep the glint.
+function castEffect(ctx, frame, img, tier, spellId) {
+    const school = spellId && spells[spellId] ? spells[spellId].school : "na";
+    const unit = ui.charWidth / 32, x0 = ui.squareSide, y0 = ui.headLevel;
+    if (school == "Physical") {
+        const slash = imageNow("img/fx_slash.png");
+        if (!slash || frame < 2) return;
+        ctx.save();                                     // mirrored: the slash opens toward the enemy
+        ctx.translate(x0 + 50 * unit, y0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(slash, (frame - 2) * 24, 0, 24, 32, 0, 0, 24 * unit, 32 * unit);
+        ctx.restore();
+    } else if (school != "na" && (frame == 3 || frame == 4)) {
+        const spark = imageNow(`img/fx_spark_${school.toLowerCase()}.png`);
+        if (!spark) return;
+        const [tx, ty] = staffTip(img, tier);
+        ctx.drawImage(spark, (frame - 1) * 16, 0, 16, 16, x0 + (tx - 7.5) * unit, y0 + (ty - 7.5) * unit, 16 * unit, 16 * unit);
+    }
+}
+
 // Play one of the wizard's animations; a looping one (pray) keeps going if asked again.
-function playWizardAnim(name) {
+// For "cast", spellId says what he casts (see castEffect).
+function playWizardAnim(name, spellId) {
     if (run.simulation) return;
     const anim = WIZARD_ANIMS[name];
     if (name == wizardAnim && anim.loopFrom !== undefined && loop.isRunning("animPJ")) return;
     wizardAnim = name;
     const tier = wizardTier(), total = anim.frames * (anim.repeat || 1);
+    if (name == "cast" && spellId && spells[spellId]) {
+        const school = spells[spellId].school;
+        if (school == "Physical") imageNow("img/fx_slash.png");
+        else if (school != "na") imageNow(`img/fx_spark_${school.toLowerCase()}.png`);
+    }
     let step = 0;
     clearWizardCanvas();
     const next = () => {
@@ -182,6 +241,7 @@ function playWizardAnim(name) {
             const ctx = pixelContext(pjCanvas);
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             ctx.drawImage(img, frame * 32, 0, 32, 32, ui.squareSide, ui.headLevel, ui.charWidth, ui.charHeight);
+            if (name == "cast") castEffect(ctx, frame, img, tier, spellId);
         });
     };
     next();
@@ -293,6 +353,7 @@ function print(data) {
 };
 
 export {
+    imageNow,
     drawWizardPose,
     playWizardAnim,
     pixelContext,

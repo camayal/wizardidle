@@ -18,6 +18,8 @@ import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
 import { drawWizard, loadNPC, playWizardAnim, print, updateHeading } from '../ui/render.js';
+import { playEnemyMove } from '../ui/enemyMoves.js';
+import { spell } from '../spells.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
@@ -182,6 +184,12 @@ const actions = [
     { name: 'Animation: fall (then fallen + skull)', run() { playWizardAnim('fall_sit'); } },
     { name: 'Animation: true death (preview only)', run() { playWizardAnim('fall_dead'); } },
     { name: 'Stand up (normal sprite)', run() { drawWizard(); } },
+    { name: 'Wizard cast: fire spell', run() { playWizardAnim('cast', 'spellSparkYellow_8'); } },
+    { name: 'Wizard cast: staff hit', run() { playWizardAnim('cast', 'spellPush9'); } },
+    { name: 'Enemy move: slash (warrior)', run() { previewEnemy('el_guerrero11', { kind: 'slash' }); } },
+    { name: 'Enemy move: pounce (creature)', run() { previewEnemy('animalejo24', { kind: 'pounce' }); } },
+    { name: 'Enemy move: slam (ent)', run() { previewEnemy('el_ent3', { kind: 'slam' }); } },
+    { name: 'Enemy move: cast frost (wizard)', run() { previewEnemy('el_hechicero2', { kind: 'cast', school: 'frost' }); } },
     { name: 'Crisp pixels on / off', run() {
         ui.crisp = !ui.crisp;
         document.documentElement.classList.toggle('crisp', ui.crisp);
@@ -192,6 +200,12 @@ const actions = [
     { name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
 ];
+
+// Show an enemy and play one of its attack moves (the spell effect lands on the wizard).
+function previewEnemy(sprite, move) {
+    loadNPC(sprite);
+    setTimeout(() => playEnemyMove(move, () => spell(move.kind == 'cast' ? { frost: 'spellPush8' }[move.school] || 'spellPush1' : 'spellPush9', true)), 300);
+}
 
 function setSpeed(factor) {
     loop.setSpeed(factor);
