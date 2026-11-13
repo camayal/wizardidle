@@ -61,6 +61,7 @@ export const enemyTypes = {
     etymos: {name: "etymos", hasgold:false},
     goro: {name: "goro", hasgold:true},
     herbus: {name: "herbus", hasgold:true},
+    fenix: {name: "fenix", hasgold:true},          // the Volcano boss had no entry here (v1 too), so its fights crashed
     infraespectro: {name: "infraespectro", hasgold:false},
     kkck: {name: "kkck", hasgold:false},
     medusa: {name: "medusa", hasgold:true},

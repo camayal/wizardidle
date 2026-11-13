@@ -9,6 +9,7 @@ import { masterTime } from '../config.js';
 import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, updateHelp, updateKill, updateStats } from './scrolls.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
+import { clearNPC, playWizardAnim } from './render.js';
 
 //////////////////////////////END OTHER REGION//////////////////////////////////
 //------------------------------------------------------------------------------//
@@ -31,7 +32,8 @@ function killBtn(){
     scrollOpen("kill");    
 }
 
-// Kill the wizard for good: record him in the cemetery, stop every clock, delete the save, reload.
+// Kill the wizard for good: record him in the cemetery, stop every clock, delete the save; he
+// falls for the last time (the true-death animation) and the page reloads.
 function realKill(){
     world.cemetery.push({
         name: state.player.name,
@@ -45,7 +47,10 @@ function realKill(){
     loop.stopAll(); // every clock, including any v1 would have leaked
     run.multipleEventsCounter = 0;
     deleteSave();
-    location.reload();
+    scrollClose();
+    clearNPC();
+    playWizardAnim("fall_dead");
+    setTimeout(() => location.reload(), 2200);
 }
 
 

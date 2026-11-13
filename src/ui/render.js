@@ -131,7 +131,80 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
 
 // Draw the wizard with his normal sprite for his level.
 function drawWizard() {
+    loop.stop("animPJ");        // a normal redraw ends any animation (ui/render.js, wizard animations)
+    wizardAnim = "";
     loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
+}
+
+// ------------------------------------------------------------------ wizard animations
+// The artist's strips: img/anim_<name><tier>.png, 32x32 frames side by side, one strip per
+// tier (every 10 levels, like lvl<N>.png). Played on the animPJ clock; any normal redraw of
+// the wizard (drawWizard) stops them.
+const WIZARD_ANIMS = {
+    cast: { frames: 7, ms: 100 },                       // the staff swings forward, a glint, back
+    walk: { frames: 4, ms: 140, repeat: 2 },            // two steps
+    pray: { frames: 6, ms: 100, loopFrom: 3 },          // frames 3-5 loop until he stands up
+    fall_sit: { frames: 6, ms: 100, then: "fallen" },   // a fall he can be revived from
+    fall_dead: { frames: 6, ms: 110, then: "dead" },    // true death
+};
+let wizardAnim = "";
+
+function wizardTier() {
+    return Math.min(200, Math.floor(state.player.lvl / 10) * 10);
+}
+
+function clearWizardCanvas() {
+    pjCanvas.width = pjCanvas.offsetWidth;
+    pjCanvas.height = pjCanvas.offsetHeight;
+}
+
+// Play one of the wizard's animations; a looping one (pray) keeps going if asked again.
+function playWizardAnim(name) {
+    if (run.simulation) return;
+    const anim = WIZARD_ANIMS[name];
+    if (name == wizardAnim && anim.loopFrom !== undefined && loop.isRunning("animPJ")) return;
+    wizardAnim = name;
+    const tier = wizardTier(), total = anim.frames * (anim.repeat || 1);
+    let step = 0;
+    clearWizardCanvas();
+    const next = () => {
+        let frame;
+        if (step < total) frame = step % anim.frames;
+        else if (anim.loopFrom !== undefined) frame = anim.loopFrom + (step - total) % (anim.frames - anim.loopFrom);
+        else {
+            loop.stop("animPJ");
+            wizardAnim = "";
+            if (anim.then) drawWizardPose(anim.then); else drawWizard();
+            return;
+        }
+        step++;
+        withImage("pj", `img/anim_${name}${tier}.png`, (img) => {
+            const ctx = pixelContext(pjCanvas);
+            ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
+            ctx.drawImage(img, frame * 32, 0, 32, 32, ui.squareSide, ui.headLevel, ui.charWidth, ui.charHeight);
+        });
+    };
+    next();
+    loop.every("animPJ", next, anim.ms);
+}
+
+// A still pose: "fallen" (with the skull above him: he needs your attention) or "dead".
+function drawWizardPose(pose) {
+    if (run.simulation) return;
+    loop.stop("animPJ");
+    wizardAnim = "";
+    clearWizardCanvas();
+    withImage("pj", `img/${pose}${wizardTier()}.png`, (img) => {
+        const ctx = pixelContext(pjCanvas);
+        ctx.drawImage(img, ui.squareSide, ui.headLevel, ui.charWidth, ui.charHeight);
+        if (pose != "fallen") return;
+        withImage("pjSkull", "img/muerto.png", (skull) => {
+            // half his size, 12 sprite px right and 10 up from his top-left (the artist's spot,
+            // clear of every staff top and crown)
+            pixelContext(pjCanvas).drawImage(skull, ui.squareSide + ui.charWidth * 0.375, ui.headLevel - ui.charHeight * 0.3125,
+                ui.charWidth / 2, ui.charHeight / 2);
+        });
+    });
 }
 
 // Remove the enemy (or object) from the right side of the scene.
@@ -150,21 +223,6 @@ function wizardName() {
     return `<b>${state.player.name}</b>`;
 }
 
-
-
-// Draw another image in the wizard's place (e.g. the skull when he falls).
-function loadAlterCanvasChar(imagen, squareSide, headLevel) {
-    if (run.simulation) return;
-    pjCanvas.width = pjCanvas.offsetWidth;
-    pjCanvas.height = pjCanvas.offsetHeight;
-    const img = new Image();
-    img.src = `img/${imagen}.png`;
-    img.addEventListener("load", function() {
-        const ctx = pixelContext(pjCanvas);
-        ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
-        ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
-    }, false);
-}
 
 
 // Draw the enemy or object on the right, sized by type (bosses, objects, the rest).
@@ -198,23 +256,6 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     });
 }
 
-
-// Make the wizard hop for a few frames (run by the animPJ clock).
-function animatePJ() {
-
-
-    ui.frameCounter += 1;
-    switch (ui.frameCounter) {
-    case 1:
-
-        loadCanvasChar(state.player.lvl, ui.squareSide - ui.jumpSpace, ui.headLevel);
-        break;
-    case 2:
-       loadCanvasChar(state.player.lvl, ui.squareSide, ui.headLevel);
-        ui.frameCounter = 0;
-        loop.stop("animPJ");
-    }
-};
 
 // Make the enemy hop for a few frames (run by the animNPC clock).
 function animateNPC() {  
@@ -252,6 +293,8 @@ function print(data) {
 };
 
 export {
+    drawWizardPose,
+    playWizardAnim,
     pixelContext,
     withImage,
     clearNPC,
@@ -259,8 +302,6 @@ export {
     showStage,
     wizardName,
     animateNPC,
-    animatePJ,
-    loadAlterCanvasChar,
     loadBackground,
     loadCanvasChar,
     loadNPC,

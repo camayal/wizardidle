@@ -213,6 +213,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Wizard animations, fallen and true-death poses; Volcano boss fixed
+- Merged the artist's animation strips (21 tiers each) and wired them (`playWizardAnim()` in `ui/render.js`, on the animPJ clock; any normal redraw stops them): **cast** on every attack (the author's choice, replaces the hop), **walk** on the plain walk and when changing zone, **pray** at shrines (frames 3-5 loop until he leaves), **fall** when he falls in battle, then the **fallen** pose with the **skull above his head** (half size, the artist's spot) until he is revived, and the **true death** (fall_dead, then the dead pose) when the player kills him with the kill button, before the page reloads. The story's permadeath comes with the faith rebalance.
+- The dev bar can preview each animation. The old hop and the skull-as-body drawing are gone.
+- v1 bug found by the stress tests: the Volcano boss (`fenix`) had no entry in the enemy families, so a boss fight there crashed and the game stopped until a reload (the simulation counted it as a freeze). Added the entry.
+
 ### 2026-11-12: Bestiary secrets; stale code while testing
 - Bestiary: the hydras are secret characters, so their section is "Secrets", shown from the start as ink stains labelled "Secret" until met. Only enemies are listed (never the healer). The total no longer counts two old sprite families that live in no zone (`la_guerrera`, `la_pilla`).
 - The author still saw the scroll text run long on open, fixed after interacting: that is how the code behaved before the fix, so the browser most likely ran stale code. Real-time captures (driving Edge through its debugging protocol) at desktop, big-monitor and phone sizes show the right size after the opening animation. Two fixes against stale code: the offline worker now re-checks code files with the server every time (`cache: 'no-cache'`), so players also get new code right after a release; and while developing (`DEV`) no offline worker is installed (an old one is removed).

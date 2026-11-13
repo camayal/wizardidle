@@ -17,7 +17,7 @@ import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { drawWizard, loadNPC, print, updateHeading } from '../ui/render.js';
+import { drawWizard, loadNPC, playWizardAnim, print, updateHeading } from '../ui/render.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
@@ -176,6 +176,12 @@ const actions = [
     { name: '+1000 gold', run() { state.player.gold += 1000; updateHeading(); } },
     { name: '+faith (one level of HP)', run() { state.player.faith += state.player.hpBase; updateHeading(); } },
     { name: 'Full HP', run() { state.player.hp = Math.floor(state.player.hpBase); updateHeading(); } },
+    { name: 'Animation: cast', run() { playWizardAnim('cast'); } },
+    { name: 'Animation: walk', run() { playWizardAnim('walk'); } },
+    { name: 'Animation: pray (loops)', run() { playWizardAnim('pray'); } },
+    { name: 'Animation: fall (then fallen + skull)', run() { playWizardAnim('fall_sit'); } },
+    { name: 'Animation: true death (preview only)', run() { playWizardAnim('fall_dead'); } },
+    { name: 'Stand up (normal sprite)', run() { drawWizard(); } },
     { name: 'Crisp pixels on / off', run() {
         ui.crisp = !ui.crisp;
         document.documentElement.classList.toggle('crisp', ui.crisp);

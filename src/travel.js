@@ -8,7 +8,7 @@ import { stats } from './stats.js';
 import { run } from './runtime.js';
 import { endEvent, event, nextEvent } from './events.js';
 import { addXP } from './wizard.js';
-import { loadBackground, print, showStage, wizardName } from './ui/render.js';
+import { loadBackground, playWizardAnim, print, showStage, wizardName } from './ui/render.js';
 
 // Steps of travelling: leave the zone, enter a new one and show its legend.
 function changeLocality() {
@@ -18,6 +18,7 @@ function changeLocality() {
         //get new zone
         state.zone.last = state.zone.current;
         print(`${wizardName()} left the ${zones[state.zone.last].name}`);
+        playWizardAnim("walk");
         
         getZone();
         //get a new zone
@@ -26,6 +27,7 @@ function changeLocality() {
         //change background
         showStage();
         print(`${wizardName()} is entering to the ${zones[state.zone.current].name}, ${pickRandomItem(zones[state.zone.current].legend)}`);
+        playWizardAnim("walk");
         break;
     case 3:
         //cancel the Interval, put 0 to the counter and trigger a new event

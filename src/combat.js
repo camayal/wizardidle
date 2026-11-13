@@ -16,7 +16,7 @@ import { addGold, addXP, calculateFe } from './wizard.js';
 import { logro } from './achievements.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { animateNPC, animatePJ, clearNPC, drawWizard, loadAlterCanvasChar, loadNPC, npcCanvas, pjCanvas, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
 
 
@@ -162,7 +162,7 @@ function wizardFalls() {
     stats.first("first.fall");
     playSound(`hurt${getRandomInt(1, 6)}`);
     fight.pjDead = true;
-    loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
+    playWizardAnim("fall_sit");     // he sinks down; then the fallen pose with the skull above
     let lootedText = "";
     // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:
     // fight.enemy was already empty. A fallen enemy can't take the wizard's gold.
@@ -342,9 +342,9 @@ function isDivineSpell(spellId) {
     return spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16";
 }
 
-// Make the wizard hop, only while the page has focus (never in a simulation).
+// The wizard swings his staff (the artist's cast animation), only while the page has focus.
 function hopWizard() {
-    if (document.hasFocus() && !run.simulation) loop.every("animPJ", animatePJ, 100);
+    if (document.hasFocus()) playWizardAnim("cast");
 }
 
 // Make the enemy hop, only while the page has focus (never in a simulation).

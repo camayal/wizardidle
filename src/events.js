@@ -16,7 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, loadBackground, loadNPC, print, showStage, updateHeading, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, loadBackground, loadNPC, playWizardAnim, print, showStage, updateHeading, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 
@@ -174,6 +174,7 @@ function exploreEV() {
         } else {
             print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
             pickRandomBackgroundForCurrentZone();
+            playWizardAnim("walk");
             addXP(0.5);
             nextEvent();
             //trigger event selecter
@@ -551,6 +552,7 @@ function giveOffering() {
 // One prayer: gain some faith.
 function pray() {
     playSound("pray");
+    playWizardAnim("pray");     // kneels and keeps praying until he leaves the shrine
     spell("spellAnk_8", true);
     run.feGanada = calculateFe();
     run.feGanada *= state.player.faithMultiplier;
@@ -562,6 +564,7 @@ function pray() {
 
 // Leave the shrine and go back to the road.
 function leaveShrine() {
+    drawWizard();               // stands up again
     clearNPC();
     showStage();
     endEvent();

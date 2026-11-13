@@ -3,7 +3,7 @@
 
 import { state } from '../state.js';
 import { fight, ui } from '../runtime.js';
-import { drawWizard, loadAlterCanvasChar, loadNPC } from './render.js';
+import { drawWizard, drawWizardPose, loadNPC } from './render.js';
 import { scrollClose } from './scrolls.js';
 import { el } from './dom.js';
 
@@ -116,7 +116,7 @@ function responsiveLayout() {
         loadNPC(state.npc);
     }
     if(!state.firstUse){drawWizard();}
-    if (fight.pjDead){loadAlterCanvasChar("muerto", ui.squareSide, ui.headLevel);
+    if (fight.pjDead){drawWizardPose("fallen");
 };
     
 
