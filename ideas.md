@@ -210,6 +210,18 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
   - **The Tower refills** (the author, 2026-11-13): from chapter VII until the lynching (lvl 149) there are **no mages in the City or the Tower** (the wizards and sorceresses go into exile); **after the lynching the Tower is populated by mages again**. *For dev:* the enemy lists of `la_Ciudad` and `la_Torre` drop `el_Hechicero` / `la_Hechicera` in that window (the Tower keeps its elementals), then the Tower gets its mages back.
   - **The staff's true name is random** (the author, 2026-11-13): "Nomaleatorio" in the 2018 notes was a slip. The name is generated in the world's first game and kept for every later wizard and loop (`world.staffName`, next to `world.erasures` / `world.loop`); text uses `{staffName}`.
 
+- **New races and statues, art ready** (2026-11-13, the author: *"keep them in mind for future developments"*): sprites in `wizardidle-old-ideas/unorganzed_sprites/Sprites/New NPC/` (83 files; only `Hydra/hydskon*` and `Hydra/mother*` are in the game already). All 32×32 unless noted. Grouped by where they could live (suggestions, nothing decided):
+  - *Nagas* (`nagas/`): naga, naga warrior, mage, ritualist, sharpshooter, guardian naga, greater naga, guardian serpent, plus **lamia** (64×64, boss-sized). Natural for a **coast zone** (see `statue_costa` below), the Swamp or the Dunes. Matches "naga" and "serpent" in the old creature list.
+  - *Salamanders* (`Salamander/`): salamander, firebrand, mystic, stormcaller → the **Volcano**. Matches "salamander" in the old list.
+  - *Yaktaurs* (`Yaktur/`): yaktaur and captain, each ranged and melee → the **Tundra** or the Prairie (the old list's "centaur" role).
+  - *Swamp and poison:* black mamba, giant frog, zombie toad, **death ooze** (the Swamp's scene already has a `death_ooze` layer), sea snake (coast).
+  - *Mushrooms:* deathcap, wandering mushroom → the **Forest**; they fit the mushroom reagent (professions).
+  - *Chaos:* chaos spawn (5 variants), cigotuvis monster → **Duenon** or the corruption chapters.
+  - *Training dummy* → a professions trainer, or a training spot in the City.
+  - *Hydras* (`Hydra/`): **simulacrum1–5** (64×64, an ice-crystal hydra growing in 5 steps like `hydskon`) could be new art for the Tundra's **icedra** or a new hydra; **lernaean_hydra01–10** (32×48, 10 steps like `mother`) is a smaller version of the Swamp's mother hydra.
+  - *Statues* (`Statues mistery/`): `archivo/` holds **the 14 existing statues as standalone sprites** (one per zone: Snail, Knight, Queen…), useful now that the wizard walks to the statue to study it (today they are painted into the `*_estatua` backgrounds). New ones for the future: **statue_costa** (a spear-bearer, for a coast zone that doesn't exist yet), a **golden statue** (Midas, the golden touch, or the Tower after chapter VII), a **light-vine** and a **dark-vine** statue (a pair: faith and corruption, or belief levels), and an empty **pedestal** (`statue_base`: a broken or stolen statue, a story moment).
+  - *Before using them:* the file names match the free Dungeon Crawl tile set; check each tile's licence and credit it like the Gervais art. **Vashnia** and **Aizul** (`nagas/vashnia.png`, `nagas/aizul_new.png`) are named characters of that game: use the sprites under names of our own.
+
 ## Already built (from the old notes)
 
 Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0) · the per-sprite enemy table: all 669 sprites in `InformationByEnemy.xlsx` match `src/data/enemies.js` exactly (type, rare, corrupted, display name) · the zone boss and enemy table in `enemyLocation.xlsx` (2014): all 16 bosses match, and 14 of 16 enemy lists match exactly. The Castle's sorceress (`la_Hechicera`) was later dropped from the code, and the Forest's elf (`el_Elfo`) was added · the XP/HP/age/enemy-HP formulas in `infodexp.xlsx` (except the two differences noted in "Levelling pace").
@@ -248,6 +260,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ### 2026-11-13: Planner items
 
+- Recorded the author's new races and statues (`New NPC/` in the old sprites): nagas, salamanders, yaktaurs, swamp creatures, mushrooms, chaos spawn, two hydras, the existing statues as sprites and five new statues; licence check noted.
 - From the author's story review: the Tower refills with mages after the lynching (none in the City or Tower from VII to 149); the staff's true name is random (`world.staffName`), replacing "Nomaleatorio" in FAITH.md and SCENE_SPELLS.md.
 - Bosses keep returning as today, except King Midas: removed forever after he dies in chapter VII (noted for dev with the Tower guard). Medusa's immunity artefact is rare.
 - Boss effects decided: Medusa's stone rare plus an immunity artefact; Midas heals about 15% at most twice, interruptible by the god; blizzard, poison cloud and earthquake get one effect each (SCENE_SPELLS.md).
