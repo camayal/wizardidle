@@ -436,14 +436,26 @@ function fadeScene(change, done, ready) {
     }, FADE_STEP_MS);
 }
 
-// A place appears around him: the fade, then (if it has a door) he comes in through it and
-// walks to his spot. npc is who is there (e.g. the shrine's mystic), shown at the same moment.
-function enterPlace(bg, npc, done) {
+// He goes into a place. With a door: the fade, then he comes in through it and walks to his
+// spot. Without one (a shrine, a statue): he walks out of the scene and into the place, like any
+// change of scene (the author's request); fade = true keeps the plain fade (waking up in the
+// healer's cabin). Already there (back to the same shrine): only who is there changes.
+// npc is who is there (e.g. the shrine's mystic), shown with the place.
+function enterPlace(bg, npc, done, fade = false) {
     const door = DOORS[bg.toLowerCase()], src = `img/${bg.toLowerCase()}.png`;
-    imageNow(src);                                  // start loading it during the fade
-    fadeScene(() => {
+    imageNow(src);                                  // start loading it on the way
+    const change = () => {
         loadBackground(bg);
         if (npc) loadNPC(npc);
+    };
+    if ((ui.currentBackGround || "").toLowerCase() == bg.toLowerCase()) {
+        change();
+        if (done) done();
+        return;
+    }
+    if (door == null && !fade) return walkThroughScene(change, done);
+    fadeScene(() => {
+        change();
         if (door != null) ui.wizardOffset = door - 48;
         if (!run.simulation) drawWizard();
     }, () => (door != null ? walkWizardTo(0, done) : done && done()), () => imageNow(src) != null);

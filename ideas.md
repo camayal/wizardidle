@@ -255,6 +255,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Into a shrine on foot
+- The author: entering a shrine should be a walk, like a change of scene, not a fade. Every place without a door (shrines, statues, inns outside the towns) now works that way: he walks out to the right, the place appears, he walks in from the left (`enterPlace`). Places with a door keep the fade and the door; waking up in the healer's cabin keeps its plain fade (`fade = true`). When he is already in the place (back to the same shrine), only who is there changes, with no walk.
+- Tests: real-browser trace of the shrine scenario (out, into the shrine with the mystic, the offering, out again); gameplay suite 0 errors.
+
 ### 2026-11-13: Sounds for the new attacks: what to reuse, what to find
 - The author asked which sounds can be reused for the new attacks and which to find: `docs/SOUNDS.md`. Today every attack plays only its spell's school sound when the blow lands, so long animations are silent until the end. Twelve existing files can cover most moves and scene spells (by name and length; the author confirms by ear); ten are to find (thud, rumble, bow, hooves, roll, roar, squelch, wind, stone, bite). Nothing wired yet: waiting for the author's choice.
 
