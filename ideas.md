@@ -232,6 +232,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Hydra attacks and moving heads (artist)
+
+- The author asked for hydra attacks (some ordinary, some scene spells) and heads that move. Tried three head motions (sway, bob, weave); **the author chose weave**: each head traces a small circle, out of step, bending from where its neck meets the body.
+- For every head stage of the three hydras: idle (weave), strike (the heads lunge in turn and bite: venom for mother, dark sparks for hydskon, frost shards for icedra) and cast (heads rear up glowing, then thrust into a scene spell). Scene spells match each hydra's spells: mother poison rain, poison cloud, earth spikes; hydskon curse, fire rain, fire tornado; icedra a new frost breath, blizzard, ice spikes.
+- Added to the review page (`wizardidle-old-ideas/tools/boss_review/index.html`, "Hydras" section). Nothing sent to dev.
+
 ### 2026-11-13: Walking through scene changes; capricor in the bestiary
 - The author found the walk back after a find cut off by the scene change. Now, when he leaves a find or a statue, he walks on out of the scene to the right, the scene changes to another spot of the zone, and he walks in from the left to his place; changing zone works the same way (walks out, the new zone appears, walks in). Walking is faster (16 sprite px a frame). The new spot is for the looks only: a simulation keeps its stage, so seeded runs are unchanged.
 - Bug (the author): a defeated capricor didn't show in the bestiary. The last capricor's death takes it off the Forest's enemy list, and the bestiary built its families from those lists; it now takes them as they are when the game loads.
