@@ -182,6 +182,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Story scrolls get echoes and variable phrases
+- Every chapter scroll in [docs/STORY.md](docs/STORY.md) now has slots filled when it opens: one phrase by the belief level (Devout, Believer, Doubter, Atheist; FAITH.md), one by the place (16 zones in 6 sceneries: open, wild, cold, hot, deep, walls), and one déjà vu line in echo games (after an erasure). Faith slots are skipped where the story locks faith (VII, X, XI), place slots where the place is fixed (Volcano, Tower, Heidan).
+- New echoes: the healer's pause (I), the stranger's slipping smile (II), the seer's tally on the exile scroll (III), the staff you always swear to take (IV), Midas dreaming the steps (VII), "How many times, god?" (VIII), "I have tried" (XI), and both epilogues.
+- Longest combination of any scroll: 99 words, under the ~110 the screen holds without scrolling. Code notes: a `scenery` field on zones, one function filling the slots, the filled text stored with each chapter's snapshot for the museum.
+
 ### 2026-11-12: Story reviewed for plot holes, then rewritten
 - Recapped the arc and listed its weak spots (why Midas didn't kill him, who planted the staff, death rules, V and IX repeating, the seer vanishing, the Tower at 139, the self-crowning). The author answered each one; [docs/STORY.md](docs/STORY.md) rewritten with the decisions table.
 - New lore from the author: a hyperpolytheist world; the prophecy names **the Omni, god of gods**; the dead hunger for his soul but only a crown can feed them, and a crown that bends his road is cursed (so Midas exiled him and was cursed anyway); deaths in play are falls; a rare true death leaves the soul in purgatory; if the god wins he unmakes the soul and rewinds time (echo games, reversed struck-through names in the cemetery); if the wizard wins he engulfs the universe and the save becomes a black museum, blocked forever.
