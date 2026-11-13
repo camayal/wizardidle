@@ -266,6 +266,7 @@ function setUpBoss() {
     const boss = zones[state.zone.current].boss;
     fight.enemy = boss;
     stats.count(`combat.boss.${boss}`);
+    stats.count(`seen.boss.${boss}`);          // the bestiary shows it from now on
     loadNPC(boss);
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
     fight.enemyHPbase = Math.round(fight.enemyHP);
@@ -283,6 +284,7 @@ function setUpEnemy() {
     fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[fight.enemy + number].type]);
     fight.enemyAndNumber = fight.enemy + number;
     stats.count(enemySprites[fight.enemyAndNumber].rare ? "combat.rareEncounters" : "combat.encounters");
+    stats.count(`seen.sprite.${fight.enemyAndNumber}`);     // the bestiary shows it from now on
     loadNPC(fight.enemy + number);
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
     fight.enemyHPbase = Math.round(fight.enemyHP);
@@ -319,6 +321,7 @@ function getHydra(newEncounter = false){
     if (newEncounter){
         stats.count("combat.hydras");
         stats.count(`combat.hydra.${fight.hydra}`)
+        stats.count(`seen.hydra.${fight.hydra}`);
         startBattleText = "has entered in a battle with a hydra!,finds a hydra!,start a fight with a hydra!"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
         startEvent(battle);

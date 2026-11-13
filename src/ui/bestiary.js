@@ -1,9 +1,10 @@
 // Wizard Idle v2 - the bestiary: every creature the wizard has defeated, family by family.
 //
 // Third page of the kill scroll (Kill / Cemetery / Bestiary). A family appears once he has
-// met it; each of its sprites shows with how many he has defeated (stat kill.sprite.<sprite>),
-// and the ones never defeated as a faint ink stain with "?" (the author chose "ink dither"
-// from three mockups on 2026-11-12). Bosses and hydras have their own sections.
+// met it. A creature shows once he has seen it (stat seen.sprite.<sprite>), with how many he
+// has defeated (kill.sprite.<sprite>, 0 if none yet); the ones never seen are a faint ink
+// stain with "?" (the author chose "ink dither" from three mockups on 2026-11-12). Bosses and
+// hydras have their own sections (seen.boss / kill.boss, seen.hydra / kill.hydra).
 
 import { enemySprites, enemyTypes } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
@@ -15,22 +16,26 @@ import { ui } from '../runtime.js';
 const INK = [70, 50, 30];                        // the scroll's dark brown ink
 const SIZE = () => Math.round(ui.em * 2.4);      // sprite size on the page
 
-function cell(sprite, count, scale = 1) {
+function cell(sprite, seen, count, scale = 1) {
     const size = Math.round(SIZE() * scale);
     const rare = enemySprites[sprite] && enemySprites[sprite].rare ? '★' : '';
-    const picture = count
+    const picture = seen || count
         ? `<img src='img/${sprite}.png' width='${size}' height='${size}'>`
         : `<canvas class='inkStain' data-sprite='${sprite}' width='32' height='32' style='width:${size}px;height:${size}px;image-rendering:pixelated'></canvas>`;
     return `<div style='display:inline-block;width:${size + ui.em * 0.6}px;text-align:center;vertical-align:top'>${picture}` +
-        `<br><small>${count ? roundNumbertoLetter(count) + rare : '?'}</small></div>`;
+        `<br><small>${seen || count ? roundNumbertoLetter(count) + rare : '?'}</small></div>`;
 }
 
 function familySection(family) {
     const max = enemyTypes[family].max;
     const sprites = Array.from({ length: max }, (_, i) => `${family}${i + 1}`);
-    const found = sprites.filter((s) => stats.get(`kill.sprite.${s}`)).length;
+    const found = sprites.filter((s) => seenSprite(s)).length;
     return `<br><span class='subtitles'>${capital(enemyTypes[family].name)}s</span> <small>(${found} of ${max})</small><br>` +
-        sprites.map((s) => cell(s, stats.get(`kill.sprite.${s}`))).join('');
+        sprites.map((s) => cell(s, seenSprite(s), stats.get(`kill.sprite.${s}`))).join('');
+}
+
+function seenSprite(sprite) {
+    return stats.get(`seen.sprite.${sprite}`) || stats.get(`kill.sprite.${sprite}`);
 }
 
 function capital(text) {
@@ -41,15 +46,16 @@ export function bestiaryPageHtml() {
     const families = Object.keys(enemyTypes).filter((f) => enemyTypes[f].max);
     const met = families.filter((f) => stats.get(`combat.enemy.${f}`));
     const total = families.reduce((sum, f) => sum + enemyTypes[f].max, 0);
-    const found = Object.keys(state.stats).filter((k) => k.startsWith('kill.sprite.')).length;
+    const found = families.reduce((sum, f) => sum + Array.from({ length: enemyTypes[f].max }, (_, i) => `${f}${i + 1}`).filter(seenSprite).length, 0);
+    const defeated = Object.keys(state.stats).filter((k) => k.startsWith('kill.sprite.')).length;
     const bosses = [...new Set(Object.values(zones).map((z) => z.boss))];
     const hydras = [...new Set(Object.values(zones).map((z) => z.hidrasName).filter(Boolean))];
-    return `<div style='text-align:center'>${found} of ${total} creatures discovered</div>` +
+    return `<div style='text-align:center'>${found} of ${total} creatures seen, ${defeated} defeated</div>` +
         (met.length ? met.map(familySection).join('') : '<br>No creature defeated yet.<br>') +
         "<br><span class='subtitles'>Bosses</span><br>" +
-        bosses.map((b) => cell(b, stats.get(`kill.boss.${b}`), 1.25)).join('') +
+        bosses.map((b) => cell(b, stats.get(`seen.boss.${b}`), stats.get(`kill.boss.${b}`), 1.25)).join('') +
         (state.hydraMysteryResolved ? "<br><span class='subtitles'>Hydras</span><br>" +
-            hydras.map((h) => cell(`${h}1`, stats.get(`kill.hydra.${h}`), 1.25)).join('') : '');
+            hydras.map((h) => cell(`${h}1`, stats.get(`seen.hydra.${h}`), stats.get(`kill.hydra.${h}`), 1.25)).join('') : '');
 }
 
 // ------------------------------------------------------------------ the ink stains
