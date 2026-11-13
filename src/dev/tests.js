@@ -17,7 +17,7 @@ import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { print, updateHeading } from '../ui/render.js';
+import { drawWizard, loadNPC, print, updateHeading } from '../ui/render.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
@@ -176,6 +176,13 @@ const actions = [
     { name: '+1000 gold', run() { state.player.gold += 1000; updateHeading(); } },
     { name: '+faith (one level of HP)', run() { state.player.faith += state.player.hpBase; updateHeading(); } },
     { name: 'Full HP', run() { state.player.hp = Math.floor(state.player.hpBase); updateHeading(); } },
+    { name: 'Crisp pixels on / off', run() {
+        ui.crisp = !ui.crisp;
+        document.documentElement.classList.toggle('crisp', ui.crisp);
+        drawWizard();
+        if (state.npc) loadNPC(state.npc);
+        devPrint(ui.crisp ? 'crisp pixels' : 'smoothed (as before 2.2)');
+    } },
     { name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
 ];

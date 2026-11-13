@@ -199,6 +199,7 @@ const TAB_RATIO = 0.092;            // visible strip of the back scroll, of the 
 const TAB_LABEL_RATIO = 0.046;      // its page name, of the scroll width
 const FRONT_PARTS = ["scrollBackUp", "scrollBackCenter", "scrollText", "btnClose"];
 let scrollTab;
+let tabBase = null, tabApplied = null;   // heights the layout set, and the ones the tab set
 
 function buildScrollTab() {
     scrollTab = document.createElement("div");
@@ -221,6 +222,7 @@ function placeScrollTab(show) {
     if (!show) {
         scrollTab.style.display = "none";
         for (const id of FRONT_PARTS) el(id).style.transform = "";
+        tabBase = tabApplied = null;
         return;
     }
     const up = el("scrollBackUp");
@@ -233,13 +235,20 @@ function placeScrollTab(show) {
         fontSize: `${width * TAB_LABEL_RATIO}px`, lineHeight: `${width * TAB_LABEL_RATIO}px` });
     el("scrollTabLabel").textContent = ui.statsView == "records" ? "Stats" : "Records";
     for (const id of FRONT_PARTS) el(id).style.transform = `translateY(${offset}px)`;
-    // the front paper ends where the bottom roll is (its top), minus the strip it moved down
-    const bottom = parseFloat(el("scrollBackDown").style.top);
-    if (bottom > 0) {
-        el("scrollBackCenter").style.minHeight = `${bottom - offset}px`;
-        el("scrollText").style.minHeight = `${(bottom - offset) * 0.92 / 0.97}px`;
-    }
+    // Shorten the front paper and text by the strip, from the heights the layout chose. If
+    // the layout set new ones since (scroll opened, window resized), those are the new base.
+    const paper = el("scrollBackCenter").style, text = el("scrollText").style;
+    const now = { paper: parseFloat(paper.minHeight), text: parseFloat(text.minHeight) };
+    if (!tabApplied || now.paper !== tabApplied.paper || now.text !== tabApplied.text) tabBase = now;
+    paper.minHeight = `${tabBase.paper - offset}px`;
+    text.minHeight = `${tabBase.text - offset}px`;
+    tabApplied = { paper: parseFloat(paper.minHeight), text: parseFloat(text.minHeight) };
 }
+
+// The layout was redone (window resized or rotated): fit the tab and the front scroll again.
+document.addEventListener("wizardidle:layout", () => {
+    if (ui.scrollCurrentContent == "stats") placeScrollTab(true);
+});
 
 // Fill the stats scroll (two pages, Stats and Records: ui/statsPages.js).
 function updateStats(){

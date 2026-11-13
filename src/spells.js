@@ -63,6 +63,7 @@ function spell(img, pj, critic = 0, center = 0){
     // which leaves the canvas clear, and then the animation stops
     function animate() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+        context.imageSmoothingEnabled = !ui.crisp;   // resizing the canvas resets it
         //draw each frame + place them in the middle
         context.drawImage(myImage, shift, 0, frameWidth, 
             frameHeight, (ui.squareSide * mult) * leftMultiHeadLocation, ui.headLevel * topMultiHeadLocation, ui.squareSide * multiSize, ui.squareSide * multiSize);

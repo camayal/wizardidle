@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="crisp">
 <!-- <html manifest="cache.appcache"> -->
     <head>
     <meta charset="utf-8"/>
@@ -318,6 +318,12 @@
             }
 
 
+
+            /* crisp pixels: images are enlarged as sharp squares instead of blurred (the
+               canvases do the same in src/ui/render.js); remove the class on <html> to compare */
+            html.crisp img, html.crisp #esceneCanvas {
+                image-rendering: pixelated;
+            }
 
             #scrollBackCenter, #scrollText{
                 max-height: 0;

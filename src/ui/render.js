@@ -88,6 +88,14 @@ function loadBackground(back) {
     localizarBocadillo();
 };
 
+// A canvas's 2D context, set to draw pixel art crisp (sharp squares) or smoothed. Set before
+// every draw: resizing a canvas resets its context settings.
+function pixelContext(canvas) {
+    const ctx = canvas.getContext("2d");
+    ctx.imageSmoothingEnabled = !ui.crisp;
+    return ctx;
+}
+
 // Images are loaded once and reused (v1 created a new Image for every redraw).
 const imageCache = new Map();
 const latestDraw = {};
@@ -116,7 +124,7 @@ function loadCanvasChar(lvl, squareSide, headLevel) {
     pjCanvas.width = pjCanvas.offsetWidth;
     pjCanvas.height = pjCanvas.offsetHeight;
     withImage("pj", `img/lvl${Math.floor(lvl / 10) * 10}.png`, (img) => {
-        const ctx = pjCanvas.getContext("2d");
+        const ctx = pixelContext(pjCanvas);
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     });
 }
@@ -152,7 +160,7 @@ function loadAlterCanvasChar(imagen, squareSide, headLevel) {
     const img = new Image();
     img.src = `img/${imagen}.png`;
     img.addEventListener("load", function() {
-        const ctx = pjCanvas.getContext("2d");
+        const ctx = pixelContext(pjCanvas);
         ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
     }, false);
@@ -166,7 +174,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     withImage("npc", `img/${npc}.png`, (img) => {
-        const ctx = npcCanvas.getContext("2d");
+        const ctx = pixelContext(npcCanvas);
         //medium size bosses (64x64px)
         if (state.npc === "arcangel" || state.npc === "doria" || state.npc === "midas" || state.npc === "kkck" || state.npc === "herbus" || state.npc === "skeleton" || state.npc === "medusa" || state.npc === "rainbow" || state.npc === "rojo") {
             ctx.drawImage(img, squareSideIn * 6, headLevelIn - (ui.objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25);
@@ -244,6 +252,7 @@ function print(data) {
 };
 
 export {
+    pixelContext,
     withImage,
     clearNPC,
     drawWizard,

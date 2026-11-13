@@ -213,6 +213,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Crisp pixels; scroll text overflow fixed
+- The author chose crisp pixels: images are enlarged as sharp squares instead of blurred (`image-rendering: pixelated` on images and the scene, `imageSmoothingEnabled = false` on the canvases). No image files changed. The dev bar has "Crisp pixels on / off" to compare.
+- Bug (found by the author): on the stats scroll the text ran past the bottom roll over the scene. The layout redoes the scroll right after it opens (and on resize), which reset the front scroll's height until the next stats refresh. The layout now announces it (`wizardidle:layout`) and the tab refits at once.
+
 ### 2026-11-12: Stats scroll tabs built (option a)
 - Merged `artist/art` (fallen and dead sprites, not wired yet; the shaded scroll art). Removed a worktree path from the artist's journal line.
 - The stats scroll's other page now lies behind and peeks out above (the back roll and a strip of shaded paper with the page name, Pixeled, #462808); clicking it swaps Stats and Records. The front scroll, with the close button, moves down by the strip (0.092 of the scroll width) and gets shorter by the same, so the bottom roll stays put. Only on the stats scroll; the plain "Stats · Records" text line is gone.

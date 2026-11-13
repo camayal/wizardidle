@@ -264,6 +264,7 @@ function layoutPortrait(){
         setStyles("scrollText", { minHeight: scrollH * 0.92 });
         setStyles("scrollBackDown", { top: scrollH * 0.97 });
     }
+    document.dispatchEvent(new Event("wizardidle:layout"));    // e.g. the stats scroll tab fits itself again
     setStyles("zoneMap", { fontSize: em * 2.5 });
     setStyles("backMapa", { width: s, left: 0, top: s * 0.1 });
     setStyles("bocadilloMapa", { width: s * 0.075 });
@@ -322,6 +323,7 @@ function layoutLandscapeMobile(){
         setStyles("scrollText", { minHeight: H * 0.7 });
         setStyles("scrollBackDown", { top: H * 0.8 });
     }
+    document.dispatchEvent(new Event("wizardidle:layout"));    // e.g. the stats scroll tab fits itself again
 }
 
 export {

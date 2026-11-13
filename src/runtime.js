@@ -58,6 +58,7 @@ export const ui = {
     currentBackGround: undefined,
     scrollCurrentContent: undefined, // which scroll is open: "stats", "achievements", ...
     statsPage: undefined,
+    crisp: true,                   // sprites drawn as sharp pixels (dev bar can switch it off to compare)
     statsView: "stats",            // page of the stats scroll: "stats" or "records"
     audio: undefined,              // last sound played
     goldIcon: undefined,           // <img> snippets sized to em, used in console messages
