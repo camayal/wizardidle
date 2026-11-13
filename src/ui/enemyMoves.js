@@ -57,11 +57,11 @@ function frames(kind, school) {
         const reach = 26 - WIZARD_DISTANCE;                     // stops just in front of the wizard
         const dust = (i) => ["fx_dust", i, 20, 25];
         const seq = [f(), f(1, 0, 1.04, 0.94, dust(0)), f(), f(1, 0, 1.04, 0.94, dust(1)), f(2, 0, 1.05, 0.92)];
-        for (const t of [0.2, 0.42, 0.64, 0.84, 0.97]) seq.push({ ...f(Math.round(reach * t), 0, 1.04, 0.96, dust(seq.length % 3)), pose: "run" });
-        seq.push({ ...f(reach, 0, 1.06, 0.96, ["fx_impact", 0, -10, 8], 2), hit: true },
-            f(reach + 2, 0, 1.04, 0.97, ["fx_impact", 1, -10, 8], -2), f(reach + 8, 0, 1, 1, ["fx_impact", 2, -10, 8], 1),
+        for (const t of [0.2, 0.42, 0.64, 0.84, 0.97]) seq.push({ ...f(Math.round(reach * t), 0, 1, 1, dust(seq.length % 3)), pose: "run", ms: 90 });
+        seq.push({ ...f(reach, 0, 1, 1, ["fx_impact", 0, -10, 8], 2), pose: "ram", hit: true },
+            { ...f(reach + 2, 0, 1, 1, ["fx_impact", 1, -10, 8], -2), pose: "ram" }, { ...f(reach + 8, 0, 1, 1, ["fx_impact", 2, -10, 8], 1), pose: "ram" },
             f(reach + 14, 0, 1, 1, ["fx_impact", 3, -10, 8]));
-        for (const t of [0.75, 0.55, 0.35, 0.17, 0.05]) seq.push({ ...f(Math.round(reach * t), seq.length % 2 ? -1 : 0), pose: "back" });
+        for (const t of [0.75, 0.55, 0.35, 0.17, 0.05]) seq.push({ ...f(Math.round(reach * t), 0), pose: "back", ms: 120 });
         seq.push(f());
         return seq;
     }
@@ -86,11 +86,16 @@ export function enemyMove() {
     return { kind: MELEE[fight.enemy] || DEFAULT_MELEE };
 }
 
-// The artist's running frames for chargers (img/run_<sprite>.png, 32 x 32 frames facing
-// left); without them the standing sprite slides.
+// The artist's frames for chargers: running (img/run_<sprite>.png, 32 x 32 frames facing left,
+// mirrored for the trot back) and the head-down ram (img/ram_<sprite>.png) at the impact;
+// without them the standing sprite moves.
 let runStep = 0;
 function poseImage(npc, frame) {
     if (!frame.pose) return null;
+    if (frame.pose == "ram") {
+        const ram = imageNow(`img/ram_${npc}.png`);
+        return ram ? { img: ram, index: 0, mirror: false } : null;
+    }
     const strip = imageNow(`img/run_${npc}.png`);
     return strip ? { img: strip, index: runStep++ % Math.max(1, strip.naturalWidth / 32), mirror: frame.pose == "back" } : null;
 }
@@ -130,6 +135,7 @@ export function playEnemyMove(move, onHit) {
     const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
     imageNow(`img/${npc}.png`);
     for (const frame of seq) if (frame.fx) imageNow(`img/${frame.fx[0]}.png`);   // start loading
+    if (move.kind == "charge") { imageNow(`img/run_${npc}.png`); imageNow(`img/ram_${npc}.png`); }
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     let k = 0;
@@ -142,8 +148,9 @@ export function playEnemyMove(move, onHit) {
         }
         drawFrame(npc, seq[k]);
         if (k == hitAt) land();
+        // the next frame comes after this frame's time (100 ms unless the move says otherwise)
+        loop.every("animNPC", next, seq[k].ms || 100);
         k++;
     };
     next();
-    loop.every("animNPC", next, 100);
 }
