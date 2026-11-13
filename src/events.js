@@ -16,7 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, updateHeading, walkWizardTo, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, updateHeading, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 
@@ -302,6 +302,14 @@ function aboveFind() {
 function overStatue() {
     return { x: (STATUE_X[state.zone.current] || 190) - 16, y: 10 };
 }
+// Another spot of the same zone, for the looks only: in a simulation nothing changes, so a
+// seeded run plays the same (the stage only decides the background and the map marker).
+function newStage() {
+    if (run.simulation) return;
+    state.zone.stage = 1 + Math.floor(looksRandom() * MAXSTAGES);
+    showStage();
+}
+
 // Prayer effects appear here and there around the shrine's cross.
 function aroundCross() {
     return { x: CROSS_X - 16 + Math.round((looksRandom() - 0.5) * 70), y: Math.round(looksRandom() * 26) };
@@ -388,10 +396,9 @@ function findStatue(){
         break;
         case 5:
         print(`${wizardName()} leaves the statue and continues`)
-        showStage();
         endEvent();
         addXP(1);
-        walkWizardTo(0, nextEvent);     // back to his place, then the next event
+        walkThroughScene(newStage, nextEvent);  // walks on out of the scene, into the next one
     }
 }
 
@@ -449,7 +456,7 @@ function findRuneOrBook(){
         ui.findSpot = null;
         endEvent();
         addXP(0.25);
-        walkWizardTo(0, nextEvent);     // back to his place, then the next event
+        walkThroughScene(newStage, nextEvent);  // walks on out of the scene, into the next one
     }
 }
 

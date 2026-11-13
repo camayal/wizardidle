@@ -286,6 +286,19 @@ function looksRandom() {
     return looks / 2147483647;
 }
 
+const WALK_STEP = 16;               // sprite px per 100 ms frame
+const OFF_RIGHT = 240, OFF_LEFT = -72;   // offsets just past the right and left edges of the scene
+
+// Walk out of the scene to the right, change the scene, walk in from the left to his place
+// (the author's idea for leaving a find or a statue, and for changing zone).
+function walkThroughScene(changeScene, onArrive) {
+    walkWizardTo(OFF_RIGHT, () => {
+        changeScene();
+        ui.wizardOffset = OFF_LEFT;
+        walkWizardTo(0, onArrive);
+    });
+}
+
 function wizardX() {
     return ui.squareSide + (ui.wizardOffset || 0) * ui.charWidth / 32;
 }
@@ -307,7 +320,7 @@ function walkWizardTo(target, onArrive) {
     let step = 0;
     clearWizardCanvas();
     loop.every("walkPJ", () => {
-        ui.wizardOffset = (ui.wizardOffset || 0) + dir * 9;
+        ui.wizardOffset = (ui.wizardOffset || 0) + dir * WALK_STEP;
         if ((target - ui.wizardOffset) * dir <= 0) return arrive();
         const frame = step++ % 4;
         withImage("pj", `img/anim_walk${tier}.png`, (img) => {
@@ -458,6 +471,7 @@ function print(data) {
 };
 
 export {
+    walkThroughScene,
     npcBox,
     looksRandom,
     showBlink,

@@ -15,6 +15,10 @@ import { state } from '../state.js';
 import { stats } from '../stats.js';
 import { ui } from '../runtime.js';
 
+// Families that live in some zone, taken when the game loads: the capricor is taken off the
+// Forest's list once the last one dies, and it must stay in the bestiary.
+const LIVING = new Set(Object.values(zones).flatMap((z) => z.enemies.toLowerCase().split(',')));
+
 const INK = [70, 50, 30];                        // the scroll's dark brown ink
 const SIZE = () => Math.round(ui.em * 2.4);      // sprite size on the page
 
@@ -52,8 +56,7 @@ function hydraHeads(hydra) {
 
 export function bestiaryPageHtml() {
     // families that live in some zone (two old sprite families are in none)
-    const living = new Set(Object.values(zones).flatMap((z) => z.enemies.toLowerCase().split(',')));
-    const families = Object.keys(enemyTypes).filter((f) => enemyTypes[f].max && living.has(f));
+    const families = Object.keys(enemyTypes).filter((f) => enemyTypes[f].max && LIVING.has(f));
     const met = families.filter((f) => stats.get(`combat.enemy.${f}`));
     const total = families.reduce((sum, f) => sum + enemyTypes[f].max, 0);
     const found = families.reduce((sum, f) => sum + Array.from({ length: enemyTypes[f].max }, (_, i) => `${f}${i + 1}`).filter(seenSprite).length, 0);
