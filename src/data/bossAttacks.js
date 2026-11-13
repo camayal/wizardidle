@@ -83,6 +83,7 @@ export const bossAttacks = {
 
 // Frames of each scene spell (256 x 64 each). Some are not used by bosses yet (story, powers).
 export const sceneSpells = {
+    frost_breath: 16,
     earth_spikes: 16, ice_spikes: 16, arcane_flare: 16, sonic_boom: 14,
     rune_circle: 16, poison_cloud: 16, golden_touch: 18, rainbow_orbs: 18,
     golden_rays: 18, spore_storm: 16, slime_spit: 14, curse: 22,

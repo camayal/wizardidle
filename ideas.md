@@ -234,6 +234,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Hydra attacks and weaving heads
+- Merged the artist's hydra art (approved by the author) and wired it: while a hydra is on screen its heads weave (idle strip for its head count); it attacks with a strike (the front heads bite) or, half of the time when its spell has one, a cast with a scene spell from frame 5: the Swamp mother's poison rain, poison cloud or earth spikes, the Dunes hydra's curse, fire rain or fire tornado, the ice hydra's new frost breath, blizzard or ice spikes. A new head still grows in with its animation, then the weaving goes on at the new size. The strike or cast is picked for the looks only (never the game's random).
+
 ### 2026-11-13: Hydra attacks and moving heads (artist)
 
 - The author asked for hydra attacks (some ordinary, some scene spells) and heads that move. Tried three head motions (sway, bob, weave); **the author chose weave**: each head traces a small circle, out of step, bending from where its neck meets the body.

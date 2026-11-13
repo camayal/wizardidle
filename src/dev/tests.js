@@ -20,7 +20,7 @@ import { pauseToggle } from '../game.js';
 import { drawWizard, loadNPC, playHydraGrow, playWizardAnim, print, updateHeading } from '../ui/render.js';
 import { playEnemyMove } from '../ui/enemyMoves.js';
 import { spell } from '../spells.js';
-import { playBossAttack } from '../ui/bossAttacks.js';
+import { playBossAttack, playHydraAttack, startHydraIdle } from '../ui/bossAttacks.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
@@ -191,6 +191,8 @@ const actions = [
     { name: 'Boss attack: Protromus (earthquake)', run() { previewBoss('protromus'); } },
     { name: 'Boss attack: Goro (charge)', run() { previewBoss('goro'); } },
     { name: 'Boss attack: Fenix', run() { previewBoss('fenix'); } },
+    { name: 'Hydra attack: Swamp mother, 4 heads', run() { previewHydra('mother4', 'spellRainGreen_24'); } },
+    { name: 'Hydra attack: ice hydra, 3 heads', run() { previewHydra('icedra3', 'spellChispasBlue_8'); } },
     { name: 'Hydra grows a head (Swamp mother, 3 to 4)', run() { loadNPC('mother4'); playHydraGrow('mother', 3); } },
     { name: 'Hydra grows a head (ice hydra, 1 to 2)', run() { loadNPC('icedra2'); playHydraGrow('icedra', 1); } },
     { name: 'Enemy move: slash (warrior)', run() { previewEnemy('el_guerrero11', { kind: 'slash' }); } },
@@ -211,6 +213,13 @@ const actions = [
     { name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
 ];
+
+// Show a hydra with its weaving heads and play one of its attacks (strike or cast).
+function previewHydra(npc, spellId) {
+    loadNPC(npc);
+    startHydraIdle();
+    setTimeout(() => playHydraAttack(spellId, () => spell(spellId, true)), 1200);
+}
 
 // Show a boss and play one of its attacks (random), the way the fight does.
 function previewBoss(boss) {

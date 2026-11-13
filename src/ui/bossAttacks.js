@@ -5,7 +5,7 @@
 // src/data/bossAttacks.js. A boss attack plays its strip where the boss stands (bosses that
 // charge or roll travel toward the wizard along their path); a scene spell plays over the whole
 // scene, above everyone, from the frame the data says. The game's own spell effect lands on
-// the wizard when the blow does. Hydras keep their hop for now.
+// the wizard when the blow does. Hydras weave their heads and strike or cast (end of file).
 
 import { ui, run, fight } from '../runtime.js';
 import { state } from '../state.js';
@@ -110,3 +110,91 @@ export function playBossAttack(boss, onHit) {
     loop.every("animNPC", next, 100);
 }
 
+// ------------------------------------------------------------------ hydras
+// Art by the artist, approved by the author: while a hydra is on screen its heads weave
+// (img/anim_<hydra>_idle<N>.png, 8 frames, N = heads); it attacks with a strike (the front heads
+// bite) or a cast (the heads rear up glowing, then a scene spell from frame 5).
+// Frames are the sprite plus a margin, the sprite resting at (12, 6).
+
+// Which scene spell each hydra spell becomes (from the zones' hidrasSpells).
+const HYDRA_SCENES = {
+    mother: [["RainGreen", "poison_rain"], ["EarthSpike", "earth_spikes"],
+        ["RingGreen", "poison_cloud"], ["SparkGreen", "poison_cloud"], ["ChispasGreen", "poison_cloud"], ["Poisson", "poison_cloud"], ["SpiralGreen", "poison_cloud"]],
+    hydskon: [["Maldicion", "curse"], ["RainRed", "fire_rain"], ["RingPale", "fire_tornado"], ["SpiralRed", "fire_tornado"]],
+    icedra: [["ChispasBlue", "frost_breath"], ["SparkWhite", "frost_breath"], ["WhiteSpin", "frost_breath"],
+        ["RainBlue", "blizzard"], ["RingBlue", "blizzard"], ["SpiralBlue", "blizzard"], ["IceSpike", "ice_spikes"]],
+};
+const HYDRA_SPRITE_H = { mother: 96, hydskon: 64, icedra: 64 };
+const CAST_SCENE_AT = 5;
+
+function hydraParts(npc) {
+    const m = /^(mother|hydskon|icedra)(\d+)$/.exec(npc || "");
+    return m ? { hydra: m[1], heads: Number(m[2]) } : null;
+}
+
+// Draw one frame of a hydra strip where the hydra stands.
+function drawHydraFrame(npc, strip, index) {
+    const parts = hydraParts(npc), img = imageNow(strip);
+    if (!parts || !img) return;
+    const frameH = HYDRA_SPRITE_H[parts.hydra] + 8, frameW = 84;
+    const [bx, by, bw, bh] = npcBox(npc);
+    const kx = bw / 64, ky = bh / HYDRA_SPRITE_H[parts.hydra];
+    const ctx = pixelContext(npcCanvas);
+    ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+    ctx.drawImage(img, index * frameW, 0, frameW, frameH, bx - 12 * kx, by - 6 * ky, frameW * kx, frameH * ky);
+}
+
+// The heads weave while the hydra is on screen; other animations (attacks, a growing head)
+// draw instead while they play. It stops by itself when the hydra is gone.
+export function startHydraIdle() {
+    if (run.simulation || !hydraParts(state.npc)) return;
+    let k = 0;
+    loop.every("idleNPC", () => {
+        const parts = hydraParts(state.npc);
+        if (!parts) return loop.stop("idleNPC");
+        if (loop.isRunning("animNPC") || !document.hasFocus()) return;
+        drawHydraFrame(state.npc, `img/anim_${parts.hydra}_idle${parts.heads}.png`, k++ % 8);
+    }, 100);
+}
+
+// A hydra attacks: a cast with its scene spell (when the spell has one, half of the time, for
+// the looks) or a strike; onHit runs once, when the blow lands.
+export function playHydraAttack(spellId, onHit) {
+    let hit = false;
+    const land = () => { if (!hit) { hit = true; onHit(); } };
+    const parts = hydraParts(state.npc);
+    if (run.simulation || !document.hasFocus() || !parts) return land();
+    const npc = state.npc, { hydra, heads } = parts;
+    const match = (HYDRA_SCENES[hydra] || []).find(([part]) => spellId.includes(part));
+    const cast = match && looksRandom() < 0.5;
+    const strip = `img/anim_${hydra}_${cast ? "cast" : "strike"}${heads}.png`;
+    const scene = cast ? `img/scene_${match[1]}.png` : null, sceneFrames = cast ? sceneSpells[match[1]] : 0;
+    imageNow(strip);
+    if (scene) imageNow(scene);
+    const layer = scene ? sceneLayer() : null;
+    npcCanvas.width = npcCanvas.offsetWidth;
+    npcCanvas.height = npcCanvas.offsetHeight;
+    let i = 0, frames = 0;
+    const next = () => {
+        const img = imageNow(strip);
+        if (img && !frames) frames = Math.round(img.naturalWidth / 84);
+        const total = cast ? Math.max(frames || 9, CAST_SCENE_AT + sceneFrames) : frames || 8;
+        const hitAt = cast ? CAST_SCENE_AT + Math.floor(sceneFrames / 2) : Math.floor(total * 0.6);
+        if (i >= total || state.npc != npc) {
+            loop.stop("animNPC");
+            if (layer) layer.getContext("2d").clearRect(0, 0, layer.width, layer.height);
+            land();
+            return;                                 // the idle weaving takes over again
+        }
+        if (img) drawHydraFrame(npc, strip, Math.min(i, (frames || 1) - 1));
+        if (layer) {
+            const ctx = pixelContext(layer), s = i - CAST_SCENE_AT, spell = imageNow(scene);
+            ctx.clearRect(0, 0, layer.width, layer.height);
+            if (spell && s >= 0 && s < sceneFrames) ctx.drawImage(spell, s * 256, 0, 256, 64, 0, 0, layer.width, layer.height);
+        }
+        if (i == hitAt) land();
+        i++;
+    };
+    next();
+    loop.every("animNPC", next, 100);
+}
