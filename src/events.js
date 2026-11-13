@@ -407,9 +407,12 @@ function findRuneOrBook(){
     switch(optionTemp){
         case 1:
         if (artefactFound()) {      // the rare artefact against Medusa's gaze (src/bossEffects.js)
+            // which of the two (the looks only): a mirror shield or a gorgon's-eye amulet
+            const [sprite, name] = looksRandom() < 0.5 ? ["item_mirrorshield", "mirror shield"] : ["item_gorgoneye", "gorgon's-eye amulet"];
             run.objectToStudy = "artefact";
-            loadNPC("item_mirrorshield");
-            print(`${wizardName()} finds a mirror shield! Medusa's gaze will never turn him to stone again`);
+            run.artefactName = name;
+            loadNPC(sprite);
+            print(`${wizardName()} finds a ${name}! Medusa's gaze will never turn him to stone again`);
             run.multipleEventsCounter = 4;
             break;
         }
@@ -453,7 +456,7 @@ function findRuneOrBook(){
         }
         break;
         case 5:
-        print(run.objectToStudy == "artefact" ? `${wizardName()} takes the mirror shield and continues` : `${wizardName()} leaves the ${run.objectToStudy} and continues`) 
+        print(run.objectToStudy == "artefact" ? `${wizardName()} takes the ${run.artefactName} and continues` : `${wizardName()} leaves the ${run.objectToStudy} and continues`)  
         clearNPC();
         run.objectToStudy = "";
         ui.findSpot = null;

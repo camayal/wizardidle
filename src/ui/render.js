@@ -489,6 +489,12 @@ function npcBox(npc, squareSideIn = ui.squareSide, headLevelIn = ui.headLevel, c
         const x = ui.findSpot != null ? ui.findSpot * charWidthIn / 32 : squareSideIn * 2;
         return [x, headLevelIn * 1.6, charWidthIn / 3, charHeightIn / 3];
     }
+    // rare items (32x32 with the object in about 20 px): the same size and ground as a book
+    if (npc.startsWith("item_")) {
+        const book = charWidthIn / 3, size = book * 32 / 20;
+        const x = (ui.findSpot != null ? ui.findSpot * charWidthIn / 32 : squareSideIn * 2) - (size - book) / 2;
+        return [x, headLevelIn * 1.6 + book - size * 0.85, size, size];
+    }
     //the remaining (32x32px)
     return [squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn];
 }

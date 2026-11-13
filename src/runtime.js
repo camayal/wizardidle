@@ -39,7 +39,8 @@ export const run = {
     offer: undefined,              // gold asked at a shrine
     feGanada: undefined,           // faith just gained, for the message
     objectToBreak: undefined,      // loot container: pot, chest, barrel...
-    objectToStudy: undefined,      // rune or book
+    objectToStudy: undefined,      // rune or book (or "artefact")
+    artefactName: undefined,       // the artefact against Medusa's gaze he just found
     restAtInn: undefined,
     afterChapterExe: undefined,
     disablePjBtn: undefined,       // divine buttons temporarily blocked

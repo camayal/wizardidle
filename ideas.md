@@ -255,6 +255,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Medusa's artefacts in the game
+- The artist's two artefacts (approved by the author) are the rare find against Medusa's gaze: a mirror shield or a gorgon's-eye amulet (which one is for the looks), drawn where the find twinkle was, the size of a book, and named in the text ("finds a gorgon's-eye amulet!", "takes the ... and continues").
+
 ### 2026-11-13: Boss effects built
 - The planner's "Boss effects" (docs/SCENE_SPELLS.md) are in the game (`src/bossEffects.js`, numbers in `config.balance` to tune): Medusa's gaze turns him to stone for 2 turns, 1 in 4 gazes (she hits freely; he breaks free after); after his first stone, 1 find in 20 is the mirror shield that makes him immune for good (art asked from the artist); King Midas's golden rays heal him 15% of his max HP at most twice per fight, and the god's touch while they spin stops the heal; the blizzard (Rainbow) makes him skip his next attack half of the time, the earthquake (Protromus) makes his next spell miss half of the time, the poison cloud (Kkck) hurts him 4% of his max HP for 2 turns.
 - The boss's attack now follows from the spell the game picks (its place in the zone's list), so the effects are part of the game and the simulations play them; the looks play that same attack. The stone ends when the game says (no more 2.5 s timer).
