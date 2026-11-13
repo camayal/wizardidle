@@ -206,6 +206,8 @@ New ideas are added as `- **Short name** (YYYY-MM-DD): what it is, and why it wo
 
 - **Discoveries in the scene** (2026-11-12, the author; **for the planner** about ingredients): a small blink appears at a random reachable spot in the scene; the wizard walks to it and discovers what is there: a rune or a book today, and later the professions' **ingredients** (gathering, `docs/PROFESSIONS.md`). The study or find effect plays at its current size right above the found item. Statues: he walks to the statue to study it. Shrines: no walk; the prayer effect appears around the big cross. Dev builds the runes, books, statues and shrines part; ingredients come with professions.
 
+- **Bosses return, except Midas** (2026-11-13, the author): zone bosses keep coming back as today (1.5% of fights in their zone, `setUpBoss()` in `src/combat.js`, no memory of past defeats). **The only boss removed forever is King Midas**, because his death is part of the story: once he dies at the Tower in **chapter VII**, he never appears again. *For dev, when the story is built:* save it (e.g. `state.story.midasDead`), and from then on a boss roll in the Tower starts a normal fight instead (the Tower has no boss left, the same kind of guard as the level-190 freeze fix); his golden-ray heal only exists before VII.
+
 ## Already built (from the old notes)
 
 Checked against the code on 2026-11-10, so these don't get re-proposed: the healer's cabin that rescues the wizard for faith · studying runes, books and statues to raise stats · the *Ship, Captain and Crew* dice game · bosses (touchable for faith) · faith from altars and gold offerings · the place graph with x/y positions and destinations · spells unlocking by level tier · the D.E. Gervais art credit (CC BY 3.0) · the per-sprite enemy table: all 669 sprites in `InformationByEnemy.xlsx` match `src/data/enemies.js` exactly (type, rare, corrupted, display name) · the zone boss and enemy table in `enemyLocation.xlsx` (2014): all 16 bosses match, and 14 of 16 enemy lists match exactly. The Castle's sorceress (`la_Hechicera`) was later dropped from the code, and the Forest's elf (`el_Elfo`) was added · the XP/HP/age/enemy-HP formulas in `infodexp.xlsx` (except the two differences noted in "Levelling pace").
@@ -237,6 +239,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ### 2026-11-13: Planner items
 
+- Bosses keep returning as today, except King Midas: removed forever after he dies in chapter VII (noted for dev with the Tower guard). Medusa's immunity artefact is rare.
 - Boss effects decided: Medusa's stone rare plus an immunity artefact; Midas heals about 15% at most twice, interruptible by the god; blizzard, poison cloud and earthquake get one effect each (SCENE_SPELLS.md).
 - Professions: gathering plays as a discovery in the scene (blink, walk, the reagent appears; bountiful harvest is a touch on it).
 - Skull alert decided: it floats above the fallen wizard only while the god can still act, never over a true death (FAITH.md 3.2).
