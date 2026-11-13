@@ -19,6 +19,7 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 | 2026-11-12 | Escape item | **The Last Escape scroll:** written by the wizard himself at chapter X, burnt a little by each use, burns to ash in chapter XI |
 | 2026-11-12 | True death and the story | **The author's rule: a true death is possible only while the god can click to revive him. Wherever the story takes that click away, the story must protect him.** Chapter VI–VIII: the corrupt staff raises him; X: the Last Escape scroll (he writes it himself); XI, after it burns: the reforged staff *{staffName}*. No true death from X until the final battle. No afterlife gods in the death mechanics |
 | 2026-11-12 | Playtests also cover | Revive boost and farming, belief thresholds, shrine chance, professions touches |
+| 2026-11-13 | Belief vs faith (from the author's playtest notes) | **Two meters.** Faith stays the currency the god spends. **Belief is its own bounded meter** (e.g. −100 to +100), moved by **moments**, not by spending: a heal at a critical moment or the final blow on an enemy counts a lot, normal heals and hits only a little, leaving him to revive alone drops it a lot. The four levels read from belief. The story can lock it at "lost", shown as a symbol rather than −∞. To be detailed in this plan (weights, bounds, what counts as critical) before it is built |
 
 ---
 

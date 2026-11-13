@@ -255,6 +255,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Belief levels: two meters (decision)
+- From the author's playtest notes, the author chose **two meters**: faith stays the currency the god spends; belief becomes its own bounded meter moved by moments (a critical heal or the final blow a lot, normal touches a little, leaving him to revive alone a lot down), the four levels read from it, and the story can lock it at "lost" (a symbol, not -inf). Recorded in docs/FAITH.md Decisions; the planner details weights, bounds and what counts as critical before it is built.
+
 ### 2026-11-13: Sleep and dreams (docs/SLEEP.md), first version
 - The planner's sleep plan, asked for by the author: when he rests he walks to his bed or to the sleeping bag, the sleep spell plays, the scene fades to dark (about 2 s), and when tonight has a dream its 1-3 lines appear softly over the dark one after the other (pale for dreams, reddish for nightmares) and stay in the console; then it fades back and he wakes as before (camping: he walks back from the bag).
 - Dreams: a story dream on the first rest after a fall or a chapter (`run.storyDream`); otherwise `config.balance.dreamChance` (0.15, to decide: "how rare" is open) of a random dream or nightmare, nightmares more likely when faith is not positive (until belief levels exist). Pure story: picked with the looks' random, only when drawn, no effect on play; simulations unchanged. Stats: `sleep.inn`, `sleep.camping`, `dream.story`, `dream.random`, `nightmare.random`.
