@@ -47,6 +47,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-12 | Route after 2.1.0: stats and playtest tools, then the story with the faith rebalance, then professions, then the rest | The story depends on faith and professions; no balance number without a playtest |
 | 2026-11-12 | After an erasure, the souls of erased wizards fight beside the next wizard in the final battle (one per erasure, max 5; wizard → souls → god); no faith change | The god's wins bring his own end closer; details in [docs/ERASURE.md](docs/ERASURE.md) |
 | 2026-11-12 | The .md docs (journal, roadmap, changelog, plans) stay published on the site | The repository is public anyway |
+| 2026-11-12 | Sprites stay as separate image files; only animations are sheets (like the spell strips), for now | Editing art in sheets would slow down every art change; measured: sheets would only speed up the first download and updates (679 sprites: ~4 s as files vs ~0.2 s as sheets), not play |
 | 2026-11-12 | A dev test bar replaces the old dev console: scenarios, quick actions and a command line, on while developing (`DEV` in config.js), switched off by the deploy | The author wants to test specific criteria quickly; players never load it |
 
 ## Ideas backlog
@@ -206,6 +207,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-12: Sprite sheets measured, decided against for now
+- The author asked whether to convert the ~1,000 images into sheets. Measured: 1,008 images, 2.25 MB (the 679 sprites of 32x32 are 262 KB; the 117 backgrounds are half the bytes). Sheets don't save space (one sheet of the 679 sprites is ~310 KB), they save requests: from the live site, 679 files took ~4 s (6-7 s with 6 connections) vs ~0.2 s for the same bytes in 5 files. That cost is paid at the first visit and after every release (the offline copy re-downloads everything); during play images come from the cache.
+- With the game's smoothing on, sprites drawn from a sheet differ at the edges; with smoothing off they match exactly. Smoothing off also looks sharper (`wizardidle-old-ideas/tools/sheets-test/smooth_vs_crisp.png`).
+- **Decided:** keep separate sprites, because editing art in sheets would be a bottleneck; only animations are sheets. Possible later: a script that packs sheets at deploy from the separate files (art stays editable), if downloads become a problem.
 
 ### 2026-11-12: Author's playtest of stage 3a
 - Everything tested fine on localhost. Notes: the dev bar can now be hidden and shown from Help > Developer tools (only while developing; remembered per browser).
