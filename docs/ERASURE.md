@@ -1,10 +1,10 @@
 # After an erasure: the god's loop
 
-What happens to the next wizards after the god wins the final battle and **erases** a wizard. Asked by the author (via the story session) on 2026-11-12: *"something special for wizards after an erasure, perhaps a super boost in the final battle against god."* Nothing is built yet. The story script is `docs/STORY.md` on branch `plan/story`.
+What happens to the next wizards after the god wins the final battle and **erases** a wizard. Asked by the author (with the story plan) on 2026-11-12: *"something special for wizards after an erasure, perhaps a super boost in the final battle against god."* Nothing is built yet. The story script is `docs/STORY.md` on branch `plan/story`.
 
 ---
 
-## The frame (decided by the author, from the story session)
+## The frame (decided by the author, with the story plan)
 
 - **Final battle:** heal-or-hit buttons. If **the god wins**, the god reclaims the wizard's soul personally and **removes it from existence**. The game ends, a **museum** appears (chapter scrolls, a snapshot of each chapter's moment, stats, map), and then a new wizard can be created.
 - **The loop:** for gods, time means little. A new game is **the god going back in time** to live the story again and see whether the wizard wins this time.
