@@ -16,7 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, loadBackground, loadNPC, playWizardAnim, print, showStage, updateHeading, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, updateHeading, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 
@@ -282,19 +282,46 @@ function innEV(){
 
 
 // See something: a statue to study (not in every zone), otherwise a rune or a book.
+// Finds and statues: the wizard walks to them (the author's idea). Scene x in sprite px of the
+// 256 x 64 scene; his place is x 32, so walking to x means an offset of x - 32.
+const STATUE_X = { el_Bosque: 207, el_Castillo: 128, el_Desierto: 172, el_Duenon: 161, el_Heidan: 195, el_Pantano: 188,
+    el_Volcan: 183, la_Ciudad: 148, la_Gruta: 220, la_Mina: 200, la_Pradera: 161, la_Torre: 208, la_Tundra: 212, las_Dunas: 180 };
+const CROSS_X = 124;                // shrine crosses stand around the middle of the scene
+
+// A blink appears somewhere on the ground and he walks to it; the find will lie there.
+function walkToFind() {
+    ui.findSpot = Math.round(80 + looksRandom() * 90);
+    showBlink(ui.findSpot);
+    walkWizardTo(ui.findSpot - 66);
+}
+
+// Where study effects play: right above the find, or over the statue (full size).
+function aboveFind() {
+    return { x: ui.findSpot + 5 - 16, y: 12 };
+}
+function overStatue() {
+    return { x: (STATUE_X[state.zone.current] || 190) - 16, y: 10 };
+}
+// Prayer effects appear here and there around the shrine's cross.
+function aroundCross() {
+    return { x: CROSS_X - 16 + Math.round((looksRandom() - 0.5) * 70), y: Math.round(looksRandom() * 26) };
+}
+
 function studyEV() {
      if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva"){//found statue, poblado and cueva has not statue
         if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
-            print(`${wizardName()} sees something...`) 
+            print(`${wizardName()} sees something...`)
+            walkToFind();
             startEvent(findRuneOrBook);
         }else{
-            print(`${wizardName()} sees something...`) 
+            print(`${wizardName()} sees something...`)
             startEvent(findStatue);
         }
         //examine the estatue
 
     }else{//found book or rune
-    print(`${wizardName()} sees something...`) 
+    print(`${wizardName()} sees something...`)
+    walkToFind();
     startEvent(findRuneOrBook);
     }
 }
@@ -320,6 +347,7 @@ function findStatue(){
         case 1:
         //found and change locality
         loadBackground(`${state.zone.current}_estatua`);
+        walkWizardTo((STATUE_X[state.zone.current] || 190) - 88);   // stops just left of the statue
         stats.count(`explore.statue.statue_${state.zone.current}`)
         stats.count("explore.statues");
         if (run.previousEvent == "findStatue"){
@@ -333,7 +361,7 @@ function findStatue(){
         //examine and get or not
         if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
             stats.count("study.statueSuccess");
-            spell("spellStudyGood_15",true);
+            spell("spellStudyGood_15",true,0,0,overStatue());
             learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
             const result = statueObj[`statue_${state.zone.current}`].event()
         if(result == "hydraMysteryResolved"){
@@ -346,24 +374,24 @@ function findStatue(){
             run.multipleEventsCounter = 4;
         }else{
             playSound("studyrune");
-            spell("spellStudyTry_16",true);
+            spell("spellStudyTry_16",true,0,0,overStatue());
             learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
             //fail study try again
             if(run.multipleEventsCounter == 4){
                 stats.count("study.statueFail");
                 //last chance of study failed, mod text
-                spell("spellStudySleep_15",true);
+                spell("spellStudySleep_15",true,0,0,overStatue());
                 learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
             }
             print(`${wizardName()} ${learnTxt}`) 
         }
         break;
         case 5:
-        print(`${wizardName()} leaves the statue and continues`) 
+        print(`${wizardName()} leaves the statue and continues`)
         showStage();
         endEvent();
         addXP(1);
-        nextEvent();
+        walkWizardTo(0, nextEvent);     // back to his place, then the next event
     }
 }
 
@@ -391,7 +419,7 @@ function findRuneOrBook(){
         if (YesOrNot(stat("pStudy"),0)){
             playSound("statUp");
             stats.count("study.success");
-            spell("spellStudyGood_15",true);
+            spell("spellStudyGood_15",true,0,0,aboveFind());
             learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
             const statToIncrease = statObj[statObj.random()];
@@ -402,25 +430,26 @@ function findRuneOrBook(){
             run.multipleEventsCounter = 4;
         }else{
             playSound(`study${run.objectToStudy}`);
-            spell("spellStudyTry_16",true);
+            spell("spellStudyTry_16",true,0,0,aboveFind());
             learnTxt = pickRandomItem("tries to understand what is written in the,reads the glyphs in the,analyzes the information in the,continues reading the");
             //fail study try again
             if(run.multipleEventsCounter == 4){
                 stats.count("study.fail");
                 //last chance of study failed, mod text
-                spell("spellStudySleep_15",true);
+                spell("spellStudySleep_15",true,0,0,aboveFind());
                 learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
             }
             print(`${wizardName()} ${learnTxt} ${run.objectToStudy}`) 
         }
         break;
         case 5:
-        print(`${wizardName()} leaves the ${run.objectToStudy} and continues`) 
+        print(`${wizardName()} leaves the ${run.objectToStudy} and continues`)
         clearNPC();
         run.objectToStudy = "";
+        ui.findSpot = null;
         endEvent();
         addXP(0.25);
-        nextEvent();
+        walkWizardTo(0, nextEvent);     // back to his place, then the next event
     }
 }
 
@@ -515,7 +544,7 @@ function doOffering(){
         switch (run.multipleEventsCounter) {
             case 1: giveOffering(); break;
             case 2:
-                spell("spellAnk_8", true);
+                spell("spellAnk_8", true, 0, 0, aroundCross());
                 print(`${wizardName()} leaves the shrine and continues the journey (${ui.spiritIcon}${roundNumbertoLetter(run.feGanada)})`);
                 leaveShrine();
         }
@@ -553,7 +582,7 @@ function giveOffering() {
 function pray() {
     playSound("pray");
     playWizardAnim("pray");     // kneels and keeps praying until he leaves the shrine
-    spell("spellAnk_8", true);
+    spell("spellAnk_8", true, 0, 0, aroundCross());
     run.feGanada = calculateFe();
     run.feGanada *= state.player.faithMultiplier;
     state.player.faith = state.player.faith + run.feGanada;

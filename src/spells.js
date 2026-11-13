@@ -13,7 +13,8 @@ import { withImage } from './ui/render.js';
 
 
 // Play a spell animation from img/<spell>.png on the wizard or the enemy (bigger on a critic) and its sound.
-function spell(img, pj, critic = 0, center = 0){
+// at: {x, y} in scene sprite px (256 x 64) to place the effect somewhere else, e.g. above a find.
+function spell(img, pj, critic = 0, center = 0, at = null){
     if (run.simulation) return;
     const frameWidth = 30, frameHeight = 30;    // size of one frame in the sprite sheet
     let currentFrame = 0, shift = 0;            // animation position, advanced every frame
@@ -65,8 +66,11 @@ function spell(img, pj, critic = 0, center = 0){
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.imageSmoothingEnabled = !ui.crisp;   // resizing the canvas resets it
         //draw each frame + place them in the middle
-        context.drawImage(myImage, shift, 0, frameWidth, 
-            frameHeight, (ui.squareSide * mult) * leftMultiHeadLocation, ui.headLevel * topMultiHeadLocation, ui.squareSide * multiSize, ui.squareSide * multiSize);
+        const unit = ui.charWidth / 32;
+        const x = at ? at.x * unit : (ui.squareSide * mult) * leftMultiHeadLocation + (pj ? (ui.wizardOffset || 0) * unit : 0);
+        const y = at ? at.y * unit : ui.headLevel * topMultiHeadLocation;
+        context.drawImage(myImage, shift, 0, frameWidth,
+            frameHeight, x, y, ui.squareSide * multiSize, ui.squareSide * multiSize);
         shift += frameWidth + 1;
         if (currentFrame == totalFrames) return;    // v1 asked for another frame here, forever
         currentFrame++;
