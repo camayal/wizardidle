@@ -55,6 +55,7 @@ function announceBattle() {
 function enemyFalls() {
     if (fight.hydraCombat && (state.hydraHeads[fight.hydra] + 1) <= Number(zones[state.zone.current].headsMax)) {
         state.hydraHeads[fight.hydra] = state.hydraHeads[fight.hydra] + 1;
+        stats.max(`hydra.maxHeads.${fight.hydra}`, state.hydraHeads[fight.hydra]);   // for the bestiary picture
         stats.count("kill.hydraHeads");
         getHydra();
     } else {

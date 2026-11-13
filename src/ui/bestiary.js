@@ -22,9 +22,9 @@ function cell(sprite, seen, count, scale = 1, unknown = '?') {
     const size = Math.round(SIZE() * scale);
     const rare = enemySprites[sprite] && enemySprites[sprite].rare ? '★' : '';
     const picture = seen || count
-        ? `<img src='img/${sprite}.png' width='${size}' height='${size}'>`
-        : `<canvas class='inkStain' data-sprite='${sprite}' width='32' height='32' style='width:${size}px;height:${size}px;image-rendering:pixelated'></canvas>`;
-    return `<div style='display:inline-block;width:${size + ui.em * 0.6}px;text-align:center;vertical-align:top'>${picture}` +
+        ? `<img src='img/${sprite}.png' height='${size}'>`
+        : `<canvas class='inkStain' data-sprite='${sprite}' width='32' height='32' style='height:${size}px;image-rendering:pixelated'></canvas>`;
+    return `<div style='display:inline-block;min-width:${size + ui.em * 0.6}px;text-align:center;vertical-align:top'>${picture}` +
         `<br><small>${seen || count ? roundNumbertoLetter(count) + rare : unknown}</small></div>`;
 }
 
@@ -44,6 +44,12 @@ function capital(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
+// A hydra is shown as it is now (its heads grow each time one is cut off), or after it was
+// defeated, as the most heads it ever had.
+function hydraHeads(hydra) {
+    return state.hydraHeads[hydra] || stats.get(`hydra.maxHeads.${hydra}`) || 1;
+}
+
 export function bestiaryPageHtml() {
     // families that live in some zone (two old sprite families are in none)
     const living = new Set(Object.values(zones).flatMap((z) => z.enemies.toLowerCase().split(',')));
@@ -60,7 +66,7 @@ export function bestiaryPageHtml() {
         bosses.map((b) => cell(b, stats.get(`seen.boss.${b}`), stats.get(`kill.boss.${b}`), 1.25)).join('') +
         // the hydras are a secret (they only come after the hydra mystery): stains until met
         "<br><span class='subtitles'>Secrets</span><br>" +
-        hydras.map((h) => cell(`${h}1`, stats.get(`seen.hydra.${h}`), stats.get(`kill.hydra.${h}`), 1.25, 'Secret')).join('');
+        hydras.map((h) => cell(`${h}${hydraHeads(h)}`, stats.get(`seen.hydra.${h}`), stats.get(`kill.hydra.${h}`), 1.25, 'Secret')).join('');
 }
 
 // ------------------------------------------------------------------ the ink stains

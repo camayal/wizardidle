@@ -213,6 +213,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-12: Hydras in the bestiary; a no-cache local server
+- Bestiary: a hydra shows as it is now (its picture grows with each head cut off), or after it was defeated, as the most heads it ever had (new record `hydra.maxHeads.<hydra>`). Pictures keep their proportions (the swamp hydra is taller than wide).
+- The author couldn't test some animations: most likely the browser reused old code files, because `python -m http.server` sends no cache rules. New `tools/serve.py` serves the game with `Cache-Control: no-store` (`python tools/serve.py`, then http://localhost:8000).
+
 ### 2026-11-12: Wizard animations, fallen and true-death poses; Volcano boss fixed
 - Merged the artist's animation strips (21 tiers each) and wired them (`playWizardAnim()` in `ui/render.js`, on the animPJ clock; any normal redraw stops them): **cast** on every attack (the author's choice, replaces the hop), **walk** on the plain walk and when changing zone, **pray** at shrines (frames 3-5 loop until he leaves), **fall** when he falls in battle, then the **fallen** pose with the **skull above his head** (half size, the artist's spot) until he is revived, and the **true death** (fall_dead, then the dead pose) when the player kills him with the kill button, before the page reloads. The story's permadeath comes with the faith rebalance.
 - The dev bar can preview each animation. The old hop and the skull-as-body drawing are gone.
