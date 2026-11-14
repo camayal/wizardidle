@@ -258,6 +258,11 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-14: Sounds: a script that cuts them, game names, three more approved (musician)
+- The author's note (no conversion by hand each time): `tools/cut_sounds.py` reads `tools/sound_cuts.txt` (game name, folder, source file, cut) and writes each `snd/<folder>/<name>.ogg`: the cut, mono, a 30 ms fade out, Ogg Vorbis, the volume untouched (`--list` checks the sources, `--review` also copies to the review drop). It needs the `soundfile` library once (`python -m pip install soundfile`); the machine has no ffmpeg. Run for the 18 approved sounds: the files are in `snd/creatures/` and in the review drop, read back as mono Ogg Vorbis with the approved lengths. Not wired: the game does not play them yet.
+- Every approved sound has its game name by the rule for files from outside (`thud`, `rumble`, `rock_roll`, `arrow`, `hooves`, `roar`, `rock_smash`, `stone_break`, `stone_grind`, `bounce`, `bite`, `wind_gust`, `swing_slash`, `swing_thrust`, `curse`, `sonic_boom`, `rune_circle`, `squelch`), all for `snd/creatures/`; `src/media.js` needs them in its creatures list when they are wired. `docs/SOUNDS.md` keeps the original names and cuts ("The files"); the site and licence of the downloads are still to confirm by the author.
+- Approved in the game's sounds mode (2026-11-14): Doria's sonic boom and rune circle, and a head growing on the Swamp hydra (one squelch for every growth). Still to strike by dev: `DOR.sonic_boom` and `DOR.rune_circle` in `src/dev/soundNeeds.js`, and the eight handled notes of `docs/sound-notes.md`.
+
 ### 2026-11-14: Images and sounds in folders
 - The author's choices (asked one by one): folders by kind and per creature; one helper by rules; `ogg/` renamed to `snd/` (a 3-letter abbreviation, the author's) with folders for what exists now, more when needed; junk deleted.
 - 1,447 files moved with `git mv` (history kept). `img/null`, `ogg/null` and `img/lvlNaN.png` (v1 bug leftovers, unused) deleted.

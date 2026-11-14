@@ -1,0 +1,27 @@
+# The cuts of tools/cut_sounds.py: one game sound per line.
+#
+#   name | folder of snd/ | source file | from (s) | to (s)
+#
+# name is the game's name (snd/<folder>/<name>.ogg): short, lowercase, words joined by _.
+# A source is a file of the sounds folder outside the repo, or a path starting with snd/ for a
+# sound already in the game. "-" for from/to means the start/the end of the file.
+# Where each sound plays, its volume and its source's licence are in docs/SOUNDS.md.
+
+thud         | creatures | dragon-studio-heavy-boulder-thud-515257.mp3 | - | -
+rumble       | creatures | dragon-studio-heavy-rock-rolling-515254.mp3 | - | -
+rock_roll    | creatures | dragon-studio-heavy-rock-rolling-515254.mp3 | 0.239 | 2.110
+arrow        | creatures | djartmusic-arrow-swish_03-306040.mp3 | - | -
+hooves       | creatures | freesound_community-single-horse-galopp-6152.mp3 | 1.556 | 2.432
+roar         | creatures | dragon-studio-beast-growl-494304.mp3 | 0.097 | 1.216
+rock_smash   | creatures | freesound_community-rock-destroy-6409.mp3 | 0 | 0.943
+stone_break  | creatures | freesound_community-rock-destroy-6409.mp3 | 0 | 0.993
+stone_grind  | creatures | freesound_community-stoneblockdragwoodgrind-82327.mp3 | - | -
+bounce       | creatures | yodguard-bouncy_jelly_creature_movement-387893.mp3 | 1.211 | 2.206
+bite         | creatures | freesound_community-monster-bite-44538.mp3 | 0.402 | 1.142
+wind_gust    | creatures | dragon-studio-gust-of-wind-511325.mp3 | - | -
+swing_slash  | creatures | snd/schools/Physical.ogg | 0.029 | 0.105
+swing_thrust | creatures | snd/schools/Physical.ogg | 0.034 | 0.107
+curse        | creatures | freesound_community-deathmagic-94937.mp3 | 1.717 | 3.519
+sonic_boom   | creatures | dragon-studio-ghostly-tone-499659.mp3 | - | -
+rune_circle  | creatures | coghezzi-sacred-rune-lock-02-arcane-seal-activation-536458.mp3 | - | -
+squelch      | creatures | universfield-wet-squelch-276679.mp3 | - | -
