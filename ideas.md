@@ -257,6 +257,12 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Belief: the way back from atheism, and a fix
+- The author's way back (FAITH.md 3.1 Decisions): a Doubter or Atheist passing a shrine +0.5; a close call (a fight won below 10% HP with no help from the god) +1; getting up alone -10 only as a Believer or Devout, -1 as a Doubter or Atheist; the god's super-critic is 1 in 10 of his critics at x16.
+- Fix: the stored belief level started empty and followed the value, so level changes were never recorded (no margin, no announcement, no time per level). He now starts as a Believer.
+- Time spent at each level is counted (`belief.time.<level>`, ms of play), and `tools/playtest.py` writes a Belief table (end value and level, when he first turned Doubter / Atheist, times back to Believer, hours per level).
+- Playtest `docs/playtests/2026-11-13-belief-way-back`: an idle wizard is a Doubter from level 1-2, never an Atheist, and yo-yos back to Believer 32-48 times (Doubter ~37 h, Believer ~6 h of ~43 h); his faith stays positive. An active god's wizard is Devout within the first hour and pinned at +100.
+
 ### 2026-11-13: Belief built; rest without beds
 - **Belief** (docs/FAITH.md 3.1, the author's decision detailed by the planner) is in the game: `src/belief.js`, numbers in `config.belief`. Faith stays the currency; belief (-100 to +100, start +20) moves only by moments (saved from the killing blow +8, heal below 20% HP +5, the god's final blow +5, critic +3, normal touch +0.5, revive +2, shrine +1, skipped shrine -1, getting up alone -10). Levels with a 10-point margin on the way up: Devout (touches -25%, shrines +15%), Believer, Doubter (touches x2, shrines -15%), Atheist (refuses heal and hit touches, never enters shrines, no penalty for skipping). The god's touch may now kill. Stats page shows the level and value. Not yet: super-critic chance (off), Atheists getting up faster, rescuers and potions, the heading icon.
 - Playtest `docs/playtests/2026-11-13-belief`: the active god plays as before; an idle god's wizard turns Atheist after about 9 falls alone (before level 25), never enters a shrine again and his faith ends deeply negative (-1.5M). For the author and the planner: intended road to atheism, or -10 too strong?

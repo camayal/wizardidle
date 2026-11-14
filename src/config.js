@@ -23,9 +23,13 @@ export const config = {
             revive: 2,
             prayer: 1,                         // entering a shrine
             skippedShrine: -1,
-            roseAlone: -10,                    // he got up without the god
+            passedShrine: 0.5,                 // a Doubter or Atheist walks past a shrine (the way back, 2026-11-13)
+            closeCall: 1,                      // he wins a fight below 10% HP with no help from the god
+            roseAlone: -10,                    // he got up without the god, as a Believer or Devout
+            roseAloneDoubting: -1,             //   ... as a Doubter or Atheist
         },
-        superCriticChance: 0,                  // off until the author picks a chance (FAITH.md: "chance to playtest")
+        closeCallLine: 0.1,
+        superCriticChance: 0.1,                // 1 in 10 of the god's critics (the author)
         superCriticMultiplier: 16,             // against x8 for a critic
         devoutTouchCost: 0.75, doubterTouchCost: 2,
         devoutShrine: 0.15, doubterShrine: -0.15,

@@ -21,7 +21,7 @@ import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
 import { playEntrance } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
-import { beliefMoment } from './belief.js';
+import { beliefMoment, isDoubting } from './belief.js';
 
 
 
@@ -75,6 +75,8 @@ function enemyFalls() {
 // The fight is won: counters and achievements, faith, loot and XP, then back to the road.
 function defeatEnemy() {
     endEvent();
+    // belief: a close call he came through on his own
+    if (!fight.godHelped && state.player.hp < state.player.hpBase * config.belief.closeCallLine) beliefMoment("closeCall");
     if (fight.enemy == "el_capricor") {
         logro.set(logro.logro_ultimocapricor);
         zones.el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
@@ -201,7 +203,7 @@ function scheduleSelfRevive() {
         loop.stop("selfRevive");
         run.previousEvent = "autorevive";
         fight.autorevive = "";
-        beliefMoment("roseAlone");      // he got up without the god
+        beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
         const faithLost = state.player.hpBase * 1.2454654;
         state.player.faith = state.player.faith - faithLost;
         print(`${wizardName()} recovers himself but feels abandoned by his god (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
@@ -223,6 +225,7 @@ function updateLongestCombo() {
 function clearFight() {
     resetBossEffects();
     fight.healedFrom = 0;
+    fight.godHelped = false;
     fight.enemy = "";
     fight.enemyAndNumber = "";
     state.npc = "";
