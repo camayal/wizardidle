@@ -82,6 +82,7 @@ be cut and converted to .ogg, with source and licence recorded), and nothing is 
 | - | Thrust swing | ogg/Physical.ogg (already in the game) | 0.034 s to 0.107 s | 0.07 s | 0.3 | 200 ms (the spear goes out) | Warrior thrusts |
 | - | Smash swing | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 400 ms (the downswing) | Ogre smashes |
 | 11 | Ram impact | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 950 ms (when the ram lands) | Capricor rams, Tauren rams (each approved) |
+| - | Infraespectro's curse | freesound_community-deathmagic-94937.mp3 | 1.717 s to 3.519 s | 1.80 s | 1.0 | 200 ms (the curse starts) | Infraespectro: curse |
 
 The author also heard two approved sounds on other moves and approved them there, with the same
 file and cut: the thud (1) on Protromus's ground punch, starting at 400 ms, and the hooves (4) on
@@ -113,7 +114,7 @@ Still to choose, one by one (approved ones are in the tables above):
 | Who | Moves |
 |---|---|
 | Regular enemies | slam (Golem) |
-| Infraespectro | curse, arcane flare, phase |
+| Infraespectro | arcane flare, phase |
 | Doria | sonic boom, arcane rain, rune circle |
 | Goro | flurry, slam, charge |
 | Kkck | poison cloud |
