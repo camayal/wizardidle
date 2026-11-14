@@ -13,7 +13,9 @@
 //                 previous frame as a ghost, the feet line, and dark / grey / light / checked backdrops.
 //
 //   From the sessions  the newest images the sessions dropped in review/ (src/dev/review.js):
-//                 view one in slot A or B, or try it in the scene in place of the game image.
+//                 "In scene" puts one in place of the game image it names and plays that image's
+//                 real scene (the author: sizes and positions are judged there, not in a viewer);
+//                 an image the game doesn't use yet is played on the scene where chosen. A / B: viewer.
 //
 // The details (scene, tier, tried files, the frame being looked at) go to the author notes box.
 
@@ -22,7 +24,7 @@ import { ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { bossAttacks } from '../data/bossAttacks.js';
 import { drawWizard, forgetImages, loadNPC, replaceImage } from '../ui/render.js';
-import { listImages, scenePicker, stopScene, TIERS } from './scenes.js';
+import { listImages, playStripInScene, sceneForImage, scenePicker, stopScene, TIERS } from './scenes.js';
 import { setNoteSource, refreshNote } from './notes.js';
 import { el } from '../ui/dom.js';
 import { sidePanel } from './panel.js';
@@ -30,7 +32,7 @@ import { isImage, reviewList } from './review.js';
 
 const STORE_KEY = 'wizardidle2:artMode';
 const CHECKS = ['grid', 'onion', 'feet', 'tiers'];
-const FIELDS = ['speed', 'v0', 'v1', 'zoom', 'backdrop', 'fms'];
+const FIELDS = ['speed', 'v0', 'v1', 'zoom', 'backdrop', 'fms', 'where'];
 
 let side, p, picker, tools, prevSpeed = 1, prevLevel, prevCrisp, replay;
 const tried = new Map();                // game image -> local file name shown instead
@@ -79,23 +81,48 @@ async function tryFile() {
     showTiming();
 }
 
-// An image from review/: in a viewer slot, or in the scene in place of the game image it names.
+// In the real scene: the picture (url) in place of the game image `replaces`, and that image's own
+// scene played by the game's code; with no game image (a new sprite), the picture alone on the
+// scene, frame by frame, where the "Where" list says.
+async function inScene(url, replaces, label) {
+    stop();
+    if (replaces && !replaces.startsWith('img/')) replaces = `img/${replaces}`;
+    const scene = replaces && sceneForImage(replaces);
+    if (replaces && url) { await replaceImage(replaces, url); tried.set(replaces, label); }
+    if (scene) {
+        picker.set({ ...scene, tier: scene.tier !== undefined ? scene.tier : picker.get().tier });
+        picker.setUp();
+        showTiming();
+        remember();
+        p.tryNote.textContent = `${label} plays in the scene of ${replaces}${url ? ` (in its place until "Reload art")` : ''}.`;
+        playScene();
+        return;
+    }
+    const img = await new Promise((resolve) => { const i = new Image(); i.onload = () => resolve(i); i.onerror = () => resolve(null); i.src = url || replaces; });
+    if (!img) { p.tryNote.textContent = `Can't load ${label}.`; return; }
+    const [fw, fh] = guessFrame(label, img);
+    tools.resetScene();
+    loop.setSpeed(Number(p.speed.value));
+    const frames = playStripInScene(img, { where: p.where.value, fw, fh, ms: Number(p.fms.value) || 100 });
+    p.tryNote.textContent = `${label}: no game scene ${replaces ? `for ${replaces}` : 'named'}, shown alone at the ${p.where.value == 'scene' ? 'whole scene' : `${p.where.value}'s spot`} (${frames} frame${frames > 1 ? 's' : ''} of ${fw} x ${fh}).`;
+}
+
+// A viewer slot in the scene: a game file plays its own scene; a local file goes in place of the
+// game image written in "Try a file" (or alone on the scene).
+function slotInScene(i) {
+    const slot = viewer.slots[i];
+    if (!slot.img) return;
+    const local = slot.local && slot.local.name == slot.name;
+    if (local) inScene(slot.local.url, p.tryPath.value.trim() || null, slot.name);
+    else inScene(null, `img/${slot.name}`, slot.name);
+}
+
+// An image from review/ in a viewer slot.
 function viewReview(e, i) {
     viewer.slots[i].local = { name: e.file, url: e.url };
     p[`v${i}`].value = e.file;
     loadSlots();
 }
-async function tryReview(e) {
-    let path = e.replaces || p.tryPath.value.trim();
-    if (!path) { p.tryNote.textContent = `Which game image should ${e.file} replace? Write it in "Try a file", then press Try again.`; return; }
-    if (!path.startsWith('img/')) path = `img/${path}`;
-    await replaceImage(path, e.url);
-    tried.set(path, `${e.file} (review/)`);
-    p.tryNote.textContent = `${path} shows ${e.file} until "Reload art".`;
-    picker.setUp();
-    showTiming();
-}
-
 function reloadArt() {
     forgetImages();
     tried.clear();
@@ -336,13 +363,15 @@ function buildPanel(saved, images) {
             <div class="row"><button data-act="reload">Reload art</button><span class="muted">loads the edited PNGs again</span></div>
             <div class="row"><b>Try a file</b> <input type="text" name="tryPath" list="artImages" placeholder="img/anim_goro_charge.png" spellcheck="false"></div>
             <div class="row"><input type="file" name="tryFile" accept="image/png"><button data-act="try">Show it</button></div>
+            <div class="row"><label>Where, for a picture the game doesn't use yet <select name="where"><option value="enemy">enemy's spot</option>
+                <option value="wizard">wizard's spot</option><option value="scene">whole scene</option></select></label></div>
             <div class="row"><span class="note" data-out="tryNote"></span></div>
         </details>
         <details open><summary>Viewer</summary>
             <div class="row"><label>A <input type="text" name="v0" list="artNames" placeholder="anim_cast0.png" spellcheck="false"></label>
-                <input type="file" name="f0" accept="image/png"></div>
+                <input type="file" name="f0" accept="image/png"><button data-act="sceneA">In scene</button></div>
             <div class="row"><label>B <input type="text" name="v1" list="artNames" placeholder="(optional, to compare)" spellcheck="false"></label>
-                <input type="file" name="f1" accept="image/png"></div>
+                <input type="file" name="f1" accept="image/png"><button data-act="sceneB">In scene</button></div>
             <datalist id="artNames">${images.map((n) => `<option value="${n}">`).join('')}</datalist>
             <datalist id="artImages">${images.map((n) => `<option value="img/${n}">`).join('')}</datalist>
             <div class="row"><label>Frame <input type="number" name="fw" min="1"> x <input type="number" name="fh" min="1"> px</label>
@@ -363,8 +392,10 @@ function buildPanel(saved, images) {
     if (!p.fms.value) p.fms.value = 100;
 
     picker = scenePicker(side.body.querySelector('[data-scene]'), tools.resetScene, () => { stop(); showTiming(); remember(); });
-    reviewList(side.body.querySelector('[data-review]'), isImage, [['A', (e) => viewReview(e, 0)], ['B', (e) => viewReview(e, 1)], ['Try', tryReview]]);
-    const acts = { play: playScene, stop, reload: reloadArt, try: tryFile, prev: () => step(-1), next: () => step(1), vplay: togglePlay };
+    reviewList(side.body.querySelector('[data-review]'), isImage, [['In scene', (e) => inScene(e.url, e.replaces || p.tryPath.value.trim() || null, e.file)],
+        ['A', (e) => viewReview(e, 0)], ['B', (e) => viewReview(e, 1)]]);
+    const acts = { play: playScene, stop, reload: reloadArt, try: tryFile, prev: () => step(-1), next: () => step(1), vplay: togglePlay,
+        sceneA: () => slotInScene(0), sceneB: () => slotInScene(1) };
     side.body.onclick = (e) => { const act = e.target.dataset && e.target.dataset.act; if (act) acts[act](); };
     p.speed.onchange = remember;
     p.crisp.onchange = () => { setCrisp(p.crisp.checked); refreshNote(); };

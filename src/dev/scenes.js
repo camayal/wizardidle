@@ -16,7 +16,8 @@ import { enemyMoveTiming, playEnemyMove } from '../ui/enemyMoves.js';
 import { bossAttackTiming, hydraAttackTiming, playBossAttack, playHydraAttack, playSceneSpell, sceneSpellTiming,
     startHydraIdle } from '../ui/bossAttacks.js';
 import { playEntrance } from '../ui/entrances.js';
-import { drawWizard, drawWizardPose, loadBackground, loadNPC, playHydraGrow, playWizardAnim } from '../ui/render.js';
+import { drawFrame, drawWizard, drawWizardPose, loadBackground, loadNPC, npcCanvas, pixelContext, pjCanvas, playHydraGrow,
+    playWizardAnim } from '../ui/render.js';
 import { spell } from '../spells.js';
 
 export const TIERS = Array.from({ length: 21 }, (_, i) => i * 10);
@@ -175,4 +176,57 @@ export function scenePicker(container, resetScene, onChange) {
     f.tier.value = String(Math.min(200, Math.floor(state.player.lvl / 10) * 10));
     fillTargets();
     return picker;
+}
+
+// ---------------------------------------------------------------- any image in the scene
+
+// The scene that shows a game image (img/<name>.png), for the picker; null when none does.
+export function sceneForImage(path) {
+    const name = path.replace(/^img\//, '').replace(/\.png$/, '');
+    let m;
+    if ((m = /^anim_([a-z]+)_(.+)$/.exec(name)) && bossAttacks[m[1]] && bossAttacks[m[1]].some((a) => a.id == m[2])) return { kind: 'boss', target: m[1], variant: m[2] };
+    if ((m = /^anim_(mother|icedra|hydskon)_(strike|cast)(\d+)$/.exec(name))) return { kind: 'hydra', target: m[1], variant: `${m[3]} heads: ${m[2]}` };
+    if ((m = /^anim_(mother|icedra|hydskon)_grow(\d+)$/.exec(name))) return { kind: 'hydra', target: m[1], variant: `${m[2]} heads: grow to ${Number(m[2]) + 1}` };
+    if ((m = /^scene_(.+)$/.exec(name)) && sceneSpells[m[1]]) return { kind: 'scene', target: m[1] };
+    if ((m = /^anim_([a-z_]+?)(\d+)$/.exec(name)) && WIZARD_ANIMS[m[1]] !== undefined) return { kind: 'wizardAnim', target: m[1], tier: m[2] };
+    if ((m = /^(fallen|dead|stone)(\d+)$/.exec(name))) return { kind: 'wizardPose', target: m[1], tier: m[2] };
+    if ((m = /^lvl(\d+)$/.exec(name))) return { kind: 'wizardAnim', target: 'cast', variant: '(plain glint)', tier: m[1] };
+    if ((m = /^(run|ram)_(.+)$/.exec(name)) && enemySprites[m[2]]) return { kind: 'enemyMove', target: m[2], variant: 'charge' };
+    if (enemySprites[name]) return { kind: 'enemyMove', target: name, variant: 'slash' };
+    if (spells[name]) return { kind: 'spell', target: name, variant: 'on the wizard' };
+    if (name == DICE) return { kind: 'dice', target: 'dice' };
+    if ((m = /^([a-z]+_[A-Za-z]+?)(\d|_altar|_estatua)$/i.exec(name))) {
+        const zone = Object.keys(zones).find((z) => z.toLowerCase() == m[1].toLowerCase());
+        if (zone) return { kind: 'background', target: zone, variant: m[2].replace(/^_/, '') };
+    }
+    return null;
+}
+
+// Any picture or strip on the scene, frame by frame: at the enemy's spot, the wizard's, or over
+// the whole scene; frames of fw x fh art px, ms each (follows the slow motion), looped.
+export function playStripInScene(img, { where = 'enemy', fw, fh, ms = 100, loopIt = true } = {}) {
+    stopScene();
+    fw = fw || img.naturalHeight; fh = fh || img.naturalHeight;
+    const frames = Math.max(1, Math.floor(img.naturalWidth / fw));
+    const unit = ui.charWidth / 32;                 // screen px per art px
+    npcCanvas.width = npcCanvas.offsetWidth;
+    npcCanvas.height = npcCanvas.offsetHeight;
+    if (where == 'wizard') pjCanvas.getContext('2d').clearRect(0, 0, pjCanvas.width, pjCanvas.height);
+    const box = () => {
+        if (where == 'scene') return [0, 0, npcCanvas.width, npcCanvas.height];
+        const w = fw * unit, h = fh * unit, feet = ui.headLevel + ui.charHeight;       // standing on the ground line
+        const x = where == 'wizard' ? ui.squareSide : ui.squareSide * 6;
+        return [x + (ui.charWidth - w) / 2, feet - h, w, h];
+    };
+    let k = 0;
+    const next = () => {
+        if (k >= frames && !loopIt) { loop.stop('animNPC'); return; }
+        const [x, y, w, h] = box(), ctx = pixelContext(npcCanvas);
+        ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        drawFrame(ctx, img, (k % frames) * fw, 0, fw, fh, x, y, w, h);
+        k++;
+    };
+    next();
+    if (frames > 1 || !loopIt) loop.every('animNPC', next, ms);
+    return frames;
 }
