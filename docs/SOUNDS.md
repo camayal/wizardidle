@@ -42,7 +42,7 @@ Short (under 1 s unless noted), mono, .ogg, about as loud as the current ones, f
 | ~~2~~ | ~~Deep rumble, ~1.5 s~~ | ~~the earthquake scene spell (with the shake)~~ (found, see Decisions) |
 | ~~3~~ | ~~Bow twang + arrow whoosh~~ | ~~shoot (Elf)~~ (found, see Decisions) |
 | ~~4~~ | ~~Hooves galloping, ~1 s, loopable~~ | ~~charge (Capricor, Tauren, boss charges)~~ (found, see Decisions) |
-| 5 | Rolling rumble, ~1.5 s | the boss's roll |
+| ~~5~~ | ~~Rolling rumble, ~1.5 s~~ | ~~the boss's roll~~ (found, see Decisions) |
 | 6 | Beast roar, ~1 s | roar (boss), pounce (a short snarl would do) |
 | 7 | Slime squelch / boing | the slime boss's bounce |
 | 8 | Wind gust, ~1 s | wing flap, whirlwind, sandstorm |
@@ -64,9 +64,11 @@ be cut and converted to .ogg, with source and licence recorded), and nothing is 
 | 1 | Heavy thud | dragon-studio-heavy-boulder-thud-515257.mp3 | whole file | 2.11 s | 0.3 | 500 ms (when the blow lands) | Ent slams |
 | 2 | Deep rumble | dragon-studio-heavy-rock-rolling-515254.mp3 | whole file | 2.11 s | 0.3 | 400 ms (the earthquake starts) | Protromus: ground punch and earthquake |
 | 3 | Arrow whoosh | djartmusic-arrow-swish_03-306040.mp3 | whole file | 1.04 s | 0.3 | 200 ms (the release) | Elf shoots |
-| 4 | Hooves | freesound_community-gallop-98644.mp3 | 0.333 s to 0.624 s | 0.29 s | 1.0 | 500 ms (the dash starts) | Tauren charges |
+| 4 | Hooves | freesound_community-single-horse-galopp-6152.mp3 | 1.556 s to 2.432 s | 0.88 s | 0.55 | 370 ms (just before the dash) | Tauren charges |
+| 5 | Rolling rumble | dragon-studio-heavy-rock-rolling-515254.mp3 | 0.239 s to 2.110 s | 1.87 s | 0.3 | 400 ms (the roll starts) | Kkck rolls |
 
-All four at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wires them:
-1 and 2 are longer than the lengths asked above (under 1 s, about 1.5 s), approved as they are;
-4 is one short gallop at full volume (the others play at the game's usual 0.3) and ends about
-160 ms before the ram lands.
+All five at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wires them:
+1, 2 and 5 are longer than the lengths asked above, approved as they are; 2 and 5 come from the
+same file (5 without its first 0.24 s); 4 is louder than the game's usual 0.3 and runs about
+300 ms past the ram's impact on the Tauren. The author first approved another hooves file
+(freesound_community-gallop-98644.mp3) and replaced it with this one a minute later.
