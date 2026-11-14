@@ -53,7 +53,7 @@ Short (under 1 s unless noted), mono, .ogg, about as loud as the current ones, f
 | 8 | Wind gust, ~1 s | ~~sandstorm~~ (found, see Decisions); whirlwind and the Fenix's wing flap still to hear on their own |
 | ~~9~~ | ~~Stone grinding / crackle, ~0.8 s~~ | ~~Medusa's gaze turning him to stone~~ (found, see Decisions) |
 | 10 | Hydra strike | the hydras' strikes: the author wants new sounds for the hydras (on hold); ~~pounce bites~~ (the small creatures' snarl, 6b) |
-| 11 | Ram impact | the Capricor's and the Tauren's ram when the charge lands (not a thud) |
+| ~~11~~ | ~~Ram impact~~ | ~~the Capricor's and the Tauren's ram when the charge lands (not a thud)~~ (Physical.ogg chosen, see Decisions) |
 
 Until a sound is found, its move stays silent (or uses the stand-in above), so they can be added
 one at a time: drop the file in `ogg/` and dev wires it.
@@ -81,6 +81,7 @@ be cut and converted to .ogg, with source and licence recorded), and nothing is 
 | - | Slash swing | ogg/Physical.ogg (already in the game) | 0.029 s to 0.105 s | 0.08 s | 0.3 | 300 ms (the slash opens) | Orc slashes |
 | - | Thrust swing | ogg/Physical.ogg (already in the game) | 0.034 s to 0.107 s | 0.07 s | 0.3 | 200 ms (the spear goes out) | Warrior thrusts |
 | - | Smash swing | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 400 ms (the downswing) | Ogre smashes |
+| 11 | Ram impact | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 950 ms (when the ram lands) | Capricor rams, Tauren rams (each approved) |
 
 The author also heard two approved sounds on other moves and approved them there, with the same
 file and cut: the thud (1) on Protromus's ground punch, starting at 400 ms, and the hooves (4) on
@@ -111,7 +112,7 @@ Still to choose, one by one (approved ones are in the tables above):
 
 | Who | Moves |
 |---|---|
-| Regular enemies | slam (Golem), ram impact (Capricor, Tauren) |
+| Regular enemies | slam (Golem) |
 | Infraespectro | curse, arcane flare, phase |
 | Doria | sonic boom, arcane rain, rune circle |
 | Goro | flurry, slam, charge |
