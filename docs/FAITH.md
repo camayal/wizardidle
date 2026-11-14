@@ -20,6 +20,7 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 | 2026-11-12 | True death and the story | **The author's rule: a true death is possible only while the god can click to revive him. Wherever the story takes that click away, the story must protect him.** Chapter VI–VIII: the corrupt staff raises him; X: the Last Escape scroll (he writes it himself); XI, after it burns: the reforged staff *{staffName}*. No true death from X until the final battle. No afterlife gods in the death mechanics |
 | 2026-11-12 | Playtests also cover | Revive boost and farming, belief thresholds, shrine chance, professions touches |
 | 2026-11-13 | Belief vs faith (from the author's playtest notes) | **Two meters.** Faith stays the currency the god spends. **Belief is its own bounded meter** (e.g. −100 to +100), moved by **moments**, not by spending: a heal at a critical moment or the final blow on an enemy counts a lot, normal heals and hits only a little, leaving him to revive alone drops it a lot. The four levels read from belief. The story can lock it at "lost", shown as a symbol rather than −∞. To be detailed in this plan (weights, bounds, what counts as critical) before it is built |
+| 2026-11-13 | Belief meter details | **−100 to +100, start +20; Devout from +60, Doubter below 0, Atheist below −60, 10-point margin.** Critical moments: saved from the killing blow (+8), heal at very low HP (+5), the god's final blow (+5), the god's critic (+3) and super-critic (+6); small ones +0.5; left to get up without the god −10. The god's touch may now kill. Details in 3.1 |
 
 ---
 
@@ -72,20 +73,53 @@ Almost every faith amount comes from the wizard's max HP (`hpBase`). To compare 
 
 ## 3. Proposal
 
-### 3.1 Belief levels
+### 3.1 Belief: its own meter (decided 2026-11-13)
 
-Turn the number into **four belief levels**, measured in g so they scale with level. Each one changes how the wizard **behaves**, so the road to atheism (or devotion) is visible.
+**Faith** stays the currency the god spends (touches, offerings). **Belief** is a separate, bounded meter of how much the wizard believes, moved by **moments**, never by spending. The four levels read from belief.
 
-| Level | Faith | Behaviour |
-|---|---|---|
-| **Devout** | above +300 g | Enters shrines more (+15%), offers more, sometimes offers crafted items; the god's touches cost 25% less |
-| **Believer** | 0 to +300 g | Today's behaviour |
-| **Doubter** | −300 g to 0 | Enters shrines less (−15%); the god's heal and hit touches **work but cost double**; "doubts" lines in the console |
-| **Atheist** | below −300 g | Never enters shrines (no skip penalty either: he doesn't care), **refuses every touch** except a revive, relies on potions and scrolls (professions), self-revives faster |
+**Bounds and levels**
 
-The console announces each change ("starts to doubt his god", "no longer believes in anything"). The heading's faith icon can change with the level (art to draw).
+| | Value |
+|---|---|
+| Range | **−100 to +100** |
+| Start | **+20** (a mild believer: he was exiled for believing) |
+| **Devout** | +60 and above |
+| **Believer** | 0 to +60 |
+| **Doubter** | −60 to 0 |
+| **Atheist** | below −60 |
+| Margin | **10 points**, so he doesn't flicker at a line (e.g. back from Atheist only at −50) |
+| *Lost* | The story lock (chapter X): shown as a **symbol**, not a number; belief stops moving |
 
-**Drift with a margin:** to climb back from Atheist to Doubter, faith must pass −200 g, not −300 g, so it doesn't flicker at the edge.
+**What moves it** (starting weights, to playtest)
+
+| Moment | Belief |
+|---|---|
+| **Saved from the killing blow:** a heal touch that keeps him alive through the enemy's very next hit (he would have died without it) | **+8** |
+| **Heal at very low HP** (below about 20%) | **+5** |
+| **Final blow:** the god's touch on an enemy lands the killing hit | **+5** |
+| **The god's touch lands a critic** on an enemy | **+3** |
+| **The god's touch lands a super-critic** | **+6** |
+| A normal heal or hit touch | +0.5 |
+| Revive by the god's touch | +2 |
+| Prayer at a shrine | +1 |
+| Skipping a shrine | −1 |
+| **Left to get up without the god** (a rescuer or alone) | **−10** |
+
+- **No drift on its own:** an idle player's wizard loses belief only through falls he gets up from without the god and through skipped shrines.
+- *Change from today:* the god's touch **may now kill** an enemy (the final blow). Today `npcBtn()` in `src/divine.js` caps the hit so the enemy keeps 1 HP ("avoid god kills").
+- *Critic for the god's touch:* today's "divine power" spells in `npcBtn()` (×8 damage) are the god's critic; in [SCENE_SPELLS.md](SCENE_SPELLS.md) they play a scene spell. A super-critic is a rarer, stronger one (chance to playtest).
+- *Stats:* `belief.highest`, `belief.lowest` (records), `belief.moment.<kind>` (counters), the level and age when each level is first reached (firsts).
+
+**What each level does**
+
+| Level | Behaviour |
+|---|---|
+| **Devout** | Enters shrines more (+15%), offers more, sometimes offers crafted items; the god's touches cost 25% less faith |
+| **Believer** | Today's behaviour |
+| **Doubter** | Enters shrines less (−15%); the god's heal and hit touches **work but cost double** faith; "doubts" lines in the console |
+| **Atheist** | Never enters shrines (no skip penalty either: he doesn't care), **refuses every touch** except a revive, relies on potions and scrolls (professions), gets up faster |
+
+The console announces each change ("starts to doubt his god", "no longer believes in anything"). The heading shows belief with its own icon next to faith (art to draw).
 
 ### 3.2 Revival (decided)
 
