@@ -257,6 +257,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-14: The healer's hood, redrawn by hand
+- The author's note "healer hood still looks weird (the pixels in the chin)": the old hood was a perfect oval and looked artificial. The artist hand-drew four cloth hoods; the author picked **A, the cowl** (flatter top, the cloth bunches at the back in a darker fold). The chin is now clean: dark face, a soft brown chin catching a little light (no stray grey or gold pixels). The staff is unchanged.
+- `healer_hooded.png` replaced; `anim_god_unhood.png` regenerated so the reveal opens with the new hood (only its hooded frames changed; the wings and god forms are identical).
+
 ### 2026-11-13: Medusa's poison shot, more visible
 - The author's note, redrawn by the artist (approved by the author): `scene_poison_dart.png` is now a slim dark stinger with a green venom drop, outlined, with a venom streak, drips and a splash on the wizard; 15 frames (was 14), set in `sceneSpells`.
 
