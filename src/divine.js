@@ -71,7 +71,7 @@ function healByTouch() {
         stats.count("god.heals");
         // belief: a heal at very low HP counts more; whether it saved him shows at the enemy's next hit
         beliefMoment(state.player.hp < state.player.hpBase * config.belief.lowHpLine ? "lowHpHeal" : "touch");
-        if (fight.enemy) fight.healedFrom = state.player.hp;
+        if (fight.enemy) { fight.healedFrom = state.player.hp; fight.godHelped = true; }
         if (state.player.hp + healHit > state.player.hpBase) {
             healHit = state.player.hpBase - state.player.hp;
             state.player.hp = state.player.hpBase;
@@ -115,6 +115,7 @@ function npcBtn(){
             }
             fight.enemyHP = Math.max(0, Math.round(fight.enemyHP) - (Math.round(divineHit)));
             beliefMoment(moment);
+            fight.godHelped = true;
             if (fight.enemyHP <= 0) beliefMoment("finalBlow");      // it falls at the fight's next step
             
             updateHeartNPC()

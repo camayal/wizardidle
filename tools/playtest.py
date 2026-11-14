@@ -10,7 +10,8 @@ summary into docs/playtests/<date>-<name>/ (summary.md and runs.csv).
 A setting is "label:query", where query is added to the simulation URL (see
 src/dev/sim.js), e.g. "boss3:god=idle&set=pGetBoss:0.03". Standard library only.
 """
-import argparse, concurrent.futures, csv, datetime, functools, html, http.server, json, os, re, shutil
+import argparse
+import collections, concurrent.futures, csv, datetime, functools, html, http.server, json, os, re, shutil
 import statistics, subprocess, sys, tempfile, threading
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -68,6 +69,17 @@ def row(label, seed, r):
     for level in MILESTONES:
         h = hours_at(r, level)
         out[f'h{level}'] = round(h, 2) if h is not None else ''
+    # belief (src/belief.js): the level he ends at, when he first turned Doubter / Atheist, how
+    # often he came back to Believer, and the hours at each level (the current one up to the end)
+    p = r.get('player', {})
+    first = lambda level: (s.get(f'first.belief.{level}') or {}).get('lvl', '')
+    out.update({'beliefEnd': round(p.get('belief', 0), 1), 'levelEnd': p.get('beliefLevel') or 'believer',
+                'firstDoubter': first('doubter'), 'firstAtheist': first('atheist'),
+                'backToBeliever': s.get('belief.reached.believer', 0)})
+    total_ms = (r.get('playTimeHours') or 0) * 3600000
+    for level in ('devout', 'believer', 'doubter', 'atheist'):
+        ms = s.get(f'belief.time.{level}', 0) + (total_ms - p.get('beliefSince', 0) if out['levelEnd'] == level else 0)
+        out[f'h_{level}'] = round(ms / 3600000, 2)
     return out
 
 
@@ -135,6 +147,9 @@ def main():
         w.writerows(rows)
     pace = summarise(rows, ['hours'] + [f'h{m}' for m in MILESTONES])
     outcome = summarise(rows, ['kills', 'bossKills', 'falls', 'selfRevives', 'godTouches', 'godHeals', 'freezes', 'faith', 'gold'])
+    belief = summarise(rows, ['beliefEnd', 'firstDoubter', 'firstAtheist', 'backToBeliever', 'h_devout', 'h_believer', 'h_doubter', 'h_atheist'])
+    ends = {label: ', '.join(f'{k} {v}' for k, v in sorted(collections.Counter(r['levelEnd'] for r in rows if r['setting'] == label).items()))
+            for label in dict.fromkeys(r['setting'] for r in rows)}
     with open(os.path.join(folder, 'summary.md'), 'w', encoding='utf-8') as f:
         f.write(f'# Playtest: {args.name} ({datetime.date.today()})\n\n')
         if args.note:
@@ -145,6 +160,10 @@ def main():
         f.write('Each cell: median (min–max) over the seeds. Hours are play time in the game.\n\n')
         f.write('## Pace: hours played to reach each level\n\n' + pace + '\n\n')
         f.write('## What happened on the way\n\n' + outcome + '\n\n')
+        f.write('## Belief\n\n' + belief + '\n\n')
+        f.write('Level at the end: ' + '; '.join(f'**{k}**: {v}' for k, v in ends.items()) + '. '
+                '*firstDoubter* / *firstAtheist*: the wizard\'s level when he first became one (empty: never); '
+                '*backToBeliever*: times he climbed back to Believer; *h_*: hours of play at each level.\n\n')
         f.write('*kills* include rare enemies; *freezes* are the v1 guardian freeze above level 190 '
                 '(the game would stop until a reload; the simulation goes on). Every run is in `runs.csv`.\n')
     errors = [r for r in rows if r['error']]

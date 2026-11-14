@@ -21,7 +21,7 @@ import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
 import { dreams } from './data/dreams.js';
-import { beliefMoment, isAtheist, shrineChance } from './belief.js';
+import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 
 //define statueobj
 const statueObj = {
@@ -248,13 +248,14 @@ function prayEV(){
         }else{
             textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
-        if (isAtheist()) {          // he doesn't care: no loss of faith or belief
+        if (isAtheist()) {          // he doesn't care: no loss of faith; the shrine still speaks to him a little
             print(`${wizardName()} ${textCapel} and walks past it without a thought`);
+            beliefMoment("passedShrine");
             run.previousEvent = "negar";
             nextEvent();
             return;
         }
-        beliefMoment("skippedShrine");
+        beliefMoment(isDoubting() ? "passedShrine" : "skippedShrine");      // the way back for a Doubter
         const faithLost = calculateFe();
         print(`${wizardName()} ${textCapel} but does not enter and continues (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
         state.player.faith = state.player.faith - faithLost;

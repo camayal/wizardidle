@@ -6,7 +6,7 @@
 
 import { config } from './config.js';
 import { state } from './state.js';
-import { stats } from './stats.js';
+import { playTime, stats } from './stats.js';
 import { print, wizardName } from './ui/render.js';
 
 const LEVELS = ["atheist", "doubter", "believer", "devout"];
@@ -33,7 +33,7 @@ function lineFor(level) {
 }
 
 export function beliefLevel() {
-    return state.player.beliefLevel || rawLevel(state.player.belief);
+    return state.player.beliefLevel || "believer";
 }
 
 // A moment moves belief (kind is the config weight's name; stats count each kind). Nothing moves
@@ -60,6 +60,8 @@ function updateLevel() {
         }
     }
     if (next == now) return;
+    stats.add(`belief.time.${now}`, playTime() - (p.beliefSince || 0));     // ms of play at each level
+    p.beliefSince = playTime();
     p.beliefLevel = next;
     stats.first(`first.belief.${next}`);
     stats.count(`belief.reached.${next}`);
@@ -79,6 +81,12 @@ export function shrineChance(base) {
     const level = beliefLevel();
     if (level == "atheist") return 0;
     return Math.max(0, Math.min(1, base + (level == "devout" ? b().devoutShrine : level == "doubter" ? b().doubterShrine : 0)));
+}
+
+// Doubters and Atheists are on the way out: some moments weigh differently for them.
+export function isDoubting() {
+    const level = beliefLevel();
+    return level == "doubter" || level == "atheist";
 }
 
 export function isAtheist() {
