@@ -26,3 +26,9 @@
 [] healer hood still looks weird (the pixels in the chin )
 [] some dreams can increase believer score
 [] in altars, due to its nature, i tis better to return the wizard walking to the left
+[] if a battle is interrumpted because i close the game, when i start again previous content (enemies, runes, etc), in in place
+[] add a defensive spells school to avoid damage we can incorporeate thos with the lvl. no overpowered, so rare. ideas: rune shield = circle in front of him; ice block = it can be in fron of him as well; more advance": phase off, and later in the game magic shield, like a multicharge, spell that protect from the following 2 or 3 attacks, this should be an outline probably black + white, that fade with every hit
+[] we need a place to show the inventory i think in the stats, another scroll
+[] faith related aspects is empty we need to put things there, probably a beliefmeter should be there 
+[] use a tool such as https://github.com/ChristosMaragkos/Oggify or a permanent created script to transform mp3 to ogg. never use tokens to do each transformaion from scratch
+[] thanks https://ko-fi.com/dragonstudio for a bunch of sounds

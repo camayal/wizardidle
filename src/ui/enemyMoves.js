@@ -40,9 +40,9 @@ const WIZARD_DISTANCE = 160;        // sprite px from the enemy's box to the wiz
 // shoot, thrust, smash and charge are the artist's.
 function frames(kind, school) {
     const f = (dx = 0, dy = 0, sx = 1, sy = 1, fx = null, shake = 0) => ({ dx, dy, sx, sy, fx, shake });
-    if (kind == "shoot") {          // draw, release, recoil; the arrow flies 16 px a frame to the wizard
-        const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];
-        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 16) seq.push(f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]));
+    if (kind == "shoot") {          // draw, release, recoil; the arrow flies 36 px every 50 ms to the wizard
+        const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];      // (the author: arrows were too slow at 16 px / 100 ms)
+        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 36) seq.push({ ...f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]), ms: 50 });
         seq[seq.length - 1].hit = true;
         seq.push(f());
         return seq;
@@ -124,6 +124,14 @@ function drawFrame(npc, frame) {
     if (!fx) return;
     const [fw, fh] = FX_SIZE[strip] || [16, 16];
     drawStripFrame(ctx, fx, index * fw, 0, fw, fh, ex + (frame.dx + ox) * unit, ey + (frame.dy + oy) * unit, fw * unit, fh * unit);
+}
+
+// How long a move lasts and when its blow lands, in ms from its first frame (for the sounds).
+export function enemyMoveTiming(move) {
+    const seq = frames(move.kind, move.school);
+    const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
+    const ms = (list) => list.reduce((sum, frame) => sum + (frame.ms || 100), 0);
+    return { hitMs: ms(seq.slice(0, hitAt)), totalMs: ms(seq) };
 }
 
 // Play the enemy's attack; onHit runs once, when the blow lands (at once if nothing is drawn).

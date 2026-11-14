@@ -126,6 +126,18 @@ function imageNow(src) {
     return img.complete && img.naturalWidth > 0 ? img : null;
 }
 
+// Dev tools (art mode): forget every loaded image, so edited files are loaded again; or show
+// another picture (a local file's URL) wherever the game draws src, until forgotten.
+function forgetImages() {
+    imageCache.clear();
+}
+function replaceImage(src, url) {
+    const img = new Image();
+    img.src = url;
+    imageCache.set(src, img);
+    return new Promise((resolve) => { img.onload = img.onerror = () => resolve(img); });
+}
+
 // Call draw(img) with the image at src, now if it's already loaded, otherwise when it loads.
 // Each canvas only keeps its latest request: an older image that finishes loading late is
 // not drawn over a newer one.
@@ -325,6 +337,16 @@ function walkThroughScene(changeScene, onArrive) {
     });
 }
 
+// The way back: he walks out to the left, the scene changes, and he comes in from the left (the
+// author: from a shrine he goes back the way he came).
+function walkBackThroughScene(changeScene, onArrive) {
+    walkWizardTo(OFF_LEFT, () => {
+        changeScene();
+        ui.wizardOffset = OFF_LEFT;
+        walkWizardTo(0, onArrive);
+    });
+}
+
 function wizardX() {
     return ui.squareSide + (ui.wizardOffset || 0) * ui.charWidth / 32;
 }
@@ -348,10 +370,10 @@ function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
     froze = true;
     const tier = wizardTier();
     let step = 0;
-    clearWizardCanvas();
-    loop.every("walkPJ", () => {
-        ui.wizardOffset = (ui.wizardOffset || 0) + dir * stepPx;
-        if ((target - ui.wizardOffset) * dir <= 0) return arrive();
+    // (no wipe here: the canvas was blank until the first frame, the author's flicker when he
+    // starts walking; the first frame is drawn at once, where he stands)
+    if (pjCanvas.width != pjCanvas.offsetWidth) clearWizardCanvas();
+    const drawStep = () => {
         const frame = step++ % 4;
         withImage("pj", `img/anim_walk${tier}.png`, (img) => {
             const ctx = pixelContext(pjCanvas), x = wizardX();
@@ -361,6 +383,12 @@ function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
             drawFrame(ctx, img, frame * 32, 0, 32, 32, 0, 0, ui.charWidth, ui.charHeight);
             ctx.restore();
         });
+    };
+    drawStep();
+    loop.every("walkPJ", () => {
+        ui.wizardOffset = (ui.wizardOffset || 0) + dir * stepPx;
+        if ((target - ui.wizardOffset) * dir <= 0) return arrive();
+        drawStep();
     }, 100);
 }
 
@@ -673,6 +701,10 @@ function print(data) {
 };
 
 export {
+    forgetImages,
+    replaceImage,
+    wizardTier,
+    walkBackThroughScene,
     drawFrame,
     sleepInDark,
     enterPlace,

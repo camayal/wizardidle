@@ -62,12 +62,19 @@ function spell(img, pj, critic = 0, center = 0, at = null){
     cell.width = frameWidth; cell.height = frameHeight;
     const cellCtx = cell.getContext("2d");
     let myImage;
+    // most effects advance one frame per screen refresh; a spell with its own frame time (ms in
+    // the data, e.g. the dice to match their sound) waits that long between frames (set before
+    // withImage: with the image already loaded it starts the animation at once)
+    const frameMs = spells[img].ms || 0;
+    let lastFrameAt = -Infinity;
     withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, `img/${img}.png`, (image) => { myImage = image; animate(); });
 
     // one frame per screen refresh; the last step only clears the canvas, then the animation
     // stops (v1 drew one step past the last frame, which could leave a sliver of the next cell or
     // of the sheet's 1-px gutters on screen: the author's two stray lines by the fallen wizard)
-    function animate() {
+    function animate(now = performance.now()) {
+        if (frameMs && now - lastFrameAt < frameMs) return requestAnimationFrame(animate);
+        lastFrameAt = now;
         context.clearRect(0, 0, canvas.width, canvas.height);
         if (currentFrame >= totalFrames) return;
         context.imageSmoothingEnabled = !ui.crisp;   // resizing the canvas resets it

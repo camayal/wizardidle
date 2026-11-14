@@ -25,7 +25,12 @@
 - Fixed: stray lines left by spell effects, blank flashes between images, a blank wizard while praying.
 - Fixed: scroll text overflowing past the bottom bar.
 - Dev: a stats module, a seeded simulation mode with god bots, and `tools/playtest.py` for playtests (with results in `docs/playtests/`).
-- Dev: a test bar (local only) with scenarios, "Fight now" fights, animation previews and a command line.
+- Dev: dev tools (local only) in a light panel beside the game, with menus: modes, scenarios, "Fight now" fights, wizard and game actions, a command line.
+- Dev: a sounds mode: any scene played by the game with any sound, cut, extended, sped up, faded and timed against the blow, with the landing sound; a list of the moves still needing a sound.
+- Dev: an art mode: any scene at any tier in slow motion, edited art reloaded without a reload, a local PNG tried in place of a game image, and a frame-by-frame viewer (game size and big, two files side by side, all tiers, grid, ghost, feet line).
+- Dev: an author notes box that fills in the test's details by itself, with a comment, Copy, and Save to file (`docs/<mode>-notes.md` through `tools/serve.py`).
+- Dev: the game waits while its window is hidden or minimized.
+- Fixed: a spell effect whose image was already loaded could crash (the dice's second roll).
 - Plans added: faith and belief, professions, story, stats, erasure, sleep, scene spells, sounds, scenes.
 
 ## 2.1.0 — 2026-11-12

@@ -1,13 +1,15 @@
-// Wizard Idle v2 - dev tools: the test bar (only while developing).
+// Wizard Idle v2 - dev tools: the dev panel (only while developing).
 //
 // Loaded by main.js only when DEV is true in config.js; the deploy sets it to false, so
-// players never get this file. A thin bar at the bottom of the screen has:
-//   - a list of scenarios: each one saves the wizard, reloads the page, prepares the
-//     wizard (level, zone, HP...) and forces the first event, then says what to check;
-//   - quick actions that change the running game at once (+1 level, gold, speed...);
+// players never get this file. A panel beside the game (src/dev/panel.js) has menus:
+//   - modes, opened in a panel on the other side: sounds (src/dev/sounds.js) and art
+//     (src/dev/art.js); the game waits while one is open;
+//   - scenarios: each one saves the wizard, reloads the page, prepares the wizard (level,
+//     zone, HP...) and forces the first event, then says what to check;
+//   - quick actions that change the running game at once (fights, +1 level, gold, speed...);
 //   - a command line that runs any typed code; `dev` gives access to the game objects.
 //
-// Adding a test means adding one entry to `scenarios` below.
+// Adding a test means adding one entry to `scenarios` or `actions` below.
 
 import { config } from '../config.js';
 import { saveGame, state, world } from '../state.js';
@@ -17,8 +19,10 @@ import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { clearNPC, drawWizard, loadNPC, playHydraGrow, playWizardAnim, print, showStage, updateHeading } from '../ui/render.js';
+import { clearNPC, drawWizard, loadNPC, showStage, updateHeading } from '../ui/render.js';
 import { endEvent, nextEvent } from '../events.js';
+import { sidePanel } from './panel.js';
+import { buildNotesBox, setNoteSource } from './notes.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
 const SPEED_KEY = 'wizardidle2:devSpeed';
@@ -192,56 +196,89 @@ const scenarios = [
 ];
 
 // ---------------------------------------------------------------- quick actions (no reload)
+// Shown in the dev panel by group; sub starts a small heading inside the group.
 
 const actions = [
-    { name: '+1 level', run() { state.player.xp = state.player.xpNext; addXP(0); } },
-    { name: '+1000 gold', run() { state.player.gold += 1000; updateHeading(); } },
-    { name: '+faith (one level of HP)', run() { state.player.faith += state.player.hpBase; updateHeading(); } },
-    { name: 'Full HP', run() { state.player.hp = Math.floor(state.player.hpBase); updateHeading(); } },
-    { name: 'Animation: cast', run() { playWizardAnim('cast'); } },
-    { name: 'Animation: walk', run() { playWizardAnim('walk'); } },
-    { name: 'Animation: pray (loops)', run() { playWizardAnim('pray'); } },
-    { name: 'Animation: fall (then fallen + skull)', run() { playWizardAnim('fall_sit'); } },
-    { name: 'Animation: true death (preview only)', run() { playWizardAnim('fall_dead'); } },
-    { name: 'Stand up (normal sprite)', run() { drawWizard(); } },
-    { name: 'Wizard cast: fire spell', run() { playWizardAnim('cast', 'spellSparkYellow_8'); } },
-    { name: 'Wizard cast: staff hit', run() { playWizardAnim('cast', 'spellPush9'); } },
+    { group: 'Modes', name: 'Sounds: choose a sound for a move', run() { openMode('sounds'); } },
+    { group: 'Modes', name: 'Art: play animations, scenes and other art', run() { openMode('art'); } },
+
+    { group: 'Wizard', name: '+1 level', run() { state.player.xp = state.player.xpNext; addXP(0); } },
+    { group: 'Wizard', name: '+1000 gold', run() { state.player.gold += 1000; updateHeading(); } },
+    { group: 'Wizard', name: '+faith (one level of HP)', run() { state.player.faith += state.player.hpBase; updateHeading(); } },
+    { group: 'Wizard', name: 'Full HP', run() { state.player.hp = Math.floor(state.player.hpBase); updateHeading(); } },
+
     // real fights: the current event ends and this one starts (the game's own fight code)
-    { name: 'Fight now: Medusa (Desert boss)', run() { liveFight(() => bossIn('el_Desierto')); } },
-    { name: 'Fight now: Medusa, her gaze always petrifies', run() { liveFight(() => { override('balance', { petrifyChance: 1 }); return bossIn('el_Desierto'); }); } },
-    { name: 'Fight now: Protromus (Cave boss, earthquake)', run() { liveFight(() => bossIn('la_Cueva')); } },
-    { name: 'Fight now: Goro (Prairie boss, charge)', run() { liveFight(() => bossIn('la_Pradera')); } },
-    { name: 'Fight now: Fenix (Volcano boss)', run() { liveFight(() => bossIn('el_Volcan')); } },
-    { name: 'Fight now: King Midas (Tower boss)', run() { liveFight(() => bossIn('la_Torre')); } },
-    { name: 'Fight now: Swamp hydra, 4 heads', run() { liveFight(() => hydraIn('el_Pantano', 'mother', 4)); } },
-    { name: 'Fight now: ice hydra, 3 heads', run() { liveFight(() => hydraIn('la_Tundra', 'icedra', 3)); } },
-    { name: 'Fight now: Dunes hydra, 2 heads', run() { liveFight(() => hydraIn('las_Dunas', 'hydskon', 2)); } },
-    { name: 'Fight now: warrior (thrust)', run() { liveFight(() => enemyNamed('el_guerrero2')); } },
-    { name: 'Fight now: creature (pounce)', run() { liveFight(() => enemyNamed('animalejo24')); } },
-    { name: 'Fight now: ent (slam)', run() { liveFight(() => enemyNamed('el_ent3')); } },
-    { name: 'Fight now: elf (shoot)', run() { liveFight(() => enemyNamed('el_elfo1')); } },
-    { name: 'Fight now: ogre (smash)', run() { liveFight(() => enemyNamed('el_ogro3')); } },
-    { name: 'Fight now: arrives walking (orc)', run() { liveFight(() => enemyNamed('el_orco2')); } },
-    { name: 'Fight now: arrives flying (demon)', run() { liveFight(() => enemyNamed('el_demonio1')); } },
-    { name: 'Fight now: arrives floating (spectre)', run() { liveFight(() => enemyNamed('el_espectro3')); } },
-    { name: 'Fight now: arrives from the ground (slime)', run() { liveFight(() => enemyNamed('baba1')); } },
-    { name: 'Fight now: arrives jumping (rogue)', run() { liveFight(() => enemyNamed('el_pillo2')); } },
-    { name: 'Fight now: arrives in a flicker (wizard)', run() { liveFight(() => enemyNamed('el_hechicero1')); } },
-    { name: 'Fight now: cowren (charge)', run() { liveFight(() => enemyNamed('el_tauren1')); } },
-    { name: 'Fight now: rogue (slash)', run() { liveFight(() => enemyNamed('el_pillo3')); } },
-    { name: 'Fight now: wizard (caster)', run() { liveFight(() => enemyNamed('el_hechicero2')); } },
-    { name: 'Hydra grows a head (Swamp mother, 3 to 4)', run() { resetScene(); loadNPC('mother4'); playHydraGrow('mother', 3); } },
-    { name: 'Hydra grows a head (ice hydra, 1 to 2)', run() { resetScene(); loadNPC('icedra2'); playHydraGrow('icedra', 1); } },
-    { name: 'Crisp pixels on / off', run() {
+    { group: 'Fight now', sub: 'Bosses', name: 'Medusa (Desert)', run() { liveFight(() => bossIn('el_Desierto')); } },
+    { group: 'Fight now', name: 'Medusa, her gaze always petrifies', run() { liveFight(() => { override('balance', { petrifyChance: 1 }); return bossIn('el_Desierto'); }); } },
+    { group: 'Fight now', name: 'Protromus (Cave, earthquake)', run() { liveFight(() => bossIn('la_Cueva')); } },
+    { group: 'Fight now', name: 'Goro (Prairie, charge)', run() { liveFight(() => bossIn('la_Pradera')); } },
+    { group: 'Fight now', name: 'Fenix (Volcano)', run() { liveFight(() => bossIn('el_Volcan')); } },
+    { group: 'Fight now', name: 'King Midas (Tower)', run() { liveFight(() => bossIn('la_Torre')); } },
+    { group: 'Fight now', name: 'Kkck (Town, poison cloud)', run() { liveFight(() => bossIn('el_Poblado')); } },
+    { group: 'Fight now', sub: 'Hydras', name: 'Swamp hydra, 4 heads', run() { liveFight(() => hydraIn('el_Pantano', 'mother', 4)); } },
+    { group: 'Fight now', name: 'Ice hydra, 3 heads', run() { liveFight(() => hydraIn('la_Tundra', 'icedra', 3)); } },
+    { group: 'Fight now', name: 'Dunes hydra, 2 heads', run() { liveFight(() => hydraIn('las_Dunas', 'hydskon', 2)); } },
+    { group: 'Fight now', sub: 'Enemies by attack', name: 'warrior (thrust)', run() { liveFight(() => enemyNamed('el_guerrero2')); } },
+    { group: 'Fight now', name: 'creature (pounce)', run() { liveFight(() => enemyNamed('animalejo24')); } },
+    { group: 'Fight now', name: 'ent (slam)', run() { liveFight(() => enemyNamed('el_ent3')); } },
+    { group: 'Fight now', name: 'elf (shoot)', run() { liveFight(() => enemyNamed('el_elfo1')); } },
+    { group: 'Fight now', name: 'ogre (smash)', run() { liveFight(() => enemyNamed('el_ogro3')); } },
+    { group: 'Fight now', name: 'cowren (charge)', run() { liveFight(() => enemyNamed('el_tauren1')); } },
+    { group: 'Fight now', name: 'rogue (slash)', run() { liveFight(() => enemyNamed('el_pillo3')); } },
+    { group: 'Fight now', name: 'wizard (caster)', run() { liveFight(() => enemyNamed('el_hechicero2')); } },
+    { group: 'Fight now', sub: 'Enemies by arrival', name: 'walking (orc)', run() { liveFight(() => enemyNamed('el_orco2')); } },
+    { group: 'Fight now', name: 'flying (demon)', run() { liveFight(() => enemyNamed('el_demonio1')); } },
+    { group: 'Fight now', name: 'floating (spectre)', run() { liveFight(() => enemyNamed('el_espectro3')); } },
+    { group: 'Fight now', name: 'from the ground (slime)', run() { liveFight(() => enemyNamed('baba1')); } },
+    { group: 'Fight now', name: 'jumping (rogue)', run() { liveFight(() => enemyNamed('el_pillo2')); } },
+    { group: 'Fight now', name: 'in a flicker (wizard)', run() { liveFight(() => enemyNamed('el_hechicero1')); } },
+
+    { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
+    { group: 'Game', name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
+    { group: 'Game', name: 'Crisp pixels on / off', run() {
         ui.crisp = !ui.crisp;
         document.documentElement.classList.toggle('crisp', ui.crisp);
         drawWizard();
         if (state.npc) loadNPC(state.npc);
         devPrint(ui.crisp ? 'crisp pixels' : 'smoothed (as before 2.2)');
     } },
-    { name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
-    { name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
+    { group: 'Game', name: 'Back to the game (end the scene, next event)', run() { closeMode(); resetScene(); nextEvent(); } },
 ];
+
+// What the notes box says when no mode is open: where the game stands.
+function gameDetails() {
+    const p = state.player, zone = zones[state.zone.current];
+    return [
+        'Game test',
+        `Wizard: level ${p.lvl}, HP ${Math.floor(p.hp)} / ${Math.floor(p.hpBase)}, gold ${Math.floor(p.gold)}, faith ${Math.floor(p.faith)}`,
+        `Zone: ${zone ? zone.name : state.zone.current}, stage ${state.zone.stage}`,
+        `On the scene: ${state.npc || 'nothing'}${fight.bossCombat ? ' (boss fight)' : fight.hydraCombat ? ' (hydra fight)' : ''}`,
+        `Speed x${loop.getSpeed()}${run.pause ? ', paused' : ''}`,
+    ].join(String.fromCharCode(10));
+}
+
+// ---------------------------------------------------------------- modes (the right panel)
+// One mode open at a time: src/dev/sounds.js or src/dev/art.js. The game waits while it is open.
+
+let mode = null, modeName = '';
+const modeTools = () => ({ resetScene, setSpeed, devPrint, closed() { mode = null; modeName = ''; setNoteSource(gameDetails); resetScene(); nextEvent(); } });
+
+function openMode(name) {
+    if (modeName == name) return;
+    closeMode(false);
+    modeName = name;
+    import(`./${name}.js`)
+        .then((m) => { mode = m; return m.open(modeTools()); })
+        .catch((error) => { modeName = ''; devPrint(`${name} mode failed: ${error.message}`, true); console.error(error); });
+}
+
+// Close the open mode (resume: the game goes on afterwards).
+function closeMode(resume = true) {
+    if (!mode) return;
+    const m = mode;
+    mode = null; modeName = '';
+    m.close(resume);
+}
 
 // End whatever is happening (event, fight, walk, fade, scroll clocks) and put the wizard back
 // in his place at full health, with no enemy on the scene.
@@ -295,7 +332,7 @@ function enemyNamed(sprite) {
 function setSpeed(factor) {
     loop.setSpeed(factor);
     try { sessionStorage.setItem(SPEED_KEY, factor); } catch (e) { /* private mode */ }
-    if (bar) bar.speed.textContent = factor == 1 ? '' : `x${factor}`;
+    if (bar) bar.speed.textContent = factor == 1 ? '' : `speed x${factor}`;
 }
 
 // ---------------------------------------------------------------- running a scenario
@@ -328,88 +365,96 @@ function preparePending() {
     return scenario;
 }
 
-// ---------------------------------------------------------------- the bar
+// ---------------------------------------------------------------- the dev panel (left side)
 
+// Messages of the dev tools: in the panel's log (and the browser console), not in the game's.
 function devPrint(text, error = false) {
-    print(`<span style='color:${error ? 'Red' : 'DarkRed'}'>DEV: ${text}</span>`);
+    console[error ? 'warn' : 'log']('[dev]', text);
+    if (!bar) return;
+    const line = document.createElement('div');
+    line.textContent = text;
+    if (error) line.style.color = '#f88';
+    bar.log.prepend(line);
+    while (bar.log.childElementCount > 40) bar.log.lastChild.remove();
 }
 
 // Command line: runs typed code in the page (like v1's exe()), with `dev` for the game.
 function runCommand(code) {
     try {
         const result = (0, eval)(code);
-        devPrint(String(result));
-        console.log('[dev]', result);
+        devPrint(`> ${code}\n${String(result)}`);
     } catch (error) {
-        devPrint(`error: ${error.message}`, true);
+        devPrint(`> ${code}\nerror: ${error.message}`, true);
     }
 }
 
+const OPEN_KEY = 'wizardidle2:devOpenGroups';     // which menus are unfolded, in this browser
+
 let bar;
 function buildBar(prepared) {
-    const style = document.createElement('style');
-    style.textContent = `
-        #devBar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 9999; display: flex; flex-wrap: wrap;
-            gap: 4px 6px; align-items: center; padding: 4px 8px; background: rgba(20, 10, 10, 0.88); color: #eee;
-            font: 12px/1.3 sans-serif; }
-        #devBar select, #devBar input, #devBar button { font: inherit; }
-        #devBar select { max-width: 60vw; }
-        #devBar input { flex: 1 1 140px; min-width: 0; }
-        #devBar .devCheck { flex-basis: 100%; color: #fc6; }
-        #devBar .devTag { font-weight: bold; color: #f88; cursor: pointer; }
-        #devBar.devClosed > :not(.devTag) { display: none; }
-    `;
-    document.head.appendChild(style);
-
-    const root = document.createElement('div');
-    root.id = 'devBar';
-    root.innerHTML = `
-        <span class="devTag" title="Hide or show the dev bar">DEV</span><span class="devSpeed"></span>
-        <select>
-            <optgroup label="Scenarios (reload)">${scenarios.map((s, i) => `<option value="s${i}">${s.name}</option>`).join('')}</optgroup>
-            <optgroup label="Actions (now)">${actions.map((a, i) => `<option value="a${i}">${a.name}</option>`).join('')}</optgroup>
-        </select>
-        <button>Run</button>
-        <input type="text" placeholder="command, e.g. dev.state.player.gold = 5000" spellcheck="false">
-        <div class="devCheck"></div>`;
-    document.body.appendChild(root);
-
-    bar = {
-        select: root.querySelector('select'),
-        check: root.querySelector('.devCheck'),
-        speed: root.querySelector('.devSpeed'),
+    const panel = sidePanel('left', 'Dev tools');
+    const groups = [...new Set(actions.map((a) => a.group))];
+    const button = (value, label, title = '') => `<button data-run="${value}" title="${title.replace(/"/g, '&quot;')}">${label}</button>`;
+    const groupHtml = (g) => {
+        let html = '';
+        actions.forEach((a, i) => {
+            if (a.group != g) return;
+            if (a.sub) html += `<div class="devSub">${a.sub}</div>`;
+            html += button(`a${i}`, a.name);
+        });
+        return html;
     };
-    const showCheck = () => {
-        const v = bar.select.value;
-        bar.check.textContent = v[0] == 's' ? `Check: ${scenarios[v.slice(1)].check}` : '';
-    };
-    bar.select.onchange = showCheck;
-    root.querySelector('button').onclick = () => {
-        const v = bar.select.value;
+    const section = (key, title, inner) => `<details data-key="${key}"><summary>${title}</summary>${inner}</details>`;
+    panel.body.innerHTML = `
+        <div class="row"><span class="muted devSpeed"></span></div>
+        ${section('Modes', 'Modes', `<div class="devList">${groupHtml('Modes')}</div>`)}
+        ${section('Scenarios', 'Scenarios (reload the page)', `<div class="devList">${scenarios.map((sc, i) => button(`s${i}`, sc.name, sc.check)).join('')}</div>`)}
+        ${groups.filter((g) => g != 'Modes').map((g) => section(g, g, `<div class="devList">${groupHtml(g)}</div>`)).join('')}
+        ${section('Command', 'Command line', `<div class="row"><input type="text" placeholder="e.g. dev.state.player.gold = 5000" spellcheck="false"></div>`)}
+        <div class="note devCheck"></div>
+        <div class="log"></div>`;
+    buildNotesBox(panel.body);
+
+    bar = { root: panel.root, check: panel.body.querySelector('.devCheck'), speed: panel.body.querySelector('.devSpeed'),
+        log: panel.body.querySelector('.log') };
+
+    panel.body.onclick = (e) => {
+        const v = e.target.dataset && e.target.dataset.run;
+        if (!v) return;
         if (v[0] == 's') runScenario(Number(v.slice(1)));
-        else actions[v.slice(1)].run();
+        else { bar.check.textContent = ''; actions[v.slice(1)].run(); }
     };
-    root.querySelector('input').onkeydown = (e) => {
+    // a scenario's check shows when the pointer is over it
+    panel.body.onmouseover = (e) => {
+        const v = e.target.dataset && e.target.dataset.run;
+        if (v && v[0] == 's') bar.check.textContent = `Check: ${scenarios[v.slice(1)].check}`;
+    };
+    panel.body.querySelector('input').onkeydown = (e) => {
         if (e.key == 'Enter' && e.target.value.trim()) { runCommand(e.target.value); e.target.select(); }
     };
-    root.querySelector('.devTag').onclick = () => root.classList.toggle('devClosed');
 
-    // Help > Developer tools hides or shows the whole bar, remembered in this browser
+    // unfolded menus are remembered
+    let open = ['Modes', 'Fight now'];
+    try { open = JSON.parse(localStorage.getItem(OPEN_KEY)) || open; } catch (e) { /* private mode */ }
+    for (const d of panel.body.querySelectorAll('details')) {
+        d.open = open.includes(d.dataset.key);
+        d.ontoggle = () => {
+            const now = [...panel.body.querySelectorAll('details')].filter((x) => x.open).map((x) => x.dataset.key);
+            try { localStorage.setItem(OPEN_KEY, JSON.stringify(now)); } catch (e) { /* private mode */ }
+        };
+    }
+
+    // Help > Developer tools hides or shows the dev panel, remembered in this browser
     let hidden = false;
     try { hidden = localStorage.getItem(HIDDEN_KEY) == '1'; } catch (e) { /* private mode */ }
-    root.style.display = hidden ? 'none' : '';
+    panel.root.style.display = hidden ? 'none' : '';
     document.addEventListener('wizardidle:toggleDevBar', () => {
         hidden = !hidden;
-        root.style.display = hidden ? 'none' : '';
+        panel.root.style.display = hidden ? 'none' : '';
         try { localStorage.setItem(HIDDEN_KEY, hidden ? '1' : '0'); } catch (e) { /* private mode */ }
     });
 
-    if (prepared) {
-        bar.select.value = `s${scenarios.indexOf(prepared)}`;
-        bar.check.textContent = `Running "${prepared.name}". Check: ${prepared.check}`;
-    } else {
-        showCheck();
-    }
+    if (prepared) bar.check.textContent = `Running "${prepared.name}". Check: ${prepared.check}`;
 }
 
 // ---------------------------------------------------------------- start
@@ -419,6 +464,13 @@ let savedSpeed = 1;
 try { savedSpeed = Number(sessionStorage.getItem(SPEED_KEY)) || 1; } catch (e) { /* private mode */ }
 buildBar(prepared);
 setSpeed(savedSpeed);
+setNoteSource(gameDetails);
+
+// While developing, the game waits when its window can't be seen (minimized, or behind other
+// windows: the browser reports both as hidden), so it doesn't play on unwatched.
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) loop.freezeGame(); else loop.thawGame();
+});
 
 // For the command line and the browser console.
-window.dev = { state, world, config, run, fight, ui, loop, scenarios, actions, setLevel, setSpeed, runScenario };
+window.dev = { state, world, config, run, fight, ui, loop, scenarios, actions, setLevel, setSpeed, runScenario, openMode, closeMode };

@@ -41,6 +41,23 @@ function shakeScene(px) {
     if (sceneCanvas) sceneCanvas.style.transform = px ? `translateX(${px * ui.charWidth / 32}px)` : "";
 }
 
+// A scene spell's frame s (0 to frames-1), then a tail where its last frame dissipates: it fades
+// out while it spreads and rises a little (the author: the poison cloud stayed full, then
+// vanished at once). Spells that already end empty look the same.
+const DISSIPATE = 6;
+function drawSceneFrame(layer, spell, s, frames) {
+    const ctx = pixelContext(layer);
+    ctx.clearRect(0, 0, layer.width, layer.height);
+    if (!spell || s < 0 || s >= frames + DISSIPATE) return;
+    if (s < frames) return ctx.drawImage(spell, s * 256, 0, 256, 64, 0, 0, layer.width, layer.height);
+    const j = s - frames + 1, grow = 1 + 0.05 * j;
+    ctx.save();
+    ctx.globalAlpha = 1 - j / (DISSIPATE + 1);
+    const w = layer.width * grow, h = layer.height * grow;
+    ctx.drawImage(spell, (frames - 1) * 256, 0, 256, 64, (layer.width - w) / 2, layer.height - h - j * layer.height / 64, w, h);
+    ctx.restore();
+}
+
 // Medusa's gaze: the wizard turns to stone, stays a while, then breaks free.
 function petrify() {
     ui.petrified = true;
@@ -50,6 +67,44 @@ function petrify() {
 // Does this boss have its own attacks?
 export function hasBossAttacks(boss) {
     return !!bossAttacks[boss];
+}
+
+// How long a boss attack lasts and when its blow lands, in ms from its first frame (for the sounds).
+export function bossAttackTiming(boss, id) {
+    const attack = (bossAttacks[boss] || []).find((a) => a.id == id);
+    if (!attack) return null;
+    const sceneFrames = attack.scene ? sceneSpells[attack.scene] : 0;
+    const hitAt = attack.scene ? attack.sceneAt + Math.floor(sceneFrames / 2)
+        : attack.path ? attack.path.indexOf(Math.min(...attack.path)) : Math.floor(attack.frames * 0.6);
+    const total = Math.max(attack.frames, attack.scene ? attack.sceneAt + sceneFrames + DISSIPATE : 0);
+    return { attack, hitMs: hitAt * 100, totalMs: total * 100 };
+}
+
+// A scene spell alone over the scene (for the sounds: spells no boss casts yet); onHit runs
+// halfway through, where a boss's blow would land.
+export function playSceneSpell(name, onHit = () => {}) {
+    const frames = sceneSpells[name], scene = `img/scene_${name}.png`;
+    if (run.simulation || !frames) return onHit();
+    imageNow(scene);
+    const layer = sceneLayer();
+    let s = 0;
+    const next = () => {
+        if (s >= frames + DISSIPATE) {
+            loop.stop("animScene");
+            layer.getContext("2d").clearRect(0, 0, layer.width, layer.height);
+            return;
+        }
+        drawSceneFrame(layer, imageNow(scene), s, frames);
+        if (s == Math.floor(frames / 2)) onHit();
+        s++;
+    };
+    next();
+    loop.every("animScene", next, 100);
+}
+
+export function sceneSpellTiming(name) {
+    const frames = sceneSpells[name] || 0;
+    return { hitMs: Math.floor(frames / 2) * 100, totalMs: (frames + DISSIPATE) * 100 };
 }
 
 // Play the boss's attack (chosen by the game, src/bossEffects.js); stone says whether this gaze
@@ -67,7 +122,7 @@ export function playBossAttack(boss, chosen, stone, onHit) {
     imageNow(strip);
     if (scene) imageNow(scene);
     const sceneFrames = attack.scene ? sceneSpells[attack.scene] : 0;
-    const total = Math.max(attack.frames, attack.scene ? attack.sceneAt + sceneFrames : 0);
+    const total = Math.max(attack.frames, attack.scene ? attack.sceneAt + sceneFrames + DISSIPATE : 0);
     // the blow lands when the scene spell reaches the wizard, at the end of a charge, or late in the swing
     const hitAt = attack.scene ? attack.sceneAt + Math.floor(sceneFrames / 2)
         : attack.path ? attack.path.indexOf(Math.min(...attack.path)) : Math.floor(attack.frames * 0.6);
@@ -95,9 +150,8 @@ export function playBossAttack(boss, chosen, stone, onHit) {
             drawFrame(ctx, img, f * FW, 0, FW, FH, bx - 36 * k + dx, by - 12 * k, FW * k, FH * k);
         }
         if (layer) {
-            const ctx = pixelContext(layer), s = i - attack.sceneAt, spell = imageNow(scene);
-            ctx.clearRect(0, 0, layer.width, layer.height);
-            if (spell && s >= 0 && s < sceneFrames) ctx.drawImage(spell, s * 256, 0, 256, 64, 0, 0, layer.width, layer.height);
+            const s = i - attack.sceneAt;
+            drawSceneFrame(layer, imageNow(scene), s, sceneFrames);
             if (attack.scene == "earthquake") shakeScene(s >= 0 && s < SHAKE.length ? SHAKE[s] : 0);
         }
         if (stone && attack.wizard && attack.wizard[0] == "petrify" && i == attack.wizard[1] && !fight.pjDead) petrify();
@@ -155,16 +209,32 @@ export function startHydraIdle() {
     }, 100);
 }
 
+// A hydra's cast or strike (see playHydraAttack): how long it lasts and when its blow lands, in
+// ms (for the sounds; null until its strip has loaded, the number of frames comes from it).
+export function hydraAttackTiming(npc, spellId, cast) {
+    const parts = hydraParts(npc);
+    if (!parts) return null;
+    const match = (HYDRA_SCENES[parts.hydra] || []).find(([part]) => spellId.includes(part));
+    cast = !!(match && cast);
+    const img = imageNow(`img/anim_${parts.hydra}_${cast ? "cast" : "strike"}${parts.heads}.png`);
+    if (!img) return null;
+    const frames = Math.round(img.naturalWidth / 84), sceneFrames = cast ? sceneSpells[match[1]] : 0;
+    const total = cast ? Math.max(frames, CAST_SCENE_AT + sceneFrames + DISSIPATE) : frames;
+    const hitAt = cast ? CAST_SCENE_AT + Math.floor(sceneFrames / 2) : Math.floor(total * 0.6);
+    return { hitMs: hitAt * 100, totalMs: total * 100 };
+}
+
 // A hydra attacks: a cast with its scene spell (when the spell has one, half of the time, for
-// the looks) or a strike; onHit runs once, when the blow lands.
-export function playHydraAttack(spellId, onHit) {
+// the looks) or a strike; onHit runs once, when the blow lands. castNow (the sounds dev mode)
+// makes it cast when the spell can, instead of half of the time.
+export function playHydraAttack(spellId, onHit, castNow) {
     let hit = false;
     const land = () => { if (!hit) { hit = true; onHit(); } };
     const parts = hydraParts(state.npc);
     if (run.simulation || !document.hasFocus() || !parts) return land();
     const npc = state.npc, { hydra, heads } = parts;
     const match = (HYDRA_SCENES[hydra] || []).find(([part]) => spellId.includes(part));
-    const cast = match && looksRandom() < 0.5;
+    const cast = match && (castNow !== undefined ? castNow : looksRandom() < 0.5);
     const strip = `img/anim_${hydra}_${cast ? "cast" : "strike"}${heads}.png`;
     const scene = cast ? `img/scene_${match[1]}.png` : null, sceneFrames = cast ? sceneSpells[match[1]] : 0;
     imageNow(strip);
@@ -176,7 +246,7 @@ export function playHydraAttack(spellId, onHit) {
     const next = () => {
         const img = imageNow(strip);
         if (img && !frames) frames = Math.round(img.naturalWidth / 84);
-        const total = cast ? Math.max(frames || 9, CAST_SCENE_AT + sceneFrames) : frames || 8;
+        const total = cast ? Math.max(frames || 9, CAST_SCENE_AT + sceneFrames + DISSIPATE) : frames || 8;
         const hitAt = cast ? CAST_SCENE_AT + Math.floor(sceneFrames / 2) : Math.floor(total * 0.6);
         if (i >= total || state.npc != npc) {
             loop.stop("animNPC");
@@ -185,11 +255,7 @@ export function playHydraAttack(spellId, onHit) {
             return;                                 // the idle weaving takes over again
         }
         if (img) drawHydraFrame(npc, strip, Math.min(i, (frames || 1) - 1));
-        if (layer) {
-            const ctx = pixelContext(layer), s = i - CAST_SCENE_AT, spell = imageNow(scene);
-            ctx.clearRect(0, 0, layer.width, layer.height);
-            if (spell && s >= 0 && s < sceneFrames) ctx.drawImage(spell, s * 256, 0, 256, 64, 0, 0, layer.width, layer.height);
-        }
+        if (layer) drawSceneFrame(layer, imageNow(scene), i - CAST_SCENE_AT, sceneFrames);
         if (i == hitAt) land();
         i++;
     };
