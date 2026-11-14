@@ -255,6 +255,13 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Enemies arrive their own way
+- The author's playtest notes ("flying enemies arrive from the air, floating ones float in, those that hide jump into the scene, underground creatures come out of the ground"), done with code on the plain sprites as the author asked, no new art: `src/ui/entrances.js`. Six ways by family: **fly** (angelicus, demon, dragus; arcangel, fenix) glides down from the upper right with wingbeats and lands; **float** (spectre, ether, eye, elemental, infraespectro) drifts in, fading in and bobbing; **rise** (slime, polypoid, ent, umigubi, mummy, skeleton, the hydras) pushes up out of the ground line with dust; **jump** (rogues, imp, creatures, shortie, elf, amazon) leaps in on an arc and lands squashed with dust; **blink** (wizards, wizardesses, vampire) flickers in, opening from a line; everyone else **walks** in from the right with steps. Bosses and new hydra encounters too (a growing head keeps its own animation).
+- The game waits while it arrives (about 0.9 s); it waits for the sprite to load first, so a first-time sprite isn't skipped. Nothing plays in a simulation or in the background.
+- Dev bar: "Fight now: arrives ..." for each of the six.
+- No art asked for now; real run or flight strips from the artist could replace the math later for some families.
+- Tests: real-browser frames of all six; gameplay suite 0 errors.
+
 ### 2026-11-13: He stops at the door before going in
 - The author (playtest notes, then "doors outside too"): before entering an inn or a dice house in the Town or the City, he walks to the street that shows its door (if he isn't on it), walks to the door, stops a moment (0.4 s), then the fade takes him inside. The doors were already in the street art: the Town's open doorways (stages 4 and 5), the City's saloon doors by the beer poster (stage 4) and the door by the dice sign (stage 1). `STREET_DOORS` in render.js; no art needed. Simulations and the page in the background go straight in, as before.
 - Tests: real-browser trace of the Town inn (street, doorway, stop, inside, sleep, out); gameplay suite 0 errors.

@@ -19,6 +19,7 @@ import { playSound } from './audio.js';
 import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
+import { playEntrance } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
 
 
@@ -267,6 +268,7 @@ function getEnemy() {
         run.previousEvent = "enemy";
     }
     print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
+    playEntrance();         // it arrives its own way (the game waits, ui/entrances.js)
     startEvent(battle);
 }
 
@@ -345,6 +347,7 @@ function getHydra(newEncounter = false){
         stats.count(`seen.hydra.${fight.hydra}`);
         startBattleText = "has entered in a battle with a hydra!,finds a hydra!,start a fight with a hydra!"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
+        playEntrance();     // it comes out of the ground (ui/entrances.js)
         if (wounded !== undefined) print(`The hydra still bears the wounds of their last battle`);
         startEvent(battle);
     } else {
