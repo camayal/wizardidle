@@ -257,6 +257,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Story art merged; the hooded healer in the cabin
+- The artist's story art (approved by the author) is on dev: the hooded healer (`healer_hooded`), the final battle (`anim_god_unhood` 29 frames, `anim_god_wings_open` 8, `anim_god_wings_burn` 15, `anim_god_death` 26 at 64 x 56, stills `god_form_G1/G2/G3/G3b/G1_remnants` at 48 x 40, drawn at the healer's box - 8 sprite px, about 110 ms a frame) and the god's shrine (`god_shrine` 4-frame candle loop, `anim_shrine_break` 13 frames, `god_shrine_broken`). Frame counts checked against the artist's notes.
+- Wired now: the healer in the cabin after a divine revive is the hooded healer (the god in disguise). The rest waits for the story stage (docs/STORY.md): the stranger moments in II, V, VIII, IX, the shrine in chapter II and its breaking in chapter X, the final battle phases (when each starts is for the planner).
+
 ### 2026-11-13: Enemies arrive their own way
 - The author's playtest notes ("flying enemies arrive from the air, floating ones float in, those that hide jump into the scene, underground creatures come out of the ground"), done with code on the plain sprites as the author asked, no new art: `src/ui/entrances.js`. Six ways by family: **fly** (angelicus, demon, dragus; arcangel, fenix) glides down from the upper right with wingbeats and lands; **float** (spectre, ether, eye, elemental, infraespectro) drifts in, fading in and bobbing; **rise** (slime, polypoid, ent, umigubi, mummy, skeleton, the hydras) pushes up out of the ground line with dust; **jump** (rogues, imp, creatures, shortie, elf, amazon) leaps in on an arc and lands squashed with dust; **blink** (wizards, wizardesses, vampire) flickers in, opening from a line; everyone else **walks** in from the right with steps. Bosses and new hydra encounters too (a growing head keeps its own animation).
 - The game waits while it arrives (about 0.9 s); it waits for the sprite to load first, so a first-time sprite isn't skipped. Nothing plays in a simulation or in the background.

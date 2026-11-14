@@ -40,7 +40,7 @@ function reviveByTouch() {
     }
     state.player.hp = state.player.hpBase;
     fight.pjDead = false;
-    const toCabin = () => enterPlace("curanderobg", "curandero", () => startEvent(reviveEV), true);   // he wakes up there
+    const toCabin = () => enterPlace("curanderobg", "healer_hooded", () => startEvent(reviveEV), true);   // he wakes up there, with the hooded healer (the god in disguise; art by the artist)
     if (run.simulation || !document.hasFocus()) return toCabin();
     loop.freezeGame();                          // nothing moves on while the rings play
     loop.every("reviveRings", () => {
