@@ -182,6 +182,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Story review page kept in the repo
+- New folder [artefacts_tests/](artefacts_tests/README.md): the Story Scrolls review page (template, build script, built page, data). It always shows the latest script (commit and date at the top), and notes can be sent for review or erased, one or all.
+- After every change to `docs/STORY.md`: rebuild with `python artefacts_tests/build_story_scrolls.py` and load `story-data.json` into the page's store.
+
 ### 2026-11-13: The broken shrine
 - The author decided the god's shrine is destroyed in Chapter X: after breaking with the god, the wizard walks back to the shrine he found in Chapter II and breaks it with his bare hands; the candle goes out. Then he writes the Last Escape scroll. Step-by-step console lines and an echo line in [docs/STORY.md](docs/STORY.md); the Chapter II shrine's zone is saved (`{shrineZone}`). The shrine stays broken afterwards, in the museum too.
 - Art: the destruction animation and the broken state requested from the artist.

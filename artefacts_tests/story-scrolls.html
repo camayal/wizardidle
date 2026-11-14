@@ -1,0 +1,431 @@
+<title>Wizard Idle Story Scrolls</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Pixelify+Sans:wght@400;500&family=Silkscreen&display=swap">
+<style>
+/* Layout: a chapter rail, a stage holding the scroll at the game's own width, and an evaluation card beside it. */
+:root{
+  --bg:#e8e5ee; --panel:#f8f6fb; --line:#d4cfdf; --ink:#262033; --muted:#6a6380;
+  --parch:#f0e2be; --parch-edge:#d9c393; --parch-ink:#3a2915; --red:#7f0000;
+  --place:#1d6b66; --faith:#6a3fb0; --echo:#a8521f; --ok:#2f7a3d; --warn:#a8521f; --bad:#a3262a;
+  --console:#1f1b29; --console-ink:#d8d2e6;
+  --f-title:"Silkscreen", "Courier New", monospace;
+  --f-scroll:"Pixelify Sans", "Trebuchet MS", sans-serif;
+  --f-ui:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16131d; --panel:#211c2b; --line:#383047; --ink:#ece8f4; --muted:#a59db9;
+  --parch:#e3d2a8; --parch-edge:#b9a271; --parch-ink:#33240f; --red:#7f0000;
+  --place:#5fc3bb; --faith:#b593f0; --echo:#f0a06a; --ok:#6fcf7f; --warn:#f0a06a; --bad:#f07a7d;
+  --console:#0f0d14; --console-ink:#d8d2e6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#16131d; --panel:#211c2b; --line:#383047; --ink:#ece8f4; --muted:#a59db9;
+  --parch:#e3d2a8; --parch-edge:#b9a271; --parch-ink:#33240f; --red:#7f0000;
+  --place:#5fc3bb; --faith:#b593f0; --echo:#f0a06a; --ok:#6fcf7f; --warn:#f0a06a; --bad:#f07a7d;
+  --console:#0f0d14; --console-ink:#d8d2e6; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1240px;margin:0 auto;display:grid;gap:20px}
+header h1{font-family:var(--f-title);font-size:1.35rem;font-weight:400;margin:0;letter-spacing:.02em;text-wrap:balance}
+header p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr) 320px;gap:20px;align-items:start}
+.rail{display:flex;flex-direction:column;gap:2px;position:sticky;top:max(12px,env(safe-area-inset-top,0px))}
+.rail button{all:unset;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:7px 10px;border-radius:6px;color:var(--ink)}
+.rail button:hover{background:var(--panel)}
+.rail button:focus-visible{outline:2px solid var(--faith);outline-offset:1px}
+.rail button[aria-current="true"]{background:var(--panel);box-shadow:inset 3px 0 0 var(--red)}
+.rail .nm{font-weight:500;font-size:.88rem;min-width:0}
+.rail .lv{font-size:.72rem;color:var(--muted);grid-column:1}
+.rail .dot{grid-row:1/3;grid-column:2;align-self:center;width:9px;height:9px;border-radius:50%;background:transparent;border:1.5px solid var(--line)}
+.dot.keep{background:var(--ok);border-color:var(--ok)} .dot.tweak{background:var(--warn);border-color:var(--warn)} .dot.rewrite{background:var(--bad);border-color:var(--bad)}
+.stage{display:grid;gap:14px;min-width:0}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.ctl{display:grid;gap:4px;min-width:0}
+.ctl>span{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.ctl.off{opacity:.45}
+.ctl .why{font-size:.7rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400}
+input[type=text],select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=text]{width:9.5em}
+select{max-width:100%}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:5px 10px;font-size:.85rem;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--faith);outline-offset:-2px}
+.seg button:disabled{cursor:default}
+.chip{display:inline-block;font-size:.72rem;padding:1px 7px;border-radius:99px;border:1px solid currentColor}
+.c-place{color:var(--place)} .c-faith{color:var(--faith)} .c-echo{color:var(--echo)}
+label.chk{display:flex;gap:6px;align-items:center;font-size:.85rem;cursor:pointer}
+.scrollbox{display:flex;justify-content:center;padding:18px 0}
+.scroll{width:25em;max-width:100%;font-size:17px;background:var(--parch);color:var(--parch-ink);
+  border-top:10px solid var(--parch-edge);border-bottom:10px solid var(--parch-edge);border-radius:4px;
+  padding:1.4em 1.3em 1.6em;text-align:center;font-family:var(--f-scroll);line-height:1.35;
+  box-shadow:0 1px 0 var(--line),0 10px 24px -14px rgba(0,0,0,.45)}
+.scroll .t1{font-family:var(--f-title);font-size:1.35em;line-height:1.2;margin:0}
+.scroll .t2{font-family:var(--f-title);font-size:.85em;opacity:.8;margin:.3em 0 1em}
+.scroll p{margin:0 0 .75em}
+.scroll p.last{color:var(--red);font-weight:500}
+.scroll em{font-style:italic}
+.hl mark{background:none;color:inherit;padding:0 .1em;border-radius:2px}
+.hl mark.place{box-shadow:inset 0 -.45em 0 color-mix(in srgb,var(--place) 30%,transparent)}
+.hl mark.faith{box-shadow:inset 0 -.45em 0 color-mix(in srgb,var(--faith) 30%,transparent)}
+.hl mark.echo{box-shadow:inset 0 -.45em 0 color-mix(in srgb,var(--echo) 35%,transparent)}
+mark{background:none;color:inherit}
+.meter{display:flex;gap:10px;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{width:180px;max-width:40vw;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar i.near{background:var(--warn)} .bar i.over{background:var(--bad)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;min-width:0}
+.card h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0;font-weight:600}
+.event{font-size:.85rem;color:var(--muted);margin:0}
+.console{background:var(--console);color:var(--console-ink);border-radius:8px;padding:10px 12px;font-family:var(--f-scroll);font-size:.9rem;display:grid;gap:8px}
+.console div b{display:block;font-family:var(--f-ui);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;opacity:.6;font-weight:600}
+.variants{display:grid;gap:12px}
+.vgroup{display:grid;gap:4px}
+.vgroup h3{margin:0;font-size:.78rem;font-weight:600}
+.vgroup button{all:unset;cursor:pointer;display:grid;grid-template-columns:5.6em 1fr;gap:8px;padding:5px 8px;border-radius:6px;font-size:.84rem;line-height:1.4}
+.vgroup button:hover{background:var(--bg)}
+.vgroup button[aria-pressed="true"]{background:var(--bg);box-shadow:inset 2px 0 0 currentColor}
+.vgroup button:focus-visible{outline:2px solid var(--faith)}
+.vgroup .k{font-size:.72rem;color:var(--muted);padding-top:.15em}
+.vgroup .v{color:var(--ink);min-width:0}
+.empty{color:var(--muted);font-style:italic}
+.verdict{display:flex;gap:6px;flex-wrap:wrap}
+.verdict button{all:unset;cursor:pointer;padding:5px 11px;border-radius:99px;border:1px solid var(--line);font-size:.85rem}
+.verdict button[aria-pressed="true"].keep{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.verdict button[aria-pressed="true"].tweak{background:var(--warn);border-color:var(--warn);color:var(--bg)}
+.verdict button[aria-pressed="true"].rewrite{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.verdict button:focus-visible{outline:2px solid var(--faith);outline-offset:1px}
+textarea{width:100%;min-height:8em;resize:vertical;line-height:1.45}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{all:unset;cursor:pointer;padding:7px 14px;border-radius:7px;background:var(--ink);color:var(--bg);font-weight:500;font-size:.88rem}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.btn.danger.armed{background:var(--bad);color:var(--bg)}
+.btn[disabled]{opacity:.45;cursor:default}
+.ver{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:2px}
+.ver b{color:var(--ink);font-weight:600}
+.tag{font-size:.7rem;padding:1px 6px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.tag.new{border-color:var(--warn);color:var(--warn)}
+.btn:focus-visible{outline:2px solid var(--faith);outline-offset:2px}
+.status{font-size:.8rem;color:var(--muted)}
+.side{display:grid;gap:14px;min-width:0}
+@media (max-width:1060px){.layout{grid-template-columns:200px minmax(0,1fr)}.side{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
+@media (max-width:720px){.layout{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  .rail button{flex:0 0 auto;grid-template-columns:auto auto}
+  .rail .lv{display:none}.rail .dot{grid-row:1}
+  .scroll{font-size:15px}}
+@media (prefers-reduced-motion:no-preference){.scroll{transition:opacity .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Wizard Idle · Story Scrolls</h1>
+    <p>Every chapter scroll from the story script, at the game's scroll width. Change the wizard's belief, where he is and the echo to read each version, then leave a verdict and a note per scroll.</p>
+    <p class="ver" id="ver"></p>
+  </header>
+
+  <div class="layout">
+    <nav class="rail" id="rail" aria-label="Chapters"></nav>
+
+    <main class="stage">
+      <div class="controls" id="controls">
+        <label class="ctl" for="wname"><span>Wizard name</span><input type="text" id="wname" value="Aldric" maxlength="20"></label>
+        <label class="ctl" id="ctl-zone" for="zone"><span>Place <span class="why" id="why-zone"></span></span>
+          <select id="zone"></select></label>
+        <div class="ctl" id="ctl-faith"><span>Belief <span class="why" id="why-faith"></span></span>
+          <div class="seg" id="faith" role="group" aria-label="Belief level"></div></div>
+        <div class="ctl" id="ctl-echo"><span>Echo game <span class="why" id="why-echo"></span></span>
+          <div class="row"><div class="seg" id="echo" role="group" aria-label="Echo"></div>
+          <label class="chk" id="loopwrap" for="loop">loop <select id="loop"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label></div></div>
+        <label class="chk" for="hl"><input type="checkbox" id="hl" checked> Highlight what varies</label>
+      </div>
+
+      <div class="scrollbox"><article class="scroll hl" id="scroll" aria-live="polite"></article></div>
+      <div class="meter"><span id="words"></span><div class="bar" aria-hidden="true"><i id="barfill"></i></div><span>screen holds about 110</span></div>
+    </main>
+
+    <aside class="side">
+      <section class="card" aria-labelledby="h-eval">
+        <h2 id="h-eval">Your verdict</h2>
+        <div class="verdict" id="verdict" role="group" aria-label="Verdict">
+          <button class="keep" data-v="keep" aria-pressed="false">Keep</button>
+          <button class="tweak" data-v="tweak" aria-pressed="false">Tweak</button>
+          <button class="rewrite" data-v="rewrite" aria-pressed="false">Rewrite</button>
+        </div>
+        <label for="note" class="status">What to change, keep or cut in this scroll</label>
+        <textarea id="note" placeholder="e.g. The Atheist line in the last paragraph is too soft…"></textarea>
+        <div class="row"><button class="btn" id="save">Save note</button><button class="btn ghost" id="erase1">Erase this note</button><span class="tag" id="sentTag" hidden></span></div>
+        <p class="status" id="status" style="margin:0">Loading notes…</p>
+      </section>
+      <section class="card" aria-labelledby="h-send" id="sendcard">
+        <h2 id="h-send">All your notes</h2>
+        <p class="status" id="summary" style="margin:0"></p>
+        <div class="row"><button class="btn" id="send">Send notes to Claude</button><span class="status" id="sendstatus"></span></div>
+        <div class="row"><button class="btn ghost" id="copyall">Copy all notes</button><button class="btn danger" id="eraseall">Erase all notes</button><span class="status" id="copystatus"></span></div>
+      </section>
+      <section class="card" aria-labelledby="h-var">
+        <h2 id="h-var">Every variant in this scroll</h2>
+        <div class="variants" id="variants"></div>
+      </section>
+      <section class="card" aria-labelledby="h-ctx">
+        <h2 id="h-ctx">Around this scroll</h2>
+        <p class="event" id="event"></p>
+        <div class="console" id="console"></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+let STORY = [{"title": "Prologue: The Beginning (lvl 1)", "note": "He always starts in the City; faith is 0. No slots.", "paras": ["You heard him first.", "A whisper in Midas's Tower, where a hundred gods are worshipped and you are not one of them.", "For that whisper, his king cast him out.", "Now {name} walks alone, with a borrowed staff and a god he has never seen.", "He believes you are listening.", "Are you?"], "slots": {}, "console": [], "echoAlt": ["You have heard him before.", "You will hear him again.", "A whisper in Midas's Tower. A king who will not touch him. A road beyond the gates.", "Time is nothing to you. To him, it is everything.", "Will this one win?"], "id": "prologue-the-beginning", "when": "lvl 1", "name": "Prologue: The Beginning"}, {"title": "Chapter I: The Exile (lvl 10)", "note": "", "paras": ["⟨place⟩ has taught him what the Tower never did: hunger, fear, the weight of a staff swung in anger.", "He talks to you at night. Small things. The cold. The slimes. Why Midas read the sentence himself, and never once looked at him.", "Every time he falls, a hooded healer carries him to a cabin he can never find again.", "He never sees the healer's face. ⟨echo⟩", "⟨faith⟩"], "slots": {"place": [["open", "The open road"], ["wild", "The forest mud"], ["cold", "The frozen waste"], ["hot", "The burning sand"], ["deep", "The dark under the earth"], ["walls", "Every locked door"]], "echo": [["normal", ""], ["echo", "The healer always pauses at the door, as if he has done this before."]], "faith": [["Devout", "He thanks you anyway, every night, for things he cannot name."], ["Believer", "He has started to wonder."], ["Doubter", "He has started to wonder if anyone is there at all."], ["Atheist", "He has decided that no one is. He is wrong."]]}, "console": [], "id": "chapter-i-the-exile", "when": "lvl 10", "name": "Chapter I: The Exile"}, {"title": "Chapter II: Devotion (lvl 30)", "note": "Event (exists): the altar, faith ×2, the Divine crosier. Its console line already changes with the divine touches used. Art needed: your own shrine (the god's, half-forgotten), and a hooded stranger sprite that is clearly different from the ordinary hooded figures.", "paras": ["He found your shrine ⟨place⟩, in a land of a hundred gods where no one remembers your name.", "⟨faith⟩ and for the first time you let him feel you. Warmth. A Divine crosier in his hands.", "On the road out, a hooded stranger bandaged his arm and refused his coins.", "\"Who do you pray to?\" the stranger asked. {name} told him.", "⟨echo⟩"], "slots": {"place": [["open", "in the long grass beside the road"], ["wild", "half-buried in moss and roots"], ["cold", "under a crust of old ice"], ["hot", "half-swallowed by the sand"], ["deep", "in a cave no torch had reached in years"], ["walls", "behind a market stall, hidden in plain sight"]], "faith": [["Devout", "He knelt as if he had waited his whole life for it,"], ["Believer", "He knelt,"], ["Doubter", "He knelt, half expecting nothing,"], ["Atheist", "He almost walked past. Something made him kneel,"]], "echo": [["normal", "The stranger smiled, as if he already knew."], ["echo", "The stranger's smile slipped for a moment, as if he had heard that answer before."]]}, "console": [["Console, lvl 40", "A hooded man watches {name} from the edge of the {zone}. · When {name} looks again, he is gone."]], "id": "chapter-ii-devotion", "when": "lvl 30", "name": "Chapter II: Devotion"}, {"title": "Chapter III: Knowledge (lvl 50)", "note": "Event: faith multiplier halves. (Professions plan: the second trade opens here.)", "paras": ["⟨faith⟩", "He reads everything: runes, ruined books, the margins of his own exile scroll.", "That is where he finds it. A seers' mark in red wax beneath the king's seal, and words too small to be meant for him:", "<em>\"An exile, heard by a single god…\"<\/em>", "Seers do not sign the sentences of apprentices. ⟨echo⟩", "Why was he worth a prophecy?"], "slots": {"faith": [["Devout", "Prayer is not enough anymore. He wants to understand you."], ["Believer", "Prayer is not enough anymore. He wants to understand you."], ["Doubter", "Prayer has not answered him. Perhaps books will."], ["Atheist", "He no longer prays. He wants proof, one way or the other."]], "echo": [["normal", ""], ["echo", "Beside the mark, in fresher ink, someone has scratched a tally: {loop} lines."]]}, "console": [["Console, lvl 60 (event)", "{name} pulls a cracked staff from a dead man's grip. · The wood is cold, and old, and humming. · The dead man is smiling."], ["Console, lvl 70", "Someone left bread and bandages by {name}'s camp. · The footprints lead nowhere."], ["Console, lvl 80 (event)", "The cracked staff splits in {name}'s hands. · Something inside it is glowing."]], "id": "chapter-iii-knowledge", "when": "lvl 50", "name": "Chapter III: Knowledge"}, {"title": "Chapter IV: The Forbidden (lvl 90)", "note": "Event: the staff seems sacred.", "paras": ["The staff woke tonight, ⟨place⟩.", "Light ran through the cracks like blood through veins, and the wood healed itself in his hands. It feels sacred. ⟨faith⟩", "It is not yours.", "⟨echo⟩", "{name} sleeps with it across his chest, and dreams of thrones.", "You watch him dream, and for the first time, you are afraid."], "slots": {"place": [["open", "under an open sky"], ["wild", "among the dripping trees"], ["cold", "in the blue cold of the night"], ["hot", "in a heat that never leaves the sand"], ["deep", "deep underground, lighting the stone like a lantern"], ["walls", "behind the walls of the {zone}"]], "faith": [["Devout", "He weeps, because it feels like you."], ["Believer", "It feels like you."], ["Doubter", "For the first time in months, he feels close to you."], ["Atheist", "He doesn't believe in sacred things. He holds it anyway."]], "echo": [["normal", "You search every shrine and every memory, and you cannot say whose it is."], ["echo", "You have watched this staff wake before. Every time, you swear you will take it from him."]]}, "console": [["Console, lvl 100 (event)", "{name} masters the staff. Enemies fall faster. · Every death costs him a little faith. He doesn't seem to notice."]], "id": "chapter-iv-the-forbidden", "when": "lvl 90", "name": "Chapter IV: The Forbidden"}, {"title": "Chapter V: Repentance (lvl 110)", "note": "Event: damage bonus and faith loss removed; faith rises again, less than in II. A moral shock.", "paras": ["He woke among the dead of a pilgrim camp, the staff warm in his hand.", "He does not remember the fight. He remembers the silence after it.", "He buried every one of them ⟨place⟩, and prayed to their gods, not to you. ⟨faith⟩", "The hooded stranger watched him dig. ⟨echo⟩", "\"Guilt is a kind of prayer,\" he said. \"Who are you praying to now?\"", "That night, the staff whispered back."], "slots": {"place": [["open", "in the soft earth beside the road"], ["wild", "in the black mud"], ["cold", "in frozen ground, with bleeding hands"], ["hot", "in sand that would not stay"], ["deep", "under stones, in the dark"], ["walls", "outside the walls, where no one would see"]], "faith": [["Devout", "He has no right to your forgiveness, he says. Only theirs."], ["Believer", "He has no right to your forgiveness, he says. Only theirs."], ["Doubter", "Your forgiveness would mean nothing now. He wants theirs."], ["Atheist", "There is no one to forgive him, he says. Only them, and they are dead."]], "echo": [["normal", ""], ["echo", "He knew exactly where to stand, as if he had stood there before."]]}, "console": [["Console, lvl 120", "{name} sees the hooded stranger kneeling at a shrine. · Who does he pray to?"], ["Console, lvl 128 (event, red rune)", "{name} finds a red rune in the ash. · Words are burned into it: <em>\"…shall strike a god down…\"<\/em> · On the back, a map: a mountain made of fire."], ["Console, lvl 129 (event, volcano)", "The rune burns in his palm and drags him into the Volcano. · He can't leave until the mountain gives back what it hid."]], "id": "chapter-v-repentance", "when": "lvl 110", "name": "Chapter V: Repentance"}, {"title": "Chapter VI: Corruption (lvl 130)", "note": "Event: ×2–3 damage, no altars, faith only falls from here; when he falls, the staff raises him. Always the Volcano: no place slot.", "paras": ["At the heart of the Volcano, he held the staff over the lava and let it drink.", "In the fire, the staff remembered who made it. Not you. The dead had been patient.", "It came out black and red, and it no longer asked for faith. It took it.", "⟨faith⟩ When he falls, the staff drags him up again.", "<em>…shall strike a god down.<\/em>", "⟨echo⟩"], "slots": {"faith": [["Devout", "He walked out still whispering your name, out of habit. By the next shrine, he had stopped."], ["Believer", "He doesn't kneel at your shrines anymore."], ["Doubter", "He stopped kneeling long ago. Now he doesn't even look at your shrines."], ["Atheist", "He had stopped believing in you long ago. He had not expected to stop needing you."]], "echo": [["normal", "Which god?"], ["echo", "Which god? This time, you almost say it out loud."]]}, "console": [["Console, lvl 139 (event, tower)", "The staff pulls {name} through ash and stone. · He stands in Midas's Tower. The doors seal. · The staff is hungry for a king. · Sorceresses see his face and flee, whispering a verse."]], "id": "chapter-vi-corruption", "when": "lvl 130", "name": "Chapter VI: Corruption"}, {"title": "Chapter VII: The Ascent (lvl 140)", "note": "Event: Midas is dead and gone for good (he never returns; the Tower has no boss from now on). No mages in the City or the Tower until the lynching. Always the Tower; faith is falling: echo slot only.", "paras": ["Midas fell on the steps of his own throne. ⟨echo⟩", "\"I never touched you,\" the king whispered. \"I only sent you away. I would not be the crown that fed you to the dead.\"", "He laughed, and blood ran into his beard. \"The seers said <em>bends his road<\/em>. Exile is a road too.\"", "The curse had come home, in the shape of the boy he spared.", "The mages are fleeing the Tower. {name} sits below an empty throne, wondering what else they hid."], "slots": {"echo": [["normal", ""], ["echo", "\"I dream of these steps,\" he said. \"Every time.\""]]}, "console": [], "id": "chapter-vii-the-ascent", "when": "lvl 140", "name": "Chapter VII: The Ascent"}, {"title": "Chapter VIII, Part I: Overthrow (lvl 149)", "note": "Event: the lynching, wherever he is. The seer's curse (no healing), only battles, no loot. After it the mages return: the Tower is full of mages again.", "paras": ["They came at dawn, ⟨place⟩: every mage who fled the Tower, and a sorceress with a seer's red eyes.", "\"I wrote your prophecy,\" she said. \"I will not watch it come true.\" ⟨echo⟩", "Her curse sealed his wounds. No spell will heal him now.", "⟨faith⟩", "Far behind the crowd, a hooded figure watches, hands folded, and does not move."], "slots": {"place": [["open", "across the open grass"], ["wild", "through the trees"], ["cold", "over the snow"], ["hot", "out of the heat haze"], ["deep", "down every tunnel at once"], ["walls", "through every gate"]], "echo": [["normal", ""], ["echo", "Then she looked past him, at you. \"Again? How many times, god?\""]], "faith": [["Devout", "He calls your name between every blow."], ["Believer", "He calls your name between every blow."], ["Doubter", "He hasn't called your name in months. He calls it now, between every blow."], ["Atheist", "He swore he would never call your name again. He calls it between every blow."]]}, "console": [], "id": "chapter-viii-part-i-overthrow", "when": "lvl 149", "name": "Chapter VIII, Part I: Overthrow"}, {"title": "Chapter VIII, Part II: The Escape (on death during the lynching)", "note": "Event: up to lvl 150; the seer carries the staff away; achievement \"lynched\".", "paras": ["They tore the staff from his hands, and the seer carried it away.", "He crawled ⟨place⟩ at nightfall, alive, and remembered one thing: the folded hands of a hooded man who never moved.", "You could have stopped them. A word. A touch.", "But a broken man might never strike a god, and you were ready to catch him at the edge.", "You told yourself it was mercy.", "⟨echo⟩"], "slots": {"place": [["open", "out of the trampled grass"], ["wild", "out of the mud"], ["cold", "out of the red snow"], ["hot", "out of the sand"], ["deep", "out of the dark"], ["walls", "out of the gutter"]], "echo": [["normal", "It was a gamble."], ["echo", "It was a gamble. You have lost it before."]]}, "console": [["Console, lvl 150–159 (at shrines)", "{name} prays at the shrine. Nothing answers."]], "id": "chapter-viii-part-ii-the-escape", "when": "on death during the lynching", "name": "Chapter VIII, Part II: The Escape"}, {"title": "Chapter IX: Vindication (lvl 160)", "note": "Event: gains faith again, everything back to normal. Depression and questions.", "paras": ["He has stopped fighting the way he used to. He walks, he falls, he gets up. ⟨place⟩", "⟨faith⟩", "The hooded healer has not left his side since the lynching. He cleans the wounds, shares his bread, says little.", "{name} calls him friend. The first since the Tower.", "⟨echo⟩", "But he has started to look at the healer's hands."], "slots": {"place": [["open", "Every road looks the same now."], ["wild", "The forest no longer frightens him. Nothing does."], ["cold", "He no longer feels the cold."], ["hot", "He no longer feels the heat."], ["deep", "He stays in the dark for days."], ["walls", "He walks the streets and no one sees him."]], "faith": [["Devout", "At night he asks you one thing, again and again: why didn't you protect me?"], ["Believer", "At night he asks you one thing, again and again: why didn't you protect me?"], ["Doubter", "At night he asks the dark, in case you are in it: why didn't you protect me?"], ["Atheist", "He doesn't pray. But at night, without meaning to, he asks: why didn't you protect me?"]], "echo": [["normal", "You let him believe."], ["echo", "You let him believe. You always do."]]}, "console": [["Console, lvl 170", "The healer hums a hymn while he works. · It's one of yours. {name} never taught it to him."]], "id": "chapter-ix-vindication", "when": "lvl 160", "name": "Chapter IX: Vindication"}, {"title": "Chapter X: Disobedience (lvl 190)", "note": "Event: faith locked at Atheist (FAITH.md 3.8): refuses all help, no altars, more bosses. He carries the Last Escape scroll (FAITH.md 3.7): at 0 HP it tears him away and heals him, and each use burns it a little. Faith is locked: echo slot only.", "paras": ["He knew those hands.", "Folded, behind the crowd, while the seer cursed him and he called your name.", "His question had an answer after all.", "The healer was gone by morning. ⟨echo⟩", "In the silence you left, a voice from below found him: \"We would never have watched.\"", "He has stopped asking whether you are listening. He hopes you are."], "slots": {"echo": [["normal", "So was his prayer."], ["echo", "So was his prayer. You have watched it go before. It does not get easier."]]}, "console": [["Console, lvl 190 (event, the broken shrine), step by step", "{name} leaves the road. He knows where he is going. · He walks back to the {shrineZone}, to the shrine where he first felt you. · It is still there. The candle is still lit. · He breaks the cross with his bare hands. Cracks run through the stone, and it bursts apart. <em>(the shattering animation)<\/em> · The candle gutters and goes out. A thin smoke rises. · Somewhere, you feel it."], ["Echo (console, as the candle goes out)", "You have watched this candle go out before."], ["Console, lvl 190 (event, the Last Escape, right after the shrine)", "{name} writes one last scroll, for himself alone. · No god will carry him now. He will carry himself."], ["Console, Last Escape used", "The scroll tears {name} out of the fight and closes his wounds. · A new burn spreads across its edge."], ["Console, lvl 199 (event, Heidan)", "{name} learns where the seer took his staff: Heidan. · He walks to Heidan. He will not leave without it."]], "id": "chapter-x-disobedience", "when": "lvl 190", "name": "Chapter X: Disobedience"}, {"title": "Chapter XI: The Return of the King (lvl 200)", "note": "Event: the Last Escape scroll burns to ash as he takes the staff; from now on {staffName} raises him when he falls (no true death until the final battle). ×2–3 damage, faith icon gone, XP bar full and dark red, more bosses and the Megaboss (the curse), the healer can appear. Always Heidan, faith locked: echo slot only.", "paras": ["The seer was waiting in Heidan, the staff across her knees.", "\"I wrote you,\" she said. \"I cannot unwrite you. ⟨echo⟩\" She told him its true name: {staffName}. He had heard it before, in the voice from below.", "He reforged it in his own blood and set a crown of ash on his head.", "\"Take the crown and you take the curse,\" she warned. He put it on anyway.", "<em>…and rise as the Omni.<\/em>", "He is coming for you."], "slots": {"echo": [["normal", ""], ["echo", "Believe me, god, I have tried."]]}, "console": [], "id": "chapter-xi-the-return-of-the-king", "when": "lvl 200", "name": "Chapter XI: The Return of the King"}, {"title": "True death (rare: nobody comes)", "note": "Only where you could have revived him: never in VI, VIII, X or XI (see the true death rule). Skull sprite, cemetery record with the cause, back to the name screen (FAITH.md). A regular cemetery death, not an erasure: no echo slot.", "paras": ["No one came.", "⟨faith⟩", "{name} lies still in the {zone}, at the edge of the gray, where souls wait until the end of days.", "For you, god, time is nothing.", "For the world, it is everything.", "Somewhere, another apprentice is already whispering."], "slots": {"faith": [["Devout", "He called your name until the end. No caravan came, no shaman, not you."], ["Believer", "Not the caravans, not the shamans, not you."], ["Doubter", "He wondered, at the end, whether you had ever been there at all."], ["Atheist", "He had stopped waiting for gods long ago. Tonight, not even the world came."]]}, "console": [], "id": "true-death", "when": "rare: nobody comes", "name": "True death"}, {"title": "Epilogue: The Unmaking (if you win)", "note": "Then the museum (scrolls, snapshots, stats, map), the cemetery shows his name reversed and struck through, and a new wizard can begin: the echo game.", "paras": ["He fell at your feet, still holding the staff.", "Below, the dead reached for him. You were faster. You always were.", "You took his soul in your own hands, and unmade it.", "The prophecy is broken. You were right.", "No one prays to you now.", "⟨echo⟩"], "slots": {"echo": [["first erasure", "But time is nothing to you. You could hear him again."], ["later erasures", "But time is nothing to you. You have unmade {loop} of them. You could hear him again."]]}, "console": [], "id": "epilogue-if-you-win", "when": "", "name": "Epilogue: The Unmaking"}, {"title": "Epilogue: The Last Light (if he wins)", "note": "Then the black museum, blocked forever: outside a scroll, the scene and the console are one black mass.", "paras": ["The hand that prayed has struck its god down.", "He rose as the Omni, and the dead came to collect him. He swallowed them. Then the gods. Then the Tower, the meadow, the stars, the last of the light. ⟨echo⟩", "Nothing is left but him, and a universe waiting to be made.", "Your story ends here.", "His is just beginning."], "slots": {"echo": [["normal", ""], ["echo", "Beside him stood every wizard you ever unmade."]]}, "console": [], "id": "epilogue-if-he-wins", "when": "", "name": "Epilogue: The Last Light"}];
+let META = {"commit": "f8e19bd", "date": "2026-11-13"};
+const ZONES = [
+  ["open",["Prairie","Town"]],["wild",["Forest","Swamp"]],["cold",["Tundra"]],
+  ["hot",["Desert","Dunes","Volcano"]],["deep",["Cave","Grotto","Mine","Duenon"]],["walls",["City","Castle","Tower","Heidan"]]];
+const SCENERY = {}; ZONES.forEach(([s,zs])=>zs.forEach(z=>SCENERY[z]=s));
+const FAITHS = ["Devout","Believer","Doubter","Atheist"];
+const FIXED_PLACE = {"chapter-vi-corruption":"Volcano","chapter-vii-the-ascent":"Tower","chapter-xi-the-return-of-the-king":"Heidan","prologue-the-beginning":"City"};
+const $ = id => document.getElementById(id);
+const esc = t => t.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const st = {i:0, zone:"Forest", faith:"Believer", echo:false, loop:2, hl:true, name:"Aldric"};
+try{ const saved = JSON.parse(localStorage.getItem("ws-view")||"{}"); Object.assign(st, saved); }catch(e){}
+const notes = {};      // id -> {verdict, note}
+let db = null;
+
+// controls
+const zsel = $("zone");
+ZONES.forEach(([s,zs])=>{ const g=document.createElement("optgroup"); g.label=s; zs.forEach(z=>{const o=document.createElement("option");o.value=z;o.textContent=z;g.appendChild(o)}); zsel.appendChild(g); });
+FAITHS.forEach(f=>{ const b=document.createElement("button"); b.type="button"; b.textContent=f; b.dataset.f=f; $("faith").appendChild(b); });
+[["off",false],["on",true]].forEach(([t,v])=>{ const b=document.createElement("button"); b.type="button"; b.textContent=t==="off"?"First game":"After an erasure"; b.dataset.e=t; $("echo").appendChild(b); });
+
+function buildRail(){
+  $("rail").innerHTML="";
+  STORY.forEach((c,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.dataset.i=i;
+    b.innerHTML=`<span class="nm">${esc(c.name)}</span><span class="lv">${esc(c.when||"")}</span><span class="dot" id="dot-${c.id}"></span>`;
+    b.addEventListener("click",()=>{ st.i=i; render(); });
+    $("rail").appendChild(b);
+  });
+  if(st.i>=STORY.length) st.i=0;
+}
+function showVersion(live){
+  $("ver").innerHTML = `Script version <b>${esc(META.commit||"?")}</b> · ${esc(META.date||"")}` + (live?" · up to date":" · built into the page");
+}
+buildRail();
+
+zsel.addEventListener("change",()=>{st.zone=zsel.value;render()});
+$("faith").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;st.faith=b.dataset.f;render()});
+$("echo").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;st.echo=b.dataset.e==="on";render()});
+$("loop").addEventListener("change",e=>{st.loop=+e.target.value;render()});
+$("wname").addEventListener("input",e=>{st.name=e.target.value.trim()||"Aldric";render()});
+$("hl").addEventListener("change",e=>{st.hl=e.target.checked;render()});
+
+function echoKey(c){ const vs=c.slots.echo; if(!vs) return null; return vs[st.echo?1:0][0]; }
+function zoneNow(c){ return FIXED_PLACE[c.id] || st.zone; }
+function fill(text, c){
+  const z = zoneNow(c), sc = SCENERY[z];
+  text = text.replace(/⟨(\w+)⟩/g,(m,k)=>{
+    const vs=c.slots[k]; if(!vs) return "";
+    let key = k==="place"?sc : k==="faith"?st.faith : echoKey(c);
+    const hit = vs.find(v=>v[0]===key); const t = hit?hit[1]:"";
+    return t?`<mark class="${k}">${t}</mark>`:"";
+  });
+  return text.replace(/\{name\}/g,esc(st.name)).replace(/\{zone\}/g,z).replace(/\{shrineZone\}/g,"Forest").replace(/\{loop\}/g,String(st.loop)).replace(/\{staffName\}/g,'<mark class="echo" title="Random name, made in the first game">Vaelmorth</mark>').replace(/\{reversedName\}/g,esc([...st.name].reverse().join("")));
+}
+
+function render(){
+  const c = STORY[st.i];
+  try{ localStorage.setItem("ws-view",JSON.stringify({i:st.i,zone:st.zone,faith:st.faith,echo:st.echo,loop:st.loop,hl:st.hl,name:st.name})); }catch(e){}
+  document.querySelectorAll(".rail button").forEach(b=>b.setAttribute("aria-current",String(+b.dataset.i===st.i)));
+  zsel.value = st.zone; $("wname").value = st.name; $("hl").checked = st.hl; $("loop").value = String(st.loop);
+
+  const hasPlace = !!c.slots.place, hasFaith = !!c.slots.faith, hasEcho = !!c.slots.echo || !!c.echoAlt;
+  $("ctl-zone").classList.toggle("off", !hasPlace && !FIXED_PLACE[c.id] && !/\{zone\}/.test(JSON.stringify(c)));
+  $("why-zone").textContent = FIXED_PLACE[c.id] ? `· always ${FIXED_PLACE[c.id]}` : hasPlace ? `· ${SCENERY[st.zone]}` : "· no place line";
+  zsel.disabled = !!FIXED_PLACE[c.id];
+  $("ctl-faith").classList.toggle("off", !hasFaith);
+  $("why-faith").textContent = hasFaith ? "" : "· locked here";
+  $("ctl-echo").classList.toggle("off", !hasEcho);
+  $("why-echo").textContent = hasEcho ? "" : "· none here";
+  $("faith").querySelectorAll("button").forEach(b=>{b.disabled=!hasFaith;b.setAttribute("aria-pressed",String(hasFaith&&b.dataset.f===st.faith))});
+  $("echo").querySelectorAll("button").forEach(b=>{b.disabled=!hasEcho;b.setAttribute("aria-pressed",String(hasEcho&&((b.dataset.e==="on")===st.echo)))});
+  $("loopwrap").hidden = !(hasEcho && st.echo && /\{loop\}/.test(JSON.stringify(c)));
+
+  // scroll
+  const [t1,t2] = c.name.includes(":") ? [c.name.split(":")[0], c.name.split(":").slice(1).join(":").trim()] : [c.name,""];
+  const paras = (c.echoAlt && st.echo) ? c.echoAlt : c.paras;
+  const filled = paras.map(p=>fill(p,c)).filter(p=>p.replace(/<[^>]+>/g,"").trim());
+  const sc = $("scroll"); sc.classList.toggle("hl", st.hl);
+  sc.innerHTML = `<p class="t1">${esc(t1)}</p>${t2?`<p class="t2">${esc(t2)}</p>`:""}` +
+    filled.map((p,k)=>`<p class="${k===filled.length-1?"last":""}">${p}</p>`).join("");
+  const words = filled.join(" ").replace(/<[^>]+>/g," ").trim().split(/\s+/).filter(Boolean).length;
+  $("words").textContent = `${words} words`;
+  const f=$("barfill"); f.style.width = Math.min(100, words/110*100)+"%"; f.className = words>110?"over":words>95?"near":"";
+
+  // variants
+  const V=$("variants"); V.innerHTML="";
+  const names={place:"Place",faith:"Belief",echo:"Echo"};
+  const order=["place","faith","echo"].filter(k=>c.slots[k]);
+  if(c.echoAlt) V.insertAdjacentHTML("beforeend",`<div class="vgroup c-echo"><h3>Echo</h3><p class="empty" style="margin:0;font-size:.84rem">The whole Prologue changes after an erasure. Switch Echo game to read it.</p></div>`);
+  if(!order.length && !c.echoAlt) V.innerHTML = `<p class="empty" style="margin:0">This scroll has no variable parts.</p>`;
+  order.forEach(k=>{
+    const g=document.createElement("div"); g.className="vgroup c-"+k;
+    g.innerHTML=`<h3>${names[k]}</h3>`;
+    const cur = k==="place"?SCENERY[zoneNow(c)] : k==="faith"?st.faith : echoKey(c);
+    c.slots[k].forEach(([key,txt])=>{
+      const b=document.createElement("button"); b.type="button"; b.setAttribute("aria-pressed",String(key===cur));
+      b.innerHTML=`<span class="k">${esc(key)}</span><span class="v">${txt?fill(txt,c):'<span class="empty">nothing printed</span>'}</span>`;
+      b.addEventListener("click",()=>{
+        if(k==="faith") st.faith=key;
+        else if(k==="echo") st.echo = c.slots.echo.findIndex(v=>v[0]===key)===1;
+        else if(!FIXED_PLACE[c.id]) st.zone = ZONES.find(z=>z[0]===key)[1][0];
+        render();
+      });
+      g.appendChild(b);
+    });
+    V.appendChild(g);
+  });
+
+  // context
+  $("event").innerHTML = c.note ? fill(c.note,c) : "No game event on this scroll.";
+  const con=$("console");
+  const lines = c.console.filter(([lab])=>st.echo || !/^Echo/.test(lab));
+  con.hidden = !lines.length;
+  con.innerHTML = lines.map(([lab,txt])=>`<div><b>${esc(lab)}</b>${fill(txt,c).replace(/ · /g,"<br>")}</div>`).join("");
+
+  // notes
+  const n = notes[c.id]||{};
+  $("verdict").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===n.verdict)));
+  if(document.activeElement!==$("note")) $("note").value = n.note||"";
+  const tag=$("sentTag"), has=hasContent(n);
+  tag.hidden=!has; tag.className="tag"+(isNew(n)?" new":""); tag.textContent=isNew(n)?"not sent yet":"sent";
+  disarm($("erase1")); $("erase1").disabled=!has;
+  renderSummary();
+}
+
+function hasContent(n){ return !!(n && (n.verdict || n.note)); }
+function isNew(n){ return hasContent(n) && (!n.sentAt || (n.updatedAt||"") > n.sentAt); }
+function withNotes(){ return STORY.filter(c=>hasContent(notes[c.id])); }
+function renderSummary(){
+  const all=withNotes(), fresh=all.filter(c=>isNew(notes[c.id]));
+  const sent=Object.values(notes).map(n=>n.sentAt||"").sort().pop();
+  $("summary").textContent = all.length
+    ? `${all.length} scroll${all.length>1?"s":""} with notes · ${fresh.length} not sent yet` + (sent?` · last sent ${new Date(sent).toLocaleString()}`:"")
+    : "No notes yet. Write one on any scroll, then send them all to Claude from here.";
+  $("eraseall").disabled = !all.length;
+}
+function paintDots(){ STORY.forEach(c=>{ const d=$("dot-"+c.id); if(d) d.className="dot "+((notes[c.id]||{}).verdict||""); }); }
+function storeLocal(){ try{localStorage.setItem("ws-notes",JSON.stringify(notes))}catch(e){} }
+
+$("verdict").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const c=STORY[st.i]; const n=notes[c.id]||(notes[c.id]={});
+  n.verdict = n.verdict===b.dataset.v ? "" : b.dataset.v;
+  saveNote(); render();
+});
+$("save").addEventListener("click",()=>{ saveNote(); render(); });
+$("note").addEventListener("input",()=>{ const c=STORY[st.i]; (notes[c.id]||(notes[c.id]={})).note=$("note").value; $("status").textContent="Unsaved changes"; });
+
+let queue = Promise.resolve();
+function saveNote(){
+  const c=STORY[st.i]; const n=notes[c.id]||(notes[c.id]={});
+  n.note=$("note").value; n.updatedAt=new Date().toISOString();
+  const body={chapter:c.name, verdict:n.verdict||"", note:n.note||"", updatedAt:n.updatedAt, sentAt:n.sentAt||""};
+  paintDots(); storeLocal();
+  if(!db){ $("status").textContent="Saved in this browser only. Use Copy all notes to send them."; return; }
+  $("status").textContent="Saving…";
+  queue = queue.then(()=>db.collection("notes").doc(c.id).set(body))
+    .then(()=>{$("status").textContent="Saved.";})
+    .catch(err=>{$("status").textContent="Couldn't save ("+(err&&err.code||"error")+"). Your text is still here; try again.";});
+}
+
+// Erasing takes two presses: the first arms the button, a second press within 4 seconds confirms.
+function arm(btn,label){ if(!btn.dataset.label) btn.dataset.label=btn.textContent; btn.classList.add("armed"); btn.textContent=label;
+  clearTimeout(btn._t); btn._t=setTimeout(()=>disarm(btn),4000); }
+function disarm(btn){ if(btn.dataset.label) btn.textContent=btn.dataset.label; btn.classList.remove("armed"); clearTimeout(btn._t); }
+function eraseIds(ids){
+  ids.forEach(id=>{ delete notes[id]; }); storeLocal(); paintDots(); render();
+  if(!db) return Promise.resolve();
+  return ids.reduce((p,id)=>p.then(()=>db.collection("notes").doc(id).delete()), Promise.resolve());
+}
+$("erase1").addEventListener("click",()=>{
+  const b=$("erase1"); if(!b.classList.contains("armed")){ arm(b,"Press again to erase"); return; }
+  disarm(b); const c=STORY[st.i];
+  eraseIds([c.id]).then(()=>{$("status").textContent="Note erased.";}).catch(err=>{$("status").textContent="Couldn't erase ("+(err&&err.code||"error")+").";});
+});
+$("eraseall").addEventListener("click",()=>{
+  const b=$("eraseall"); if(!b.classList.contains("armed")){ arm(b,`Erase ${withNotes().length} notes? Press again`); return; }
+  disarm(b); const ids=Object.keys(notes);
+  eraseIds(ids).then(()=>{$("copystatus").textContent="All notes erased.";}).catch(err=>{$("copystatus").textContent="Couldn't erase every note ("+(err&&err.code||"error")+").";});
+});
+
+function notesText(list){
+  return list.map(c=>`${c.name}: ${(notes[c.id].verdict||"no verdict").toUpperCase()}${notes[c.id].note?"\n"+notes[c.id].note:""}`).join("\n\n");
+}
+$("copyall").addEventListener("click",()=>{
+  const txt = notesText(withNotes()) || "No notes yet.";
+  navigator.clipboard.writeText(txt).then(()=>{$("copystatus").textContent="Copied.";}).catch(()=>{$("note").value=txt;$("note").select();$("copystatus").textContent="Copy blocked: the notes are selected in the box above.";});
+});
+
+// Send to Claude: one comment with every note not sent yet (or all of them, if none are new).
+let comments=null;
+async function refreshSend(){
+  const b=$("send");
+  if(!comments){ b.disabled=true; $("sendstatus").textContent="Sending isn't available here. Use Copy all notes."; return; }
+  let can="off"; try{ can=await comments.canSendToClaude(); }catch(e){}
+  b.disabled = can!=="available";
+  $("sendstatus").textContent = can==="available" ? "" : can==="no_session" ? "No Claude session is listening right now. Your notes stay saved." : can==="writers_only" ? "Only the page's editors can send to Claude." : "Sending isn't available here. Use Copy all notes.";
+}
+$("send").addEventListener("click",async()=>{
+  const all=withNotes(); if(!all.length){ $("sendstatus").textContent="Write a note first."; return; }
+  let list=all.filter(c=>isNew(notes[c.id])); if(!list.length) list=all;
+  const head=`Story notes from the review page (script ${META.commit||"?"}): ${list.length} scroll${list.length>1?"s":""}.\n\n`;
+  const enc=new TextEncoder(); const full=notesText(list); let body=full;
+  while(enc.encode(head+body).length>3900) body=body.slice(0,-200);
+  if(body!==full) body+="\n…(more in the notes store)";
+  const b=$("send"); b.disabled=true; $("sendstatus").textContent="Sending…";
+  try{
+    const anchor=await comments.anchorFor($("sendcard"));
+    await comments.sendToClaude({anchor, text:head+body});
+    const now=new Date().toISOString();
+    list.forEach(c=>{ notes[c.id].sentAt=now; }); storeLocal();
+    if(db) await list.reduce((p,c)=>p.then(()=>db.collection("notes").doc(c.id).update({sentAt:now})), Promise.resolve());
+    $("sendstatus").textContent=`Sent ${list.length} note${list.length>1?"s":""} to Claude.`; render();
+  }catch(err){
+    const code=err&&err.code;
+    $("sendstatus").textContent = code==="rate_limited" ? "Sent too often. Wait a moment and try again." : code==="consent_required" ? "Allow comments for this page, then send again." : "Couldn't send ("+(code||"error")+"). Your notes are still saved.";
+  }finally{ refreshSend(); }
+});
+
+// Startup: the copy built into the page first, then the live script and the shared notes.
+try{ Object.assign(notes, JSON.parse(localStorage.getItem("ws-notes")||"{}")); }catch(e){}
+showVersion(false); paintDots(); render();
+(async()=>{
+  const timer=setTimeout(()=>{ if(!db) $("status").textContent="Notes are saved in this browser only."; },10000);
+  try{ db = await (window.claude && window.claude.use ? window.claude.use("db") : null); }catch(e){ db=null; }
+  try{ comments = await (window.claude && window.claude.use ? window.claude.use("comments") : null); }catch(e){ comments=null; }
+  refreshSend();
+  if(!db){ clearTimeout(timer); $("status").textContent="Notes are saved in this browser only. Use Copy all notes to send them."; return; }
+  db.doc("story/current").onSnapshot(d=>{
+    if(!d.exists) return;
+    const v=d.data()||{};
+    try{ const next=JSON.parse(v.json); if(Array.isArray(next)&&next.length){ STORY=next; META={commit:v.commit,date:v.date}; buildRail(); paintDots(); render(); showVersion(true); } }catch(e){}
+  }, ()=>{});
+  db.collection("notes").onSnapshot(snap=>{
+    clearTimeout(timer);
+    const keepId = document.activeElement===$("note") ? STORY[st.i].id : null;
+    const kept = keepId ? notes[keepId] : null;
+    Object.keys(notes).forEach(k=>delete notes[k]);
+    snap.docs.forEach(d=>{ const v=d.data()||{}; notes[d.id]={verdict:v.verdict||"",note:v.note||"",updatedAt:v.updatedAt||"",sentAt:v.sentAt||""}; });
+    if(kept) notes[keepId]=Object.assign({},notes[keepId]||{},{note:kept.note});
+    storeLocal(); paintDots(); render();
+    $("status").textContent = snap.metadata.fromCache ? "Loading notes…" : "Notes are saved and shared with Claude.";
+  }, err=>{ clearTimeout(timer); $("status").textContent="Couldn't load saved notes ("+(err&&err.code||"error")+")."; });
+  document.addEventListener("visibilitychange",()=>{ if(!document.hidden) refreshSend(); });
+})();
+</script>
