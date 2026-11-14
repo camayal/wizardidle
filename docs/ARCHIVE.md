@@ -476,3 +476,71 @@ simple `cat >>`, never read or edit it as part of normal work.
 ## 2026-11-14 from docs/AUTHOR_NOTES.md: done (the healer's hood redrawn as a cowl, artist/art 10837a2)
 
 [x] healer hood still looks weird (the pixels in the chin )
+
+## 2026-11-14 from docs/SOUNDS.md: the reuse table (every row decided)
+
+Existing sounds that could be reused, judged by name and length, then decided by ear.
+
+| File | Length | Reuse for |
+|---|---|---|
+| Physical.ogg | 0.23 s | the swing of a regular enemy's slash, thrust, smash (approved, each with its own cut); ~~phase, great slash, the flurry~~ (boss moves) |
+| ~~Nature.ogg~~ | 0.35 s | ~~spit, slime spit, poison strike / dart, poison cloud, spores, vines~~ |
+| ~~Fire.ogg~~ | 1.73 s | ~~fire breath, flame pillar, fire rain, fire fist, fire peak, fire tornado~~ |
+| ~~Frost.ogg~~ | 1.16 s | ~~blizzard, ice spikes, frost breath~~ |
+| ~~Thunder.ogg~~ | 0.70 s | ~~lightning, golden storm~~ |
+| ~~Shadow.ogg~~ | 3.43 s | ~~curse, eclipse (long: may need a shorter cut)~~ |
+| ~~Arcane.ogg~~ | 1.25 s | ~~arcane flare, arcane rain, rune circle, sonic boom, prism pulse, colour burst, rainbow orbs~~ |
+| ~~Divine.ogg~~ | 2.27 s | ~~golden touch, divine light~~ |
+| ~~heal.ogg~~ | 3.43 s | ~~Midas healed by his golden rays, healing rain~~ |
+| ~~breakPot.ogg~~ | 1.36 s | ~~the stone bursting off the wizard (unpetrify)~~ (another sound chosen) |
+| ~~breakWood.ogg~~ | 1.50 s | ~~stand-in for the ram's impact and heavy slams until a thud is found~~ (the thud was found; the ram got its own sound) |
+| hidra.ogg | 3.32 s | already plays when a hydra appears or grows a head |
+
+The author's decision (2026-11-13): the rows crossed out are boss spells, and each boss move gets
+its own sound instead of sharing its school's.
+
+## 2026-11-14 from docs/SOUNDS.md: the "sounds to find" list (found rows)
+
+| # | Sound | For |
+|---|---|---|
+| ~~1~~ | ~~Heavy thud / ground hit~~ | ~~slam (Ent, Golem, Mummy, Umigubi, Roco, bosses), ground punch~~ (found) |
+| ~~2~~ | ~~Deep rumble, ~1.5 s~~ | ~~the earthquake scene spell (with the shake)~~ (found) |
+| ~~3~~ | ~~Bow twang + arrow whoosh~~ | ~~shoot (Elf)~~ (found) |
+| ~~4~~ | ~~Hooves galloping, ~1 s, loopable~~ | ~~charge (Capricor, Tauren, boss charges)~~ (found) |
+| ~~5~~ | ~~Rolling rumble, ~1.5 s~~ | ~~the boss's roll~~ (found) |
+| ~~6~~ | ~~Beast roar, ~1 s~~ | ~~roar (boss) only~~ (found) |
+| ~~6b~~ | ~~Small creature snarl, under 0.5 s~~ | ~~pounce (small creatures need their own, lighter sound)~~ (found) |
+| ~~7~~ | ~~Slime squelch / boing~~ | ~~the slime boss's bounce~~ (found) |
+| 8 | Wind gust, ~1 s | ~~sandstorm~~ (found); whirlwind and the Fenix's wing flap stayed pending |
+| ~~9~~ | ~~Stone grinding / crackle, ~0.8 s~~ | ~~Medusa's gaze turning him to stone~~ (found) |
+| 10 | Hydra strike | stayed pending (on hold); ~~pounce bites~~ (the small creatures' snarl, 6b) |
+| ~~11~~ | ~~Ram impact~~ | ~~the Capricor's and the Tauren's ram when the charge lands (not a thud)~~ (Physical.ogg chosen) |
+
+## 2026-11-14 from docs/SOUNDS.md: how some choices were reached
+
+- Hooves: the author first approved freesound_community-gallop-98644.mp3 and replaced it a minute
+  later with freesound_community-single-horse-galopp-6152.mp3.
+- Stone grinding: the first choice was dragon-studio-glass-cracking-511310.mp3, replaced the next
+  day by freesound_community-stoneblockdragwoodgrind-82327.mp3.
+- The roar (2026-11-13): the author heard the beast growl on a pounce and decided a roar like that
+  is only for Bicaptop; small creatures need another sound. The boss's roar and the small
+  creatures' snarl became two separate rows, each approved on its own.
+- Sounds were first tried on a separate test page; since 2026-11-14 they are tried in the game's
+  dev mode for sounds.
+
+## 2026-11-14 from ideas.md: older journal entries
+
+### 2026-11-13: Medusa's poison shot, more visible
+- The author's note, redrawn by the artist (approved by the author): `scene_poison_dart.png` is now a slim dark stinger with a green venom drop, outlined, with a venom streak, drips and a splash on the wizard; 15 frames (was 14), set in `sceneSpells`.
+
+### 2026-11-13: Belief: the way back from atheism, and a fix
+- The author's way back (FAITH.md 3.1 Decisions): a Doubter or Atheist passing a shrine +0.5; a close call (a fight won below 10% HP with no help from the god) +1; getting up alone -10 only as a Believer or Devout, -1 as a Doubter or Atheist; the god's super-critic is 1 in 10 of his critics at x16.
+- Fix: the stored belief level started empty and followed the value, so level changes were never recorded (no margin, no announcement, no time per level). He now starts as a Believer.
+- Time spent at each level is counted (`belief.time.<level>`, ms of play), and `tools/playtest.py` writes a Belief table (end value and level, when he first turned Doubter / Atheist, times back to Believer, hours per level).
+- Playtest `docs/playtests/2026-11-13-belief-way-back`: an idle wizard is a Doubter from level 1-2, never an Atheist, and yo-yos back to Believer 32-48 times (Doubter ~37 h, Believer ~6 h of ~43 h); his faith stays positive. An active god's wizard is Devout within the first hour and pinned at +100.
+
+### 2026-11-13: Belief built; rest without beds
+- **Belief** (docs/FAITH.md 3.1, the author's decision detailed by the planner) is in the game: `src/belief.js`, numbers in `config.belief`. Faith stays the currency; belief (-100 to +100, start +20) moves only by moments (saved from the killing blow +8, heal below 20% HP +5, the god's final blow +5, critic +3, normal touch +0.5, revive +2, shrine +1, skipped shrine -1, getting up alone -10). Levels with a 10-point margin on the way up: Devout (touches -25%, shrines +15%), Believer, Doubter (touches x2, shrines -15%), Atheist (refuses heal and hit touches, never enters shrines, no penalty for skipping). The god's touch may now kill. Stats page shows the level and value. Not yet: super-critic chance (off), Atheists getting up faster, rescuers and potions, the heading icon.
+- Playtest `docs/playtests/2026-11-13-belief`: the active god plays as before; an idle god's wizard turns Atheist after about 9 falls alone (before level 25), never enters a shrine again and his faith ends deeply negative (-1.5M). For the author and the planner: intended road to atheism, or -10 too strong?
+- **Rest** (the author, through the artist: no beds or sleeping pose needed): at an inn he walks slowly to the middle and the scene goes dark; camping, he walks a few steps, the sleeping bag appears in front of him (no more bag at the enemy's place on arrival) and it goes dark; when the scene comes back he stands in his place, with no walk back. The stand-in bed spots are gone.
+- Tests: browser runs of the touches and of both rests; gameplay suite 0 errors.

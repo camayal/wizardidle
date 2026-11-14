@@ -13,7 +13,9 @@
 //   img/story/  img/objects/  img/ui/  img/ui/achievements/  img/app/ (icons the browser uses)
 //   snd/<schools|wizard|creatures|places|ui>/
 //
-// New kinds get a folder when they arrive: add the rule here, then move the files. While
+// Files from outside (downloads, packs) are renamed before they come in: short, lowercase, words
+// joined by _, the prefix of their kind, no author, site or ids (those go in SOUNDS.md or the art
+// notes). New kinds get a folder when they arrive: add the rule here, then move the files. While
 // developing, a name no rule knows is reported in the browser console (and looked for in
 // the main folder), so a misplaced file shows at once.
 
