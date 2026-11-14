@@ -23,7 +23,6 @@
 [] dice sounds are not nicely sync send to @musician
 [] create scenes that are the end of one ad the beginon of the otherone.
 [] in desert wizard walks from left. some of those scenes have ocean on the left of the screen, we need to modify them to make a beach (walkable) or other solution.
-[] healer hood still looks weird (the pixels in the chin )
 [] some dreams can increase believer score
 [] in altars, due to its nature, i tis better to return the wizard walking to the left
 [] if a battle is interrumpted because i close the game, when i start again previous content (enemies, runes, etc), in in place

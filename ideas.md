@@ -255,6 +255,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-14: The healer's hood, redrawn by hand
+- The author's note "healer hood still looks weird (the pixels in the chin)": the old hood was a perfect oval and looked artificial. The artist hand-drew four cloth hoods; the author picked **A, the cowl** (flatter top, the cloth bunches at the back in a darker fold). The chin is now clean: dark face, a soft brown chin catching a little light (no stray grey or gold pixels). The staff is unchanged.
+- `healer_hooded.png` replaced; `anim_god_unhood.png` regenerated so the reveal opens with the new hood (only its hooded frames changed; the wings and god forms are identical).
+
 ### 2026-11-14: Dev tools beside the game, sounds and art modes
 - The author's request (with the musician's and the artist's lists of what each test needs): the bottom dev bar is now a light panel left of the game (`src/dev/panel.js`, `src/dev/tests.js`) with folding menus (Modes, Scenarios, Fight now, Wizard, Game, Command line) and a log; on a narrow screen it floats over the game.
 - Shared scene picker (`src/dev/scenes.js`): kind, what, which and tier; enemy attacks and arrivals, boss attacks, hydras (strike, cast, grow), scene spells, spell effects, wizard animations and poses, the dice (two rolls 1.5 s apart), any sprite or object, backgrounds. Each knows when its blow lands and the spell that lands with it.
@@ -279,7 +283,3 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - Playtest `docs/playtests/2026-11-13-belief`: the active god plays as before; an idle god's wizard turns Atheist after about 9 falls alone (before level 25), never enters a shrine again and his faith ends deeply negative (-1.5M). For the author and the planner: intended road to atheism, or -10 too strong?
 - **Rest** (the author, through the artist: no beds or sleeping pose needed): at an inn he walks slowly to the middle and the scene goes dark; camping, he walks a few steps, the sleeping bag appears in front of him (no more bag at the enemy's place on arrival) and it goes dark; when the scene comes back he stands in his place, with no walk back. The stand-in bed spots are gone.
 - Tests: browser runs of the touches and of both rests; gameplay suite 0 errors.
-
-### 2026-11-13: Story art merged; the hooded healer in the cabin
-- The artist's story art (approved by the author) is on dev: the hooded healer (`healer_hooded`), the final battle (`anim_god_unhood` 29 frames, `anim_god_wings_open` 8, `anim_god_wings_burn` 15, `anim_god_death` 26 at 64 x 56, stills `god_form_G1/G2/G3/G3b/G1_remnants` at 48 x 40, drawn at the healer's box - 8 sprite px, about 110 ms a frame) and the god's shrine (`god_shrine` 4-frame candle loop, `anim_shrine_break` 13 frames, `god_shrine_broken`). Frame counts checked against the artist's notes.
-- Wired now: the healer in the cabin after a divine revive is the hooded healer (the god in disguise). The rest waits for the story stage (docs/STORY.md): the stranger moments in II, V, VIII, IX, the shrine in chapter II and its breaking in chapter X, the final battle phases (when each starts is for the planner).

@@ -466,3 +466,13 @@ simple `cat >>`, never read or edit it as part of normal work.
 - Verified by running v1 and v2 side by side in headless Edge with virtual time and boosted rare events: zero errors, v2 reached level 118. The dice game didn't come up in testing.
 - Found v1 bugs along the way (boss fights read the previous enemy's data, "another Boss" text never shows, …), logged in the roadmap for phase 4.
 - Housekeeping: removed co-author trailers from commit history; turned off commit attribution globally.
+
+## 2026-11-14 from ideas.md: older journal entries
+
+### 2026-11-13: Story art merged; the hooded healer in the cabin
+- The artist's story art (approved by the author) is on dev: the hooded healer (`healer_hooded`), the final battle (`anim_god_unhood` 29 frames, `anim_god_wings_open` 8, `anim_god_wings_burn` 15, `anim_god_death` 26 at 64 x 56, stills `god_form_G1/G2/G3/G3b/G1_remnants` at 48 x 40, drawn at the healer's box - 8 sprite px, about 110 ms a frame) and the god's shrine (`god_shrine` 4-frame candle loop, `anim_shrine_break` 13 frames, `god_shrine_broken`). Frame counts checked against the artist's notes.
+- Wired now: the healer in the cabin after a divine revive is the hooded healer (the god in disguise). The rest waits for the story stage (docs/STORY.md): the stranger moments in II, V, VIII, IX, the shrine in chapter II and its breaking in chapter X, the final battle phases (when each starts is for the planner).
+
+## 2026-11-14 from docs/AUTHOR_NOTES.md: done (the healer's hood redrawn as a cowl, artist/art 10837a2)
+
+[x] healer hood still looks weird (the pixels in the chin )
