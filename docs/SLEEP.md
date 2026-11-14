@@ -10,7 +10,7 @@ Resting is the inn event (`innEV()` → `searchInn()` → `wakeUp()` in `src/eve
 
 | Question | Decision |
 |---|---|
-| How sleep looks | **The wizard walks to the bed** (at an inn) **or to the sleeping bag** (camping), lies down, and **the scene fades to dark**; then it fades back and he wakes |
+| How sleep looks | **No beds** (the author, 2026-11-13): at an inn he walks slowly in; in the wild **the sleeping bag is laid where he stops**; he lies down and **the scene fades to dark**, then it fades back and he wakes (built by dev) |
 | What a dream is | **A vision over the dark scene:** 1–3 short lines appear softly over the darkness, with a faint image when the artist has drawn one (a staff, a face, the hood). The console keeps the lines |
 | When dreams come | **Rare, plus story nights:** most rests are plain sleep; a small chance of a dream or nightmare on any rest, and a scripted story dream on the first rest after key moments (a chapter, a fall, the approach of the final battle) |
 | What they do | **For now, pure story:** text and image only, no effect on faith, rest or stats |
@@ -18,7 +18,7 @@ Resting is the inn event (`innEV()` → `searchInn()` → `wakeUp()` in `src/eve
 ## How it plays
 
 1. **Arrive:** the inn background or the camping spot (as today).
-2. **Walk to bed:** the wizard walks to the bed (the bed tiles `L2_Bed*` from the interior set) or to the sleeping bag, and lies down (the fallen sprite's lying pose can guide the artist; a sleeping pose is different from a fall, so it needs its own drawing).
+2. **Lie down:** no beds. At an inn he walks slowly in; camping, the sleeping bag is laid where he stops, and he lies down.
 3. **Dark:** about 1 s to fade, about 2 s dark. If tonight has a dream, its lines (and image) appear over the dark for a few seconds.
 4. **Wake:** fade back, the wake-up line and HP as today (`wakeUp()`; its double-count text bug is fixed in stage 3).
 
@@ -31,7 +31,7 @@ Resting is the inn event (`innEV()` → `searchInn()` → `wakeUp()` in `src/eve
 
 ## Needs
 
-- Art (artist): the wizard lying in bed / in the sleeping bag; optional faint dream images.
+- Art (artist): optional faint dream images.
 - Text (story script): story dreams per moment; a pool of short random dreams and nightmares.
 - Stats ([STATS.md](STATS.md)): `sleep.inn`, `sleep.camping`, `dream.story`, `dream.random`, `nightmare.random`.
 

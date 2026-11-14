@@ -343,6 +343,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ### 2026-11-13: Planner items
 
+- Belief, after the first playtest (an idle wizard was an Atheist for good before level 25): a way back decided (passing shrines +0.5, close calls +1, getting up alone −1 once a Doubter or Atheist); the god's super-critic is 1 in 10 of his critics at ×16. Sleep plan: no beds.
 - Belief meter detailed (FAITH.md 3.1, the author's choices): −100 to +100, start +20, levels at +60 / 0 / −60 with a 10-point margin; critical moments and starting weights; the god's touch may now kill (the final blow).
 - Scenes plan: the street doors (`STREET_DOORS`) are the first fixed door landmarks; enemy entrance paths stay free of props.
 - Scenes plan written (`docs/SCENES.md`) from the author's decisions: scenes composed from his layers, a finite seeded world (about 100 of 300 variants), three tiers joined by stairs and cave mouths, visible exits with a god nudge, light and weather from game time. Checked the art: every layer file already splits `Fondo` (base) and `Piso` (floor). Decided too: one map per tier (a new Heidan map), rare scenes marked quietly, engine first then art.

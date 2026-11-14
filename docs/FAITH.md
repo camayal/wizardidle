@@ -20,6 +20,7 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 | 2026-11-12 | True death and the story | **The author's rule: a true death is possible only while the god can click to revive him. Wherever the story takes that click away, the story must protect him.** Chapter VI–VIII: the corrupt staff raises him; X: the Last Escape scroll (he writes it himself); XI, after it burns: the reforged staff *{staffName}*. No true death from X until the final battle. No afterlife gods in the death mechanics |
 | 2026-11-12 | Playtests also cover | Revive boost and farming, belief thresholds, shrine chance, professions touches |
 | 2026-11-13 | Belief vs faith (from the author's playtest notes) | **Two meters.** Faith stays the currency the god spends. **Belief is its own bounded meter** (e.g. −100 to +100), moved by **moments**, not by spending: a heal at a critical moment or the final blow on an enemy counts a lot, normal heals and hits only a little, leaving him to revive alone drops it a lot. The four levels read from belief. The story can lock it at "lost", shown as a symbol rather than −∞. To be detailed in this plan (weights, bounds, what counts as critical) before it is built |
+| 2026-11-13 | A way back from atheism | **Passing by a shrine** (Doubter or Atheist) +0.5; **a close call** (survives a fight below 10% HP with no help) +1; **getting up alone** −10 only while a Believer or Devout, −1 once a Doubter or Atheist. The god's super-critic: **1 in 10 of his critics, ×16** |
 | 2026-11-13 | Belief meter details | **−100 to +100, start +20; Devout from +60, Doubter below 0, Atheist below −60, 10-point margin.** Critical moments: saved from the killing blow (+8), heal at very low HP (+5), the god's final blow (+5), the god's critic (+3) and super-critic (+6); small ones +0.5; left to get up without the god −10. The god's touch may now kill. Details in 3.1 |
 
 ---
@@ -98,14 +99,18 @@ Almost every faith amount comes from the wizard's max HP (`hpBase`). To compare 
 | **Heal at very low HP** (below about 20%) | **+5** |
 | **Final blow:** the god's touch on an enemy lands the killing hit | **+5** |
 | **The god's touch lands a critic** on an enemy | **+3** |
-| **The god's touch lands a super-critic** | **+6** |
+| **The god's touch lands a super-critic** (1 in 10 of the god's critics, ×16 damage against the critic's ×8; decided 2026-11-13) | **+6** |
 | A normal heal or hit touch | +0.5 |
 | Revive by the god's touch | +2 |
 | Prayer at a shrine | +1 |
 | Skipping a shrine | −1 |
-| **Left to get up without the god** (a rescuer or alone) | **−10** |
+| **Passing by a shrine** while a Doubter or Atheist (he walks past without entering: *"glances at the shrine longer than he means to"*) | **+0.5** |
+| **Close call:** he survives a fight below 10% HP with no help | **+1** |
+| **Left to get up without the god** (a rescuer or alone) **while a Believer or Devout** (he was used to the god's help) | **−10** |
+| Left to get up without the god **while a Doubter or Atheist** (he expects nothing) | −1 |
 
-- **No drift on its own:** an idle player's wizard loses belief only through falls he gets up from without the god and through skipped shrines.
+- **No drift on its own.**
+- **A way back from atheism, even with an idle player** (decided 2026-11-13, the author: *"we should have a way to revert atheism"*): the first playtest (`docs/playtests/2026-11-13-belief`) showed that with −10 for every fall, an idle player's wizard became an Atheist after about 9 falls, before level 25, and stayed one for the whole game (an Atheist never prays, so nothing raised his belief). Now passing by shrines and close calls raise belief a little, and getting up alone costs only −1 once he's a Doubter or Atheist. A new playtest checks where an idle wizard ends up.
 - *Change from today:* the god's touch **may now kill** an enemy (the final blow). Today `npcBtn()` in `src/divine.js` caps the hit so the enemy keeps 1 HP ("avoid god kills").
 - *Critic for the god's touch:* today's "divine power" spells in `npcBtn()` (×8 damage) are the god's critic; in [SCENE_SPELLS.md](SCENE_SPELLS.md) they play a scene spell. A super-critic is a rarer, stronger one (chance to playtest).
 - *Stats:* `belief.highest`, `belief.lowest` (records), `belief.moment.<kind>` (counters), the level and age when each level is first reached (firsts).
