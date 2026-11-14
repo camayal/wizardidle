@@ -26,7 +26,7 @@ ones, and free to use (CC0 or similar; record the source and licence next to the
 
 ## Approved, still to cut and wire
 
-Approved by ear, each tried against its animation. None is in `ogg/` yet and nothing is wired:
+Approved by ear, each tried against its animation. None is in `snd/` yet and nothing is wired:
 each still has to be cut and converted to .ogg, with its source and licence recorded. A row
 leaves this table when its sound plays in the game. The source files are in
 `wizardidle-old-ideas/unorganized_sounds/`. "Starts at" is counted from the first frame of the
@@ -49,10 +49,10 @@ animation.
 | Sandstorm | dragon-studio-gust-of-wind-511325.mp3 | whole file | 1.22 s | 0.3 | 100 ms (the scene spell starts) |
 | Medusa's gaze: he turns to stone | freesound_community-stoneblockdragwoodgrind-82327.mp3 | whole file | 1.15 s | 0.3 | 700 ms (the stone starts to climb) |
 | The stone bursts off | freesound_community-rock-destroy-6409.mp3 | 0.000 s to 0.993 s | 0.99 s | 0.3 | 400 ms (the stone cracks) |
-| Orc: slash swing | ogg/Physical.ogg (already in the game) | 0.029 s to 0.105 s | 0.08 s | 0.3 | 300 ms (the slash opens) |
-| Warrior: thrust swing | ogg/Physical.ogg (already in the game) | 0.034 s to 0.107 s | 0.07 s | 0.3 | 200 ms (the spear goes out) |
-| Ogre: smash swing | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 400 ms (the downswing) |
-| Capricor: ram, Tauren: ram (each approved) | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 950 ms (when the ram lands) |
+| Orc: slash swing | snd/schools/Physical.ogg (already in the game) | 0.029 s to 0.105 s | 0.08 s | 0.3 | 300 ms (the slash opens) |
+| Warrior: thrust swing | snd/schools/Physical.ogg (already in the game) | 0.034 s to 0.107 s | 0.07 s | 0.3 | 200 ms (the spear goes out) |
+| Ogre: smash swing | snd/schools/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 400 ms (the downswing) |
+| Capricor: ram, Tauren: ram (each approved) | snd/schools/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 950 ms (when the ram lands) |
 | Infraespectro: curse | freesound_community-deathmagic-94937.mp3 | 1.717 s to 3.519 s | 1.80 s | 1.0 | 200 ms (the curse starts) |
 
 All at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wires them:
@@ -61,7 +61,7 @@ All at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wire
 - The rumble and the roll come from the same file (the roll without its first 0.24 s).
 - The hooves on the Tauren and the Capricor are louder than the game's usual 0.3, and run about
   300 ms past the ram's impact on the Tauren.
-- The stone bursting off replaces `breakPot.ogg`.
+- The stone bursting off replaces `snd/places/breakPot.ogg`.
 
 ## Still to choose
 
@@ -87,4 +87,4 @@ One by one, in the game's dev mode for sounds (its list is `src/dev/soundNeeds.j
 | Rojo | flaming punch, fire rain, slam (fire peak) |
 | Hydras | strike (Swamp, ice, Dunes), frost breath. On hold: the author wants new sounds for the hydras |
 | Scene spells no boss casts yet | whirlwind, eclipse, divine light, healing rain |
-| Dice game | the roll: `ogg/dice.ogg` is 2.07 s and the dice animation now lasts 1.44 s (18 frames of 80 ms), with a new roll possible every 1.5 s. Wanted: about 1.2 to 1.4 s, the clatter early and the dice settled by the end (the author's playtest note, 2026-11-14) |
+| Dice game | the roll: `snd/places/dice.ogg` is 2.07 s and the dice animation now lasts 1.44 s (18 frames of 80 ms), with a new roll possible every 1.5 s. Wanted: about 1.2 to 1.4 s, the clatter early and the dice settled by the end (the author's playtest note, 2026-11-14) |
