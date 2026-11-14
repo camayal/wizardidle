@@ -61,7 +61,7 @@ All at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wire
 - The rumble and the roll come from the same file (the roll without its first 0.24 s).
 - The hooves on the Tauren and the Capricor are louder than the game's usual 0.3, and run about
   300 ms past the ram's impact on the Tauren.
-- The stone bursting off replaces `breakPot.ogg`.
+- The stone bursting off replaces `snd/places/breakPot.ogg`.
 
 ## Still to choose
 
