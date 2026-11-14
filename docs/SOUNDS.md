@@ -43,9 +43,9 @@ Short (under 1 s unless noted), mono, .ogg, about as loud as the current ones, f
 | ~~3~~ | ~~Bow twang + arrow whoosh~~ | ~~shoot (Elf)~~ (found, see Decisions) |
 | ~~4~~ | ~~Hooves galloping, ~1 s, loopable~~ | ~~charge (Capricor, Tauren, boss charges)~~ (found, see Decisions) |
 | ~~5~~ | ~~Rolling rumble, ~1.5 s~~ | ~~the boss's roll~~ (found, see Decisions) |
-| 6 | Beast roar, ~1 s | roar (boss) only |
+| ~~6~~ | ~~Beast roar, ~1 s~~ | ~~roar (boss) only~~ (found, see Decisions) |
 | 6b | Small creature snarl, under 0.5 s | pounce (small creatures need their own, lighter sound) |
-| 7 | Slime squelch / boing | the slime boss's bounce |
+| ~~7~~ | ~~Slime squelch / boing~~ | ~~the slime boss's bounce~~ (found, see Decisions) |
 | 8 | Wind gust, ~1 s | wing flap, whirlwind, sandstorm |
 | 9 | Stone grinding / crackle, ~0.8 s | Medusa's gaze turning him to stone |
 | 10 | Bite snap | the hydra's strike, pounce bites |
@@ -67,8 +67,10 @@ be cut and converted to .ogg, with source and licence recorded), and nothing is 
 | 3 | Arrow whoosh | djartmusic-arrow-swish_03-306040.mp3 | whole file | 1.04 s | 0.3 | 200 ms (the release) | Elf shoots |
 | 4 | Hooves | freesound_community-single-horse-galopp-6152.mp3 | 1.556 s to 2.432 s | 0.88 s | 0.55 | 370 ms (just before the dash) | Tauren charges |
 | 5 | Rolling rumble | dragon-studio-heavy-rock-rolling-515254.mp3 | 0.239 s to 2.110 s | 1.87 s | 0.3 | 400 ms (the roll starts) | Kkck rolls |
+| 6 | Beast roar | dragon-studio-beast-growl-494304.mp3 | 0.097 s to 1.216 s | 1.12 s | 0.3 | 200 ms | Bicaptop roars |
+| 7 | Slime bounce | yodguard-bouncy_jelly_creature_movement-387893.mp3 | 1.211 s to 2.206 s | 0.99 s | 0.3 | 0 ms (the first frame) | Cuboq bounces |
 
-All five at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wires them:
+All seven at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wires them:
 1, 2 and 5 are longer than the lengths asked above, approved as they are; 2 and 5 come from the
 same file (5 without its first 0.24 s); 4 is louder than the game's usual 0.3 and runs about
 300 ms past the ram's impact on the Tauren. The author first approved another hooves file
@@ -76,4 +78,4 @@ same file (5 without its first 0.24 s); 4 is louder than the game's usual 0.3 an
 
 The roar (2026-11-13): the author heard the beast growl on a pounce and decided a roar like
 that is only for Bicaptop; small creatures need another sound. Row 6 is now the boss's roar
-alone and 6b is the small creatures' snarl. Neither is chosen yet.
+alone (approved for Bicaptop, in the table) and 6b is the small creatures' snarl, not chosen yet.

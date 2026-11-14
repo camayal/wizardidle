@@ -257,8 +257,8 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
-### 2026-11-13: Sounds: the first five chosen by ear (musician)
-- The author tried the candidate sounds against the attack animations and approved five: the heavy thud, the deep rumble, the arrow whoosh, the hooves (a second file replaced the first choice) and the rolling rumble. Files, cuts, volume and the moment each starts are in `docs/SOUNDS.md` (Decisions); those five are crossed out of "Sounds to find". Still to find: roar, squelch, wind, stone, bite; the reuse table is still to confirm by ear. The files are not in `ogg/` yet and nothing is wired.
+### 2026-11-13: Sounds: the first seven chosen by ear (musician)
+- The author tried the candidate sounds against the attack animations and approved seven: the heavy thud, the deep rumble, the arrow whoosh, the hooves (a second file replaced the first choice), the rolling rumble, the beast roar (for Bicaptop only: small creatures get their own snarl, new row 6b) and the slime bounce. Files, cuts, volume and the moment each starts are in `docs/SOUNDS.md` (Decisions); those seven are crossed out of "Sounds to find". Still to find: small creature snarl, wind, stone, bite; the reuse table is still to confirm by ear. The files are not in `ogg/` yet and nothing is wired.
 
 ### 2026-11-13: Medusa's poison shot, more visible
 - The author's note, redrawn by the artist (approved by the author): `scene_poison_dart.png` is now a slim dark stinger with a green venom drop, outlined, with a venom streak, drips and a splash on the wizard; 15 frames (was 14), set in `sceneSpells`.
