@@ -43,7 +43,8 @@ Short (under 1 s unless noted), mono, .ogg, about as loud as the current ones, f
 | ~~3~~ | ~~Bow twang + arrow whoosh~~ | ~~shoot (Elf)~~ (found, see Decisions) |
 | ~~4~~ | ~~Hooves galloping, ~1 s, loopable~~ | ~~charge (Capricor, Tauren, boss charges)~~ (found, see Decisions) |
 | ~~5~~ | ~~Rolling rumble, ~1.5 s~~ | ~~the boss's roll~~ (found, see Decisions) |
-| 6 | Beast roar, ~1 s | roar (boss), pounce (a short snarl would do) |
+| 6 | Beast roar, ~1 s | roar (boss) only |
+| 6b | Small creature snarl, under 0.5 s | pounce (small creatures need their own, lighter sound) |
 | 7 | Slime squelch / boing | the slime boss's bounce |
 | 8 | Wind gust, ~1 s | wing flap, whirlwind, sandstorm |
 | 9 | Stone grinding / crackle, ~0.8 s | Medusa's gaze turning him to stone |
@@ -72,3 +73,7 @@ All five at normal speed, not repeated, with a 30 ms fade out. Notes for whoever
 same file (5 without its first 0.24 s); 4 is louder than the game's usual 0.3 and runs about
 300 ms past the ram's impact on the Tauren. The author first approved another hooves file
 (freesound_community-gallop-98644.mp3) and replaced it with this one a minute later.
+
+The roar (2026-11-13): the author heard the beast growl on a pounce and decided a roar like
+that is only for Bicaptop; small creatures need another sound. Row 6 is now the boss's roar
+alone and 6b is the small creatures' snarl. Neither is chosen yet.
