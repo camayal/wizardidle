@@ -35,6 +35,9 @@ function addStyle() {
         .devPanel input[type=text] { flex: 1 1 140px; min-width: 0; }
         .devPanel textarea { width: 100%; box-sizing: border-box; height: 3.4em; }
         .devPanel .muted { color: #666; }
+        .devPanel .slide { flex-wrap: nowrap; margin: 2px 0; }
+        .devPanel .slide label { width: 5.5em; flex: none; }
+        .devPanel .slide input[type=range] { flex: 1 1 100px; min-width: 60px; }
         .devPanel .note { color: #8a4b00; }
         .devPanel .log { max-height: 9em; overflow: auto; white-space: pre-wrap; color: #333; font-family: monospace; }
         .devPanel .devNotes { border-top: 2px solid #d8cfc0; margin-top: 6px; padding-top: 4px; position: sticky; bottom: -6px;

@@ -28,9 +28,18 @@ import { isSound, reviewList } from './review.js';
 const SETTINGS_KEY = 'wizardidle2:soundMode';       // settings per scene and per file, in this browser
 const FIELDS = ['cutFrom', 'cutTo', 'speed', 'extend', 'volume', 'fadeIn', 'fadeOut', 'startsAt'];
 const DEFAULTS = { cutFrom: 0, cutTo: '', speed: 1, extend: 1, volume: 0.3, fadeIn: 0, fadeOut: 30, startsAt: 0 };
+// A slider beside each number box (the box stays for fine edits): name, label, min, max, step, unit.
+// The cut's maximum becomes the file's length when a file loads.
+const SLIDERS = [
+    ['cutFrom', 'Cut from', 0, 1, 0.001, 's'], ['cutTo', 'Cut to', 0, 1, 0.001, 's'],
+    ['startsAt', 'Starts at', -2000, 3000, 10, 'ms'], ['volume', 'Volume', 0, 1, 0.01, ''],
+    ['speed', 'Speed', 0.25, 3, 0.05, 'x'], ['extend', 'Extend', 1, 10, 1, 'x'],
+    ['fadeIn', 'Fade in', 0, 1000, 10, 'ms'], ['fadeOut', 'Fade out', 0, 1000, 10, 'ms'],
+];
 
 let side, p, picker, tools, audio, buffer, replay, startTimer, oggs = [], prevSpeed = 1, prevLevel;
 let sources = [];
+let folderSet = new Set(), folderPick = '';           // the files of a picked folder, and the one chosen from it
 const files = new Map();                            // files added by the author: name -> File
 const decoded = new Map();                          // sound name -> AudioBuffer
 
@@ -141,7 +150,7 @@ function showTiming() {
 function details() {
     if (!p) return '';
     const need = matchingNeed(), s = settings(), t = picker.timing();
-    const name = p.sound.value, from = !name ? '' : files.has(name) ? ' (added file)' : ' (from ogg/, in the game)';
+    const name = p.sound.value, from = !name ? '' : folderSet.has(name) ? ' (from the picked folder)' : files.has(name) ? ' (added file)' : ' (from ogg/, in the game)';
     const whole = buffer && s.cutFrom == 0 && Math.abs(s.cutTo - buffer.duration) < 0.0005;
     const ref = t ? (t.hitMs !== undefined ? `blow lands at ${t.hitMs} ms, ` : '') + (t.totalMs ? `the move lasts ${t.totalMs} ms` : '') : 'no timing';
     const land = picker.landing(), school = land && spells[land] && spells[land].school;
@@ -184,6 +193,7 @@ async function recall(sound) {
     for (const f of FIELDS) p[f].value = values[f];
     await loadSound(sound);
     if (buffer && !p.cutTo.value) p.cutTo.value = buffer.duration.toFixed(3);
+    syncSliders();
     markCurrent();
     const need = matchingNeed();
     p.need.value = need ? need.id : '';
@@ -196,10 +206,21 @@ function markCurrent() {
     for (const o of p.sound.options) o.textContent = o.value ? o.value + (o.value == now ? '  <- the game plays this now' : '') : '(no sound)';
 }
 
+// The sliders follow the boxes; the cut's sliders end at the file's length.
+function syncSliders() {
+    for (const range of side.body.querySelectorAll('input[type=range][data-for]')) {
+        const name = range.dataset.for;
+        if ((name == 'cutFrom' || name == 'cutTo') && buffer) range.max = buffer.duration.toFixed(3);
+        range.value = p[name].value;
+    }
+}
+
 function fillSounds() {
     const keep = p.sound.value;
+    // a picked folder's files stay in their own list; only the one chosen from it shows here
+    const added = [...files.keys()].filter((n) => !folderSet.has(n) || n == folderPick);
     p.sound.innerHTML = '<option value="">(no sound)</option>' +
-        (files.size ? `<optgroup label="Added files">${[...files.keys()].map((n) => `<option value="${n}">${n}</option>`).join('')}</optgroup>` : '') +
+        (added.length ? `<optgroup label="Added files">${added.map((n) => `<option value="${n}">${n}</option>`).join('')}</optgroup>` : '') +
         (oggs.length ? `<optgroup label="In the game (ogg/)">${oggs.map((n) => `<option value="${n}">${n}</option>`).join('')}</optgroup>` : '');
     if ([...p.sound.options].some((o) => o.value == keep)) p.sound.value = keep;
     markCurrent();
@@ -227,21 +248,14 @@ function buildPanel() {
         <div class="devSub">Sound</div>
         <div class="row"><select name="sound"></select></div>
         <div class="row"><label>Add files <input type="file" name="files" multiple accept="audio/*,.mp3,.ogg,.wav"></label>
-            <span class="muted" data-out="fileLen"></span></div>
-        <div class="row">
-            <label>Cut from <input type="number" name="cutFrom" step="0.001" min="0"> s</label>
-            <label>to <input type="number" name="cutTo" step="0.001" min="0"> s</label>
-        </div>
-        <div class="row">
-            <label>Extend <input type="number" name="extend" step="1" min="1"> x</label>
-            <label>Speed <input type="number" name="speed" step="0.05" min="0.1"> x</label>
-            <label>Volume <input type="number" name="volume" step="0.05" min="0" max="1"></label>
-        </div>
-        <div class="row">
-            <label>Fade in <input type="number" name="fadeIn" step="10" min="0"> ms</label>
-            <label>Fade out <input type="number" name="fadeOut" step="10" min="0"> ms</label>
-            <label>Starts at <input type="number" name="startsAt" step="10"> ms</label>
-        </div>
+            <label>Add folder <input type="file" name="folder" webkitdirectory multiple></label></div>
+        <div class="row" data-folder style="display:none"><select name="folderList" size="8" style="width:100%"></select>
+            <span class="muted">↑ ↓ play the next one, Enter or Space plays it again</span>
+            <label><input type="checkbox" name="folderScene"> with the scene</label></div>
+        <div class="row"><span class="muted" data-out="fileLen"></span></div>
+        ${SLIDERS.map(([name, label, min, max, step, unit]) => `<div class="row slide"><label>${label}</label>
+            <input type="range" data-for="${name}" min="${min}" max="${max}" step="${step}">
+            <input type="number" name="${name}" min="${min}" step="${step}"> ${unit}</div>`).join('')}
         <div class="row"><button data-act="play">Play</button><button data-act="sound">Sound only</button><button data-act="stop">Stop</button>
             <label><input type="checkbox" name="repeat"> repeat</label>
             <label title="The spell's effect and school sound when the blow lands, as in the game"><input type="checkbox" name="landing" checked> landing sound</label></div>
@@ -276,6 +290,38 @@ function buildPanel() {
     p.sound.onchange = async () => { await recall(p.sound.value); remember(); };
     for (const f of FIELDS) p[f].addEventListener('change', remember);
     for (const name of ['verdict', 'landing']) p[name].addEventListener('change', refreshNote);
+    // sliders and boxes move together; a slider saves when let go
+    for (const range of side.body.querySelectorAll('input[type=range][data-for]')) {
+        const box = p[range.dataset.for];
+        range.addEventListener('input', () => { box.value = range.value; refreshNote(); });
+        range.addEventListener('change', remember);
+        box.addEventListener('input', () => { range.value = box.value; });
+    }
+    // a folder: its sound files fill a list; moving in the list plays each one
+    p.folder.onchange = () => {
+        const list = [...p.folder.files].filter((f) => /\.(mp3|ogg|wav|m4a|flac)$/i.test(f.name)).sort((a, b) => a.name.localeCompare(b.name));
+        for (const n of folderSet) if (n != p.sound.value) files.delete(n);
+        folderSet = new Set(list.map((f) => f.name));
+        for (const f of list) { files.set(f.name, f); decoded.delete(f.name); }
+        p.folderList.innerHTML = list.map((f) => `<option value="${f.name}">${f.name}</option>`).join('');
+        side.body.querySelector('[data-folder]').style.display = list.length ? '' : 'none';
+        p.fileLen.textContent = `${list.length} sound files in the folder`;
+        p.folder.value = '';
+        p.folderList.focus();
+    };
+    const pickFromFolder = async () => {
+        const name = p.folderList.value;
+        if (!name) return;
+        folderPick = name;
+        fillSounds();
+        await recall(name);
+        remember();
+        play(p.folderScene.checked);
+    };
+    p.folderList.onchange = pickFromFolder;
+    p.folderList.addEventListener('keydown', (e) => {
+        if (e.key == 'Enter' || e.key == ' ') { e.preventDefault(); play(p.folderScene.checked); }
+    });
     p.files.onchange = async () => {
         for (const file of p.files.files) { files.set(file.name, file); decoded.delete(file.name); }
         fillSounds();
