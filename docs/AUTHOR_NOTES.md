@@ -18,3 +18,11 @@
 [x] ~~check with @artist, medusa poison shoot need to be more visible~~ (the artist redrew it: a dark stinger with a green venom drop, a streak, drips and a splash)
 [] still flickery with some wizard animation, when it will start walking for example
 [] cemeentery each wizard should ahve a tumb with their name and perhaps age, touch extend information.  ERASURE follow rules, i think it is invert and crossed name and perhaps a cracked tomb. maybe 4 to 5 tombs desings with each one cracked just in case.
+[] boxes and other breakable items appear in a very werid way, when the wizar is already in the scene. I think we need to compute what the next scene will have before showing the scene, and then when the wizard goes into the scene the box or breakable is already there.
+[] Not sure but it wizard is not walking towards or away frm the shrines. This is a bug
+[] dice sounds are not nicely sync send to @musician
+[] create scenes that are the end of one ad the beginon of the otherone.
+[] in desert wizard walks from left. some of those scenes have ocean on the left of the screen, we need to modify them to make a beach (walkable) or other solution.
+[] healer hood still looks weird (the pixels in the chin )
+[] some dreams can increase believer score
+[] in altars, due to its nature, i tis better to return the wizard walking to the left

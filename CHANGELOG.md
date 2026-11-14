@@ -1,5 +1,33 @@
 # Changelog
 
+## Unreleased (dev)
+
+- Wizard animations from the artist: casting (with a spark by school, or a staff slash), walking, praying, falling, true death, turned to stone and breaking free, at every tier.
+- Fallen and dead poses: a fallen wizard sits with a skull above him until revived; a true death shows the dead pose.
+- The wizard walks: to finds and statues, out of one scene and into the next, through doors, and to the street door of inns and dice houses in the Town and the City before going in.
+- Shrines, statues and inns outside the towns are entered on foot; scene changes fade more slowly.
+- Something to find twinkles on the ground before the wizard walks to it.
+- Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.
+- Enemy attacks match their weapons: slash, thrust, smash, shoot, pounce, slam, and chargers run across the scene.
+- Bosses have their own attacks and scene spells, from the artist; hydras weave their heads, strike or cast, and grow each new head on screen.
+- Boss effects: Medusa's gaze can turn the wizard to stone, King Midas heals with his golden rays (your touch interrupts it), blizzards, earthquakes and poison clouds.
+- Medusa's artefacts: after his first time as stone, a rare find (a mirror shield or a gorgon's-eye amulet) makes him immune.
+- Hydras keep their wounds between battles and heal only when a head grows; the game says how many heads they have left.
+- Belief: a meter of its own, apart from faith, moved by moments (a heal that saves him, your final blow, getting up alone); four levels (Devout, Believer, Doubter, Atheist) change shrine visits and touch prices, and an Atheist refuses heals and hits.
+- Your touch on an enemy can now kill it; one in ten of your critics is a super-critic.
+- Sleep: he walks into the inn or lays his sleeping bag, the scene goes dark, sometimes with a dream or a nightmare, and he wakes in his place.
+- The revive plays in order: the divine rings over the fallen wizard, the fade, then the hooded healer's cabin.
+- Bestiary: a third tab of the kill scroll, with every creature seen or defeated, ink stains for the unknown, and the hydras as a secret.
+- Stats scroll: a curated stats page and a Records tab (bests, firsts, a journey chart, all your wizards).
+- Sprites drawn crisp (sharp pixels).
+- Fixed: the game froze for good above level 190 (guardian fights).
+- Fixed: the Volcano boss crashed its fights.
+- Fixed: stray lines left by spell effects, blank flashes between images, a blank wizard while praying.
+- Fixed: scroll text overflowing past the bottom bar.
+- Dev: a stats module, a seeded simulation mode with god bots, and `tools/playtest.py` for playtests (with results in `docs/playtests/`).
+- Dev: a test bar (local only) with scenarios, "Fight now" fights, animation previews and a command line.
+- Plans added: faith and belief, professions, story, stats, erasure, sleep, scene spells, sounds, scenes.
+
 ## 2.1.0 — 2026-11-12
 
 - Faster: spell animations stop after their last frame (before, every spell ever cast kept redrawing forever; 19 times fewer redraws in a 30-minute game).
