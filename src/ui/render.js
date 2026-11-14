@@ -331,7 +331,7 @@ function wizardX() {
 
 // Walk to an offset (sprite px), playing the walk strip (mirrored when going back), then call
 // onArrive. Without drawing (simulation, page in the background) he is simply there.
-function walkWizardTo(target, onArrive) {
+function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
     let froze = false;
     const arrive = () => {
         loop.stop("walkPJ");
@@ -350,7 +350,7 @@ function walkWizardTo(target, onArrive) {
     let step = 0;
     clearWizardCanvas();
     loop.every("walkPJ", () => {
-        ui.wizardOffset = (ui.wizardOffset || 0) + dir * WALK_STEP;
+        ui.wizardOffset = (ui.wizardOffset || 0) + dir * stepPx;
         if ((target - ui.wizardOffset) * dir <= 0) return arrive();
         const frame = step++ % 4;
         withImage("pj", `img/anim_walk${tier}.png`, (img) => {
@@ -437,10 +437,14 @@ function fadeScene(change, done, ready) {
 }
 
 // Sleep (docs/SLEEP.md): the scene fades to dark and stays dark a moment; a dream's lines
-// (1-3) appear softly over the dark one after the other, then it fades back. done runs after.
+// (1-3) appear softly over the dark one after the other, then it fades back. atDark runs once
+// it is fully dark (to change the scene unseen), done after.
 const SLEEP_DARK_MS = 2000, DREAM_LINE_MS = 1800;
-function sleepInDark(dream, done) {
-    if (run.simulation || !document.hasFocus()) return done && done();
+function sleepInDark(dream, done, atDark) {
+    if (run.simulation || !document.hasFocus()) {
+        if (atDark) atDark();
+        return done && done();
+    }
     loop.freezeGame();
     const layer = fadeLayer(), ctx = layer.getContext("2d");
     const lines = dream ? dream.lines : [];
@@ -452,6 +456,7 @@ function sleepInDark(dream, done) {
         ctx.clearRect(0, 0, layer.width, layer.height);
         ctx.fillStyle = `rgba(6, 4, 12, ${steps[k]})`;
         ctx.fillRect(0, 0, layer.width, layer.height);
+        if (k == 3 && atDark) atDark();
         const t = (k - 3) * FADE_STEP_MS - 500;     // ms into the dark, after a short beat
         if (lines.length && k >= 3 && k < 3 + hold) {
             ctx.font = `${size}px munroregular, monospace`;
@@ -583,6 +588,8 @@ function npcBox(npc, squareSideIn = ui.squareSide, headLevelIn = ui.headLevel, c
         const x = (ui.findSpot != null ? ui.findSpot * charWidthIn / 32 : squareSideIn * 2) - (size - book) / 2;
         return [x, headLevelIn * 1.6 + book - size * 0.85, size, size];
     }
+    // the sleeping bag, laid in front of him where he stopped (ui.bagSpot, scene px)
+    if (npc === "sleepingbag" && ui.bagSpot != null) return [ui.bagSpot * charWidthIn / 32, headLevelIn, charWidthIn, charWidthIn];
     //the remaining (32x32px)
     return [squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn];
 }

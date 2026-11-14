@@ -12,8 +12,9 @@
 [x] (done with code, no new art: walk, fly, float, rise, jump, blink by family) ~~with the walking system, we need to add enemy sa entries system, it should be thematic, flying enemies arrive from the air, floating just float with a movements. things or humanoides that tend to hide, jump in the scene, underground creatures get from the ground, @artist will need to participate on those creating generalize animations for each family of enemies.~~
 [x] ~~we need to keep reference of the doors, so the wizard stops before entering in some places.~~ (done: Town and City inns and dice houses, doors already drawn on the streets)
 [] poison cloud scene spell is quite anoying is not disapearing, we need a better way to disapeer it, kind of disipating.
-[] looking a inn need to be compose for two scenes, one walk to the scene where the actual entrance of the inn is (if not visible in the current scene), then enter by the door. 
-[] after sleeping in sleeping bag, the wizard do not need to return the the common standing point, it can just walk right to the next scene, I think only inn or buildings that back walk is needed 
+[x] ~~looking a inn need to be compose for two scenes, one walk to the scene where the actual entrance of the inn is (if not visible in the current scene), then enter by the door.~~ (done for the Town and City inns and dice houses: the street with the door, then in; the Desert inn has no door on its streets)
+[x] ~~after sleeping in sleeping bag, the wizard do not need to return the the common standing point, it can just walk right to the next scene, I think only inn or buildings that back walk is needed~~ (done your way: after the rest he is already in his place, no walk back)
 [] arrows need to be faster
 [] check with @artist, medusa poison shoot need to be more visible
 [] still flickery with some wizard animation, when it will start walking for example
+[] cemeentery each wizard should ahve a tumb with their name and perhaps age, touch extend information.  ERASURE follow rules, i think it is invert and crossed name and perhaps a cracked tomb. maybe 4 to 5 tombs desings with each one cracked just in case.

@@ -497,18 +497,17 @@ function arriveToRest(placesWithInn) {
         stats.count(`inn.zone.${state.zone.current}`);
         print(`${wizardName()} enters in an inn`);
     } else {
-        loadNPC("sleepingbag");
         const textCamping = "looks for a safe place too rest,hides to rest,falls asleep";
         print(`${wizardName()} ${pickRandomItem(textCamping)}`);
         stats.count("inn.campings");
     }
 }
 
-// Where he sleeps (docs/SLEEP.md), as the centre of his sprite in scene px (256 x 64). STAND-INS
-// until the artist draws beds in the inns: the Town inn's door to the rooms, a free spot in the
-// City inn, the Desert inn's carpet; camping, next to the sleeping bag (drawn at x 192).
-const BED_X = { el_Poblado: 107, la_Ciudad: 150, el_Desierto: 155 };
-const BAG_X = 176;
+// How rest looks (the author, 2026-11-13; no beds or sleeping pose): at an inn he walks slowly
+// to the middle of the inn and the scene goes dark; camping, he walks a little, lays the
+// sleeping bag in front of him and the scene goes dark. When it comes back he is standing in
+// his place. Offsets in scene px from his place.
+const INN_MIDDLE = 80, CAMP_WALK = 36, SLOW_STEP = 5;
 
 // A dream for tonight, or none: a story dream on the first rest after a fall or a chapter,
 // otherwise now and then a random dream (more for believers) or nightmare (more for doubters).
@@ -527,17 +526,28 @@ function pickDream() {
     return { lines: pick(dreams[nightmare ? "nightmare" : "dream"]), nightmare };
 }
 
-// He walks to his bed or sleeping bag, the sleep spell, the dark (with tonight's dream, kept in
-// the console too). Without drawing (simulation, page in the background) none of it plays.
+// He walks (slowly into the inn, or a few steps to camp, laying the bag), the sleep spell, the
+// dark (with tonight's dream, kept in the console too); at full dark he is put back in his place
+// and the bag is packed. Without drawing (simulation, page in the background) none of it plays.
 function goToBed(placesWithInn) {
     stats.count(placesWithInn ? "sleep.inn" : "sleep.camping");
     if (run.simulation || !document.hasFocus()) return spell("spellSleep_24", true);
     const dream = pickDream();
-    walkWizardTo((placesWithInn ? BED_X[state.zone.current] || 150 : BAG_X) - 48, () => {
+    const lieDown = () => {
+        if (!placesWithInn) {
+            ui.bagSpot = 32 + ui.wizardOffset + 20;     // just in front of him
+            loadNPC("sleepingbag");
+        }
         spell("spellSleep_24", true);
         if (dream) print(`<i>${wizardName()} dreams: ${dream.lines.join(" ")}</i>`);
-        sleepInDark(dream);
-    });
+        sleepInDark(dream, null, () => {
+            ui.wizardOffset = 0;
+            drawWizard();
+            if (!placesWithInn) { clearNPC(); ui.bagSpot = null; }
+        });
+    };
+    if (placesWithInn) walkWizardTo(INN_MIDDLE, lieDown, SLOW_STEP);
+    else walkWizardTo(CAMP_WALK, lieDown);
 }
 
 // Pay for a bed if he can (a full rest), otherwise sleep for free (a partial rest).
@@ -589,7 +599,7 @@ function wakeUp(placesWithInn) {
     run.restAtInn = false;
     endEvent();
     if (placesWithInn) leavePlace(showStage, nextEvent);    // out through the door
-    else walkWizardTo(0, nextEvent);                       // back from the sleeping bag
+    else nextEvent();                                      // he woke up in his place
 }
 
 

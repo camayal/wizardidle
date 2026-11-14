@@ -129,18 +129,18 @@ const scenarios = [
     },
     {
         name: 'Sleep: Town inn, with a dream',
-        check: 'Walks in, pays, walks to the door to the rooms, the scene goes dark, the chapter dream shows over the dark, wakes, walks out.',
+        check: 'Walks in, pays, walks slowly to the middle of the inn, the scene goes dark, the chapter dream shows over the dark, he is back in his place, walks out.',
         setup() {
             moveTo('el_Poblado');
             run.storyDream = 'chapter';
-            state.player.gold = Math.max(state.player.gold, 1000);
+            state.player.gold = Math.max(state.player.gold, 1e9);       // enough for a bed at any level
             state.player.hp = Math.floor(state.player.hpBase / 2);
             return { event: EVENT.inn };
         },
     },
     {
         name: 'Sleep: camping, with a dream',
-        check: 'The sleeping bag, he walks to it, the dark with the dream after a fall (a nightmare, reddish), wakes, walks back.',
+        check: 'He walks a few steps, lays the sleeping bag, the dark with the dream after a fall (a nightmare, reddish), he is back in his place and goes on.',
         setup() {
             moveTo('el_Bosque');
             run.storyDream = 'fall';
