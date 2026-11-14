@@ -11,6 +11,7 @@ import { state } from '../state.js';
 import * as loop from '../loop.js';
 import { enemySprites } from '../data/enemies.js';
 import { drawFrame as drawStripFrame, imageNow, loadNPC, npcCanvas, pixelContext } from './render.js';
+import { art } from '../media.js';
 
 // Melee families by the attack their sprites make (approved by the author): swords slash,
 // bows shoot, spears thrust, heavy weapons smash, horns charge, beasts pounce, heavy bodies
@@ -93,15 +94,15 @@ let runStep = 0;
 function poseImage(npc, frame) {
     if (!frame.pose) return null;
     if (frame.pose == "ram") {
-        const ram = imageNow(`img/ram_${npc}.png`);
+        const ram = imageNow(art(`ram_${npc}`));
         return ram ? { img: ram, index: 0, mirror: false } : null;
     }
-    const strip = imageNow(`img/run_${npc}.png`);
+    const strip = imageNow(art(`run_${npc}`));
     return strip ? { img: strip, index: runStep++ % Math.max(1, strip.naturalWidth / 32), mirror: frame.pose == "back" } : null;
 }
 
 function drawFrame(npc, frame) {
-    const sprite = imageNow(`img/${npc}.png`);
+    const sprite = imageNow(art(`${npc}`));
     if (!sprite) return;
     const pose = poseImage(npc, frame);
     const unit = ui.charWidth / 32;                             // one sprite pixel on screen
@@ -120,7 +121,7 @@ function drawFrame(npc, frame) {
     }
     if (!frame.fx) return;
     const [strip, index, ox, oy] = frame.fx;
-    const fx = imageNow(`img/${strip}.png`);
+    const fx = imageNow(art(`${strip}`));
     if (!fx) return;
     const [fw, fh] = FX_SIZE[strip] || [16, 16];
     drawStripFrame(ctx, fx, index * fw, 0, fw, fh, ex + (frame.dx + ox) * unit, ey + (frame.dy + oy) * unit, fw * unit, fh * unit);
@@ -141,9 +142,9 @@ export function playEnemyMove(move, onHit) {
     if (run.simulation || !document.hasFocus() || !state.npc) return land();
     const npc = state.npc, seq = frames(move.kind, move.school);
     const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
-    imageNow(`img/${npc}.png`);
-    for (const frame of seq) if (frame.fx) imageNow(`img/${frame.fx[0]}.png`);   // start loading
-    if (move.kind == "charge") { imageNow(`img/run_${npc}.png`); imageNow(`img/ram_${npc}.png`); }
+    imageNow(art(`${npc}`));
+    for (const frame of seq) if (frame.fx) imageNow(art(`${frame.fx[0]}`));   // start loading
+    if (move.kind == "charge") { imageNow(art(`run_${npc}`)); imageNow(art(`ram_${npc}`)); }
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     let k = 0;

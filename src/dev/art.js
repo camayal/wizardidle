@@ -27,6 +27,7 @@ import { drawWizard, forgetImages, loadNPC, replaceImage } from '../ui/render.js
 import { listImages, playStripInScene, sceneForImage, scenePicker, stopScene, TIERS } from './scenes.js';
 import { setNoteSource, refreshNote } from './notes.js';
 import { el } from '../ui/dom.js';
+import { art } from '../media.js';
 import { sidePanel } from './panel.js';
 import { isImage, reviewList } from './review.js';
 
@@ -36,6 +37,11 @@ const FIELDS = ['speed', 'v0', 'v1', 'zoom', 'backdrop', 'fms', 'where'];
 
 let side, p, picker, tools, prevSpeed = 1, prevLevel, prevCrisp, replay;
 const tried = new Map();                // game image -> local file name shown instead
+
+// The game's path of an image written any way (name, name.png, img/name.png, with folders).
+function gamePath(text) {
+    return art(text.split('/').pop().replace(/\.png$/, ''));
+}
 
 // ---------------------------------------------------------------- the scene
 
@@ -73,7 +79,7 @@ async function tryFile() {
     const file = p.tryFile.files[0];
     let path = p.tryPath.value.trim();
     if (!file || !path) { p.tryNote.textContent = 'Pick the game image and a file.'; return; }
-    if (!path.startsWith('img/')) path = `img/${path}`;
+    path = gamePath(path);
     await replaceImage(path, URL.createObjectURL(file));
     tried.set(path, file.name);
     p.tryNote.textContent = `${path} shows ${file.name} until "Reload art".`;
@@ -86,7 +92,7 @@ async function tryFile() {
 // scene, frame by frame, where the "Where" list says.
 async function inScene(url, replaces, label) {
     stop();
-    if (replaces && !replaces.startsWith('img/')) replaces = `img/${replaces}`;
+    if (replaces) replaces = gamePath(replaces);
     const scene = replaces && sceneForImage(replaces);
     if (replaces && url) { await replaceImage(replaces, url); tried.set(replaces, label); }
     if (scene) {
@@ -114,7 +120,7 @@ function slotInScene(i) {
     if (!slot.img) return;
     const local = slot.local && slot.local.name == slot.name;
     if (local) inScene(slot.local.url, p.tryPath.value.trim() || null, slot.name);
-    else inScene(null, `img/${slot.name}`, slot.name);
+    else inScene(null, slot.name, slot.name);
 }
 
 // An image from review/ in a viewer slot.
@@ -176,7 +182,7 @@ async function loadSlots() {
         if (!name) { Object.assign(slot, { img: null, name: '' }); continue; }
         if (slot.name == name && slot.img) continue;
         slot.name = name;
-        slot.img = slot.local && slot.local.name == name ? await loadImage(slot.local.url) : await loadImage(`img/${name}`);
+        slot.img = slot.local && slot.local.name == name ? await loadImage(slot.local.url) : await loadImage(gamePath(name));
         if (slot.img && i == 0) {
             const [fw, fh] = guessFrame(name, slot.img);
             p.fw.value = fw; p.fh.value = fh;
@@ -199,7 +205,7 @@ function tierNames(name) {
 
 const tierImages = new Map();
 async function tierImage(name) {
-    if (!tierImages.has(name)) tierImages.set(name, await loadImage(`img/${name}`));
+    if (!tierImages.has(name)) tierImages.set(name, await loadImage(gamePath(name)));
     return tierImages.get(name);
 }
 
@@ -361,7 +367,7 @@ function buildPanel(saved, images) {
                 <label><input type="checkbox" name="crisp" checked> crisp pixels</label></div>
             <div class="row"><span class="blow">● blow</span><span class="muted" data-out="timing"></span></div>
             <div class="row"><button data-act="reload">Reload art</button><span class="muted">loads the edited PNGs again</span></div>
-            <div class="row"><b>Try a file</b> <input type="text" name="tryPath" list="artImages" placeholder="img/anim_goro_charge.png" spellcheck="false"></div>
+            <div class="row"><b>Try a file</b> <input type="text" name="tryPath" list="artImages" placeholder="anim_goro_charge.png" spellcheck="false"></div>
             <div class="row"><input type="file" name="tryFile" accept="image/png"><button data-act="try">Show it</button></div>
             <div class="row"><label>Where, for a picture the game doesn't use yet <select name="where"><option value="enemy">enemy's spot</option>
                 <option value="wizard">wizard's spot</option><option value="scene">whole scene</option></select></label></div>
@@ -373,7 +379,7 @@ function buildPanel(saved, images) {
             <div class="row"><label>B <input type="text" name="v1" list="artNames" placeholder="(optional, to compare)" spellcheck="false"></label>
                 <input type="file" name="f1" accept="image/png"><button data-act="sceneB">In scene</button></div>
             <datalist id="artNames">${images.map((n) => `<option value="${n}">`).join('')}</datalist>
-            <datalist id="artImages">${images.map((n) => `<option value="img/${n}">`).join('')}</datalist>
+            <datalist id="artImages">${images.map((n) => `<option value="${n}">`).join('')}</datalist>
             <div class="row"><label>Frame <input type="number" name="fw" min="1"> x <input type="number" name="fh" min="1"> px</label>
                 <label>Zoom <select name="zoom">${opts(['2', '4', '8'], ['x2', 'x4', 'x8'])}</select></label></div>
             <div class="row"><button data-act="prev">◀</button><button data-act="vplay" name="vplay">Play</button><button data-act="next">▶</button>

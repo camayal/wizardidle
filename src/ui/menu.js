@@ -10,6 +10,7 @@ import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, update
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { clearNPC, playWizardAnim } from './render.js';
+import { art } from '../media.js';
 
 //////////////////////////////END OTHER REGION//////////////////////////////////
 //------------------------------------------------------------------------------//
@@ -66,12 +67,12 @@ function btnCloseEvent(){
 // Toolbar: open the map with the wizard's position.
 function mapBtn(){
     if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
-        el("backMapa").src = "img/mapaunderground.png";
+        el("backMapa").src = art(`mapaunderground`);
     }else{
-        el("backMapa").src = "img/mapa.png";
+        el("backMapa").src = art(`mapa`);
     }
-    el("bocadilloMapa").src = "img/bocadillo.png";
-    el("pjMapa").src = `img/lvl${Math.floor(state.player.lvl / 10) * 10}.png`;
+    el("bocadilloMapa").src = art(`bocadillo`);
+    el("pjMapa").src = art(`lvl${Math.floor(state.player.lvl / 10) * 10}`);
     el("mapa").style.display = "block";
     localizarBocadillo()
     

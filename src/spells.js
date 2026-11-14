@@ -7,6 +7,7 @@ import { state } from './state.js';
 import { run, ui } from './runtime.js';
 import { playSound } from './audio.js';
 import { withImage } from './ui/render.js';
+import { art } from './media.js';
 
 
 
@@ -67,7 +68,7 @@ function spell(img, pj, critic = 0, center = 0, at = null){
     // withImage: with the image already loaded it starts the animation at once)
     const frameMs = spells[img].ms || 0;
     let lastFrameAt = -Infinity;
-    withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, `img/${img}.png`, (image) => { myImage = image; animate(); });
+    withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, art(`${img}`), (image) => { myImage = image; animate(); });
 
     // one frame per screen refresh; the last step only clears the canvas, then the animation
     // stops (v1 drew one step past the last frame, which could leave a sliver of the next cell or

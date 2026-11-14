@@ -11,6 +11,7 @@ import { chapter, openHistory } from './story.js';
 import { logro } from './achievements.js';
 import { playSound } from './audio.js';
 import { drawWizard, print, updateHeading } from './ui/render.js';
+import { art } from './media.js';
 
     
 
@@ -74,7 +75,7 @@ function levelUP() {
             break;
             default:
             playSound("lvlup");
-            print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='img/star.png'></img> <span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'> <b>${state.player.name} level up</b></span> <img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='img/star.png'></img> `);
+            print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='${art(`star`)}'></img> <span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'> <b>${state.player.name} level up</b></span> <img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='${art(`star`)}'></img> `);
         }
     //calculate age
         state.player.age = state.player.age + (state.player.xpNext * 0.0005)

@@ -15,6 +15,7 @@ import { drawWizard, print, showStage, updateHeading, wizardName } from './ui/re
 import { defineObjectSize, getEM } from './ui/layout.js';
 import { el } from './ui/dom.js';
 import * as loop from './loop.js';
+import { art } from './media.js';
 
 const version = "2.1.0"; // v1: "02nov2020_10pm"
 let uniqueID;
@@ -54,11 +55,11 @@ run.pause = false;
 
 run.afterChapterExe = false;
 //vars icons
-ui.goldIcon = `<img class='imgInConsole' height='${ui.em}' src='img/gold.png'/> `;
+ui.goldIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`gold`)}'/> `;
 
-ui.spiritIcon = `<img class='imgInConsole' height='${ui.em}' src='img/spirit.png'/> `;
-ui.attackIcon = `<img class='imgInConsole' height='${ui.em}' src='img/attack.png'/> `;
-ui.healIcon = `<img class='imgInConsole' height='${ui.em}' src='img/heal.png'/> `;
+ui.spiritIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`spirit`)}'/> `;
+ui.attackIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`attack`)}'/> `;
+ui.healIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`heal`)}'/> `;
 
 
 

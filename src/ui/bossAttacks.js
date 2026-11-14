@@ -13,6 +13,7 @@ import * as loop from '../loop.js';
 import { bossAttacks, sceneSpells } from '../data/bossAttacks.js';
 import { drawFrame, imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext, playWizardAnim } from './render.js';
 import { el } from './dom.js';
+import { art } from '../media.js';
 
 const FW = 104, FH = 80;            // a boss frame; the 64 x 64 boss rests at (36, 12) in it
 const SHAKE = [0, 1, -1, 2, -2, 2, -2, 1, -1, 2, -2, 1, -1, 1, 0, 0];     // the earthquake, px per frame
@@ -83,7 +84,7 @@ export function bossAttackTiming(boss, id) {
 // A scene spell alone over the scene (for the sounds: spells no boss casts yet); onHit runs
 // halfway through, where a boss's blow would land.
 export function playSceneSpell(name, onHit = () => {}) {
-    const frames = sceneSpells[name], scene = `img/scene_${name}.png`;
+    const frames = sceneSpells[name], scene = art(`scene_${name}`);
     if (run.simulation || !frames) return onHit();
     imageNow(scene);
     const layer = sceneLayer();
@@ -118,7 +119,7 @@ export function playBossAttack(boss, chosen, stone, onHit) {
         return land();
     }
     const attack = chosen || attacks[Math.floor(looksRandom() * attacks.length)];
-    const strip = `img/anim_${boss}_${attack.id}.png`, scene = attack.scene ? `img/scene_${attack.scene}.png` : null;
+    const strip = art(`anim_${boss}_${attack.id}`), scene = attack.scene ? art(`scene_${attack.scene}`) : null;
     imageNow(strip);
     if (scene) imageNow(scene);
     const sceneFrames = attack.scene ? sceneSpells[attack.scene] : 0;
@@ -205,7 +206,7 @@ export function startHydraIdle() {
         const parts = hydraParts(state.npc);
         if (!parts) return loop.stop("idleNPC");
         if (loop.isRunning("animNPC") || !document.hasFocus()) return;
-        drawHydraFrame(state.npc, `img/anim_${parts.hydra}_idle${parts.heads}.png`, k++ % 8);
+        drawHydraFrame(state.npc, art(`anim_${parts.hydra}_idle${parts.heads}`), k++ % 8);
     }, 100);
 }
 
@@ -216,7 +217,7 @@ export function hydraAttackTiming(npc, spellId, cast) {
     if (!parts) return null;
     const match = (HYDRA_SCENES[parts.hydra] || []).find(([part]) => spellId.includes(part));
     cast = !!(match && cast);
-    const img = imageNow(`img/anim_${parts.hydra}_${cast ? "cast" : "strike"}${parts.heads}.png`);
+    const img = imageNow(art(`anim_${parts.hydra}_${cast ? "cast" : "strike"}${parts.heads}`));
     if (!img) return null;
     const frames = Math.round(img.naturalWidth / 84), sceneFrames = cast ? sceneSpells[match[1]] : 0;
     const total = cast ? Math.max(frames, CAST_SCENE_AT + sceneFrames + DISSIPATE) : frames;
@@ -235,8 +236,8 @@ export function playHydraAttack(spellId, onHit, castNow) {
     const npc = state.npc, { hydra, heads } = parts;
     const match = (HYDRA_SCENES[hydra] || []).find(([part]) => spellId.includes(part));
     const cast = match && (castNow !== undefined ? castNow : looksRandom() < 0.5);
-    const strip = `img/anim_${hydra}_${cast ? "cast" : "strike"}${heads}.png`;
-    const scene = cast ? `img/scene_${match[1]}.png` : null, sceneFrames = cast ? sceneSpells[match[1]] : 0;
+    const strip = art(`anim_${hydra}_${cast ? "cast" : "strike"}${heads}`);
+    const scene = cast ? art(`scene_${match[1]}`) : null, sceneFrames = cast ? sceneSpells[match[1]] : 0;
     imageNow(strip);
     if (scene) imageNow(scene);
     const layer = scene ? sceneLayer() : null;

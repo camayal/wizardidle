@@ -22,6 +22,7 @@ import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from 
 import { playEntrance } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
 import { beliefMoment, isDoubting } from './belief.js';
+import { art } from './media.js';
 
 
 
@@ -296,7 +297,7 @@ function setUpBoss() {
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25)) * fight.bossMultiplier;
     fight.enemyHPbase = Math.round(fight.enemyHP);
     updateHeartNPC();
-    fight.enemyName = `<span style='color:DarkRed'><img class='imgInConsole' height='${ui.em}' src='img/boss.png'/> ${enemyTypes[boss].name.toUpperCase()}</span>`;
+    fight.enemyName = `<span style='color:DarkRed'><img class='imgInConsole' height='${ui.em}' src='${art(`boss`)}'/> ${enemyTypes[boss].name.toUpperCase()}</span>`;
 }
 
 // A normal enemy of the zone: one of its family's sprites, with the spell of its type.
@@ -347,7 +348,7 @@ function getHydra(newEncounter = false){
     if (wounded !== undefined) fight.enemyHP = Math.max(1, Math.round(fight.enemyHPbase * wounded));
     else delete state.hydraHealth[fight.hydra];
     updateHeartNPC();
-    fight.enemyName = `<span style='color:DarkGreen'><img class='imgInConsole' height='${ui.em}' src='img/boss.png'/> ${fight.hydra.toUpperCase()}</span>`;
+    fight.enemyName = `<span style='color:DarkGreen'><img class='imgInConsole' height='${ui.em}' src='${art(`boss`)}'/> ${fight.hydra.toUpperCase()}</span>`;
     let startBattleText;
     if (newEncounter){
         stats.count("combat.hydras");

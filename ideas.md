@@ -5,6 +5,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 - What changed in each release → [CHANGELOG.md](CHANGELOG.md) (short bullet points)
 - The route ahead (cleanup, speed, story, features) and the fixed v1 bugs → [docs/ROADMAP.md](docs/ROADMAP.md)
 - **Done goes to the archive** (the author's rule, 2026-11-14): when something is finished (a journal entry older than the newest few, an idea built or dropped, a bug fixed, a sound or a piece of art approved, a note handled), cut it from its working file and append it to [docs/ARCHIVE.md](docs/ARCHIVE.md) with a plain `cat >>` (a heading `## <date> from <file>: <what>`, then the text). Never read or open the archive in normal work; it only grows. Working files (this one, SOUNDS.md, AUTHOR_NOTES.md, the plans' pending parts, `src/dev/soundNeeds.js`, `docs/*-notes.md`) keep only what is still pending.
+- **Where art and sounds live** (the author's layout, 2026-11-14): `img/` in folders by kind and creature (wizard/<animation>, enemies/<family>, bosses/<boss>, bosses/hydras/<hydra>, effects/<spells|scene|fx>, places/<zone>, story, objects, ui, ui/achievements, app) and `snd/` (schools, wizard, creatures, places, ui). File names did not change. The code asks by name, `art('el_golem1')` and `snd('Fire')`; only `src/media.js` knows the folders. A new file goes in the folder its name's rule says; a new kind needs a rule there first (while developing, an unknown name is reported in the browser console).
 - **New files go to the review drop** (the author's rule, 2026-11-14): every session copies its latest outputs (art, sounds) into `review/` at the root of the main checkout (git-ignored) and adds one line per file to `review/index.txt`: `date | who | file | game file it would replace, or - | short note`. The dev tools' art and sounds modes list them, newest first, to view or try. Delete handled lines and files.
 - The author's old notes, spreadsheets and art sources (2014–2018) live **outside the repo**, in the sibling folder `wizardidle-old-ideas/` on the author's machine; the layer extraction script is in its `tools/`. Paths below like `wizardidle-old-ideas/layers/` refer to it.
 
@@ -51,6 +52,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 | 2026-11-12 | The .md docs (journal, roadmap, changelog, plans) stay published on the site | The repository is public anyway |
 | 2026-11-12 | Sprites stay as separate image files; only animations are sheets (like the spell strips), for now | Editing art in sheets would slow down every art change; measured: sheets would only speed up the first download and updates (679 sprites: ~4 s as files vs ~0.2 s as sheets), not play |
 | 2026-11-12 | A dev test bar replaces the old dev console: scenarios, quick actions and a command line, on while developing (`DEV` in config.js), switched off by the deploy | The author wants to test specific criteria quickly; players never load it |
+| 2026-11-14 | Art and sounds in folders by kind and creature (`img/...`, `ogg/` renamed `snd/`), found by name through `src/media.js` (art(), snd()) | One folder held 1,412 images; the author wanted it organized. Rules by name keep the code using plain names, and a new file only has to follow the naming |
 | 2026-11-14 | Dev tools move beside the game (light panels in the empty sides of a PC screen), with menus; sounds and art are tried in the game in generic modes (any scene, any file), and an author notes box fills in the details for the author to copy to the musician or the artist | The separate sound test page cost too many tokens; the author sets the scenes alone and pastes one note, so no session has to keep listening |
 
 ## Ideas backlog
@@ -254,6 +256,13 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 ---
 
 ## Journal
+
+### 2026-11-14: Images and sounds in folders
+- The author's choices (asked one by one): folders by kind and per creature; one helper by rules; `ogg/` renamed to `snd/` (a 3-letter abbreviation, the author's) with folders for what exists now, more when needed; junk deleted.
+- 1,447 files moved with `git mv` (history kept). `img/null`, `ogg/null` and `img/lvlNaN.png` (v1 bug leftovers, unused) deleted.
+- `src/media.js`: `art(name)` and `snd(name)` give each file's path from its name (enemy sprites by family from `enemySprites`, bosses from `bossAttacks` and the zones, hydras, wizard tiers, zone backgrounds...); a name no rule knows is reported in the console while developing. The game's paths (85 places) now go through them; index.html, manifest.json and browserconfig.xml have the new literal paths.
+- `tools/serve.py` lists every file of `img/` or `snd/` at `/__list/img` and `/__list/snd` for the dev tools; the notes limit is 200 KB.
+- Checked: every file is where its name's rule says (1,412 images, 35 sounds), all 1,231 names the game data can ask for exist, and a live run (fights with bosses, a hydra, chargers, both dev modes) had no missing file and no warning.
 
 ### 2026-11-14: The healer's hood, redrawn by hand
 - The author's note "healer hood still looks weird (the pixels in the chin)": the old hood was a perfect oval and looked artificial. The artist hand-drew four cloth hoods; the author picked **A, the cowl** (flatter top, the cloth bunches at the back in a darker fold). The chin is now clean: dark face, a soft brown chin catching a little light (no stray grey or gold pixels). The staff is unchanged.

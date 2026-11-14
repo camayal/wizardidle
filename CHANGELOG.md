@@ -25,6 +25,7 @@
 - Fixed: stray lines left by spell effects, blank flashes between images, a blank wizard while praying.
 - Fixed: scroll text overflowing past the bottom bar.
 - Dev: a stats module, a seeded simulation mode with god bots, and `tools/playtest.py` for playtests (with results in `docs/playtests/`).
+- Images and sounds organized in folders (wizard, enemies by family, bosses, effects, places by zone, story, objects, interface; sounds by kind); unused leftover files removed.
 - Dev: dev tools (local only) in a light panel beside the game, with menus: modes, scenarios, "Fight now" fights, wizard and game actions, a command line.
 - Dev: sounds mode sliders beside the number boxes, and Add folder: a list of the folder's sounds, each played by moving with the arrow keys.
 - Dev: a sounds mode: any scene played by the game with any sound, cut, extended, sped up, faded and timed against the blow, with the landing sound; a list of the moves still needing a sound.

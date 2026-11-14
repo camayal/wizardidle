@@ -150,7 +150,7 @@ function showTiming() {
 function details() {
     if (!p) return '';
     const need = matchingNeed(), s = settings(), t = picker.timing();
-    const name = p.sound.value, from = !name ? '' : folderSet.has(name) ? ' (from the picked folder)' : files.has(name) ? ' (added file)' : ' (from ogg/, in the game)';
+    const name = p.sound.value, from = !name ? '' : folderSet.has(name) ? ' (from the picked folder)' : files.has(name) ? ' (added file)' : ' (in the game)';
     const whole = buffer && s.cutFrom == 0 && Math.abs(s.cutTo - buffer.duration) < 0.0005;
     const ref = t ? (t.hitMs !== undefined ? `blow lands at ${t.hitMs} ms, ` : '') + (t.totalMs ? `the move lasts ${t.totalMs} ms` : '') : 'no timing';
     const land = picker.landing(), school = land && spells[land] && spells[land].school;
@@ -221,16 +221,15 @@ function fillSounds() {
     const added = [...files.keys()].filter((n) => !folderSet.has(n) || n == folderPick);
     p.sound.innerHTML = '<option value="">(no sound)</option>' +
         (added.length ? `<optgroup label="Added files">${added.map((n) => `<option value="${n}">${n}</option>`).join('')}</optgroup>` : '') +
-        (oggs.length ? `<optgroup label="In the game (ogg/)">${oggs.map((n) => `<option value="${n}">${n}</option>`).join('')}</optgroup>` : '');
+        (oggs.length ? `<optgroup label="In the game (snd/)">${oggs.map((n) => `<option value="${n}">${n}</option>`).join('')}</optgroup>` : '');
     if ([...p.sound.options].some((o) => o.value == keep)) p.sound.value = keep;
     markCurrent();
 }
 
-// The game's own sounds (ogg/), from the folder listing tools/serve.py gives.
+// The game's own sounds (snd/ and its folders), from the list tools/serve.py gives.
 async function gameSounds() {
     try {
-        const html = await (await fetch('ogg/')).text();
-        return [...html.matchAll(/href="([^"]+\.ogg)"/gi)].map((m) => `ogg/${decodeURIComponent(m[1])}`);
+        return (await (await fetch('__list/snd')).json()).filter((p) => p.endsWith('.ogg'));       // tools/serve.py
     } catch (e) { return []; }
 }
 

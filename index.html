@@ -7,15 +7,15 @@
     <meta name="robots" content="noindex">
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" type="image/png" sizes="512x512" href="img/icon512.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="img/icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="img/icon192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-    <link rel="mask-icon" href="img/safari-pinned-tab.svg" color="#111111">
+    <link rel="icon" type="image/png" sizes="512x512" href="img/app/icon512.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="img/app/icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/app/icon192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/app/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/app/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/app/apple-touch-icon.png">
+    <link rel="mask-icon" href="img/app/safari-pinned-tab.svg" color="#111111">
     <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="img/mstile-144x144.png">
+    <meta name="msapplication-TileImage" content="img/app/mstile-144x144.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
     <meta name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -124,7 +124,7 @@
 
                 
          #marco {
-            background: url('img/frame.png') no-repeat;
+            background: url('img/ui/frame.png') no-repeat;
             background-size: contain;
             /*background-size: cover;*/
          }
@@ -419,16 +419,16 @@
                 
 
 
-    <img id="nubes" class="initialHidden" src="img/nubes.png"/>
+    <img id="nubes" class="initialHidden" src="img/ui/nubes.png"/>
     <div id="launcher" class="initialHidden">
         <span class="goticFont" id="title1">Wizard</span>
         <span id="title2">IDLE</span>
-        <img id="fondoLauncher" src="img/initBack.png"/>
+        <img id="fondoLauncher" src="img/ui/initBack.png"/>
         <label id="labelInputName" for="inputName">What is the wizard's name?</label>
         <input id="inputName" type="text" name="name" value="">
              
 
-            <img class="btn" id="startBtn" src="img/start.png"/>
+            <img class="btn" id="startBtn" src="img/ui/start.png"/>
             <span id="footer" class="pixelFont">A divine perspective of a wizard journey</span>
     </div>
     
@@ -441,25 +441,25 @@
                 <div id="xpbar" class="left" ><meter id="XPprogressBar" value="0" min="0" max="10"></meter></div>
                 <div id="indicadores" class="left">
                     <span id="lvl">_lvl_</span>
-                    <img id="hpIcon" class="imgInConsole" src="img/heart.png"/><span id="hp">_hp_</span>
-                    <img id="goldIcon" class="imgInConsole" src="img/gold.png"/><span id="gold">_gold_</span>
-                    <img id="spiritIcon" class="imgInConsole" src="img/spirit.png"/><span id="fe">_faith_</span>
+                    <img id="hpIcon" class="imgInConsole" src="img/ui/heart.png"/><span id="hp">_hp_</span>
+                    <img id="goldIcon" class="imgInConsole" src="img/ui/gold.png"/><span id="gold">_gold_</span>
+                    <img id="spiritIcon" class="imgInConsole" src="img/ui/spirit.png"/><span id="fe">_faith_</span>
                 </div>
             </div>
 
              <div id="mainButtons">
-                 <img id="btn1" class="btn dis" src="img/archbtn.png"/>
-                 <img id="btn2" class="btn dis" src="img/statsbtn.png"/>
-                 <img id="btn3" class="btn dis" src="img/diebtn.png"/>
-                 <img id="btn4" class="btn dis" src="img/plegariabtn.png"/>
-                 <img id="btn5" class="btn dis" src="img/mapbtn.png"/>
-                 <img id="btn6" class="btn dis" src="img/helpbtn.png"/>
+                 <img id="btn1" class="btn dis" src="img/ui/archbtn.png"/>
+                 <img id="btn2" class="btn dis" src="img/ui/statsbtn.png"/>
+                 <img id="btn3" class="btn dis" src="img/ui/diebtn.png"/>
+                 <img id="btn4" class="btn dis" src="img/ui/plegariabtn.png"/>
+                 <img id="btn5" class="btn dis" src="img/ui/mapbtn.png"/>
+                 <img id="btn6" class="btn dis" src="img/ui/helpbtn.png"/>
             </div>
         
         </div>
 
         
-        <img id="backConsole" src="img/console.png"/>
+        <img id="backConsole" src="img/ui/console.png"/>
         <div id="console"></div>
         <div id="marco"></div>
         <canvas id="esceneCanvas"></canvas> 
@@ -476,10 +476,10 @@
 
 
     <div id = "scroll"   >
-        <!-- <img class="initialHidden" id="scrollBackCenter" src="img/scrollBackCenter.png"> -->
-        <img id="scrollBackCenter" src="img/scrollBackCenter.png">
-        <img class="invisible" id="scrollBackUp" src="img/scrollBackUp.png">
-        <img class="invisible" id="scrollBackDown" src="img/scrollBackUp.png">
+        <!-- <img class="initialHidden" id="scrollBackCenter" src="img/ui/scrollBackCenter.png"> -->
+        <img id="scrollBackCenter" src="img/ui/scrollBackCenter.png">
+        <img class="invisible" id="scrollBackUp" src="img/ui/scrollBackUp.png">
+        <img class="invisible" id="scrollBackDown" src="img/ui/scrollBackUp.png">
         <!-- <div class="initialHidden" id ="scrollText"> -->
             <div id ="scrollText">
 
@@ -494,13 +494,13 @@
             </div>
 
         </div>
-        <img class="initialHidden btn" id="btnClose" src="img/CloseBtn.png"/>
+        <img class="initialHidden btn" id="btnClose" src="img/ui/CloseBtn.png"/>
     </div>
 
 
 
     <!-- <audio id="sound"> -->
-        <!-- <source src="ogg/start.ogg" type="audio/ogg"> -->
+        <!-- <source src="snd/ui/start.ogg" type="audio/ogg"> -->
         <!-- </audio> -->
         <!-- <audio id="sound1"/>
         <audio id="sound2"/>

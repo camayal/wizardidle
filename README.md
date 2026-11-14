@@ -47,7 +47,8 @@ src/loop.js              the game loop
 src/config.js            game balance and timing
 src/data/                enemies, zones, spells, achievements
 src/utils.js             small pure helpers
-img/  ogg/               art and sound
+src/media.js             where each image and sound lives (art(), snd())
+img/  snd/               art and sound, in folders by kind
 ```
 
 ## Deployment

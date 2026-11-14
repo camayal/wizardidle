@@ -19,6 +19,7 @@ import { playEntrance } from '../ui/entrances.js';
 import { drawFrame, drawWizard, drawWizardPose, loadBackground, loadNPC, npcCanvas, pixelContext, pjCanvas, playHydraGrow,
     playWizardAnim } from '../ui/render.js';
 import { spell } from '../spells.js';
+import { snd } from '../media.js';
 
 export const TIERS = Array.from({ length: 21 }, (_, i) => i * 10);
 const WIZARD_ANIMS = { cast: 700, walk: 1120, pray: 600, fall_sit: 600, fall_dead: 660, petrify: 800, unpetrify: 1000 };   // ms
@@ -83,7 +84,7 @@ export const KINDS = {
     wizardPose: { label: 'Wizard: pose', targets: () => POSES, variants: () => [], play: (t) => drawWizardPose(t) },
     dice: { label: 'Dice roll (two rolls, 1.5 s apart)', targets: () => ['dice'], variants: () => [],
         play: () => { spell(DICE, true, false, true); setTimeout(() => spell(DICE, true, false, true), DICE_STEP); },
-        timing: () => ({ totalMs: DICE_MS, again: DICE_STEP }), current: 'ogg/dice.ogg' },
+        timing: () => ({ totalMs: DICE_MS, again: DICE_STEP }), current: snd('dice') },
     object: { label: 'Any sprite or object', targets: () => images.filter((n) => !/^(anim_|scene_|spell|fx_|run_|ram_)/.test(n)).map((n) => n.replace(/\.png$/, '')),
         variants: () => [], setUp: (t) => loadNPC(t), play: (t) => loadNPC(t) },
     background: { label: 'Background', targets: () => Object.keys(zones),
@@ -92,12 +93,12 @@ export const KINDS = {
         play: (t, v) => loadBackground(`${t}${/^\d$/.test(v) ? v : `_${v}`}`) },
 };
 
-// The img/ folder's files, from the listing tools/serve.py gives.
+// Every image's file name (img/ and its folders), from the list tools/serve.py gives.
 export async function listImages() {
     if (images.length) return images;
     try {
-        const html = await (await fetch('img/')).text();
-        images = [...html.matchAll(/href="([^"/]+\.png)"/gi)].map((m) => decodeURIComponent(m[1])).sort();
+        const paths = await (await fetch('__list/img')).json();        // tools/serve.py
+        images = paths.filter((p) => p.endsWith('.png')).map((p) => p.split('/').pop()).sort();
     } catch (e) { /* another server: no list */ }
     return images;
 }
@@ -161,7 +162,7 @@ export function scenePicker(container, resetScene, onChange) {
             const k = kind();
             if (k.current) return k.current;
             const id = picker.landing(), school = id && spells[id] && spells[id].school;
-            return school && school != 'na' ? `ogg/${school}.ogg` : null;
+            return school && school != 'na' ? snd(school) : null;
         },
         describe() {
             const v = picker.get();
@@ -182,7 +183,7 @@ export function scenePicker(container, resetScene, onChange) {
 
 // The scene that shows a game image (img/<name>.png), for the picker; null when none does.
 export function sceneForImage(path) {
-    const name = path.replace(/^img\//, '').replace(/\.png$/, '');
+    const name = path.split('/').pop().replace(/\.png$/, '');      // any folder, or a plain name
     let m;
     if ((m = /^anim_([a-z]+)_(.+)$/.exec(name)) && bossAttacks[m[1]] && bossAttacks[m[1]].some((a) => a.id == m[2])) return { kind: 'boss', target: m[1], variant: m[2] };
     if ((m = /^anim_(mother|icedra|hydskon)_(strike|cast)(\d+)$/.exec(name))) return { kind: 'hydra', target: m[1], variant: `${m[3]} heads: ${m[2]}` };

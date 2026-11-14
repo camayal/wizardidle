@@ -13,6 +13,7 @@ import { localizarBocadillo } from './scrolls.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { spells } from '../data/spells.js';
+import { art } from '../media.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -54,11 +55,11 @@ function showHeading() {
 
 // Heart icon for the enemy's remaining HP (fraction from 0 to 1).
 function heartMeter(hpPercent){
-    if (hpPercent > 0.75) return "img/heart.png";
-    if (hpPercent > 0.5) return "img/heart75.png";
-    if (hpPercent > 0.1) return "img/heart50.png";
-    if (hpPercent > 0) return "img/heart10.png";
-    if (hpPercent <= 0) return "img/heart0.png";
+    if (hpPercent > 0.75) return art(`heart`);
+    if (hpPercent > 0.5) return art(`heart75`);
+    if (hpPercent > 0.1) return art(`heart50`);
+    if (hpPercent > 0) return art(`heart10`);
+    if (hpPercent <= 0) return art(`heart0`);
 }
 
 // Refresh the enemy heart icon used in console messages.
@@ -84,8 +85,8 @@ function loadBackground(back) {
     ui.currentBackGround = back;
     if (run.simulation) return;     // in a simulation only what's on the scene matters
     // the old background stays until the new image has loaded (no flash of the page behind)
-    withImage("background", `img/${back.toLowerCase()}.png`, () => {
-        esceneCanvas.style.background = `url('img/${back.toLowerCase()}.png') no-repeat`;
+    withImage("background", art(`${back.toLowerCase()}`), () => {
+        esceneCanvas.style.background = `url('${art(`${back.toLowerCase()}`)}') no-repeat`;
         esceneCanvas.style.backgroundSize = "contain";
     });
     //change bocadillo location
@@ -159,7 +160,7 @@ function withImage(canvasName, src, draw) {
 // Draw the wizard; his sprite changes with the level (img/lvl<N>.png, every 10 levels).
 function loadCanvasChar(lvl, squareSide, headLevel) {
     if (run.simulation) return;
-    withImage("pj", `img/lvl${Math.floor(lvl / 10) * 10}.png`, (img) => {
+    withImage("pj", art(`lvl${Math.floor(lvl / 10) * 10}`), (img) => {
         clearWizardCanvas();        // cleared only when the new image is ready (no blank flash)
         const ctx = pixelContext(pjCanvas);
         ctx.drawImage(img, squareSide, headLevel, ui.charWidth, ui.charHeight);
@@ -174,9 +175,9 @@ function preloadWizardArt() {
     const tier = wizardTier();
     if (tier == preloadedTier || run.simulation) return;
     preloadedTier = tier;
-    for (const name of Object.keys(WIZARD_ANIMS)) imageNow(`img/anim_${name}${tier}.png`);
-    for (const pose of ["fallen", "dead", "stone"]) imageNow(`img/${pose}${tier}.png`);
-    imageNow(`img/anim_walk${tier}.png`);
+    for (const name of Object.keys(WIZARD_ANIMS)) imageNow(art(`anim_${name}${tier}`));
+    for (const pose of ["fallen", "dead", "stone"]) imageNow(art(`${pose}${tier}`));
+    imageNow(art(`anim_walk${tier}`));
 }
 
 function drawWizard() {
@@ -237,7 +238,7 @@ function castEffect(ctx, frame, img, tier, spellId) {
     const school = spellId && spells[spellId] ? spells[spellId].school : "na";
     const unit = ui.charWidth / 32, x0 = wizardX(), y0 = ui.headLevel;
     if (school == "Physical") {
-        const slash = imageNow("img/fx_slash.png");
+        const slash = imageNow(art(`fx_slash`));
         if (!slash || frame < 2) return;
         ctx.save();                                     // mirrored: the slash opens toward the enemy
         ctx.translate(x0 + 50 * unit, y0);
@@ -245,7 +246,7 @@ function castEffect(ctx, frame, img, tier, spellId) {
         ctx.drawImage(slash, (frame - 2) * 24, 0, 24, 32, 0, 0, 24 * unit, 32 * unit);
         ctx.restore();
     } else if (school != "na" && (frame == 3 || frame == 4)) {
-        const spark = imageNow(`img/fx_spark_${school.toLowerCase()}.png`);
+        const spark = imageNow(art(`fx_spark_${school.toLowerCase()}`));
         if (!spark) return;
         const [tx, ty] = staffTip(img, tier);
         ctx.drawImage(spark, (frame - 1) * 16, 0, 16, 16, x0 + (tx - 7.5) * unit, y0 + (ty - 7.5) * unit, 16 * unit, 16 * unit);
@@ -265,8 +266,8 @@ function playWizardAnim(name, spellId) {
     if (pjCanvas.width != pjCanvas.offsetWidth) clearWizardCanvas();   // only when the size changed
     if (name == "cast" && spellId && spells[spellId]) {
         const school = spells[spellId].school;
-        if (school == "Physical") imageNow("img/fx_slash.png");
-        else if (school != "na") imageNow(`img/fx_spark_${school.toLowerCase()}.png`);
+        if (school == "Physical") imageNow(art(`fx_slash`));
+        else if (school != "na") imageNow(art(`fx_spark_${school.toLowerCase()}`));
     }
     let step = 0;
     const next = () => {
@@ -281,7 +282,7 @@ function playWizardAnim(name, spellId) {
             return;
         }
         step++;
-        withImage("pj", `img/anim_${name}${tier}.png`, (img) => {
+        withImage("pj", art(`anim_${name}${tier}`), (img) => {
             const ctx = pixelContext(pjCanvas);
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             drawFrame(ctx, img, frame * 32, 0, 32, 32, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
@@ -297,12 +298,12 @@ function drawWizardPose(pose) {
     if (run.simulation) return;
     loop.stop("animPJ");
     wizardAnim = "";
-    withImage("pj", `img/${pose}${wizardTier()}.png`, (img) => {
+    withImage("pj", art(`${pose}${wizardTier()}`), (img) => {
         clearWizardCanvas();        // cleared only when the pose is ready (no blank flash)
         const ctx = pixelContext(pjCanvas);
         ctx.drawImage(img, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
         if (pose != "fallen") return;
-        withImage("pjSkull", "img/muerto.png", (skull) => {
+        withImage("pjSkull", art(`muerto`), (skull) => {
             // half his size, 12 sprite px right and 10 up from his top-left (the artist's spot,
             // clear of every staff top and crown)
             pixelContext(pjCanvas).drawImage(skull, wizardX() + ui.charWidth * 0.375, ui.headLevel - ui.charHeight * 0.3125,
@@ -375,7 +376,7 @@ function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
     if (pjCanvas.width != pjCanvas.offsetWidth) clearWizardCanvas();
     const drawStep = () => {
         const frame = step++ % 4;
-        withImage("pj", `img/anim_walk${tier}.png`, (img) => {
+        withImage("pj", art(`anim_walk${tier}`), (img) => {
             const ctx = pixelContext(pjCanvas), x = wizardX();
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             ctx.save();
@@ -533,7 +534,7 @@ function enterPlace(bg, npc, done, fade = false) {
                 goInside(bg, npc, done, fade);
             }, DOOR_PAUSE_MS);
         });
-        imageNow(`img/${streetBg.toLowerCase()}.png`);
+        imageNow(art(`${streetBg.toLowerCase()}`));
         if ((ui.currentBackGround || "").toLowerCase() == streetBg.toLowerCase()) return toDoor();
         return walkThroughScene(() => loadBackground(streetBg), toDoor);
     }
@@ -541,7 +542,7 @@ function enterPlace(bg, npc, done, fade = false) {
 }
 
 function goInside(bg, npc, done, fade) {
-    const door = DOORS[bg.toLowerCase()], src = `img/${bg.toLowerCase()}.png`;
+    const door = DOORS[bg.toLowerCase()], src = art(`${bg.toLowerCase()}`);
     imageNow(src);                                  // start loading it on the way
     const change = () => {
         loadBackground(bg);
@@ -627,7 +628,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     state.npc = npc;
     if (run.simulation) return;
     loop.stop("blink");
-    withImage("npc", `img/${npc}.png`, (img) => {
+    withImage("npc", art(`${npc}`), (img) => {
         if (state.npc != npc) return;               // cleared or replaced while it loaded
         npcCanvas.width = npcCanvas.offsetWidth;    // cleared only when the new image is ready
         npcCanvas.height = npcCanvas.offsetHeight;
@@ -640,7 +641,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
 // to N+1, frames the size of the hydra sprite), drawn where the hydra is.
 function playHydraGrow(hydra, fromHeads) {
     if (run.simulation || !document.hasFocus()) return;
-    const npc = `${hydra}${fromHeads + 1}`, src = `img/anim_${hydra}_grow${fromHeads}.png`;
+    const npc = `${hydra}${fromHeads + 1}`, src = art(`anim_${hydra}_grow${fromHeads}`);
     const frameW = 64, frameH = hydra == "mother" ? 96 : 64;
     let k = 0, waited = 0;
     const next = () => {
