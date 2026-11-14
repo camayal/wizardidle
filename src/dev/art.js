@@ -12,6 +12,9 @@
 //                 two slots to compare options, every tier of a wizard image, a grid, the
 //                 previous frame as a ghost, the feet line, and dark / grey / light / checked backdrops.
 //
+//   From the sessions  the newest images the sessions dropped in review/ (src/dev/review.js):
+//                 view one in slot A or B, or try it in the scene in place of the game image.
+//
 // The details (scene, tier, tried files, the frame being looked at) go to the author notes box.
 
 import { state } from '../state.js';
@@ -23,6 +26,7 @@ import { listImages, scenePicker, stopScene, TIERS } from './scenes.js';
 import { setNoteSource, refreshNote } from './notes.js';
 import { el } from '../ui/dom.js';
 import { sidePanel } from './panel.js';
+import { isImage, reviewList } from './review.js';
 
 const STORE_KEY = 'wizardidle2:artMode';
 const CHECKS = ['grid', 'onion', 'feet', 'tiers'];
@@ -71,6 +75,23 @@ async function tryFile() {
     await replaceImage(path, URL.createObjectURL(file));
     tried.set(path, file.name);
     p.tryNote.textContent = `${path} shows ${file.name} until "Reload art".`;
+    picker.setUp();
+    showTiming();
+}
+
+// An image from review/: in a viewer slot, or in the scene in place of the game image it names.
+function viewReview(e, i) {
+    viewer.slots[i].local = { name: e.file, url: e.url };
+    p[`v${i}`].value = e.file;
+    loadSlots();
+}
+async function tryReview(e) {
+    let path = e.replaces || p.tryPath.value.trim();
+    if (!path) { p.tryNote.textContent = `Which game image should ${e.file} replace? Write it in "Try a file", then press Try again.`; return; }
+    if (!path.startsWith('img/')) path = `img/${path}`;
+    await replaceImage(path, e.url);
+    tried.set(path, `${e.file} (review/)`);
+    p.tryNote.textContent = `${path} shows ${e.file} until "Reload art".`;
     picker.setUp();
     showTiming();
 }
@@ -304,6 +325,7 @@ function buildPanel(saved, images) {
     side = sidePanel('right', 'Art', () => close(true));
     const opts = (list, labels = list) => list.map((x, i) => `<option value="${x}">${labels[i]}</option>`).join('');
     side.body.innerHTML = `
+        <details open><summary>From the sessions (review/)</summary><div data-review></div></details>
         <details open><summary>In the scene</summary>
             <div data-scene></div>
             <div class="row"><button data-act="play">Play</button><button data-act="stop">Stop</button>
@@ -341,6 +363,7 @@ function buildPanel(saved, images) {
     if (!p.fms.value) p.fms.value = 100;
 
     picker = scenePicker(side.body.querySelector('[data-scene]'), tools.resetScene, () => { stop(); showTiming(); remember(); });
+    reviewList(side.body.querySelector('[data-review]'), isImage, [['A', (e) => viewReview(e, 0)], ['B', (e) => viewReview(e, 1)], ['Try', tryReview]]);
     const acts = { play: playScene, stop, reload: reloadArt, try: tryFile, prev: () => step(-1), next: () => step(1), vplay: togglePlay };
     side.body.onclick = (e) => { const act = e.target.dataset && e.target.dataset.act; if (act) acts[act](); };
     p.speed.onchange = remember;

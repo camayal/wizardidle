@@ -23,6 +23,7 @@ import { spell } from '../spells.js';
 import { spells } from '../data/spells.js';
 import { el } from '../ui/dom.js';
 import { sidePanel } from './panel.js';
+import { isSound, reviewList } from './review.js';
 
 const SETTINGS_KEY = 'wizardidle2:soundMode';       // settings per scene and per file, in this browser
 const FIELDS = ['cutFrom', 'cutTo', 'speed', 'extend', 'volume', 'fadeIn', 'fadeOut', 'startsAt'];
@@ -222,6 +223,7 @@ function buildPanel() {
             `<optgroup label="${g}">${needs().filter((n) => n.who == g).map((n) => `<option value="${n.id}">${n.who}: ${n.move}</option>`).join('')}</optgroup>`).join('')}</select></div>
         <div class="devSub">Scene</div>
         <div data-scene></div>
+        <details><summary>From the sessions (review/)</summary><div data-review></div></details>
         <div class="devSub">Sound</div>
         <div class="row"><select name="sound"></select></div>
         <div class="row"><label>Add files <input type="file" name="files" multiple accept="audio/*,.mp3,.ogg,.wav"></label>
@@ -251,6 +253,15 @@ function buildPanel() {
     for (const node of side.body.querySelectorAll('[data-out]')) p[node.dataset.out] = node;
 
     picker = scenePicker(side.body.querySelector('[data-scene]'), tools.resetScene, async () => { stopAll(); await recall(); remember(); });
+    // a sound from review/ joins the added files and is picked
+    reviewList(side.body.querySelector('[data-review]'), isSound, [['Use', async (e) => {
+        const blob = await (await fetch(e.url)).blob();
+        files.set(e.file, new File([blob], e.file));
+        decoded.delete(e.file);
+        fillSounds();
+        await recall(e.file);
+        remember();
+    }]]);
     const acts = { play: () => play(true), sound: () => play(false), stop: stopAll };
     side.body.onclick = (e) => { const act = e.target.dataset && e.target.dataset.act; if (act) acts[act](); };
     p.need.onchange = async () => {

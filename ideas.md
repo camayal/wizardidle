@@ -5,6 +5,7 @@ The working notebook for Wizard Idle v2: where the project stands, what was deci
 - What changed in each release → [CHANGELOG.md](CHANGELOG.md) (short bullet points)
 - The route ahead (cleanup, speed, story, features) and the fixed v1 bugs → [docs/ROADMAP.md](docs/ROADMAP.md)
 - **Done goes to the archive** (the author's rule, 2026-11-14): when something is finished (a journal entry older than the newest few, an idea built or dropped, a bug fixed, a sound or a piece of art approved, a note handled), cut it from its working file and append it to [docs/ARCHIVE.md](docs/ARCHIVE.md) with a plain `cat >>` (a heading `## <date> from <file>: <what>`, then the text). Never read or open the archive in normal work; it only grows. Working files (this one, SOUNDS.md, AUTHOR_NOTES.md, the plans' pending parts, `src/dev/soundNeeds.js`, `docs/*-notes.md`) keep only what is still pending.
+- **New files go to the review drop** (the author's rule, 2026-11-14): every session copies its latest outputs (art, sounds) into `review/` at the root of the main checkout (git-ignored) and adds one line per file to `review/index.txt`: `date | who | file | game file it would replace, or - | short note`. The dev tools' art and sounds modes list them, newest first, to view or try. Delete handled lines and files.
 - The author's old notes, spreadsheets and art sources (2014–2018) live **outside the repo**, in the sibling folder `wizardidle-old-ideas/` on the author's machine; the layer extraction script is in its `tools/`. Paths below like `wizardidle-old-ideas/layers/` refer to it.
 
 ---
@@ -261,6 +262,7 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 - Art mode (`src/dev/art.js`): the scene at any tier in slow motion (x1 to x0.1) with the blow marked, crisp pixels on, Reload art, Try a file (a local PNG in place of a game image); a viewer for any img/ file or local file: frame by frame, game size and x2/x4/x8 side by side, slots A and B, all tiers, grid, ghost of the previous frame, feet line, light/grey/dark/checked backdrops. Not done yet: frame-by-frame stepping inside the live scene, story scenes and UI tiles as their own kinds (the viewer shows any image meanwhile).
 - Author notes box (`src/dev/notes.js`), always in the dev panel: the technical details fill in by themselves; the author adds a comment, Copy puts both on the clipboard, Save to file appends to `docs/<mode>-notes.md` (`tools/serve.py` accepts POST `/notes/sound|art|dev` from localhost).
 - The game waits while its window is hidden (minimized or covered), only while developing.
+- Review drop (`src/dev/review.js`): sessions copy new files to `review/` and list them in `review/index.txt`; the art mode shows the images (view in slot A or B, or try in the scene in place of the game image named), the sounds mode the sound files (Use adds one to the picker).
 - Fixed: `spell()` used `frameMs` before declaring it when the image was already loaded (the dice's second roll crashed).
 
 ### 2026-11-13: Medusa's poison shot, more visible
