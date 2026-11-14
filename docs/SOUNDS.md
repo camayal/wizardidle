@@ -79,6 +79,8 @@ be cut and converted to .ogg, with source and licence recorded), and nothing is 
 | 9 | Stone grinding | freesound_community-stoneblockdragwoodgrind-82327.mp3 | whole file | 1.15 s | 0.3 | 700 ms (the stone starts to climb) | Medusa's gaze, he turns to stone |
 | - | Stone bursting off | freesound_community-rock-destroy-6409.mp3 | 0.000 s to 0.993 s | 0.99 s | 0.3 | 400 ms (the stone cracks) | The stone bursts off (instead of breakPot.ogg) |
 | - | Slash swing | ogg/Physical.ogg (already in the game) | 0.029 s to 0.105 s | 0.08 s | 0.3 | 300 ms (the slash opens) | Orc slashes |
+| - | Thrust swing | ogg/Physical.ogg (already in the game) | 0.034 s to 0.107 s | 0.07 s | 0.3 | 200 ms (the spear goes out) | Warrior thrusts |
+| - | Smash swing | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 400 ms (the downswing) | Ogre smashes |
 
 The author also heard two approved sounds on other moves and approved them there, with the same
 file and cut: the thud (1) on Protromus's ground punch, starting at 400 ms, and the hooves (4) on
@@ -109,7 +111,7 @@ Still to choose, one by one (approved ones are in the tables above):
 
 | Who | Moves |
 |---|---|
-| Regular enemies | thrust (Warrior), smash (Ogre), slam (Golem), ram impact (Capricor, Tauren) |
+| Regular enemies | slam (Golem), ram impact (Capricor, Tauren) |
 | Infraespectro | curse, arcane flare, phase |
 | Doria | sonic boom, arcane rain, rune circle |
 | Goro | flurry, slam, charge |
