@@ -257,6 +257,10 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-14: Sounds: one per move, bosses apart (musician)
+- The author's decisions while listening: one sound per move, heard on that move; bosses apart from regular enemies; each boss spell gets its own sound instead of its school's (the author is looking for them); the Capricor's ram is not a thud; the hydras need new sounds. `docs/SOUNDS.md` has a new section "Boss moves: one sound each" with what is still to choose.
+- Approved since the first seven: the small creatures' snarl, the wind on the sandstorm, the stone grinding for Medusa's gaze, the stone bursting off (a rock sound instead of breakPot.ogg), and the thud and the hooves again on Protromus's ground punch and the Capricor's charge. Nothing is in `ogg/` or wired yet.
+
 ### 2026-11-13: Sounds: the first seven chosen by ear (musician)
 - The author tried the candidate sounds against the attack animations and approved seven: the heavy thud, the deep rumble, the arrow whoosh, the hooves (a second file replaced the first choice), the rolling rumble, the beast roar (for Bicaptop only: small creatures get their own snarl, new row 6b) and the slime bounce. Files, cuts, volume and the moment each starts are in `docs/SOUNDS.md` (Decisions); those seven are crossed out of "Sounds to find". Still to find: small creature snarl, wind, stone, bite; the reuse table is still to confirm by ear. The files are not in `ogg/` yet and nothing is wired.
 
