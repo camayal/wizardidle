@@ -10,6 +10,7 @@ import { run, ui } from '../runtime.js';
 import { state } from '../state.js';
 import * as loop from '../loop.js';
 import { drawFrame, imageNow, loadNPC, npcBox, npcCanvas, pixelContext } from './render.js';
+import { art } from '../media.js';
 
 // Families by how they arrive (walk is the default).
 const ENTRANCE = {
@@ -74,8 +75,8 @@ export function playEntrance(done) {
     const npc = state.npc;
     if (run.simulation || !document.hasFocus() || !npc) return done && done();
     const kind = entranceKind(npc), total = FRAMES[kind];
-    imageNow(`img/${npc}.png`);
-    imageNow("img/fx_dust.png");
+    imageNow(art(`${npc}`));
+    imageNow(art(`fx_dust`));
     loop.freezeGame();
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
@@ -88,7 +89,7 @@ export function playEntrance(done) {
     };
     const step = () => {
         if (state.npc != npc || k > total) return finish();
-        const img = imageNow(`img/${npc}.png`);
+        const img = imageNow(art(`${npc}`));
         if (!img) {                                 // not loaded yet: wait for it (2 s at most)
             pixelContext(npcCanvas).clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             if (++waited > 40) k = total + 1;
@@ -117,7 +118,7 @@ function draw(npc, img, p) {
     }
     ctx.drawImage(img, x, y, w, h);
     ctx.restore();
-    const dust = imageNow("img/fx_dust.png");
+    const dust = imageNow(art(`fx_dust`));
     if (dust && p.dust >= 0) {                      // dust at the feet (24 x 8, 3 frames)
         const dw = 24 * scene * (bw / ui.charWidth), dh = 8 * scene * (bw / ui.charWidth);
         drawFrame(ctx, dust, p.dust * 24, 0, 24, 8, bx + (bw - dw) / 2, by + bh - dh, dw, dh);

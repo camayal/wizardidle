@@ -14,6 +14,7 @@ import { roundNumbertoLetter } from '../utils.js';
 import { state } from '../state.js';
 import { stats } from '../stats.js';
 import { ui } from '../runtime.js';
+import { art } from '../media.js';
 
 // Families that live in some zone, taken when the game loads: the capricor is taken off the
 // Forest's list once the last one dies, and it must stay in the bestiary.
@@ -26,7 +27,7 @@ function cell(sprite, seen, count, scale = 1, unknown = '?') {
     const size = Math.round(SIZE() * scale);
     const rare = enemySprites[sprite] && enemySprites[sprite].rare ? '★' : '';
     const picture = seen || count
-        ? `<img src='img/${sprite}.png' height='${size}'>`
+        ? `<img src='${art(`${sprite}`)}' height='${size}'>`
         : `<canvas class='inkStain' data-sprite='${sprite}' width='32' height='32' style='height:${size}px;image-rendering:pixelated'></canvas>`;
     return `<div style='display:inline-block;min-width:${size + ui.em * 0.6}px;text-align:center;vertical-align:top'>${picture}` +
         `<br><small>${seen || count ? roundNumbertoLetter(count) + rare : unknown}</small></div>`;
@@ -128,6 +129,6 @@ export function paintInkStains(container) {
         if (stains.has(sprite)) { paint(stains.get(sprite)); continue; }
         const img = new Image();
         img.onload = () => { const stain = inkStain(img, sprite); stains.set(sprite, stain); paint(stain); };
-        img.src = `img/${sprite}.png`;
+        img.src = art(`${sprite}`);
     }
 }

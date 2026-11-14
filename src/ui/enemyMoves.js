@@ -11,6 +11,7 @@ import { state } from '../state.js';
 import * as loop from '../loop.js';
 import { enemySprites } from '../data/enemies.js';
 import { drawFrame as drawStripFrame, imageNow, loadNPC, npcCanvas, pixelContext } from './render.js';
+import { art } from '../media.js';
 
 // Melee families by the attack their sprites make (approved by the author): swords slash,
 // bows shoot, spears thrust, heavy weapons smash, horns charge, beasts pounce, heavy bodies
@@ -40,9 +41,9 @@ const WIZARD_DISTANCE = 160;        // sprite px from the enemy's box to the wiz
 // shoot, thrust, smash and charge are the artist's.
 function frames(kind, school) {
     const f = (dx = 0, dy = 0, sx = 1, sy = 1, fx = null, shake = 0) => ({ dx, dy, sx, sy, fx, shake });
-    if (kind == "shoot") {          // draw, release, recoil; the arrow flies 16 px a frame to the wizard
-        const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];
-        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 16) seq.push(f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]));
+    if (kind == "shoot") {          // draw, release, recoil; the arrow flies 36 px every 50 ms to the wizard
+        const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];      // (the author: arrows were too slow at 16 px / 100 ms)
+        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 36) seq.push({ ...f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]), ms: 50 });
         seq[seq.length - 1].hit = true;
         seq.push(f());
         return seq;
@@ -93,15 +94,15 @@ let runStep = 0;
 function poseImage(npc, frame) {
     if (!frame.pose) return null;
     if (frame.pose == "ram") {
-        const ram = imageNow(`img/ram_${npc}.png`);
+        const ram = imageNow(art(`ram_${npc}`));
         return ram ? { img: ram, index: 0, mirror: false } : null;
     }
-    const strip = imageNow(`img/run_${npc}.png`);
+    const strip = imageNow(art(`run_${npc}`));
     return strip ? { img: strip, index: runStep++ % Math.max(1, strip.naturalWidth / 32), mirror: frame.pose == "back" } : null;
 }
 
 function drawFrame(npc, frame) {
-    const sprite = imageNow(`img/${npc}.png`);
+    const sprite = imageNow(art(`${npc}`));
     if (!sprite) return;
     const pose = poseImage(npc, frame);
     const unit = ui.charWidth / 32;                             // one sprite pixel on screen
@@ -120,10 +121,18 @@ function drawFrame(npc, frame) {
     }
     if (!frame.fx) return;
     const [strip, index, ox, oy] = frame.fx;
-    const fx = imageNow(`img/${strip}.png`);
+    const fx = imageNow(art(`${strip}`));
     if (!fx) return;
     const [fw, fh] = FX_SIZE[strip] || [16, 16];
     drawStripFrame(ctx, fx, index * fw, 0, fw, fh, ex + (frame.dx + ox) * unit, ey + (frame.dy + oy) * unit, fw * unit, fh * unit);
+}
+
+// How long a move lasts and when its blow lands, in ms from its first frame (for the sounds).
+export function enemyMoveTiming(move) {
+    const seq = frames(move.kind, move.school);
+    const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
+    const ms = (list) => list.reduce((sum, frame) => sum + (frame.ms || 100), 0);
+    return { hitMs: ms(seq.slice(0, hitAt)), totalMs: ms(seq) };
 }
 
 // Play the enemy's attack; onHit runs once, when the blow lands (at once if nothing is drawn).
@@ -133,9 +142,9 @@ export function playEnemyMove(move, onHit) {
     if (run.simulation || !document.hasFocus() || !state.npc) return land();
     const npc = state.npc, seq = frames(move.kind, move.school);
     const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
-    imageNow(`img/${npc}.png`);
-    for (const frame of seq) if (frame.fx) imageNow(`img/${frame.fx[0]}.png`);   // start loading
-    if (move.kind == "charge") { imageNow(`img/run_${npc}.png`); imageNow(`img/ram_${npc}.png`); }
+    imageNow(art(`${npc}`));
+    for (const frame of seq) if (frame.fx) imageNow(art(`${frame.fx[0]}`));   // start loading
+    if (move.kind == "charge") { imageNow(art(`run_${npc}`)); imageNow(art(`ram_${npc}`)); }
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
     let k = 0;

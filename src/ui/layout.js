@@ -6,6 +6,7 @@ import { fight, ui } from '../runtime.js';
 import { drawWizard, drawWizardPose, loadNPC } from './render.js';
 import { scrollClose } from './scrolls.js';
 import { el } from './dom.js';
+import { art } from '../media.js';
 
 //seg
 
@@ -57,10 +58,10 @@ function responsiveLayout() {
     ui.em = getEM();
     
     //update the icons to avoid bug big icons when start the game in landscape
-    ui.goldIcon = `<img class='imgInConsole' height='${ui.em}' src='img/gold.png'/> `;
-    ui.spiritIcon = `<img class='imgInConsole' height='${ui.em}' src='img/spirit.png'/> `;
-    ui.attackIcon = `<img class='imgInConsole' height='${ui.em}' src='img/attack.png'/> `;
-    ui.healIcon = `<img class='imgInConsole' height='${ui.em}' src='img/heal.png'/> `;
+    ui.goldIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`gold`)}'/> `;
+    ui.spiritIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`spirit`)}'/> `;
+    ui.attackIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`attack`)}'/> `;
+    ui.healIcon = `<img class='imgInConsole' height='${ui.em}' src='${art(`heal`)}'/> `;
 
     let x, i;
     if (!!document.getElementsByClassName("imgInConsole")[0]){

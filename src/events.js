@@ -16,7 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, sleepInDark, updateHeading, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
@@ -233,7 +233,7 @@ function prayEV(){
         }
         print(`${wizardName()} ${textCapel}`);
         const mistico = `mistico${getRandomInt(1,3)}`;
-        enterPlace(`${state.zone.current}_altar`, mistico);
+        enterPlace(`${state.zone.current}_altar`, mistico, () => walkWizardTo(CROSS_X - 32 - 46));   // up to the cross
         if (YesOrNot(stat("pOfrenda"),0) && state.player.gold > 0){
             run.offer = true;
         }else{
@@ -666,7 +666,7 @@ function leaveShrine() {
     endEvent();
     run.disableCenterBtn = false;
     run.offer = false;
-    walkThroughScene(newStage, nextEvent);  // walks on out of the scene, into the next one
+    walkBackThroughScene(newStage, nextEvent);  // back out to the left, the way he came (the author)
 }
 
 
@@ -682,13 +682,15 @@ function getBotin() {
 // Pick and draw a container (chests and pots have several sprites).
 function showLoot() {
     run.objectToBreak = pickRandomItem("bag,barrel,box,chest,pot");
+    let sprite = run.objectToBreak;
     if (run.objectToBreak == "chest") {
-        loadNPC(`chest${getRandomInt(1, 6)}`);
+        sprite = `chest${getRandomInt(1, 6)}`;
     } else if (run.objectToBreak == "pot") {
-        loadNPC(`pot${getRandomInt(1, 4)}`);
-    } else {
-        loadNPC(run.objectToBreak);
+        sprite = `pot${getRandomInt(1, 4)}`;
     }
+    // the author: it was popping up with him already in the scene; now the next scene is made
+    // with it already there, and he walks into it
+    walkThroughScene(() => { newStage(); loadNPC(sprite); });
     print(`${wizardName()} sees ${run.previousEvent == "getBotin" ? "another " : "a "}${run.objectToBreak}`);
 }
 

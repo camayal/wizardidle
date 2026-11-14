@@ -59,7 +59,7 @@ export const spells = {
     spellCoins: {school:"na",frames:20,name:"Coin"},
     spellSleep_24: {school:"na",frames:24,name:"Sleep"},
     spellMultiDivine_28: {school:"na",frames:28,name:"Divine interaction"},
-    spellMiniDados_18: {school:"na",frames:18,name:"Dice"},
+    spellMiniDados_18: {school:"na",frames:18,name:"Dice",ms:80},   // ms: its own frame time (1.44 s, under the dice game's 1.5 s step; dice.ogg is 2.07 s)
 };
 
 // Spells the wizard learns, one tier every 10 levels (v1: spellTier0..spellTier20).

@@ -7,6 +7,7 @@ import { ui } from './runtime.js';
 import { playSound } from './audio.js';
 import { print } from './ui/render.js';
 import { updateAchievements } from './ui/scrolls.js';
+import { art } from './media.js';
 
 
 
@@ -23,7 +24,7 @@ const logro = {
         // achievement sound
         playSound("achivement");
         state.achievements[nameLogro.name] = true;
-        print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='img/achivement.png'><span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'><b>${nameLogro.title}</b> - ${nameLogro.description}</span>`);
+        print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='${art(`achivement`)}'><span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'><b>${nameLogro.title}</b> - ${nameLogro.description}</span>`);
         
         if (ui.scrollCurrentContent == "achievements"){
         updateAchievements();
@@ -36,7 +37,7 @@ const logro = {
 function achievementList(){
     let out = "";
     for (const text of Object.keys(state.achievements)){
-        out += `<div class="divTableRow"><div class="divTableCell"><img src="img/${logro[text].name}.png" height="${ui.em * 4}px" /></div><div class="divTableCell"><strong>${logro[text].title}</strong> <br>${logro[text].description}</div></div>`;
+        out += `<div class="divTableRow"><div class="divTableCell"><img src="${art(`${logro[text].name}`)}" height="${ui.em * 4}px" /></div><div class="divTableCell"><strong>${logro[text].title}</strong> <br>${logro[text].description}</div></div>`;
     }
     return out;
 }

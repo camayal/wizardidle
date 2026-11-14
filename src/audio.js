@@ -2,13 +2,14 @@
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
 import { run, ui } from './runtime.js';
+import { snd } from './media.js';
 
     
-// Play ogg/<name>.ogg once. Browsers may block sound until the player interacts; that is ignored.
+// Play a sound once by its name (its folder: src/media.js). Browsers may block sound until the player interacts; that is ignored.
 function playSound(ogg, volume = 0.3){
     if (run.simulation) return;
 
-    ui.audio = new Audio(`ogg/${ogg}.ogg`);
+    ui.audio = new Audio(snd(ogg));
     ui.audio.volume = volume;
     const promise = ui.audio.play();
     //avoid autoplay policy error

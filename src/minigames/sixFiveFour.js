@@ -10,6 +10,7 @@ import { hopEnemy, hopWizard } from '../combat.js';
 import { spell } from '../spells.js';
 import { playSound } from '../audio.js';
 import { clearNPC, leavePlace, print, showStage, updateHeading, wizardName } from '../ui/render.js';
+import { art } from '../media.js';
 
 //TODO add idx for all this part and achievements
 //temp dicegame
@@ -66,7 +67,7 @@ function sixfivefour(){
 
 // A small dice-game icon for the console (img/<name>.png).
 function diceImg(name) {
-    return `<img class='imgInConsole' height='${ui.em}' src='img/${name}.png'/>`;
+    return `<img class='imgInConsole' height='${ui.em}' src='${art(`${name}`)}'/>`;
 }
 
 // The banked symbols in parentheses, or nothing.

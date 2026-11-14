@@ -16,6 +16,7 @@ import { stats } from '../stats.js';
 import { statsPageHtml } from './statsPages.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
+import { art } from '../media.js';
 
 let scrollIDContent;
 
@@ -116,9 +117,9 @@ function localizarBocadillo(){
         el("pjMapa").style.display ="none";
     }else{
         if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
-            el("backMapa").src = "img/mapaunderground.png";
+            el("backMapa").src = art(`mapaunderground`);
         }else{
-            el("backMapa").src = "img/mapa.png";
+            el("backMapa").src = art(`mapa`);
         }
         if(!ui.currentBackGround.match(/_altar/) && !ui.currentBackGround.match(/_estatua/)){
         const localidad = places[ui.currentBackGround];
@@ -211,8 +212,8 @@ function stripAt(index) {
         const strip = document.createElement("div");
         strip.className = "scrollTab";
         strip.style.cssText = "position:absolute; display:none; cursor:pointer; overflow:hidden;";
-        strip.innerHTML = '<img class="scrollTabPaper" src="img/scrollBackCenterShade.png" style="position:absolute; left:0; width:100%">' +
-            '<img class="scrollTabRoll" src="img/scrollBackUpShade.png" style="position:absolute; left:0; top:0; width:100%">' +
+        strip.innerHTML = '<img class="scrollTabPaper" src="' + art('scrollBackCenterShade') + '" style="position:absolute; left:0; width:100%">' +
+            '<img class="scrollTabRoll" src="' + art('scrollBackUpShade') + '" style="position:absolute; left:0; top:0; width:100%">' +
             '<span class="scrollTabLabel" style="position:absolute; left:0; width:100%; text-align:center; font-family:pixeled_english_fontregular; color:#462808"></span>';
         strip.onclick = () => {
             const set = ui.scrollCurrentContent;
@@ -307,14 +308,14 @@ function updateHelp(){
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true idle game, you must do nothing. The wizard can perform all actions without your help. This is a different way to play, watching what other beings do without your control but some interference (you can interact with miracles). <b><i>This is a god like game</i></b>.</div>' +
    '<div class="faq">Graphical layout</div><div class="a">The screen is divided in three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, health points, gold and faith points. In this panel you can found the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where is printed all actions performed by the wizard.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to intect</i> with the wizard, non-player caracters or environments. </div>' +
    '<div class="faq">Icons explanation</div><div class="a">' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/boss.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Boss, this encounter is harder than others, the reward is multiplied too.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/attack.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Attack, followed by the amount of damage against the wizard or the enemy.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/heart.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Wizard health, can be found in five states depending of the percentage (100%, 75%, 50%, 10%, and 0%).</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img style="filter: hue-rotate(45deg)" src="img/heart.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Enemy health, as well wizard health, it can be found in five states.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/achivement.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Achivement, just won a achivement.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/gold.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Gold, represent the currency in the game.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/heal.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Healing, followed by amount of health recovered.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/spirit.png" height="' + ui.em + 'px" /></div><div class="divTableCell">Faith, divine currency in the game, divine touches and other stuff cost faith instead gold.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('boss') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Boss, this encounter is harder than others, the reward is multiplied too.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('attack') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Attack, followed by the amount of damage against the wizard or the enemy.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('heart') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Wizard health, can be found in five states depending of the percentage (100%, 75%, 50%, 10%, and 0%).</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img style="filter: hue-rotate(45deg)" src="' + art('heart') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Enemy health, as well wizard health, it can be found in five states.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('achivement') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Achivement, just won a achivement.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('gold') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Gold, represent the currency in the game.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('heal') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Healing, followed by amount of health recovered.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('spirit') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Faith, divine currency in the game, divine touches and other stuff cost faith instead gold.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + ui.em * 1.5 + 'px">!</span></div><div class="divTableCell">Showed near the bottom-right corner, new content or update is available in the server. Reload the game to download the new content for offline access.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + ui.em * 1.5 + 'px">...</span></div><div class="divTableCell">Showed near the bottom-right corner, searching for new content or updates.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + ui.em * 1.5 + 'px">.</span></div><div class="divTableCell">Showed near the bottom-right corner, the game can run but some problem with the offline functions happens. No enough space, your browser does not allow cache, or cache is in conflict with a previous one.</div></div>' +
@@ -323,22 +324,22 @@ function updateHelp(){
    '<div class="faq">The player</div><div class="a"><b>You</b>, to avoid interrupt the free will of the wizard, you can only watch and help limited reducing the faith of the wizard. If the wizard has faith < 0 you cannot help him.</div>' +
    '<div class="faq">Divine touches</div><div class="a">This is the main player interaction with the wizard and occurs when click or touch the Scene panel. Some basic interactions are: <ol><li>Touch the wizard heal him (cost faith).</li><li>Touch the wizard when he is dead (soft dead) revive him.</li><li>Touch the enemy damage him/her/it (cost faith).</li><li>Touch a shrine mandate the wizard to give a tribute in gold (gain faith).</li>'+(state.travelFavor ? "<li>Touch the map teleport the wizard to the selected area.</li>" : "")+'</ol></div>' +
    '<div class="faq">Kill the wizard</div><div class="a">' +
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/diebtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">This is a definitive option, with this the player can destroy the current wizard in order to create another, <b>this action cannot be undone.</b></div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('diebtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">This is a definitive option, with this the player can destroy the current wizard in order to create another, <b>this action cannot be undone.</b></div></div>' +
    '</div>' +
    '<div class="faq">Achievements</div><div class="a">' + 
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/archbtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">A history of events your wizard achieve during his journey.</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('archbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">A history of events your wizard achieve during his journey.</div></div>' +
    '</div>' +
    '<div class="faq">Stats</div><div class="a">' +
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/statsbtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Many stats about what happen in the wizard trip. Pure informational.</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('statsbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Many stats about what happen in the wizard trip. Pure informational.</div></div>' +
    '</div>' +
    '<div class="faq">Map</div><div class="a">' + 
-   '<div class="divTableRow"><div class="divTableCell"><img src="img/mapbtn.png" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('mapbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
    '</div>' +
    '<div class="faq">Study and skills</div><div class="a">During the wizard\'s trip, books, runes and statues can be found available to study. A successful study of them increase some stats. In this way the wizard can be a strong archmage or a devote donor to your cause.</div>' +
    '<div class="faq">Faith</div><div class="a">Your interaction with the wizard\'s world depends of this currency. The wizard gains faith praying and offering in your shrines. He loses the faith avoiding enter to the shires, reviving himself, and after each divine touch.</div>' +
    '<div class="faq">Rest and healing</div><div class="a">There are different ways to heal the wizard:<br><ol><li>By himself, casting some restoration spell during the battles.</li><li>By himself, sleeping.</li><li>By your interaction, in exchange for faith.</li></ol></div>' +
    '<div class="faq">Revive (soft dead)</div><div class="a">' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="img/muerto.png" height="' + ui.em * 3 + 'px" /></div><div class="divTableCell">If the wizard falls in a battle, there are two ways to revive and continue with the game: <ol><li>By divine intervention touching the dead image (promotes godliness).</li><li>By himself, after some time, this cost huge amounts of faith and the recover is partial (promotes atheism).</li></ol></div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('muerto') + '" height="' + ui.em * 3 + 'px" /></div><div class="divTableCell">If the wizard falls in a battle, there are two ways to revive and continue with the game: <ol><li>By divine intervention touching the dead image (promotes godliness).</li><li>By himself, after some time, this cost huge amounts of faith and the recover is partial (promotes atheism).</li></ol></div></div>' +
    '</div>' +
    '<div class="faq">FAQ</div><div class="a">' + frequentQuestions + '</div>' +
    '<div class="faq">Licences</div><div class="a">' + 
@@ -392,7 +393,7 @@ function updateKill(){
         'For kill the wizard press Kill button below, otherwise just close this scroll.' +
         '</div>' +
         '<br><br><div>' +
-        '<img class="btn" id="realKillBtn" src="img/matar.png"/>' +
+        '<img class="btn" id="realKillBtn" src="' + art('matar') + '"/>' +
         '</div><br><br>';
     }
     el('innerTextScroll').innerHTML = `<div id="kill">${title}${body}</div>`;

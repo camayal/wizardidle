@@ -1,0 +1,2 @@
+# the archive is append-only on every branch: a merge keeps both sides
+docs/ARCHIVE.md merge=union
