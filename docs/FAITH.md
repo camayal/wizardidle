@@ -246,6 +246,8 @@ The offering question (cap, diminishing returns, fixed by level, keep the snowba
 
 ## 6. Open questions
 
+- **For later (the author, 2026-11-13): the god's critics need faith.** The god's touches cost faith, so with no faith left (an Atheist, or after heavy spending) the god can't touch at all: no critic, no super-critic, and none of the belief they give (+3 / +6), just when the wizard is furthest away. To think about in the future: e.g. a touch that costs nothing below 0 faith but has a cool-down, belief moments that don't need faith, or the winning-back actions (3.6, which cost no faith) as the only way in.
+
 - **Offerings:** cap, diminishing returns, fixed by level, or keep the snowball: decided by the playtests (3.10).
 - **Revive boost amount**, and whether farming needs a guard: playtests.
 - The rescuers, the winning-back actions and the escape scroll's plot: to be confirmed (see Decisions).
