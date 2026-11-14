@@ -37,6 +37,7 @@ Replace the 36 fixed backgrounds with scenes **composed from the author's own pa
   - *Underground:* caves, mines and the like, reached by cave mouths.
 - **Exits are drawn in the scene** (a path, a gate, stairs, a cave mouth), so the player can see the choices. The wizard picks one; the god's tap on an exit is a nudge he may ignore.
 - **Fixed places:** inn doors, shrines, dice houses and stairs live in one specific scene each, so they can be found, remembered and shown on the map.
+- **The street doors already exist** (`STREET_DOORS` in `src/ui/render.js`): the Town inn on `el_Poblado4` at x 120, the Town dice house on `el_Poblado5` at x 119, the City inn on `la_Ciudad4` at x 52, the City dice house on `la_Ciudad1` at x 149. He walks to the door, stops, then goes in. **These are the first fixed door landmarks:** a composed variant of those bases must keep the door at that x and the path to it clear.
 
 ## The scene recipe (back to front)
 
@@ -50,7 +51,7 @@ Replace the 36 fixed backgrounds with scenes **composed from the author's own pa
 | **Light tint** | Over the whole scene | The game clock |
 
 - Variants are **common, uncommon or rare**. The finite catalogue ties into the "unique places visited" stat ([STATS.md](STATS.md)).
-- **Protected spots** no prop may cover: the wizard's place, the enemy's spot, the find spots (discoveries), the statue's position, doors and the path to them.
+- **Protected spots** no prop may cover: the wizard's place, the enemy's spot, the find spots (discoveries), the statue's position, doors and the path to them, and **the enemies' entrance paths** (enemies now arrive by family, `src/ui/entrances.js`: they walk or fly in from the scene's right edge, or rise out of the ground at the enemy's spot, so the strip from the right edge to the enemy's spot and the ground at his spot stay free).
 - **Per tier:**
   - *Upperground:* a cloud floor that can drift; no weather.
   - *Ground:* the full recipe, with weather.
