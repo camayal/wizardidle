@@ -213,7 +213,7 @@ Counters and records from "Track almost everything as stats": faith gained and s
 
 The offering question (cap, diminishing returns, fixed by level, keep the snowball) and every number in this plan are decided by **measured runs**, not by guessing.
 
-- **Switches in `src/config.js`:** `offeringMode: "share" | "cap" | "sqrt" | "level"`, plus the belief thresholds, revive boost and shrine chance, so each option runs from the same code.
+- **Switches in `src/config.js`:** `offeringMode: "share" | "cap" | "sqrt" | "level"`, plus the belief meter's lines and weights, revive boost and shrine chance, so each option runs from the same code.
 - **Simulated runs:** the headless browser runs already used in every phase (virtual time, boosted clocks), from level 1 to 100+, with two **god bots**:
   - *Idle god:* never touches. Shows the natural drift (toward atheism?).
   - *Active god:* heals below 30% HP, revives at once, tithes at every shrine, tries to win back an Atheist. Shows whether faith snowballs.
@@ -223,7 +223,7 @@ The offering question (cap, diminishing returns, fixed by level, keep the snowba
 
 ## 4. Code plan
 
-- `src/config.js`: belief thresholds (in g), shrine chance, offering caps, touch prices, revive cost.
+- `src/config.js`: the belief meter (bounds, level lines, moment weights), shrine chance, offering caps, touch prices, revive cost.
 - `src/wizard.js`: `g()` (the unit), `beliefLevel()` (from faith, with the margin), `faithChange(amount, source)`, one function every gain and loss goes through, so stats, belief changes and console lines happen in one place.
 - `src/divine.js`: prices by belief level, revive cost, refusals.
 - `src/events.js`: shrine chance and skip by belief level, offering cap.
