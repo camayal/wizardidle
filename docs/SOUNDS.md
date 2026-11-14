@@ -83,6 +83,8 @@ be cut and converted to .ogg, with source and licence recorded), and nothing is 
 | - | Smash swing | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 400 ms (the downswing) | Ogre smashes |
 | 11 | Ram impact | ogg/Physical.ogg (already in the game) | whole file | 0.23 s | 0.3 | 950 ms (when the ram lands) | Capricor rams, Tauren rams (each approved) |
 | - | Infraespectro's curse | freesound_community-deathmagic-94937.mp3 | 1.717 s to 3.519 s | 1.80 s | 1.0 | 200 ms (the curse starts) | Infraespectro: curse |
+| - | Bicaptop's charge | freesound_community-single-horse-galopp-6152.mp3 | 1.556 s to 2.432 s | 0.88 s | 1.0 | 200 ms (the charge starts) | Bicaptop: charge |
+| - | Bicaptop's slam | freesound_community-rock-destroy-6409.mp3 | 0.000 s to 0.943 s | 0.94 s | 0.3 | 600 ms (when the slam lands) | Bicaptop: slam |
 
 The author also heard two approved sounds on other moves and approved them there, with the same
 file and cut: the thud (1) on Protromus's ground punch, starting at 400 ms, and the hooves (4) on
@@ -119,7 +121,6 @@ Still to choose, one by one (approved ones are in the tables above):
 | Goro | flurry, slam, charge |
 | Kkck | poison cloud |
 | Protromus | earth spikes |
-| Bicaptop | slam, charge |
 | Midas | golden touch, rainbow orbs, golden rays |
 | Herbus | vines, spores |
 | Cuboq | spit |
@@ -132,3 +133,10 @@ Still to choose, one by one (approved ones are in the tables above):
 | Rojo | flaming punch, fire rain, slam (fire peak) |
 | Hydras | strike (Swamp, ice, Dunes), frost breath |
 | Scene spells no boss casts yet | whirlwind, eclipse, divine light, healing rain |
+| Dice game | the roll: `ogg/dice.ogg` is 2.07 s and the dice animation now lasts 1.44 s (18 frames of 80 ms), with a new roll possible every 1.5 s. Wanted: about 1.2 to 1.4 s, the clatter early and the dice settled by the end (the author's playtest note, 2026-11-14) |
+
+## How the sounds are chosen from now on
+
+The author's decision (2026-11-14): the sounds are tried in the game itself, in a dev mode for
+sounds that plays the real scenes (a list of the moves that still need a sound, plain buttons to
+pick a file, a button that saves the note to a file), instead of a separate test page.
