@@ -563,7 +563,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 - **Snapshot the filled text:** the museum shows each scroll as it was read, so store the filled text (not the template) with the chapter's snapshot.
 - **Console beats** (40, 60, 70, 80, 100, 120, 128, 129, 139, 150–159, 170, 190, 199) go in a separate `beats` table keyed by level, so chapters stay readable.
 - **Echo slots** read `world.erasures.length > 0` and `world.loop` (ERASURE.md). Never triggered by a true death or the kill button.
-- **Falls:** the skull (`img/muerto.png`) is kept for a true death; a fall needs a new sprite of the wizard lying injured.
+- **Falls:** the skull (`muerto.png`, found by name through `src/media.js`) is kept for a true death; a fall needs a new sprite of the wizard lying injured.
 - **Snapshots for the museums:** at each chapter save a small record (zone, background, NPC, level, key stats, the filled scroll text), not an image, so the save stays small. The final battle's snapshot includes the souls.
 - **Two epilogues:** `specialEnd` becomes `endGodWins` (museum, then a new wizard) and `endOmni` (black museum, the app blocked forever).
 - **Midas is gone forever after VII:** zone bosses keep returning in play, but Midas never appears again once he dies in the Tower; the Tower has no boss, and his golden-ray heal exists only before VII (ideas.md, "Bosses return, except Midas").
