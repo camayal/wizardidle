@@ -87,7 +87,7 @@ export const sceneSpells = {
     earth_spikes: 16, ice_spikes: 16, arcane_flare: 16, sonic_boom: 14,
     rune_circle: 16, poison_cloud: 16, golden_touch: 18, rainbow_orbs: 18,
     golden_rays: 18, spore_storm: 16, slime_spit: 14, curse: 22,
-    fire_tornado: 18, fire_breath: 16, petrify_gaze: 18, poison_dart: 14,
+    fire_tornado: 18, fire_breath: 16, petrify_gaze: 18, poison_dart: 15,
     golden_storm: 16, prism_pulse: 18, colour_burst: 16, fire_fist: 14,
     fire_peak: 14, fire_rain: 16, arcane_rain: 16, poison_rain: 16,
     lightning: 14, blizzard: 16, flame_pillar: 15, meteor_shower: 20,

@@ -257,6 +257,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Medusa's poison shot, more visible
+- The author's note, redrawn by the artist (approved by the author): `scene_poison_dart.png` is now a slim dark stinger with a green venom drop, outlined, with a venom streak, drips and a splash on the wizard; 15 frames (was 14), set in `sceneSpells`.
+
 ### 2026-11-13: Belief: the way back from atheism, and a fix
 - The author's way back (FAITH.md 3.1 Decisions): a Doubter or Atheist passing a shrine +0.5; a close call (a fight won below 10% HP with no help from the god) +1; getting up alone -10 only as a Believer or Devout, -1 as a Doubter or Atheist; the god's super-critic is 1 in 10 of his critics at x16.
 - Fix: the stored belief level started empty and followed the value, so level changes were never recorded (no margin, no announcement, no time per level). He now starts as a Believer.

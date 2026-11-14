@@ -15,6 +15,6 @@
 [x] ~~looking a inn need to be compose for two scenes, one walk to the scene where the actual entrance of the inn is (if not visible in the current scene), then enter by the door.~~ (done for the Town and City inns and dice houses: the street with the door, then in; the Desert inn has no door on its streets)
 [x] ~~after sleeping in sleeping bag, the wizard do not need to return the the common standing point, it can just walk right to the next scene, I think only inn or buildings that back walk is needed~~ (done your way: after the rest he is already in his place, no walk back)
 [] arrows need to be faster
-[] check with @artist, medusa poison shoot need to be more visible
+[x] ~~check with @artist, medusa poison shoot need to be more visible~~ (the artist redrew it: a dark stinger with a green venom drop, a streak, drips and a splash)
 [] still flickery with some wizard animation, when it will start walking for example
 [] cemeentery each wizard should ahve a tumb with their name and perhaps age, touch extend information.  ERASURE follow rules, i think it is invert and crossed name and perhaps a cracked tomb. maybe 4 to 5 tombs desings with each one cracked just in case.
