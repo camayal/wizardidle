@@ -38,6 +38,9 @@ function newState() {
             gold: getRandomInt(10, 50),
             faith: getRandomInt(10, 35),
             faithMultiplier: 1,       // doubles at chapter II (devotion)
+            belief: config.belief.start,  // his belief, -100 to +100 (src/belief.js)
+            beliefLevel: "",          // devout, believer, doubter, atheist ("" until it first changes: read from belief)
+            beliefLost: false,        // the story's lock (chapter X): belief stops moving
             enemyHpRange: 0,
             enemyAttackRange: 0,
             xpPerEnemy: 0,

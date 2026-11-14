@@ -1,7 +1,7 @@
 // Wizard Idle v2 - The three divine touches: on the wizard (left), on the scene (center), on the enemy (right).
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
-import { getRandomInt, pickRandomItem, roundNumbertoLetter } from './utils.js';
+import { getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { stat, state } from './state.js';
 import { stats } from './stats.js';
 import { fight, run, ui } from './runtime.js';
@@ -11,6 +11,8 @@ import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { interruptMidasHeal } from './bossEffects.js';
+import { config } from './config.js';
+import { beliefMoment, isAtheist, touchCost } from './belief.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -40,6 +42,7 @@ function reviveByTouch() {
     }
     state.player.hp = state.player.hpBase;
     fight.pjDead = false;
+    beliefMoment("revive");
     const toCabin = () => enterPlace("curanderobg", "healer_hooded", () => startEvent(reviveEV), true);   // he wakes up there, with the hooded healer (the god in disguise; art by the artist)
     if (run.simulation || !document.hasFocus()) return toCabin();
     loop.freezeGame();                          // nothing moves on while the rings play
@@ -53,22 +56,26 @@ function reviveByTouch() {
 // Heal 50-200% of his restoration knowledge, paying 1-3 faith per HP; never above full HP,
 // and never more faith than he has.
 function healByTouch() {
+    if (isAtheist()) return refuseTouch();
     const healOperation = state.player.hpBase * stat("fHeal");
     let healHit = getRandomInt(healOperation * 0.5, healOperation * 2);
     if (Math.round(state.player.hp) + Math.round(healHit) > Math.round(state.player.hpBase)) {
         healHit = Math.round(state.player.hpBase) - Math.round(state.player.hp);
     }
-    let faithLost = healHit * getRandomInt(1, 3);
+    let faithLost = touchCost(healHit * getRandomInt(1, 3));
     if (Math.round(state.player.faith) - Math.round(faithLost) < 0) {
         faithLost = state.player.faith;
         healHit = faithLost / getRandomInt(1, 3);
     }
     if ((Math.round(state.player.hp) < Math.round(state.player.hpBase)) && (Math.round(state.player.faith) > 0)) {
         stats.count("god.heals");
+        // belief: a heal at very low HP counts more; whether it saved him shows at the enemy's next hit
+        beliefMoment(state.player.hp < state.player.hpBase * config.belief.lowHpLine ? "lowHpHeal" : "touch");
+        if (fight.enemy) fight.healedFrom = state.player.hp;
         if (state.player.hp + healHit > state.player.hpBase) {
             healHit = state.player.hpBase - state.player.hp;
             state.player.hp = state.player.hpBase;
-            faithLost = healHit * getRandomInt(1, 3);
+            faithLost = touchCost(healHit * getRandomInt(1, 3));
         } else {
             state.player.hp = state.player.hp + (healHit);
         }
@@ -83,14 +90,13 @@ function healByTouch() {
 // Touch on the enemy: hurt it with divine wrath, at a cost in faith.
 function npcBtn(){
     let txt;
-    if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 1){
+    if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 0){
+        if (isAtheist()) return refuseTouch();
         //hurt npc
         interruptMidasHeal();
+        // the god's touch may kill now (docs/FAITH.md 3.1: the final blow; v1 always left it 1 HP)
         let divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
-        if ( Math.round(fight.enemyHP) -  Math.round(divineHit) <= 0){//modify the divineHit to avoid god kills
-            divineHit = ( Math.round(fight.enemyHP) - 1);
-        }
-        let faithLost =  divineHit * getRandomInt(1,3)
+        let faithLost =  touchCost(divineHit * getRandomInt(1,3))
         if ( Math.round(state.player.faith) - Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
             faithLost = state.player.faith;
             divineHit = faithLost / getRandomInt(1,3);//update divine hit
@@ -98,13 +104,18 @@ function npcBtn(){
 
             const spellId = getSpell(20);
             spell( spellId,false);
+            let moment = "touch";
             if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
-                divineHit = Math.round(divineHit) * 8 //if is one of the divine powers
-                txt = "sees how the god's wrath destroy the enemy - ";
+                const superCritic = config.belief.superCriticChance > 0 && YesOrNot(config.belief.superCriticChance, 0);
+                divineHit = Math.round(divineHit) * (superCritic ? config.belief.superCriticMultiplier : 8) //if is one of the divine powers
+                txt = superCritic ? "sees the god's wrath crush the enemy - " : "sees how the god's wrath destroy the enemy - ";
+                moment = superCritic ? "superCritic" : "critic";
             }else{
                 txt = "feels the god's power over the enemy - ";
             }
-            fight.enemyHP = Math.round(fight.enemyHP) - (Math.round(divineHit));
+            fight.enemyHP = Math.max(0, Math.round(fight.enemyHP) - (Math.round(divineHit)));
+            beliefMoment(moment);
+            if (fight.enemyHP <= 0) beliefMoment("finalBlow");      // it falls at the fight's next step
             
             updateHeartNPC()
             state.player.faith = state.player.faith - faithLost;
@@ -113,6 +124,12 @@ function npcBtn(){
             stats.count("god.hits");
         }
     }
+
+// An Atheist refuses the god's heal and hit (docs/FAITH.md 3.1); nothing is spent.
+function refuseTouch() {
+    print(`${wizardName()} ${pickRandomItem("shrugs off a touch he doesn't believe in,refuses the help of a god he doesn't believe in,ignores a strange warmth")}`);
+    stats.count("belief.touchesRefused");
+}
 
 // Touch on the scene: ask the wizard for a tithe in gold, which becomes faith.
 function centerBtn(){

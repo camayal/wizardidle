@@ -13,6 +13,7 @@ import { state, world } from '../state.js';
 import { stats } from '../stats.js';
 import { ui } from '../runtime.js';
 import { countLogros, logro } from '../achievements.js';
+import { beliefLevel } from '../belief.js';
 
 const n = roundNumbertoLetter;
 
@@ -95,8 +96,11 @@ function goldSection() {
 }
 
 function faithSection() {
+    const level = beliefLevel();
     return section('Faith') +
         line('Faith now', n(state.player.faith)) +
+        // belief (src/belief.js): its level and value, or the story's lock
+        line('Belief', state.player.beliefLost ? 'lost &#8856;' : `${level.charAt(0).toUpperCase() + level.slice(1)} (${Math.round(state.player.belief)})`) +
         line('From prayers', n(stats.get('faith.gain.prayer'))) +
         line('From offerings', n(stats.get('faith.gain.offering'))) +
         line('From cleansing corruption', n(stats.get('faith.gain.cleanse'))) +
@@ -159,6 +163,7 @@ function recordsPage() {
         best('combat.longestCombo', 'Longest flawless streak', ' fights') +
         best('combat.biggestHit', 'Biggest hit') +
         best('faith.highest', 'Most faith at once') +
+        best('belief.highest', 'Strongest belief') +
         best('gold.highest', 'Richest', ' gold') +
         section(`${name}'s firsts`) +
         first('first.rareKill', 'First rare enemy') +

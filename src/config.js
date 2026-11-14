@@ -6,6 +6,30 @@
 // Values and comments are the ones from v1's checkDB().
 
 export const config = {
+    // Belief (docs/FAITH.md 3.1, the author's starting values, to playtest): its own meter,
+    // moved by moments; the level lines, the margin on the way up, and what each level changes.
+    belief: {
+        start: 20, min: -100, max: 100,
+        devout: 60, doubter: 0, atheist: -60,  // lines: Devout from +60, Believer from 0, Atheist below -60
+        margin: 10,
+        lowHpLine: 0.2,                        // a heal below this share of his HP is a "very low HP" heal
+        weights: {
+            savedFromKillingBlow: 8,           // a heal touch that keeps him alive through the enemy's next hit
+            lowHpHeal: 5,
+            finalBlow: 5,                      // the god's touch kills the enemy
+            critic: 3,                         // the god's touch lands a critic (the divine powers)
+            superCritic: 6,
+            touch: 0.5,                        // a normal heal or hit touch
+            revive: 2,
+            prayer: 1,                         // entering a shrine
+            skippedShrine: -1,
+            roseAlone: -10,                    // he got up without the god
+        },
+        superCriticChance: 0,                  // off until the author picks a chance (FAITH.md: "chance to playtest")
+        superCriticMultiplier: 16,             // against x8 for a critic
+        devoutTouchCost: 0.75, doubterTouchCost: 2,
+        devoutShrine: 0.15, doubterShrine: -0.15,
+    },
     // Fixed rules of the world.
     balance: {
         rXP: 1.1,                  // XP curve exponent

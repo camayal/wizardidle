@@ -9,6 +9,7 @@
 export const fight = {
     enemy: undefined,              // enemy family or boss/hydra name, e.g. "el_golem", "doria"
     enemyAndNumber: undefined,     // sprite of a normal enemy, e.g. "el_golem5"
+    healedFrom: 0,                 // his HP before the god's last heal touch, until the enemy's next hit (belief)
     enemyName: undefined,          // display name, e.g. "<i>Zubruwi</i> the Maro"
     enemyHP: undefined,
     enemyHPbase: undefined,

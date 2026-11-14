@@ -21,6 +21,7 @@ import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
 import { playEntrance } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
+import { beliefMoment } from './belief.js';
 
 
 
@@ -30,6 +31,8 @@ function battle() {
     run.multipleEventsCounter += 1;
     if (run.multipleEventsCounter == 1) {
         announceBattle();
+    } else if (Math.round(fight.enemyHP) <= 0) {
+        enemyFalls();               // the god's touch killed it between two steps
     } else {
         if (startOfTurn()) {
             enemyAttack();          // he is stone: the boss hits freely
@@ -198,6 +201,7 @@ function scheduleSelfRevive() {
         loop.stop("selfRevive");
         run.previousEvent = "autorevive";
         fight.autorevive = "";
+        beliefMoment("roseAlone");      // he got up without the god
         const faithLost = state.player.hpBase * 1.2454654;
         state.player.faith = state.player.faith - faithLost;
         print(`${wizardName()} recovers himself but feels abandoned by his god (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
@@ -218,6 +222,7 @@ function updateLongestCombo() {
 // Forget the enemy once a fight is over (won or lost).
 function clearFight() {
     resetBossEffects();
+    fight.healedFrom = 0;
     fight.enemy = "";
     fight.enemyAndNumber = "";
     state.npc = "";
@@ -461,6 +466,9 @@ function enemyAttack() {
     let enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
     if (fight.enemy == "midas") enemyHit *= 2;
     if (isDivineSpell(fight.spellEnemy)) enemyHit *= 4;
+    // belief: the god's last heal saved him if this hit would have killed him without it
+    if (fight.healedFrom && enemyHit >= fight.healedFrom && state.player.hp - enemyHit > 0) beliefMoment("savedFromKillingBlow");
+    fight.healedFrom = 0;
     if (state.player.hp - enemyHit < 0) {
         state.player.hp = 0;
     } else {
