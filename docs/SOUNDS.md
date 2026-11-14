@@ -38,10 +38,10 @@ Short (under 1 s unless noted), mono, .ogg, about as loud as the current ones, f
 
 | # | Sound | For |
 |---|---|---|
-| 1 | Heavy thud / ground hit | slam (Ent, Golem, Mummy, Umigubi, Roco, bosses), ground punch |
-| 2 | Deep rumble, ~1.5 s | the earthquake scene spell (with the shake) |
-| 3 | Bow twang + arrow whoosh | shoot (Elf) |
-| 4 | Hooves galloping, ~1 s, loopable | charge (Capricor, Tauren, boss charges) |
+| ~~1~~ | ~~Heavy thud / ground hit~~ | ~~slam (Ent, Golem, Mummy, Umigubi, Roco, bosses), ground punch~~ (found, see Decisions) |
+| ~~2~~ | ~~Deep rumble, ~1.5 s~~ | ~~the earthquake scene spell (with the shake)~~ (found, see Decisions) |
+| ~~3~~ | ~~Bow twang + arrow whoosh~~ | ~~shoot (Elf)~~ (found, see Decisions) |
+| ~~4~~ | ~~Hooves galloping, ~1 s, loopable~~ | ~~charge (Capricor, Tauren, boss charges)~~ (found, see Decisions) |
 | 5 | Rolling rumble, ~1.5 s | the boss's roll |
 | 6 | Beast roar, ~1 s | roar (boss), pounce (a short snarl would do) |
 | 7 | Slime squelch / boing | the slime boss's bounce |
@@ -54,4 +54,19 @@ one at a time: drop the file in `ogg/` and dev wires it.
 
 ## Decisions
 
-(none yet)
+Sounds the author approved by ear (2026-11-13), each tried against its animation. The source
+files are in `wizardidle-old-ideas/unorganized_sounds/`; they are not in `ogg/` yet (still to
+be cut and converted to .ogg, with source and licence recorded), and nothing is wired.
+"Starts at" is counted from the first frame of the animation.
+
+| # | Sound | Source file | Cut | Plays | Volume | Starts at | Tried on |
+|---|---|---|---|---|---|---|---|
+| 1 | Heavy thud | dragon-studio-heavy-boulder-thud-515257.mp3 | whole file | 2.11 s | 0.3 | 500 ms (when the blow lands) | Ent slams |
+| 2 | Deep rumble | dragon-studio-heavy-rock-rolling-515254.mp3 | whole file | 2.11 s | 0.3 | 400 ms (the earthquake starts) | Protromus: ground punch and earthquake |
+| 3 | Arrow whoosh | djartmusic-arrow-swish_03-306040.mp3 | whole file | 1.04 s | 0.3 | 200 ms (the release) | Elf shoots |
+| 4 | Hooves | freesound_community-gallop-98644.mp3 | 0.333 s to 0.624 s | 0.29 s | 1.0 | 500 ms (the dash starts) | Tauren charges |
+
+All four at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wires them:
+1 and 2 are longer than the lengths asked above (under 1 s, about 1.5 s), approved as they are;
+4 is one short gallop at full volume (the others play at the game's usual 0.3) and ends about
+160 ms before the ram lands.

@@ -257,6 +257,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-13: Sounds: the first four chosen by ear (musician)
+- The author tried the candidate sounds against the attack animations and approved four: the heavy thud, the deep rumble, the arrow whoosh and the hooves. Files, cuts, volume and the moment each starts are in `docs/SOUNDS.md` (Decisions); those four are crossed out of "Sounds to find". Still to find: roll, roar, squelch, wind, stone, bite; the reuse table is still to confirm by ear. The files are not in `ogg/` yet and nothing is wired.
+
 ### 2026-11-13: Medusa's poison shot, more visible
 - The author's note, redrawn by the artist (approved by the author): `scene_poison_dart.png` is now a slim dark stinger with a green venom drop, outlined, with a venom streak, drips and a splash on the wizard; 15 frames (was 14), set in `sceneSpells`.
 
