@@ -6,20 +6,25 @@
 //     (src/dev/art.js); the game waits while one is open;
 //   - scenarios: each one saves the wizard, reloads the page, prepares the wizard (level,
 //     zone, HP...) and forces the first event, then says what to check;
-//   - quick actions that change the running game at once (fights, +1 level, gold, speed...);
+//   - pickers (lists plus a button) that change the running game at once: the wizard (level,
+//     pose, animation, gifts), a boss, a hydra, an enemy (exact or random by attack, rare,
+//     arrival), each fight with a chosen arrival;
+//   - a few quick actions (speed, pause...);
 //   - a command line that runs any typed code; `dev` gives access to the game objects.
 //
-// Adding a test means adding one entry to `scenarios` or `actions` below.
+// Adding a test means adding one entry to `scenarios` or `actions`, or an option to a picker.
 
 import { config } from '../config.js';
 import { saveGame, state, world } from '../state.js';
 import { fight, run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
-import { enemySprites } from '../data/enemies.js';
+import { enemySprites, enemyTypes } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { clearNPC, drawWizard, loadNPC, showStage, updateHeading } from '../ui/render.js';
+import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStage, updateHeading } from '../ui/render.js';
+import { ARRIVALS, entranceKind } from '../ui/entrances.js';
+import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
 import { sidePanel } from './panel.js';
 import { buildNotesBox, setNoteSource } from './notes.js';
@@ -202,37 +207,6 @@ const actions = [
     { group: 'Modes', name: 'Sounds: choose a sound for a move', run() { openMode('sounds'); } },
     { group: 'Modes', name: 'Art: play animations, scenes and other art', run() { openMode('art'); } },
 
-    { group: 'Wizard', name: '+1 level', run() { state.player.xp = state.player.xpNext; addXP(0); } },
-    { group: 'Wizard', name: '+1000 gold', run() { state.player.gold += 1000; updateHeading(); } },
-    { group: 'Wizard', name: '+faith (one level of HP)', run() { state.player.faith += state.player.hpBase; updateHeading(); } },
-    { group: 'Wizard', name: 'Full HP', run() { state.player.hp = Math.floor(state.player.hpBase); updateHeading(); } },
-
-    // real fights: the current event ends and this one starts (the game's own fight code)
-    { group: 'Fight now', sub: 'Bosses', name: 'Medusa (Desert)', run() { liveFight(() => bossIn('el_Desierto')); } },
-    { group: 'Fight now', name: 'Medusa, her gaze always petrifies', run() { liveFight(() => { override('balance', { petrifyChance: 1 }); return bossIn('el_Desierto'); }); } },
-    { group: 'Fight now', name: 'Protromus (Cave, earthquake)', run() { liveFight(() => bossIn('la_Cueva')); } },
-    { group: 'Fight now', name: 'Goro (Prairie, charge)', run() { liveFight(() => bossIn('la_Pradera')); } },
-    { group: 'Fight now', name: 'Fenix (Volcano)', run() { liveFight(() => bossIn('el_Volcan')); } },
-    { group: 'Fight now', name: 'King Midas (Tower)', run() { liveFight(() => bossIn('la_Torre')); } },
-    { group: 'Fight now', name: 'Kkck (Town, poison cloud)', run() { liveFight(() => bossIn('el_Poblado')); } },
-    { group: 'Fight now', sub: 'Hydras', name: 'Swamp hydra, 4 heads', run() { liveFight(() => hydraIn('el_Pantano', 'mother', 4)); } },
-    { group: 'Fight now', name: 'Ice hydra, 3 heads', run() { liveFight(() => hydraIn('la_Tundra', 'icedra', 3)); } },
-    { group: 'Fight now', name: 'Dunes hydra, 2 heads', run() { liveFight(() => hydraIn('las_Dunas', 'hydskon', 2)); } },
-    { group: 'Fight now', sub: 'Enemies by attack', name: 'warrior (thrust)', run() { liveFight(() => enemyNamed('el_guerrero2')); } },
-    { group: 'Fight now', name: 'creature (pounce)', run() { liveFight(() => enemyNamed('animalejo24')); } },
-    { group: 'Fight now', name: 'ent (slam)', run() { liveFight(() => enemyNamed('el_ent3')); } },
-    { group: 'Fight now', name: 'elf (shoot)', run() { liveFight(() => enemyNamed('el_elfo1')); } },
-    { group: 'Fight now', name: 'ogre (smash)', run() { liveFight(() => enemyNamed('el_ogro3')); } },
-    { group: 'Fight now', name: 'cowren (charge)', run() { liveFight(() => enemyNamed('el_tauren1')); } },
-    { group: 'Fight now', name: 'rogue (slash)', run() { liveFight(() => enemyNamed('el_pillo3')); } },
-    { group: 'Fight now', name: 'wizard (caster)', run() { liveFight(() => enemyNamed('el_hechicero2')); } },
-    { group: 'Fight now', sub: 'Enemies by arrival', name: 'walking (orc)', run() { liveFight(() => enemyNamed('el_orco2')); } },
-    { group: 'Fight now', name: 'flying (demon)', run() { liveFight(() => enemyNamed('el_demonio1')); } },
-    { group: 'Fight now', name: 'floating (spectre)', run() { liveFight(() => enemyNamed('el_espectro3')); } },
-    { group: 'Fight now', name: 'from the ground (slime)', run() { liveFight(() => enemyNamed('baba1')); } },
-    { group: 'Fight now', name: 'jumping (rogue)', run() { liveFight(() => enemyNamed('el_pillo2')); } },
-    { group: 'Fight now', name: 'in a flicker (wizard)', run() { liveFight(() => enemyNamed('el_hechicero1')); } },
-
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { group: 'Game', name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
     { group: 'Game', name: 'Crisp pixels on / off', run() {
@@ -244,6 +218,116 @@ const actions = [
     } },
     { group: 'Game', name: 'Back to the game (end the scene, next event)', run() { closeMode(); resetScene(); nextEvent(); } },
 ];
+
+// ---------------------------------------------------------------- pickers (lists plus a button)
+
+const HYDRA_NAMES = { mother: 'Swamp hydra', icedra: 'Ice hydra', hydskon: 'Dunes hydra' };
+const HYDRA_ZONE = { mother: 'el_Pantano', icedra: 'la_Tundra', hydskon: 'las_Dunas' };
+const HYDRA_MAX = { mother: 10, icedra: 5, hydskon: 5 };
+const LEVELS = [1, 5, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 189, 190, 191, 200, 209, 210];
+const POSES = ['fallen', 'dead', 'stone'];
+const ANIMS = ['cast', 'walk', 'pray', 'fall_sit', 'fall_dead', 'petrify', 'unpetrify'];
+const MOVES = ['slash', 'thrust', 'smash', 'shoot', 'charge', 'pounce', 'slam'];
+const GIFTS = {
+    '+1000 gold': () => { state.player.gold += 1000; },
+    '+1 million gold': () => { state.player.gold += 1e6; },
+    '+faith (one level of HP)': () => { state.player.faith += state.player.hpBase; },
+    'Full HP': () => { state.player.hp = Math.floor(state.player.hpBase); },
+    'Half HP': () => { state.player.hp = Math.floor(state.player.hpBase / 2); },
+    '1 HP (falls at the next blow)': () => { state.player.hp = 1; },
+};
+
+// Normal enemies only (no boss or hydra), with what the filters need.
+const BOSS_NAMES = new Set(Object.values(zones).map((z) => z.boss));
+const enemyList = Object.keys(enemySprites).filter((s) => {
+    const family = s.replace(/\d+$/, '');
+    return /\d$/.test(s) && enemyTypes[family] && !BOSS_NAMES.has(family) && !HYDRA_NAMES[family];
+}).sort();
+const familyOf = (s) => s.replace(/\d+$/, '');
+const isCaster = (s) => enemySprites[s].type != 'melee';
+
+// Random picks: label -> test on a sprite.
+const ENEMY_PICKS = {
+    'random: any enemy': () => true,
+    'random: caster (magic)': isCaster,
+    'random: melee (any move)': (s) => !isCaster(s),
+    ...Object.fromEntries(MOVES.map((m) => [`random: melee ${m}`, (s) => !isCaster(s) && meleeMoveOf(familyOf(s)) == m])),
+    'random: rare': (s) => enemySprites[s].rare,
+    'random: rare mage (portal)': (s) => enemySprites[s].rare && entranceKind(s) == 'blink',
+    'random: corrupted': (s) => enemySprites[s].corrupted,
+    ...Object.fromEntries(['walk', 'fly', 'float', 'rise', 'jump', 'blink'].map((k) =>
+        [`random: arrives by ${k == 'blink' ? 'magic (mages)' : k}`, (s) => entranceKind(s) == k])),
+};
+const pickRandom = (list) => list[Math.floor(Math.random() * list.length)];
+
+function pickerHtml() {
+    const opts = (list, labels = list) => list.map((x, i) => `<option value="${x}">${labels[i]}</option>`).join('');
+    const arrival = `<label>Arrival <select data-f="arrival"><option value="">its own way</option>${opts(ARRIVALS)}</select></label>`;
+    const bossZones = Object.keys(zones).filter((z) => zones[z].boss && enemyTypes[zones[z].boss]);
+    const bossLabels = bossZones.map((z) => `${enemyTypes[zones[z].boss].name} (${zones[z].name || z})`);
+    return {
+        Wizard: `
+            <div class="row"><label>Level <select data-f="level">${opts(LEVELS)}</select></label>
+                <button data-do="setLevel">Set</button><button data-do="levelDown">-1</button><button data-do="levelUp">+1 (level up)</button></div>
+            <div class="row"><select data-f="look">
+                <optgroup label="Poses">${opts(POSES.map((x) => `pose:${x}`), POSES)}</optgroup>
+                <optgroup label="Animations">${opts(ANIMS.map((x) => `anim:${x}`), ANIMS)}</optgroup>
+                <option value="stand">standing (back to normal)</option></select>
+                <button data-do="look">Show</button></div>
+            <div class="row"><select data-f="gift">${opts(Object.keys(GIFTS))}</select><button data-do="gift">Apply</button></div>`,
+        Bosses: `
+            <div class="row"><select data-f="boss">${opts(bossZones, bossLabels)}</select></div>
+            <div class="row">${arrival}<label><input type="checkbox" data-f="petrify"> gaze always petrifies (Medusa)</label></div>
+            <div class="row"><button data-do="boss">Fight</button></div>`,
+        Hydras: `
+            <div class="row"><select data-f="hydra">${opts(Object.keys(HYDRA_NAMES), Object.values(HYDRA_NAMES))}</select>
+                <label>Heads <select data-f="heads"></select></label><button data-do="hydra">Fight</button></div>`,
+        Enemies: `
+            <div class="row"><select data-f="pick">${opts(Object.keys(ENEMY_PICKS))}<option value="exact">exact sprite (below)</option></select></div>
+            <div class="row"><input type="text" data-f="sprite" list="devEnemyList" spellcheck="false" placeholder="sprite, e.g. el_hechicero10">
+                <datalist id="devEnemyList">${enemyList.map((x) => `<option value="${x}">${enemySprites[x].rare ? 'rare ' : ''}${enemySprites[x].type}</option>`).join('')}</datalist></div>
+            <div class="row">${arrival}<button data-do="enemy">Fight</button></div>`,
+    };
+}
+
+// The pickers' buttons: f gives a list's value in the same section.
+const pickerActions = {
+    setLevel(f) { setLevel(Number(f('level'))); afterWizardChange(); },
+    levelDown() { setLevel(Math.max(1, state.player.lvl - 1)); afterWizardChange(); },
+    levelUp() { state.player.xp = state.player.xpNext; addXP(0); },
+    look(f) {
+        const [kind, name] = f('look').split(':');
+        ui.petrified = false;
+        if (kind == 'pose') drawWizardPose(name);
+        else if (kind == 'anim') { if (name == 'unpetrify') ui.petrified = true; playWizardAnim(name); }
+        else drawWizard();
+    },
+    gift(f) { GIFTS[f('gift')](); updateHeading(); },
+    boss(f) {
+        const zone = f('boss'), petrify = f('petrify');
+        liveFight(() => {
+            if (petrify) override('balance', { petrifyChance: 1 });
+            return bossIn(zone);
+        }, f('arrival'));
+    },
+    hydra(f) { const h = f('hydra'); liveFight(() => hydraIn(HYDRA_ZONE[h], h, Number(f('heads')))); },
+    enemy(f) {
+        let sprite = f('sprite').trim();
+        if (f('pick') != 'exact') {
+            const list = enemyList.filter(ENEMY_PICKS[f('pick')]);
+            if (!list.length) return devPrint(`no enemy for "${f('pick')}"`, true);
+            sprite = pickRandom(list);
+        } else if (!enemyList.includes(sprite)) return devPrint(`unknown sprite "${sprite}"`, true);
+        devPrint(`fight: ${sprite} (${enemySprites[sprite].type}${enemySprites[sprite].rare ? ', rare' : ''})`);
+        liveFight(() => enemyNamed(sprite), f('arrival'));
+    },
+};
+
+function afterWizardChange() {
+    drawWizard();
+    updateHeading();
+    devPrint(`level ${state.player.lvl}`);
+}
 
 // What the notes box says when no mode is open: where the game stands.
 function gameDetails() {
@@ -289,6 +373,7 @@ function resetScene() {
         polymorphed: false, pjDead: false, autorevive: '', bossMultiplier: 1, bossGoldMultiplier: 1 });
     Object.assign(ui, { petrified: false, wizardOffset: 0, findSpot: null });
     run.pause = false;
+    run.forceEntrance = undefined;
     state.player.hp = Math.floor(state.player.hpBase);
     clearNPC();
     showStage();
@@ -298,12 +383,13 @@ function resetScene() {
 
 // A real fight now: the current event ends, setup() prepares it (zone, chances) and returns
 // the event to force, which starts right away; config changes last until it is picked.
-function liveFight(setup) {
+function liveFight(setup, arrival) {
     resetScene();
     const first = setup();
     showStage();
     run.forceOnce = first.event;
     run.forceEnemy = first.enemy;
+    run.forceEntrance = arrival || undefined;
     const watch = setInterval(() => {
         if (run.forceOnce === undefined) { restoreOverrides(); clearInterval(watch); }
     }, 50);
@@ -405,10 +491,13 @@ function buildBar(prepared) {
         return html;
     };
     const section = (key, title, inner) => `<details data-key="${key}"><summary>${title}</summary>${inner}</details>`;
+    const pickers = pickerHtml();
     panel.body.innerHTML = `
         <div class="row"><span class="muted devSpeed"></span></div>
         ${section('Modes', 'Modes', `<div class="devList">${groupHtml('Modes')}</div>`)}
-        ${section('Scenarios', 'Scenarios (reload the page)', `<div class="devList">${scenarios.map((sc, i) => button(`s${i}`, sc.name, sc.check)).join('')}</div>`)}
+        ${Object.entries(pickers).map(([key, inner]) => section(key, key, `<div data-picker="${key}">${inner}</div>`)).join('')}
+        ${section('Scenarios', 'Scenarios (reload the page)', `<div class="row"><select class="devScenario">${scenarios.map((sc, i) => `<option value="${i}">${sc.name}</option>`).join('')}</select>
+            <button data-do="scenario">Run</button></div>`)}
         ${groups.filter((g) => g != 'Modes').map((g) => section(g, g, `<div class="devList">${groupHtml(g)}</div>`)).join('')}
         ${section('Command', 'Command line', `<div class="row"><input type="text" placeholder="e.g. dev.state.player.gold = 5000" spellcheck="false"></div>`)}
         <div class="note devCheck"></div>
@@ -418,23 +507,34 @@ function buildBar(prepared) {
     bar = { root: panel.root, check: panel.body.querySelector('.devCheck'), speed: panel.body.querySelector('.devSpeed'),
         log: panel.body.querySelector('.log') };
 
+    const scenarioList = panel.body.querySelector('.devScenario');
+    const showCheck = () => { bar.check.textContent = `Check: ${scenarios[scenarioList.value].check}`; };
+    scenarioList.onchange = showCheck;
     panel.body.onclick = (e) => {
-        const v = e.target.dataset && e.target.dataset.run;
-        if (!v) return;
-        if (v[0] == 's') runScenario(Number(v.slice(1)));
-        else { bar.check.textContent = ''; actions[v.slice(1)].run(); }
+        const d = e.target.dataset || {};
+        if (d.do == 'scenario') return runScenario(Number(scenarioList.value));
+        if (d.do) {                                 // a picker's button: read the lists of its section
+            const box = e.target.closest('[data-picker]');
+            const f = (name) => { const node = box.querySelector(`[data-f="${name}"]`); return node.type == 'checkbox' ? node.checked : node.value; };
+            bar.check.textContent = '';
+            return pickerActions[d.do](f);
+        }
+        if (d.run) { bar.check.textContent = ''; actions[d.run.slice(1)].run(); }
     };
-    // a scenario's check shows when the pointer is over it
-    panel.body.onmouseover = (e) => {
-        const v = e.target.dataset && e.target.dataset.run;
-        if (v && v[0] == 's') bar.check.textContent = `Check: ${scenarios[v.slice(1)].check}`;
-    };
-    panel.body.querySelector('input').onkeydown = (e) => {
+    // the hydra's head list follows the hydra
+    const hydra = panel.body.querySelector('[data-f="hydra"]'), heads = panel.body.querySelector('[data-f="heads"]');
+    const fillHeads = () => { heads.innerHTML = Array.from({ length: HYDRA_MAX[hydra.value] }, (_, i) => `<option>${i + 1}</option>`).join(''); };
+    hydra.onchange = fillHeads;
+    fillHeads();
+    // the level list starts at the wizard's level
+    const level = panel.body.querySelector('[data-f="level"]');
+    level.value = String(LEVELS.filter((l) => l <= state.player.lvl).pop() || 1);
+    panel.body.querySelector('[data-key="Command"] input').onkeydown = (e) => {
         if (e.key == 'Enter' && e.target.value.trim()) { runCommand(e.target.value); e.target.select(); }
     };
 
     // unfolded menus are remembered
-    let open = ['Modes', 'Fight now'];
+    let open = ['Modes', 'Enemies'];
     try { open = JSON.parse(localStorage.getItem(OPEN_KEY)) || open; } catch (e) { /* private mode */ }
     for (const d of panel.body.querySelectorAll('details')) {
         d.open = open.includes(d.dataset.key);

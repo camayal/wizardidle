@@ -53,11 +53,11 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-17: Mages fade in or step out of a portal, fewer dreams, dev pickers
+- Two author notes from the dev inbox. Random dreams drop from 15% to 5% of rests (story dreams unchanged). Enemy mages flicker or fade in at random; rare mages (Evoker, Sacred wizardess) and every zone boss come through a portal, drawn by code for now (violet, red for bosses); the artist was asked for portal strip options in review/. The dev panel's Wizard and Fight now buttons became pickers (wizard, bosses, hydras, enemies by sprite or random by attack, rare, arrival, each with a forced arrival); scenarios are one list. Checked by a headless playtest (3 seeds to level 40, no errors) and a headless page load (panel builds, no console errors); the entrances were not watched in a browser.
+
 ### 2026-11-17: Chargers get home first, the dream follows the scene
 - The author's three dev notes. Chargers (capricorns, taurens) took about 2 s to paw, dash, ram and trot back, but a battle step is 1.5 s, so the wizard cast while they were still running home; now a move longer than a step holds the game's clocks for its tail and the wizard casts about 0.15 s after the enemy is back (shorter moves unchanged). The sleep dark with its dream, and the boss scene-spell layer, now follow the scene when a scroll opens or closes. The hydra explanation under the bestiary's Secrets is gone. Checked by a headless playtest (3 seeds to level 40, no errors), which skips animations, so the charge and the dream were not watched in a browser.
 
 ### 2026-11-17: Records retired, achievements dated
 - The author's two dev notes: the Records page and its tab are removed from the stats scroll (the stats it read stay; the Stats page and achievements use them). An achievement now stores the time it was won and the list shows it in small grey text; ones won before this show no date. Also ticked the breakables item in AUTHOR_NOTES (fixed earlier, never ticked). Checked by a headless playtest (3 seeds to level 40, no errors); the scrolls were not opened in a browser.
-
-### 2026-11-17: Walk to the loot, never into the same scene
-- The author's dev notes: he now walks up to the bag, barrel, box, chest or pot and stops just before it (LOOT_STOP), opens it there, then walks on into the next scene as after a statue. Exploring could walk him out and back into the same scene: the stage was never updated on an in-zone move, so the next move could pick the background already shown; it is kept now, and newStage never rolls the stage he is on. Checked by a headless playtest (3 seeds to level 60, no errors); not watched in a browser.

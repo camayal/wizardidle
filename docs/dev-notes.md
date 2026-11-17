@@ -5,11 +5,6 @@ author's comment (technical details only when a moment was captured). A later no
 earlier one.
 
 ```
-Date: 2026-11-15 11:26
-Author's note: dev we need 2 or 3 ways the enemy mages appear, the current is fine, but we could do one like fading in, another only for rares and bosses is can be a portal type animation send request to @artist about tthis animation
-```
-
-```
 Date: 2026-11-15 11:38
 Author's note: I would like to have one creek in the praire, and keep the one in the swam, but we need to modify the maps to include them, and additionally cbe sure to create scenes of bridges one for each region
 ```
@@ -17,11 +12,6 @@ Author's note: I would like to have one creek in the praire, and keep the one in
 ```
 Date: 2026-11-15 11:53
 Author's note: For elementals, I changed my mind; the entry to battle should be linked to its element, perhaps animate them adequately.
-```
-
-```
-Date: 2026-11-15 16:37
-Author's note: dreams are quite frequent, we need to reduce them
 ```
 
 ```

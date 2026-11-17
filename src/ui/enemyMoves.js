@@ -26,6 +26,7 @@ const MELEE = {
     el_capricor: "charge", el_tauren: "charge",
 };
 const DEFAULT_MELEE = "slash";
+export const meleeMoveOf = (family) => MELEE[family] || DEFAULT_MELEE;
 
 // The school of an enemy's spell, for its spark.
 const SPELL_SCHOOL = { spellPush1: "arcane", spellPush2: "arcane", spellPush3: "nature", spellPush7: "nature",

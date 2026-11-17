@@ -1318,3 +1318,16 @@ Author's note: I noticed in the bestirary a note about the hydra, we dont need t
 
 ### 2026-11-17: Hydra entrances redrawn
 - Author approved ice option A (icedra-style peaks, burst frames 10-15 unchanged, reveal frame stays) and the mud burst without the pond (its fade-out was not polished). Option B rejected. Swapped the two strips, fixed the HYDRA_FADE comment; fade logic untouched.
+
+```
+Date: 2026-11-15 11:26
+Author's note: dev we need 2 or 3 ways the enemy mages appear, the current is fine, but we could do one like fading in, another only for rares and bosses is can be a portal type animation send request to @artist about tthis animation
+```
+
+```
+Date: 2026-11-15 16:37
+Author's note: dreams are quite frequent, we need to reduce them
+```
+
+### 2026-11-17: Walk to the loot, never into the same scene
+- The author's dev notes: he now walks up to the bag, barrel, box, chest or pot and stops just before it (LOOT_STOP), opens it there, then walks on into the next scene as after a statue. Exploring could walk him out and back into the same scene: the stage was never updated on an in-zone move, so the next move could pick the background already shown; it is kept now, and newStage never rolls the stage he is on. Checked by a headless playtest (3 seeds to level 60, no errors); not watched in a browser.

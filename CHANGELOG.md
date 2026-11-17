@@ -17,6 +17,9 @@
 - Something to find twinkles on the ground before the wizard walks to it.
 - Hydra entrances redrawn: the ice peaks now match the icedra (black outline, faceted faces) and the mud burst no longer leaves a pond behind.
 - Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.
+- Enemy mages now flicker in or fade in out of thin air; rare mages and every zone boss step out of a portal (violet for mages, red for bosses).
+- Dreams and nightmares come less often (one rest in twenty instead of about one in seven).
+- Dev tools: the long button lists became pickers: the wizard (level, -1/+1, poses, animations, gold/faith/HP), any boss with its arrival, any hydra with its heads, and enemies by exact sprite or at random (caster, melee by move, rare, rare mage, corrupted, by arrival), each with a chosen arrival; scenarios are one list with a Run button.
 - Enemy attacks match their weapons: slash, thrust, smash, shoot, pounce, slam, and chargers run across the scene. The wizard waits for a charger to be back in place before casting again.
 - Hydras arrive their own way at every head count: the Swamp mother rises from a mud pool, the Tundra icedra breaks out of an iceberg, the Dunes hydskon is built from flying bones (playable in the art dev console as "N heads: arrive").
 - Bosses have their own attacks and scene spells, from the artist; hydras weave their heads, strike or cast, and grow each new head on screen.

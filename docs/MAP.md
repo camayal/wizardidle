@@ -46,12 +46,12 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - menu.js: toolbar buttons. scrolls.js: parchment scroll pages (stats, achievements, help, kill, map). statsPages.js: the Stats page. bestiary.js: kill scroll's bestiary page.
 - bossAttacks.js: plays boss attack strips, scene spells, earthquake shake, Medusa's gaze.
 - enemyMoves.js: how normal enemies attack (sprite moved by code plus an effect).
-- entrances.js: how enemies arrive (glide, float, rise, jump, flicker, walk).
+- entrances.js: how enemies arrive (glide, float, rise, jump, flicker, walk; mages also fade in; rare mages and bosses through a portal).
 - dom.js: `el(id)` shortcut. src/minigames/sixFiveFour.js: the dice game in town houses.
 
 ## src/dev/ (dev)
 
-- tests.js: the dev panel: scenarios, quick actions, command line, mode buttons.
+- tests.js: the dev panel: pickers (wizard, bosses, hydras, enemies, each fight with a chosen arrival), scenarios, quick actions, command line, mode buttons.
 - panel.js: left and right side panels (float over the game on small screens).
 - sounds.js: sounds mode: pick a scene and a sound, cut/speed/fade/volume, play together.
 - art.js: art mode: a files table (review drop, local files, game files picked by folder), the scene and an alt scene under it to compare, frame size found by itself, one viewer for sheets.
