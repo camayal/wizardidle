@@ -89,3 +89,27 @@ Author's note: if the wizar is already in the dice games, why exit and go again,
 Date: 2026-11-17 06:58
 Author's note: healer teleport is quite rudimentary, we can use the metod we use in entrance wizards but in reverse to vanish him
 ```
+
+```
+Date: 2026-11-17 13:03
+Author's note: prologue scroll should be visable only when the game load, so in the button we can see the scene, not before.
+```
+
+```
+Date: 2026-11-17 13:05
+Author's note: remove phisical  attack from our wizard, it is a wizard after all. only spells
+```
+
+```
+Date: 2026-11-17
+From artist (approved by the author): hydra entrances, ready to wire.
+Files: img/bosses/hydras/<hydra>/anim_<hydra>_enter.png, one strip each, 16 frames, played once
+when the hydra arrives (instead of its normal entrance), then its idle. About 120 ms a frame.
+- mother (Swamp): rises out of a green mud pool. Frames 96x96: the hydra sits 16 px in from the
+  left, so draw the frame 16 px further left than mother1.png (same feet line).
+- icedra (Tundra): an iceberg grows with the hydra inside, cracks and shatters. Frames 64x64.
+- hydskon (Dunes): bones whirl and fly in to build the hydra, eyes light up. Frames 64x64.
+Same pixel scale as the stage-1 sprites (hydskon1, icedra1, mother1): draw at the hydra's normal
+scale, never stretched to a fixed box, or the wider mother frame comes out smaller.
+They show the stage-1 hydra (one head).
+```

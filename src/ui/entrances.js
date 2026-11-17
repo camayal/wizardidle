@@ -25,6 +25,8 @@ for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of familie
 
 const STEP_MS = 50;
 const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, blink: 12 };
+const HYDRA_ENTER = { mother: [96, 96, 16], hydskon: [64, 64, 0], icedra: [64, 64, 0] };  // frame w, h, sprite's left margin
+const HYDRA_ENTER_MS = 120;         // the artist's strips: 16 frames, played once, stage-1 hydra only
 const OFF_RIGHT = 80;               // sprite px from its place to just past the scene's right edge
 
 export function entranceKind(npc) {
@@ -74,6 +76,8 @@ function pose(kind, t, k) {
 export function playEntrance(done) {
     const npc = state.npc;
     if (run.simulation || !document.hasFocus() || !npc) return done && done();
+    const hydra = /^(mother|hydskon|icedra)1$/.exec(npc);
+    if (hydra) return playHydraEnter(npc, hydra[1], done);
     const kind = entranceKind(npc), total = FRAMES[kind];
     cancelNPCDraw();                                // the sprite must not pop up in its place mid-arrival
     imageNow(art(`${npc}`));
@@ -124,4 +128,39 @@ function draw(npc, img, p) {
         const dw = 24 * scene * (bw / ui.charWidth), dh = 8 * scene * (bw / ui.charWidth);
         drawFrame(ctx, dust, p.dust * 24, 0, 24, 8, bx + (bw - dw) / 2, by + bh - dh, dw, dh);
     }
+}
+
+// A one-head hydra arrives with its own strip (img/bosses/hydras/<hydra>/anim_<hydra>_enter.png):
+// the sprite sits at its usual place inside the frame, so the frame is drawn shifted by its margin.
+function playHydraEnter(npc, hydra, done) {
+    const [fw, fh, margin] = HYDRA_ENTER[hydra], src = art(`anim_${hydra}_enter`);
+    cancelNPCDraw();
+    imageNow(src);
+    loop.freezeGame();
+    npcCanvas.width = npcCanvas.offsetWidth;
+    npcCanvas.height = npcCanvas.offsetHeight;
+    let k = 0, waited = 0;
+    const finish = () => {
+        loop.stop("animNPC");
+        loop.thawGame();
+        if (state.npc == npc) loadNPC(npc);                // the idle weaving (already running) takes over
+        if (done) done();
+    };
+    const step = () => {
+        const strip = imageNow(src);
+        if (!strip) {                               // not loaded yet: wait for it (2 s at most)
+            pixelContext(npcCanvas).clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+            if (++waited > 17) finish();
+            return;
+        }
+        if (state.npc != npc || k >= strip.naturalWidth / fw) return finish();
+        const [bx, by, bw, bh] = npcBox(npc);
+        const kx = bw / 64, ky = bh / fh;
+        const ctx = pixelContext(npcCanvas);
+        ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        drawFrame(ctx, strip, k * fw, 0, fw, fh, bx - margin * kx, by, fw * kx, fh * ky);
+        k++;
+    };
+    step();
+    loop.every("animNPC", step, HYDRA_ENTER_MS);
 }
