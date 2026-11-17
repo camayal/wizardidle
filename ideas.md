@@ -53,14 +53,11 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-17: Records retired, achievements dated
+- The author's two dev notes: the Records page and its tab are removed from the stats scroll (the stats it read stay; the Stats page and achievements use them). An achievement now stores the time it was won and the list shows it in small grey text; ones won before this show no date. Also ticked the breakables item in AUTHOR_NOTES (fixed earlier, never ticked). Checked by a headless playtest (3 seeds to level 40, no errors); the scrolls were not opened in a browser.
+
 ### 2026-11-17: Walk to the loot, never into the same scene
 - The author's dev notes: he now walks up to the bag, barrel, box, chest or pot and stops just before it (LOOT_STOP), opens it there, then walks on into the next scene as after a statue. Exploring could walk him out and back into the same scene: the stage was never updated on an in-zone move, so the next move could pick the background already shown; it is kept now, and newStage never rolls the stage he is on. Checked by a headless playtest (3 seeds to level 60, no errors); not watched in a browser.
 
 ### 2026-11-17: Hydra entrances redrawn
 - Author approved ice option A (icedra-style peaks, burst frames 10-15 unchanged, reveal frame stays) and the mud burst without the pond (its fade-out was not polished). Option B rejected. Swapped the two strips, fixed the HYDRA_FADE comment; fade logic untouched.
-
-### 2026-11-17: Shrine walk
-- The author's shrine notes: he now stops a little before the cross (offset 22, clear of every zone's cross), the shrine sound plays once he is in the shrine (not before he walks there), the mystic stays while he walks back out to the left and goes with the scene. The 'not walking to or from shrines' note predated the walk-in and walk-back. Checked by a headless playtest run (no errors); not watched in a browser.
-
-### 2026-11-17: Hands down at every tier
-- Author's request: the flame in the raised hand (magic tiers) and the hands that were not all down. All tiers now rest with both hands down, arms recoloured per tier; the flame shows only in the cast animation, held in the lowered hand. Author's choice: tiers 0 and 10 look alike and differ in the attack. The cast no longer has a flame by the hand; the spark at the staff tip stays. A hands-up pose would be new art (see the thinker's inbox).

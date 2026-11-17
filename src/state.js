@@ -66,7 +66,7 @@ function newState() {
         statBonus: {},                // skill -> gained on top of config.baseStats
         stats: { 'explore.zone.la_Ciudad': 1, 'combat.combo': 0 },  // see src/stats.js (v1: idx_*)
         history: [],                  // one line per level-up (src/stats.js)
-        achievements: {},             // achievement name -> true
+        achievements: {},             // achievement name -> time won (ms)
     };
 }
 

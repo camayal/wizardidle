@@ -25,16 +25,6 @@ Author's note: dreem scene do not respect the reposition of the scene view when 
 ```
 
 ```
-Date: 2026-11-15 11:51
-Author's note: I don't like the Records scroll, I think this is why we have achievements. we can get rid of them. past wizard stats will be in the Cementery
-```
-
-```
-Date: 2026-11-15 11:51
-Author's note: For the achievments, I think we need to add the date and time where it was won, in small text and perhaps gray
-```
-
-```
 Date: 2026-11-15 11:53
 Author's note: For elementals, I changed my mind; the entry to battle should be linked to its element, perhaps animate them adequately.
 ```

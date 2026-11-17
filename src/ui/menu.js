@@ -91,7 +91,6 @@ function helpBtn(){
 
 // Toolbar: open the stats scroll (refreshed while open).
 function statsBtn(){
-    ui.scrollViews.stats = "stats";
     loop.every("stats", updateStats,masterTime);
     updateStats();
     el("innerTextScroll").style.display = "block";
