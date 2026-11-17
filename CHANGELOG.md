@@ -57,6 +57,7 @@
 - Dev tools, art mode reworked: one table of files (the sessions' drops, local files, game files chosen by folder) with Scene, Alt and View on each row; an alt scene under the game plays the same moment with another file or the game's own art, side by side; frame sizes are found by themselves (and can be set by hand); one viewer, over the game, for sheets and close-ups.
 - Scene spells (rains, the poison cloud, the rest) no longer stay on screen now and then: they fade away when they end, even if another animation cuts in.
 - Arrows fly faster.
+- The Cemetery is a field of tombs: each fallen wizard has one of five headstones with his name and age carved in it; tap one to read his story on a small parchment. Erased wizards lie under a cracked stone, their name turned and crossed out.
 
 
 ## 2.1.0 — 2026-11-12

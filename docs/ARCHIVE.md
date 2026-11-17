@@ -1351,3 +1351,6 @@ Author's note: @dev art console is quite confusing.  please clear things  up
 
 ### 2026-11-17: Records retired, achievements dated
 - The author's two dev notes: the Records page and its tab are removed from the stats scroll (the stats it read stay; the Stats page and achievements use them). An achievement now stores the time it was won and the list shows it in small grey text; ones won before this show no date. Also ticked the breakables item in AUTHOR_NOTES (fixed earlier, never ticked). Checked by a headless playtest (3 seeds to level 40, no errors); the scrolls were not opened in a browser.
+
+### 2026-11-17: Chargers get home first, the dream follows the scene
+- The author's three dev notes. Chargers (capricorns, taurens) took about 2 s to paw, dash, ram and trot back, but a battle step is 1.5 s, so the wizard cast while they were still running home; now a move longer than a step holds the game's clocks for its tail and the wizard casts about 0.15 s after the enemy is back (shorter moves unchanged). The sleep dark with its dream, and the boss scene-spell layer, now follow the scene when a scroll opens or closes. The hydra explanation under the bestiary's Secrets is gone. Checked by a headless playtest (3 seeds to level 40, no errors), which skips animations, so the charge and the dream were not watched in a browser.

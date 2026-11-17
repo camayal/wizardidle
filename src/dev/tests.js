@@ -26,6 +26,7 @@ import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStag
 import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
+import { scrollOpen } from '../ui/scrolls.js';
 import { sidePanel } from './panel.js';
 import { buildNotesBox, setNoteSource } from './notes.js';
 
@@ -217,6 +218,26 @@ const actions = [
         devPrint(ui.crisp ? 'crisp pixels' : 'smoothed (as before 2.2)');
     } },
     { group: 'Game', name: 'Back to the game (end the scene, next event)', run() { closeMode(); resetScene(); nextEvent(); } },
+
+    { group: 'Cemetery', name: 'Add sample tombs (all five, whole and erased) and open it', run() {
+        world.cemetery = world.cemetery.filter((w) => !w.sample);
+        const names = ['Orin', "D'Arcy", 'Zephyra', 'Barnaby the Bold', 'Maë-Lin'];
+        const day = (n) => new Date(Date.now() - n * 864e5).toISOString();
+        ['a', 'b', 'c', 'd', 'e'].forEach((tomb, i) => {
+            for (const erased of [false, true]) world.cemetery.push({ sample: true, tomb, erased,
+                name: erased ? `${names[i]} II` : names[i], lvl: [12, 57, 140, 199, 210][i], age: [37, 112, 1234, 9, 3400000][i],
+                born: day(40 - i * 3), died: day(20 - i * 3), kills: 50 * (i + 1), falls: i * 2 });
+        });
+        saveGame();
+        ui.scrollViews.kill = 'cemetery';
+        scrollOpen('kill');
+        devPrint('10 sample tombs added (top row whole, cracked ones are the erased)');
+    } },
+    { group: 'Cemetery', name: 'Remove the sample tombs', run() {
+        world.cemetery = world.cemetery.filter((w) => !w.sample);
+        saveGame();
+        devPrint('sample tombs removed');
+    } },
 ];
 
 // ---------------------------------------------------------------- pickers (lists plus a button)

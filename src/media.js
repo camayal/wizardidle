@@ -12,6 +12,7 @@
 //   img/effects/<spells|scene|fx>/
 //   img/places/<zone>/           stages 1-5, altar, statue, tavern, dice house
 //   img/story/  img/objects/  img/ui/  img/ui/achievements/  img/app/ (icons the browser uses)
+//   img/ui/cemetery/             tomb_<a-e>, tomb_<a-e>_cracked, tomb_font, tomb_note
 //   snd/<schools|wizard|creatures|places|ui>/
 //
 // Files from outside (downloads, packs) are renamed before they come in: short, lowercase, words
@@ -55,6 +56,7 @@ export function artFolder(name) {
     if (STORY.test(name)) return 'story';
     if (OBJECTS.test(name)) return 'objects';
     if (/^(logro_|no_logro$)/.test(name)) return 'ui/achievements';
+    if (/^tomb_/.test(name)) return 'ui/cemetery';
     if (UI.test(name)) return 'ui';
     return '';
 }

@@ -16,6 +16,7 @@ import { stats } from '../stats.js';
 import { statsPageHtml } from './statsPages.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
+import { cemeteryPageHtml, paintCemetery } from './cemetery.js';
 import { art } from '../media.js';
 
 let scrollIDContent;
@@ -161,17 +162,6 @@ function enableMainButtons() {
     for (let i=0; i < eles.length; i++)
        eles[i].onclick = eles[i].prev_click;  // restore the previous value
     };
-
-// Cemetery lines as v1 wrote them: "Name (lvl: 12) died at the age of 23. <born> - <died>".
-function cemeteryText(){
-    const dateOptions = {year: 'numeric', month: 'long', day: 'numeric'};
-    return world.cemetery.map(function(w){
-        return `${w.name} (lvl: ${roundNumbertoLetter(w.lvl)}) died at the age of ${roundNumbertoLetter(w.age)}` +
-            (w.kills !== undefined ? `, after ${roundNumbertoLetter(w.kills)} victories and ${roundNumbertoLetter(w.falls)} falls` : "") + ". " +
-            new Date(w.born).toLocaleDateString("en", dateOptions) + " - " + new Date(w.died).toLocaleDateString("en", dateOptions) + "<br>";
-    }).join("");
-}
-
 
 ////////////////////////////////////////////////
 //  ████████╗███████╗██╗  ██╗████████╗███████╗//
@@ -381,7 +371,7 @@ function updateKill(){
     const title = `<span class="titles" id="titleKill">${PAGE_NAMES[page]}</span>`;
     let body;
     if (page == "cemetery") {
-        body = world.cemetery.length == 0 ? "<br>Nobody rests here yet." : `<br>${cemeteryText()}`;
+        body = cemeteryPageHtml();
     } else if (page == "bestiary") {
         body = bestiaryPageHtml();
     } else {
@@ -408,6 +398,7 @@ function updateKill(){
         el("realKillBtn").style.height  = `${(ui.objectSize * 0.09375) * 1.5}px`;
     }
     if (page == "bestiary") paintInkStains(el('innerTextScroll'));
+    if (page == "cemetery") paintCemetery(el('innerTextScroll'));
     if (ui.scrollCurrentContent == "kill") placeScrollTabs("kill");
 }
 
