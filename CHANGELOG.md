@@ -9,6 +9,7 @@
 - Hands down at every tier: the raised hand that held the flame is lowered, so each wizard rests with both hands down; the flame now shows only in the cast animation, held in the lowered hand.
 - The wizard walks: to finds and statues, out of one scene and into the next, through doors, and to the street door of inns and dice houses in the Town and the City before going in.
 - Shrines, statues and inns outside the towns are entered on foot; scene changes fade more slowly.
+- Shrines: the wizard stops a little before the cross, the shrine sound plays once he is inside, and the mystic stays while he walks away.
 - Something to find twinkles on the ground before the wizard walks to it.
 - Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.
 - Enemy attacks match their weapons: slash, thrust, smash, shoot, pounce, slam, and chargers run across the scene.

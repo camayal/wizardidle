@@ -222,7 +222,6 @@ function reviveEV(){
 function prayEV(){
     let textCapel;
     if (YesOrNot(shrineChance(stat("pFindCapel")),0)){      // by his belief level (an Atheist never enters)
-        playSound("altar");
         beliefMoment("prayer");
         stats.count("faith.shrines");
         stats.count(`faith.shrineZone.${state.zone.current}`);
@@ -233,7 +232,12 @@ function prayEV(){
         }
         print(`${wizardName()} ${textCapel}`);
         const mistico = `mistico${getRandomInt(1,3)}`;
-        enterPlace(`${state.zone.current}_altar`, mistico, () => walkWizardTo(CROSS_X - 32 - 46));   // up to the cross
+        // the author: the shrine sound plays once he is in the shrine, not before; he stops a
+        // little before the cross (he was almost on top of it)
+        enterPlace(`${state.zone.current}_altar`, mistico, () => {
+            playSound("altar");
+            walkWizardTo(SHRINE_STOP);
+        });
         if (YesOrNot(stat("pOfrenda"),0) && state.player.gold > 0){
             run.offer = true;
         }else{
@@ -296,6 +300,7 @@ function innEV(){
 const STATUE_X = { el_Bosque: 207, el_Castillo: 128, el_Desierto: 172, el_Duenon: 161, el_Heidan: 195, el_Pantano: 188,
     el_Volcan: 183, la_Ciudad: 148, la_Gruta: 220, la_Mina: 200, la_Pradera: 161, la_Torre: 208, la_Tundra: 212, las_Dunas: 180 };
 const CROSS_X = 124;                // shrine crosses stand around the middle of the scene
+const SHRINE_STOP = 22;             // his offset at a shrine: sprite x 54-86, clear of the cross (left edge about x 100)
 
 // A blink appears somewhere on the ground and he walks to it; the find will lie there.
 function walkToFind() {
@@ -662,11 +667,12 @@ function pray() {
 // Leave the shrine and go back to the road.
 function leaveShrine() {
     drawWizard();               // stands up again
-    clearNPC();
     endEvent();
     run.disableCenterBtn = false;
     run.offer = false;
-    walkBackThroughScene(newStage, nextEvent);  // back out to the left, the way he came (the author)
+    // back out to the left, the way he came; the mystic stays at the shrine (the author) and
+    // goes only with the scene
+    walkBackThroughScene(() => { clearNPC(); newStage(); }, nextEvent);
 }
 
 

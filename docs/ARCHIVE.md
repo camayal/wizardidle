@@ -1228,3 +1228,26 @@ Same pixel scale as the stage-1 sprites (hydskon1, icedra1, mother1): draw at th
 scale, never stretched to a fixed box, or the wider mother frame comes out smaller.
 They show the stage-1 hydra (one head).
 ```
+
+## Dev notes handled 2026-11-17 (shrines)
+
+```
+Date: 2026-11-14 23:49
+Author's note: When walk towards the shrine wizars is almost on top of the cross, perhaps put him some space away
+```
+```
+Date: 2026-11-14 23:50
+Author's note: when leaving the shrine, monk does not need to disapear, it can stay there.
+```
+```
+Date: 2026-11-14 23:59
+Author's note: the shrine sound is played before enteringinto the actual shrine scene. i think it better to play it when is entering the shrine
+```
+
+## Journal cut 2026-11-17
+
+### 2026-11-17: Notes cleanup
+- The author's request: fewer tokens per session. ideas.md is now this index; idea text moved to the plans or `docs/ideas/`; decisions to `docs/DECISIONS.md`; the 30 approved boss and hydra sounds recorded in SOUNDS.md (and cut from `src/dev/soundNeeds.js`); dev notes for the artist and the thinker moved to their inboxes, duplicates cut.
+
+### 2026-11-17: Hydra entrances wired
+- Artist's strips (`anim_<hydra>_enter.png`, 16 frames, 120 ms) play once in `playEntrance` (ui/entrances.js) for mother1, hydskon1 and icedra1; mother's frame is drawn 16 px left of the sprite. Hydras with more heads (wounded return) keep the old rise. Not run in a browser here (no node).

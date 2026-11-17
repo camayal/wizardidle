@@ -9,25 +9,13 @@ Date: 2026-11-14 23:48
 Author's note: enemies that charge need extra time to be back to the position before wizard attach them, aatack is vissiable even without the enemi is in position
 ```
 
-```
-Date: 2026-11-14 23:49
-Author's note: When walk towards the shrine wizars is almost on top of the cross, perhaps put him some space away
-```
 
-```
-Date: 2026-11-14 23:50
-Author's note: when leaving the shrine, monk does not need to disapear, it can stay there.
-```
 
 ```
 Date: 2026-11-14 23:54
 Author's note: we need to modify pots, boxes and chest, wizard need to walt towards them before interacting.
 ```
 
-```
-Date: 2026-11-14 23:59
-Author's note: the shrine sound is played before enteringinto the actual shrine scene. i think it better to play it when is entering the shrine
-```
 
 
 ```

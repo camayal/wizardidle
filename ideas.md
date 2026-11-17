@@ -53,14 +53,11 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-17: Shrine walk
+- The author's shrine notes: he now stops a little before the cross (offset 22, clear of every zone's cross), the shrine sound plays once he is in the shrine (not before he walks there), the mystic stays while he walks back out to the left and goes with the scene. The 'not walking to or from shrines' note predated the walk-in and walk-back. Checked by a headless playtest run (no errors); not watched in a browser.
+
 ### 2026-11-17: Hands down at every tier
 - Author's request: the flame in the raised hand (magic tiers) and the hands that were not all down. All tiers now rest with both hands down, arms recoloured per tier; the flame shows only in the cast animation, held in the lowered hand. Author's choice: tiers 0 and 10 look alike and differ in the attack. The cast no longer has a flame by the hand; the spark at the staff tip stays. A hands-up pose would be new art (see the thinker's inbox).
 
 ### 2026-11-17: Art mode reworked
 - Author's request: the art console was messy. Files are one table (name, what it replaces, Scene / Alt / View); game files are picked by folder or search; the alt scene sits where the console was and replays a recording of the same scene with the Alt file (or the game's art), in step with the live one; frame size found from the name, then from the pictures (neighbouring frames overlap most), with boxes to override; one viewer over the game for sheets. Also: one refresh timer for the notes box, not one per mode. Checked in headless Edge (no errors, alt scene drawn, tiers per file).
-
-### 2026-11-17: Notes cleanup
-- The author's request: fewer tokens per session. ideas.md is now this index; idea text moved to the plans or `docs/ideas/`; decisions to `docs/DECISIONS.md`; the 30 approved boss and hydra sounds recorded in SOUNDS.md (and cut from `src/dev/soundNeeds.js`); dev notes for the artist and the thinker moved to their inboxes, duplicates cut.
-
-### 2026-11-17: Hydra entrances wired
-- Artist's strips (`anim_<hydra>_enter.png`, 16 frames, 120 ms) play once in `playEntrance` (ui/entrances.js) for mother1, hydskon1 and icedra1; mother's frame is drawn 16 px left of the sprite. Hydras with more heads (wounded return) keep the old rise. Not run in a browser here (no node).
