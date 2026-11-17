@@ -1203,3 +1203,6 @@ Date: 2026-11-15 11:23
 Author's note: For artist, some tiers have the hand elevated, this was a limitation of the open source art i used in the past, we should make a couple of things: 1) make that the default position is with both hands down, and 2) hands up can be anothe rmoment for wizard, it can be related with some healing schools and perhaps another specific school defined from the begining (the natural school that the wizard can dominate naturally, without th ehelp of the staff) send this last idea to @planner to think about this system
 ```
 (artist, 2026-11-17: part 1 done. Every tier now rests with both hands down, in all poses and animations; the hands-up idea went to the thinker notes.)
+
+### 2026-11-17: Enemy flash before its arrival (from the journal)
+- Author's note (2026-11-15): an enemy sometimes showed in its place, vanished, then came in. Cause: when its image was not loaded yet, loadNPC's draw waited for the load and landed in the middle of the arrival. Now `playEntrance()` cancels that pending draw (`cancelNPCDraw()` in render.js); the arrival draws the enemy itself and puts it in place at the end. Checked that the game loads clean in headless Edge.

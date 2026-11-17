@@ -5,7 +5,8 @@
 - Lighter notes: ideas.md is a short index, idea text sits by topic in docs/ideas/, decisions in docs/DECISIONS.md, one notes inbox per role; the approved boss and hydra sounds are recorded in SOUNDS.md and gone from the dev tools' "needs a sound" list.
 - A file map, docs/MAP.md: what every file does, how the parts connect, media and dev-tools rules, for anyone starting work.
 - Wizard animations from the artist: casting (with a spark by school, or a staff slash), walking, praying, falling, true death, turned to stone and breaking free, at every tier.
-- Fallen and dead poses: a fallen wizard sits with a skull above him until revived; a true death shows the dead pose.
+- Fallen and dead poses: a fallen wizard sits with a skull above him until revived; a true death shows the dead pose; the dead wizard lies face down, hair only, at every tier.
+- Hands down at every tier: the raised hand that held the flame is lowered, so each wizard rests with both hands down; the flame now shows only in the cast animation, held in the lowered hand.
 - The wizard walks: to finds and statues, out of one scene and into the next, through doors, and to the street door of inns and dice houses in the Town and the City before going in.
 - Shrines, statues and inns outside the towns are entered on foot; scene changes fade more slowly.
 - Something to find twinkles on the ground before the wizard walks to it.
