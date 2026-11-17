@@ -12,7 +12,7 @@ import { event, nextEvent } from './events.js';
 import { levelUP } from './wizard.js';
 import { playSound } from './audio.js';
 import { drawWizard, print, showStage, updateHeading, wizardName } from './ui/render.js';
-import { defineObjectSize, getEM } from './ui/layout.js';
+import { defineObjectSize, getEM, responsiveLayout } from './ui/layout.js';
 import { el } from './ui/dom.js';
 import * as loop from './loop.js';
 import { art } from './media.js';
@@ -130,7 +130,9 @@ function initialName(){
 
     if(state.firstUse){
         el("inputName").value = randomName();
-        el("launcher").style.display = "none" ;
+        // The layout shows the name screen (or the clouds on a phone held sideways). With the dev
+        // tools this runs after the page's load event, so hiding the launcher here left a blank page.
+        responsiveLayout();
 
     }else{
         start();

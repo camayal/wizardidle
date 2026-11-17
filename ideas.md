@@ -258,6 +258,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-17: Name screen hidden behind the dev tools
+- Author's note (2026-11-15): after a kill with the dev tools on, only the dev panel showed. Cause: with DEV, main.js starts the game after the dev tools load, which can be after the page's load event; `initialName()` then hid the name screen and no layout showed it again. Now `initialName()` runs the layout for a new wizard. Checked with a fresh visit in headless Edge.
+
 ### 2026-11-17: File map for the roles
 - Wrote docs/MAP.md: one line per file, how the pieces connect, media rules, dev tools and docs. Roles read it before code. Loose end: a root `ogg/` folder still exists though the code no longer uses it; the comment in src/data/bossAttacks.js still says img/anim_<boss>_<attack>.png (now in img/bosses/<boss>/).
 
