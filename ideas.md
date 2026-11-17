@@ -53,6 +53,9 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-17: Hydra entrances redrawn
+- Author approved ice option A (icedra-style peaks, burst frames 10-15 unchanged, reveal frame stays) and the mud burst without the pond (its fade-out was not polished). Option B rejected. Swapped the two strips, fixed the HYDRA_FADE comment; fade logic untouched.
+
 ### 2026-11-17: Shrine walk
 - The author's shrine notes: he now stops a little before the cross (offset 22, clear of every zone's cross), the shrine sound plays once he is in the shrine (not before he walks there), the mystic stays while he walks back out to the left and goes with the scene. The 'not walking to or from shrines' note predated the walk-in and walk-back. Checked by a headless playtest run (no errors); not watched in a browser.
 

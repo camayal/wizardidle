@@ -31,7 +31,7 @@ const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, blink: 12 };
 const HYDRA_ENTER = { mother: { effect: "mud", reveal: 9 }, icedra: { effect: "ice", reveal: 10 }, hydskon: { effect: "bones", reveal: 11 } };
 const HYDRA_FRAME = 96;
 const HYDRA_ENTER_MS = 120;
-const HYDRA_FADE = 5;               // steps the last frame fades over (the mud pond stays a moment)
+const HYDRA_FADE = 5;               // steps the last frame fades over (the last droplets and shards fade out)
 const OFF_RIGHT = 80;               // sprite px from its place to just past the scene's right edge
 
 export function entranceKind(npc) {
