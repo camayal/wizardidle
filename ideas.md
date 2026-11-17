@@ -258,6 +258,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-17: File map for the roles
+- Wrote docs/MAP.md: one line per file, how the pieces connect, media rules, dev tools and docs. Roles read it before code. Loose end: a root `ogg/` folder still exists though the code no longer uses it; the comment in src/data/bossAttacks.js still says img/anim_<boss>_<attack>.png (now in img/bosses/<boss>/).
+
 ### 2026-11-14: Images and sounds in folders
 - The author's choices (asked one by one): folders by kind and per creature; one helper by rules; `ogg/` renamed to `snd/` (a 3-letter abbreviation, the author's) with folders for what exists now, more when needed; junk deleted.
 - 1,447 files moved with `git mv` (history kept). `img/null`, `ogg/null` and `img/lvlNaN.png` (v1 bug leftovers, unused) deleted.

@@ -2,6 +2,7 @@
 
 ## Unreleased (dev, shown as 2.2.0-dev)
 
+- A file map, docs/MAP.md: what every file does, how the parts connect, media and dev-tools rules, for anyone starting work.
 - Wizard animations from the artist: casting (with a spark by school, or a staff slash), walking, praying, falling, true death, turned to stone and breaking free, at every tier.
 - Fallen and dead poses: a fallen wizard sits with a skull above him until revived; a true death shows the dead pose.
 - The wizard walks: to finds and statues, out of one scene and into the next, through doors, and to the street door of inns and dice houses in the Town and the City before going in.
