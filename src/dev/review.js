@@ -7,7 +7,7 @@
 //     date | who | file | game file it would replace, or - | short note
 //     2026-11-14 12:30 | artist | goro_charge_b.png | img/anim_goro_charge.png | option B, longer dust
 //
-// The art and sounds modes list them, newest first, with buttons to look at or try each one.
+// The art and sounds modes list them in a table, newest first, with buttons to look at or try each one.
 // Handled lines are deleted (and their files), so the list stays short.
 
 const INDEX = 'review/index.txt';
@@ -29,18 +29,23 @@ export async function reviewEntries() {
     }
 }
 
-// A list in a container: entries passing `only` (e.g. images), each with the buttons given as
-// [label, (entry) => ...]. Refresh reads the index again.
+// A table in a container: entries passing `only` (e.g. images), one row each (the file, what it
+// would replace, the buttons), the buttons given as [label, (entry) => ..., when(entry)?].
+// Refresh reads the index again.
+export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
 export function reviewList(container, only, buttons) {
-    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     let shown = [];
     const draw = async () => {
         shown = (await reviewEntries()).filter(only).slice(0, 30);
         container.innerHTML = `<div class="row"><button data-r="refresh">Refresh</button>
             <span class="muted">${shown.length ? `${shown.length} newest` : 'nothing yet (review/index.txt)'}</span></div>` +
-            shown.map((e, i) => `<div class="row" title="${esc(e.note)}">
-                ${buttons.map(([label], b) => `<button data-r="${i}:${b}">${label}</button>`).join('')}
-                <span><b>${esc(e.file)}</b> <span class="muted">${esc(e.who)}, ${esc(e.date)}${e.replaces ? ` → ${esc(e.replaces)}` : ''}${e.note ? `: ${esc(e.note)}` : ''}</span></span></div>`).join('');
+            (shown.length ? `<table class="files"><tr><th>File</th><th>Replaces</th><th></th></tr>` +
+            shown.map((e, i) => `<tr><td class="name"><b>${esc(e.file)}</b>
+                <div class="small">${esc(e.who)}, ${esc(e.date)}${e.note ? `: ${esc(e.note)}` : ''}</div></td>
+                <td class="small">${esc(e.replaces || '-')}</td>
+                <td class="acts">${buttons.map(([label, , when], b) => !when || when(e) ? `<button data-r="${i}:${b}">${label}</button>` : '').join('')}</td></tr>`).join('') +
+            '</table>' : '');
     };
     container.onclick = (ev) => {
         const r = ev.target.dataset && ev.target.dataset.r;

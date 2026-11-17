@@ -15,8 +15,6 @@ export function setNoteSource(fn, mode = 'dev') {
     source = fn || (() => '');
     kind = mode;
     refreshNote();
-    // the details follow the game (not while being selected to copy by hand)
-    setInterval(() => { if (document.activeElement != details) refreshNote(); }, 1000);
 }
 
 export function refreshNote() {
@@ -97,4 +95,6 @@ export function buildNotesBox(container) {
     n('save').onclick = saveNote;
     n('clear').onclick = () => { reset(); status.textContent = ''; };
     refreshNote();
+    // the details follow the game (not while being selected to copy by hand); one timer for every mode
+    setInterval(() => { if (document.activeElement != details) refreshNote(); }, 1000);
 }

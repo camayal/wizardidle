@@ -1182,3 +1182,12 @@ Author's note: elementals shoudl have another movement to go into the battle, i 
 - Wrote [docs/STORY.md](docs/STORY.md) on branch `plan/story`: the text of every chapter scroll (Prologue to XI, both epilogues) and the console lines between them. 38–77 words each, so every scroll fits the screen without scrolling (it holds about 110–140).
 - The author decided, one question at a time: the scroll speaks to you, the god; the arc is free to revise; hooks are a secret behind the exile, a recurring stranger and a cliffhanger last line; the secret is a prophecy; the stranger is your mask; two endings by who dies; short scrolls plus console beats; one staff that changes; the prophecy is revealed in pieces, complete at VII; in X he finds out who watched the lynching; the god fears the prophecy.
 - Choices made while writing, open to change: the lynching's sorceress is the seer who wrote the prophecy; the reforged staff is *Nomaleatorio*; Midas thought he was the god of the prophecy.
+
+### 2026-11-17: Name screen hidden behind the dev tools
+- Author's note (2026-11-15): after a kill with the dev tools on, only the dev panel showed. Cause: with DEV, main.js starts the game after the dev tools load, which can be after the page's load event; `initialName()` then hid the name screen and no layout showed it again. Now `initialName()` runs the layout for a new wizard. Checked with a fresh visit in headless Edge.
+
+### Dev note handled 2026-11-17 (dev console capture moment)
+```
+Date: 2026-11-15 00:01
+Author's note: for dev console, a button that say, camputre moment, so the tecnical detail is frozzen untile the save to file or clear is clicqued. also save to file should  clear the comment. Otherwise, notes shoudl not have technical information.
+```

@@ -53,11 +53,11 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-17: Art mode reworked
+- Author's request: the art console was messy. Files are one table (name, what it replaces, Scene / Alt / View); game files are picked by folder or search; the alt scene sits where the console was and replays a recording of the same scene with the Alt file (or the game's art), in step with the live one; frame size found from the name, then from the pictures (neighbouring frames overlap most), with boxes to override; one viewer over the game for sheets. Also: one refresh timer for the notes box, not one per mode. Checked in headless Edge (no errors, alt scene drawn, tiers per file).
+
 ### 2026-11-17: Notes cleanup
 - The author's request: fewer tokens per session. ideas.md is now this index; idea text moved to the plans or `docs/ideas/`; decisions to `docs/DECISIONS.md`; the 30 approved boss and hydra sounds recorded in SOUNDS.md (and cut from `src/dev/soundNeeds.js`); dev notes for the artist and the thinker moved to their inboxes, duplicates cut.
 
 ### 2026-11-17: Enemy flash before its arrival
 - Author's note (2026-11-15): an enemy sometimes showed in its place, vanished, then came in. Cause: when its image was not loaded yet, loadNPC's draw waited for the load and landed in the middle of the arrival. Now `playEntrance()` cancels that pending draw (`cancelNPCDraw()` in render.js); the arrival draws the enemy itself and puts it in place at the end. Checked that the game loads clean in headless Edge.
-
-### 2026-11-17: Name screen hidden behind the dev tools
-- Author's note (2026-11-15): after a kill with the dev tools on, only the dev panel showed. Cause: with DEV, main.js starts the game after the dev tools load, which can be after the page's load event; `initialName()` then hid the name screen and no layout showed it again. Now `initialName()` runs the layout for a new wizard. Checked with a fresh visit in headless Edge.

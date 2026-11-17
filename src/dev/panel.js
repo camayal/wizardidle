@@ -45,6 +45,17 @@ function addStyle() {
         .devPanel textarea[readonly] { background: #f0ebe2; color: #333; }
         .devPanel .blow { color: #bbb; font-weight: bold; }
         .devPanel .blow.on { color: #d00; }
+        .devPanel table.files { width: 100%; border-collapse: collapse; margin: 2px 0 4px; }
+        .devPanel table.files th { text-align: left; color: #666; font-weight: bold; border-bottom: 1px solid #d8cfc0; padding: 2px 4px; }
+        .devPanel table.files td { border-bottom: 1px solid #ece4d6; padding: 3px 4px; vertical-align: top; }
+        .devPanel table.files td.name { word-break: break-all; }
+        .devPanel table.files td.acts { white-space: nowrap; text-align: right; }
+        .devPanel table.files td.acts button { padding: 1px 6px; }
+        .devPanel table.files .small { font-size: 11px; color: #777; word-break: normal; }
+        .devPanel table.files tr.isMain td:first-child { box-shadow: inset 3px 0 #3a8a2a; }
+        .devPanel table.files tr.isAlt td:first-child { box-shadow: inset 3px 0 #2a5fa8; }
+        .devPanel table.files tr.isMain.isAlt td:first-child { box-shadow: inset 3px 0 #3a8a2a, inset 6px 0 #2a5fa8; }
+        .devPanel .tagMain { color: #3a8a2a; font-weight: bold; } .devPanel .tagAlt { color: #2a5fa8; font-weight: bold; }
     `;
     document.head.appendChild(style);
 }
@@ -106,4 +117,4 @@ export function sidePanel(side, title, onClose) {
     return panel;
 }
 
-export { placeAll };
+export { placeAll, gameBox };

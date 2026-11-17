@@ -54,7 +54,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - tests.js: the dev panel: scenarios, quick actions, command line, mode buttons.
 - panel.js: left and right side panels (float over the game on small screens).
 - sounds.js: sounds mode: pick a scene and a sound, cut/speed/fade/volume, play together.
-- art.js: art mode: any image in the real scene, frame viewer, review drop listing.
+- art.js: art mode: a files table (review drop, local files, game files picked by folder), the scene and an alt scene under it to compare, frame size found by itself, one viewer for sheets.
 - scenes.js: scene picker shared by both modes (wizard moves, enemies, bosses, spells, objects, backgrounds).
 - soundNeeds.js: list of moves still needing a sound (delete a line when approved).
 - notes.js: notes box. review.js: reads the review drop.

@@ -32,6 +32,7 @@ const DICE = 'spellMiniDados_18', DICE_MS = 18 * 80;
 export const DICE_STEP = 1500;          // a new roll every 1.5 s (src/minigames/sixFiveFour.js)
 const sprites = Object.keys(enemySprites).sort();
 let images = [];                        // img/ files, for "any sprite or object"
+let paths = [];                         // the same with their folders (img/wizard/cast/anim_cast0.png)
 
 const move = (v) => v.startsWith('cast ') ? { kind: 'cast', school: v.slice(5) } : { kind: v };
 const heads = (v) => parseInt(v);
@@ -97,10 +98,16 @@ export const KINDS = {
 export async function listImages() {
     if (images.length) return images;
     try {
-        const paths = await (await fetch('__list/img')).json();        // tools/serve.py
-        images = paths.filter((p) => p.endsWith('.png')).map((p) => p.split('/').pop()).sort();
+        paths = (await (await fetch('__list/img')).json()).filter((p) => p.endsWith('.png'));        // tools/serve.py
+        images = paths.map((p) => p.split('/').pop()).sort();
     } catch (e) { /* another server: no list */ }
     return images;
+}
+
+// Every image with its folder, for choosing a game file by folder instead of typing its name.
+export async function listImagePaths() {
+    await listImages();
+    return paths;
 }
 
 export function stopScene() {
@@ -146,11 +153,11 @@ export function scenePicker(container, resetScene, onChange) {
             if (v.variant) f.variant.value = v.variant;
             if (v.tier !== undefined && TIERS.includes(Number(v.tier))) f.tier.value = v.tier;
         },
-        setUp() {
+        setUp(tier = f.tier.value) {          // another tier than the list's, for one play (art mode's alt scene)
             stopScene();
             resetScene();
             ui.petrified = false;
-            state.player.lvl = Number(f.tier.value);
+            state.player.lvl = Number(tier);
             drawWizard();
             const k = kind();
             if (k.setUp) k.setUp(target(), f.variant.value);

@@ -29,10 +29,6 @@ Date: 2026-11-14 23:59
 Author's note: the shrine sound is played before enteringinto the actual shrine scene. i think it better to play it when is entering the shrine
 ```
 
-```
-Date: 2026-11-15 00:01
-Author's note: for dev console, a button that say, camputre moment, so the tecnical detail is frozzen untile the save to file or clear is clicqued. also save to file should  clear the comment. Otherwise, notes shoudl not have technical information.
-```
 
 ```
 Date: 2026-11-15 11:26

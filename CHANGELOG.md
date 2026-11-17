@@ -40,6 +40,7 @@
 - Dev: a review drop: the sessions' newest art and sounds listed in the art and sounds modes; "In scene" plays new art in its real scene, in place of the game image.
 - Fixed: a spell effect whose image was already loaded could crash (the dice's second roll).
 - Plans added: faith and belief, professions, story, stats, erasure, sleep, scene spells, sounds, scenes.
+- Dev tools, art mode reworked: one table of files (the sessions' drops, local files, game files chosen by folder) with Scene, Alt and View on each row; an alt scene under the game plays the same moment with another file or the game's own art, side by side; frame sizes are found by themselves (and can be set by hand); one viewer, over the game, for sheets and close-ups.
 
 ## 2.1.0 — 2026-11-12
 
