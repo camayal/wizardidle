@@ -1,8 +1,8 @@
 # Story ideas
 
-Ideas for the story waiting their turn (the story plan itself is docs/STORY.md on branch plan/story). Read only when working on the story.
+Ideas for the story waiting their turn (the story script itself is [docs/STORY.md](../STORY.md)). Read only when working on the story.
 
-- **Finish the story: chapters III–XI and the final battle** (from old notes, 2018): *Today:* only the Prologue, Chapter I and Chapter II (Devotion: faith multiplier, Divine crosier) do anything. Chapters III–VIII (lvl 50–149) exist as titles with TODO comments describing the plan (`var chapter` object in `src/story.js`). Chapters IX–XI and the ending aren't there at all. The planned arc (`wizardidle-old-ideas/historiaperlevel.txt`):
+- **Finish the story: chapters III–XI and the final battle** (from old notes, 2018): **Scripted 2026-11-12 in [docs/STORY.md](../STORY.md)**: every scroll and console beat, revised from the arc below; the code still has to follow. *Today:* only the Prologue, Chapter I and Chapter II (Devotion: faith multiplier, Divine crosier) do anything. Chapters III–VIII (lvl 50–149) exist as titles with TODO comments describing the plan (`var chapter` object in `src/story.js`). Chapters IX–XI and the ending aren't there at all. The planned arc (`wizardidle-old-ideas/historiaperlevel.txt`):
   - **50, III:** faith multiplier halves; he seeks knowledge and artefacts instead of preaching.
   - **60–80:** finds a staff he believes is sacred, then breaks it.
   - **90, IV, The search for the forbidden:** gains the sacred staff. **100:** controls it, ×1.5 damage, loses faith with every kill.
@@ -69,4 +69,4 @@ Ideas for the story waiting their turn (the story plan itself is docs/STORY.md o
 ## Open questions
 
 - Wizards from the past: how do they help: a one-off appearance, a recurring ally, a boost that scales with their level? Only at story moments or at random?
-- Story: keep the old arc as written (sacred staff → corruption → killing Midas → lynching → disobedience → war on the god), or revise it? Should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?
+- Story: ~~keep the old arc or revise it?~~ Revised, see [docs/STORY.md](../STORY.md). Still open: should the late chapters' rules (no altars, no revive, refusing help) follow the faith rebalance?

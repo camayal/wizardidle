@@ -1151,3 +1151,34 @@ Author's note: elementals shoudl have another movement to go into the battle, i 
 - The author's note (no conversion by hand each time): `tools/cut_sounds.py` reads `tools/sound_cuts.txt` (game name, folder, source file, cut) and writes each `snd/<folder>/<name>.ogg`: the cut, mono, a 30 ms fade out, Ogg Vorbis, the volume untouched (`--list` checks the sources, `--review` also copies to the review drop). It needs the `soundfile` library once (`python -m pip install soundfile`); the machine has no ffmpeg. Run for the 18 approved sounds: the files are in `snd/creatures/` and in the review drop, read back as mono Ogg Vorbis with the approved lengths. Not wired: the game does not play them yet.
 - Every approved sound has its game name by the rule for files from outside (`thud`, `rumble`, `rock_roll`, `arrow`, `hooves`, `roar`, `rock_smash`, `stone_break`, `stone_grind`, `bounce`, `bite`, `wind_gust`, `swing_slash`, `swing_thrust`, `curse`, `sonic_boom`, `rune_circle`, `squelch`), all for `snd/creatures/`; `src/media.js` needs them in its creatures list when they are wired. `docs/SOUNDS.md` keeps the original names and cuts ("The files"); the site and licence of the downloads are still to confirm by the author.
 - Approved in the game's sounds mode (2026-11-14): Doria's sonic boom and rune circle, and a head growing on the Swamp hydra (one squelch for every growth). Still to strike by dev: `DOR.sonic_boom` and `DOR.rune_circle` in `src/dev/soundNeeds.js`, and the eight handled notes of `docs/sound-notes.md`.
+
+## 2026-11-17 from ideas.md: journal entries from branch plan/story (merged into dev)
+
+### 2026-11-13: Story review page kept in the repo
+- New folder [artefacts_tests/](artefacts_tests/README.md): the Story Scrolls review page (template, build script, built page, data). It always shows the latest script (commit and date at the top), and notes can be sent for review or erased, one or all.
+- After every change to `docs/STORY.md`: rebuild with `python artefacts_tests/build_story_scrolls.py` and load `story-data.json` into the page's store.
+
+### 2026-11-13: The broken shrine
+- The author decided the god's shrine is destroyed in Chapter X: after breaking with the god, the wizard walks back to the shrine he found in Chapter II and breaks it with his bare hands; the candle goes out. Then he writes the Last Escape scroll. Step-by-step console lines and an echo line in [docs/STORY.md](docs/STORY.md); the Chapter II shrine's zone is saved (`{shrineZone}`). The shrine stays broken afterwards, in the museum too.
+- Art: the destruction animation and the broken state requested from the artist.
+
+### 2026-11-13: Story scrolls, the author's review
+- The author read every scroll and left a verdict and note per scroll. Kept as written: III, VI, VIII part II, X, XI.
+- Changed: "Midas's Tower"; Chapter I has slimes instead of wolves (no wolves in the game) and no longer reveals that the healer is the god ("he never sees the healer's face"); Chapter V's moral shock is stronger (he wakes among the dead of a pilgrim camp, the staff warm in his hand, and prays to their gods); the epilogues are now *The Unmaking* and *The Last Light*.
+- The staff's true name was never meant to be "Nomaleatorio": it is a random name (`{staffName}`), made in the first game and kept in every loop.
+- Notes for the code: Midas gone forever after VII (bosses return otherwise); the Tower full of mages again after the lynching; art needed for the god's shrine and a distinct hooded stranger.
+
+### 2026-11-12: Story scrolls get echoes and variable phrases
+- Every chapter scroll in [docs/STORY.md](docs/STORY.md) now has slots filled when it opens: one phrase by the belief level (Devout, Believer, Doubter, Atheist; FAITH.md), one by the place (16 zones in 6 sceneries: open, wild, cold, hot, deep, walls), and one déjà vu line in echo games (after an erasure). Faith slots are skipped where the story locks faith (VII, X, XI), place slots where the place is fixed (Volcano, Tower, Heidan).
+- New echoes: the healer's pause (I), the stranger's slipping smile (II), the seer's tally on the exile scroll (III), the staff you always swear to take (IV), Midas dreaming the steps (VII), "How many times, god?" (VIII), "I have tried" (XI), and both epilogues.
+- Longest combination of any scroll: 99 words, under the ~110 the screen holds without scrolling. Code notes: a `scenery` field on zones, one function filling the slots, the filled text stored with each chapter's snapshot for the museum.
+
+### 2026-11-12: Story reviewed for plot holes, then rewritten
+- Recapped the arc and listed its weak spots (why Midas didn't kill him, who planted the staff, death rules, V and IX repeating, the seer vanishing, the Tower at 139, the self-crowning). The author answered each one; [docs/STORY.md](docs/STORY.md) rewritten with the decisions table.
+- New lore from the author: a hyperpolytheist world; the prophecy names **the Omni, god of gods**; the dead hunger for his soul but only a crown can feed them, and a crown that bends his road is cursed (so Midas exiled him and was cursed anyway); deaths in play are falls; a rare true death leaves the soul in purgatory; if the god wins he unmakes the soul and rewinds time (echo games, reversed struck-through names in the cemetery); if the wizard wins he engulfs the universe and the save becomes a black museum, blocked forever.
+- Coordinated with the planner: [docs/ERASURE.md](docs/ERASURE.md) (souls of erased wizards in the final battle, one by one, shown in the museum; echoes only after an erasure) and a request for a sprite of the wizard lying injured.
+
+### 2026-11-12: The story is scripted
+- Wrote [docs/STORY.md](docs/STORY.md) on branch `plan/story`: the text of every chapter scroll (Prologue to XI, both epilogues) and the console lines between them. 38–77 words each, so every scroll fits the screen without scrolling (it holds about 110–140).
+- The author decided, one question at a time: the scroll speaks to you, the god; the arc is free to revise; hooks are a secret behind the exile, a recurring stranger and a cliffhanger last line; the secret is a prophecy; the stranger is your mask; two endings by who dies; short scrolls plus console beats; one staff that changes; the prophecy is revealed in pieces, complete at VII; in X he finds out who watched the lynching; the god fears the prophecy.
+- Choices made while writing, open to change: the lynching's sorceress is the seer who wrote the prophecy; the reforged staff is *Nomaleatorio*; Midas thought he was the god of the prophecy.

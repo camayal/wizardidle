@@ -1,0 +1,431 @@
+<title>Wizard Idle Story Scrolls</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Pixelify+Sans:wght@400;500&family=Silkscreen&display=swap">
+<style>
+/* Layout: a chapter rail, a stage holding the scroll at the game's own width, and an evaluation card beside it. */
+:root{
+  --bg:#e8e5ee; --panel:#f8f6fb; --line:#d4cfdf; --ink:#262033; --muted:#6a6380;
+  --parch:#f0e2be; --parch-edge:#d9c393; --parch-ink:#3a2915; --red:#7f0000;
+  --place:#1d6b66; --faith:#6a3fb0; --echo:#a8521f; --ok:#2f7a3d; --warn:#a8521f; --bad:#a3262a;
+  --console:#1f1b29; --console-ink:#d8d2e6;
+  --f-title:"Silkscreen", "Courier New", monospace;
+  --f-scroll:"Pixelify Sans", "Trebuchet MS", sans-serif;
+  --f-ui:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16131d; --panel:#211c2b; --line:#383047; --ink:#ece8f4; --muted:#a59db9;
+  --parch:#e3d2a8; --parch-edge:#b9a271; --parch-ink:#33240f; --red:#7f0000;
+  --place:#5fc3bb; --faith:#b593f0; --echo:#f0a06a; --ok:#6fcf7f; --warn:#f0a06a; --bad:#f07a7d;
+  --console:#0f0d14; --console-ink:#d8d2e6; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#16131d; --panel:#211c2b; --line:#383047; --ink:#ece8f4; --muted:#a59db9;
+  --parch:#e3d2a8; --parch-edge:#b9a271; --parch-ink:#33240f; --red:#7f0000;
+  --place:#5fc3bb; --faith:#b593f0; --echo:#f0a06a; --ok:#6fcf7f; --warn:#f0a06a; --bad:#f07a7d;
+  --console:#0f0d14; --console-ink:#d8d2e6; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1240px;margin:0 auto;display:grid;gap:20px}
+header h1{font-family:var(--f-title);font-size:1.35rem;font-weight:400;margin:0;letter-spacing:.02em;text-wrap:balance}
+header p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr) 320px;gap:20px;align-items:start}
+.rail{display:flex;flex-direction:column;gap:2px;position:sticky;top:max(12px,env(safe-area-inset-top,0px))}
+.rail button{all:unset;cursor:pointer;display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:7px 10px;border-radius:6px;color:var(--ink)}
+.rail button:hover{background:var(--panel)}
+.rail button:focus-visible{outline:2px solid var(--faith);outline-offset:1px}
+.rail button[aria-current="true"]{background:var(--panel);box-shadow:inset 3px 0 0 var(--red)}
+.rail .nm{font-weight:500;font-size:.88rem;min-width:0}
+.rail .lv{font-size:.72rem;color:var(--muted);grid-column:1}
+.rail .dot{grid-row:1/3;grid-column:2;align-self:center;width:9px;height:9px;border-radius:50%;background:transparent;border:1.5px solid var(--line)}
+.dot.keep{background:var(--ok);border-color:var(--ok)} .dot.tweak{background:var(--warn);border-color:var(--warn)} .dot.rewrite{background:var(--bad);border-color:var(--bad)}
+.stage{display:grid;gap:14px;min-width:0}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:end;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.ctl{display:grid;gap:4px;min-width:0}
+.ctl>span{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.ctl.off{opacity:.45}
+.ctl .why{font-size:.7rem;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400}
+input[type=text],select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+input[type=text]{width:9.5em}
+select{max-width:100%}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:5px 10px;font-size:.85rem;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--faith);outline-offset:-2px}
+.seg button:disabled{cursor:default}
+.chip{display:inline-block;font-size:.72rem;padding:1px 7px;border-radius:99px;border:1px solid currentColor}
+.c-place{color:var(--place)} .c-faith{color:var(--faith)} .c-echo{color:var(--echo)}
+label.chk{display:flex;gap:6px;align-items:center;font-size:.85rem;cursor:pointer}
+.scrollbox{display:flex;justify-content:center;padding:18px 0}
+.scroll{width:25em;max-width:100%;font-size:17px;background:var(--parch);color:var(--parch-ink);
+  border-top:10px solid var(--parch-edge);border-bottom:10px solid var(--parch-edge);border-radius:4px;
+  padding:1.4em 1.3em 1.6em;text-align:center;font-family:var(--f-scroll);line-height:1.35;
+  box-shadow:0 1px 0 var(--line),0 10px 24px -14px rgba(0,0,0,.45)}
+.scroll .t1{font-family:var(--f-title);font-size:1.35em;line-height:1.2;margin:0}
+.scroll .t2{font-family:var(--f-title);font-size:.85em;opacity:.8;margin:.3em 0 1em}
+.scroll p{margin:0 0 .75em}
+.scroll p.last{color:var(--red);font-weight:500}
+.scroll em{font-style:italic}
+.hl mark{background:none;color:inherit;padding:0 .1em;border-radius:2px}
+.hl mark.place{box-shadow:inset 0 -.45em 0 color-mix(in srgb,var(--place) 30%,transparent)}
+.hl mark.faith{box-shadow:inset 0 -.45em 0 color-mix(in srgb,var(--faith) 30%,transparent)}
+.hl mark.echo{box-shadow:inset 0 -.45em 0 color-mix(in srgb,var(--echo) 35%,transparent)}
+mark{background:none;color:inherit}
+.meter{display:flex;gap:10px;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{width:180px;max-width:40vw;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok)}
+.bar i.near{background:var(--warn)} .bar i.over{background:var(--bad)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px;min-width:0}
+.card h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0;font-weight:600}
+.event{font-size:.85rem;color:var(--muted);margin:0}
+.console{background:var(--console);color:var(--console-ink);border-radius:8px;padding:10px 12px;font-family:var(--f-scroll);font-size:.9rem;display:grid;gap:8px}
+.console div b{display:block;font-family:var(--f-ui);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;opacity:.6;font-weight:600}
+.variants{display:grid;gap:12px}
+.vgroup{display:grid;gap:4px}
+.vgroup h3{margin:0;font-size:.78rem;font-weight:600}
+.vgroup button{all:unset;cursor:pointer;display:grid;grid-template-columns:5.6em 1fr;gap:8px;padding:5px 8px;border-radius:6px;font-size:.84rem;line-height:1.4}
+.vgroup button:hover{background:var(--bg)}
+.vgroup button[aria-pressed="true"]{background:var(--bg);box-shadow:inset 2px 0 0 currentColor}
+.vgroup button:focus-visible{outline:2px solid var(--faith)}
+.vgroup .k{font-size:.72rem;color:var(--muted);padding-top:.15em}
+.vgroup .v{color:var(--ink);min-width:0}
+.empty{color:var(--muted);font-style:italic}
+.verdict{display:flex;gap:6px;flex-wrap:wrap}
+.verdict button{all:unset;cursor:pointer;padding:5px 11px;border-radius:99px;border:1px solid var(--line);font-size:.85rem}
+.verdict button[aria-pressed="true"].keep{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.verdict button[aria-pressed="true"].tweak{background:var(--warn);border-color:var(--warn);color:var(--bg)}
+.verdict button[aria-pressed="true"].rewrite{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.verdict button:focus-visible{outline:2px solid var(--faith);outline-offset:1px}
+textarea{width:100%;min-height:8em;resize:vertical;line-height:1.45}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{all:unset;cursor:pointer;padding:7px 14px;border-radius:7px;background:var(--ink);color:var(--bg);font-weight:500;font-size:.88rem}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border:1px solid var(--bad)}
+.btn.danger.armed{background:var(--bad);color:var(--bg)}
+.btn[disabled]{opacity:.45;cursor:default}
+.ver{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:2px}
+.ver b{color:var(--ink);font-weight:600}
+.tag{font-size:.7rem;padding:1px 6px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.tag.new{border-color:var(--warn);color:var(--warn)}
+.btn:focus-visible{outline:2px solid var(--faith);outline-offset:2px}
+.status{font-size:.8rem;color:var(--muted)}
+.side{display:grid;gap:14px;min-width:0}
+@media (max-width:1060px){.layout{grid-template-columns:200px minmax(0,1fr)}.side{grid-column:1/-1;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}}
+@media (max-width:720px){.layout{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  .rail button{flex:0 0 auto;grid-template-columns:auto auto}
+  .rail .lv{display:none}.rail .dot{grid-row:1}
+  .scroll{font-size:15px}}
+@media (prefers-reduced-motion:no-preference){.scroll{transition:opacity .15s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Wizard Idle · Story Scrolls</h1>
+    <p>Every chapter scroll from the story script, at the game's scroll width. Change the wizard's belief, where he is and the echo to read each version, then leave a verdict and a note per scroll.</p>
+    <p class="ver" id="ver"></p>
+  </header>
+
+  <div class="layout">
+    <nav class="rail" id="rail" aria-label="Chapters"></nav>
+
+    <main class="stage">
+      <div class="controls" id="controls">
+        <label class="ctl" for="wname"><span>Wizard name</span><input type="text" id="wname" value="Aldric" maxlength="20"></label>
+        <label class="ctl" id="ctl-zone" for="zone"><span>Place <span class="why" id="why-zone"></span></span>
+          <select id="zone"></select></label>
+        <div class="ctl" id="ctl-faith"><span>Belief <span class="why" id="why-faith"></span></span>
+          <div class="seg" id="faith" role="group" aria-label="Belief level"></div></div>
+        <div class="ctl" id="ctl-echo"><span>Echo game <span class="why" id="why-echo"></span></span>
+          <div class="row"><div class="seg" id="echo" role="group" aria-label="Echo"></div>
+          <label class="chk" id="loopwrap" for="loop">loop <select id="loop"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label></div></div>
+        <label class="chk" for="hl"><input type="checkbox" id="hl" checked> Highlight what varies</label>
+      </div>
+
+      <div class="scrollbox"><article class="scroll hl" id="scroll" aria-live="polite"></article></div>
+      <div class="meter"><span id="words"></span><div class="bar" aria-hidden="true"><i id="barfill"></i></div><span>screen holds about 110</span></div>
+    </main>
+
+    <aside class="side">
+      <section class="card" aria-labelledby="h-eval">
+        <h2 id="h-eval">Your verdict</h2>
+        <div class="verdict" id="verdict" role="group" aria-label="Verdict">
+          <button class="keep" data-v="keep" aria-pressed="false">Keep</button>
+          <button class="tweak" data-v="tweak" aria-pressed="false">Tweak</button>
+          <button class="rewrite" data-v="rewrite" aria-pressed="false">Rewrite</button>
+        </div>
+        <label for="note" class="status">What to change, keep or cut in this scroll</label>
+        <textarea id="note" placeholder="e.g. The Atheist line in the last paragraph is too soft…"></textarea>
+        <div class="row"><button class="btn" id="save">Save note</button><button class="btn ghost" id="erase1">Erase this note</button><span class="tag" id="sentTag" hidden></span></div>
+        <p class="status" id="status" style="margin:0">Loading notes…</p>
+      </section>
+      <section class="card" aria-labelledby="h-send" id="sendcard">
+        <h2 id="h-send">All your notes</h2>
+        <p class="status" id="summary" style="margin:0"></p>
+        <div class="row"><button class="btn" id="send">Send notes to Claude</button><span class="status" id="sendstatus"></span></div>
+        <div class="row"><button class="btn ghost" id="copyall">Copy all notes</button><button class="btn danger" id="eraseall">Erase all notes</button><span class="status" id="copystatus"></span></div>
+      </section>
+      <section class="card" aria-labelledby="h-var">
+        <h2 id="h-var">Every variant in this scroll</h2>
+        <div class="variants" id="variants"></div>
+      </section>
+      <section class="card" aria-labelledby="h-ctx">
+        <h2 id="h-ctx">Around this scroll</h2>
+        <p class="event" id="event"></p>
+        <div class="console" id="console"></div>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+let STORY = __DATA__;
+let META = __META__;
+const ZONES = [
+  ["open",["Prairie","Town"]],["wild",["Forest","Swamp"]],["cold",["Tundra"]],
+  ["hot",["Desert","Dunes","Volcano"]],["deep",["Cave","Grotto","Mine","Duenon"]],["walls",["City","Castle","Tower","Heidan"]]];
+const SCENERY = {}; ZONES.forEach(([s,zs])=>zs.forEach(z=>SCENERY[z]=s));
+const FAITHS = ["Devout","Believer","Doubter","Atheist"];
+const FIXED_PLACE = {"chapter-vi-corruption":"Volcano","chapter-vii-the-ascent":"Tower","chapter-xi-the-return-of-the-king":"Heidan","prologue-the-beginning":"City"};
+const $ = id => document.getElementById(id);
+const esc = t => t.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const st = {i:0, zone:"Forest", faith:"Believer", echo:false, loop:2, hl:true, name:"Aldric"};
+try{ const saved = JSON.parse(localStorage.getItem("ws-view")||"{}"); Object.assign(st, saved); }catch(e){}
+const notes = {};      // id -> {verdict, note}
+let db = null;
+
+// controls
+const zsel = $("zone");
+ZONES.forEach(([s,zs])=>{ const g=document.createElement("optgroup"); g.label=s; zs.forEach(z=>{const o=document.createElement("option");o.value=z;o.textContent=z;g.appendChild(o)}); zsel.appendChild(g); });
+FAITHS.forEach(f=>{ const b=document.createElement("button"); b.type="button"; b.textContent=f; b.dataset.f=f; $("faith").appendChild(b); });
+[["off",false],["on",true]].forEach(([t,v])=>{ const b=document.createElement("button"); b.type="button"; b.textContent=t==="off"?"First game":"After an erasure"; b.dataset.e=t; $("echo").appendChild(b); });
+
+function buildRail(){
+  $("rail").innerHTML="";
+  STORY.forEach((c,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.dataset.i=i;
+    b.innerHTML=`<span class="nm">${esc(c.name)}</span><span class="lv">${esc(c.when||"")}</span><span class="dot" id="dot-${c.id}"></span>`;
+    b.addEventListener("click",()=>{ st.i=i; render(); });
+    $("rail").appendChild(b);
+  });
+  if(st.i>=STORY.length) st.i=0;
+}
+function showVersion(live){
+  $("ver").innerHTML = `Script version <b>${esc(META.commit||"?")}</b> · ${esc(META.date||"")}` + (live?" · up to date":" · built into the page");
+}
+buildRail();
+
+zsel.addEventListener("change",()=>{st.zone=zsel.value;render()});
+$("faith").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;st.faith=b.dataset.f;render()});
+$("echo").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;st.echo=b.dataset.e==="on";render()});
+$("loop").addEventListener("change",e=>{st.loop=+e.target.value;render()});
+$("wname").addEventListener("input",e=>{st.name=e.target.value.trim()||"Aldric";render()});
+$("hl").addEventListener("change",e=>{st.hl=e.target.checked;render()});
+
+function echoKey(c){ const vs=c.slots.echo; if(!vs) return null; return vs[st.echo?1:0][0]; }
+function zoneNow(c){ return FIXED_PLACE[c.id] || st.zone; }
+function fill(text, c){
+  const z = zoneNow(c), sc = SCENERY[z];
+  text = text.replace(/⟨(\w+)⟩/g,(m,k)=>{
+    const vs=c.slots[k]; if(!vs) return "";
+    let key = k==="place"?sc : k==="faith"?st.faith : echoKey(c);
+    const hit = vs.find(v=>v[0]===key); const t = hit?hit[1]:"";
+    return t?`<mark class="${k}">${t}</mark>`:"";
+  });
+  return text.replace(/\{name\}/g,esc(st.name)).replace(/\{zone\}/g,z).replace(/\{shrineZone\}/g,"Forest").replace(/\{loop\}/g,String(st.loop)).replace(/\{staffName\}/g,'<mark class="echo" title="Random name, made in the first game">Vaelmorth</mark>').replace(/\{reversedName\}/g,esc([...st.name].reverse().join("")));
+}
+
+function render(){
+  const c = STORY[st.i];
+  try{ localStorage.setItem("ws-view",JSON.stringify({i:st.i,zone:st.zone,faith:st.faith,echo:st.echo,loop:st.loop,hl:st.hl,name:st.name})); }catch(e){}
+  document.querySelectorAll(".rail button").forEach(b=>b.setAttribute("aria-current",String(+b.dataset.i===st.i)));
+  zsel.value = st.zone; $("wname").value = st.name; $("hl").checked = st.hl; $("loop").value = String(st.loop);
+
+  const hasPlace = !!c.slots.place, hasFaith = !!c.slots.faith, hasEcho = !!c.slots.echo || !!c.echoAlt;
+  $("ctl-zone").classList.toggle("off", !hasPlace && !FIXED_PLACE[c.id] && !/\{zone\}/.test(JSON.stringify(c)));
+  $("why-zone").textContent = FIXED_PLACE[c.id] ? `· always ${FIXED_PLACE[c.id]}` : hasPlace ? `· ${SCENERY[st.zone]}` : "· no place line";
+  zsel.disabled = !!FIXED_PLACE[c.id];
+  $("ctl-faith").classList.toggle("off", !hasFaith);
+  $("why-faith").textContent = hasFaith ? "" : "· locked here";
+  $("ctl-echo").classList.toggle("off", !hasEcho);
+  $("why-echo").textContent = hasEcho ? "" : "· none here";
+  $("faith").querySelectorAll("button").forEach(b=>{b.disabled=!hasFaith;b.setAttribute("aria-pressed",String(hasFaith&&b.dataset.f===st.faith))});
+  $("echo").querySelectorAll("button").forEach(b=>{b.disabled=!hasEcho;b.setAttribute("aria-pressed",String(hasEcho&&((b.dataset.e==="on")===st.echo)))});
+  $("loopwrap").hidden = !(hasEcho && st.echo && /\{loop\}/.test(JSON.stringify(c)));
+
+  // scroll
+  const [t1,t2] = c.name.includes(":") ? [c.name.split(":")[0], c.name.split(":").slice(1).join(":").trim()] : [c.name,""];
+  const paras = (c.echoAlt && st.echo) ? c.echoAlt : c.paras;
+  const filled = paras.map(p=>fill(p,c)).filter(p=>p.replace(/<[^>]+>/g,"").trim());
+  const sc = $("scroll"); sc.classList.toggle("hl", st.hl);
+  sc.innerHTML = `<p class="t1">${esc(t1)}</p>${t2?`<p class="t2">${esc(t2)}</p>`:""}` +
+    filled.map((p,k)=>`<p class="${k===filled.length-1?"last":""}">${p}</p>`).join("");
+  const words = filled.join(" ").replace(/<[^>]+>/g," ").trim().split(/\s+/).filter(Boolean).length;
+  $("words").textContent = `${words} words`;
+  const f=$("barfill"); f.style.width = Math.min(100, words/110*100)+"%"; f.className = words>110?"over":words>95?"near":"";
+
+  // variants
+  const V=$("variants"); V.innerHTML="";
+  const names={place:"Place",faith:"Belief",echo:"Echo"};
+  const order=["place","faith","echo"].filter(k=>c.slots[k]);
+  if(c.echoAlt) V.insertAdjacentHTML("beforeend",`<div class="vgroup c-echo"><h3>Echo</h3><p class="empty" style="margin:0;font-size:.84rem">The whole Prologue changes after an erasure. Switch Echo game to read it.</p></div>`);
+  if(!order.length && !c.echoAlt) V.innerHTML = `<p class="empty" style="margin:0">This scroll has no variable parts.</p>`;
+  order.forEach(k=>{
+    const g=document.createElement("div"); g.className="vgroup c-"+k;
+    g.innerHTML=`<h3>${names[k]}</h3>`;
+    const cur = k==="place"?SCENERY[zoneNow(c)] : k==="faith"?st.faith : echoKey(c);
+    c.slots[k].forEach(([key,txt])=>{
+      const b=document.createElement("button"); b.type="button"; b.setAttribute("aria-pressed",String(key===cur));
+      b.innerHTML=`<span class="k">${esc(key)}</span><span class="v">${txt?fill(txt,c):'<span class="empty">nothing printed</span>'}</span>`;
+      b.addEventListener("click",()=>{
+        if(k==="faith") st.faith=key;
+        else if(k==="echo") st.echo = c.slots.echo.findIndex(v=>v[0]===key)===1;
+        else if(!FIXED_PLACE[c.id]) st.zone = ZONES.find(z=>z[0]===key)[1][0];
+        render();
+      });
+      g.appendChild(b);
+    });
+    V.appendChild(g);
+  });
+
+  // context
+  $("event").innerHTML = c.note ? fill(c.note,c) : "No game event on this scroll.";
+  const con=$("console");
+  const lines = c.console.filter(([lab])=>st.echo || !/^Echo/.test(lab));
+  con.hidden = !lines.length;
+  con.innerHTML = lines.map(([lab,txt])=>`<div><b>${esc(lab)}</b>${fill(txt,c).replace(/ · /g,"<br>")}</div>`).join("");
+
+  // notes
+  const n = notes[c.id]||{};
+  $("verdict").querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.v===n.verdict)));
+  if(document.activeElement!==$("note")) $("note").value = n.note||"";
+  const tag=$("sentTag"), has=hasContent(n);
+  tag.hidden=!has; tag.className="tag"+(isNew(n)?" new":""); tag.textContent=isNew(n)?"not sent yet":"sent";
+  disarm($("erase1")); $("erase1").disabled=!has;
+  renderSummary();
+}
+
+function hasContent(n){ return !!(n && (n.verdict || n.note)); }
+function isNew(n){ return hasContent(n) && (!n.sentAt || (n.updatedAt||"") > n.sentAt); }
+function withNotes(){ return STORY.filter(c=>hasContent(notes[c.id])); }
+function renderSummary(){
+  const all=withNotes(), fresh=all.filter(c=>isNew(notes[c.id]));
+  const sent=Object.values(notes).map(n=>n.sentAt||"").sort().pop();
+  $("summary").textContent = all.length
+    ? `${all.length} scroll${all.length>1?"s":""} with notes · ${fresh.length} not sent yet` + (sent?` · last sent ${new Date(sent).toLocaleString()}`:"")
+    : "No notes yet. Write one on any scroll, then send them all to Claude from here.";
+  $("eraseall").disabled = !all.length;
+}
+function paintDots(){ STORY.forEach(c=>{ const d=$("dot-"+c.id); if(d) d.className="dot "+((notes[c.id]||{}).verdict||""); }); }
+function storeLocal(){ try{localStorage.setItem("ws-notes",JSON.stringify(notes))}catch(e){} }
+
+$("verdict").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const c=STORY[st.i]; const n=notes[c.id]||(notes[c.id]={});
+  n.verdict = n.verdict===b.dataset.v ? "" : b.dataset.v;
+  saveNote(); render();
+});
+$("save").addEventListener("click",()=>{ saveNote(); render(); });
+$("note").addEventListener("input",()=>{ const c=STORY[st.i]; (notes[c.id]||(notes[c.id]={})).note=$("note").value; $("status").textContent="Unsaved changes"; });
+
+let queue = Promise.resolve();
+function saveNote(){
+  const c=STORY[st.i]; const n=notes[c.id]||(notes[c.id]={});
+  n.note=$("note").value; n.updatedAt=new Date().toISOString();
+  const body={chapter:c.name, verdict:n.verdict||"", note:n.note||"", updatedAt:n.updatedAt, sentAt:n.sentAt||""};
+  paintDots(); storeLocal();
+  if(!db){ $("status").textContent="Saved in this browser only. Use Copy all notes to send them."; return; }
+  $("status").textContent="Saving…";
+  queue = queue.then(()=>db.collection("notes").doc(c.id).set(body))
+    .then(()=>{$("status").textContent="Saved.";})
+    .catch(err=>{$("status").textContent="Couldn't save ("+(err&&err.code||"error")+"). Your text is still here; try again.";});
+}
+
+// Erasing takes two presses: the first arms the button, a second press within 4 seconds confirms.
+function arm(btn,label){ if(!btn.dataset.label) btn.dataset.label=btn.textContent; btn.classList.add("armed"); btn.textContent=label;
+  clearTimeout(btn._t); btn._t=setTimeout(()=>disarm(btn),4000); }
+function disarm(btn){ if(btn.dataset.label) btn.textContent=btn.dataset.label; btn.classList.remove("armed"); clearTimeout(btn._t); }
+function eraseIds(ids){
+  ids.forEach(id=>{ delete notes[id]; }); storeLocal(); paintDots(); render();
+  if(!db) return Promise.resolve();
+  return ids.reduce((p,id)=>p.then(()=>db.collection("notes").doc(id).delete()), Promise.resolve());
+}
+$("erase1").addEventListener("click",()=>{
+  const b=$("erase1"); if(!b.classList.contains("armed")){ arm(b,"Press again to erase"); return; }
+  disarm(b); const c=STORY[st.i];
+  eraseIds([c.id]).then(()=>{$("status").textContent="Note erased.";}).catch(err=>{$("status").textContent="Couldn't erase ("+(err&&err.code||"error")+").";});
+});
+$("eraseall").addEventListener("click",()=>{
+  const b=$("eraseall"); if(!b.classList.contains("armed")){ arm(b,`Erase ${withNotes().length} notes? Press again`); return; }
+  disarm(b); const ids=Object.keys(notes);
+  eraseIds(ids).then(()=>{$("copystatus").textContent="All notes erased.";}).catch(err=>{$("copystatus").textContent="Couldn't erase every note ("+(err&&err.code||"error")+").";});
+});
+
+function notesText(list){
+  return list.map(c=>`${c.name}: ${(notes[c.id].verdict||"no verdict").toUpperCase()}${notes[c.id].note?"\n"+notes[c.id].note:""}`).join("\n\n");
+}
+$("copyall").addEventListener("click",()=>{
+  const txt = notesText(withNotes()) || "No notes yet.";
+  navigator.clipboard.writeText(txt).then(()=>{$("copystatus").textContent="Copied.";}).catch(()=>{$("note").value=txt;$("note").select();$("copystatus").textContent="Copy blocked: the notes are selected in the box above.";});
+});
+
+// Send to Claude: one comment with every note not sent yet (or all of them, if none are new).
+let comments=null;
+async function refreshSend(){
+  const b=$("send");
+  if(!comments){ b.disabled=true; $("sendstatus").textContent="Sending isn't available here. Use Copy all notes."; return; }
+  let can="off"; try{ can=await comments.canSendToClaude(); }catch(e){}
+  b.disabled = can!=="available";
+  $("sendstatus").textContent = can==="available" ? "" : can==="no_session" ? "No Claude session is listening right now. Your notes stay saved." : can==="writers_only" ? "Only the page's editors can send to Claude." : "Sending isn't available here. Use Copy all notes.";
+}
+$("send").addEventListener("click",async()=>{
+  const all=withNotes(); if(!all.length){ $("sendstatus").textContent="Write a note first."; return; }
+  let list=all.filter(c=>isNew(notes[c.id])); if(!list.length) list=all;
+  const head=`Story notes from the review page (script ${META.commit||"?"}): ${list.length} scroll${list.length>1?"s":""}.\n\n`;
+  const enc=new TextEncoder(); const full=notesText(list); let body=full;
+  while(enc.encode(head+body).length>3900) body=body.slice(0,-200);
+  if(body!==full) body+="\n…(more in the notes store)";
+  const b=$("send"); b.disabled=true; $("sendstatus").textContent="Sending…";
+  try{
+    const anchor=await comments.anchorFor($("sendcard"));
+    await comments.sendToClaude({anchor, text:head+body});
+    const now=new Date().toISOString();
+    list.forEach(c=>{ notes[c.id].sentAt=now; }); storeLocal();
+    if(db) await list.reduce((p,c)=>p.then(()=>db.collection("notes").doc(c.id).update({sentAt:now})), Promise.resolve());
+    $("sendstatus").textContent=`Sent ${list.length} note${list.length>1?"s":""} to Claude.`; render();
+  }catch(err){
+    const code=err&&err.code;
+    $("sendstatus").textContent = code==="rate_limited" ? "Sent too often. Wait a moment and try again." : code==="consent_required" ? "Allow comments for this page, then send again." : "Couldn't send ("+(code||"error")+"). Your notes are still saved.";
+  }finally{ refreshSend(); }
+});
+
+// Startup: the copy built into the page first, then the live script and the shared notes.
+try{ Object.assign(notes, JSON.parse(localStorage.getItem("ws-notes")||"{}")); }catch(e){}
+showVersion(false); paintDots(); render();
+(async()=>{
+  const timer=setTimeout(()=>{ if(!db) $("status").textContent="Notes are saved in this browser only."; },10000);
+  try{ db = await (window.claude && window.claude.use ? window.claude.use("db") : null); }catch(e){ db=null; }
+  try{ comments = await (window.claude && window.claude.use ? window.claude.use("comments") : null); }catch(e){ comments=null; }
+  refreshSend();
+  if(!db){ clearTimeout(timer); $("status").textContent="Notes are saved in this browser only. Use Copy all notes to send them."; return; }
+  db.doc("story/current").onSnapshot(d=>{
+    if(!d.exists) return;
+    const v=d.data()||{};
+    try{ const next=JSON.parse(v.json); if(Array.isArray(next)&&next.length){ STORY=next; META={commit:v.commit,date:v.date}; buildRail(); paintDots(); render(); showVersion(true); } }catch(e){}
+  }, ()=>{});
+  db.collection("notes").onSnapshot(snap=>{
+    clearTimeout(timer);
+    const keepId = document.activeElement===$("note") ? STORY[st.i].id : null;
+    const kept = keepId ? notes[keepId] : null;
+    Object.keys(notes).forEach(k=>delete notes[k]);
+    snap.docs.forEach(d=>{ const v=d.data()||{}; notes[d.id]={verdict:v.verdict||"",note:v.note||"",updatedAt:v.updatedAt||"",sentAt:v.sentAt||""}; });
+    if(kept) notes[keepId]=Object.assign({},notes[keepId]||{},{note:kept.note});
+    storeLocal(); paintDots(); render();
+    $("status").textContent = snap.metadata.fromCache ? "Loading notes…" : "Notes are saved and shared with Claude.";
+  }, err=>{ clearTimeout(timer); $("status").textContent="Couldn't load saved notes ("+(err&&err.code||"error")+")."; });
+  document.addEventListener("visibilitychange",()=>{ if(!document.hidden) refreshSend(); });
+})();
+</script>

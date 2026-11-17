@@ -23,13 +23,13 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 **With a plan**
 - Faith rebalance, belief levels, rescuers → [docs/FAITH.md](docs/FAITH.md)
-- Professions: reagents, items, vendors → [docs/PROFESSIONS.md](docs/PROFESSIONS.md) (branch plan/professions)
+- Professions: reagents, items, vendors → [docs/PROFESSIONS.md](docs/PROFESSIONS.md)
 - Stats for almost everything, playtest tools → [docs/STATS.md](docs/STATS.md)
 - Souls of erased wizards in the final battle → [docs/ERASURE.md](docs/ERASURE.md)
 - Scene spells for bosses and the wizard → [docs/SCENE_SPELLS.md](docs/SCENE_SPELLS.md)
 - Soft sleep, dreams and nightmares → [docs/SLEEP.md](docs/SLEEP.md)
 - Dynamic scenes, map of places, exits → [docs/SCENES.md](docs/SCENES.md)
-- The story → docs/STORY.md (branch plan/story)
+- The story script, every scroll → [docs/STORY.md](docs/STORY.md) (review page in `artefacts_tests/`)
 
 **Story** → [docs/ideas/story.md](docs/ideas/story.md)
 - Finish chapters III–XI and the final battle (the 2018 arc, the "in sin" switch)

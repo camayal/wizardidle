@@ -100,5 +100,6 @@ Code asks by plain name; only src/media.js knows folders. A name that fits no ru
 - AUTHOR_NOTES.md: the author's bugs and needs after playtests. Inboxes, one per role: dev-notes.md, art-notes.md, sound-notes.md (saved from the dev tools box), thinker-notes.md (design notes moved there).
 - STATS.md: stats and playtest tools plan. FAITH.md: belief, faith, revive plan. PROFESSIONS.md: reagents, recipes, vendors plan.
 - SCENES.md: composing scenes from parts. SCENE_SPELLS.md: full-scene spell animations and boss effects.
+- STORY.md: the story script, every chapter scroll and console beat. Its review page is in artefacts_tests/ (README there); after changing STORY.md run `python artefacts_tests/build_story_scrolls.py`.
 - SLEEP.md: sleep, dreams, nightmares. ERASURE.md: what follows the god's final win and erasure.
 - SOUNDS.md: sounds pending (approved, to cut, to choose). playtests/: results of simulation runs.
