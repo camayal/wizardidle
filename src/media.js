@@ -7,7 +7,8 @@
 //   img/wizard/<cast|walk|pray|fall|petrify|unpetrify>/   anim_<name><tier>
 //   img/wizard/poses/            lvl<tier>, stone<tier>, fallen<tier>, dead<tier>
 //   img/enemies/<family>/        el_golem1 ..., run_<sprite>, ram_<sprite>; polymorph/ (sheep, chicken)
-//   img/bosses/<boss>/           the boss and anim_<boss>_<attack>; hydras/<hydra>/ the hydras
+//   img/bosses/<boss>/           the boss and anim_<boss>_<attack>; hydras/<hydra>/ the hydras,
+//                                hydras/ anim_hydra_<effect>_enter (every hydra)
 //   img/effects/<spells|scene|fx>/
 //   img/places/<zone>/           stages 1-5, altar, statue, tavern, dice house
 //   img/story/  img/objects/  img/ui/  img/ui/achievements/  img/app/ (icons the browser uses)
@@ -40,6 +41,7 @@ export function artFolder(name) {
     if ((m = /^anim_([a-z_]+?)\d+$/.exec(name)) && WIZARD_ANIM[m[1]]) return `wizard/${WIZARD_ANIM[m[1]]}`;
     if (/^(lvl|stone|fallen|dead)\d+$/.test(name)) return 'wizard/poses';
     if ((m = HYDRA.exec(name))) return `bosses/hydras/${m[1]}`;
+    if (/^anim_hydra_/.test(name)) return 'bosses/hydras';     // effects shared by every hydra
     if (BOSSES.has(name)) return `bosses/${name}`;
     if ((m = /^anim_([a-z]+)_/.exec(name)) && BOSSES.has(m[1])) return `bosses/${m[1]}`;
     if (enemySprites[name]) return `enemies/${name.replace(/\d+$/, '')}`;

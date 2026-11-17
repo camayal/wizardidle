@@ -25,8 +25,13 @@ for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of familie
 
 const STEP_MS = 50;
 const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, blink: 12 };
-const HYDRA_ENTER = { mother: [96, 96, 16], hydskon: [64, 64, 0], icedra: [64, 64, 0] };  // frame w, h, sprite's left margin
-const HYDRA_ENTER_MS = 120;         // the artist's strips: 16 frames, played once, stage-1 hydra only
+// The artist's general hydra entrances (img/bosses/hydras/anim_hydra_<effect>_enter.png): 16 frames
+// of 96 x 96 sprite px with no hydra in them, drawn on top of the hydra at any head count; the
+// hydra shows from the reveal frame (0-based) on.
+const HYDRA_ENTER = { mother: { effect: "mud", reveal: 9 }, icedra: { effect: "ice", reveal: 10 }, hydskon: { effect: "bones", reveal: 11 } };
+const HYDRA_FRAME = 96;
+const HYDRA_ENTER_MS = 120;
+const HYDRA_FADE = 5;               // steps the last frame fades over (the mud pond stays a moment)
 const OFF_RIGHT = 80;               // sprite px from its place to just past the scene's right edge
 
 export function entranceKind(npc) {
@@ -76,7 +81,7 @@ function pose(kind, t, k) {
 export function playEntrance(done) {
     const npc = state.npc;
     if (run.simulation || !document.hasFocus() || !npc) return done && done();
-    const hydra = /^(mother|hydskon|icedra)1$/.exec(npc);
+    const hydra = /^(mother|hydskon|icedra)\d+$/.exec(npc);
     if (hydra) return playHydraEnter(npc, hydra[1], done);
     const kind = entranceKind(npc), total = FRAMES[kind];
     cancelNPCDraw();                                // the sprite must not pop up in its place mid-arrival
@@ -130,12 +135,13 @@ function draw(npc, img, p) {
     }
 }
 
-// A one-head hydra arrives with its own strip (img/bosses/hydras/<hydra>/anim_<hydra>_enter.png):
-// the sprite sits at its usual place inside the frame, so the frame is drawn shifted by its margin.
+// A hydra (any head count) arrives under its zone's effect: the strip is centred on the hydra's
+// feet, bottom-aligned, the hydra hidden until the reveal frame, then the last frame fades out.
 function playHydraEnter(npc, hydra, done) {
-    const [fw, fh, margin] = HYDRA_ENTER[hydra], src = art(`anim_${hydra}_enter`);
+    const { effect, reveal } = HYDRA_ENTER[hydra], src = art(`anim_hydra_${effect}_enter`), body = art(npc);
     cancelNPCDraw();
     imageNow(src);
+    imageNow(body);
     loop.freezeGame();
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
@@ -147,18 +153,24 @@ function playHydraEnter(npc, hydra, done) {
         if (done) done();
     };
     const step = () => {
-        const strip = imageNow(src);
-        if (!strip) {                               // not loaded yet: wait for it (2 s at most)
+        const strip = imageNow(src), img = imageNow(body);
+        if (!strip || !img) {                       // not loaded yet: wait for them (2 s at most)
             pixelContext(npcCanvas).clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             if (++waited > 17) finish();
             return;
         }
-        if (state.npc != npc || k >= strip.naturalWidth / fw) return finish();
+        const frames = strip.naturalWidth / HYDRA_FRAME;
+        if (state.npc != npc || k >= frames + HYDRA_FADE) return finish();
         const [bx, by, bw, bh] = npcBox(npc);
-        const kx = bw / 64, ky = bh / fh;
+        const px = bw / img.naturalWidth, size = HYDRA_FRAME * px;     // canvas px per sprite px
         const ctx = pixelContext(npcCanvas);
         ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-        drawFrame(ctx, strip, k * fw, 0, fw, fh, bx - margin * kx, by, fw * kx, fh * ky);
+        if (k >= reveal) ctx.drawImage(img, bx, by, bw, bh);
+        ctx.save();
+        if (k >= frames) ctx.globalAlpha = 1 - (k - frames + 1) / (HYDRA_FADE + 1);
+        drawFrame(ctx, strip, Math.min(k, frames - 1) * HYDRA_FRAME, 0, HYDRA_FRAME, HYDRA_FRAME,
+            bx + (bw - size) / 2, by + bh - size, size, size);
+        ctx.restore();
         k++;
     };
     step();

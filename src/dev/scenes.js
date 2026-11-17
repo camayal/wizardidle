@@ -60,13 +60,14 @@ export const KINDS = {
         } },
     hydra: { label: 'Hydra', targets: () => Object.keys(HYDRAS),
         variants: (t) => Array.from({ length: HYDRAS[t] || 1 }, (_, i) => i + 1).flatMap((n) =>
-            [`${n} heads: strike`, `${n} heads: cast`, ...(n < HYDRAS[t] ? [`${n} heads: grow to ${n + 1}`] : [])]),
+            [`${n} heads: arrive`, `${n} heads: strike`, `${n} heads: cast`, ...(n < HYDRAS[t] ? [`${n} heads: grow to ${n + 1}`] : [])]),
         setUp: (t, v) => { loadNPC(`${t}${heads(v)}`); startHydraIdle(); hydraAttackTiming(`${t}${heads(v)}`, HYDRA_SPELL[t], v.includes('cast')); },
         play: (t, v, onHit) => {
             if (v.includes('grow')) { loadNPC(`${t}${heads(v) + 1}`); playHydraGrow(t, heads(v)); return; }
+            if (v.includes('arrive')) { loadNPC(`${t}${heads(v)}`); playEntrance(); return; }
             playHydraAttack(v.includes('cast') ? HYDRA_SPELL[t] : '', onHit, v.includes('cast'));
         },
-        timing: (t, v) => v.includes('grow') ? null : hydraAttackTiming(`${t}${heads(v)}`, v.includes('cast') ? HYDRA_SPELL[t] : '', v.includes('cast')),
+        timing: (t, v) => v.includes('grow') || v.includes('arrive') ? null : hydraAttackTiming(`${t}${heads(v)}`, v.includes('cast') ? HYDRA_SPELL[t] : '', v.includes('cast')),
         landing: (t, v) => {
             const zone = Object.values(zones).find((z) => z.hidrasName == t), list = listOf(zone && zone.hidrasSpells);
             return v.includes('cast') ? HYDRA_SPELL[t] : list[0] || null;
@@ -194,6 +195,7 @@ export function sceneForImage(path) {
     let m;
     if ((m = /^anim_([a-z]+)_(.+)$/.exec(name)) && bossAttacks[m[1]] && bossAttacks[m[1]].some((a) => a.id == m[2])) return { kind: 'boss', target: m[1], variant: m[2] };
     if ((m = /^anim_(mother|icedra|hydskon)_(strike|cast)(\d+)$/.exec(name))) return { kind: 'hydra', target: m[1], variant: `${m[3]} heads: ${m[2]}` };
+    if ((m = /^anim_hydra_(mud|ice|bones)_enter$/.exec(name))) return { kind: 'hydra', target: { mud: 'mother', ice: 'icedra', bones: 'hydskon' }[m[1]], variant: '3 heads: arrive' };
     if ((m = /^anim_(mother|icedra|hydskon)_grow(\d+)$/.exec(name))) return { kind: 'hydra', target: m[1], variant: `${m[2]} heads: grow to ${Number(m[2]) + 1}` };
     if ((m = /^scene_(.+)$/.exec(name)) && sceneSpells[m[1]]) return { kind: 'scene', target: m[1] };
     if ((m = /^anim_([a-z_]+?)(\d+)$/.exec(name)) && WIZARD_ANIMS[m[1]] !== undefined) return { kind: 'wizardAnim', target: m[1], tier: m[2] };

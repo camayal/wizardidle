@@ -1251,3 +1251,15 @@ Author's note: the shrine sound is played before enteringinto the actual shrine 
 
 ### 2026-11-17: Hydra entrances wired
 - Artist's strips (`anim_<hydra>_enter.png`, 16 frames, 120 ms) play once in `playEntrance` (ui/entrances.js) for mother1, hydskon1 and icedra1; mother's frame is drawn 16 px left of the sprite. Hydras with more heads (wounded return) keep the old rise. Not run in a browser here (no node).
+
+## Done 2026-11-17: general hydra entrances wired (every head count)
+
+```
+Date: 2026-11-17
+From artist (approved by the author): general hydra entrances, effect only, for every hydra at every head count.
+Files: img/bosses/hydras/anim_hydra_mud_enter.png (swamp), anim_hydra_ice_enter.png (tundra), anim_hydra_bones_enter.png (dunes).
+Each strip is 16 frames of 96x96 with no hydra in it. Draw it ON TOP of the hydra, bottom-aligned and centred on the hydra's feet.
+Keep the hydra hidden until the reveal frame (0-based): mud 9, ice 10, bones 11. The mud pond stays on the last frame (hold it or fade it).
+These replace the three anim_<hydra>_enter.png strips and their one-head-only wiring; once wired, delete the old ones.
+Please make them playable over a real hydra in the art dev console so the author can check them there.
+```
