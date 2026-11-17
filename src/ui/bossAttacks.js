@@ -36,6 +36,12 @@ function sceneLayer() {
     sceneCanvas.height = el("esceneCanvas").offsetHeight;
     return sceneCanvas;
 }
+// A scroll opened mid-spell moves the scene: the scene spell follows it (only the box moves).
+document.addEventListener("wizardidle:layout", () => {
+    if (!sceneCanvas) return;
+    const scene = el("esceneCanvas").style;
+    Object.assign(sceneCanvas.style, { left: scene.left, top: scene.top, width: scene.width, height: scene.height });
+});
 
 function shakeScene(px) {
     for (const id of SHAKEN) el(id).style.transform = px ? `translateX(${px * ui.charWidth / 32}px)` : "";

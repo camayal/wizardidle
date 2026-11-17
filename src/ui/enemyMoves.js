@@ -12,6 +12,7 @@ import * as loop from '../loop.js';
 import { enemySprites } from '../data/enemies.js';
 import { drawFrame as drawStripFrame, imageNow, loadNPC, npcCanvas, pixelContext } from './render.js';
 import { art } from '../media.js';
+import { masterTime } from '../config.js';
 
 // Melee families by the attack their sprites make (approved by the author): swords slash,
 // bows shoot, spears thrust, heavy weapons smash, horns charge, beasts pounce, heavy bodies
@@ -135,6 +136,8 @@ export function enemyMoveTiming(move) {
     return { hitMs: ms(seq.slice(0, hitAt)), totalMs: ms(seq) };
 }
 
+const HOLD_MARGIN_MS = 150;     // the enemy is home this long before the wizard's next cast
+
 // Play the enemy's attack; onHit runs once, when the blow lands (at once if nothing is drawn).
 export function playEnemyMove(move, onHit) {
     let hit = false;
@@ -147,18 +150,25 @@ export function playEnemyMove(move, onHit) {
     if (move.kind == "charge") { imageNow(art(`run_${npc}`)); imageNow(art(`ram_${npc}`)); }
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
-    let k = 0;
+    // A move longer than a battle step (a charge across the scene) would still be on its way
+    // back when the wizard casts again (the author's note): the game waits for the rest of it.
+    const holdAt = masterTime - HOLD_MARGIN_MS;
+    let k = 0, elapsed = 0, froze = false;
     const next = () => {
         if (k >= seq.length || state.npc != npc) {             // done, or the enemy is gone
             loop.stop("animNPC");
+            if (froze) loop.thawGame();
             land();
             if (state.npc == npc) loadNPC(npc);
             return;
         }
         drawFrame(npc, seq[k]);
         if (k == hitAt) land();
+        if (!froze && elapsed >= holdAt) { froze = true; loop.freezeGame(); }
         // the next frame comes after this frame's time (100 ms unless the move says otherwise)
-        loop.every("animNPC", next, seq[k].ms || 100);
+        const ms = seq[k].ms || 100;
+        loop.every("animNPC", next, ms);
+        elapsed += ms;
         k++;
     };
     next();

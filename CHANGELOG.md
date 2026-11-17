@@ -11,11 +11,13 @@
 - Shrines, statues and inns outside the towns are entered on foot; scene changes fade more slowly.
 - Shrines: the wizard stops a little before the cross, the shrine sound plays once he is inside, and the mystic stays while he walks away.
 - Loot: the wizard walks up to the bag, barrel, box, chest or pot before opening it, then walks on.
+- Sleeping: the dark and the dream stay over the scene when a scroll opens or closes.
+- The bestiary no longer explains hydras under Secrets.
 - The Records page of the stats scroll is gone (achievements do that job; past wizards are in the Cemetery). Each achievement now shows when it was won, in small grey text.
 - Something to find twinkles on the ground before the wizard walks to it.
 - Hydra entrances redrawn: the ice peaks now match the icedra (black outline, faceted faces) and the mud burst no longer leaves a pond behind.
 - Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.
-- Enemy attacks match their weapons: slash, thrust, smash, shoot, pounce, slam, and chargers run across the scene.
+- Enemy attacks match their weapons: slash, thrust, smash, shoot, pounce, slam, and chargers run across the scene. The wizard waits for a charger to be back in place before casting again.
 - Hydras arrive their own way at every head count: the Swamp mother rises from a mud pool, the Tundra icedra breaks out of an iceberg, the Dunes hydskon is built from flying bones (playable in the art dev console as "N heads: arrive").
 - Bosses have their own attacks and scene spells, from the artist; hydras weave their heads, strike or cast, and grow each new head on screen.
 - Boss effects: Medusa's gaze can turn the wizard to stone, King Midas heals with his golden rays (your touch interrupts it), blizzards, earthquakes and poison clouds.

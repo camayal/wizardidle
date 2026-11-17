@@ -5,11 +5,6 @@ author's comment (technical details only when a moment was captured). A later no
 earlier one.
 
 ```
-Date: 2026-11-14 23:48
-Author's note: enemies that charge need extra time to be back to the position before wizard attach them, aatack is vissiable even without the enemi is in position
-```
-
-```
 Date: 2026-11-15 11:26
 Author's note: dev we need 2 or 3 ways the enemy mages appear, the current is fine, but we could do one like fading in, another only for rares and bosses is can be a portal type animation send request to @artist about tthis animation
 ```
@@ -20,18 +15,8 @@ Author's note: I would like to have one creek in the praire, and keep the one in
 ```
 
 ```
-Date: 2026-11-15 11:39
-Author's note: dreem scene do not respect the reposition of the scene view when stats or other UI scroll are opened
-```
-
-```
 Date: 2026-11-15 11:53
 Author's note: For elementals, I changed my mind; the entry to battle should be linked to its element, perhaps animate them adequately.
-```
-
-```
-Date: 2026-11-15 11:54
-Author's note: I noticed in the bestirary a note about the hydra, we dont need that. remove it.
 ```
 
 ```

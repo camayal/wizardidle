@@ -436,6 +436,13 @@ function fadeLayer() {
     fadeCanvas.height = el("esceneCanvas").offsetHeight;
     return fadeCanvas;
 }
+// The scene moves when a scroll opens or closes (or the window turns): the dark and the dream
+// over it follow (the author's note; only the box moves, so what is drawn stays).
+document.addEventListener("wizardidle:layout", () => {
+    if (!fadeCanvas) return;
+    const scene = el("esceneCanvas").style;
+    Object.assign(fadeCanvas.style, { left: scene.left, top: scene.top, width: scene.width, height: scene.height });
+});
 
 const FADE_STEP_MS = 80;            // the fade has 9 steps: about 0.7 s
 

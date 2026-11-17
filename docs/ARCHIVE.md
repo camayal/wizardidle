@@ -1294,3 +1294,27 @@ Author's note: For the achievments, I think we need to add the date and time whe
 
 ### 2026-11-17: Hands down at every tier
 - Author's request: the flame in the raised hand (magic tiers) and the hands that were not all down. All tiers now rest with both hands down, arms recoloured per tier; the flame shows only in the cast animation, held in the lowered hand. Author's choice: tiers 0 and 10 look alike and differ in the attack. The cast no longer has a flame by the hand; the spark at the staff tip stays. A hands-up pose would be new art (see the thinker's inbox).
+
+
+## Dev notes handled 2026-11-17 (charger wait, dream follows the scene, hydra note removed)
+
+```
+Date: 2026-11-14 23:48
+Author's note: enemies that charge need extra time to be back to the position before wizard attach them, aatack is vissiable even without the enemi is in position
+```
+
+
+```
+Date: 2026-11-15 11:39
+Author's note: dreem scene do not respect the reposition of the scene view when stats or other UI scroll are opened
+```
+
+
+```
+Date: 2026-11-15 11:54
+Author's note: I noticed in the bestirary a note about the hydra, we dont need that. remove it.
+```
+
+
+### 2026-11-17: Hydra entrances redrawn
+- Author approved ice option A (icedra-style peaks, burst frames 10-15 unchanged, reveal frame stays) and the mud burst without the pond (its fade-out was not polished). Option B rejected. Swapped the two strips, fixed the HYDRA_FADE comment; fade logic untouched.
