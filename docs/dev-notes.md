@@ -87,3 +87,13 @@ Author's note: prologue scroll should be visable only when the game load, so in 
 Date: 2026-11-17 13:05
 Author's note: remove phisical  attack from our wizard, it is a wizard after all. only spells
 ```
+
+```
+Date: 2026-11-17
+From artist (approved by the author): general hydra entrances, effect only, for every hydra at every head count.
+Files: img/bosses/hydras/anim_hydra_mud_enter.png (swamp), anim_hydra_ice_enter.png (tundra), anim_hydra_bones_enter.png (dunes).
+Each strip is 16 frames of 96x96 with no hydra in it. Draw it ON TOP of the hydra, bottom-aligned and centred on the hydra's feet.
+Keep the hydra hidden until the reveal frame (0-based): mud 9, ice 10, bones 11. The mud pond stays on the last frame (hold it or fade it).
+These replace the three anim_<hydra>_enter.png strips and their one-head-only wiring; once wired, delete the old ones.
+Please make them playable over a real hydra in the art dev console so the author can check them there.
+```
