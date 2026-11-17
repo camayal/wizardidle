@@ -301,6 +301,7 @@ const STATUE_X = { el_Bosque: 207, el_Castillo: 128, el_Desierto: 172, el_Duenon
     el_Volcan: 183, la_Ciudad: 148, la_Gruta: 220, la_Mina: 200, la_Pradera: 161, la_Torre: 208, la_Tundra: 212, las_Dunas: 180 };
 const CROSS_X = 124;                // shrine crosses stand around the middle of the scene
 const SHRINE_STOP = 22;             // his offset at a shrine: sprite x 54-86, clear of the cross (left edge about x 100)
+const LOOT_STOP = 120;              // his offset at a container: sprite x 152-184, just before it (drawn at x 192)
 
 // A blink appears somewhere on the ground and he walks to it; the find will lie there.
 function walkToFind() {
@@ -318,8 +319,12 @@ function overStatue() {
 }
 // Another spot of the same zone, for the looks only: in a simulation nothing changes, so a
 // seeded run plays the same (the stage only decides the background and the map marker).
+// Never the stage he is on (the author: he walked out and back into the same scene).
 function newStage() {
-    if (!run.simulation) state.zone.stage = 1 + Math.floor(looksRandom() * MAXSTAGES);
+    if (!run.simulation) {
+        const other = 1 + Math.floor(looksRandom() * (MAXSTAGES - 1));     // 1..4, skipping his
+        state.zone.stage = other >= state.zone.stage ? other + 1 : other;
+    }
     showStage();
 }
 
@@ -676,12 +681,16 @@ function leaveShrine() {
 }
 
 
-// Steps of looting: see a container (bag, barrel, box, chest or pot), then open it for gold.
+// Steps of looting: see a container (bag, barrel, box, chest or pot) and walk up to it, open
+// it for gold, walk on into the next scene.
 function getBotin() {
     run.multipleEventsCounter += 1;
     switch (run.multipleEventsCounter) {
         case 1: showLoot(); break;
-        case 2: openLoot();
+        case 2: openLoot(); break;
+        case 3:
+            endEvent();
+            walkThroughScene(newStage, nextEvent);  // walks on out of the scene, into the next one
     }
 }
 
@@ -695,8 +704,8 @@ function showLoot() {
         sprite = `pot${getRandomInt(1, 4)}`;
     }
     // the author: it was popping up with him already in the scene; now the next scene is made
-    // with it already there, and he walks into it
-    walkThroughScene(() => { newStage(); loadNPC(sprite); });
+    // with it already there, and he walks into it, up to the container (he opens it from there)
+    walkThroughScene(() => { newStage(); loadNPC(sprite); }, null, LOOT_STOP);
     print(`${wizardName()} sees ${run.previousEvent == "getBotin" ? "another " : "a "}${run.objectToBreak}`);
 }
 
@@ -727,9 +736,7 @@ function openLoot() {
     if (Number(counterText("loot.container.pot")) > 100) logro.set(logro.logro_pots);
     run.previousEvent = "getBotin";
     updateHeading();
-    endEvent();
     addXP(0.5);
-    nextEvent();
 }
 
 export {

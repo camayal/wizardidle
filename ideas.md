@@ -53,6 +53,9 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-17: Walk to the loot, never into the same scene
+- The author's dev notes: he now walks up to the bag, barrel, box, chest or pot and stops just before it (LOOT_STOP), opens it there, then walks on into the next scene as after a statue. Exploring could walk him out and back into the same scene: the stage was never updated on an in-zone move, so the next move could pick the background already shown; it is kept now, and newStage never rolls the stage he is on. Checked by a headless playtest (3 seeds to level 60, no errors); not watched in a browser.
+
 ### 2026-11-17: Hydra entrances redrawn
 - Author approved ice option A (icedra-style peaks, burst frames 10-15 unchanged, reveal frame stays) and the mud burst without the pond (its fade-out was not polished). Option B rejected. Swapped the two strips, fixed the HYDRA_FADE comment; fade logic untouched.
 
@@ -61,6 +64,3 @@ Newest first; keep the last three, cut older ones to the archive.
 
 ### 2026-11-17: Hands down at every tier
 - Author's request: the flame in the raised hand (magic tiers) and the hands that were not all down. All tiers now rest with both hands down, arms recoloured per tier; the flame shows only in the cast animation, held in the lowered hand. Author's choice: tiers 0 and 10 look alike and differ in the attack. The cast no longer has a flame by the hand; the spark at the staff tip stays. A hands-up pose would be new art (see the thinker's inbox).
-
-### 2026-11-17: Art mode reworked
-- Author's request: the art console was messy. Files are one table (name, what it replaces, Scene / Alt / View); game files are picked by folder or search; the alt scene sits where the console was and replays a recording of the same scene with the Alt file (or the game's art), in step with the live one; frame size found from the name, then from the pictures (neighbouring frames overlap most), with boxes to override; one viewer over the game for sheets. Also: one refresh timer for the notes box, not one per mode. Checked in headless Edge (no errors, alt scene drawn, tiers per file).

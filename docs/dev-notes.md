@@ -9,15 +9,6 @@ Date: 2026-11-14 23:48
 Author's note: enemies that charge need extra time to be back to the position before wizard attach them, aatack is vissiable even without the enemi is in position
 ```
 
-
-
-```
-Date: 2026-11-14 23:54
-Author's note: we need to modify pots, boxes and chest, wizard need to walt towards them before interacting.
-```
-
-
-
 ```
 Date: 2026-11-15 11:26
 Author's note: dev we need 2 or 3 ways the enemy mages appear, the current is fine, but we could do one like fading in, another only for rares and bosses is can be a portal type animation send request to @artist about tthis animation
@@ -51,11 +42,6 @@ Author's note: For elementals, I changed my mind; the entry to battle should be 
 ```
 Date: 2026-11-15 11:54
 Author's note: I noticed in the bestirary a note about the hydra, we dont need that. remove it.
-```
-
-```
-Date: 2026-11-15 16:34
-Author's note: sometime when wizar is exploring he walks to reach the same scene. wizar only should walk if the scene is different.
 ```
 
 ```
