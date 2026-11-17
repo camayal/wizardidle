@@ -1331,3 +1331,20 @@ Author's note: dreams are quite frequent, we need to reduce them
 
 ### 2026-11-17: Walk to the loot, never into the same scene
 - The author's dev notes: he now walks up to the bag, barrel, box, chest or pot and stops just before it (LOOT_STOP), opens it there, then walks on into the next scene as after a statue. Exploring could walk him out and back into the same scene: the stage was never updated on an in-zone move, so the next move could pick the background already shown; it is kept now, and newStage never rolls the stage he is on. Checked by a headless playtest (3 seeds to level 60, no errors); not watched in a browser.
+
+## AUTHOR_NOTES: ticked items (cut 2026-11-17)
+[x] ~~looking a inn need to be compose for two scenes, one walk to the scene where the actual entrance of the inn is (if not visible in the current scene), then enter by the door.~~ (done for the Town and City inns and dice houses: the street with the door, then in; the Desert inn has no door on its streets) Author note: yes, it is a blue,yellow tent the inn in the desert
+[x] ~~boxes and other breakable items appear in a very werid way, when the wizar is already in the scene. I think we need to compute what the next scene will have before showing the scene, and then when the wizard goes into the scene the box or breakable is already there.~~ (done: the next scene is built with the container already in it, he walks in and up to it, opens it, then walks on)
+[x] ~~Not sure but it wizard is not walking towards or away frm the shrines. This is a bug~~ (done: he walks in from the left to the cross and back out to the left)
+[x] ~~in altars, due to its nature, i tis better to return the wizard walking to the left~~ (done: he leaves the shrine walking left, the way he came)
+
+## Art notes: handled (cut 2026-11-17)
+```
+Art test
+Scene: Enemy: arrival: animalejo17 (wizard tier 0)
+Speed x1, crisp pixels on
+Viewer: A anim_god_death.png (local file)
+Frame 1 / 1 (1664 x 56 px), zoom x2, backdrop mid
+Date: 2026-11-15 16:12
+Author's note: @dev art console is quite confusing.  please clear things  up
+```
