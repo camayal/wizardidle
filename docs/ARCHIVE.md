@@ -1212,3 +1212,19 @@ Date: 2026-11-15 16:42
 Author's note: @artist going into battle animations for hycras should be special. similar to the bosses.
 ```
 Done 2026-11-17 (artist): each hydra got its own entrance, anim_<hydra>_enter.png; dev note written.
+
+
+
+```
+Date: 2026-11-17
+From artist (approved by the author): hydra entrances, ready to wire.
+Files: img/bosses/hydras/<hydra>/anim_<hydra>_enter.png, one strip each, 16 frames, played once
+when the hydra arrives (instead of its normal entrance), then its idle. About 120 ms a frame.
+- mother (Swamp): rises out of a green mud pool. Frames 96x96: the hydra sits 16 px in from the
+  left, so draw the frame 16 px further left than mother1.png (same feet line).
+- icedra (Tundra): an iceberg grows with the hydra inside, cracks and shatters. Frames 64x64.
+- hydskon (Dunes): bones whirl and fly in to build the hydra, eyes light up. Frames 64x64.
+Same pixel scale as the stage-1 sprites (hydskon1, icedra1, mother1): draw at the hydra's normal
+scale, never stretched to a fixed box, or the wider mother frame comes out smaller.
+They show the stage-1 hydra (one head).
+```

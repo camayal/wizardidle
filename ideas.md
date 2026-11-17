@@ -61,3 +61,6 @@ Newest first; keep the last three, cut older ones to the archive.
 
 ### 2026-11-17: Enemy flash before its arrival
 - Author's note (2026-11-15): an enemy sometimes showed in its place, vanished, then came in. Cause: when its image was not loaded yet, loadNPC's draw waited for the load and landed in the middle of the arrival. Now `playEntrance()` cancels that pending draw (`cancelNPCDraw()` in render.js); the arrival draws the enemy itself and puts it in place at the end. Checked that the game loads clean in headless Edge.
+
+### 2026-11-17: Hydra entrances wired
+- Artist's strips (`anim_<hydra>_enter.png`, 16 frames, 120 ms) play once in `playEntrance` (ui/entrances.js) for mother1, hydskon1 and icedra1; mother's frame is drawn 16 px left of the sprite. Hydras with more heads (wounded return) keep the old rise. Not run in a browser here (no node).
