@@ -2,8 +2,8 @@
 //
 // Loaded by main.js only when DEV is true in config.js; the deploy sets it to false, so
 // players never get this file. A panel beside the game (src/dev/panel.js) has menus:
-//   - modes, opened in a panel on the other side: sounds (src/dev/sounds.js) and art
-//     (src/dev/art.js); the game waits while one is open;
+//   - modes, opened in a panel on the other side: sounds (src/dev/sounds.js), art
+//     (src/dev/art.js) and texts (src/dev/texts.js); the game waits while one is open;
 //   - scenarios: each one saves the wizard, reloads the page, prepares the wizard (level,
 //     zone, HP...) and forces the first event, then says what to check;
 //   - pickers (lists plus a button) that change the running game at once: the wizard (level,
@@ -207,6 +207,7 @@ const scenarios = [
 const actions = [
     { group: 'Modes', name: 'Sounds: choose a sound for a move', run() { openMode('sounds'); } },
     { group: 'Modes', name: 'Art: play animations, scenes and other art', run() { openMode('art'); } },
+    { group: 'Modes', name: 'Texts: read and edit the story, dreams and console lines in place', run() { openMode('texts'); } },
 
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { group: 'Game', name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },

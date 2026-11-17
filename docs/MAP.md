@@ -47,6 +47,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - bossAttacks.js: plays boss attack strips, scene spells, earthquake shake, Medusa's gaze.
 - enemyMoves.js: how normal enemies attack (sprite moved by code plus an effect).
 - entrances.js: how enemies arrive (glide, float, rise, jump, flicker, walk; mages also fade in; rare mages and the mage bosses through fx_portal_* strips).
+- text.js: `markup(html, slots)`: game texts are HTML; `[sprite]` becomes an inline icon, `{name}` and other slots are filled.
 - dom.js: `el(id)` shortcut. src/minigames/sixFiveFour.js: the dice game in town houses.
 
 ## src/dev/ (dev)
@@ -57,7 +58,8 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - art.js: art mode: a files table (review drop, local files, game files picked by folder), the scene and an alt scene under it to compare, frame size found by itself, one viewer for sheets.
 - scenes.js: scene picker shared by both modes (wizard moves, enemies, bosses, spells, objects, backgrounds).
 - soundNeeds.js: list of moves still needing a sound (delete a line when approved).
-- notes.js: notes box. review.js: reads the review drop.
+- texts.js: texts mode: drops of chapters (read from docs/STORY.md), dreams (data/dreams.js) and console lines (phrase lists read from the game code and zones, story beats from STORY.md); shows the picked text in the chapter scroll, the dark of the night or the console, and edits it live in the notes box.
+- notes.js: notes box (in the texts mode it becomes the text's editor). review.js: reads the review drop.
 - sim.js: fast simulation mode (`?sim=1&seed=7&god=active&until=100&set=name:value`). bots.js: the god bots it uses.
 
 ## tools/
@@ -88,8 +90,8 @@ Code asks by plain name; only src/media.js knows folders. A name that fits no ru
 ## Dev tools
 
 - Run: `python tools/serve.py` (port 8000, or give another), open http://localhost:8000. DEV in config.js must be true.
-- Panels: left holds the dev menus; Modes open on the right: Sounds, Art. The game waits while a mode is open. Hide from Help, Developer tools.
-- Notes box: type a comment; "Capture moment" freezes the technical details; "Save to file" appends to docs/sound-notes.md, docs/art-notes.md or docs/dev-notes.md (localhost only, via serve.py).
+- Panels: left holds the dev menus; Modes open on the right: Sounds, Art, Texts. The game waits while a mode is open. Hide from Help, Developer tools.
+- Notes box: type a comment; "Capture moment" freezes the technical details; "Save to file" appends to docs/sound-notes.md, docs/art-notes.md, docs/dev-notes.md or, from the Texts mode, docs/history-notes.md (the edited texts, to copy into the code) (localhost only, via serve.py).
 - Review drop: the folder wizardidle-review/ beside the main folder, outside the project (tools/serve.py serves it at review/ from any working folder). Roles drop new art and sounds only there, never in img/ or snd/; dev copies an approved file into the game. Add a line to its index.txt: `date | who | file | game file it would replace, or - | short note`. Art and Sounds modes list them newest first. Delete handled lines and files.
 - Playtests: `python tools/playtest.py` (see its help) or open index.html with `?sim=1`.
 

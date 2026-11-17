@@ -13,8 +13,8 @@ The review drop lives outside the project, in the folder wizardidle-review/ next
 folder (beside wizardidle-old-ideas/), so nothing a session drops there can get in git's way.
 It is served at /review/ from any working folder; WIZARDIDLE_REVIEW can point elsewhere.
 
-The dev tools' notes box (src/dev/notes.js) can save here: a POST to /notes/<mode> (sound, art
-or dev) appends the note to docs/<mode>-notes.md. Only from this computer (localhost).
+The dev tools' notes box (src/dev/notes.js) can save here: a POST to /notes/<mode> (sound, art,
+dev, or history for the game's texts) appends the note to docs/<mode>-notes.md. Only from this computer (localhost).
 Standard library only.
 """
 import functools, http.server, json, os, subprocess, sys, urllib.parse
@@ -35,12 +35,19 @@ def review_folder():
 
 
 REVIEW = review_folder()
-NOTE_FILES = ('sound', 'art', 'dev')
+NOTE_FILES = ('sound', 'art', 'dev', 'history')     # history: the game's texts (Texts mode)
 NOTES_HEADER = """# {title} notes
 
 Notes saved from the dev tools' notes box ({mode} mode), newest last: the technical details
 filled in by the game, then the author's comment. A later note on the same test replaces an
 earlier one.
+"""
+HISTORY_HEADER = """# History notes
+
+The game's texts as the author edited them in the dev tools' Texts mode, newest last: which
+text, where it lives (docs/STORY.md, src/data/dreams.js, a line of the game code), then the
+new text in HTML ([sprite] is an icon, {name} the wizard's name, a new line a line break).
+The code is changed from here; a later note on the same text replaces an earlier one.
 """
 
 
@@ -85,7 +92,7 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         new = not os.path.exists(path)
         with open(path, 'a', encoding='utf-8', newline='\n') as f:
             if new:
-                f.write(NOTES_HEADER.format(title=mode.capitalize(), mode=mode))
+                f.write(HISTORY_HEADER if mode == 'history' else NOTES_HEADER.format(title=mode.capitalize(), mode=mode))
             f.write('\n```\n' + note.replace('```', "'''") + '\n```\n')
         self.send_response(200)
         self.send_header('Content-Type', 'text/plain; charset=utf-8')

@@ -14,6 +14,7 @@ import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { spells } from '../data/spells.js';
 import { art } from '../media.js';
+import { markup } from './text.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -442,6 +443,7 @@ document.addEventListener("wizardidle:layout", () => {
     if (!fadeCanvas) return;
     const scene = el("esceneCanvas").style;
     Object.assign(fadeCanvas.style, { left: scene.left, top: scene.top, width: scene.width, height: scene.height });
+    if (dreamBox) Object.assign(dreamBox.style, { left: scene.left, top: scene.top, width: scene.width, height: scene.height });
 });
 
 const FADE_STEP_MS = 80;            // the fade has 9 steps: about 0.7 s
@@ -476,7 +478,37 @@ function fadeScene(change, done, ready) {
 // Sleep (docs/SLEEP.md): the scene fades to dark and stays dark a moment; a dream's lines
 // (1-3) appear softly over the dark one after the other, then it fades back. atDark runs once
 // it is fully dark (to change the scene unseen), done after.
+// The lines are HTML over the dark (2026-11-17, the author: bold, italics, colours, sizes and
+// [sprite] icons are written in the dream itself; src/ui/text.js), not drawn on the canvas.
 const SLEEP_DARK_MS = 2000, DREAM_LINE_MS = 1800;
+let dreamBox;
+
+// The dream's lines over the scene, all hidden (opacity 0); returns the line elements.
+function dreamLines(dream) {
+    const layer = fadeLayer();
+    if (!dreamBox) {
+        dreamBox = document.createElement("div");
+        dreamBox.id = "dreamText";
+        Object.assign(dreamBox.style, { position: "absolute", pointerEvents: "none", boxSizing: "border-box",
+            flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center",
+            padding: "0 4%", fontFamily: "munroregular, monospace", lineHeight: "1.2", overflow: "hidden" });
+        layer.after(dreamBox);
+    }
+    const s = layer.style;
+    Object.assign(dreamBox.style, { left: s.left, top: s.top, width: s.width, height: s.height, zIndex: 51, display: "flex",
+        fontSize: `${Math.max(10, Math.round(layer.height / 7))}px`,
+        color: dream && dream.nightmare ? "rgb(255, 150, 130)" : "rgb(230, 222, 255)" });
+    const name = wizardName();
+    dreamBox.innerHTML = (dream ? dream.lines : []).map((line) => `<div style="opacity: 0">${markup(line, { name })}</div>`).join("");
+    return [...dreamBox.children];
+}
+
+function hideDreamLines() {
+    if (!dreamBox) return;
+    dreamBox.innerHTML = "";
+    dreamBox.style.display = "none";
+}
+
 function sleepInDark(dream, done, atDark) {
     if (run.simulation || !document.hasFocus()) {
         if (atDark) atDark();
@@ -484,10 +516,9 @@ function sleepInDark(dream, done, atDark) {
     }
     loop.freezeGame();
     const layer = fadeLayer(), ctx = layer.getContext("2d");
-    const lines = dream ? dream.lines : [];
+    const lines = dreamLines(dream);
     const hold = Math.round((SLEEP_DARK_MS + lines.length * DREAM_LINE_MS) / FADE_STEP_MS);
     const steps = [0.3, 0.6, 0.85, ...Array(hold).fill(1), 0.75, 0.45, 0.2, 0];
-    const size = Math.max(10, Math.round(layer.height / 7));
     let k = 0;
     loop.every("sleep", () => {
         ctx.clearRect(0, 0, layer.width, layer.height);
@@ -495,24 +526,34 @@ function sleepInDark(dream, done, atDark) {
         ctx.fillRect(0, 0, layer.width, layer.height);
         if (k == 3 && atDark) atDark();
         const t = (k - 3) * FADE_STEP_MS - 500;     // ms into the dark, after a short beat
-        if (lines.length && k >= 3 && k < 3 + hold) {
-            ctx.font = `${size}px munroregular, monospace`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            const top = layer.height / 2 - (lines.length - 1) * size * 0.6;
-            lines.forEach((line, i) => {
-                const a = Math.max(0, Math.min(1, (t - i * DREAM_LINE_MS) / 500));
-                ctx.fillStyle = dream.nightmare ? `rgba(255, 150, 130, ${a})` : `rgba(230, 222, 255, ${a})`;
-                ctx.fillText(line, layer.width / 2, top + i * size * 1.2);
-            });
-        }
+        const shown = k >= 3 && k < 3 + hold;
+        lines.forEach((line, i) => {
+            line.style.opacity = shown ? Math.max(0, Math.min(1, (t - i * DREAM_LINE_MS) / 500)) : 0;
+        });
         if (++k >= steps.length) {
             loop.stop("sleep");
             ctx.clearRect(0, 0, layer.width, layer.height);
+            hideDreamLines();
             loop.thawGame();
             if (done) done();
         }
     }, FADE_STEP_MS);
+}
+
+// The dark with a dream's lines fully shown, held until dreamStillOff() (the Texts dev mode:
+// the author edits a dream and sees it as it looks at night). Call again to show an edit.
+function dreamStill(dream) {
+    loop.stop("sleep");
+    dreamLines(dream).forEach((line) => { line.style.opacity = 1; });     // first: it sizes (and so clears) the layer
+    const ctx = fadeCanvas.getContext("2d");
+    ctx.fillStyle = "rgba(6, 4, 12, 1)";
+    ctx.fillRect(0, 0, fadeCanvas.width, fadeCanvas.height);
+}
+
+function dreamStillOff() {
+    loop.stop("sleep");
+    if (fadeCanvas) fadeCanvas.getContext("2d").clearRect(0, 0, fadeCanvas.width, fadeCanvas.height);
+    hideDreamLines();
 }
 
 // He goes into a place. With a door: the fade, then he comes in through it and walks to his
@@ -722,6 +763,8 @@ export {
     walkBackThroughScene,
     drawFrame,
     sleepInDark,
+    dreamStill,
+    dreamStillOff,
     enterPlace,
     fadeScene,
     leavePlace,

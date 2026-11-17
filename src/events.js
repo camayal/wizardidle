@@ -21,6 +21,7 @@ import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
 import { pickDream } from './dream.js';
+import { markup } from './ui/text.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 
 //define statueobj
@@ -534,7 +535,7 @@ function goToBed(placesWithInn) {
             loadNPC("sleepingbag");
         }
         spell("spellSleep_24", true);
-        if (dream) print(`<i>${wizardName()} dreams: ${dream.lines.join(" ")}</i>`);
+        if (dream) print(`<i>${wizardName()} dreams: ${markup(dream.lines.join(" "), { name: wizardName() })}</i>`);
         sleepInDark(dream, null, () => {
             ui.wizardOffset = 0;
             drawWizard();
