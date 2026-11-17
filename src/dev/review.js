@@ -1,8 +1,9 @@
 // Wizard Idle v2 - dev tools: the review drop (what the sessions made last, ready to look at).
 //
 // The author's idea (2026-11-14): finding a session's new files was hard, so every session
-// copies its latest outputs into review/ at the root of the main checkout (git-ignored, served by
-// tools/serve.py) and adds one line per file to review/index.txt:
+// copies its latest outputs into the review drop, the folder wizardidle-review/ beside the main
+// folder (outside the project, served at review/ by tools/serve.py), and adds one line per file
+// to its index.txt:
 //
 //     date | who | file | game file it would replace, or - | short note
 //     2026-11-14 12:30 | artist | goro_charge_b.png | img/anim_goro_charge.png | option B, longer dust

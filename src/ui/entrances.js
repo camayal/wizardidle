@@ -8,7 +8,9 @@
 // rare ones a portal (the artist's three, purple, blue or red, at random). The mage bosses step out
 // of their own bigger portal: Doria blue, King Midas golden, Rainbow multicolour. Every portal is
 // an fx_portal_* strip of 16 frames (open 0-5, loop 6-11, close 12-15); until its file is there
-// a stand-in drawn by code in its colours plays instead.
+// a stand-in drawn by code in its colours plays instead. A boss's portal is drawn a little smaller
+// than its art (the author: the whole boss should be seen) and the boss grows out of the portal's
+// centre while it turns, standing in its place just before the portal closes behind it.
 //
 // The game is frozen while an enemy arrives; nothing plays in a simulation or in the background.
 
@@ -32,7 +34,7 @@ const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, blink: 12, fade: 20, portal: 28 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
 export const ARRIVALS = Object.keys(FRAMES);
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -46,6 +48,7 @@ export const PORTALS = {
 const MAGE_PORTALS = ["fx_portal_a", "fx_portal_b", "fx_portal_c"];
 const BOSS_PORTAL = { doria: "fx_portal_doria", midas: "fx_portal_midas", rainbow: "fx_portal_rainbow" };
 const STRIP_FRAMES = 16;
+const BOSS_PORTAL_SCALE = 0.7;      // the 80 x 96 boss strips at 70%: about the boss's own size
 // The strip frame for an arrival step: opens, loops while the enemy steps out, closes.
 const stripFrame = (k) => k < 6 ? k : k < 24 ? 6 + (k - 6) % 6 : Math.min(15, 12 + k - 24);
 // The artist's general hydra entrances (img/bosses/hydras/anim_hydra_<effect>_enter.png): 16 frames
@@ -68,7 +71,10 @@ export function entranceKind(npc) {
 function arrivalKind(npc) {
     const forced = run.forceEntrance || "";
     run.forceEntrance = undefined;
-    const portal = (strip) => ({ kind: "portal", portal: strip || BOSS_PORTAL[npc] || MAGE_PORTALS[Math.floor(looksRandom() * 3)] });
+    const portal = (strip) => {
+        strip = strip || BOSS_PORTAL[npc] || MAGE_PORTALS[Math.floor(looksRandom() * 3)];
+        return { kind: BOSS_PORTAL[npc] ? "bossPortal" : "portal", portal: strip };
+    };
     if (forced.startsWith("portal")) return portal(forced.split(":")[1]);
     if (FRAMES[forced]) return { kind: forced };
     if (BOSS_PORTAL[npc]) return portal();
@@ -123,6 +129,12 @@ function pose(kind, t, k) {
         p.alpha = u;
         p.sx = p.sy = 0.5 + 0.5 * easeOut(u);
         p.portalClip = u < 1;                                              // still inside the portal
+    } else if (kind == "bossPortal") {                                     // grows out of the portal's centre
+        p.portal = t < 0.3 ? easeOut(t / 0.3) : t > 0.85 ? clamp01(1 - (t - 0.85) / 0.15) : 1;
+        const u = clamp01((t - 0.23) / 0.6);                               // strip loop frames, done before the close
+        p.alpha = Math.min(1, u * 1.5);
+        p.grow = Math.max(0.02, easeOut(u));
+        p.bossScale = BOSS_PORTAL_SCALE;
     }
     return p;
 }
@@ -166,18 +178,23 @@ export function playEntrance(done) {
 function draw(npc, img, p) {
     const [bx, by, bw, bh] = npcBox(npc);
     const scene = ui.charWidth / 32;
-    const w = bw * p.sx, h = bh * p.sy;
-    const x = bx + p.dx * scene + (bw - w) / 2, y = by + p.dy * scene + bh - h;
+    let w = bw * p.sx, h = bh * p.sy;
+    let x = bx + p.dx * scene + (bw - w) / 2, y = by + p.dy * scene + bh - h;
     const ctx = pixelContext(npcCanvas);
     ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
     let cx = bx + bw / 2, cy = by + bh * 0.55, rx = bw * 0.42, ry = bh * 0.56;
     const strip = p.strip && imageNow(art(p.strip));
     if (strip) {                                    // the artist's strip, feet on the ground line
-        const px = bw / img.naturalWidth, fw = strip.naturalWidth / STRIP_FRAMES, fh = strip.naturalHeight;
+        const px = bw / img.naturalWidth * (p.bossScale || 1), fw = strip.naturalWidth / STRIP_FRAMES, fh = strip.naturalHeight;
         const sw = fw * px, sh = fh * px;
         drawFrame(ctx, strip, stripFrame(p.spin) * fw, 0, fw, fh, bx + (bw - sw) / 2, by + bh + px - sh, sw, sh);
         rx = sw * 0.4; ry = sh * 0.42; cy = by + bh - ry;      // its open oval
     } else if (p.portal > 0) drawPortal(ctx, cx, cy, rx * p.portal, ry, scene, PORTALS[p.strip] || PORTALS.fx_portal_a, p.spin);
+    if (p.grow) {                                   // from the portal's centre to its own place
+        const gw = bw * p.grow, gh = bh * p.grow;
+        const gx = cx + (bx + bw / 2 - cx) * p.grow, gy = cy + (by + bh / 2 - cy) * p.grow;
+        x = gx - gw / 2; y = gy - gh / 2; w = gw; h = gh;
+    }
     ctx.save();
     ctx.globalAlpha = p.alpha;
     if (p.clip) {                                   // only what is above the ground shows

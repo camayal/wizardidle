@@ -1,2 +1,2 @@
-# the review drop: sessions copy their latest outputs here for the dev tools (src/dev/review.js)
+# the old review drop (it now lives outside the project, wizardidle-review/; see tools/serve.py)
 review/

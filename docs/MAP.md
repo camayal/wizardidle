@@ -62,7 +62,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 ## tools/
 
-- serve.py: local server without caching, plus note saving. playtest.py: runs many simulations headless and writes docs/playtests/<date>-<name>/ (summary.md, runs.csv).
+- serve.py: local server without caching, note saving, and the review drop at review/. land.py: lands a work branch on dev-repo in the main folder by itself (run after every commit by hooks/post-commit, with `git config core.hooksPath tools/hooks`). playtest.py: runs many simulations headless and writes docs/playtests/<date>-<name>/ (summary.md, runs.csv).
 
 ## How it connects
 
@@ -90,7 +90,7 @@ Code asks by plain name; only src/media.js knows folders. A name that fits no ru
 - Run: `python tools/serve.py` (port 8000, or give another), open http://localhost:8000. DEV in config.js must be true.
 - Panels: left holds the dev menus; Modes open on the right: Sounds, Art. The game waits while a mode is open. Hide from Help, Developer tools.
 - Notes box: type a comment; "Capture moment" freezes the technical details; "Save to file" appends to docs/sound-notes.md, docs/art-notes.md or docs/dev-notes.md (localhost only, via serve.py).
-- Review drop: review/ at the repo root (git-ignored). Copy new art and sounds there and add a line to review/index.txt: `date | who | file | game file it would replace, or - | short note`. Art and Sounds modes list them newest first. Delete handled lines and files.
+- Review drop: the folder wizardidle-review/ beside the main folder, outside the project (tools/serve.py serves it at review/ from any working folder). Roles drop new art and sounds only there, never in img/ or snd/; dev copies an approved file into the game. Add a line to its index.txt: `date | who | file | game file it would replace, or - | short note`. Art and Sounds modes list them newest first. Delete handled lines and files.
 - Playtests: `python tools/playtest.py` (see its help) or open index.html with `?sim=1`.
 
 ## docs/

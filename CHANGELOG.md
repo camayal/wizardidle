@@ -19,6 +19,8 @@
 - Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.
 - Enemy mages now flicker in or fade in out of thin air; rare mages step out of a portal (purple, blue or red, three designs by the artist), and the mage bosses out of their own bigger one: Doria blue, King Midas golden, Rainbow multicolour.
 - Dreams and nightmares come less often (one rest in twenty instead of about one in seven).
+- Boss portals are drawn a little smaller than the boss, and the boss grows out of the portal's centre while it turns, in its place just before the portal closes.
+- Dev workflow: the review drop lives outside the project and work lands on dev-repo by itself after each commit, so no more manual merges or files in git's way.
 - Dev tools: the long button lists became pickers: the wizard (level, -1/+1, poses, animations, gold/faith/HP), any boss with its arrival, any hydra with its heads, and enemies by exact sprite or at random (caster, melee by move, rare, rare mage, corrupted, by arrival), each with a chosen arrival; scenarios are one list with a Run button.
 - Enemy attacks match their weapons: slash, thrust, smash, shoot, pounce, slam, and chargers run across the scene. The wizard waits for a charger to be back in place before casting again.
 - Hydras arrive their own way at every head count: the Swamp mother rises from a mud pool, the Tundra icedra breaks out of an iceberg, the Dunes hydskon is built from flying bones (playable in the art dev console as "N heads: arrive").

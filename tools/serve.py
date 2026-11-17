@@ -9,13 +9,32 @@ copies of the code after it changes; with this server every reload gets the file
 The dev tools ask for every file of img/ or snd/ (folders included) at /__list/img and
 /__list/snd, as a JSON list of paths.
 
+The review drop lives outside the project, in the folder wizardidle-review/ next to the main
+folder (beside wizardidle-old-ideas/), so nothing a session drops there can get in git's way.
+It is served at /review/ from any working folder; WIZARDIDLE_REVIEW can point elsewhere.
+
 The dev tools' notes box (src/dev/notes.js) can save here: a POST to /notes/<mode> (sound, art
 or dev) appends the note to docs/<mode>-notes.md. Only from this computer (localhost).
 Standard library only.
 """
-import functools, http.server, json, os, sys
+import functools, http.server, json, os, subprocess, sys, urllib.parse
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def review_folder():
+    if os.environ.get('WIZARDIDLE_REVIEW'):
+        return os.environ['WIZARDIDLE_REVIEW']
+    try:        # the main folder, also from a second working folder of the same repository
+        common = subprocess.run(['git', 'rev-parse', '--path-format=absolute', '--git-common-dir'], cwd=REPO,
+                                capture_output=True, text=True, check=True).stdout.strip()
+        home = os.path.dirname(common)
+    except (OSError, subprocess.CalledProcessError):
+        home = REPO
+    return os.path.join(os.path.dirname(home), 'wizardidle-review')
+
+
+REVIEW = review_folder()
 NOTE_FILES = ('sound', 'art', 'dev')
 NOTES_HEADER = """# {title} notes
 
@@ -29,6 +48,13 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store')
         super().end_headers()
+
+    def translate_path(self, path):
+        clean = urllib.parse.unquote(path.split('?', 1)[0].split('#', 1)[0])
+        if clean.startswith('/review/'):
+            parts = [x for x in clean[len('/review/'):].split('/') if x not in ('', '.', '..')]
+            return os.path.join(REVIEW, *parts)
+        return super().translate_path(path)
 
     def do_GET(self):
         if self.path in ('/__list/img', '/__list/snd'):
@@ -70,5 +96,6 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
 if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     handler = functools.partial(NoCacheHandler, directory=REPO)
-    print(f'Wizard Idle on http://localhost:{port} (no caching; Ctrl+C to stop)')
+    os.makedirs(REVIEW, exist_ok=True)
+    print(f'Wizard Idle on http://localhost:{port} (no caching; Ctrl+C to stop); review drop: {REVIEW}')
     http.server.ThreadingHTTPServer(('', port), handler).serve_forever()

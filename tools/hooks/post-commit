@@ -1,0 +1,3 @@
+#!/bin/sh
+# After every commit: a work branch lands on dev-repo by itself (tools/land.py).
+python "$(git rev-parse --show-toplevel)/tools/land.py" || true
