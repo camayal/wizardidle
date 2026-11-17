@@ -16,3 +16,9 @@ Author's note: considering the layouts for other screens, we can think in one fo
 Date: 2026-11-15 12:53
 Author's note: @historian and @dev. god the player must be unable to use the kill button after some point in the history, we need to came up for a plan, and narrative.
 ```
+
+```
+Date: 2026-11-15 11:23 (moved from the art notes, 2026-11-17)
+Author's note: hands up can be another moment for the wizard, it can be related with some healing schools and perhaps another specific school defined from the beginning (the natural school that the wizard can dominate naturally, without the help of the staff). Think about this system.
+Artist, 2026-11-17: every tier now rests with both hands down. The tiers that held a flame in the raised hand now show it only in the cast animation, held in the lowered hand. A hands-up pose would be new art.
+```

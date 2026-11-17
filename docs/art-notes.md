@@ -25,16 +25,6 @@ Author's note: for @artist, in the dinamic scenes we need to be sure that the pa
 ```
 
 ```
-Date: 2026-11-15 11:23
-Author's note: For artist, some tiers have the hand elevated, this was a limitation of the open source art i used in the past, we should make a couple of things: 1) make that the default position is with both hands down, and 2) hands up can be anothe rmoment for wizard, it can be related with some healing schools and perhaps another specific school defined from the begining (the natural school that the wizard can dominate naturally, without th ehelp of the staff) send this last idea to @planner to think about this system
-```
-
-```
-Date: 2026-11-15 11:43
-Author's note: Dead wizard sprite is not quite interesting, I think I would prefer somethin more like laying down face toward the floor, more like dead, rather than sleeping.
-```
-
-```
 Date: 2026-11-15 11:44
 Author's note: Praire need some scene backround where the road is freatured, @artist
 ```

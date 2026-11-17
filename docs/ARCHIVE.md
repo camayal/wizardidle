@@ -1191,3 +1191,15 @@ Author's note: elementals shoudl have another movement to go into the battle, i 
 Date: 2026-11-15 00:01
 Author's note: for dev console, a button that say, camputre moment, so the tecnical detail is frozzen untile the save to file or clear is clicqued. also save to file should  clear the comment. Otherwise, notes shoudl not have technical information.
 ```
+## Art note: dead wizard sprite (done 2026-11-17, commit bcaa33e)
+
+```
+Date: 2026-11-15 11:43
+Author's note: Dead wizard sprite is not quite interesting, I think I would prefer somethin more like laying down face toward the floor, more like dead, rather than sleeping.
+```
+
+```
+Date: 2026-11-15 11:23
+Author's note: For artist, some tiers have the hand elevated, this was a limitation of the open source art i used in the past, we should make a couple of things: 1) make that the default position is with both hands down, and 2) hands up can be anothe rmoment for wizard, it can be related with some healing schools and perhaps another specific school defined from the begining (the natural school that the wizard can dominate naturally, without th ehelp of the staff) send this last idea to @planner to think about this system
+```
+(artist, 2026-11-17: part 1 done. Every tier now rests with both hands down, in all poses and animations; the hands-up idea went to the thinker notes.)
