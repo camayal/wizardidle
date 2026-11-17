@@ -1,2 +1,4 @@
 # the archive is append-only on every branch: a merge keeps both sides
 docs/ARCHIVE.md merge=union
+# git hooks run under sh: keep Unix line endings
+tools/hooks/* text eol=lf
