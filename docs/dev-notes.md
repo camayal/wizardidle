@@ -87,3 +87,13 @@ Author's note: prologue scroll should be visable only when the game load, so in 
 Date: 2026-11-17 13:05
 Author's note: remove phisical  attack from our wizard, it is a wizard after all. only spells
 ```
+
+```
+Date: 2026-11-17 14:51
+Author's note: we need to think a way to remove the enemy when the wizard is beated. i think an approach like ethe entrance is ncie, rather than animation, just math and other programatic way
+```
+
+```
+Date: 2026-11-17 14:52
+Author's note: magic bosses, or flying bosses, need to have similar entrances thatn mages and flying enemies. regarding bosses likes fenix, they need t fly. enemis like kkck can grow from the grown, other boses that can jump or slam, can enter jumping.
+```
