@@ -329,12 +329,13 @@ const WALK_STEP = 11;               // sprite px per 100 ms frame (the author fo
 const OFF_RIGHT = 240, OFF_LEFT = -72;   // offsets just past the right and left edges of the scene
 
 // Walk out of the scene to the right, change the scene, walk in from the left to his place
-// (the author's idea for leaving a find or a statue, and for changing zone).
-function walkThroughScene(changeScene, onArrive) {
+// (the author's idea for leaving a find or a statue, and for changing zone), or on to stopAt
+// (an offset) to reach something in the new scene.
+function walkThroughScene(changeScene, onArrive, stopAt = 0) {
     walkWizardTo(OFF_RIGHT, () => {
         changeScene();
         ui.wizardOffset = OFF_LEFT;
-        walkWizardTo(0, onArrive);
+        walkWizardTo(stopAt, onArrive);
     });
 }
 

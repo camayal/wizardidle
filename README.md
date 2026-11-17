@@ -8,7 +8,7 @@ Simple pure JavaScript project to learn more about this language. CAML
 
 | Version | Where to play | Code |
 |---|---|---|
-| **2.x** | [camayal.info/wizardidle](https://camayal.info/wizardidle/) | `main` (releases), `dev` (work in progress) |
+| **2.x** | [camayal.info/wizardidle](https://camayal.info/wizardidle/) | `main` (releases), `dev-repo` (work in progress) |
 | **1.0.0** (legacy) | kept for the record | tag [`v1.0.0`](../../tree/v1.0.0), branch `legacy/1.x` |
 
 **v1** was written by hand in 2018–2020, before AI coding assistants, while I was learning JavaScript. It is frozen exactly as it was and kept as a historical record.

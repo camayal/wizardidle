@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (dev, shown as 2.2.0-dev)
+## Unreleased (dev-repo, shown as 2.2.0-dev)
 
 - Lighter notes: ideas.md is a short index, idea text sits by topic in docs/ideas/, decisions in docs/DECISIONS.md, one notes inbox per role; the approved boss and hydra sounds are recorded in SOUNDS.md and gone from the dev tools' "needs a sound" list.
 - A file map, docs/MAP.md: what every file does, how the parts connect, media and dev-tools rules, for anyone starting work.
@@ -10,6 +10,7 @@
 - The wizard walks: to finds and statues, out of one scene and into the next, through doors, and to the street door of inns and dice houses in the Town and the City before going in.
 - Shrines, statues and inns outside the towns are entered on foot; scene changes fade more slowly.
 - Shrines: the wizard stops a little before the cross, the shrine sound plays once he is inside, and the mystic stays while he walks away.
+- Loot: the wizard walks up to the bag, barrel, box, chest or pot before opening it, then walks on.
 - Something to find twinkles on the ground before the wizard walks to it.
 - Hydra entrances redrawn: the ice peaks now match the icedra (black outline, faceted faces) and the mud burst no longer leaves a pond behind.
 - Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.
@@ -26,6 +27,7 @@
 - Bestiary: a third tab of the kill scroll, with every creature seen or defeated, ink stains for the unknown, and the hydras as a secret.
 - Stats scroll: a curated stats page and a Records tab (bests, firsts, a journey chart, all your wizards).
 - Sprites drawn crisp (sharp pixels).
+- Fixed: exploring could walk the wizard out of a scene and back into the same one.
 - Fixed: the game froze for good above level 190 (guardian fights).
 - Fixed: the Volcano boss crashed its fights.
 - Fixed (dev tools): after killing a wizard, or on a first visit, the name screen stayed hidden and only the dev panel showed.

@@ -45,9 +45,11 @@ function changeLocality() {
 
 
 
-// Move to another stage of the current zone.
+// Move to another stage of the current zone. The stage is kept too: it was not, so the next
+// move could pick the scene he was already in (the author: he walked to the same scene).
 function pickRandomBackgroundForCurrentZone() {
     const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].moves)
+    state.zone.stage = Number(randomLocality.match(/\d+$/));
     loadBackground(randomLocality);
 };
 

@@ -1263,3 +1263,17 @@ Keep the hydra hidden until the reveal frame (0-based): mud 9, ice 10, bones 11.
 These replace the three anim_<hydra>_enter.png strips and their one-head-only wiring; once wired, delete the old ones.
 Please make them playable over a real hydra in the art dev console so the author can check them there.
 ```
+
+## Dev notes handled 2026-11-17 (walk before looting, same scene)
+
+```
+Date: 2026-11-14 23:54
+Author's note: we need to modify pots, boxes and chest, wizard need to walt towards them before interacting.
+```
+```
+Date: 2026-11-15 16:34
+Author's note: sometime when wizar is exploring he walks to reach the same scene. wizar only should walk if the scene is different.
+```
+
+### 2026-11-17: Art mode reworked
+- Author's request: the art console was messy. Files are one table (name, what it replaces, Scene / Alt / View); game files are picked by folder or search; the alt scene sits where the console was and replays a recording of the same scene with the Alt file (or the game's art), in step with the live one; frame size found from the name, then from the pictures (neighbouring frames overlap most), with boxes to override; one viewer over the game for sheets. Also: one refresh timer for the notes box, not one per mode. Checked in headless Edge (no errors, alt scene drawn, tiers per file).
