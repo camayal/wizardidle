@@ -1,8 +1,8 @@
 // Wizard Idle v2 - data module: boss attacks and scene spells (art by the artist, approved by the
 // author on 2026-11-13; see src/ui/bossAttacks.js).
 //
-// Each boss has 2-3 attacks: img/anim_<boss>_<attack>.png, frames of 104 x 80 with the 64 x 64 boss
-// resting at (36, 12). scene: a scene spell (img/scene_<spell>.png, 256 x 64 frames over the whole
+// Each boss has 2-3 attacks: img/bosses/<boss>/anim_<boss>_<attack>.png, found by name through art(), frames of 104 x 80 with the 64 x 64 boss
+// resting at (36, 12). scene: a scene spell (img/effects/scene/scene_<spell>.png, 256 x 64 frames over the whole
 // scene) that starts on boss frame sceneAt; path: scene px per frame for bosses that travel
 // (negative = toward the wizard); wizard: what happens to him and on which frame.
 
