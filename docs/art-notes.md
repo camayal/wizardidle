@@ -13,3 +13,38 @@ Frame 1 / 1 (1664 x 56 px), zoom x2, backdrop mid
 Date: 2026-11-15 16:12
 Author's note: @dev art console is quite confusing.  please clear things  up
 ```
+
+```
+Date: 2026-11-14 23:53
+Author's note: send to @artist, perhaps we can create a generalized animation to read bookx, inspect runes (and other items) e.g. drop the staff, kneel a little bit, intem disapear, wizards with hands close and on top the object that is examining. This is just an idea, we need to determine if is interesting. the way it is working is also nice and kinda signature. consult with  @thinker
+```
+
+```
+Date: 2026-11-15 11:20
+Author's note: for @artist, in the dinamic scenes we need to be sure that the path of the wizard is never blocked. we can also include a ontop layer to put decorations that are close to the screen, so the wizard can pass behind them
+```
+
+```
+Date: 2026-11-15 11:23
+Author's note: For artist, some tiers have the hand elevated, this was a limitation of the open source art i used in the past, we should make a couple of things: 1) make that the default position is with both hands down, and 2) hands up can be anothe rmoment for wizard, it can be related with some healing schools and perhaps another specific school defined from the begining (the natural school that the wizard can dominate naturally, without th ehelp of the staff) send this last idea to @planner to think about this system
+```
+
+```
+Date: 2026-11-15 11:43
+Author's note: Dead wizard sprite is not quite interesting, I think I would prefer somethin more like laying down face toward the floor, more like dead, rather than sleeping.
+```
+
+```
+Date: 2026-11-15 11:44
+Author's note: Praire need some scene backround where the road is freatured, @artist
+```
+
+```
+Date: 2026-11-15 16:42
+Author's note: @artist going into battle animations for hycras should be special. similar to the bosses.
+```
+
+```
+Date: 2026-11-15 16:43
+Author's note: @artist, comming from the ground generalized animation need to be a little more expresive
+```

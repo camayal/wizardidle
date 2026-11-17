@@ -556,3 +556,591 @@ Author's note: if a wizard is killed and the dev console is open, the game never
 Date: 2026-11-15 11:18
 Author's note: Sometimes before the enemy enters the sprite is loaded in the regular position, disapear and the eneme enters. This is a bug
 ```
+
+## 2026-11-17 from docs/sound-notes.md: 34 approved boss and hydra sound tests (recorded in SOUNDS.md)
+
+```
+Sound test DOR.sonic_boom: Doria: sonic boom
+Scene: Boss: attack: doria / sonic_boom (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-ghostly-tone-499659.mp3 (from the picked folder)
+Cut: whole file (file 3.120 s)
+Speed: 1x | Extend: 1x | Plays for 3.12 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2300 ms)
+Landing sound: Arcane (spellPush2), heard
+Date: 2026-11-14 16:50
+Author's note: -
+```
+
+```
+Sound test DOR.rune_circle: Doria: rune circle
+Scene: Boss: attack: doria / rune_circle (wizard tier 0)
+Verdict: APPROVED
+Sound: coghezzi-sacred-rune-lock-02-arcane-seal-activation-536458.mp3 (from the picked folder)
+Cut: whole file (file 4.049 s)
+Speed: 1x | Extend: 1x | Plays for 4.05 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Arcane (spellRingRose_8), heard
+Date: 2026-11-14 16:55
+Author's note: -
+```
+
+```
+Sound test (free choice)
+Scene: Hydra: mother / 1 heads: grow to 2 (wizard tier 0)
+Verdict: APPROVED
+Sound: universfield-wet-squelch-276679.mp3 (from the picked folder)
+Cut: whole file (file 2.328 s)
+Speed: 1x | Extend: 1x | Plays for 2.33 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (no timing)
+Landing sound: Nature (spellChispasGreen_8), muted
+Date: 2026-11-14 16:56
+Author's note: -
+```
+
+```
+Sound test (free choice)
+Scene: Hydra: mother / 2 heads: grow to 3 (wizard tier 0)
+Verdict: APPROVED
+Sound: universfield-wet-squelch-276679.mp3 (from the picked folder)
+Cut: whole file (file 2.328 s)
+Speed: 1x | Extend: 1x | Plays for 2.33 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (no timing)
+Landing sound: Nature (spellChispasGreen_8), muted
+Date: 2026-11-14 16:56
+Author's note: -
+```
+
+```
+Sound test (free choice)
+Scene: Hydra: mother / 3 heads: grow to 4 (wizard tier 0)
+Verdict: APPROVED
+Sound: universfield-wet-squelch-276679.mp3 (from the picked folder)
+Cut: whole file (file 2.328 s)
+Speed: 1x | Extend: 1x | Plays for 2.33 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (no timing)
+Landing sound: Nature (spellChispasGreen_8), muted
+Date: 2026-11-14 16:56
+Author's note: -
+```
+
+```
+Sound test (free choice)
+Scene: Hydra: mother / 4 heads: grow to 5 (wizard tier 0)
+Verdict: APPROVED
+Sound: universfield-wet-squelch-276679.mp3 (from the picked folder)
+Cut: whole file (file 2.328 s)
+Speed: 1x | Extend: 1x | Plays for 2.33 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (no timing)
+Landing sound: Nature (spellChispasGreen_8), muted
+Date: 2026-11-14 16:56
+Author's note: -
+```
+
+```
+Sound test (free choice)
+Scene: Hydra: mother / 5 heads: grow to 6 (wizard tier 0)
+Verdict: APPROVED
+Sound: universfield-wet-squelch-276679.mp3 (from the picked folder)
+Cut: whole file (file 2.328 s)
+Speed: 1x | Extend: 1x | Plays for 2.33 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (no timing)
+Landing sound: Nature (spellChispasGreen_8), muted
+Date: 2026-11-14 16:57
+Author's note: -
+```
+
+```
+Sound test (free choice)
+Scene: Hydra: mother / 6 heads: grow to 7 (wizard tier 0)
+Verdict: APPROVED
+Sound: universfield-wet-squelch-276679.mp3 (from the picked folder)
+Cut: whole file (file 2.328 s)
+Speed: 1x | Extend: 1x | Plays for 2.33 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (no timing)
+Landing sound: Nature (spellChispasGreen_8), muted
+Date: 2026-11-14 16:57
+Author's note: -
+```
+
+```
+Sound test MID.rainbow_orbs: Midas: rainbow orbs
+Scene: Boss: attack: midas / rainbow_orbs (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-bubble-gum-popping-467465.mp3 (from the picked folder)
+Cut: whole file (file 1.392 s)
+Speed: 1.6x | Extend: 1x | Plays for 0.87 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1200 ms, the move lasts 2700 ms)
+Landing sound: Nature (spellChispasGreen_8), heard
+Date: 2026-11-14 19:27
+Author's note: -
+```
+
+```
+Sound test MID.golden_rays: Midas: golden rays
+Scene: Boss: attack: midas / golden_rays (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-eerie-resonant-tone-478368.mp3 (from the picked folder)
+Cut: whole file (file 3.120 s)
+Speed: 1x | Extend: 1x | Plays for 3.12 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1100 ms, the move lasts 2600 ms)
+Landing sound: Thunder (spellChispasReddish_8), muted
+Date: 2026-11-14 19:29
+Author's note: Remember that this spell needs to be changed in the code, this is a Midas healing spell, not an attack spell
+```
+
+```
+Sound test MID.golden_rays: Midas: golden rays
+Scene: Boss: attack: midas / golden_rays (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-eerie-resonant-tone-478368.mp3 (from the picked folder)
+Cut: whole file (file 3.120 s)
+Speed: 1x | Extend: 1x | Plays for 3.12 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1100 ms, the move lasts 2600 ms)
+Landing sound: Thunder (spellChispasReddish_8), muted
+Date: 2026-11-14 19:29
+Author's note: Remember that this spell needs to be changed in the code, this is a Midas healing spell, not an attack spell
+```
+
+```
+Sound test MID.golden_touch: Midas: golden touch
+Scene: Boss: attack: midas / golden_touch (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-glass-wail-570451.mp3 (from the picked folder)
+Cut: whole file (file 1.411 s)
+Speed: 1x | Extend: 1x | Plays for 1.41 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1100 ms, the move lasts 2600 ms)
+Landing sound: Frost (spellChispasBlue_8), heard
+Date: 2026-11-14 19:31
+Author's note: this school need to be changed, perhaps holy or something, now is kinda shock/electric. Landing sound will change as well
+```
+
+```
+Sound test ROJ.slam: Rojo: slam (fire peak)
+Scene: Boss: attack: rojo / slam (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-elemental-spell-impact-flame-448566.mp3 (from the picked folder)
+Cut: 0.000 s to 2.541 s (file 5.592 s)
+Speed: 1x | Extend: 1x | Plays for 2.54 s
+Fade in 0 ms, fade out 140 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1300 ms, the move lasts 2600 ms)
+Landing sound: Physical (spellPush9), heard
+Date: 2026-11-14 19:35
+Author's note: -
+```
+
+```
+Sound test ROJ.flaming_punch: Rojo: flaming punch
+Scene: Boss: attack: rojo / flaming_punch (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-elemental-spell-impact-flame-448566.mp3 (from the picked folder)
+Cut: 2.559 s to 5.592 s (file 5.592 s)
+Speed: 1x | Extend: 1x | Plays for 3.03 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2300 ms)
+Landing sound: Physical (spellPush10), heard
+Date: 2026-11-14 19:36
+Author's note: -
+```
+
+```
+Sound test CUB.spit: Cuboq: spit
+Scene: Boss: attack: cuboq / spit (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-clean-minimal-pop-467466.mp3 (from the picked folder)
+Cut: whole file (file 1.632 s)
+Speed: 0.45x | Extend: 1x | Plays for 3.63 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1100 ms, the move lasts 2400 ms)
+Landing sound: Nature (spellPoisson_8), heard
+Date: 2026-11-14 19:37
+Author's note: -
+```
+
+```
+Sound test SKE.great_slash: Skeleton: great slash
+Scene: Boss: attack: skeleton / great_slash (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-simple-whoosh-copyright-free-631457.mp3 (from the picked folder)
+Cut: whole file (file 1.045 s)
+Speed: 1x | Extend: 1x | Plays for 1.04 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 740 ms (blow lands at 900 ms, the move lasts 1900 ms)
+Landing sound: Arcane (spellPush2), heard
+Date: 2026-11-14 19:40
+Author's note: -
+```
+
+```
+Sound test SKE.curse: Skeleton: curse
+Scene: Boss: attack: skeleton / curse (wizard tier 0)
+Verdict: APPROVED
+Sound: freesound_community-deathmagic-94937.mp3 (from the picked folder)
+Cut: whole file (file 8.016 s)
+Speed: 1x | Extend: 1x | Plays for 8.02 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at -1140 ms (blow lands at 1300 ms, the move lasts 3000 ms)
+Landing sound: Arcane (spellRainPurple_24), muted
+Date: 2026-11-14 19:42
+Author's note: This is a curse spell, need to work kinda like hemoragie, no need landing sound, change school is needed
+```
+
+```
+Sound test RAI.ice_spikes: Rainbow: ice spikes
+Scene: Boss: attack: rainbow / ice_spikes (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-glass-cracking-504028.mp3 (from the picked folder)
+Cut: whole file (file 1.704 s)
+Speed: 0.65x | Extend: 1x | Plays for 2.62 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1100 ms, the move lasts 2500 ms)
+Landing sound: Frost (spellPush8), heard
+Date: 2026-11-14 19:44
+Author's note: -
+```
+
+```
+Sound test RAI.blizzard: Rainbow: blizzard
+Scene: Boss: attack: rainbow / blizzard (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-freezing-winter-wind-499654.mp3 (from the picked folder)
+Cut: 0.000 s to 2.200 s (file 13.392 s)
+Speed: 1x | Extend: 1x | Plays for 2.20 s
+Fade in 0 ms, fade out 1000 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Frost (spellChispasBlue_8), heard
+Date: 2026-11-14 19:48
+Author's note: -
+```
+
+```
+Sound test RAI.blizzard: Rainbow: blizzard
+Scene: Boss: attack: rainbow / blizzard (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-freezing-winter-wind-499654.mp3 (from the picked folder)
+Cut: 0.000 s to 2.200 s (file 13.392 s)
+Speed: 1x | Extend: 1x | Plays for 2.20 s
+Fade in 0 ms, fade out 1000 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Frost (spellChispasBlue_8), heard
+Date: 2026-11-14 19:48
+Author's note: -
+```
+
+```
+Sound test FEN.fire_breath: Fenix: fire breath
+Scene: Boss: attack: fenix / fire_breath (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-fire-spell-impact-393921.mp3 (from the picked folder)
+Cut: whole file (file 2.900 s)
+Speed: 1x | Extend: 1x | Plays for 2.90 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1100 ms, the move lasts 2500 ms)
+Landing sound: Fire (spellPush4), heard
+Date: 2026-11-14 19:49
+Author's note: -
+```
+
+```
+Sound test FEN.wing_flap: Fenix: wing flap
+Scene: Boss: attack: fenix / wing_flap (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-bush-rustling-467467.mp3 (from the picked folder)
+Cut: whole file (file 1.392 s)
+Speed: 0.45x | Extend: 1x | Plays for 3.09 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1200 ms, the move lasts 2700 ms)
+Landing sound: Fire (spellChispasRed_8), heard
+Date: 2026-11-14 19:50
+Author's note: -
+```
+
+```
+Sound test FEN.flame_pillar: Fenix: flame pillar
+Scene: Boss: attack: fenix / flame_pillar (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-elemental-spell-impact-flame-448566.mp3 (from the picked folder)
+Cut: 0.000 s to 2.200 s (file 5.592 s)
+Speed: 1x | Extend: 1x | Plays for 2.20 s
+Fade in 0 ms, fade out 870 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Fire (spellRainRed_24), heard
+Date: 2026-11-14 19:51
+Author's note: -
+```
+
+```
+Sound test PRO.earth_spikes: Protromus: earth spikes
+Scene: Boss: attack: protromus / earth_spikes (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-colossal-footsteps-467495.mp3 (from the picked folder)
+Cut: whole file (file 8.832 s)
+Speed: 2.55x | Extend: 1x | Plays for 3.46 s
+Fade in 0 ms, fade out 30 ms | Volume 0.82
+Starts at 0 ms (blow lands at 1400 ms, the move lasts 2800 ms)
+Landing sound: Nature (spellEarthSpike_10), heard
+Date: 2026-11-14 19:54
+Author's note: -
+```
+
+```
+Sound test GOR.flurry: Goro: flurry
+Scene: Boss: attack: goro / flurry (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-beast-growl-sound-376873.mp3 (from the picked folder)
+Cut: whole file (file 1.097 s)
+Speed: 1.05x | Extend: 1x | Plays for 1.04 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 700 ms, the move lasts 1200 ms)
+Landing sound: Physical (spellPush10), heard
+Date: 2026-11-14 19:59
+Author's note: -
+```
+
+```
+Sound test GOR.slam: Goro: slam
+Scene: Boss: attack: goro / slam (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-heavy-boulder-thud-515257.mp3 (from the picked folder)
+Cut: whole file (file 2.112 s)
+Speed: 1x | Extend: 1x | Plays for 2.11 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 600 ms, the move lasts 1100 ms)
+Landing sound: Physical (spellPush6), heard
+Date: 2026-11-14 20:01
+Author's note: -
+```
+
+```
+Sound test GOR.charge: Goro: charge
+Scene: Boss: attack: goro / charge (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-heavy-boulder-thud-515257.mp3 (from the picked folder)
+Cut: 0.343 s to 0.678 s (file 2.112 s)
+Speed: 1.25x | Extend: 3x | Plays for 0.80 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 700 ms, the move lasts 1800 ms)
+Landing sound: Physical (spellPush9), heard
+Date: 2026-11-14 20:03
+Author's note: -
+```
+
+```
+Sound test INF.arcane_flare: Infraespectro: arcane flare
+Scene: Boss: attack: infraespectro / arcane_flare (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-creepy-sound-effect-570459.mp3 (from the picked folder)
+Cut: 0.000 s to 1.702 s (file 3.161 s)
+Speed: 1x | Extend: 1x | Plays for 1.70 s
+Fade in 0 ms, fade out 810 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Shadow (spellWhiteMaldicion_8), heard
+Date: 2026-11-14 20:05
+Author's note: -
+```
+
+```
+Sound test INF.phase: Infraespectro: phase
+Scene: Boss: attack: infraespectro / phase (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-velvet-whoosh-sfx-570450.mp3 (from the picked folder)
+Cut: 0.000 s to 0.473 s (file 0.549 s)
+Speed: 0.7x | Extend: 1x | Plays for 0.68 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 600 ms, the move lasts 1100 ms)
+Landing sound: Arcane (spellChispasWhite_8), heard
+Date: 2026-11-14 20:07
+Author's note: Perhaps reclasify this to adjust landing sound
+```
+
+```
+Sound test HER.vines: Herbus: vines
+Scene: Boss: attack: herbus / vines (wizard tier 0)
+Verdict: APPROVED
+Sound: yodguard-bouncy_jelly_creature_movement-387893.mp3 (from the picked folder)
+Cut: whole file (file 8.040 s)
+Speed: 0.4x | Extend: 1x | Plays for 20.10 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Nature (spellChispasGreen_8), heard
+Date: 2026-11-14 20:08
+Author's note: -
+```
+
+```
+Sound test HER.vines: Herbus: vines
+Scene: Boss: attack: herbus / vines (wizard tier 0)
+Verdict: APPROVED
+Sound: yodguard-bouncy_jelly_creature_movement-387893.mp3 (from the picked folder)
+Cut: 0.000 s to 1.132 s (file 8.040 s)
+Speed: 0.4x | Extend: 1x | Plays for 2.83 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Nature (spellChispasGreen_8), heard
+Date: 2026-11-14 20:08
+Author's note: -
+```
+
+```
+Sound test HER.vines: Herbus: vines
+Scene: Boss: attack: herbus / vines (wizard tier 0)
+Verdict: APPROVED
+Sound: yodguard-bouncy_jelly_creature_movement-387893.mp3 (from the picked folder)
+Cut: 0.000 s to 1.132 s (file 8.040 s)
+Speed: 0.4x | Extend: 1x | Plays for 2.83 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Nature (spellChispasGreen_8), heard
+Date: 2026-11-14 20:08
+Author's note: -
+```
+
+```
+Sound test HER.spores: Herbus: spores
+Scene: Boss: attack: herbus / spores (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-sand-transition-451861.mp3 (from the picked folder)
+Cut: 0.000 s to 2.400 s (file 3.912 s)
+Speed: 0.85x | Extend: 1x | Plays for 2.82 s
+Fade in 0 ms, fade out 500 ms | Volume 0.3
+Starts at -360 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Nature (spellPoisson_8), heard
+Date: 2026-11-14 20:12
+Author's note: -
+```
+
+```
+Sound test ARC.lightning: Arcangel: lightning
+Scene: Boss: attack: arcangel / lightning (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-thunder-4-631461.mp3 (from the picked folder)
+Cut: 0.000 s to 2.233 s (file 3.056 s)
+Speed: 1x | Extend: 1x | Plays for 2.23 s
+Fade in 0 ms, fade out 810 ms | Volume 0.3
+Starts at 0 ms (blow lands at 900 ms, the move lasts 2200 ms)
+Landing sound: Thunder (spellChispasReddish_8), heard
+Date: 2026-11-14 20:14
+Author's note: -
+```
+
+## 2026-11-17 from ideas.md: working rules (now in docs/MAP.md and the roles' memory)
+
+- **Done goes to the archive** (the author's rule, 2026-11-14): when something is finished (a journal entry older than the newest few, an idea built or dropped, a bug fixed, a sound or a piece of art approved, a note handled), cut it from its working file and append it to [docs/ARCHIVE.md](docs/ARCHIVE.md) with a plain `cat >>` (a heading `## <date> from <file>: <what>`, then the text). Never read or open the archive in normal work; it only grows. Working files (this one, SOUNDS.md, AUTHOR_NOTES.md, the plans' pending parts, `src/dev/soundNeeds.js`, `docs/*-notes.md`) keep only what is still pending.
+- **Where art and sounds live** (the author's layout, 2026-11-14): `img/` in folders by kind and creature (wizard/<animation>, enemies/<family>, bosses/<boss>, bosses/hydras/<hydra>, effects/<spells|scene|fx>, places/<zone>, story, objects, ui, ui/achievements, app) and `snd/` (schools, wizard, creatures, places, ui). File names did not change. The code asks by name, `art('el_golem1')` and `snd('Fire')`; only `src/media.js` knows the folders. A new file goes in the folder its name's rule says; a new kind needs a rule there first (while developing, an unknown name is reported in the browser console).
+- **Files from outside get renamed** (the author's rule, 2026-11-14): downloaded or found images and sounds (packs, freesound, the author's folders) usually have long or odd names. Before a file enters `img/` or `snd/`, rename it to the game's style: short, lowercase English or the game's existing words, words joined by `_`, no spaces, no author, site, pack, ids or version numbers, and the prefix its kind uses (`anim_<who>_<move>`, `scene_<spell>`, `fx_<name>`, `run_`/`ram_<sprite>`, a creature's family name plus a number; sounds like `fire_breath`, `hooves`, `dice_roll`). The original name, source and licence go in the doc that records the decision (SOUNDS.md for sounds, the art notes for images), never in the file name. The name must fit a rule of `src/media.js`; a new kind needs its rule first.
+- **New files go to the review drop** (the author's rule, 2026-11-14): every session copies its latest outputs (art, sounds) into `review/` at the root of the main checkout (git-ignored) and adds one line per file to `review/index.txt`: `date | who | file | game file it would replace, or - | short note`. The dev tools' art and sounds modes list them, newest first, to view or try. Delete handled lines and files.
+
+## 2026-11-17 from ideas.md: backlog entries whose plan doc holds them (faith, professions, stats, erasure, scene spells, sleep)
+
+- **Rebalance faith and player interaction** (2026-11-10; **plan → [docs/FAITH.md](docs/FAITH.md)**, decisions recorded there, numbers wait for playtests): rebalance faith points and how the player (the god) interacts with the wizard, while **keeping the atheist ending possible**. *Today:* faith comes from praying, shrine offerings (gold to faith) and wiping out corrupted enemies. It's lost by skipping shrines, self-reviving, and every divine touch (heal, hit enemy). Below 0 faith the player can't help at all, which is the road to atheism ("The player" help text and the divine-touch faith costs, `//determine faith cost`, in `src/ui/scrolls.js` and `src/divine.js`).
+
+- **Professions for the wizard** (2026-11-10, *asked to be built: ready for dev*; **plan written 2026-11-11 → [docs/PROFESSIONS.md](docs/PROFESSIONS.md)**: reagents, the 15 items and their effects, vendors and trainers, build order): give the wizard professions. *From the old notes* (`wizardidle-old-ideas/Help.txt`, `Recetas.csv`): three professions, **Alchemy, Enchanting and Writing**. Each zone has its own material to gather: mushroom (hongo), bone (hueso), gem (gema), ectoplasm, essence, herb. Recipes take two materials and have a price (50 or 100) and a difficulty:
+  - *Writing → scrolls:* reduction, teleportation, understanding, maximisation, divine binding.
+  - *Enchanting → rings:* health, magic power, natural integration, luck, greatness.
+  - *Alchemy → potions:* health, mana, vitality, alcohol, golden potion.
+
+  *Today:* half-prepared. Zones already name their material (`drop:` in `src/data/zones.js`) and there's a "scavenger skills" stat (`pFindMaterials`, raised by the Dwarf statue), but gathering is only a `//found materials` ToDo in `src/combat.js`, and there's no inventory, crafting or use for the items. The old help also had "Commerce" and "Gathering" pages that the current help lacks. *Art already drawn* (`wizardidle-old-ideas/unorganzed_sprites/Sprites/`): `anilos.png` is **five gem rings** (pink, blue, green, orange, brown), one per ring recipe. `BASE/dg_food32.gif` has mushrooms in a dozen colours (the *hongo* material), plus drinks, bread and meat.
+
+- **Track almost everything as stats** (2026-11-10; **plan → [docs/STATS.md](docs/STATS.md)**, with the playtest tools): keep a stat for nearly everything that happens, so later achievements, missions, quests and new areas have numbers to hang on ("kill 50 corrupted enemies", "reach 0 faith three times", "visit every place in the Swamp"). *Today:* 56 counters via `count()` into `state.counters`, several split by key (`zone_*`, `enemy_*`, `typeBoss_*`, `school_*`, `altar_zone_*`, `BotinGot_*`, `Polymorph_*`, `study_*`…), plus `meta.playTimeMs`. Gaps found: they're **all counters**. There are no records (highest / lowest), no "firsts" (when something first happened), and nothing across wizards. The **dice game tracks nothing at all**.
+
+  Four kinds of stat to keep:
+  - *Counters:* how many times (what `count()` does today).
+  - *Totals:* how much in all (damage, gold, faith).
+  - *Records:* the best or worst ever (biggest hit, most gold held, lowest faith).
+  - *Firsts:* the level, age and date something first happened (first boss, first death, first rare). These are great for story callbacks and quest unlocks.
+
+  Each can live per wizard (`state`) or per world across all wizards (`wizardidle2:world`, next to the cemetery).
+
+  Candidates, by area:
+  - *Combat:* damage dealt / taken (totals); biggest hit and biggest crit (records); longest fight in rounds; fights won without taking a hit; close calls (won under 10% HP); kill streak without dying; kills by enemy type (melee, wizard, nature, fire, frost…) and by zone; corrupted enemies killed; rare enemies killed by name; spells cast by spell, not just school; total HP healed; kills while polymorphed.
+  - *Deaths:* deaths by zone and **killed by** (which enemy or boss); divine revives vs self-revives (amount of faith lost); level and age at each death.
+  - *Faith and the god:* faith gained / spent (totals); highest and lowest faith ever (how deep into atheism); times faith crossed 0 in each direction; time spent below 0; divine touches by target (wizard, enemy, boss, shrine); touches with too little faith; faith lost skipping shrines (an amount; `negar` only counts).
+  - *Gold:* earned / spent (totals); most gold held (record); inn spending (exists); robbed, once robbery exists.
+  - *Dice (untracked today):* games played; won / lost / tied; gold won / lost; best cargo; times he risked another roll and whether it paid; opponents beaten.
+  - *Exploration:* unique places visited (e.g. `el_Bosque3`, not just zones); first-visit level per zone; time spent per zone; overworld vs underground; longest stay in one zone; map opened.
+  - *Study:* runes vs books separately; total skill gained per stat (`statBonus` holds the result, not the history).
+  - *Progress and time:* time per level (real play time); level, age and date of each chapter; sessions, days played, longest session; offline time, if offline progress comes back.
+  - *Player habits:* scrolls opened (stats, achievements, help, map); taps on the scene.
+  - *World, across wizards:* wizards created / killed; highest level ever; oldest wizard; lifetime kills, bosses, gold, faith. Enables account-wide achievements and the cemetery idea.
+  - *For future systems:* materials gathered by type, items crafted / used (professions); quests started / completed; story choices.
+
+  Found while looking: `cardCombat()` in `src/combat.js` is an empty placeholder (a card-combat idea that never started?).
+
+- **After an erasure: the souls of erased wizards help the next one** (2026-11-12, asked by the author with the story plan; **plan → [docs/ERASURE.md](docs/ERASURE.md)**): when the god wins the final battle he erases the wizard (removed from existence, name reversed and struck through in the cemetery), a museum appears, and a new game is the god going back in time. Decided: in the next final battles **the souls of the erased wizards come to help**, one per erasure **up to 5**, **entering one by one** every few rounds (each named by his reversed name), shown in the museum's final-battle snapshot, in turn order **wizard → souls → god**; the souls act only in the final battle, but after at least one erasure the next game's text shows **small echoes** (a different Prologue opening: *"You have heard him before. You will hear him again. Time is nothing to you. To him, it is everything. Will this one win?"*, and a few déjà vu lines in the chapters); faith rules don't change. Saved per world (`world.erasures`, `world.loop`, next to the cemetery). Every win brings the god's own end closer, which is the prophecy. **Only wizards defeated by the god in the final battle are erased** (the author, 2026-11-12); wizards who die at any other moment are a regular part of the cemetery and have a different role (ghost rescuers, letters, legends: "Wizards from the past help in the story").
+
+- **Scene spells: attacks that cover the whole scene** (2026-11-12, the author, via the artist session). Boss fights are special, so some boss attacks play over the **whole scene**, not just on the wizard: spikes erupting from the ground toward him, rains, lightning, a blizzard, a pillar of fire. They are drawn as independent full-scene animations (the size of a zone background) whose ground effects are translucent, so a spike bursts out of a bit of that zone's own soil. Drafted by the artist (art in `wizardidle-old-ideas/tools/scene_spells/`, not in the game yet):
+  - *Used by bosses:* earth spikes (protromus), ice spikes and blizzard (rainbow), fire rain (rojo), arcane rain (doria, king skeleton), lightning (arcangel), entangling vines (herbus), flame pillar (fenix).
+  - *Added after the author's boss review (round 2):* sonic boom and rune circle (doria), poison cloud (kkck), golden touch, rainbow orbs and golden rays (king midas), spore storm (herbus), slime spit (cuboq), curse (king skeleton), fire tornado and fire breath (fenix), petrifying gaze and poison dart (medusa), golden storm (arcangel), prism pulse and colour burst (etymos), fire fist and fire peak (rojo); the earthquake now follows protromus's ground punch. 34 scene spells in all.
+  - *Kept for later, not used by anyone yet:* meteor shower, divine light, eclipse, sandstorm, whirlwind, healing rain.
+  - *For the planner (the author, round 3):* **king midas's golden rays heal him** (the rays spinning around him are a self-heal, not an attack).
+  - *For the planner (the author, round 3):* **medusa's gaze turns the wizard to stone for a couple of turns.** It needs to be rare, or, better (the author prefers it), the wizard can **find an artefact that makes him immune** to it. Art drawn for every tier (not in the game yet): the wizard turning to stone, a stone wizard held while he is petrified, and the stone cracking and bursting off him (`wizardidle-old-ideas/tools/anim/stone/`).
+  - Infraespectro's curse and arcane flare are scene spells too (a new "arcane flare": a blinding burst that races over the scene).
+  - *For the planner (the author's words): the scene must shake.* The earthquake (and big hits like slams and the meteor shower) needs **the whole scene to shake** for a moment, which art alone can't do: the game moves the scene canvas a pixel or two each frame (suggested for the earthquake: 0, 1, −1, 2, −2, 2, −2, 1, −1, 2, −2, 1, −1, 1, 0, 0 px).
+  - **Boss effects decided (2026-11-13, [docs/SCENE_SPELLS.md](docs/SCENE_SPELLS.md)):** Medusa's gaze petrifies rarely (about 1 in 4 gazes, 2 turns) and after the first time he can find a **rare** artefact for permanent immunity; Midas's golden rays heal him about 15%, at most twice per fight, and the god's touch interrupts them; a few signature effects (blizzard: skip an attack; poison cloud: damage over 2 turns; earthquake: miss a spell), the rest looks only.
+  - **Plan → [docs/SCENE_SPELLS.md](docs/SCENE_SPELLS.md)** (decided 2026-11-13): the wizard earns them with the staff (90, VI, XI); a critic can become a **super-critic** that casts a scene spell (very rare before 90, rare with a staff); the god's touch-critics play divine light, meteor shower or healing rain; eclipse, sandstorm/whirlwind and divine light go to story moments, and the earthquake (now protromus's) is reused at the Tower siege.
+  - *For the planner (the author's words):* add notes for **our wizard to use scene spells when he is very powerful**, and use the spare ones **for the story and for other powers**. Open: at what level or chapter he earns them, which god actions or story moments trigger the "kept for later" ones (an eclipse at a dark chapter, divine light for a miracle, an earthquake, healing rain from the god…), and whether they cost faith.
+
+- **Soft sleep, dreams and nightmares** (2026-11-12, the author; **plan → [docs/SLEEP.md](docs/SLEEP.md)**, decided 2026-11-13: he walks to the bed or sleeping bag, the scene fades to dark; dreams are rare visions over the dark plus story nights; pure story for now): resting today plays a sleep effect over the wizard and prints a few lines (`searchInn` in `src/events.js`: arrive, sleep, wake up, at an inn or camping). The author wants something soft: the scene goes dark for a couple of seconds, then he wakes. Sleep is also the natural place for the story's **dreams and nightmares**. Leave sleeping untouched until it's planned.
+  - *To decide:* how the darkness looks and how long; what a dream or nightmare is (console text, a short scroll, a vision over the dark scene); when they come (chance, level, chapter, belief level, after a fall, near the final battle); what they do (pure story, hints, a rest bonus, faith changes, ties to the erasure echoes and souls); whether nightmares belong to atheism and dreams to faith. The artist can help with the visuals once it's decided.
+
+## 2026-11-17 from ideas.md: journal entries 2026-11-13 to 2026-11-14
+
+### 2026-11-14: Images and sounds in folders
+- The author's choices (asked one by one): folders by kind and per creature; one helper by rules; `ogg/` renamed to `snd/` (a 3-letter abbreviation, the author's) with folders for what exists now, more when needed; junk deleted.
+- 1,447 files moved with `git mv` (history kept). `img/null`, `ogg/null` and `img/lvlNaN.png` (v1 bug leftovers, unused) deleted.
+- `src/media.js`: `art(name)` and `snd(name)` give each file's path from its name (enemy sprites by family from `enemySprites`, bosses from `bossAttacks` and the zones, hydras, wizard tiers, zone backgrounds...); a name no rule knows is reported in the console while developing. The game's paths (85 places) now go through them; index.html, manifest.json and browserconfig.xml have the new literal paths.
+- `tools/serve.py` lists every file of `img/` or `snd/` at `/__list/img` and `/__list/snd` for the dev tools; the notes limit is 200 KB.
+- Checked: every file is where its name's rule says (1,412 images, 35 sounds), all 1,231 names the game data can ask for exist, and a live run (fights with bosses, a hydra, chargers, both dev modes) had no missing file and no warning.
+
+### 2026-11-14: The healer's hood, redrawn by hand
+- The author's note "healer hood still looks weird (the pixels in the chin)": the old hood was a perfect oval and looked artificial. The artist hand-drew four cloth hoods; the author picked **A, the cowl** (flatter top, the cloth bunches at the back in a darker fold). The chin is now clean: dark face, a soft brown chin catching a little light (no stray grey or gold pixels). The staff is unchanged.
+- `healer_hooded.png` replaced; `anim_god_unhood.png` regenerated so the reveal opens with the new hood (only its hooded frames changed; the wings and god forms are identical).
+
+### 2026-11-14: Dev tools beside the game, sounds and art modes
+- The author's request (with the musician's and the artist's lists of what each test needs): the bottom dev bar is now a light panel left of the game (`src/dev/panel.js`, `src/dev/tests.js`) with folding menus (Modes, Scenarios, Fight now, Wizard, Game, Command line) and a log; on a narrow screen it floats over the game.
+- Shared scene picker (`src/dev/scenes.js`): kind, what, which and tier; enemy attacks and arrivals, boss attacks, hydras (strike, cast, grow), scene spells, spell effects, wizard animations and poses, the dice (two rolls 1.5 s apart), any sprite or object, backgrounds. Each knows when its blow lands and the spell that lands with it.
+- Sounds mode (`src/dev/sounds.js`): any scene with an ogg/ file or added files; cut, extend, speed, volume (game 0.3, up to 1), fades, starts at (ms from the first frame), the landing spell's effect and school sound (can be muted), the file the game plays now marked, settings kept per scene and per file for A/B, verdict. "Needs a sound" (`src/dev/soundNeeds.js`, from SOUNDS.md) jumps to a waiting move; strike entries there when approved.
+- Art mode (`src/dev/art.js`): the scene at any tier in slow motion (x1 to x0.1) with the blow marked, crisp pixels on, Reload art, Try a file (a local PNG in place of a game image); a viewer for any img/ file or local file: frame by frame, game size and x2/x4/x8 side by side, slots A and B, all tiers, grid, ghost of the previous frame, feet line, light/grey/dark/checked backdrops. Not done yet: frame-by-frame stepping inside the live scene, story scenes and UI tiles as their own kinds (the viewer shows any image meanwhile).
+- Sounds mode (author, later the same day): a slider beside every number box (the boxes stay for fine edits; the cut's sliders end at the file's length), and Add folder: its sound files fill a list where ↑ ↓ plays the next one (alone, or with the scene), Enter or Space plays it again.
+- Author notes box (`src/dev/notes.js`), always in the dev panel: the technical details fill in by themselves; the author adds a comment, Copy puts both on the clipboard, Save to file appends to `docs/<mode>-notes.md` (`tools/serve.py` accepts POST `/notes/sound|art|dev` from localhost).
+- The game waits while its window is hidden (minimized or covered), only while developing.
+- Review drop (`src/dev/review.js`): sessions copy new files to `review/` and list them in `review/index.txt`; the art mode shows the images: "In scene" puts one in place of the game image it names and plays that image's real scene (the author: sizes and positions are judged in the scene, not a viewer; an image the game doesn't use yet plays alone at the enemy's spot, the wizard's, or over the whole scene), A / B open it in the viewer, whose slots also have "In scene", the sounds mode the sound files (Use adds one to the picker).
+- Fixed: `spell()` used `frameMs` before declaring it when the image was already loaded (the dice's second roll crashed).
+
+### 2026-11-14: Sounds: one per move, bosses apart (musician)
+- The author's decisions while listening: one sound per move, heard on that move; bosses apart from regular enemies; each boss spell gets its own sound instead of its school's (the author is looking for them); the Capricor's ram is not a thud; the hydras need new sounds. `docs/SOUNDS.md` has a new section "Boss moves: one sound each" with what is still to choose.
+- Approved since the first seven: the small creatures' snarl, the wind on the sandstorm, the stone grinding for Medusa's gaze, the stone bursting off (a rock sound instead of breakPot.ogg), and the thud and the hooves again on Protromus's ground punch and the Capricor's charge. Nothing is in `ogg/` or wired yet.
+
+### 2026-11-13: Sounds: the first seven chosen by ear (musician)
+- The author tried the candidate sounds against the attack animations and approved seven: the heavy thud, the deep rumble, the arrow whoosh, the hooves (a second file replaced the first choice), the rolling rumble, the beast roar (for Bicaptop only: small creatures get their own snarl, new row 6b) and the slime bounce. Files, cuts, volume and the moment each starts are in `docs/SOUNDS.md` (Decisions); those seven are crossed out of "Sounds to find". Still to find: small creature snarl, wind, stone, bite; the reuse table is still to confirm by ear. The files are not in `ogg/` yet and nothing is wired.
+
+## 2026-11-17 from docs/dev-notes.md: two duplicate notes
+
+```
+Date: 2026-11-15 11:40
+Author's note: dreem scene do not respect the reposition of the scene view when stats or other UI scroll are opened
+(cut: duplicate of the 11:39 note)
+```
+
+```
+Date: 2026-11-15 11:42
+Author's note: elementals shoudl have another movement to go into the battle, i would say like fade in
+(cut: replaced by the 11:53 note on elementals)
+```
+
+## 2026-11-17 from ideas.md: journal entry 2026-11-17 File map for the roles
+
+### 2026-11-17: File map for the roles
+- Wrote docs/MAP.md: one line per file, how the pieces connect, media rules, dev tools and docs. Roles read it before code. Loose end: a root `ogg/` folder still exists though the code no longer uses it; the comment in src/data/bossAttacks.js still says img/anim_<boss>_<attack>.png (now in img/bosses/<boss>/).

@@ -6,7 +6,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 - index.html: the page shell; loads src/main.js. manifest.json, browserconfig.xml, favicon.ico: install-as-app info.
 - service-worker.js: offline mode. Code files network first, art and sound cache first; each deploy gets its own cache.
-- CHANGELOG.md: what changed per release. ideas.md: the journal and the pending ideas. README.md: public readme.
+- CHANGELOG.md: what changed per release. ideas.md: status, one line per idea (text in docs/ideas/ or the plans), the last three journal entries. README.md: public readme.
 
 ## src/ (core)
 
@@ -95,8 +95,9 @@ Code asks by plain name; only src/media.js knows folders. A name that fits no ru
 
 ## docs/
 
-- ROADMAP.md: stages ahead. ARCHIVE.md: finished items, append-only, never read.
-- AUTHOR_NOTES.md: the author's bugs and needs after playtests. dev-notes.md, art-notes.md, sound-notes.md: notes saved from the dev tools box.
+- ROADMAP.md: stages ahead. ARCHIVE.md: finished items, append-only, never read. DECISIONS.md: settled choices and why, append-only, not read in normal work.
+- ideas/: idea text by topic (story.md, world.md, creatures.md, extras.md); ideas.md lists them one line each. Open only the topic you work on.
+- AUTHOR_NOTES.md: the author's bugs and needs after playtests. Inboxes, one per role: dev-notes.md, art-notes.md, sound-notes.md (saved from the dev tools box), thinker-notes.md (design notes moved there).
 - STATS.md: stats and playtest tools plan. FAITH.md: belief, faith, revive plan. PROFESSIONS.md: reagents, recipes, vendors plan.
 - SCENES.md: composing scenes from parts. SCENE_SPELLS.md: full-scene spell animations and boss effects.
 - SLEEP.md: sleep, dreams, nightmares. ERASURE.md: what follows the god's final win and erasure.

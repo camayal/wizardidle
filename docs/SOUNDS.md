@@ -63,6 +63,43 @@ All at normal speed, not repeated, with a 30 ms fade out. Notes for whoever wire
   300 ms past the ram's impact on the Tauren.
 - The stone bursting off replaces `snd/places/breakPot.ogg`.
 
+## Approved boss and hydra moves (from the sound notes, 2026-11-14/15)
+
+Same rules as the table above (cut, convert to .ogg, record source and licence, wire). A later test of the same scene replaced an earlier one.
+
+| Move | Source file | Cut | Plays | Volume | Starts at | Landing sound | Author's note |
+|---|---|---|---|---|---|---|---|
+| Doria: sonic boom | dragon-studio-ghostly-tone-499659.mp3 | whole file | 3.12 s | 0.3 | 0 ms (blow lands at 1000 ms, the move lasts 2300 ms) | Arcane (spellPush2), heard | - |
+| Doria: rune circle | coghezzi-sacred-rune-lock-02-arcane-seal-activation-536458.mp3 | whole file | 4.05 s | 0.3 | 0 ms (blow lands at 1000 ms, the move lasts 2400 ms) | Arcane (spellRingRose_8), heard | - |
+| Hydra: mother / 1 heads: grow to 2 | universfield-wet-squelch-276679.mp3 | whole file | 2.33 s | 0.3 | 0 ms (no timing) | Nature (spellChispasGreen_8), muted | - |
+| Hydra: mother / 2 heads: grow to 3 | universfield-wet-squelch-276679.mp3 | whole file | 2.33 s | 0.3 | 0 ms (no timing) | Nature (spellChispasGreen_8), muted | - |
+| Hydra: mother / 3 heads: grow to 4 | universfield-wet-squelch-276679.mp3 | whole file | 2.33 s | 0.3 | 0 ms (no timing) | Nature (spellChispasGreen_8), muted | - |
+| Hydra: mother / 4 heads: grow to 5 | universfield-wet-squelch-276679.mp3 | whole file | 2.33 s | 0.3 | 0 ms (no timing) | Nature (spellChispasGreen_8), muted | - |
+| Hydra: mother / 5 heads: grow to 6 | universfield-wet-squelch-276679.mp3 | whole file | 2.33 s | 0.3 | 0 ms (no timing) | Nature (spellChispasGreen_8), muted | - |
+| Hydra: mother / 6 heads: grow to 7 | universfield-wet-squelch-276679.mp3 | whole file | 2.33 s | 0.3 | 0 ms (no timing) | Nature (spellChispasGreen_8), muted | - |
+| Midas: rainbow orbs | dragon-studio-bubble-gum-popping-467465.mp3 | whole file | 0.87 s (speed 1.6x, extend 1x) | 0.3 | 0 ms (blow lands at 1200 ms, the move lasts 2700 ms) | Nature (spellChispasGreen_8), heard | - |
+| Midas: golden rays | dragon-studio-eerie-resonant-tone-478368.mp3 | whole file | 3.12 s | 0.3 | 0 ms (blow lands at 1100 ms, the move lasts 2600 ms) | Thunder (spellChispasReddish_8), muted | Remember that this spell needs to be changed in the code, this is a Midas healing spell, not an attack spell |
+| Midas: golden touch | dragon-studio-glass-wail-570451.mp3 | whole file | 1.41 s | 0.3 | 0 ms (blow lands at 1100 ms, the move lasts 2600 ms) | Frost (spellChispasBlue_8), heard | this school need to be changed, perhaps holy or something, now is kinda shock/electric. Landing sound will change as well |
+| Rojo: slam | dragon-studio-elemental-spell-impact-flame-448566.mp3 | 0.000 s to 2.541 s | 2.54 s | 0.3 (fade in 0, out 140 ms) | 0 ms (blow lands at 1300 ms, the move lasts 2600 ms) | Physical (spellPush9), heard | - |
+| Rojo: flaming punch | dragon-studio-elemental-spell-impact-flame-448566.mp3 | 2.559 s to 5.592 s | 3.03 s | 0.3 | 0 ms (blow lands at 1000 ms, the move lasts 2300 ms) | Physical (spellPush10), heard | - |
+| Cuboq: spit | dragon-studio-clean-minimal-pop-467466.mp3 | whole file | 3.63 s (speed 0.45x, extend 1x) | 0.3 | 0 ms (blow lands at 1100 ms, the move lasts 2400 ms) | Nature (spellPoisson_8), heard | - |
+| Skeleton: great slash | dragon-studio-simple-whoosh-copyright-free-631457.mp3 | whole file | 1.04 s | 0.3 | 740 ms (blow lands at 900 ms, the move lasts 1900 ms) | Arcane (spellPush2), heard | - |
+| Skeleton: curse | freesound_community-deathmagic-94937.mp3 | whole file | 8.02 s | 0.3 | -1140 ms (blow lands at 1300 ms, the move lasts 3000 ms) | Arcane (spellRainPurple_24), muted | This is a curse spell, need to work kinda like hemoragie, no need landing sound, change school is needed |
+| Rainbow: ice spikes | dragon-studio-glass-cracking-504028.mp3 | whole file | 2.62 s (speed 0.65x, extend 1x) | 0.3 | 0 ms (blow lands at 1100 ms, the move lasts 2500 ms) | Frost (spellPush8), heard | - |
+| Rainbow: blizzard | dragon-studio-freezing-winter-wind-499654.mp3 | 0.000 s to 2.200 s | 2.20 s | 0.3 (fade in 0, out 1000 ms) | 0 ms (blow lands at 1000 ms, the move lasts 2400 ms) | Frost (spellChispasBlue_8), heard | - |
+| Fenix: fire breath | dragon-studio-fire-spell-impact-393921.mp3 | whole file | 2.90 s | 0.3 | 0 ms (blow lands at 1100 ms, the move lasts 2500 ms) | Fire (spellPush4), heard | - |
+| Fenix: wing flap | dragon-studio-bush-rustling-467467.mp3 | whole file | 3.09 s (speed 0.45x, extend 1x) | 0.3 | 0 ms (blow lands at 1200 ms, the move lasts 2700 ms) | Fire (spellChispasRed_8), heard | - |
+| Fenix: flame pillar | dragon-studio-elemental-spell-impact-flame-448566.mp3 | 0.000 s to 2.200 s | 2.20 s | 0.3 (fade in 0, out 870 ms) | 0 ms (blow lands at 1000 ms, the move lasts 2400 ms) | Fire (spellRainRed_24), heard | - |
+| Protromus: earth spikes | dragon-studio-colossal-footsteps-467495.mp3 | whole file | 3.46 s (speed 2.55x, extend 1x) | 0.82 | 0 ms (blow lands at 1400 ms, the move lasts 2800 ms) | Nature (spellEarthSpike_10), heard | - |
+| Goro: flurry | dragon-studio-beast-growl-sound-376873.mp3 | whole file | 1.04 s (speed 1.05x, extend 1x) | 0.3 | 0 ms (blow lands at 700 ms, the move lasts 1200 ms) | Physical (spellPush10), heard | - |
+| Goro: slam | dragon-studio-heavy-boulder-thud-515257.mp3 | whole file | 2.11 s | 0.3 | 0 ms (blow lands at 600 ms, the move lasts 1100 ms) | Physical (spellPush6), heard | - |
+| Goro: charge | dragon-studio-heavy-boulder-thud-515257.mp3 | 0.343 s to 0.678 s | 0.80 s (speed 1.25x, extend 3x) | 0.3 | 0 ms (blow lands at 700 ms, the move lasts 1800 ms) | Physical (spellPush9), heard | - |
+| Infraespectro: arcane flare | dragon-studio-creepy-sound-effect-570459.mp3 | 0.000 s to 1.702 s | 1.70 s | 0.3 (fade in 0, out 810 ms) | 0 ms (blow lands at 1000 ms, the move lasts 2400 ms) | Shadow (spellWhiteMaldicion_8), heard | - |
+| Infraespectro: phase | dragon-studio-velvet-whoosh-sfx-570450.mp3 | 0.000 s to 0.473 s | 0.68 s (speed 0.7x, extend 1x) | 0.3 | 0 ms (blow lands at 600 ms, the move lasts 1100 ms) | Arcane (spellChispasWhite_8), heard | Perhaps reclasify this to adjust landing sound |
+| Herbus: vines | yodguard-bouncy_jelly_creature_movement-387893.mp3 | 0.000 s to 1.132 s | 2.83 s (speed 0.4x, extend 1x) | 0.3 | 0 ms (blow lands at 1000 ms, the move lasts 2400 ms) | Nature (spellChispasGreen_8), heard | - |
+| Herbus: spores | dragon-studio-sand-transition-451861.mp3 | 0.000 s to 2.400 s | 2.82 s (speed 0.85x, extend 1x) | 0.3 (fade in 0, out 500 ms) | -360 ms (blow lands at 1000 ms, the move lasts 2400 ms) | Nature (spellPoisson_8), heard | - |
+| Arcangel: lightning | dragon-studio-thunder-4-631461.mp3 | 0.000 s to 2.233 s | 2.23 s | 0.3 (fade in 0, out 810 ms) | 0 ms (blow lands at 900 ms, the move lasts 2200 ms) | Thunder (spellChispasReddish_8), heard | - |
+
 ## Still to choose
 
 One by one, in the game's dev mode for sounds (its list is `src/dev/soundNeeds.js`).
@@ -70,21 +107,13 @@ One by one, in the game's dev mode for sounds (its list is `src/dev/soundNeeds.j
 | Who | Moves |
 |---|---|
 | Regular enemies | slam (Golem) |
-| Infraespectro | arcane flare, phase |
-| Doria | sonic boom, arcane rain, rune circle |
-| Goro | flurry, slam, charge |
+| Doria | arcane rain |
 | Kkck | poison cloud |
-| Protromus | earth spikes |
-| Midas | golden touch, rainbow orbs, golden rays |
-| Herbus | vines, spores |
-| Cuboq | spit |
-| Skeleton | great slash, curse, arcane rain |
-| Rainbow | blizzard, ice spikes |
-| Fenix | wing flap, fire breath, flame pillar |
+| Skeleton | arcane rain |
 | Medusa | poison strike |
-| Arcangel | lightning, golden storm |
+| Arcangel | golden storm |
 | Etymos | prism pulse, colour burst |
-| Rojo | flaming punch, fire rain, slam (fire peak) |
+| Rojo | fire rain |
 | Hydras | strike (Swamp, ice, Dunes), frost breath. On hold: the author wants new sounds for the hydras |
 | Scene spells no boss casts yet | whirlwind, eclipse, divine light, healing rain |
 | Dice game | the roll: `snd/places/dice.ogg` is 2.07 s and the dice animation now lasts 1.44 s (18 frames of 80 ms), with a new roll possible every 1.5 s. Wanted: about 1.2 to 1.4 s, the clatter early and the dice settled by the end (the author's playtest note, 2026-11-14) |
