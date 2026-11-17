@@ -551,3 +551,8 @@ its own sound instead of sharing its school's.
 Date: 2026-11-15 00:17
 Author's note: if a wizard is killed and the dev console is open, the game never appears, just the dev console
 ```
+
+```
+Date: 2026-11-15 11:18
+Author's note: Sometimes before the enemy enters the sprite is loaded in the regular position, disapear and the eneme enters. This is a bug
+```

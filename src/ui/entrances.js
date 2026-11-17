@@ -9,7 +9,7 @@
 import { run, ui } from '../runtime.js';
 import { state } from '../state.js';
 import * as loop from '../loop.js';
-import { drawFrame, imageNow, loadNPC, npcBox, npcCanvas, pixelContext } from './render.js';
+import { cancelNPCDraw, drawFrame, imageNow, loadNPC, npcBox, npcCanvas, pixelContext } from './render.js';
 import { art } from '../media.js';
 
 // Families by how they arrive (walk is the default).
@@ -75,6 +75,7 @@ export function playEntrance(done) {
     const npc = state.npc;
     if (run.simulation || !document.hasFocus() || !npc) return done && done();
     const kind = entranceKind(npc), total = FRAMES[kind];
+    cancelNPCDraw();                                // the sprite must not pop up in its place mid-arrival
     imageNow(art(`${npc}`));
     imageNow(art(`fx_dust`));
     loop.freezeGame();

@@ -637,6 +637,12 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     });
 }
 
+// Drop loadNPC's draw that is still waiting for its image (an arrival draws the enemy itself;
+// otherwise the image could land mid-arrival and show the enemy in its place for a moment).
+function cancelNPCDraw() {
+    latestDraw.npc = (latestDraw.npc || 0) + 1;
+}
+
 // A hydra grows its next head (the artist's strips img/anim_<hydra>_grow<N>.png, from N heads
 // to N+1, frames the size of the hydra sprite), drawn where the hydra is.
 function playHydraGrow(hydra, fromHeads) {
@@ -713,6 +719,7 @@ export {
     leavePlace,
     walkThroughScene,
     npcBox,
+    cancelNPCDraw,
     looksRandom,
     showBlink,
     walkWizardTo,

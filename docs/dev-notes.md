@@ -40,11 +40,6 @@ Author's note: for dev console, a button that say, camputre moment, so the tecni
 ```
 
 ```
-Date: 2026-11-15 11:18
-Author's note: Sometimes before the enemy enters the sprite is loaded in the regular position, disapear and the eneme enters. This is a bug
-```
-
-```
 Date: 2026-11-15 11:20
 Author's note: for @artist, in the dinamic scenes we need to be sure that the path of the wizard is never blocked. we can also include a ontop layer to put decorations that are close to the screen, so the wizard can pass behind them
 ```

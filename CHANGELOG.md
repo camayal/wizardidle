@@ -26,6 +26,7 @@
 - Fixed (dev tools): after killing a wizard, or on a first visit, the name screen stayed hidden and only the dev panel showed.
 - Fixed: stray lines left by spell effects, blank flashes between images, a blank wizard while praying.
 - Fixed: scroll text overflowing past the bottom bar.
+- Fixed: an arriving enemy could flash in its place, vanish, and only then come in.
 - Dev: a stats module, a seeded simulation mode with god bots, and `tools/playtest.py` for playtests (with results in `docs/playtests/`).
 - Dev: the rules for new files: files from outside are renamed to the game's short style before they come in; their source and licence go in the docs.
 - Images and sounds organized in folders (wizard, enemies by family, bosses, effects, places by zone, story, objects, interface; sounds by kind); unused leftover files removed.

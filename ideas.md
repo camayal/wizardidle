@@ -258,6 +258,9 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Journal
 
+### 2026-11-17: Enemy flash before its arrival
+- Author's note (2026-11-15): an enemy sometimes showed in its place, vanished, then came in. Cause: when its image was not loaded yet, loadNPC's draw waited for the load and landed in the middle of the arrival. Now `playEntrance()` cancels that pending draw (`cancelNPCDraw()` in render.js); the arrival draws the enemy itself and puts it in place at the end. Checked that the game loads clean in headless Edge.
+
 ### 2026-11-17: Name screen hidden behind the dev tools
 - Author's note (2026-11-15): after a kill with the dev tools on, only the dev panel showed. Cause: with DEV, main.js starts the game after the dev tools load, which can be after the page's load event; `initialName()` then hid the name screen and no layout showed it again. Now `initialName()` runs the layout for a new wizard. Checked with a fresh visit in headless Edge.
 
