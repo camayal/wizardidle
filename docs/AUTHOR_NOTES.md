@@ -2,9 +2,8 @@
 
 [~] some new enemy attacks need some sounds, check which can be reused, and what other should I find (checked: docs/SOUNDS.md lists the reusable sounds and the 10 to find; wiring waits for your OK)
 [~] (decided: two meters, faith = currency, belief = its own meter moved by moments; in docs/FAITH.md, the planner details it, then dev builds) implement the levels of believe. i think other than faith they should be included, for example a wizard where the player interact with him a lot in the best moments are better (heal in critical moments, final blow to enemies, etc), that should influence the amount of faith it gets. normal heals, normal attacks can improve the believe but in a minimum scale. obviously no revival will reduce a lot. we can think in creating to tier or faith, + number - numbers, in the story it will be modifies to some points to -inf (symbol) or we can came up with a more manable number, perhaps a different idea than a "currency" which is the current state.
-[] poison cloud scene spell is quite anoying is not disapearing, we need a better way to disapeer it, kind of disipating.
-[] arrows need to be faster
-[] still flickery with some wizard animation, when it will start walking for example
+[x] ~~poison cloud scene spell is quite anoying is not disapearing, we need a better way to disapeer it, kind of disipating.~~ (done: it was every scene spell, rains too, now and then; they rode on the enemy animation clock, other animations replaced it and nothing wiped them; now they run on their own clock and wipe themselves however they end)
+[x] ~~arrows need to be faster~~ (done: 60 px every 50 ms, was 36; the flight takes 3 frames instead of 4)
 [] cemeentery each wizard should ahve a tumb with their name and perhaps age, touch extend information.  ERASURE follow rules, i think it is invert and crossed name and perhaps a cracked tomb. maybe 4 to 5 tombs desings with each one cracked just in case.
 [] dice sounds are not nicely sync send to @musician
 [] create scenes that are the end of one ad the beginon of the otherone.

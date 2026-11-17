@@ -65,6 +65,30 @@ function drawSceneFrame(layer, spell, s, frames) {
     ctx.restore();
 }
 
+// Play a scene spell on its own clock, from `delay` frames from now; it wipes itself however it
+// ends (the author saw rains and the poison cloud stay forever: they used to ride on the enemy's
+// animation clock, which other animations replace, and then nothing ever cleared them).
+// onFrame(s) runs every frame with the spell's frame number.
+function runSceneSpell(name, frames, delay = 0, onFrame = () => {}) {
+    const scene = art(`scene_${name}`), quake = name == "earthquake";
+    imageNow(scene);
+    const layer = sceneLayer();
+    let s = -delay;
+    const wipe = () => {
+        layer.getContext("2d").clearRect(0, 0, layer.width, layer.height);
+        if (quake) shakeScene(0);
+    };
+    const next = () => {
+        if (s >= frames + DISSIPATE) return loop.stop("animScene");
+        drawSceneFrame(layer, imageNow(scene), s, frames);
+        if (quake) shakeScene(s >= 0 && s < SHAKE.length ? SHAKE[s] : 0);
+        onFrame(s);
+        s++;
+    };
+    next();
+    loop.every("animScene", next, 100, wipe);
+}
+
 // Medusa's gaze: the wizard turns to stone, stays a while, then breaks free.
 function petrify() {
     ui.petrified = true;
@@ -90,23 +114,9 @@ export function bossAttackTiming(boss, id) {
 // A scene spell alone over the scene (for the sounds: spells no boss casts yet); onHit runs
 // halfway through, where a boss's blow would land.
 export function playSceneSpell(name, onHit = () => {}) {
-    const frames = sceneSpells[name], scene = art(`scene_${name}`);
+    const frames = sceneSpells[name];
     if (run.simulation || !frames) return onHit();
-    imageNow(scene);
-    const layer = sceneLayer();
-    let s = 0;
-    const next = () => {
-        if (s >= frames + DISSIPATE) {
-            loop.stop("animScene");
-            layer.getContext("2d").clearRect(0, 0, layer.width, layer.height);
-            return;
-        }
-        drawSceneFrame(layer, imageNow(scene), s, frames);
-        if (s == Math.floor(frames / 2)) onHit();
-        s++;
-    };
-    next();
-    loop.every("animScene", next, 100);
+    runSceneSpell(name, frames, 0, (s) => { if (s == Math.floor(frames / 2)) onHit(); });
 }
 
 export function sceneSpellTiming(name) {
@@ -135,15 +145,13 @@ export function playBossAttack(boss, chosen, stone, onHit) {
         : attack.path ? attack.path.indexOf(Math.min(...attack.path)) : Math.floor(attack.frames * 0.6);
     const [bx, by, bw] = npcBox(boss);
     const k = bw / 64;                                  // screen px per art px
-    const layer = scene ? sceneLayer() : null;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
+    if (scene) runSceneSpell(attack.scene, sceneFrames, attack.sceneAt);
     let i = 0;
     const next = () => {
         if (i >= total || state.npc != boss) {           // done, or the boss is gone
             loop.stop("animNPC");
-            shakeScene(0);
-            if (layer) layer.getContext("2d").clearRect(0, 0, layer.width, layer.height);
             land();
             if (state.npc == boss) loadNPC(boss);
             return;
@@ -155,11 +163,6 @@ export function playBossAttack(boss, chosen, stone, onHit) {
             const ctx = pixelContext(npcCanvas);
             ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             drawFrame(ctx, img, f * FW, 0, FW, FH, bx - 36 * k + dx, by - 12 * k, FW * k, FH * k);
-        }
-        if (layer) {
-            const s = i - attack.sceneAt;
-            drawSceneFrame(layer, imageNow(scene), s, sceneFrames);
-            if (attack.scene == "earthquake") shakeScene(s >= 0 && s < SHAKE.length ? SHAKE[s] : 0);
         }
         if (stone && attack.wizard && attack.wizard[0] == "petrify" && i == attack.wizard[1] && !fight.pjDead) petrify();
         if (i == hitAt) land();
@@ -246,9 +249,9 @@ export function playHydraAttack(spellId, onHit, castNow) {
     const scene = cast ? art(`scene_${match[1]}`) : null, sceneFrames = cast ? sceneSpells[match[1]] : 0;
     imageNow(strip);
     if (scene) imageNow(scene);
-    const layer = scene ? sceneLayer() : null;
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
+    if (scene) runSceneSpell(match[1], sceneFrames, CAST_SCENE_AT);
     let i = 0, frames = 0;
     const next = () => {
         const img = imageNow(strip);
@@ -257,12 +260,10 @@ export function playHydraAttack(spellId, onHit, castNow) {
         const hitAt = cast ? CAST_SCENE_AT + Math.floor(sceneFrames / 2) : Math.floor(total * 0.6);
         if (i >= total || state.npc != npc) {
             loop.stop("animNPC");
-            if (layer) layer.getContext("2d").clearRect(0, 0, layer.width, layer.height);
             land();
             return;                                 // the idle weaving takes over again
         }
         if (img) drawHydraFrame(npc, strip, Math.min(i, (frames || 1) - 1));
-        if (layer) drawSceneFrame(layer, imageNow(scene), i - CAST_SCENE_AT, sceneFrames);
         if (i == hitAt) land();
         i++;
     };

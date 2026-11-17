@@ -13,6 +13,9 @@
 //   every("master", event, 1500)   call event() every 1.5 s
 //   stop("master")
 //   stopAll()
+//
+// A clock can carry an onEnd clean-up: it runs however the clock ends (stopped, replaced by a
+// clock of the same name, or stopAll), so a drawing that was cut short is still wiped.
 
 const TICK_MS = 50;
 const clocks = new Map();   // name -> { fn, ms, due }
@@ -65,17 +68,29 @@ export function getSpeed() {
     return speed;
 }
 
-export function every(name, fn, ms) {
-    clocks.set(name, { fn, ms, due: now() + ms / speed });
+function ended(clock) {
+    if (clock && clock.onEnd) {
+        try { clock.onEnd(); } catch (error) { setTimeout(() => { throw error; }); }
+    }
+}
+
+export function every(name, fn, ms, onEnd) {
+    const old = clocks.get(name);
+    clocks.set(name, { fn, ms, due: now() + ms / speed, onEnd });
+    ended(old);
 }
 
 export function stop(name) {
+    const old = clocks.get(name);
     clocks.delete(name);
+    ended(old);
 }
 
 export function stopAll() {
+    const old = [...clocks.values()];
     clocks.clear();
     frozen = 0;
+    old.forEach(ended);
 }
 
 export function isRunning(name) {

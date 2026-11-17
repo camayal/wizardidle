@@ -43,9 +43,9 @@ const WIZARD_DISTANCE = 160;        // sprite px from the enemy's box to the wiz
 // shoot, thrust, smash and charge are the artist's.
 function frames(kind, school) {
     const f = (dx = 0, dy = 0, sx = 1, sy = 1, fx = null, shake = 0) => ({ dx, dy, sx, sy, fx, shake });
-    if (kind == "shoot") {          // draw, release, recoil; the arrow flies 36 px every 50 ms to the wizard
-        const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];      // (the author: arrows were too slow at 16 px / 100 ms)
-        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 36) seq.push({ ...f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]), ms: 50 });
+    if (kind == "shoot") {          // draw, release, recoil; the arrow flies 60 px every 50 ms to the wizard
+        const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];      // (the author: too slow at 16 px / 100 ms, then at 36 px / 50 ms)
+        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 60) seq.push({ ...f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]), ms: 50 });
         seq[seq.length - 1].hit = true;
         seq.push(f());
         return seq;

@@ -1348,3 +1348,6 @@ Frame 1 / 1 (1664 x 56 px), zoom x2, backdrop mid
 Date: 2026-11-15 16:12
 Author's note: @dev art console is quite confusing.  please clear things  up
 ```
+
+### 2026-11-17: Records retired, achievements dated
+- The author's two dev notes: the Records page and its tab are removed from the stats scroll (the stats it read stay; the Stats page and achievements use them). An achievement now stores the time it was won and the list shows it in small grey text; ones won before this show no date. Also ticked the breakables item in AUTHOR_NOTES (fixed earlier, never ticked). Checked by a headless playtest (3 seeds to level 40, no errors); the scrolls were not opened in a browser.
