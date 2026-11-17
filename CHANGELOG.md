@@ -31,7 +31,7 @@
 - Dev: sounds mode sliders beside the number boxes, and Add folder: a list of the folder's sounds, each played by moving with the arrow keys.
 - Dev: a sounds mode: any scene played by the game with any sound, cut, extended, sped up, faded and timed against the blow, with the landing sound; a list of the moves still needing a sound.
 - Dev: an art mode: any scene at any tier in slow motion, edited art reloaded without a reload, a local PNG tried in place of a game image, and a frame-by-frame viewer (game size and big, two files side by side, all tiers, grid, ghost, feet line).
-- Dev: an author notes box that fills in the test's details by itself, with a comment, Copy, and Save to file (`docs/<mode>-notes.md` through `tools/serve.py`).
+- Dev: an author notes box: a comment with the date, Copy, Save to file (`docs/<mode>-notes.md` through `tools/serve.py`, then clears), and "Capture moment" to freeze the test's details into the note.
 - Dev: the game waits while its window is hidden or minimized.
 - Dev: a review drop: the sessions' newest art and sounds listed in the art and sounds modes; "In scene" plays new art in its real scene, in place of the game image.
 - Fixed: a spell effect whose image was already loaded could crash (the dice's second roll).

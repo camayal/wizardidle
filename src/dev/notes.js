@@ -5,7 +5,10 @@
 // Copy puts both on the clipboard to paste to whoever needs it. "Save to file" also appends it
 // to docs/<mode>-notes.md through tools/serve.py.
 
-let source = () => '', area, details, comment, status, kind = 'dev';
+// 2026-11-17: a note carries only the date and the comment. The technical details go in only
+// after "Capture moment", which freezes them until Save to file or Clear. Save also clears the comment.
+
+let source = () => '', area, details, comment, status, captureBtn, kind = 'dev', captured = null;
 
 // The open mode says what its details are (a function, read when the box refreshes).
 export function setNoteSource(fn, mode = 'dev') {
@@ -17,7 +20,24 @@ export function setNoteSource(fn, mode = 'dev') {
 }
 
 export function refreshNote() {
-    if (details) details.value = source() || '(nothing open: pick a mode or a scene)';
+    if (details && captured == null) details.value = source() || '(nothing open: pick a mode or a scene)';
+}
+
+// Freeze the details as they are now; they go into the note.
+function capture() {
+    captured = null;
+    refreshNote();
+    captured = details.value;
+    captureBtn.textContent = 'Captured (in the note)';
+    status.textContent = 'Moment captured: it stays until Save to file or Clear.';
+}
+
+// Back to a plain note: comment empty, details live again and left out.
+function reset() {
+    comment.value = '';
+    captured = null;
+    captureBtn.textContent = 'Capture moment';
+    refreshNote();
 }
 
 function stamp() {
@@ -26,8 +46,8 @@ function stamp() {
 }
 
 function noteText() {
-    refreshNote();
-    return `${details.value}\nDate: ${stamp()}\nAuthor's note: ${comment.value.trim() || '-'}`;
+    const head = captured != null ? `${captured}\n` : '';
+    return `${head}Date: ${stamp()}\nAuthor's note: ${comment.value.trim() || '-'}`;
 }
 
 async function copyNote() {
@@ -50,6 +70,7 @@ async function saveNote() {
     try {
         const r = await fetch(`notes/${kind}`, { method: 'POST', headers: { 'Content-Type': 'text/plain; charset=utf-8' }, body: text });
         if (!r.ok) throw new Error(r.status);
+        reset();
         status.textContent = `Saved to docs/${kind}-notes.md.`;
     } catch (e) {
         status.textContent = 'Not saved (the game is not served by tools/serve.py): use Copy.';
@@ -64,14 +85,16 @@ export function buildNotesBox(container) {
         <div class="devSub">Author notes</div>
         <textarea data-n="details" readonly title="Filled in by itself"></textarea>
         <textarea data-n="comment" placeholder="Your comment"></textarea>
-        <div class="row"><button data-n="copy">Copy</button><button data-n="save">Save to file</button>
-            <button data-n="clear">Clear comment</button><span class="muted" data-n="status"></span></div>`;
+        <div class="row"><button data-n="capture">Capture moment</button><button data-n="copy">Copy</button>
+            <button data-n="save">Save to file</button><button data-n="clear">Clear</button>
+            <span class="muted" data-n="status"></span></div>`;
     container.appendChild(area);
     const n = (name) => area.querySelector(`[data-n=${name}]`);
-    details = n('details'); comment = n('comment'); status = n('status');
+    details = n('details'); comment = n('comment'); status = n('status'); captureBtn = n('capture');
     details.style.height = '7.5em';
+    captureBtn.onclick = capture;
     n('copy').onclick = copyNote;
     n('save').onclick = saveNote;
-    n('clear').onclick = () => { comment.value = ''; status.textContent = ''; };
+    n('clear').onclick = () => { reset(); status.textContent = ''; };
     refreshNote();
 }
