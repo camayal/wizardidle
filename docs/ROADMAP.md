@@ -1,6 +1,6 @@
 # Roadmap
 
-Work happens on `dev`; `main` is the live site and only gets playable versions. Each stage starts when the one before it is done.
+Work happens on `dev-repo`; `main` is the live site and only gets playable versions. Each stage starts when the one before it is done.
 
 ## 1. Clean up the code (done 2026-11-11)
 

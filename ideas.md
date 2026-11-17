@@ -9,7 +9,7 @@ The index of Wizard Idle v2: where the project stands, one line per idea, and th
 
 ## Where we are
 
-- **Branch:** `dev` (v2 work). `main` is the live site, so merge only when playable.
+- **Branch:** `dev-repo` (v2 work). `main` is the live site, so merge only when playable.
 - **Released:** 2.1.0 live since 2026-11-12 (stages 1 and 2: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the faith stats and playtests ([FAITH.md](docs/FAITH.md)); then the story with the faith rebalance.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.1.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (dev, shown as 2.2.0-dev)
+## Unreleased (dev-repo, shown as 2.2.0-dev)
 
 - Lighter notes: ideas.md is a short index, idea text sits by topic in docs/ideas/, decisions in docs/DECISIONS.md, one notes inbox per role; the approved boss and hydra sounds are recorded in SOUNDS.md and gone from the dev tools' "needs a sound" list.
 - A file map, docs/MAP.md: what every file does, how the parts connect, media and dev-tools rules, for anyone starting work.
