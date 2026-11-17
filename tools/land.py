@@ -18,8 +18,15 @@ SKIP = ('dev-repo', 'main', 'legacy/1.x', 'HEAD')
 TARGET = 'dev-repo'
 
 
+# A hook runs with GIT_DIR and friends pointing at the working folder that committed; left in,
+# every git call (even one run in the main folder) would ask that folder instead, and the main
+# folder looked "not on dev-repo" after every commit.
+CLEAN_ENV = {k: v for k, v in os.environ.items()
+             if k not in ('GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_PREFIX', 'GIT_COMMON_DIR')}
+
+
 def git(*args, cwd=None, check=True):
-    r = subprocess.run(['git', *args], cwd=cwd, capture_output=True)
+    r = subprocess.run(['git', *args], cwd=cwd, capture_output=True, env=CLEAN_ENV)
     if check and r.returncode:
         raise RuntimeError(r.stderr.decode('utf-8', 'replace').strip() or f'git {args[0]} failed')
     return r
