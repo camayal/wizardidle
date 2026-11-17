@@ -37,7 +37,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - zones.js: zones, stages, their enemies, boss, destinations.
 - spells.js: spell sprite sheets (name_frames), school, display name.
 - bossAttacks.js: each boss's attacks, frame counts, scene spell and its start frame.
-- achievements.js: achievement list. dreams.js: placeholder dream lines (docs/SLEEP.md).
+- achievements.js: achievement list. dreams.js: the dream pool (docs/SLEEP.md). src/dream.js picks tonight's dream (shuffle bags) and applies its belief effect.
 
 ## src/ui/ (drawing and menus)
 

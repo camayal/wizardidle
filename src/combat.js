@@ -204,6 +204,7 @@ function scheduleSelfRevive() {
         loop.stop("selfRevive");
         run.previousEvent = "autorevive";
         fight.autorevive = "";
+        run.fallBy = "alone";
         beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
         const faithLost = state.player.hpBase * 1.2454654;
         state.player.faith = state.player.faith - faithLost;

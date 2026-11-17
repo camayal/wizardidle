@@ -20,7 +20,7 @@ import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, 
 import { counterText } from './ui/scrolls.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
-import { dreams } from './data/dreams.js';
+import { pickDream } from './dream.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 
 //define statueobj
@@ -211,6 +211,7 @@ function reviveEV(){
         stats.count(`explore.zone.${randomLocality}`);
         print(`${wizardName()} leaves the healer's cabin`)
         stats.count("death.healer");
+        run.fallBy = "healer";
         endEvent();
         run.disablePjBtn = false;
         leavePlace(showStage, nextEvent);
@@ -520,30 +521,13 @@ function arriveToRest(placesWithInn) {
 // his place. Offsets in scene px from his place.
 const INN_MIDDLE = 80, CAMP_WALK = 36, SLOW_STEP = 5;
 
-// A dream for tonight, or none: a story dream on the first rest after a fall or a chapter,
-// otherwise now and then a random dream (more for believers) or nightmare (more for doubters).
-// Looks only: picked with looksRandom, never the game's Math.random, and only when it is shown.
-function pickDream() {
-    const pick = (list) => list[Math.floor(looksRandom() * list.length)];
-    if (run.storyDream) {
-        const kind = run.storyDream;
-        run.storyDream = "";
-        stats.count("dream.story");
-        return { lines: pick(dreams[kind]), nightmare: kind == "fall" };
-    }
-    if (looksRandom() >= config.balance.dreamChance) return null;
-    const nightmare = looksRandom() < (state.player.faith > 0 ? 0.25 : 0.75);
-    stats.count(nightmare ? "nightmare.random" : "dream.random");
-    return { lines: pick(dreams[nightmare ? "nightmare" : "dream"]), nightmare };
-}
-
 // He walks (slowly into the inn, or a few steps to camp, laying the bag), the sleep spell, the
 // dark (with tonight's dream, kept in the console too); at full dark he is put back in his place
 // and the bag is packed. Without drawing (simulation, page in the background) none of it plays.
 function goToBed(placesWithInn) {
     stats.count(placesWithInn ? "sleep.inn" : "sleep.camping");
+    const dream = pickDream();      // the choice and its belief effect run drawn or not (src/dream.js)
     if (run.simulation || !document.hasFocus()) return spell("spellSleep_24", true);
-    const dream = pickDream();
     const lieDown = () => {
         if (!placesWithInn) {
             ui.bagSpot = 32 + ui.wizardOffset + 20;     // just in front of him

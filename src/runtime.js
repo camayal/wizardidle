@@ -24,6 +24,7 @@ export const fight = {
     polymorphedAnimal: undefined,
     pjDead: undefined,             // the wizard has fallen
     autorevive: undefined,         // timer for the wizard's self-revive
+    fallBy: "alone",               // who got him up after the last fall: "healer", "rescuer" or "alone"
     storyDream: "",                // the next rest has a story dream: "fall" or "chapter" (docs/SLEEP.md)
     stoneTurns: 0,                 // boss effects (src/bossEffects.js): turns left as stone,
     skipAttack: false,             //   the blizzard's lost attack, the quake's missed spell,

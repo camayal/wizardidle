@@ -2,6 +2,7 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- Dreams: some dreams raise belief (+1 Devout or Believer, +2 Doubter, +3 Atheist; callings for the doubting), nightmares can shake a Believer or Devout a little but never below the Believer line; the full pool of 56 dreams, none repeats until its whole pool has played, and they happen in the background too.
 - Lighter notes: ideas.md is a short index, idea text sits by topic in docs/ideas/, decisions in docs/DECISIONS.md, one notes inbox per role; the approved boss and hydra sounds are recorded in SOUNDS.md and gone from the dev tools' "needs a sound" list.
 - A file map, docs/MAP.md: what every file does, how the parts connect, media and dev-tools rules, for anyone starting work.
 - Wizard animations from the artist: casting (with a spark by school, or a staff slash), walking, praying, falling, true death, turned to stone and breaking free, at every tier.

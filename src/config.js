@@ -27,7 +27,13 @@ export const config = {
             closeCall: 1,                      // he wins a fight below 10% HP with no help from the god
             roseAlone: -10,                    // he got up without the god, as a Believer or Devout
             roseAloneDoubting: -1,             //   ... as a Doubter or Atheist
+            dreamDevout: 1,                    // a belief dream (docs/SLEEP.md), by his level when he dreams it
+            dreamBeliever: 1,
+            dreamDoubter: 2,
+            dreamAtheist: 3,                   //   (none while belief is lost)
+            nightmare: -1,                     // a nightmare, only while Believer or Devout, never below nightmareFloor
         },
+        nightmareFloor: 0,                     // a nightmare never takes belief below this (the Believer line)
         closeCallLine: 0.1,
         superCriticChance: 0.1,                // 1 in 10 of the god's critics (the author)
         superCriticMultiplier: 16,             // against x8 for a critic
@@ -45,7 +51,10 @@ export const config = {
         pGetBoss: 0.015,           // chance a fight is against the zone boss
         pGetGuardian: 0.1,         // megabosses
         pGetStatue: 0.08,
-        dreamChance: 0.05,         // a rest has a random dream or nightmare (looks only, docs/SLEEP.md); was 0.15, too frequent
+        dreamChance: 0.05,         // a rest has a random dream or nightmare (docs/SLEEP.md); was 0.15, too frequent
+        dreamBelieverNightmare: 0.25,  // share of dream nights that are nightmares for a Believer or Devout
+        dreamDoubterNightmare: 0.75,   //   ... for a Doubter or Atheist
+        echoDreamChance: 0.25,         // after an erasure, share of random dreams taken from the echo pool
         pGetHydra: 0.1,            // only once the hydra mystery is solved
         pDados: 0.1,               // was 0.2: too easy to get stuck in the dice game
         allowChangeZone: 1,        // 1 = use pChangeZone as is, 0 = never change zone

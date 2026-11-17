@@ -53,6 +53,8 @@ function newState() {
             last: 'la_Torre',
             stage: Math.floor((Math.random() * MAXSTAGES) + 1),
         },
+        dreamBags: {},                // dream pool -> ids still to play, shuffled (src/dream.js)
+        dreamLast: {},                // dream pool -> the dream played last
         npc: '',                      // sprite currently on the right side of the scene
         forceEvent: '',               // debug: comma-separated event numbers to force
         hydraMysteryResolved: false,
