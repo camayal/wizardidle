@@ -148,3 +148,8 @@ Author's note: @artist going into battle animations for hycras should be special
 Date: 2026-11-15 16:43
 Author's note: @artist, comming from the ground generalized animation need to be a little more expresive
 ```
+
+```
+Date: 2026-11-17 06:58
+Author's note: healer teleport is quite rudimentary, we can use the metod we use in entrance wizards but in reverse to vanish him
+```
