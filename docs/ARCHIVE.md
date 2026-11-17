@@ -544,3 +544,10 @@ its own sound instead of sharing its school's.
 - Playtest `docs/playtests/2026-11-13-belief`: the active god plays as before; an idle god's wizard turns Atheist after about 9 falls alone (before level 25), never enters a shrine again and his faith ends deeply negative (-1.5M). For the author and the planner: intended road to atheism, or -10 too strong?
 - **Rest** (the author, through the artist: no beds or sleeping pose needed): at an inn he walks slowly to the middle and the scene goes dark; camping, he walks a few steps, the sleeping bag appears in front of him (no more bag at the enemy's place on arrival) and it goes dark; when the scene comes back he stands in his place, with no walk back. The stand-in bed spots are gone.
 - Tests: browser runs of the touches and of both rests; gameplay suite 0 errors.
+
+## 2026-11-17 from docs/dev-notes.md: fixed, name screen hidden behind the dev tools (fdbef4a)
+
+```
+Date: 2026-11-15 00:17
+Author's note: if a wizard is killed and the dev console is open, the game never appears, just the dev console
+```
