@@ -1,17 +1,14 @@
-// Wizard Idle v2 - the stats scroll: two pages, Stats and Records.
+// Wizard Idle v2 - the stats scroll.
 //
-// Stats is the curated page: a few lines per area, totals instead of long lists.
-// The other page's scroll peeks out above (ui/scrolls.js, stats scroll tabs).
-// Records shows this wizard's bests and firsts (with the level they happened at), a chart
-// of his journey, and numbers across every wizard of this world (src/stats.js).
+// The curated page: a few lines per area, totals instead of long lists.
 // Everything else that is recorded stays hidden, for achievements, quests and playtests.
-// Chosen by the author on 2026-11-12 from mockups (options A + B).
+// Chosen by the author on 2026-11-12 from mockups. The Records page was removed on
+// 2026-11-17 (the author: achievements do that job; past wizards live in the Cemetery).
 
 import { zones } from '../data/zones.js';
 import { roundNumbertoLetter } from '../utils.js';
-import { state, world } from '../state.js';
+import { state } from '../state.js';
 import { stats } from '../stats.js';
-import { ui } from '../runtime.js';
 import { countLogros, logro } from '../achievements.js';
 import { beliefLevel } from '../belief.js';
 
@@ -114,79 +111,11 @@ function achievementsSection() {
     return section('Achievements') + line('Currently won', won) + `Completion: ${Math.round((won / total) * 100)}%<br>`;
 }
 
-// ------------------------------------------------------------------ Records
-
-function best(key, label, unit = '') {
-    const record = state.stats[key];
-    return line(label, record ? `${n(record.value)}${unit}, at level ${record.lvl}` : 'not yet');
-}
-
-function first(key, label) {
-    const record = state.stats[key];
-    return line(label, record ? `level ${record.lvl}, after ${hoursText(record.playTimeMs)}` : 'not yet');
-}
-
-// Hours played to reach each level, as a small line chart.
-function journeyChart() {
-    const history = state.history;
-    if (history.length < 2) return 'Not much of a journey yet<br>';
-    const W = 300, H = 110, last = history[history.length - 1];
-    const maxHours = last.playTimeMs / 3600000 || 1;
-    const x = (lvl) => 10 + (lvl - history[0].lvl) / Math.max(1, last.lvl - history[0].lvl) * (W - 20);
-    const y = (ms) => H - 15 - (ms / 3600000) / maxHours * (H - 30);
-    const points = history.map((h) => `${x(h.lvl).toFixed(1)},${y(h.playTimeMs).toFixed(1)}`).join(' ');
-    return `<small>hours played to reach each level</small><br>` +
-        `<svg viewBox='0 0 ${W} ${H}' width='100%' style='max-width:${W}px'>` +
-        `<polyline points='${points}' fill='none' stroke='currentColor' stroke-width='2'/>` +
-        `<text x='10' y='${H - 2}' font-size='11' fill='currentColor'>level ${history[0].lvl}</text>` +
-        `<text x='${W - 70}' y='${H - 2}' font-size='11' fill='currentColor'>level ${last.lvl}</text>` +
-        `<text x='12' y='12' font-size='11' fill='currentColor'>${maxHours.toFixed(1)} h</text></svg><br>`;
-}
-
-function worldRecord(key, label, unit = '') {
-    const record = world.stats[key];
-    return line(label, record ? `${n(record.value)}${unit}${record.name ? ` (${record.name})` : ''}` : 'not yet');
-}
-
-function hallOfWizards() {
-    const alive = { name: state.player.name, lvl: state.player.lvl, age: state.player.age,
-        kills: stats.get('kill.enemies') + stats.get('kill.rare'), alive: true };
-    const all = [alive, ...world.cemetery].sort((a, b) => b.lvl - a.lvl);
-    return all.map((w) => `${w.name}: level ${n(w.lvl)}, ${n(w.age)} yrs` +
-        (w.kills !== undefined ? `, ${n(w.kills)} kills` : '') + (w.alive ? ' (alive)' : '') + '<br>').join('');
-}
-
-function recordsPage() {
-    const name = state.player.name;
-    const wizards = Math.max(stats.get('world.wizards'), world.cemetery.length + 1);
-    return section(`${name}'s bests`) +
-        best('combat.longestCombo', 'Longest flawless streak', ' fights') +
-        best('combat.biggestHit', 'Biggest hit') +
-        best('faith.highest', 'Most faith at once') +
-        best('belief.highest', 'Strongest belief') +
-        best('gold.highest', 'Richest', ' gold') +
-        section(`${name}'s firsts`) +
-        first('first.rareKill', 'First rare enemy') +
-        first('first.fall', 'First fall') +
-        first('first.bossKill', 'First boss defeated') +
-        (state.hydraMysteryResolved ? first('first.hydraKill', 'First hydra defeated') : '') +
-        section(`${name}'s journey`) + journeyChart() +
-        section('All your wizards') +
-        line('Wizards created', n(wizards)) +
-        line('Enemies defeated', n(stats.get('kill.enemies', { world: true }) + stats.get('kill.rare', { world: true }))) +
-        line('Falls', n(stats.get('death.falls', { world: true }))) +
-        worldRecord('world.highestLevel', 'Highest level ever') +
-        worldRecord('world.oldestAge', 'Oldest wizard', ' yrs') +
-        section('Hall of wizards') + hallOfWizards();
-}
-
 // ------------------------------------------------------------------ the page
 
 export function statsPageHtml(secondsInGame) {
-    const records = ui.scrollViews.stats == 'records';
-    return `<div id='stats'><span class='titles' id='titleStats'>${records ? 'Records' : 'Stats'}</span>` +
-        (records ? recordsPage()
-            : wizardSection(secondsInGame) + battlesSection() + magicSection() + travelsSection() +
-              goldSection() + faithSection() + achievementsSection()) +
+    return "<div id='stats'><span class='titles' id='titleStats'>Stats</span>" +
+        wizardSection(secondsInGame) + battlesSection() + magicSection() + travelsSection() +
+        goldSection() + faithSection() + achievementsSection() +
         '</div>';
 }

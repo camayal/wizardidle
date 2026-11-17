@@ -1277,3 +1277,20 @@ Author's note: sometime when wizar is exploring he walks to reach the same scene
 
 ### 2026-11-17: Art mode reworked
 - Author's request: the art console was messy. Files are one table (name, what it replaces, Scene / Alt / View); game files are picked by folder or search; the alt scene sits where the console was and replays a recording of the same scene with the Alt file (or the game's art), in step with the live one; frame size found from the name, then from the pictures (neighbouring frames overlap most), with boxes to override; one viewer over the game for sheets. Also: one refresh timer for the notes box, not one per mode. Checked in headless Edge (no errors, alt scene drawn, tiers per file).
+
+```
+Date: 2026-11-15 11:51
+Author's note: I don't like the Records scroll, I think this is why we have achievements. we can get rid of them. past wizard stats will be in the Cementery
+```
+
+```
+Date: 2026-11-15 11:51
+Author's note: For the achievments, I think we need to add the date and time where it was won, in small text and perhaps gray
+```
+
+
+### 2026-11-17: Shrine walk
+- The author's shrine notes: he now stops a little before the cross (offset 22, clear of every zone's cross), the shrine sound plays once he is in the shrine (not before he walks there), the mystic stays while he walks back out to the left and goes with the scene. The 'not walking to or from shrines' note predated the walk-in and walk-back. Checked by a headless playtest run (no errors); not watched in a browser.
+
+### 2026-11-17: Hands down at every tier
+- Author's request: the flame in the raised hand (magic tiers) and the hands that were not all down. All tiers now rest with both hands down, arms recoloured per tier; the flame shows only in the cast animation, held in the lowered hand. Author's choice: tiers 0 and 10 look alike and differ in the attack. The cast no longer has a flame by the hand; the spark at the staff tip stays. A hands-up pose would be new art (see the thinker's inbox).

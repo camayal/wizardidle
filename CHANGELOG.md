@@ -11,6 +11,7 @@
 - Shrines, statues and inns outside the towns are entered on foot; scene changes fade more slowly.
 - Shrines: the wizard stops a little before the cross, the shrine sound plays once he is inside, and the mystic stays while he walks away.
 - Loot: the wizard walks up to the bag, barrel, box, chest or pot before opening it, then walks on.
+- The Records page of the stats scroll is gone (achievements do that job; past wizards are in the Cemetery). Each achievement now shows when it was won, in small grey text.
 - Something to find twinkles on the ground before the wizard walks to it.
 - Hydra entrances redrawn: the ice peaks now match the icedra (black outline, faceted faces) and the mud burst no longer leaves a pond behind.
 - Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.

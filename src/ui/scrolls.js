@@ -194,13 +194,13 @@ function updateAchievements(){
 }
 
 // ------------------------------------------------------------------ tabbed scrolls
-// Some scrolls have several pages (Stats / Records, and Kill / Cemetery / Bestiary). The
+// Some scrolls have several pages (Kill / Cemetery / Bestiary). The
 // other pages' scrolls lie behind and peek out above the front one, each as a strip with its
 // name; clicking a strip brings that page to the front (option (a), chosen by the author on
 // 2026-11-12 from the artist's mockups). The front scroll moves down by the strips and gets
 // shorter by the same amount, so its bottom roll stays where it was.
-const TAB_SETS = { stats: ["stats", "records"], kill: ["kill", "cemetery", "bestiary"] };
-const PAGE_NAMES = { stats: "Stats", records: "Records", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary" };
+const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"] };
+const PAGE_NAMES = { kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary" };
 const TAB_RATIO = 0.092;            // visible strip of each back scroll, of the scroll width
 const TAB_LABEL_RATIO = 0.046;      // its page name, of the scroll width
 const FRONT_PARTS = ["scrollBackUp", "scrollBackCenter", "scrollText", "btnClose"];
@@ -272,7 +272,7 @@ document.addEventListener("wizardidle:layout", () => {
     if (TAB_SETS[ui.scrollCurrentContent]) placeScrollTabs(ui.scrollCurrentContent);
 });
 
-// Fill the stats scroll (two pages, Stats and Records: ui/statsPages.js).
+// Fill the stats scroll (ui/statsPages.js).
 function updateStats(){
     const secondsInGame = ((state.meta.playTimeMs + (loop.now() - run.timeStart)) / 1000).toFixed(0);
     ui.statsPage = statsPageHtml(secondsInGame);
@@ -281,7 +281,7 @@ function updateStats(){
     el("stats").style.lineHeight = `${ui.em}px`;
     el("titleStats").style.fontSize = `${ui.em * 2.5}px`;
     el("titleStats").style.lineHeight = `${ui.em * 2.5}px`;
-    if (ui.scrollCurrentContent == "stats") placeScrollTabs("stats");
+    if (ui.scrollCurrentContent == "stats") placeScrollTabs("stats");  // no tabs: clears any left
 }
 
 // The dev bar switch in Help (src/dev/tests.js listens for the event; the game never

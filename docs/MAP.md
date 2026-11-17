@@ -43,7 +43,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 - render.js: heading (HP, XP, gold, faith), console, backgrounds, wizard and enemy drawing and idle animation.
 - layout.js: sizes everything from the window, portrait or landscape.
-- menu.js: toolbar buttons. scrolls.js: parchment scroll pages (stats, achievements, help, kill, map). statsPages.js: the Stats and Records pages. bestiary.js: kill scroll's bestiary page.
+- menu.js: toolbar buttons. scrolls.js: parchment scroll pages (stats, achievements, help, kill, map). statsPages.js: the Stats page. bestiary.js: kill scroll's bestiary page.
 - bossAttacks.js: plays boss attack strips, scene spells, earthquake shake, Medusa's gaze.
 - enemyMoves.js: how normal enemies attack (sprite moved by code plus an effect).
 - entrances.js: how enemies arrive (glide, float, rise, jump, flicker, walk).

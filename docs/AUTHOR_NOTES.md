@@ -7,7 +7,7 @@
 [] arrows need to be faster
 [] still flickery with some wizard animation, when it will start walking for example
 [] cemeentery each wizard should ahve a tumb with their name and perhaps age, touch extend information.  ERASURE follow rules, i think it is invert and crossed name and perhaps a cracked tomb. maybe 4 to 5 tombs desings with each one cracked just in case.
-[] boxes and other breakable items appear in a very werid way, when the wizar is already in the scene. I think we need to compute what the next scene will have before showing the scene, and then when the wizard goes into the scene the box or breakable is already there.
+[x] ~~boxes and other breakable items appear in a very werid way, when the wizar is already in the scene. I think we need to compute what the next scene will have before showing the scene, and then when the wizard goes into the scene the box or breakable is already there.~~ (done: the next scene is built with the container already in it, he walks in and up to it, opens it, then walks on)
 [x] ~~Not sure but it wizard is not walking towards or away frm the shrines. This is a bug~~ (done: he walks in from the left to the cross and back out to the left)
 [] dice sounds are not nicely sync send to @musician
 [] create scenes that are the end of one ad the beginon of the otherone.
