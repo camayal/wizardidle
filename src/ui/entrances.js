@@ -4,9 +4,11 @@
 // author: "some walking or jumping could be done mathematically so we avoid more art"): paths,
 // bobbing, squash on landing, a ground line that hides what is still underground, the dust strip.
 //
-// Mages have three ways in (the author's note): a flicker or a fade-in, at random, and a portal
-// for the rare ones; every zone boss comes through a portal too. The portal is drawn by code
-// until the artist's strip is approved.
+// Mages have three ways in (the author's notes): a flicker or a fade-in, at random, and for the
+// rare ones a portal (the artist's three, purple, blue or red, at random). The mage bosses step out
+// of their own bigger portal: Doria blue, King Midas golden, Rainbow multicolour. Every portal is
+// an fx_portal_* strip of 16 frames (open 0-5, loop 6-11, close 12-15); until its file is there
+// a stand-in drawn by code in its colours plays instead.
 //
 // The game is frozen while an enemy arrives; nothing plays in a simulation or in the background.
 
@@ -32,9 +34,20 @@ for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of familie
 const STEP_MS = 50;
 const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, blink: 12, fade: 20, portal: 28 };
 export const ARRIVALS = Object.keys(FRAMES);
-const BOSSES = new Set(Object.values(zones).map((z) => z.boss));
-// The portal's rings, outer to inner: violet for rare mages, red for bosses.
-const PORTAL_COLORS = { rare: ["#5b2a9e", "#9b5de5", "#e0c3ff"], boss: ["#7a1020", "#d0343c", "#ffc2a8"] };
+// Each portal strip and the stand-in's rings, outer to inner.
+export const PORTALS = {
+    fx_portal_a: ["#5b2a9e", "#9b5de5", "#e0c3ff"],             // purple, the swirl rift
+    fx_portal_b: ["#1d3f8f", "#3f7fe0", "#bfe0ff"],             // blue, the dashed rings
+    fx_portal_c: ["#7a1020", "#d0343c", "#ffc2a8"],             // red, the ragged rift
+    fx_portal_doria: ["#163a8a", "#2f6fdc", "#9cc8ff"],         // the mage bosses' bigger portals
+    fx_portal_midas: ["#7a5200", "#d9a520", "#fff1a8"],
+    fx_portal_rainbow: ["#d03a3a", "#e8a020", "#3fb04f", "#3f7fe0", "#9b5de5"],
+};
+const MAGE_PORTALS = ["fx_portal_a", "fx_portal_b", "fx_portal_c"];
+const BOSS_PORTAL = { doria: "fx_portal_doria", midas: "fx_portal_midas", rainbow: "fx_portal_rainbow" };
+const STRIP_FRAMES = 16;
+// The strip frame for an arrival step: opens, loops while the enemy steps out, closes.
+const stripFrame = (k) => k < 6 ? k : k < 24 ? 6 + (k - 6) % 6 : Math.min(15, 12 + k - 24);
 // The artist's general hydra entrances (img/bosses/hydras/anim_hydra_<effect>_enter.png): 16 frames
 // of 96 x 96 sprite px with no hydra in them, drawn on top of the hydra at any head count; the
 // hydra shows from the reveal frame (0-based) on.
@@ -49,17 +62,20 @@ export function entranceKind(npc) {
     return KIND[family] || "walk";
 }
 
-// How this enemy arrives now: the dev tools' pick, a portal for bosses and rare mages, a flicker
-// or a fade-in for other mages, otherwise its family's way.
+// How this enemy arrives now, { kind, portal }: the dev tools' pick ("portal" or "portal:<strip>"),
+// the mage bosses' own portal, a random portal for rare mages, a flicker or a fade-in for other
+// mages, otherwise its family's way (other bosses too).
 function arrivalKind(npc) {
-    const forced = run.forceEntrance;
+    const forced = run.forceEntrance || "";
     run.forceEntrance = undefined;
-    if (forced && FRAMES[forced]) return forced;
-    if (BOSSES.has(npc)) return "portal";
+    const portal = (strip) => ({ kind: "portal", portal: strip || BOSS_PORTAL[npc] || MAGE_PORTALS[Math.floor(looksRandom() * 3)] });
+    if (forced.startsWith("portal")) return portal(forced.split(":")[1]);
+    if (FRAMES[forced]) return { kind: forced };
+    if (BOSS_PORTAL[npc]) return portal();
     const kind = entranceKind(npc);
-    if (kind != "blink") return kind;
-    if ((enemySprites[npc] || {}).rare) return "portal";
-    return looksRandom() < 0.5 ? "blink" : "fade";
+    if (kind != "blink") return { kind };
+    if ((enemySprites[npc] || {}).rare) return portal();
+    return { kind: looksRandom() < 0.5 ? "blink" : "fade" };
 }
 
 const easeOut = (t) => 1 - (1 - t) * (1 - t);
@@ -117,10 +133,10 @@ export function playEntrance(done) {
     if (run.simulation || !document.hasFocus() || !npc) return done && done();
     const hydra = /^(mother|hydskon|icedra)\d+$/.exec(npc);
     if (hydra) return playHydraEnter(npc, hydra[1], done);
-    const kind = arrivalKind(npc), total = FRAMES[kind];
-    const tint = BOSSES.has(npc) ? "boss" : "rare";
+    const { kind, portal } = arrivalKind(npc), total = FRAMES[kind];
     cancelNPCDraw();                                // the sprite must not pop up in its place mid-arrival
     imageNow(art(`${npc}`));
+    if (portal) imageNow(art(portal));
     imageNow(art(`fx_dust`));
     loop.freezeGame();
     npcCanvas.width = npcCanvas.offsetWidth;
@@ -140,7 +156,7 @@ export function playEntrance(done) {
             if (++waited > 40) k = total + 1;
             return;
         }
-        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { tint, spin: k }));
+        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { strip: portal, spin: k }));
         k++;
     };
     step();                                         // at once: it never shows in its place first
@@ -154,8 +170,14 @@ function draw(npc, img, p) {
     const x = bx + p.dx * scene + (bw - w) / 2, y = by + p.dy * scene + bh - h;
     const ctx = pixelContext(npcCanvas);
     ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-    const cx = bx + bw / 2, cy = by + bh * 0.55, rx = bw * 0.42, ry = bh * 0.56;
-    if (p.portal > 0) drawPortal(ctx, cx, cy, rx * p.portal, ry, scene, PORTAL_COLORS[p.tint], p.spin);
+    let cx = bx + bw / 2, cy = by + bh * 0.55, rx = bw * 0.42, ry = bh * 0.56;
+    const strip = p.strip && imageNow(art(p.strip));
+    if (strip) {                                    // the artist's strip, feet on the ground line
+        const px = bw / img.naturalWidth, fw = strip.naturalWidth / STRIP_FRAMES, fh = strip.naturalHeight;
+        const sw = fw * px, sh = fh * px;
+        drawFrame(ctx, strip, stripFrame(p.spin) * fw, 0, fw, fh, bx + (bw - sw) / 2, by + bh + px - sh, sw, sh);
+        rx = sw * 0.4; ry = sh * 0.42; cy = by + bh - ry;      // its open oval
+    } else if (p.portal > 0) drawPortal(ctx, cx, cy, rx * p.portal, ry, scene, PORTALS[p.strip] || PORTALS.fx_portal_a, p.spin);
     ctx.save();
     ctx.globalAlpha = p.alpha;
     if (p.clip) {                                   // only what is above the ground shows
@@ -193,7 +215,7 @@ function drawPortal(ctx, cx, cy, rx, ry, scene, colors, spin) {
     ctx.fill();
     ctx.lineWidth = Math.max(1, scene * 1.5);
     colors.forEach((color, i) => {
-        const shrink = 1 - i * 0.16;
+        const shrink = 1 - i * 0.48 / colors.length;
         ctx.beginPath();
         ctx.ellipse(cx, cy, rx * shrink, ry * shrink, 0, 0, Math.PI * 2);
         ctx.strokeStyle = color;

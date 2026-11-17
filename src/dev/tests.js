@@ -23,7 +23,7 @@ import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
 import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStage, updateHeading } from '../ui/render.js';
-import { ARRIVALS, entranceKind } from '../ui/entrances.js';
+import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
 import { sidePanel } from './panel.js';
@@ -253,7 +253,7 @@ const ENEMY_PICKS = {
     'random: melee (any move)': (s) => !isCaster(s),
     ...Object.fromEntries(MOVES.map((m) => [`random: melee ${m}`, (s) => !isCaster(s) && meleeMoveOf(familyOf(s)) == m])),
     'random: rare': (s) => enemySprites[s].rare,
-    'random: rare mage (portal)': (s) => enemySprites[s].rare && entranceKind(s) == 'blink',
+    'random: rare mage (portal a/b/c)': (s) => enemySprites[s].rare && entranceKind(s) == 'blink',
     'random: corrupted': (s) => enemySprites[s].corrupted,
     ...Object.fromEntries(['walk', 'fly', 'float', 'rise', 'jump', 'blink'].map((k) =>
         [`random: arrives by ${k == 'blink' ? 'magic (mages)' : k}`, (s) => entranceKind(s) == k])),
@@ -262,7 +262,9 @@ const pickRandom = (list) => list[Math.floor(Math.random() * list.length)];
 
 function pickerHtml() {
     const opts = (list, labels = list) => list.map((x, i) => `<option value="${x}">${labels[i]}</option>`).join('');
-    const arrival = `<label>Arrival <select data-f="arrival"><option value="">its own way</option>${opts(ARRIVALS)}</select></label>`;
+    const portals = Object.keys(PORTALS).map((x) => `portal:${x}`);
+    const arrival = `<label>Arrival <select data-f="arrival"><option value="">its own way</option>${opts(ARRIVALS.map((x) => x == 'portal' ? 'portal' : x),
+        ARRIVALS.map((x) => x == 'portal' ? 'portal (random a/b/c)' : x))}${opts(portals, portals.map((x) => x.slice(10).replace('_', ' ')))}</select></label>`;
     const bossZones = Object.keys(zones).filter((z) => zones[z].boss && enemyTypes[zones[z].boss]);
     const bossLabels = bossZones.map((z) => `${enemyTypes[zones[z].boss].name} (${zones[z].name || z})`);
     return {
