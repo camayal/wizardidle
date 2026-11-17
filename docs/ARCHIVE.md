@@ -1182,3 +1182,10 @@ Author's note: elementals shoudl have another movement to go into the battle, i 
 - Wrote [docs/STORY.md](docs/STORY.md) on branch `plan/story`: the text of every chapter scroll (Prologue to XI, both epilogues) and the console lines between them. 38–77 words each, so every scroll fits the screen without scrolling (it holds about 110–140).
 - The author decided, one question at a time: the scroll speaks to you, the god; the arc is free to revise; hooks are a secret behind the exile, a recurring stranger and a cliffhanger last line; the secret is a prophecy; the stranger is your mask; two endings by who dies; short scrolls plus console beats; one staff that changes; the prophecy is revealed in pieces, complete at VII; in X he finds out who watched the lynching; the god fears the prophecy.
 - Choices made while writing, open to change: the lynching's sorceress is the seer who wrote the prophecy; the reforged staff is *Nomaleatorio*; Midas thought he was the god of the prophecy.
+
+## Art note: dead wizard sprite (done 2026-11-17, commit bcaa33e)
+
+```
+Date: 2026-11-15 11:43
+Author's note: Dead wizard sprite is not quite interesting, I think I would prefer somethin more like laying down face toward the floor, more like dead, rather than sleeping.
+```

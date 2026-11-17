@@ -30,11 +30,6 @@ Author's note: For artist, some tiers have the hand elevated, this was a limitat
 ```
 
 ```
-Date: 2026-11-15 11:43
-Author's note: Dead wizard sprite is not quite interesting, I think I would prefer somethin more like laying down face toward the floor, more like dead, rather than sleeping.
-```
-
-```
 Date: 2026-11-15 11:44
 Author's note: Praire need some scene backround where the road is freatured, @artist
 ```
