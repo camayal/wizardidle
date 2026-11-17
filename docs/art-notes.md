@@ -30,11 +30,6 @@ Author's note: Praire need some scene backround where the road is freatured, @ar
 ```
 
 ```
-Date: 2026-11-15 16:42
-Author's note: @artist going into battle animations for hycras should be special. similar to the bosses.
-```
-
-```
 Date: 2026-11-15 16:43
 Author's note: @artist, comming from the ground generalized animation need to be a little more expresive
 ```
