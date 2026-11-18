@@ -1415,3 +1415,11 @@ Author's note: sometimes the wizard spend so much time in a given zone. we need 
 Date: 2026-11-15 16:40
 Author's note: if the wizar is already in the dice games, why exit and go again, we need to check the way to evaluate the next destignation in the gampling house, that is the actual gambling house, wizard skip leaving and play another round
 ```
+
+### Dev note done 2026-11-17: bestiary headings
+
+```
+Date: 2026-11-17 20:03
+Author's note: when the game start it says no creature defeated yet but it puts bosses and Secrets, only add bosses when the first boss is encountered, and only put secrets when the first hydra is found
+```
+

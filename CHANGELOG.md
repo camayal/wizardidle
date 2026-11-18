@@ -2,6 +2,7 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- Bestiary: the Bosses heading shows only once the first boss is met, and Secrets only once the first hydra is found.
 - The Kill button asks twice: the first press opens a small parchment saying to press again, that it is permanent; tapping the parchment closes it.
 - The mysterious healer leaves by fading away, the mages' fade-in played backwards, instead of the red pin overlay.
 - Credits: Dragon Studio (ko-fi.com/dragonstudio) for a bunch of sounds.

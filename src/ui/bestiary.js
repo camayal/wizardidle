@@ -64,13 +64,16 @@ export function bestiaryPageHtml() {
     const defeated = Object.keys(state.stats).filter((k) => k.startsWith('kill.sprite.')).length;
     const bosses = [...new Set(Object.values(zones).map((z) => z.boss))];
     const hydras = [...new Set(Object.values(zones).map((z) => z.hidrasName).filter(Boolean))];
+    // the Bosses section shows once the first boss is met, the Secrets once the first hydra is
+    const bossMet = bosses.some((b) => stats.get(`seen.boss.${b}`) || stats.get(`kill.boss.${b}`));
+    const hydraMet = hydras.some((h) => stats.get(`seen.hydra.${h}`) || stats.get(`kill.hydra.${h}`));
     return `<div style='text-align:center'>${found} of ${total} creatures seen, ${defeated} defeated</div>` +
         (met.length ? met.map(familySection).join('') : '<br>No creature defeated yet.<br>') +
-        "<br><span class='subtitles'>Bosses</span><br>" +
-        bosses.map((b) => cell(b, stats.get(`seen.boss.${b}`), stats.get(`kill.boss.${b}`), 1.25)).join('') +
+        (bossMet ? "<br><span class='subtitles'>Bosses</span><br>" +
+            bosses.map((b) => cell(b, stats.get(`seen.boss.${b}`), stats.get(`kill.boss.${b}`), 1.25)).join('') : '') +
         // the hydras are a secret (they only come after the hydra mystery): stains until met
-        "<br><span class='subtitles'>Secrets</span><br>" +
-        hydras.map((h) => cell(`${h}${hydraHeads(h)}`, stats.get(`seen.hydra.${h}`), stats.get(`kill.hydra.${h}`), 1.25, 'Secret')).join('');
+        (hydraMet ? "<br><span class='subtitles'>Secrets</span><br>" +
+            hydras.map((h) => cell(`${h}${hydraHeads(h)}`, stats.get(`seen.hydra.${h}`), stats.get(`kill.hydra.${h}`), 1.25, 'Secret')).join('') : '');
 }
 
 // ------------------------------------------------------------------ the ink stains
