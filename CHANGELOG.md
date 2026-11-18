@@ -2,6 +2,7 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- Trying out: the XP bar in the artist's wood frame (option A: brass nails, gold fill), on a wood plate that also holds the level, HP, gold and faith line, instead of the plain white bar.
 - Fixed: the wizard really waits for a charger to be back in place before casting; his spell no longer lands on the empty spot while it is still running back (the wait was timed by its frames, which ran late).
 - The mother hydra now leaves with a dive: she sinks among ripple rings, and a crown of mud splashes up as her head goes under.
 - The mysterious healer vanishes with his old red pin animation again, played over his fade-out.

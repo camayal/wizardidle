@@ -142,24 +142,22 @@
             }
             
 
-            meter {
-            background: #EEE; 
+            /* The XP bar and the plate behind it and the indicators: the artist's pieces
+               (caps and a middle tile that repeats), stretched by border-image; the sizes in
+               art pixels are set by src/ui/layout.js. */
+            #xpPlate, #XPprogressBar {
+                box-sizing: border-box;
+                border-style: solid;
+                border-width: 0;
+                image-rendering: pixelated;
             }
-
-            meter::-webkit-meter-optimum-value {
-                background: gold; 
-                transition: 0.5s width;
-            }
-            meter::-webkit-meter-bar {
-              background: #EEE;
-              border: 0;
-            }
-
-            meter::-moz-meter-bar{
-              background: gold;
-            }
-
-            meter::-moz-meter-optimum{
+            #xpPlate { border-image: url(img/ui/xpbar_plate.png) 0 8 fill round; }
+            #XPprogressBar { border-image: url(img/ui/xpbar_frame.png) 0 6 fill round; }
+            #xpTrack, #xpFill { position: absolute; top: 0; bottom: 0; }
+            #xpFill {
+                left: 0;
+                background: url(img/ui/xpbar_fill.png) repeat-x left top;
+                image-rendering: pixelated;
                 transition: 0.5s width;
             }
 
@@ -174,7 +172,7 @@
 
             
 
-            #main, #spellCanvas, #console, #backConsole, #marco, #esceneCanvas, #pjCanvas, #npcCanvas, #heading, #xpbar, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #pjName, #XPprogressBar, #indicadores, #statusText, #launcher, #fondoLauncher, #inputName, #labelInputName, #nubes,  #startBtn, #textStartBtn, #title1, #title2, #footer, #scroll, #scrollBackCenter, #scrollBackUp, #scrollBackDown, #btnClose, #scrollText, #pjDivineBtn, #npcDivineBtn, #centerDivineBtn, #backMapa, #bocadilloMapa, #pjMapa {
+            #main, #spellCanvas, #console, #backConsole, #marco, #esceneCanvas, #pjCanvas, #npcCanvas, #heading, #xpbar, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #pjName, #xpPlate, #XPprogressBar, #indicadores, #statusText, #launcher, #fondoLauncher, #inputName, #labelInputName, #nubes,  #startBtn, #textStartBtn, #title1, #title2, #footer, #scroll, #scrollBackCenter, #scrollBackUp, #scrollBackDown, #btnClose, #scrollText, #pjDivineBtn, #npcDivineBtn, #centerDivineBtn, #backMapa, #bocadilloMapa, #pjMapa {
                 position: absolute;
             }
 
@@ -438,7 +436,8 @@
         <div id ="heading">
             <div id="info">
                 <div class="left" id="pjName">_name_</div>
-                <div id="xpbar" class="left" ><meter id="XPprogressBar" value="0" min="0" max="10"></meter></div>
+                <div id="xpPlate"></div>
+                <div id="xpbar" class="left" ><div id="XPprogressBar"><div id="xpTrack"><div id="xpFill"></div></div></div></div>
                 <div id="indicadores" class="left">
                     <span id="lvl">_lvl_</span>
                     <img id="hpIcon" class="imgInConsole" src="img/ui/heart.png"/><span id="hp">_hp_</span>

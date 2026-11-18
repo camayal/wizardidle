@@ -180,6 +180,20 @@ const CANVASES = ["esceneCanvas", "pjCanvas", "npcCanvas", "spellCanvas"];
 const TOOLBAR = ["btn1", "btn2", "btn3", "btn4", "btn5", "btn6"];
 const HEADING_ICONS = ["hpIcon", "goldIcon", "spiritIcon"];
 
+// The XP bar on its wood plate, with the indicators in the plate's dark inset (the artist's
+// option A). u is one art pixel on screen: the plate is 26 high (caps 8 wide), the bar 10 high
+// (caps 6 wide, the track 4 in from each end) sitting 3 below the plate's top, and the inset
+// runs from row 15 to 25, 3 in from each side.
+function layoutXPPlate(top, width, u) {
+    setStyles("xpPlate", { left: 0, top, width, height: 26 * u, borderImageWidth: `0 ${8 * u}px` });
+    setStyles("XPprogressBar", { display: "block", left: 4 * u, top: top + 3 * u, width: width - 8 * u, height: 10 * u, borderImageWidth: `0 ${6 * u}px` });
+    setStyles("xpTrack", { left: 4 * u, right: 4 * u });
+    setStyles("xpFill", { backgroundSize: `${4 * u}px ${10 * u}px` });
+    setStyles("indicadores", { left: 6 * u, top: top + 15 * u, width: width - 12 * u, height: 10 * u, fontSize: 9 * u, lineHeight: `${10 * u}px`,
+        display: "flex", alignItems: "center", justifyContent: "space-between" });
+    setEach(HEADING_ICONS, { height: 7 * u, width: 7 * u });
+}
+
 // Layout for desktop and phones held upright: heading, scene, then the console.
 // Everything is proportional to ui.objectSize (s); the console fills the remaining height.
 function layoutPortrait(){
@@ -207,9 +221,7 @@ function layoutPortrait(){
     // heading
     setStyles("heading", { height: headingH });
     setStyles("pjName", { fontSize: button, width: s * 0.7 });
-    setStyles("XPprogressBar", { display: "block", width: s * 0.7, height: s * 0.035, top: button * 1.125 });
-    setStyles("indicadores", { fontSize: s * 0.045, width: s * 0.7, top: button * 1.57, display: "flex", justifyContent: "space-between" });
-    setEach(HEADING_ICONS, { height: s * 0.045, width: s * 0.045 });
+    layoutXPPlate(s * 0.093, s * 0.7, s * 0.0042);
     setEach(TOOLBAR, { display: "block", width: button });
     setEach(["btn1", "btn4"], { left: s * 0.75 });
     setEach(["btn2", "btn5"], { left: s * 0.75 + (s * 0.1) });
@@ -297,9 +309,7 @@ function layoutLandscapeMobile(){
     // heading
     setStyles("heading", { height: headingH });
     setStyles("pjName", { fontSize: s * 0.11, width: W * 0.90 });
-    setStyles("XPprogressBar", { width: W * 0.95, height: s * 0.03, top: s * 0.13 });
-    setStyles("indicadores", { fontSize: s * 0.05, width: W * 0.95, top: s * 0.17, display: "flex", justifyContent: "space-between" });
-    setEach(HEADING_ICONS, { height: s * 0.05, width: s * 0.05 });
+    layoutXPPlate(s * 0.117, W * 0.95, s * 0.0042);
     setStyles("statusText", { fontSize: em * 2, left: W * 0.925, top: s * 0.01 });
 
     // scene
