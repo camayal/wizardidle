@@ -8,7 +8,7 @@
 // To try it: in the browser console set `dev.state.meta.lastSeen -= 40 * 86400000` and reload
 // (about 40 days away); the page saves again on hide, so do it right before reloading.
 
-import { config, DEV } from './config.js';
+import { config } from './config.js';
 import { state, world, deleteSave, reloadAway } from './state.js';
 import { fight, run, ui } from './runtime.js';
 import * as loop from './loop.js';
@@ -124,11 +124,11 @@ function nextPoem() {
 }
 
 // A hidden page counts as away: the game waits while it is hidden; if it stayed hidden past
-// minSeconds, showing it again reloads, and the load settles the time. Not in the dev tools
-// (they have their own wait) so a long look elsewhere does not reload a developer's session.
+// minSeconds, showing it again reloads, and the load settles the time. The same in the dev
+// tools (the author's request, 2026-11-18: dev sessions behave as the live game).
 let watching = false;
 export function watchHidden() {
-    if (watching || DEV || run.simulation) return;
+    if (watching || run.simulation) return;
     watching = true;
     document.addEventListener("visibilitychange", () => {
         if (document.hidden) return loop.freezeGame();
