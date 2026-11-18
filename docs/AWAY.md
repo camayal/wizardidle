@@ -117,7 +117,7 @@ The idea: while the page is hidden (not closed), the game keeps running at 1/108
   1. **On return to a soft-dead wizard:** DECIDED 2026-11-17: (a) he lies fallen and the god's touch saves him; returning alone does not.
   2. **If the god returns and leaves again without touching him:** DECIDED 2026-11-17: (a) he stays soft dead and the clock goes on toward permadeath.
   3. **Protected chapters (STORY.md true death rule):** DECIDED 2026-11-17: (a) the protection holds silently: no soft dead and no permadeath there.
-  4. **Hidden page:** DECIDED 2026-11-17: (b) the game runs in slow motion at 1/108 while the page is hidden (author overrode the recommendation). Sound reduced too. Still to settle: how this agrees with the return calculation.
+  4. **Hidden page:** DECIDED 2026-11-17: (a) calculation only, no slow-motion game (the author first picked slow motion, then chose this after hearing that phones freeze hidden tabs and that the game has no music). A hidden page is settled on return. When it shows after a long absence one low, slowed sound effect plays (a distant bell; the musician prepares it, listed in SOUNDS.md).
   5. **Soft-dead line:** (a) candidate 1 (recommended); (b) candidate 2; (c) candidate 3; (d) add or talk first.
   6. **Poem:** (a) one poem, the author or historian writes it from the brief (recommended); (b) Draft A as is; (c) Draft B as is; (d) a small bag of poems that never repeat in one world; (e) add or talk first.
   7. **Does the touch that saves a soft-dead wizard give the usual revive faith (FAITH.md)?** (a) yes, the usual free revive (recommended: he was saved by the god he waited for); (b) no faith; (c) add or talk first.
