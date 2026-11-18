@@ -84,11 +84,11 @@ const HYDRA_ENTER = {
     hydskon: { effect: "bones", reveal: 11, sound: "hydra_bones_enter", volume: 0.3 },
 };
 const HYDRA_FRAME = 96;
-// The ground effects the risers come out of and sink into (the artist's, img/effects/fx/fx_ground_<a-d>
-// and fx_ground_boss_<a-d>): 10 frames, 48 x 32 for a 32 px sprite, 96 x 64 for a 64 px boss, drawn at
-// 1 art px per sprite px with the ground row on the feet. One of the four at random each time. The
+// The ground effects the risers come out of and sink into (the artist's, img/effects/fx/fx_ground_<a-c>
+// and fx_ground_boss_<a-c>): 10 frames, 48 x 32 for a 32 px sprite, 96 x 64 for a 64 px boss, drawn at
+// 1 art px per sprite px with the ground row on the feet. One of the three at random each time. The
 // sprite shows from frame `from` and is fully up on frame `up`; leaving plays it all backwards.
-const GROUND = { a: { from: 3, up: 7 }, b: { from: 3, up: 7 }, c: { from: 1, up: 5 }, d: { from: 3, up: 7 } };
+const GROUND = { a: { from: 3, up: 7 }, b: { from: 3, up: 7 }, c: { from: 1, up: 5 } };
 const GROUND_ROW = { 32: 24, 64: 48 };       // by sprite size: the ground row of the strip
 const GROUND_FRAMES = 10;
 // The hydras' leaving strips (anim_hydra_<effect>_leave, 14 frames of 96 x 96, ground = bottom row,
@@ -126,10 +126,10 @@ function arrivalKind(npc) {
     return { kind: looksRandom() < 0.5 ? "blink" : "fade" };
 }
 
-// A random one of the four ground effects for this enemy's size: { src, row, from, up }.
+// A random one of the three ground effects for this enemy's size: { src, row, from, up }.
 function groundSet(npc) {
     const img = imageNow(art(npc)), boss = img && img.naturalWidth > 40;
-    const letter = "abcd"[Math.floor(looksRandom() * 4) % 4];
+    const letter = "abc"[Math.floor(looksRandom() * 3) % 3];
     return Object.assign({ src: art(boss ? `fx_ground_boss_${letter}` : `fx_ground_${letter}`), row: GROUND_ROW[boss ? 64 : 32] }, GROUND[letter]);
 }
 
