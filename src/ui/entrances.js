@@ -47,7 +47,7 @@ const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 26, burrow: 30, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 26, burrow: 30, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
 export const ARRIVALS = Object.keys(FRAMES);
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -63,6 +63,9 @@ const MAGE_PORTALS = ["fx_portal_a", "fx_portal_b", "fx_portal_c"];
 // purple mage portal drawn at boss size, until his own cursed one is drawn.
 const BOSS_PORTAL = { doria: "fx_portal_doria", midas: "fx_portal_midas", rainbow: "fx_portal_rainbow",
     skeleton: "fx_portal_a" };
+// King Skeleton's arch (the author picked it, 2026-11-17): drawn at full size around him (an 80 px
+// wide strip at 1 art px per boss px), he fades in standing inside it, then it fades away behind him.
+const ARCH = new Set(["skeleton"]);
 const STRIP_FRAMES = 16;
 const BOSS_PORTAL_SCALE = 0.7;      // a portal 80 sprite px wide (the boss strips) at 70%: about the boss's own size
 const BOSS_STRIP_WIDTH = 80;        // a smaller strip (the 40 px mage portals) is scaled up to it
@@ -90,7 +93,7 @@ function arrivalKind(npc) {
     run.forceEntrance = undefined;
     const portal = (strip) => {
         strip = strip || BOSS_PORTAL[npc] || MAGE_PORTALS[Math.floor(looksRandom() * 3)];
-        return { kind: BOSS_PORTAL[npc] ? "bossPortal" : "portal", portal: strip };
+        return { kind: ARCH.has(npc) ? "archPortal" : BOSS_PORTAL[npc] ? "bossPortal" : "portal", portal: strip };
     };
     if (forced.startsWith("portal")) return portal(forced.split(":")[1]);
     if (FRAMES[forced]) return { kind: forced };
@@ -177,6 +180,10 @@ function pose(kind, t, k) {
         p.alpha = u;
         p.sx = p.sy = 0.5 + 0.5 * easeOut(u);
         p.portalClip = u < 1;                                              // still inside the portal
+    } else if (kind == "archPortal") {                                     // fades in inside the arch
+        p.portal = t < 0.3 ? easeOut(t / 0.3) : t > 0.85 ? clamp01(1 - (t - 0.85) / 0.15) : 1;
+        p.alpha = clamp01((t - 0.22) / 0.5);                               // during the loop frames
+        p.bossScale = 1;
     } else if (kind == "bossPortal") {                                     // grows out of the portal's centre
         p.portal = t < 0.3 ? easeOut(t / 0.3) : t > 0.85 ? clamp01(1 - (t - 0.85) / 0.15) : 1;
         const u = clamp01((t - 0.23) / 0.6);                               // strip loop frames, done before the close
