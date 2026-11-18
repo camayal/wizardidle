@@ -8,9 +8,12 @@
 import { zones } from '../data/zones.js';
 import { roundNumbertoLetter } from '../utils.js';
 import { state } from '../state.js';
+import { ui } from '../runtime.js';
 import { stats } from '../stats.js';
 import { countLogros, logro } from '../achievements.js';
 import { beliefLevel } from '../belief.js';
+import { config } from '../config.js';
+import { art } from '../media.js';
 
 const n = roundNumbertoLetter;
 
@@ -92,12 +95,22 @@ function goldSection() {
         line('Lost in battle', n(stats.get('gold.lostInBattle')));
 }
 
+// The belief meter: a bar from the lowest to the highest belief, filled up to his value (empty
+// and marked as lost when the story has locked it).
+function beliefMeter() {
+    const { min, max } = config.belief;
+    const share = state.player.beliefLost ? 0 : Math.max(0, Math.min(1, (state.player.belief - min) / (max - min)));
+    return "<div style='height:0.8em; margin:0.2em 0 0.4em; border:2px solid #462808; background:rgba(70,40,8,0.15)'>" +
+        `<div style='height:100%; width:${Math.round(share * 100)}%; background:#8a5a14'></div></div>`;
+}
+
 function faithSection() {
     const level = beliefLevel();
     return section('Faith') +
         line('Faith now', n(state.player.faith)) +
         // belief (src/belief.js): its level and value, or the story's lock
         line('Belief', state.player.beliefLost ? 'lost &#8856;' : `${level.charAt(0).toUpperCase() + level.slice(1)} (${Math.round(state.player.belief)})`) +
+        beliefMeter() +
         line('From prayers', n(stats.get('faith.gain.prayer'))) +
         line('From offerings', n(stats.get('faith.gain.offering'))) +
         line('From cleansing corruption', n(stats.get('faith.gain.cleanse'))) +
@@ -109,6 +122,21 @@ function achievementsSection() {
     const won = countLogros();
     const total = Object.keys(logro).filter((key) => logro[key].name && !logro[key].planned).length;
     return section('Achievements') + line('Currently won', won) + `Completion: ${Math.round((won / total) * 100)}%<br>`;
+}
+
+// ------------------------------------------------------------------ Inventory
+
+// What he carries: only the staff and his gold for now, plus the artefacts he has found. More
+// will come (the staff changes with the story, docs/STORY.md).
+export function inventoryPageHtml() {
+    const icon = (name) => `<img class='imgInConsole' height='${ui.em || 16}' src='${art(name)}'/> `;
+    const artefacts = (state.artefacts || []).map((a) => `${icon(a.sprite)}${a.name}<br>`).join('');
+    return "<div id='inventory'><span class='titles' id='titleInventory'>Inventory</span><br>" +
+        section('Carried') +
+        'Staff<br>' +
+        `${icon('gold')}${n(state.player.gold)} gold<br>` +
+        (artefacts ? section('Artefacts') + artefacts : '') +
+        '</div>';
 }
 
 // ------------------------------------------------------------------ the page

@@ -20,6 +20,7 @@ import { state, world } from '../state.js';
 import { ui } from '../runtime.js';
 import { zones } from '../data/zones.js';
 import { dreams } from '../data/dreams.js';
+import { poems } from '../data/awayTexts.js';
 import { beliefLevel } from '../belief.js';
 import { dreamStill, dreamStillOff, sleepInDark, wizardName } from '../ui/render.js';
 import { scrollClose, scrollOpen } from '../ui/scrolls.js';
@@ -35,7 +36,7 @@ const CODE_FILES = ['events.js', 'combat.js', 'divine.js', 'travel.js', 'story.j
 const POOL_NAMES = {
     light: 'Light dreams (Devout, Believer)', call: 'Callings (Doubter, Atheist)', night: 'Nightmares',
     fallHealer: 'After a fall: the healer', fallRescuer: 'After a fall: a rescuer', fallAlone: 'After a fall: alone',
-    chap: 'Chapter dreams', echo: 'Echo dreams (after an erasure)',
+    chap: 'Chapter dreams', echo: 'Echo dreams (after an erasure)', poem: 'Away poems (death while the god is away)',
 };
 const FAITH = ['Devout', 'Believer', 'Doubter', 'Atheist'];
 
@@ -161,6 +162,13 @@ async function loadItems() {
         label: `${d.belief ? '✦ ' : ''}${d.lines[0].slice(0, 44)}${d.lines[0].length > 44 ? '…' : ''}`,
         where: `src/data/dreams.js, ${d.id}${d.belief ? ' (belief dream)' : ''} (one line per line)`,
         text: d.lines.join('\n'),
+    })));
+    // the poems of an absence permadeath are shown like a dream (first line: the title)
+    items.dream.push(...poems.map((x) => ({
+        kind: 'dream', id: `dream:poem-${x.id}`, group: POOL_NAMES.poem, pool: 'poem', belief: false,
+        label: x.title, where: `src/data/awayTexts.js, poems, ${x.id} (first line is the title, then one line per line; {zone} too)`,
+        text: [`<b>${x.title}</b>`, ...x.lines].join('
+'),
     })));
     const code = [];
     for (const file of CODE_FILES) code.push(...parseCode(file, await fetchText(`src/${file}`)).map((x) => ({ ...x, group: `Game phrases: ${file}` })));

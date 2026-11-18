@@ -457,6 +457,7 @@ function findRuneOrBook(){
             const [sprite, name] = looksRandom() < 0.5 ? ["item_mirrorshield", "mirror shield"] : ["item_gorgoneye", "gorgon's-eye amulet"];
             run.objectToStudy = "artefact";
             run.artefactName = name;
+            state.artefacts.push({ sprite, name });
             loadNPC(sprite);
             print(`${wizardName()} finds a ${name}! Medusa's gaze will never turn him to stone again`);
             run.multipleEventsCounter = 4;

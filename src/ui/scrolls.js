@@ -13,7 +13,7 @@ import { detectmob, layoutPortrait } from './layout.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
-import { statsPageHtml } from './statsPages.js';
+import { inventoryPageHtml, statsPageHtml } from './statsPages.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
@@ -189,8 +189,8 @@ function updateAchievements(){
 // name; clicking a strip brings that page to the front (option (a), chosen by the author on
 // 2026-11-12 from the artist's mockups). The front scroll moves down by the strips and gets
 // shorter by the same amount, so its bottom roll stays where it was.
-const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"] };
-const PAGE_NAMES = { kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary" };
+const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"] };
+const PAGE_NAMES = { kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory" };
 const TAB_RATIO = 0.092;            // visible strip of each back scroll, of the scroll width
 const TAB_LABEL_RATIO = 0.046;      // its page name, of the scroll width
 const FRONT_PARTS = ["scrollBackUp", "scrollBackCenter", "scrollText", "btnClose"];
@@ -265,13 +265,15 @@ document.addEventListener("wizardidle:layout", () => {
 // Fill the stats scroll (ui/statsPages.js).
 function updateStats(){
     const secondsInGame = ((state.meta.playTimeMs + (loop.now() - run.timeStart)) / 1000).toFixed(0);
-    ui.statsPage = statsPageHtml(secondsInGame);
+    const inventory = ui.scrollViews.stats == "inventory";
+    ui.statsPage = inventory ? inventoryPageHtml() : statsPageHtml(secondsInGame);
     el('innerTextScroll').innerHTML = ui.statsPage;
-    el("stats").style.fontSize = `${ui.em}px`;
-    el("stats").style.lineHeight = `${ui.em}px`;
-    el("titleStats").style.fontSize = `${ui.em * 2.5}px`;
-    el("titleStats").style.lineHeight = `${ui.em * 2.5}px`;
-    if (ui.scrollCurrentContent == "stats") placeScrollTabs("stats");  // no tabs: clears any left
+    const id = inventory ? "inventory" : "stats", title = inventory ? "titleInventory" : "titleStats";
+    el(id).style.fontSize = `${ui.em}px`;
+    el(id).style.lineHeight = `${ui.em}px`;
+    el(title).style.fontSize = `${ui.em * 2.5}px`;
+    el(title).style.lineHeight = `${ui.em * 2.5}px`;
+    if (ui.scrollCurrentContent == "stats") placeScrollTabs("stats");  // the Stats and Inventory pages
 }
 
 // The dev bar switch in Help (src/dev/tests.js listens for the event; the game never

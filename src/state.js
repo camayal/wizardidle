@@ -63,6 +63,7 @@ function newState() {
         forceEvent: '',               // debug: comma-separated event numbers to force
         hydraMysteryResolved: false,
         petrifiedOnce: false,         // Medusa turned him to stone at least once (src/bossEffects.js)
+        artefacts: [],                // what he carries: { sprite, name } of each artefact found (the inventory page)
         petrifyImmune: false,         // he found the artefact against her gaze
         travelFavor: false,           // planned in v1 (map travel once god loves the wizard), never unlocked
         hydraHeads: {},               // hydra name -> current number of heads

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- The stats scroll has a second page, Inventory (a strip above it, like the kill scroll's): for now the staff, his gold and any artefact he has found, such as the mirror shield or the gorgon's-eye amulet. The Faith section of Stats shows a belief meter bar under the belief level.
+- Texts dev mode: the eight away poems are listed (Dreams drop, "Away poems"), shown over the dark and playable.
 - A wizard who dies for good while the god is away gets a poem, one of eight that never repeat in one world, shown softly over the dark scene (title, then the lines) before the next wizard begins; the fallen line now names the zone he lies in.
 - Dev tools: the game no longer waits when its window is hidden or minimized; it runs as in the live game (the deploy's hidden-page rule is untouched).
 - Time away: a wizard found fallen after a long absence now stays down, even after a reload or a second visit; only the god's touch lifts him, and the hours he lay there keep adding up toward his death. Chapters VI, VIII, X and XI protect him: no fall and no death from absence there (faith and gold still drift).

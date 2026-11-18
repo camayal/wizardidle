@@ -1505,3 +1505,7 @@ Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7).
 6. A hidden page is settled by calculation on return (no slow-motion game). Keep the live game stopped while hidden. When the page shows after a long absence play one return sound (see sound-notes).
 ```
 (done 2026-11-18: points 1 and 2 built; 3 to 6 were already in place; the return sound waits for the musician)
+
+[] we need a place to show the inventory i think in the stats, another scroll
+[] faith related aspects is empty we need to put things there, probably a beliefmeter should be there 
+(done 2026-11-18: Inventory page as a second page of the stats scroll, with the staff, gold and artefacts found; the Faith section of Stats gained a belief meter bar)

@@ -4,6 +4,7 @@
 
 import { roundNumbertoLetter } from '../utils.js';
 import { state } from '../state.js';
+import { zones } from '../data/zones.js';
 import { fight, run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { setLiveTime } from '../game.js';
@@ -507,7 +508,7 @@ function dreamLines(dream, slots) {
         fontSize: `${Math.max(10, Math.round(layer.height / 7))}px`,
         color: dream && dream.nightmare ? "rgb(255, 150, 130)" : "rgb(230, 222, 255)" });
     const name = wizardName();
-    dreamBox.innerHTML = (dream ? dream.lines : []).map((line) => `<div style="opacity: 0">${markup(line, slots || { name })}</div>`).join("");
+    dreamBox.innerHTML = (dream ? dream.lines : []).map((line) => `<div style="opacity: 0">${markup(line, slots || { name, zone: zones[state.zone.current].name })}</div>`).join("");
     return [...dreamBox.children];
 }
 
