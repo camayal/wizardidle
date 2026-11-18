@@ -1467,3 +1467,9 @@ Author's note: For elementals, I changed my mind; the entry to battle should be 
 ```
 
 Done: the "element" arrival in src/ui/entrances.js (fire pillar, lightning strike, ice that shatters).
+
+```
+Date: 2026-11-17
+Author's note: for @artist, the hydra swamp (mud pool) exit animation (img/bosses/hydras/anim_hydra_mud_leave.png, the mother hydra sinking into her mud pool) is not the best. Let's come up with another idea: propose a few options for the mother hydra's exit, the author picks one.
+```
+Done 2026-11-17: the author picked option D (dive splash) of four; it replaces anim_hydra_mud_leave.png.
