@@ -1453,3 +1453,8 @@ Each file fuses the author's two sounds: the "inf" sound from the start of the e
 | hydra_ice_enter (icedra) | inf_hydra_ice.mp3 + burst_hydra_ice.mp3 | 1.20 s (frame 10) | 0.000 s to 2.500 s | 0.6 (fade in 0, out 30 ms) | Frost (spellChispasBlue_8), heard |
 | hydra_bones_enter (hydskon) | inf_hydra_bones.mp3 + burst_hydra_bone.mp3 | 1.32 s (frame 11) | 0.000 s to 2.100 s | 0.3 (fade in 0, out 30 ms) | Shadow (spellMaldicion_8), heard |
 
+
+```
+Date: 2026-11-15 16:43
+Author's note: @artist, comming from the ground generalized animation need to be a little more expresive
+```

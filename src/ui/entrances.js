@@ -49,7 +49,7 @@ const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 26, burrow: 30, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 11, jump: 14, slam: 26, burrow: 30, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
 export const ARRIVALS = Object.keys(FRAMES);
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -84,6 +84,16 @@ const HYDRA_ENTER = {
     hydskon: { effect: "bones", reveal: 11, sound: "hydra_bones_enter", volume: 0.3 },
 };
 const HYDRA_FRAME = 96;
+// The ground effects the risers come out of and sink into (the artist's, img/effects/fx/fx_ground_<a-d>
+// and fx_ground_boss_<a-d>): 10 frames, 48 x 32 for a 32 px sprite, 96 x 64 for a 64 px boss, drawn at
+// 1 art px per sprite px with the ground row on the feet. One of the four at random each time. The
+// sprite shows from frame `from` and is fully up on frame `up`; leaving plays it all backwards.
+const GROUND = { a: { from: 3, up: 7 }, b: { from: 3, up: 7 }, c: { from: 1, up: 5 }, d: { from: 3, up: 7 } };
+const GROUND_ROW = { 32: 24, 64: 48 };       // by sprite size: the ground row of the strip
+const GROUND_FRAMES = 10;
+// The hydras' leaving strips (anim_hydra_<effect>_leave, 14 frames of 96 x 96, ground = bottom row,
+// laid over the sinking hydra, which is out of sight by frame 9).
+const HYDRA_LEAVE_GONE = 9;
 const HYDRA_ENTER_MS = 120;
 const HYDRA_FADE = 5;               // steps the last frame fades over (the last droplets and shards fade out)
 // Bosses with their own entrance strip with the boss drawn in it (the artist's, 100 ms a frame):
@@ -116,6 +126,13 @@ function arrivalKind(npc) {
     return { kind: looksRandom() < 0.5 ? "blink" : "fade" };
 }
 
+// A random one of the four ground effects for this enemy's size: { src, row, from, up }.
+function groundSet(npc) {
+    const img = imageNow(art(npc)), boss = img && img.naturalWidth > 40;
+    const letter = "abcd"[Math.floor(looksRandom() * 4) % 4];
+    return Object.assign({ src: art(boss ? `fx_ground_boss_${letter}` : `fx_ground_${letter}`), row: GROUND_ROW[boss ? 64 : 32] }, GROUND[letter]);
+}
+
 const easeOut = (t) => 1 - (1 - t) * (1 - t);
 const clamp01 = (x) => Math.max(0, Math.min(1, x));
 
@@ -136,10 +153,8 @@ function pose(kind, t, k) {
         p.dy = Math.sin(k * 0.7) * 2.5 * (1 - t);
         p.alpha = Math.min(1, t * 1.6);
     } else if (kind == "rise") {
-        p.dy = 34 * (1 - easeOut(t));
-        p.dx = t < 1 ? Math.sin(k * 2.2) * 0.8 : 0;                        // pushing out
+        p.riseFrame = k;                                                    // the ground effect's frame; draw() raises the sprite
         p.clip = true;
-        p.dust = Math.min(2, Math.floor(t * 3));
     } else if (kind == "jump") {
         if (t < 0.8) {
             const u = t / 0.8;
@@ -218,6 +233,7 @@ export function playEntrance(done) {
     imageNow(art(`${npc}`));
     if (portal) imageNow(art(portal));
     imageNow(art(`fx_dust`));
+    const ground = kind == "rise" ? groundSet(npc) : undefined;
     loop.freezeGame();
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
@@ -231,12 +247,12 @@ export function playEntrance(done) {
     const step = () => {
         if (state.npc != npc || k > total) return finish();
         const img = imageNow(art(`${npc}`));
-        if (!img) {                                 // not loaded yet: wait for it (2 s at most)
+        if (!img || (ground && !imageNow(ground.src))) {   // not loaded yet: wait for it (2 s at most)
             pixelContext(npcCanvas).clearRect(0, 0, npcCanvas.width, npcCanvas.height);
             if (++waited > 40) k = total + 1;
             return;
         }
-        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { strip: portal, spin: k, fire: FIERY.has(npc) }));
+        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { strip: portal, spin: k, fire: FIERY.has(npc), ground }));
         k++;
     };
     step();                                         // at once: it never shows in its place first
@@ -298,11 +314,14 @@ export function playLeave(npc, done) {
 }
 
 function leave(npc, gone, done) {
+    const hydra = /^(mother|hydskon|icedra)\d+$/.exec(npc);
+    if (hydra) return leaveHydra(npc, hydra[1], gone, done);
     // the portal bosses go back through their portal: it opens, they shrink (or fade, King Skeleton)
     // into it, it closes
     const strip = BOSS_PORTAL[npc];
     const kind = strip ? (ARCH.has(npc) ? "archPortal" : "bossPortal") : LEAVE[entranceKind(npc)] || entranceKind(npc), total = FRAMES[kind];
     if (strip) imageNow(art(strip));
+    const ground = kind == "rise" ? groundSet(npc) : undefined;
     cancelNPCDraw();
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
@@ -316,8 +335,9 @@ function leave(npc, gone, done) {
     const step = () => {
         if (gone() || k > total) return finish();
         const img = imageNow(art(`${npc}`));
-        if (!img) { if (++waited > 40) k = total + 1; return; }
-        draw(npc, img, Object.assign(pose(kind, 1 - Math.min(1, k / (total - 2)), k), { flip: TURNS.has(kind), strip, spin: k }));
+        if (!img || (ground && !imageNow(ground.src))) { if (++waited > 40) k = total + 1; return; }
+        const back = kind == "rise" ? total - 2 - k : k;     // the ground effect plays backwards
+        draw(npc, img, Object.assign(pose(kind, 1 - Math.min(1, k / (total - 2)), back), { flip: TURNS.has(kind), strip, spin: k, ground }));
         k++;
     };
     step();
@@ -329,6 +349,12 @@ function draw(npc, img, p) {
     const scene = ui.charWidth / 32;
     let w = bw * p.sx, h = bh * p.sy;
     let x = bx + p.dx * scene + (bw - w) / 2, y = by + p.dy * scene + bh - h;
+    if (p.riseFrame !== undefined && p.ground) {    // out of the ground effect: hidden, then up by its frames
+        const g = p.ground, f = p.riseFrame, u = clamp01((f - g.from) / (g.up - g.from));
+        if (f < g.from) p.alpha = 0;
+        y += bh * 1.05 * (1 - easeOut(u));
+        x += f < g.up && f >= g.from ? Math.sin(f * 2.2) * 0.8 * scene : 0;     // pushing out
+    }
     const ctx = pixelContext(npcCanvas);
     ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
     let cx = bx + bw / 2, cy = by + bh * 0.55, rx = bw * 0.42, ry = bh * 0.56;
@@ -370,6 +396,11 @@ function draw(npc, img, p) {
     ctx.restore();
     if (p.mound > 0 || p.clods > 0) drawDirt(ctx, bx + bw / 2 + (p.moundShake || 0) * scene, by + bh, bw / img.naturalWidth, p);
     if (p.fire && p.landed !== undefined) drawFire(ctx, bx + bw / 2, by + bh, bw, scene, p.landed);
+    const fx = p.ground && p.riseFrame >= 0 && p.riseFrame < GROUND_FRAMES && imageNow(p.ground.src);
+    if (fx) {                                       // the hole in front of the feet, 1 art px per sprite px
+        const a = bw / img.naturalWidth, fw = fx.naturalWidth / GROUND_FRAMES, fh = fx.naturalHeight;
+        drawFrame(ctx, fx, p.riseFrame * fw, 0, fw, fh, bx + (bw - fw * a) / 2, by + bh - p.ground.row * a, fw * a, fh * a);
+    }
     const dust = imageNow(art(`fx_dust`));
     if (dust && p.dust >= 0) {                      // dust at the feet (24 x 8, 3 frames)
         const dw = 24 * scene * (bw / ui.charWidth), dh = 8 * scene * (bw / ui.charWidth);
@@ -524,6 +555,49 @@ function playHydraEnter(npc, hydra, done) {
         drawFrame(ctx, strip, Math.min(k, frames - 1) * HYDRA_FRAME, 0, HYDRA_FRAME, HYDRA_FRAME,
             bx + (bw - size) / 2, by + bh - size, size, size);
         ctx.restore();
+        k++;
+    };
+    step();
+    loop.every("animNPC", step, HYDRA_ENTER_MS);
+}
+
+// A hydra leaves: it sinks behind the ground line while the artist's strip (no hydra drawn) plays over
+// it, out of sight by frame HYDRA_LEAVE_GONE. No sound.
+function leaveHydra(npc, hydra, gone, done) {
+    const src = art(`anim_hydra_${HYDRA_ENTER[hydra].effect}_leave`), body = art(npc);
+    cancelNPCDraw();
+    imageNow(src);
+    imageNow(body);
+    npcCanvas.width = npcCanvas.offsetWidth;
+    npcCanvas.height = npcCanvas.offsetHeight;
+    let k = 0, waited = 0;
+    const finish = () => {
+        loop.stop("animNPC");
+        loop.thawGame();
+        if (!gone()) clearNPC();
+        if (done) done();
+    };
+    const step = () => {
+        const strip = imageNow(src), img = imageNow(body);
+        if (!strip || !img) {
+            if (++waited > 17) finish();
+            return;
+        }
+        const frames = strip.naturalWidth / HYDRA_FRAME;
+        if (gone() || k >= frames) return finish();
+        const [bx, by, bw, bh] = npcBox(npc);
+        const px = bw / img.naturalWidth, size = HYDRA_FRAME * px;
+        const ctx = pixelContext(npcCanvas);
+        ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        if (k < HYDRA_LEAVE_GONE) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(0, 0, npcCanvas.width, by + bh);          // only what is above the ground shows
+            ctx.clip();
+            ctx.drawImage(img, bx, by + bh * clamp01(k / (HYDRA_LEAVE_GONE - 0.5)), bw, bh);
+            ctx.restore();
+        }
+        drawFrame(ctx, strip, k * HYDRA_FRAME, 0, HYDRA_FRAME, HYDRA_FRAME, bx + (bw - size) / 2, by + bh - size, size, size);
         k++;
     };
     step();

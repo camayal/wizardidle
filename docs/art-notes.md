@@ -13,8 +13,3 @@ Author's note: for @artist, in the dinamic scenes we need to be sure that the pa
 Date: 2026-11-15 11:44
 Author's note: Praire need some scene backround where the road is freatured, @artist
 ```
-
-```
-Date: 2026-11-15 16:43
-Author's note: @artist, comming from the ground generalized animation need to be a little more expresive
-```
