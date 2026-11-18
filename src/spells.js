@@ -68,6 +68,9 @@ function spell(img, pj, critic = 0, center = 0, at = null){
     // withImage: with the image already loaded it starts the animation at once)
     const frameMs = spells[img].ms || 0;
     let lastFrameAt = -Infinity;
+    // when the effect on the wizard is over (a frame per screen refresh, about 17 ms): the enemy
+    // that felled him waits for it before it leaves (ui/entrances.js playLeave)
+    if (pj) run.wizardSpellUntil = Math.max(run.wizardSpellUntil || 0, performance.now() + totalFrames * Math.max(frameMs, 17) + 100);
     withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, art(`${img}`), (image) => { myImage = image; animate(); });
 
     // one frame per screen refresh; the last step only clears the canvas, then the animation

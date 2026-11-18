@@ -229,24 +229,39 @@ export function playExit(done) {
 }
 
 // The wizard has fallen: the enemy that beat him leaves its own way in, played backwards (the
-// author: like the entrances, done with code). npc is the one that was on the scene; it goes on
-// drawing after the fight is cleared, unless another one comes in. The game waits meanwhile.
+// author: like the entrances, done with code). npc is the one that was on the scene: it stays
+// there (state.npc) while its last attack, its scene spell and the effect on the wizard play out
+// (the author: it left before its last spell was cast), then it leaves and the scene is empty.
+// Another one coming in stops it. The game waits meanwhile.
 const LEAVE = { blink: "fade", slam: "jump" };
 const TURNS = new Set(["walk", "jump", "fly", "slither"]);                 // turn their back to go
+const LEAVE_WAIT_MS = 8000;                                                // waits for the blow 8 s at most
 export function playLeave(npc, done) {
     const gone = () => state.npc && state.npc != npc;                       // someone else is on the scene now
     if (!npc || run.simulation || !document.hasFocus()) {
         if (!gone()) clearNPC();
         return done && done();
     }
+    if (!state.npc) state.npc = npc;                // its attack goes on to the end
+    loop.freezeGame();
+    const since = performance.now();
+    const busy = () => loop.isRunning("animNPC") || loop.isRunning("animScene") || performance.now() < (run.wizardSpellUntil || 0);
+    loop.every("leaveNPC", () => {
+        if (gone() || !busy() || performance.now() - since > LEAVE_WAIT_MS) {
+            loop.stop("leaveNPC");
+            leave(npc, gone, done);
+        }
+    }, STEP_MS);
+}
+
+function leave(npc, gone, done) {
     const kind = BOSS_PORTAL[npc] ? "fade" : LEAVE[entranceKind(npc)] || entranceKind(npc), total = FRAMES[kind];
     cancelNPCDraw();
-    loop.freezeGame();
     let k = 0, waited = 0;
     const finish = () => {
         loop.stop("animNPC");
         loop.thawGame();
-        if (!gone()) pixelContext(npcCanvas).clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        if (!gone()) clearNPC();
         if (done) done();
     };
     const step = () => {
