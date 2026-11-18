@@ -64,3 +64,10 @@ Decided (2026-11-17, docs/DECISIONS.md): achievements belong to the player, save
 
 Please turn these into a plan with options; dev waits for the author's OK before building.
 ```
+
+```
+Date: 2026-11-18
+Author's note (moved from dev-notes): add a defensive spells school to avoid damage we can incorporeate thos with the lvl. no overpowered, so rare. ideas: rune shield = circle in front of him; ice block = it can be in fron of him as well; more advance": phase off, and later in the game magic shield, like a multicharge, spell that protect from the following 2 or 3 attacks, this should be an outline probably black + white, that fade with every hit
+
+Please turn this into a plan with options (rarity, level scaling, charges, the art it needs); dev waits for the author's OK before building.
+```
