@@ -40,6 +40,20 @@ export const config = {
         devoutTouchCost: 0.75, doubterTouchCost: 2,
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
+    // Time away (docs/AWAY.md, first estimates, to playtest): away time / worldDivisor = world time.
+    away: {
+        worldDivisor: 108,         // 1 month away is about 6.7 world hours
+        minSeconds: 300,           // shorter than this changes nothing (a reload, a quick look elsewhere)
+        capDays: 90,               // elapsed time is capped (a clock set forward cannot farm): 20 world hours
+        faithLossPerHour: 0.02,    // share of his faith lost per world hour (compounds, never below 0)
+        goldDriftPerHour: 0.005,   // gold moves up or down by up to this share per world hour
+        levelsPerHour: 0.3,        // expected levels per world hour (his normal pace is 3 to 6)
+        maxLevels: 3,              // most levels one absence can give, and never up to the next chapter level
+        softDeadHours: 6.6,        // from here (a little under 1 month) he has fallen; the god can revive him
+        deadRampHours: 13.3,       // about 2 months: permadeath chance is deadRampChance here
+        deadRampChance: 0.7,
+        deadCertainHours: 20,      // the cap: permadeath is certain
+    },
     // Fixed rules of the world.
     balance: {
         rXP: 1.1,                  // XP curve exponent

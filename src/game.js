@@ -16,6 +16,7 @@ import { defineObjectSize, getEM, responsiveLayout } from './ui/layout.js';
 import { el } from './ui/dom.js';
 import * as loop from './loop.js';
 import { art } from './media.js';
+import { settleAway, watchHidden } from './away.js';
 
 const version = "2.2.0-dev"; // "-dev" until the release; v1: "02nov2020_10pm"
 let uniqueID;
@@ -75,7 +76,9 @@ function start() {
         //artificial levelUP from 0 to 1 to add some vars
         state.firstUse = false;
     };
-    if (state.player.hp <= 0){//perfom a weak revive if the player does not revive after reload, loss faith
+    const away = settleAway();      // the time the god was not watching (src/away.js)
+    watchHidden();
+    if (away != "soft" && state.player.hp <= 0){//perfom a weak revive if the player does not revive after reload, loss faith
         state.player.hp = state.player.hpBase * 0.1;
             const feperdida = state.player.hpBase * 0.25;
             state.player.faith = state.player.faith - feperdida
@@ -85,7 +88,7 @@ function start() {
     drawWizard();
     showStage();
     //load previous locality random scenery
-    nextEvent();
+    if (away == "none") nextEvent();    // fallen (soft): waits for the god's touch; dead: the poem
     //trigger event selecter
 
 };

@@ -2,6 +2,7 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- Time away: the time the god was not watching changes the wizard a little (away time divided by 108). His faith falls, gold drifts, he may gain a level or two (never up to a chapter). After about a month he has fallen and only your touch lifts him; after more he may die for good, and then a poem is the only thing you are told. A page left hidden for a few minutes counts as away. The help scroll holds a hint about the slow clock.
 - Reloading the game starts with a clean scene: the enemy, hydra or object that was there when the game closed no longer stands frozen on the right.
 - Dev tools, Texts mode: every chapter scroll, dream and console line in drop lists, shown where the game shows it (chapter scroll, the dark of the night, the console); the author notes box becomes a taller editor, each edit shows in the game at once, Save to file adds it to docs/history-notes.md.
 - Dream lines are HTML over the dark: bold, italics, colours, sizes and [sprite] icons can be written in a dream; long lines wrap instead of running off the scene.

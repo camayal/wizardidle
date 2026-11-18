@@ -24,6 +24,7 @@ function newState() {
         meta: {
             createdAt: new Date().toISOString(),
             playTimeMs: 0,
+            lastSeen: 0,            // Date.now() when the god last watched (saved on hide and close); src/away.js
         },
         player: {
             name: '',
@@ -124,6 +125,7 @@ let saving = true;
 
 export function saveGame() {
     if (!saving) return;
+    if (!document.hidden) state.meta.lastSeen = Date.now();     // a hidden page keeps the moment it was left
     write(SAVE_KEY, state);
     write(WORLD_KEY, world);
 }
@@ -146,10 +148,22 @@ export function deleteSave() {
     localStorage.removeItem(SAVE_KEY);
 }
 
+// The moment the god looks away: stored in the save (src/away.js settles it on the next load).
+function saveLeaving() {
+    state.meta.lastSeen = Date.now();
+    saveGame();
+}
+
+// Reload without saving over the stored moment of leaving (a hidden page that stayed hidden long).
+export function reloadAway() {
+    saving = false;
+    location.reload();
+}
+
 setInterval(saveGame, SAVE_EVERY_MS);
-window.addEventListener('pagehide', saveGame);
+window.addEventListener('pagehide', saveLeaving);
 document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') saveGame();
+    if (document.visibilityState === 'hidden') saveLeaving();
 });
 
 // Current value of a trainable skill: the base from config plus what this wizard gained.

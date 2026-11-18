@@ -62,6 +62,10 @@ function btnCloseEvent(){
     if (ui.scrollCurrentContent == "history"){//unpause game after history
        pauseToggle();
     }
+    if (ui.scrollCurrentContent == "away"){//the poem after an absence death: the next wizard
+       location.reload();
+       return;
+    }
     scrollClose()
 }
 
