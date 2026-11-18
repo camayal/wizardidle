@@ -15,10 +15,9 @@ import * as loop from './loop.js';
 import { chapter } from './story.js';
 import { recordLevel, stats } from './stats.js';
 import { setLevelValues } from './wizard.js';
-import { print, wizardName } from './ui/render.js';
-import { scrollOpen } from './ui/scrolls.js';
-import { el } from './ui/dom.js';
-import { awayTexts, awayText } from './data/awayTexts.js';
+import { print, wizardName, poemInDark } from './ui/render.js';
+import { zones } from './data/zones.js';
+import { poems, awayText } from './data/awayTexts.js';
 import { faithAfter, goldAfter, levelsGained, permadeathChance, worldHours } from './awayMath.js';
 
 // Levels with a chapter stop the levels from away time; so does the last level.
@@ -76,15 +75,15 @@ export function settleAway(rand = Math.random) {
             stats.count("death.away");
             stats.count("away.softDead");
         }
-        print(awayText("softDead", wizardName()));
+        print(awayText("softDead", slots()));
         // no self revive, not even after a reload: only the god's touch lifts him (docs/AWAY.md)
         return "soft";
     }
     return hours ? "drift" : "none";
 }
 
-// He died for good while away: the cemetery, the save forgotten, the poem on a scroll; closing
-// it loads the next wizard (src/ui/menu.js).
+// He died for good while away: the cemetery, the save forgotten, the poem over the dark
+// scene, then the next wizard.
 function dieAway() {
     world.cemetery.push({
         name: state.player.name,
@@ -99,14 +98,29 @@ function dieAway() {
     stats.count("death.away");
     stats.count("away.permadeath");
     loop.stopAll();
+    const poem = nextPoem();        // before the world is written: the bag is saved with it
     deleteSave();
-    setTimeout(() => {
-        el("innerTextScroll").innerHTML = `<span class="titles" id="historyTitle">${awayTexts.poemTitle}</span><br><br>${awayText("poem", wizardName())}<br>`;
-        el("innerTextScroll").style.display = "block";
-        el("historyTitle").style.fontSize = `${ui.em * 2.5}px`;
-        el("historyTitle").style.lineHeight = `${ui.em * 2.5}px`;
-        scrollOpen("away");
-    }, 600);
+    setTimeout(() => poemInDark(poem, slots(), () => location.reload()), 600);     // the next wizard
+}
+
+// The slots of the away texts: his name and the zone he lay in.
+const slots = () => ({ name: wizardName(), zone: zones[state.zone.current].name });
+
+// The next poem of the world's shuffle bag: none repeats until all have been read; the one read
+// last never opens the next round.
+function nextPoem() {
+    let bag = world.poemBag;
+    if (!bag || !bag.length) {
+        bag = poems.map((p) => p.id);
+        for (let i = bag.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [bag[i], bag[j]] = [bag[j], bag[i]];
+        }
+        if (bag.length > 1 && bag[0] == world.poemLast) bag.push(bag.shift());
+        world.poemBag = bag;
+    }
+    const id = world.poemLast = bag.shift();
+    return poems.find((p) => p.id == id);
 }
 
 // A hidden page counts as away: the game waits while it is hidden; if it stayed hidden past

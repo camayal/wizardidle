@@ -492,7 +492,7 @@ const SLEEP_DARK_MS = 2000, DREAM_LINE_MS = 1800;
 let dreamBox;
 
 // The dream's lines over the scene, all hidden (opacity 0); returns the line elements.
-function dreamLines(dream) {
+function dreamLines(dream, slots) {
     const layer = fadeLayer();
     if (!dreamBox) {
         dreamBox = document.createElement("div");
@@ -507,7 +507,7 @@ function dreamLines(dream) {
         fontSize: `${Math.max(10, Math.round(layer.height / 7))}px`,
         color: dream && dream.nightmare ? "rgb(255, 150, 130)" : "rgb(230, 222, 255)" });
     const name = wizardName();
-    dreamBox.innerHTML = (dream ? dream.lines : []).map((line) => `<div style="opacity: 0">${markup(line, { name })}</div>`).join("");
+    dreamBox.innerHTML = (dream ? dream.lines : []).map((line) => `<div style="opacity: 0">${markup(line, slots || { name })}</div>`).join("");
     return [...dreamBox.children];
 }
 
@@ -543,6 +543,30 @@ function sleepInDark(dream, done, atDark) {
             ctx.clearRect(0, 0, layer.width, layer.height);
             hideDreamLines();
             loop.thawGame();
+            if (done) done();
+        }
+    }, FADE_STEP_MS);
+}
+
+// The poem for a wizard who died for good while the god was away (docs/AWAY.md): the scene
+// fades to dark, the title and the lines appear one after the other, slowly, and it stays dark;
+// done() runs after the last line has had its time (the name screen follows).
+const POEM_LINE_MS = 2600, POEM_END_MS = 4500;
+function poemInDark(poem, slots, done) {
+    const layer = fadeLayer(), ctx = layer.getContext("2d");
+    const lines = dreamLines({ lines: [`<b>${poem.title}</b>`, ...poem.lines] }, slots);
+    const total = 1500 + lines.length * POEM_LINE_MS + POEM_END_MS;
+    let t = 0;
+    loop.every("poem", () => {
+        const dark = Math.min(1, t / 1000);
+        ctx.fillStyle = `rgba(6, 4, 12, ${dark})`;
+        ctx.fillRect(0, 0, layer.width, layer.height);
+        lines.forEach((line, i) => {
+            line.style.opacity = Math.max(0, Math.min(1, (t - 1500 - i * POEM_LINE_MS) / 700));
+        });
+        t += FADE_STEP_MS;
+        if (t >= total) {
+            loop.stop("poem");
             if (done) done();
         }
     }, FADE_STEP_MS);
@@ -771,6 +795,7 @@ export {
     walkBackThroughScene,
     drawFrame,
     sleepInDark,
+    poemInDark,
     dreamStill,
     dreamStillOff,
     enterPlace,

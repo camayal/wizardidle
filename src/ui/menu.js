@@ -64,10 +64,6 @@ function btnCloseEvent(){
        if (chapterRead()) return;     // another chapter waits: its scroll replaces this one
        pauseToggle();
     }
-    if (ui.scrollCurrentContent == "away"){//the poem after an absence death: the next wizard
-       location.reload();
-       return;
-    }
     scrollClose()
 }
 
