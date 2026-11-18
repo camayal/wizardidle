@@ -8,3 +8,13 @@ earlier one.
 Date: 2026-11-15 11:38
 Author's note: I would like to have one creek in the praire, and keep the one in the swam, but we need to modify the maps to include them, and additionally cbe sure to create scenes of bridges one for each region
 ```
+
+```
+Date: 2026-11-18
+Author's note: Faith scroll: improve its graphic design, it needs to look more divine; the belief meter needs to be more artistic (art from the artist may help).
+```
+
+```
+Date: 2026-11-18
+Author's note: Inventory: show the items in a grid, each item in its own square slot (the staff icons are square 32x32 for this reason).
+```
