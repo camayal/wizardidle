@@ -16,6 +16,9 @@ The player is a god. When the app is closed he cannot see the world: other gods 
 | What may world time change? | Gold and faith drift a little. A few levels over long absences. Same region. |
 | Limit on levels | Never enough to reach another chapter or trigger a story event: levels from away time stop below the next chapter threshold. |
 | Permadeath | The only thing that grows dramatically with absence, and it is the clock-forwarding control. The only moment the player is told anything on return: something poetic (a short text, not a system message). |
+| Faith | Falls while the god is away (an absent god is believed in less); it does not drift up. Gold may drift either way, a little. |
+| Hidden page | Treated like a closed app: when the page hides, the live game stops and the time is stored; on showing again the 108 clock settles it (proposed, author unsure what it meant, explained 2026-11-17). |
+| Numbers | First numbers are estimates; adjust after playtests. |
 | Cap | Elapsed time is capped, so a device clock set forward cannot farm levels. |
 
 ## Rough scale (factor 108)
@@ -37,11 +40,9 @@ The player is a god. When the app is closed he cannot see the world: other gods 
 
 ## Open questions
 
-- The drift numbers, the level odds and the permadeath curve: wait for playtests (STATS tools can simulate world hours).
-- The cap value.
+- The cap value, and the first estimates for drift, level odds and the permadeath curve (to write next, then adjust after playtests).
+- Does the faith free revive (FAITH.md) catch an absence death? Open.
 - The poetic text itself (the historian/author writes it).
-- Does the faith free revive (FAITH.md) catch an absence death, or is an absence death final?
-- Does a hidden tab count as away time (same 108 rule), or only a closed app? The dev tools already freeze the game when hidden.
 
 ## To do when built
 
