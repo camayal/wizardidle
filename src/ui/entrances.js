@@ -13,7 +13,7 @@
 // centre while it turns, standing in its place just before the portal closes behind it.
 //
 // Bosses arrive by what they are (the author's note): fliers fly in, spectres float, the mage bosses
-// step out of their portals and Rojo flickers in like a mage, kkck and the plant and bone kings grow
+// step out of their portals, and so do the other staff kings (Rojo, King Skeleton, Herbus); kkck grows
 // out of the ground, the brutes slam down from a leap, the cube bounces in and medusa slithers.
 //
 // When the wizard falls, the enemy leaves its own way in, played backwards (playLeave): walkers turn
@@ -34,11 +34,11 @@ const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
     float: ["el_espectro", "la_esencia", "el_ojo", "el_elemental", "infraespectro", "etymos"],
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
-        "kkck", "herbus", "skeleton"],
+        "kkck"],
     jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
     slam: ["goro", "protromus", "bicaptop"],
     slither: ["medusa"],
-    blink: ["el_hechicero", "la_hechicera", "el_vampiro", "rojo"],
+    blink: ["el_hechicero", "la_hechicera", "el_vampiro"],
 };
 const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
@@ -56,9 +56,13 @@ export const PORTALS = {
     fx_portal_rainbow: ["#d03a3a", "#e8a020", "#3fb04f", "#3f7fe0", "#9b5de5"],
 };
 const MAGE_PORTALS = ["fx_portal_a", "fx_portal_b", "fx_portal_c"];
-const BOSS_PORTAL = { doria: "fx_portal_doria", midas: "fx_portal_midas", rainbow: "fx_portal_rainbow" };
+// The magic bosses step out of a portal: the mage bosses their own, the other staff kings (Rojo,
+// King Skeleton, Herbus) a mage portal drawn at boss size until they have their own.
+const BOSS_PORTAL = { doria: "fx_portal_doria", midas: "fx_portal_midas", rainbow: "fx_portal_rainbow",
+    rojo: "fx_portal_c", skeleton: "fx_portal_a", herbus: "fx_portal_b" };
 const STRIP_FRAMES = 16;
-const BOSS_PORTAL_SCALE = 0.7;      // the 80 x 96 boss strips at 70%: about the boss's own size
+const BOSS_PORTAL_SCALE = 0.7;      // a portal 80 sprite px wide (the boss strips) at 70%: about the boss's own size
+const BOSS_STRIP_WIDTH = 80;        // a smaller strip (the 40 px mage portals) is scaled up to it
 // The strip frame for an arrival step: opens, loops while the enemy steps out, closes.
 const stripFrame = (k) => k < 6 ? k : k < 24 ? 6 + (k - 6) % 6 : Math.min(15, 12 + k - 24);
 // The artist's general hydra entrances (img/bosses/hydras/anim_hydra_<effect>_enter.png): 16 frames
@@ -285,7 +289,8 @@ function draw(npc, img, p) {
     let cx = bx + bw / 2, cy = by + bh * 0.55, rx = bw * 0.42, ry = bh * 0.56;
     const strip = p.strip && imageNow(art(p.strip));
     if (strip) {                                    // the artist's strip, feet on the ground line
-        const px = bw / img.naturalWidth * (p.bossScale || 1), fw = strip.naturalWidth / STRIP_FRAMES, fh = strip.naturalHeight;
+        const fw = strip.naturalWidth / STRIP_FRAMES, fh = strip.naturalHeight;
+        const px = bw / img.naturalWidth * (p.bossScale ? p.bossScale * BOSS_STRIP_WIDTH / fw : 1);
         const sw = fw * px, sh = fh * px;
         drawFrame(ctx, strip, stripFrame(p.spin) * fw, 0, fw, fh, bx + (bw - sw) / 2, by + bh + px - sh, sw, sh);
         rx = sw * 0.4; ry = sh * 0.42; cy = by + bh - ry;      // its open oval
