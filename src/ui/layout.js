@@ -180,18 +180,19 @@ const CANVASES = ["esceneCanvas", "pjCanvas", "npcCanvas", "spellCanvas"];
 const TOOLBAR = ["btn1", "btn2", "btn3", "btn4", "btn5", "btn6"];
 const HEADING_ICONS = ["hpIcon", "goldIcon", "spiritIcon"];
 
-// The XP bar on its wood plate, with the indicators in the plate's dark inset (the artist's
-// option A). u is one art pixel on screen: the plate is 26 high (caps 8 wide), the bar 10 high
-// (caps 6 wide, the track 4 in from each end) sitting 3 below the plate's top, and the inset
-// runs from row 15 to 25, 3 in from each side.
+// The XP bar on its dark plate with gilt rules, the indicators below it (the artist's option D).
+// u is one art pixel on screen. The plate's gold rules (4 rows on top, 2 below, caps 8 wide)
+// keep their size and its dark middle stretches, so the plate can be as tall as the text needs.
+// The bar is 10 high (caps 8 wide, the track 4 in from each end), 3 below the plate's top; the
+// indicators take the 12 rows under it, in text as big as before.
 function layoutXPPlate(top, width, u) {
-    setStyles("xpPlate", { left: 0, top, width, height: 26 * u, borderImageWidth: `0 ${8 * u}px` });
-    setStyles("XPprogressBar", { display: "block", left: 4 * u, top: top + 3 * u, width: width - 8 * u, height: 10 * u, borderImageWidth: `0 ${6 * u}px` });
+    setStyles("xpPlate", { left: 0, top, width, height: 28 * u, borderImageWidth: `${4 * u}px ${8 * u}px ${2 * u}px` });
+    setStyles("XPprogressBar", { display: "block", left: 4 * u, top: top + 3 * u, width: width - 8 * u, height: 10 * u, borderImageWidth: `0 ${8 * u}px` });
     setStyles("xpTrack", { left: 4 * u, right: 4 * u });
-    setStyles("xpFill", { backgroundSize: `${4 * u}px ${10 * u}px` });
-    setStyles("indicadores", { left: 6 * u, top: top + 15 * u, width: width - 12 * u, height: 10 * u, fontSize: 9 * u, lineHeight: `${10 * u}px`,
+    setStyles("xpFill", { backgroundSize: `${8 * u}px ${10 * u}px` });
+    setStyles("indicadores", { left: 8 * u, top: top + 14 * u, width: width - 16 * u, height: 12 * u, fontSize: 11 * u, lineHeight: `${12 * u}px`,
         display: "flex", alignItems: "center", justifyContent: "space-between" });
-    setEach(HEADING_ICONS, { height: 7 * u, width: 7 * u });
+    setEach(HEADING_ICONS, { height: 9 * u, width: 9 * u });
 }
 
 // Layout for desktop and phones held upright: heading, scene, then the console.
@@ -221,7 +222,7 @@ function layoutPortrait(){
     // heading
     setStyles("heading", { height: headingH });
     setStyles("pjName", { fontSize: button, width: s * 0.7 });
-    layoutXPPlate(s * 0.093, s * 0.7, s * 0.0042);
+    layoutXPPlate(s * 0.092, s * 0.7, s * 0.0042);
     setEach(TOOLBAR, { display: "block", width: button });
     setEach(["btn1", "btn4"], { left: s * 0.75 });
     setEach(["btn2", "btn5"], { left: s * 0.75 + (s * 0.1) });

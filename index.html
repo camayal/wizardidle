@@ -151,8 +151,10 @@
                 border-width: 0;
                 image-rendering: pixelated;
             }
-            #xpPlate { border-image: url(img/ui/xpbar_plate.png) 0 8 fill round; }
-            #XPprogressBar { border-image: url(img/ui/xpbar_frame.png) 0 6 fill round; }
+            #xpPlate { border-image: url(img/ui/xpbar_plate.png) 4 8 2 8 fill round; }
+            #XPprogressBar { border-image: url(img/ui/xpbar_frame.png) 0 8 fill round; }
+            #indicadores { text-shadow: 0.1em 0.1em 0 #000; }
+            #indicadores .stat { white-space: nowrap; }
             #xpTrack, #xpFill { position: absolute; top: 0; bottom: 0; }
             #xpFill {
                 left: 0;
@@ -440,9 +442,9 @@
                 <div id="xpbar" class="left" ><div id="XPprogressBar"><div id="xpTrack"><div id="xpFill"></div></div></div></div>
                 <div id="indicadores" class="left">
                     <span id="lvl">_lvl_</span>
-                    <img id="hpIcon" class="imgInConsole" src="img/ui/heart.png"/><span id="hp">_hp_</span>
-                    <img id="goldIcon" class="imgInConsole" src="img/ui/gold.png"/><span id="gold">_gold_</span>
-                    <img id="spiritIcon" class="imgInConsole" src="img/ui/spirit.png"/><span id="fe">_faith_</span>
+                    <span class="stat"><img id="hpIcon" class="imgInConsole" src="img/ui/heart.png"/> <span id="hp">_hp_</span></span>
+                    <span class="stat"><img id="goldIcon" class="imgInConsole" src="img/ui/gold.png"/> <span id="gold">_gold_</span></span>
+                    <span class="stat"><img id="spiritIcon" class="imgInConsole" src="img/ui/spirit.png"/> <span id="fe">_faith_</span></span>
                 </div>
             </div>
 
