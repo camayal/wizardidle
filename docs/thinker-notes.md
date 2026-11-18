@@ -64,8 +64,3 @@ Decided (2026-11-17, docs/DECISIONS.md): achievements belong to the player, save
 
 Please turn these into a plan with options; dev waits for the author's OK before building.
 ```
-
-```
-Date: 2026-11-18
-Author's note (question, answer with pros and cons, then options): would it be a nice idea to make each scroll a little more thematic instead of the same parchment? Examples: the cemetery with a grass background; the inventory with a wooden texture and crates/boxes; the stats and the bestiary kept as parchment, or each with its own look. Combining different looks could break our current status (the one scroll style used by stats, achievements, help, kill, map, faith). Please list pros and cons, a recommendation, and what it would cost the artist; dev waits for the author's OK before building.
-```

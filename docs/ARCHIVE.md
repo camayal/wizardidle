@@ -1517,3 +1517,10 @@ Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7).
 Date: 2026-11-18
 Author's note: Inventory: show the items in a grid, each item in its own square slot (the staff icons are square 32x32 for this reason).
 ```
+
+## Thinker note: themed scrolls (planned 2026-11-18, in docs/SCROLLS.md)
+
+```
+Date: 2026-11-18
+Author's note (question, answer with pros and cons, then options): would it be a nice idea to make each scroll a little more thematic instead of the same parchment? Examples: the cemetery with a grass background; the inventory with a wooden texture and crates/boxes; the stats and the bestiary kept as parchment, or each with its own look. Combining different looks could break our current status (the one scroll style used by stats, achievements, help, kill, map, faith). Please list pros and cons, a recommendation, and what it would cost the artist; dev waits for the author's OK before building.
+```
