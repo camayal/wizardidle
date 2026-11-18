@@ -7,5 +7,5 @@
 [] add a defensive spells school to avoid damage we can incorporeate thos with the lvl. no overpowered, so rare. ideas: rune shield = circle in front of him; ice block = it can be in fron of him as well; more advance": phase off, and later in the game magic shield, like a multicharge, spell that protect from the following 2 or 3 attacks, this should be an outline probably black + white, that fade with every hit
 [] we need a place to show the inventory i think in the stats, another scroll
 [] faith related aspects is empty we need to put things there, probably a beliefmeter should be there 
-[] use a tool such as https://github.com/ChristosMaragkos/Oggify or a permanent created script to transform mp3 to ogg. never use tokens to do each transformaion from scratch
+[x] ~~use a tool such as https://github.com/ChristosMaragkos/Oggify or a permanent created script to transform mp3 to ogg. never use tokens to do each transformaion from scratch~~ (done: `python tools/to_ogg.py <files or folder>`; see its help)
 [x] ~~thanks https://ko-fi.com/dragonstudio for a bunch of sounds~~ (done: in the help scroll's sound credits)

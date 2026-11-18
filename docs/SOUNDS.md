@@ -74,7 +74,8 @@ All at normal speed, not repeated. Notes for whoever wires them:
 `python tools/cut_sounds.py` makes them from the list in `tools/sound_cuts.txt`: the cut, mono,
 a 30 ms fade out, Ogg Vorbis, the volume untouched. It needs the `soundfile` library once
 (`python -m pip install soundfile`). The originals are in
-`wizardidle-old-ideas/unorganized_sounds/`.
+`wizardidle-old-ideas/unorganized_sounds/`. To turn whole files into game .ogg files without a cut,
+use `python tools/to_ogg.py <files or folder> [--out snd/<folder>] [--name game_name]` (same settings).
 
 | Game sound | Original file | Cut |
 |---|---|---|

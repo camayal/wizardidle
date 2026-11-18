@@ -23,11 +23,12 @@ import sys
 import time
 from pathlib import Path
 
+from to_ogg import write_ogg    # the game's Ogg Vorbis settings, shared with tools/to_ogg.py
+
 REPO = Path(__file__).resolve().parent.parent
 CUTS = Path(__file__).resolve().parent / 'sound_cuts.txt'
 OUTSIDE = Path('wizardidle-old-ideas') / 'unorganized_sounds'
 FADE_OUT_MS = 30
-QUALITY = 0.5           # Vorbis quality, 0 to 1 (about 96 to 128 kbps in mono)
 
 
 def read_cuts():
@@ -91,11 +92,7 @@ def cut_one(cut, src, sf, np):
     if fade:
         piece[-fade:] *= np.linspace(1, 0, fade, dtype='float32')
     out = REPO / 'snd' / cut['folder'] / f'{cut["name"]}.ogg'
-    out.parent.mkdir(parents=True, exist_ok=True)
-    with sf.SoundFile(str(out), 'w', samplerate=rate, channels=1, format='OGG', subtype='VORBIS',
-                      compression_level=1 - QUALITY) as f:
-        for i in range(0, len(piece), 8192):     # in blocks: long single writes can crash the encoder
-            f.write(piece[i:i + 8192])
+    write_ogg(out, piece, rate, sf)
     return out, len(piece) / rate
 
 
