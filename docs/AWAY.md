@@ -20,6 +20,9 @@ The player is a god. When the app is closed he cannot see the world: other gods 
 | Hidden page | Treated like a closed app: when the page hides, the live game stops and the time is stored; on showing again the 108 clock settles it (proposed, author unsure what it meant, explained 2026-11-17). |
 | Numbers | First numbers are estimates; adjust after playtests. |
 | Cap | Elapsed time is capped, so a device clock set forward cannot farm levels. |
+| Faith revive and absence (2026-11-17) | **The free revive does not catch an absence death.** Absence is staged by world time instead: after about **1 month away** he is **soft dead** (not permadead) and coming back can still save him; on that return the console shows one line implying that if the god does not appear, this is the last day of his life. After **another month away** the permadeath chance is high, and finally certain ("no chances"). Exact curve: Estimates. |
+| What the player is told (2026-11-17) | **Only an absence permadeath is told**, with a **poem**, and only when it happened. The soft-dead console line is the one other trace (a game line, not a message about time). |
+| The 108 factor (2026-11-17) | **Never announced**; only the FAQ hint. |
 
 ## Rough scale (factor 108)
 
@@ -38,11 +41,86 @@ The player is a god. When the app is closed he cannot see the world: other gods 
 3. Apply small drift to gold and faith per world hour, an occasional level (stopped below the next chapter), and roll permadeath with a chance that rises steeply with world time.
 4. If he died: on entering, show the poetic text once. Otherwise show nothing.
 
+## The story side
+
+### Three states, side by side
+
+| | Soft sleep (SLEEP.md) | Soft dead (absence) | Death (cemetery) |
+|---|---|---|---|
+| What it is | Rest at an inn or camp | He fell while the god was away; no rescuer came, nothing finished him. He lies where he fell, fading, waiting for the one hand that can still lift him | Gone for good |
+| How it ends | He wakes by himself | **Only the god** can end it, on return | Never: cemetery, then the name screen |
+| Rescuers (FAITH.md) | not needed | **none**: the caravan, the shaman and the others had their chance while the god was away | none |
+| Looks | Dark fade, maybe a dream | The fallen sprite with the skull above him (the skull means "the god can still act", FAITH.md) | The dead sprite, no skull |
+| Told to the player | sleep lines | **one console line** (below) | **the poem** (absence permadeath only) |
+
+**Story rules:**
+- Permadeath from absence comes **only out of the soft-dead state**, never straight from a healthy wizard. Soft dead is the last door: the god walks through it or he doesn't.
+- It obeys the true death rule (FAITH.md): he dies for good only where the god could have clicked. The god could have come back, so absence counts; the protected chapters are an open question below.
+- No word about time in any line: no "months", no "days" (a month away is only some hours of world time), no "offline", no 108.
+
+### The soft-dead line (console, on return)
+
+Shown once when the god returns and finds him soft dead. It must say: he is still alive, he cannot last, only the god can change it. A month away is about seven world hours, so "since dawn" fits and quietly hints at the slow clock. Candidates:
+
+1. *{name} has lain in the {zone} since dawn. If no god comes for him before nightfall, it will be his last day.* (recommended: plain, the same register as "No one came.")
+2. *{name} opens one eye. "If you are coming," he whispers, "come today."*
+3. *Somewhere in the {zone}, {name} is still breathing. Not for long. Today is the last day he can wait.*
+
+### The poem (absence permadeath only)
+
+**Brief:**
+- **When and how:** once, on entering, over the dark scene the way a dream vision is shown (SLEEP.md): the lines appear softly, then the cemetery record and the name screen (STORY.md, *True death*). Not a scroll, not a popup.
+- **Voice:** addressed to **you**, the god (STORY.md). Quiet, plain words; grief more than accusation, no blame spelled out.
+- **Length:** 4 to 6 short lines.
+- **Must say:** he waited for you; you did not come; he is dead for good. Uses {name}, may use {zone}. May echo the death-chapter idea *"for you, god, time is nothing; for the world it is everything"* (FAITH.md).
+- **Must not say:** any time unit or count, the 108 factor, system words (save, app, offline, closed), any number.
+- **Final text:** the author or the historian writes it; the drafts are starting points.
+
+**Draft A**
+> You looked away, and the world went on without you.
+> {name} lay in the {zone} and counted the hours,
+> then he stopped counting.
+> For you, time is nothing.
+> For him it was everything he had.
+> No one came.
+
+**Draft B**
+> {name} called you once at dusk, once at dawn.
+> The third time, he did not call.
+> A god can be gone for a moment.
+> A man is gone for good.
+> The {zone} keeps him now.
+
+### Cemetery, not erasure
+
+An absence permadeath is a **regular cemetery death** (erasure is only for final-battle losers): a normal tomb (not cracked), his name **not** reversed or struck through, **no echo slot**, no soul in the final battle. He is a regular past wizard, so he can come back as the **ghost rescuer** and write **letters** (FAITH.md). The tomb's parchment note gives the cause in one line, for example *"He waited for you in the {zone}."* A letter from such a wizard (he waited, the god never came) is a strong hook; not decided.
+
+### Hidden page in slow motion: the idea weighed
+
+The idea: while the page is hidden (not closed), the game keeps running at 1/108 speed with the sound low and slowed, so the player can feel time passing for the wizard; a closed app is settled by calculation on return.
+
+**Pros**
+- Poetic: the god's eye drifts away and the world goes on, far and slow. Fits "the god cannot see the world".
+- An audible hint at the slow clock, for players who like to guess the factor.
+
+**Cons**
+- **It is a simulation**, against the "no simulation" wish, and a second path for the same thing: the live slow game and the return calculation could disagree (a fight half-played when the page shows again, two rules for dying while away).
+- **Nothing visible happens.** A hidden page cannot be seen, and at 1/108 a short fight lasts most of an hour; only the sound would ever reach the player.
+- Sound from a hidden page annoys (another tab, a phone in a pocket) and costs battery on phones. Browsers also slow hidden pages down on their own, so a live run would be unreliable anyway.
+
+**Recommendation: no slow-motion game.** Keep the decided rule (hidden = closed, settled by the 108 calculation). Keep the one good part, the feeling, as a **sound cue only**: when the page hides, the music slows and fades to silence over a few seconds; when it shows, the music comes back. One cue, no simulation, the same story ("you looked away").
+
 ## Open questions
 
 - The cap value, and the first estimates for drift, level odds and the permadeath curve (to write next, then adjust after playtests).
-- Does the faith free revive (FAITH.md) catch an absence death? Open.
-- The poetic text itself (the historian/author writes it).
+- Story side, to ask the author one at a time:
+  1. **On return to a soft-dead wizard:** (a) he lies fallen with the skull and **the god's touch** saves him (recommended: the god must act, not just open the app); (b) returning alone lifts him; (c) add or talk first.
+  2. **If the god returns and leaves again without touching him:** (a) he stays soft dead and the clock goes on toward permadeath (recommended); (b) leaving again kills him at once; (c) add or talk first.
+  3. **Protected chapters (STORY.md true death rule):** (a) the story's protector holds him: no soft dead and no permadeath there, silently (recommended: keeps the rule whole); (b) absence overrides the protection; (c) add or talk first.
+  4. **Hidden page:** (a) no slow-motion game, a fade-and-slow sound cue only (recommended); (b) the slow-motion game as proposed; (c) nothing at all; (d) add or talk first.
+  5. **Soft-dead line:** (a) candidate 1 (recommended); (b) candidate 2; (c) candidate 3; (d) add or talk first.
+  6. **Poem:** (a) one poem, the author or historian writes it from the brief (recommended); (b) Draft A as is; (c) Draft B as is; (d) a small bag of poems that never repeat in one world; (e) add or talk first.
+  7. **Does the touch that saves a soft-dead wizard give the usual revive faith (FAITH.md)?** (a) yes, the usual free revive (recommended: he was saved by the god he waited for); (b) no faith; (c) add or talk first.
 
 ## To do when built
 
