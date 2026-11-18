@@ -58,6 +58,7 @@ export function pickDream() {
         else pool = doubting ? "call" : "light";
     }
     const dream = takeFromBag(pool);
+    stats.count(`dream.seen.${dream.id}`);      // "every dream": one key per dream
     if (nightmare) {
         const level = beliefLevel();
         if (level == "believer" || level == "devout") beliefMoment("nightmare", config.belief.nightmareFloor);

@@ -11,6 +11,7 @@
 
 import { world } from '../state.js';
 import { ui } from '../runtime.js';
+import { stats } from '../stats.js';
 import { art } from '../media.js';
 import { roundNumbertoLetter } from '../utils.js';
 
@@ -135,7 +136,10 @@ export function paintCemetery(container) {
         const tomb = ev.target.closest && ev.target.closest('canvas.tomb');
         const same = open && tomb && open.dataset.grave == tomb.dataset.grave;
         if (open) open.remove();
-        if (tomb && !same) openNote(grid, tomb);
+        if (tomb && !same) {
+            openNote(grid, tomb);
+            stats.count(`world.cemetery.read.${tomb.dataset.grave}`);     // "read every note": one key per tomb
+        }
     };
 }
 

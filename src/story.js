@@ -277,6 +277,7 @@ function showNextChapter(){
 // The player closed a chapter scroll. Returns true when another chapter follows (its scroll opens
 // next and the game keeps waiting), false when the queue is empty and the game can go on.
 function chapterRead(){
+    stats.count("story.chaptersRead");
     chapterQueue.shift();
     if (chapterQueue.length == 0) return false;
     showNextChapter();

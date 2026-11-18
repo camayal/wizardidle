@@ -52,11 +52,15 @@ export function settleAway(rand = Math.random) {
     p.gold = goldAfter(p.gold, hours, rand());
     for (let n = levelsGained(p.lvl, hours, rand(), thresholds()); n > 0; n--) quietLevel();
     stats.add("away.worldHours", hours);
+    stats.count("away.returns");
+    stats.max("away.longestHours", Math.round(hours * 10) / 10);
     if (hours >= config.away.softDeadHours) {
         p.hp = 0;
         fight.pjDead = true;
+        run.softDead = true;        // a touch now saves him (src/divine.js counts it)
         stats.count("death.falls", 1, { world: true });
         stats.count("death.away");
+        stats.count("away.softDead");
         print(awayText("softDead", wizardName()));
         // no self revive: only the god's touch lifts him (docs/AWAY.md)
         return "soft";
@@ -78,6 +82,7 @@ function dieAway() {
         away: true,
     });
     stats.count("death.away");
+    stats.count("away.permadeath");
     loop.stopAll();
     deleteSave();
     setTimeout(() => {

@@ -53,6 +53,14 @@ Only what the next features need, in this order:
 4. **Dice game:** games, won / lost / tied, gold won / lost, best cargo, risky rolls and whether they paid.
 5. **The rest of the catalogue** in `ideas.md` (combat records, exploration, study, habits, world), a few at a time.
 
+### Added 2026-11-17 (every stat is per wizard and per world)
+
+- **Combat:** `combat.won`, `combat.wonAlone` / `combat.wonWithGod`, `combat.flawless` (no damage taken), `combat.longestFight` (steps), `combat.closestCallPct` (lowest HP % at a win), `combat.damageDealt`, `combat.damageTaken`, `combat.biggestHitTaken`, `spell.cast.<spell>`, `spell.healed`, `kill.polymorphed`.
+- **Falls:** `death.by.<sprite|boss|hydra>`, `death.byBoss`, `death.byHydra`, `death.byPolymorphed.<animal>`, `death.zone.<zone>`, `death.level.<tens>`.
+- **Time away:** `away.returns`, `away.longestHours`, `away.softDead`, `away.permadeath`, `away.savedByTouch` (`death.away` still counts both).
+- **Dice house:** `dice.games`, `dice.wins` / `dice.losses` / `dice.ties`, `dice.anotherRound`, `dice.biggestBet`, `gold.dice.bet`, `gold.dice.won`.
+- **Elsewhere:** `explore.restlessLeaves`, `inn.hpRecovered`, `story.chaptersRead`, `dream.seen.<dream id>`, `god.killAsked`, `god.killTakenBack`, `world.wizardsKilledByGod`, `world.cemetery.read.<tomb>`.
+
 ### Achievements from stats
 
 Achievement checks are scattered through the code today (`if (Number(counterText("BotinGot_chest")) > 100) …`). New achievements are written as **data**: `{ id, stat: "dice.won", atLeast: 50 }`, checked whenever that stat changes. The 13 placeholder achievements get their triggers this way.

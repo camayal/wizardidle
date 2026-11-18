@@ -8,8 +8,11 @@
 //   stats.min("faith.lowest", -310)       a record: kept if lower
 //   stats.first("first.bossKill")         a first: written once, with when it happened
 //
-// Per wizard in state.stats; per world (what outlives every wizard) in world.stats, when
-// called with { world: true } (both). Names starting with "world." are only per world.
+// Every stat is kept twice: per wizard in state.stats, and per world (what outlives every
+// wizard: the player's lifetime, read by achievements) in world.stats. Names starting with
+// "world." are only per world; streaks (PER_WIZARD) are only per wizard. Each write is one
+// object property, so counting costs nothing worth measuring; add stats freely
+// (docs/DECISIONS.md: stats for most aspects of the game).
 // A record or a first is { value, lvl, age, date, playTimeMs }.
 // v1 and 2.x up to 2.1 had only counters (state.counters, v1: idx_*); they were renamed
 // to this scheme without a migration (dev phase, old saves don't matter).
@@ -28,9 +31,13 @@ function when(value) {
     return { value, name: state.player.name, lvl: state.player.lvl, age: Math.round(state.player.age * 10) / 10, date: new Date().toISOString(), playTimeMs: playTime() };
 }
 
+// Streaks that start again (stats.reset): a lifetime sum of them means nothing.
+const PER_WIZARD = new Set(['combat.combo']);
+
+// `options` is kept for old calls ({ world: true }); every stat reaches the world anyway.
 function stores(name, options) {
     if (name.startsWith('world.')) return [world.stats];
-    return options && options.world ? [state.stats, world.stats] : [state.stats];
+    return PER_WIZARD.has(name) ? [state.stats] : [state.stats, world.stats];
 }
 
 export const stats = {
@@ -63,7 +70,7 @@ export const stats = {
     },
     // The number behind a stat (a record's value), 0 if it never happened.
     get(name, options) {
-        const value = (name.startsWith('world.') || (options && options.world) ? world.stats : state.stats)[name];
+        const value = (name.startsWith('world.') || (options && options.world) ? world.stats : state.stats)[name];   // { world: true }: the lifetime number
         return value === undefined ? 0 : typeof value === 'object' ? value.value : value;
     },
 };

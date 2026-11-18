@@ -407,14 +407,15 @@ function updateKill(){
 function killClick() {
     const wrap = el("killBtnWrap"), btn = el("realKillBtn");
     if (!wrap || !btn) return;
-    if (wrap.querySelector('.killNote')) return realKill();
+    if (wrap.querySelector('.killNote')) { stats.count("world.wizardsKilledByGod"); return realKill(); }
+    stats.count("god.killAsked");
     const width = Math.min(wrap.clientWidth * 0.92, btn.offsetWidth * 2.4);
     const note = parchmentNote([
         `Click <b>Kill</b> again to kill <b>${state.player.name}</b>.`,
         'It is permanent.',
     ], width, `left:${(wrap.clientWidth - width) / 2}px; bottom:${btn.offsetHeight * 1.15}px`);
     note.className = 'killNote';
-    note.onclick = () => note.remove();
+    note.onclick = () => { note.remove(); stats.count("god.killTakenBack"); };
     wrap.appendChild(note);
 }
 

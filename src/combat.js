@@ -75,6 +75,7 @@ function enemyFalls() {
 
 // The fight is won: counters and achievements, faith, loot and XP, then back to the road.
 function defeatEnemy() {
+    const rounds = run.multipleEventsCounter - 1;      // before endEvent starts the count again
     endEvent();
     // belief: a close call he came through on his own
     if (!fight.godHelped && state.player.hp < state.player.hpBase * config.belief.closeCallLine) beliefMoment("closeCall");
@@ -104,6 +105,7 @@ function defeatEnemy() {
     }
     stats.count("combat.combo");
     updateLongestCombo();
+    recordWin(rounds);
     clearNPC();
 
     // faith: cleansing a corrupted enemy gains faith; while in sin every kill costs faith
@@ -128,6 +130,27 @@ function defeatEnemy() {
     victoryRewards(faithText);
     clearFight();
     nextEvent();
+}
+
+// How the fight was won: rounds, damage taken, how close it was, with or without the god.
+function recordWin(rounds) {
+    stats.count("combat.won");
+    stats.count(fight.godHelped ? "combat.wonWithGod" : "combat.wonAlone");
+    stats.max("combat.longestFight", rounds);
+    if (!fight.damageTaken) stats.count("combat.flawless");
+    if (fight.polymorphed) stats.count("kill.polymorphed");
+    stats.min("combat.closestCallPct", Math.round(100 * Math.max(0, state.player.hp) / state.player.hpBase));
+}
+
+// What beat the wizard: a boss, a hydra or the sprite (empty if it fell in the same round).
+function recordFall() {
+    const by = fight.bossCombat ? fight.enemy : fight.hydraCombat ? fight.hydra : fight.enemyAndNumber;
+    if (by) stats.count(`death.by.${by}`);
+    if (fight.bossCombat) stats.count("death.byBoss");
+    else if (fight.hydraCombat) stats.count("death.byHydra");
+    if (fight.polymorphed) stats.count(`death.byPolymorphed.${fight.polymorphedAnimal}`);
+    stats.count(`death.zone.${state.zone.current}`);
+    stats.count(`death.level.${Math.floor(state.player.lvl / 10) * 10}`);
 }
 
 // Gold (if the enemy carries any) and XP for a won fight, with the victory message.
@@ -169,6 +192,7 @@ function wizardFalls() {
         if (fight.polymorphedAnimal == "oveja") logro.set(logro.logro_killedbysheep);
     }
     if (fight.bossCombat) logro.set(logro.logro_primeraderrotaporboss);
+    recordFall();
     fight.polymorphed = false;
     updateLongestCombo();
     stats.reset("combat.combo");
@@ -229,6 +253,7 @@ function clearFight() {
     resetBossEffects();
     fight.healedFrom = 0;
     fight.godHelped = false;
+    fight.damageTaken = 0;
     fight.enemy = "";
     fight.enemyAndNumber = "";
     state.npc = "";
@@ -396,6 +421,7 @@ function hopEnemy() {
 // Take damage off the enemy, never below 0.
 function damageEnemy(damage) {
     stats.max("combat.biggestHit", Math.round(damage));
+    stats.add("combat.damageDealt", Math.round(Math.min(damage, Math.max(0, fight.enemyHP))));
     if (fight.enemyHP - damage < 0) {
         fight.enemyHP = 0;
     } else {
@@ -444,6 +470,7 @@ function criticAttack() {
     if (isDivineSpell(spellId)) damage = damage * 4;
     damageEnemy(damage);
     stats.count(`spell.school.${spells[spellId].school}`);
+    stats.count(`spell.cast.${spellId}`);
     spell(spellId, false, true);
     print(`${wizardName()} performs a <b>critic attack!</b> (${ui.attackIcon}${roundNumbertoLetter(state.player.attack * stat("fAttack"))}) &times; ${Math.round(stat("fCritic"))} - ${ui.heartIcon}${roundNumbertoLetter(fight.enemyHP)}`);
     stats.count("combat.critics");
@@ -459,6 +486,7 @@ function normalAttack() {
     if (isDivineSpell(spellId)) damage *= 4;
     damageEnemy(damage);
     stats.count(`spell.school.${spells[spellId].school}`);
+    stats.count(`spell.cast.${spellId}`);
     const spellText = spells[spellId].name.toLowerCase();
     const verb = pickRandomItem(" cast , attacks with ");
     print(wizardName() + verb + spellText + " (" + ui.attackIcon + roundNumbertoLetter(damage) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
@@ -508,6 +536,10 @@ function enemyAttack() {
     }
     if (lethal && !hit) { waiting = true; loop.freezeGame(); }      // the next step waits for the blow
     stats.count("combat.attacksReceived");
+    const taken = Math.round(Math.min(enemyHit, state.player.hp + (lethal ? 0 : enemyHit)));     // never more than he had
+    stats.add("combat.damageTaken", taken);
+    stats.max("combat.biggestHitTaken", Math.round(enemyHit));
+    fight.damageTaken = (fight.damageTaken || 0) + taken;
 }
 
 
@@ -522,6 +554,7 @@ function healEV() {
             }else{
                 state.player.hp = state.player.hp + healHit;
             }
+        stats.add("spell.healed", Math.round(healHit));
         playSound("heal");
         spell("spellHeal_8",true);
         print(wizardName() + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    

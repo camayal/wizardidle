@@ -163,6 +163,7 @@ function changeZoneChance() {
 // A restless wizard (see restless) goes straight to another zone.
 function exploreEV() {
     if (restless()) {
+        stats.count("explore.restlessLeaves");
         print(`${wizardName()} ${pickRandomItem("has seen enough of this place,feels the call of the road,wants to see other lands")}`);
         startEvent(changeLocality);
         return;
@@ -602,6 +603,7 @@ function wakeUp(placesWithInn) {
         rested = (state.player.hpBase - state.player.hp) / getRandomInt(1, 5);
     }
     state.player.hp = state.player.hp + rested;
+    stats.add("inn.hpRecovered", Math.round(Math.max(0, rested)));
     if (state.player.hp >= state.player.hpBase) {
         textRecover = "feels totally renewed,feels well rested,has new energies,regained his health";
     } else {

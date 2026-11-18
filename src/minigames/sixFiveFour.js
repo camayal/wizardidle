@@ -5,6 +5,7 @@ import { getRandomInt, pickRandomItem, roundNumbertoLetter } from '../utils.js';
 import { config } from '../config.js';
 import { state } from '../state.js';
 import { run, ui } from '../runtime.js';
+import { stats } from '../stats.js';
 import * as loop from '../loop.js';
 import { endEvent, event, nextEvent, startEvent } from '../events.js';
 import { hopEnemy, hopWizard } from '../combat.js';
@@ -56,6 +57,9 @@ function sixfivefour(){
     countRounds++
     //set or equal the bet
     state.player.gold = state.player.gold - betForDice;
+    stats.count("dice.games");
+    stats.add("gold.dice.bet", Math.round(betForDice));
+    stats.max("dice.biggestBet", Math.round(betForDice));
     updateHeading();
     print(`${nameDicePlayer} starts the game and suggest a bet of ${ui.goldIcon}${roundNumbertoLetter(betForDice)}`)
 
@@ -233,6 +237,8 @@ function finalScoreSixFiveFour(nameDicePlayer){
                     winnerDice = nameDicePlayer;
                 }
 
+                stats.count(winnerDice == gamblingManName ? "dice.losses" : "dice.wins");
+                if (winnerDice != gamblingManName) stats.add("gold.dice.won", Math.round(betForDice * 2));
                 if (winnerDice == gamblingManName){
                     playSound("coins");
                     spell("spellCoins",false);
@@ -245,6 +251,7 @@ function finalScoreSixFiveFour(nameDicePlayer){
 
             }else{
                 print(`Nobody won (${cargoFirstPlayer} vs. ${cargo})`)
+                stats.count("dice.ties");
                 state.player.gold = state.player.gold + betForDice;
                 updateHeading();
             }
@@ -256,6 +263,7 @@ function finalScoreSixFiveFour(nameDicePlayer){
             // he stays at the table and plays another round.
             if (state.player.gold > 0 && Math.random() < config.balance.pDadosAgain) {
                 print(`${wizardName()} ${pickRandomItem("stays for another round,asks for one more game,orders a drink and plays again")}`);
+                stats.count("dice.anotherRound");
                 endEvent();
                 startEvent(sixfivefour);
                 break;
