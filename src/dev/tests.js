@@ -601,11 +601,5 @@ buildBar(prepared);
 setSpeed(savedSpeed);
 setNoteSource(gameDetails);
 
-// While developing, the game waits when its window can't be seen (minimized, or behind other
-// windows: the browser reports both as hidden), so it doesn't play on unwatched.
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) loop.freezeGame(); else loop.thawGame();
-});
-
 // For the command line and the browser console.
 window.dev = { state, world, config, run, fight, ui, loop, scenarios, actions, setLevel, setSpeed, runScenario, openMode, closeMode };

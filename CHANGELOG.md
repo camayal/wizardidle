@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Dev tools: the game no longer waits when its window is hidden or minimized; it runs as in the live game (the deploy's hidden-page rule is untouched).
 - Time away: a wizard found fallen after a long absence now stays down, even after a reload or a second visit; only the god's touch lifts him, and the hours he lay there keep adding up toward his death. Chapters VI, VIII, X and XI protect him: no fall and no death from absence there (faith and gold still drift).
 
 ## 2.2.0 — 2026-11-18
