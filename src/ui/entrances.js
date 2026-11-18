@@ -14,7 +14,7 @@
 //
 // Bosses arrive by what they are (the author's note): fliers fly in, spectres float, the mage bosses
 // step out of their portals and so does King Skeleton; Herbus (a shaman) and kkck grow out of the
-// ground, the brutes slam down from a leap, the cube bounces in, medusa slithers and Rojo walks in.
+// ground, the brutes slam down from a leap (Rojo in a burst of fire), the cube bounces in, medusa slithers.
 //
 // When the wizard falls, the enemy leaves its own way in, played backwards (playLeave): walkers turn
 // and walk off, fliers fly off, risers sink back into the ground, mages fade away.
@@ -36,15 +36,16 @@ const ENTRANCE = {
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
         "kkck", "herbus"],
     jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
-    slam: ["goro", "protromus", "bicaptop"],
+    slam: ["goro", "protromus", "bicaptop", "rojo"],
     slither: ["medusa"],
     blink: ["el_hechicero", "la_hechicera", "el_vampiro"],
 };
+const FIERY = new Set(["rojo"]);     // lands in a burst of fire and embers (melee with elemental powers)
 const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 20, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 26, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
 export const ARRIVALS = Object.keys(FRAMES);
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -140,6 +141,7 @@ function pose(kind, t, k) {
             p.sy = 0.72 + 0.28 * v; p.sx = 1.22 - 0.22 * v;
             p.dx = (k % 2 ? 1 : -1) * 1.5 * (1 - v);
             p.dust = Math.min(2, Math.floor(v * 3));
+            p.landed = v;
         }
     } else if (kind == "slither") {                                        // glides in on a sideways wave
         p.dx = OFF_RIGHT * (1 - t) + (t < 1 ? Math.sin(k * 1.3) * 1.5 : 0);
@@ -197,7 +199,7 @@ export function playEntrance(done) {
             if (++waited > 40) k = total + 1;
             return;
         }
-        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { strip: portal, spin: k }));
+        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { strip: portal, spin: k, fire: FIERY.has(npc) }));
         k++;
     };
     step();                                         // at once: it never shows in its place first
@@ -323,11 +325,32 @@ function draw(npc, img, p) {
         ctx.drawImage(img, x + p.ghost * scene, y, w, h);
     }
     ctx.restore();
+    if (p.fire && p.landed !== undefined) drawFire(ctx, bx + bw / 2, by + bh, bw, scene, p.landed);
     const dust = imageNow(art(`fx_dust`));
     if (dust && p.dust >= 0) {                      // dust at the feet (24 x 8, 3 frames)
         const dw = 24 * scene * (bw / ui.charWidth), dh = 8 * scene * (bw / ui.charWidth);
         drawFrame(ctx, dust, p.dust * 24, 0, 24, 8, bx + (bw - dw) / 2, by + bh - dh, dw, dh);
     }
+}
+
+// A burst of fire at the feet on landing (v 0 to 1): flames flare out and up, embers rise and fade,
+// yellow to orange to red, square pixels like the art. Placed by a fixed pattern, not at random.
+const FIRE = ["#fff1a8", "#ffd23f", "#f7931e", "#e8411c", "#a51c1c"];
+function drawFire(ctx, cx, ground, bw, scene, v) {
+    const px = Math.max(1, Math.round(scene * 2));
+    ctx.save();
+    for (let i = 0; i < 44; i++) {
+        const side = i % 2 ? 1 : -1, spread = 0.1 + ((i * 37) % 23) / 23 * 0.65;      // how far out
+        const lift = ((i * 53) % 17) / 17;                                              // how high
+        const ember = i >= 30;                                                          // the last ones fly up
+        const x = cx + side * spread * bw * (0.4 + 0.6 * v);
+        const y = ground - (ember ? lift * bw * 0.8 * v + bw * 0.08 : lift * bw * 0.45 * (1 - 0.6 * v));
+        ctx.globalAlpha = Math.max(0, 1 - v * (ember ? 0.7 : 0.85));
+        ctx.fillStyle = FIRE[Math.min(FIRE.length - 1, Math.floor(lift * 2.5 + v * 2))];
+        const size = ember ? px : px * (v < 0.6 ? 3 : 2);
+        ctx.fillRect(Math.round(x - size / 2), Math.round(y - size), size, size);
+    }
+    ctx.restore();
 }
 
 // The portal (stand-in until the artist's strip): a dark oval with three dashed rings turning
