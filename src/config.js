@@ -53,6 +53,7 @@ export const config = {
         deadRampHours: 13.3,       // about 2 months: permadeath chance is deadRampChance here
         deadRampChance: 0.7,
         deadCertainHours: 20,      // the cap: permadeath is certain
+        protectedLevels: [[130, 139], [149, 159], [190, 200]],  // chapters VI, VIII, X and XI: the story takes the god's click away, so no soft dead and no permadeath there (STORY.md, true death rule)
     },
     // Fixed rules of the world.
     balance: {

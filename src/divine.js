@@ -32,7 +32,7 @@ const RINGS_MS = 650;
 // rings over him where he fell, the fade, then he is in the healer's cabin.
 function reviveByTouch() {
     stats.count("god.touches");
-    if (run.softDead) { run.softDead = false; stats.count("away.savedByTouch"); }
+    if (run.softDead) { run.softDead = false; state.meta.softDead = false; state.meta.awayHours = 0; stats.count("away.savedByTouch"); }
     run.disablePjBtn = true;
     playSound("revive");
     spell("spellMultiDivine_28", true);

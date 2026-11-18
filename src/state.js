@@ -25,6 +25,8 @@ function newState() {
             createdAt: new Date().toISOString(),
             playTimeMs: 0,
             lastSeen: 0,            // Date.now() when the god last watched (saved on hide and close); src/away.js
+            softDead: false,        // fallen while the god was away: stays down until the god's touch (src/away.js)
+            awayHours: 0,           // world hours he has lain soft dead without a touch; resets on the touch
         },
         player: {
             name: '',

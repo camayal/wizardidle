@@ -24,6 +24,9 @@ import { faithAfter, goldAfter, levelsGained, permadeathChance, worldHours } fro
 // Levels with a chapter stop the levels from away time; so does the last level.
 const thresholds = () => [...Object.keys(chapter).map((k) => Number(k.replace("lvl", ""))), 200];
 
+// Chapters where the story protects him (config.away.protectedLevels).
+const protectedLevel = (lvl) => config.away.protectedLevels.some(([a, b]) => lvl >= a && lvl <= b);
+
 // A quiet level up: no scroll, no console line, no sound.
 function quietLevel() {
     const p = state.player;
@@ -37,35 +40,47 @@ function quietLevel() {
 // Settle the time since the god last watched. Returns "none", "drift", "soft" (fallen, can be
 // revived) or "dead" (died for good: the poem is on screen). Call once when a wizard loads.
 export function settleAway(rand = Math.random) {
-    const since = state.meta.lastSeen;
-    state.meta.lastSeen = Date.now();
-    if (!since || run.simulation) return "none";
-    const seconds = (Date.now() - since) / 1000;
-    if (seconds < config.away.minSeconds) return "none";
-    const hours = worldHours(seconds);
+    const m = state.meta;
+    const since = m.lastSeen;
+    m.lastSeen = Date.now();
+    if (run.simulation) return "none";
     const p = state.player;
-    if (rand() < permadeathChance(hours)) {
+    const safe = protectedLevel(p.lvl);
+    if (safe) { m.softDead = false; m.awayHours = 0; }
+    const seconds = since ? (Date.now() - since) / 1000 : 0;
+    const hours = seconds < config.away.minSeconds ? 0 : worldHours(seconds);
+    const wasDown = !!m.softDead;
+    if (!hours && !wasDown) return "none";
+    // a fallen wizard keeps counting from where he lay: the hours add up until the god's touch
+    const total = wasDown ? (m.awayHours || 0) + hours : hours;
+    if (hours && !safe && (wasDown || total >= config.away.softDeadHours) && rand() < permadeathChance(total)) {
         dieAway();
         return "dead";
     }
-    p.faith = faithAfter(p.faith, hours);
-    p.gold = goldAfter(p.gold, hours, rand());
-    for (let n = levelsGained(p.lvl, hours, rand(), thresholds()); n > 0; n--) quietLevel();
-    stats.add("away.worldHours", hours);
-    stats.count("away.returns");
-    stats.max("away.longestHours", Math.round(hours * 10) / 10);
-    if (hours >= config.away.softDeadHours) {
+    if (hours) {
+        p.faith = faithAfter(p.faith, hours);
+        p.gold = goldAfter(p.gold, hours, rand());
+        for (let n = levelsGained(p.lvl, hours, rand(), thresholds()); n > 0; n--) quietLevel();
+        stats.add("away.worldHours", hours);
+        stats.count("away.returns");
+        stats.max("away.longestHours", Math.round(hours * 10) / 10);
+    }
+    if (!safe && (wasDown || total >= config.away.softDeadHours)) {
+        m.softDead = true;
+        m.awayHours = total;
         p.hp = 0;
         fight.pjDead = true;
         run.softDead = true;        // a touch now saves him (src/divine.js counts it)
-        stats.count("death.falls", 1, { world: true });
-        stats.count("death.away");
-        stats.count("away.softDead");
+        if (!wasDown) {
+            stats.count("death.falls", 1, { world: true });
+            stats.count("death.away");
+            stats.count("away.softDead");
+        }
         print(awayText("softDead", wizardName()));
-        // no self revive: only the god's touch lifts him (docs/AWAY.md)
+        // no self revive, not even after a reload: only the god's touch lifts him (docs/AWAY.md)
         return "soft";
     }
-    return "drift";
+    return hours ? "drift" : "none";
 }
 
 // He died for good while away: the cemetery, the save forgotten, the poem on a scroll; closing

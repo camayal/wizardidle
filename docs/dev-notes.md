@@ -8,14 +8,3 @@ earlier one.
 Date: 2026-11-15 11:38
 Author's note: I would like to have one creek in the praire, and keep the one in the swam, but we need to modify the maps to include them, and additionally cbe sure to create scenes of bridges one for each region
 ```
-
-```
-Date: 2026-11-17
-Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7). Finish the feature:
-1. A reloaded soft-dead wizard must stay down: no weak self-revive; only the god's touch lifts him.
-2. Protected chapters (STORY.md true-death rule): no soft dead and no permadeath from absence there, silently; gold and faith still drift.
-3. The saving touch gives the usual free revive faith (FAITH.md).
-4. Soft-dead console line is candidate 1, with the {zone} filled in.
-5. Poem: a bag of poems that never repeat in one world (shuffle bag like the dreams); shown over the dark scene like a dream, not a scroll. Keep the placeholders until the author/historian writes them.
-6. A hidden page is settled by calculation on return (no slow-motion game). Keep the live game stopped while hidden. When the page shows after a long absence play one return sound (see sound-notes).
-```

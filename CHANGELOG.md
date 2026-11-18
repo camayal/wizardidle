@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Time away: a wizard found fallen after a long absence now stays down, even after a reload or a second visit; only the god's touch lifts him, and the hours he lay there keep adding up toward his death. Chapters VI, VIII, X and XI protect him: no fall and no death from absence there (faith and gold still drift).
+
 ## 2.2.0 — 2026-11-18
 
 - The XP bar has a gilt frame (gold rules, diamond knobs, a ticked gold fill) on a white plate that also holds the level, HP, gold and faith line in dark text, instead of the plain white bar; each icon sits by its number.
