@@ -2,6 +2,9 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- The Kill button asks twice: the first press opens a small parchment saying to press again, that it is permanent; tapping the parchment closes it.
+- The mysterious healer leaves by fading away, the mages' fade-in played backwards, instead of the red pin overlay.
+- Credits: Dragon Studio (ko-fi.com/dragonstudio) for a bunch of sounds.
 - The wizard no longer lingers in one zone: after a while there each walk makes him more likely to move on, and after a long stay he sets off for another zone.
 - Dice houses: after a game he may stay at the table for another round instead of walking out and back in. In the Town he no longer walks into the dice house on almost every exploration (a missing bracket).
 - The Prologue scroll opens only once the scene has loaded, so the scene shows below it; a chapter scroll now holds the game the moment it is due, so no event starts behind it.

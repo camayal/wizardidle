@@ -18,6 +18,7 @@ import { spell } from './spells.js';
 import { playSound } from './audio.js';
 import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
+import { playExit } from './ui/entrances.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
 import { pickDream } from './dream.js';
@@ -219,8 +220,7 @@ function reviveEV(){
             spell("spellHeal_8",true);
             break;
         case 3:
-            spell("spellPinRed_16",false);
-            clearNPC();
+            playExit();                     // the healer fades away like a mage arrives, backwards
             print(`${wizardName()} is totally recovered (${ui.healIcon}${roundNumbertoLetter(state.player.hpBase)}) and the mysterious guy is gone`)
             updateHeading();
             break;

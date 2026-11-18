@@ -150,18 +150,9 @@ function day(iso) {
 function openNote(grid, tomb) {
     const w = world.cemetery[Number(tomb.dataset.grave)];
     if (!w) return;
-    const note = document.createElement('div');
-    note.className = 'tombNote';
-    note.dataset.grave = tomb.dataset.grave;
     const width = Math.min(grid.clientWidth * 0.92, tomb.offsetWidth * 2.9);
-    const height = width * 72 / 112;
     const left = Math.max(0, Math.min(grid.clientWidth - width, tomb.offsetLeft + tomb.offsetWidth / 2 - width / 2));
     const top = tomb.offsetTop + tomb.offsetHeight * 0.55;
-    note.style.cssText = `position:absolute; left:${left}px; top:${top}px; width:${width}px; height:${height}px; ` +
-        `box-sizing:border-box; padding:${height * 13 / 72}px ${width * 10 / 112}px; z-index:2; cursor:pointer; overflow:hidden; ` +
-        `display:flex; flex-direction:column; justify-content:center; text-align:center; ` +
-        `font-size:${ui.em * 0.8}px; line-height:${ui.em * 0.95}px; color:#462808; ` +
-        `background:url('${art('tomb_note')}') center / 100% 100% no-repeat; image-rendering:pixelated`;
     const lines = [
         `<b>${esc(w.name)}</b>`,
         `Level ${roundNumbertoLetter(w.lvl)}, died at ${roundNumbertoLetter(w.age)}`,
@@ -169,7 +160,23 @@ function openNote(grid, tomb) {
     if (w.kills !== undefined) lines.push(`${roundNumbertoLetter(w.kills)} victories, ${roundNumbertoLetter(w.falls)} falls`);
     lines.push(`${day(w.born)} - ${day(w.died)}`);
     if (w.erased) lines.push('<i>Erased in the final battle</i>');
+    const note = parchmentNote(lines, width, `left:${left}px; top:${top}px`);
+    note.className = 'tombNote';
+    note.dataset.grave = tomb.dataset.grave;
+    grid.appendChild(note);
+}
+
+// A small parchment note (the tomb note art), width px wide, absolutely placed by place (css),
+// one line per entry of lines. Also the kill confirmation on the Kill page.
+export function parchmentNote(lines, width, place) {
+    const note = document.createElement('div');
+    const height = width * 72 / 112;
+    note.style.cssText = `position:absolute; ${place}; width:${width}px; height:${height}px; ` +
+        `box-sizing:border-box; padding:${height * 13 / 72}px ${width * 10 / 112}px; z-index:2; cursor:pointer; overflow:hidden; ` +
+        `display:flex; flex-direction:column; justify-content:center; text-align:center; ` +
+        `font-size:${ui.em * 0.8}px; line-height:${ui.em * 0.95}px; color:#462808; ` +
+        `background:url('${art('tomb_note')}') center / 100% 100% no-repeat; image-rendering:pixelated`;
     note.innerHTML = lines.map((l) => `<div>${l}</div>`).join('');
     loadImage(art('tomb_note')).then((img) => { if (!img) note.style.backgroundColor = '#e9d3a1'; });   // plain parchment until it's drawn
-    grid.appendChild(note);
+    return note;
 }

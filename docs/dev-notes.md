@@ -15,11 +15,6 @@ Author's note: For elementals, I changed my mind; the entry to battle should be 
 ```
 
 ```
-Date: 2026-11-17 06:58
-Author's note: healer teleport is quite rudimentary, we can use the metod we use in entrance wizards but in reverse to vanish him
-```
-
-```
 Date: 2026-11-17 14:51
 Author's note: we need to think a way to remove the enemy when the wizard is beated. i think an approach like ethe entrance is ncie, rather than animation, just math and other programatic way
 ```

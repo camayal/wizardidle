@@ -17,7 +17,7 @@
 import { run, ui } from '../runtime.js';
 import { state } from '../state.js';
 import * as loop from '../loop.js';
-import { cancelNPCDraw, drawFrame, imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext } from './render.js';
+import { cancelNPCDraw, clearNPC, drawFrame, imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext } from './render.js';
 import { art } from '../media.js';
 import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
@@ -172,6 +172,34 @@ export function playEntrance(done) {
         k++;
     };
     step();                                         // at once: it never shows in its place first
+    loop.every("animNPC", step, STEP_MS);
+}
+
+// The one on the scene leaves: the mages' fade-in played backwards (the author: the healer
+// vanishes like a mage comes in, not with an overlay). The game waits while it fades.
+export function playExit(done) {
+    const npc = state.npc;
+    const img = npc && imageNow(art(`${npc}`));
+    if (run.simulation || !document.hasFocus() || !img) {
+        if (npc) clearNPC();
+        return done && done();
+    }
+    cancelNPCDraw();
+    loop.freezeGame();
+    const total = FRAMES.fade;
+    let k = 0;
+    const finish = () => {
+        loop.stop("animNPC");
+        loop.thawGame();
+        if (state.npc == npc) clearNPC();
+        if (done) done();
+    };
+    const step = () => {
+        if (state.npc != npc || k > total) return finish();
+        draw(npc, img, pose("fade", 1 - Math.min(1, k / (total - 2)), k));
+        k++;
+    };
+    step();
     loop.every("animNPC", step, STEP_MS);
 }
 
