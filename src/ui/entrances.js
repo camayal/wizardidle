@@ -13,8 +13,9 @@
 // centre while it turns, standing in its place just before the portal closes behind it.
 //
 // Bosses arrive by what they are (the author's note): fliers fly in, spectres float, the mage bosses
-// step out of their portals and so does King Skeleton; Herbus (a shaman) and kkck grow out of the
-// ground, the brutes slam down from a leap (Rojo in a burst of fire), the cube bounces in, medusa slithers.
+// step out of their portals and so does King Skeleton; Herbus (a shaman) grows out of the ground,
+// kkck pushes up a bump of dirt and bursts out of it, the brutes slam down from a leap (Rojo in a
+// burst of fire), the cube bounces in and medusa slithers.
 //
 // When the wizard falls, the enemy leaves its own way in, played backwards (playLeave): walkers turn
 // and walk off, fliers fly off, risers sink back into the ground, mages fade away.
@@ -34,7 +35,8 @@ const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
     float: ["el_espectro", "la_esencia", "el_ojo", "el_elemental", "infraespectro", "etymos"],
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
-        "kkck", "herbus"],
+        "herbus"],
+    burrow: ["kkck"],
     jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
     slam: ["goro", "protromus", "bicaptop", "rojo"],
     slither: ["medusa"],
@@ -45,7 +47,7 @@ const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 26, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 26, burrow: 30, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
 export const ARRIVALS = Object.keys(FRAMES);
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -143,6 +145,21 @@ function pose(kind, t, k) {
             p.dust = Math.min(2, Math.floor(v * 3));
             p.landed = v;
         }
+    } else if (kind == "burrow") {                                         // a bump of dirt, then it bursts out
+        if (t < 0.45) {
+            const u = t / 0.45;
+            p.alpha = 0;
+            p.mound = easeOut(u);
+            p.moundShake = u > 0.5 ? (k % 2 ? 1 : -1) * (u - 0.5) * 2 : 0;   // trembles before it breaks
+        } else {
+            const v = clamp01((t - 0.45) / 0.5);
+            p.dy = 34 * (1 - easeOut(v));
+            p.dx = v < 1 ? Math.sin(k * 2.2) * 0.8 : 0;
+            p.clip = true;
+            p.mound = 1 - v;                                               // flattens as it comes out
+            p.clods = v;
+            p.dust = Math.min(2, Math.floor(v * 3));
+        }
     } else if (kind == "slither") {                                        // glides in on a sideways wave
         p.dx = OFF_RIGHT * (1 - t) + (t < 1 ? Math.sin(k * 1.3) * 1.5 : 0);
         p.sx = t < 1 ? 1 + 0.05 * Math.sin(k * 1.3) : 1;
@@ -239,7 +256,7 @@ export function playExit(done) {
 // there (state.npc) while its last attack, its scene spell and the effect on the wizard play out
 // (the author: it left before its last spell was cast), then it leaves and the scene is empty.
 // Another one coming in stops it. The game waits meanwhile.
-const LEAVE = { blink: "fade", slam: "jump" };
+const LEAVE = { blink: "fade", slam: "jump", burrow: "rise" };
 const TURNS = new Set(["walk", "jump", "fly", "slither"]);                 // turn their back to go
 const LEAVE_WAIT_MS = 8000;                                                // waits for the blow 8 s at most
 export function playLeave(npc, done) {
@@ -325,6 +342,7 @@ function draw(npc, img, p) {
         ctx.drawImage(img, x + p.ghost * scene, y, w, h);
     }
     ctx.restore();
+    if (p.mound > 0 || p.clods > 0) drawDirt(ctx, bx + bw / 2 + (p.moundShake || 0) * scene, by + bh, bw / img.naturalWidth, p);
     if (p.fire && p.landed !== undefined) drawFire(ctx, bx + bw / 2, by + bh, bw, scene, p.landed);
     const dust = imageNow(art(`fx_dust`));
     if (dust && p.dust >= 0) {                      // dust at the feet (24 x 8, 3 frames)
@@ -349,6 +367,37 @@ function drawFire(ctx, cx, ground, bw, scene, v) {
         ctx.fillStyle = FIRE[Math.min(FIRE.length - 1, Math.floor(lift * 2.5 + v * 2))];
         const size = ember ? px : px * (v < 0.6 ? 3 : 2);
         ctx.fillRect(Math.round(x - size / 2), Math.round(y - size), size, size);
+    }
+    ctx.restore();
+}
+
+// The bump of dirt (burrow): a mound of soil swelling at the feet, in art pixels (a = canvas px per
+// sprite px), darker at the base with lighter crumbs on top; then clods thrown out in arcs as the
+// creature bursts through. Fixed patterns, no randomness.
+const DIRT = ["#3e2612", "#5a3a1e", "#7a4f2a", "#9b6a3c", "#c08a52"];
+function drawDirt(ctx, cx, ground, a, p) {
+    ctx.save();
+    const m = p.mound || 0, W = 28, H = Math.round(20 * m);          // half-width and height in art px
+    for (let r = 0; r < H; r++) {
+        const half = Math.round(W * (0.55 + 0.45 * m) * Math.sqrt(1 - Math.pow(r / Math.max(1, H), 2)));
+        for (let x = -half; x < half; x++) {
+            const edge = half - Math.abs(x) <= 1 || r == H - 1;
+            const speck = (x * 7 + r * 13) % 11 == 0;
+            const shade = edge ? 1 : speck ? 4 : r > H * 0.6 ? 3 : 2;
+            ctx.fillStyle = DIRT[shade];
+            ctx.fillRect(Math.round(cx + x * a), Math.round(ground - (r + 1) * a), Math.ceil(a), Math.ceil(a));
+        }
+    }
+    const v = p.clods || 0;
+    if (v > 0) {
+        for (let i = 0; i < 18; i++) {
+            const side = i % 2 ? 1 : -1, reach = 10 + ((i * 29) % 13) * 2.2, rise = 8 + ((i * 41) % 11) * 2;
+            const x = cx + side * reach * v * a, y = ground - (Math.sin(Math.PI * Math.min(1, v * 1.1)) * rise + 2) * a;
+            const size = (i % 3 == 0 ? 4 : 3) * a;
+            ctx.globalAlpha = Math.max(0, 1 - v * v);
+            ctx.fillStyle = DIRT[1 + (i % 4)];
+            ctx.fillRect(Math.round(x - size / 2), Math.round(y - size / 2), Math.ceil(size), Math.ceil(size));
+        }
     }
     ctx.restore();
 }
