@@ -18,7 +18,8 @@
 // burst of fire), the cube bounces in and medusa slithers.
 //
 // When the wizard falls, the enemy leaves its own way in, played backwards (playLeave): walkers turn
-// and walk off, fliers fly off, risers sink back into the ground, mages fade away.
+// and walk off, fliers fly off, risers sink back into the ground, mages fade away, the portal bosses
+// go back through their portal.
 //
 // The game is frozen while an enemy arrives; nothing plays in a simulation or in the background.
 
@@ -291,8 +292,14 @@ export function playLeave(npc, done) {
 }
 
 function leave(npc, gone, done) {
-    const kind = BOSS_PORTAL[npc] ? "fade" : LEAVE[entranceKind(npc)] || entranceKind(npc), total = FRAMES[kind];
+    // the portal bosses go back through their portal: it opens, they shrink (or fade, King Skeleton)
+    // into it, it closes
+    const strip = BOSS_PORTAL[npc];
+    const kind = strip ? (ARCH.has(npc) ? "archPortal" : "bossPortal") : LEAVE[entranceKind(npc)] || entranceKind(npc), total = FRAMES[kind];
+    if (strip) imageNow(art(strip));
     cancelNPCDraw();
+    npcCanvas.width = npcCanvas.offsetWidth;
+    npcCanvas.height = npcCanvas.offsetHeight;
     let k = 0, waited = 0;
     const finish = () => {
         loop.stop("animNPC");
@@ -304,7 +311,7 @@ function leave(npc, gone, done) {
         if (gone() || k > total) return finish();
         const img = imageNow(art(`${npc}`));
         if (!img) { if (++waited > 40) k = total + 1; return; }
-        draw(npc, img, Object.assign(pose(kind, 1 - Math.min(1, k / (total - 2)), k), { flip: TURNS.has(kind) }));
+        draw(npc, img, Object.assign(pose(kind, 1 - Math.min(1, k / (total - 2)), k), { flip: TURNS.has(kind), strip, spin: k }));
         k++;
     };
     step();

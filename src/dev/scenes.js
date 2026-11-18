@@ -38,6 +38,28 @@ const move = (v) => v.startsWith('cast ') ? { kind: 'cast', school: v.slice(5) }
 const heads = (v) => parseInt(v);
 const listOf = (x) => (Array.isArray(x) ? x : String(x || '').split(',')).filter(Boolean);
 
+// The whole fall, as in a fight (combat.js wizardFalls): the enemy attacks, the wizard sinks at
+// once, the blow and its spell land, then the enemy leaves its own way (after its attack is over).
+function beatsTheWizard(t) {
+    const hydra = /^(mother|icedra|hydskon)\d+$/.exec(t);
+    setTimeout(() => {
+        const onHit = (spellId) => () => { if (spellId) spell(spellId, true); };
+        if (hydra) {
+            startHydraIdle();
+            const zone = Object.values(zones).find((z) => z.hidrasName == hydra[1]);
+            playHydraAttack('', onHit(listOf(zone && zone.hidrasSpells)[0]), false);
+        } else if (bossAttacks[t]) {
+            const attack = bossAttacks[t][0];
+            playBossAttack(t, bossAttackTiming(t, attack.id).attack, false, onHit(KINDS.boss.landing(t, attack.id)));
+        } else {
+            playEnemyMove(move('slash'), onHit(KINDS.enemyMove.landing(t, 'slash')));
+        }
+        playWizardAnim('fall_sit');
+        state.npc = '';                 // the fight is cleared, as when he falls
+        playLeave(t, () => setTimeout(drawWizard, 1000));
+    }, 800);
+}
+
 // Each kind: targets (the "what" list), variants (the "which" list, for a target), setUp (put it on
 // the scene), play(target, variant, onHit) and, when known, timing (ms: when the blow lands,
 // how long it lasts) and landing (the spell whose effect and school sound land with the blow).
@@ -47,8 +69,12 @@ export const KINDS = {
         play: (t, v, onHit) => playEnemyMove(move(v), onHit),
         timing: (t, v) => enemyMoveTiming(move(v)),
         landing: (t, v) => v.startsWith('cast') ? null : listOf(npcSpells[(enemySprites[t] || {}).type])[0] || null },
-    arrival: { label: 'Enemy: arrival', targets: () => sprites, variants: () => ['arrive', 'leave (the wizard fell)'],
-        play: (t, v) => { loadNPC(t); if (v && v.startsWith('leave')) { state.npc = ''; playLeave(t); } else playEntrance(); } },
+    arrival: { label: 'Enemy: arrival', targets: () => sprites, variants: () => ['arrive', 'leave (the wizard fell)', 'beats the wizard'],
+        play: (t, v) => {
+            loadNPC(t);
+            if (v == 'beats the wizard') return beatsTheWizard(t);
+            if (v && v.startsWith('leave')) { state.npc = ''; playLeave(t); } else playEntrance();
+        } },
     boss: { label: 'Boss: attack', targets: () => Object.keys(bossAttacks), variants: (t) => (bossAttacks[t] || []).map((a) => a.id),
         setUp: (t) => loadNPC(t),
         play: (t, v, onHit) => playBossAttack(t, bossAttackTiming(t, v).attack, false, onHit),

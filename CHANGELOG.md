@@ -2,7 +2,7 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
-- When the wizard falls, the enemy leaves the way it came, backwards: walkers turn and walk off, fliers fly away, risers sink into the ground, mages fade out.
+- When the wizard falls, the enemy leaves the way it came, backwards: walkers turn and walk off, fliers fly away, risers sink into the ground, mages fade out, the portal bosses go back through their portal.
 - Boss entrances: King Skeleton fades in inside his cursed skull arch, which then crumbles away; Herbus grows out of braided vines; kkck pushes up a bump of dirt and bursts out of it; Goro, Protromus and Bicaptop slam down from a leap, Rojo in a burst of fire; Cuboq bounces in; Etymos floats in; Medusa slithers.
 - The enemy that fells the wizard finishes its attack and its spell before it leaves.
 - Bestiary: the Bosses heading shows only once the first boss is met, and Secrets only once the first hydra is found.
