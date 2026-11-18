@@ -1380,3 +1380,18 @@ Author's note: time away from the game. The player is a god: when the app is clo
 
 ### 2026-11-17: Belief dreams, written, decided and built
 - The author's note "some dreams can increase believer score", with the wish that dreams never repeat. The story side wrote a pool of dreams in docs/ideas/dreams.md: light dreams, callings for doubters, nightmares, fall dreams, general chapter dreams and echo dreams, plus six story-linked chapter dreams kept for later. The author decided (docs/SLEEP.md, Belief dreams): belief dreams give +1 Devout/Believer, +2 Doubter, +3 Atheist; nightmares take 1 only from a Believer or Devout, never below the Believer line; every weight in config for playtests; a shuffle bag per pool and per wizard, so no dream returns before its whole pool has played; no wake line. Built the same day: src/dream.js (shuffle bags saved per wizard in state, the dream-or-nightmare split by belief level, belief effect run in simulation too with the real RNG), the full pool in src/data/dreams.js, every number in config.belief and config.balance. Fall dreams by healer or alone (the rescuer pool waits for rescuers). Echo dreams join after an erasure (world.erasures does not exist yet).
+
+Dev note (done 2026-11-17):
+```
+Date: 2026-11-17 13:03
+Author's note: prologue scroll should be visable only when the game load, so in the button we can see the scene, not before.
+```
+
+Dev note (done 2026-11-17):
+```
+Date: 2026-11-17 13:05
+Author's note: remove phisical  attack from our wizard, it is a wizard after all. only spells
+```
+
+### 2026-11-17: A Texts mode in the dev tools
+- The author asked for one place to see every text of the game in its real context and edit it live. Modes > Texts lists Chapters (read from docs/STORY.md, slot variants picked in the panel), Dreams (by pool) and Console (phrase lists read from the game code and zone legends, plus the story's console beats). The picked text shows in the chapter scroll, over the dark of the night, or in the console printed as the game would; the author notes box becomes a taller editor and every edit shows at once. Texts are HTML; `[sprite]` is an icon and `{name}` the wizard's name (src/ui/text.js). Save to file appends to docs/history-notes.md; the code is updated from there. Dream lines in the game became HTML over the dark for this, so styled dreams look the same in play.

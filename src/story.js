@@ -5,9 +5,8 @@ import { getRandomInt } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
 import { run, ui } from './runtime.js';
-import { pauseToggle } from './game.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, loadBackground, loadNPC, print, showStage, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, loadBackground, loadNPC, print, showStage, wizardName, whenSceneReady } from './ui/render.js';
 import { counterText, scrollClose, scrollOpen } from './ui/scrolls.js';
 import { el } from './ui/dom.js';
 
@@ -248,21 +247,24 @@ function openHistory(){
     run.storyDream = "chapter";     // the next rest dreams of it (docs/SLEEP.md)
     shownChapter.event()
 
-    // show the scroll if the chapter has text
+    // show the scroll if the chapter has text; the game waits from now on (no event starts behind
+    // it), and the scroll opens once the scene has loaded (the Prologue comes as the game starts)
     if (shownChapter.text != "NA"){
-        if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
-            scrollClose()
-            el("scrollBackCenter").addEventListener("transitionend", updateHistory);
-        } else{
-            updateHistory();
-        }
+        run.pause = true;
+        whenSceneReady(() => {
+            if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
+                scrollClose()
+                el("scrollBackCenter").addEventListener("transitionend", updateHistory);
+            } else{
+                updateHistory();
+            }
+        });
     } 
 }
 
 // Write the current chapter's text into the scroll once it has opened.
 function updateHistory(){
    el("scrollBackCenter").removeEventListener("transitionend", updateHistory)
-   pauseToggle();
    el('innerTextScroll').innerHTML= shownChapter.text;
    el("innerTextScroll").style.display = "block";
    el("historyTitle").style.fontSize = `${ui.em * 2.5}px`;

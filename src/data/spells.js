@@ -64,8 +64,10 @@ export const spells = {
 
 // Spells the wizard learns, one tier every 10 levels (v1: spellTier0..spellTier20).
 export const spellTiers = [
-    "spellPush1,spellPush2,spellPush3,spellPush4,spellPush5,spellPush6", // tier 0
-    "spellPush7,spellPush8,spellPush9,spellPush10", // tier 1
+    // the staff hits (spellPush6, 9, 10: school Physical) are left out: he is a wizard, only spells;
+    // bosses still use them (zones.js bossSpell)
+    "spellPush1,spellPush2,spellPush3,spellPush4,spellPush5", // tier 0
+    "spellPush7,spellPush8", // tier 1
     "spellChispasBlue_8,spellChispasGreen_8,spellChispasReddish_8", // tier 2
     "spellChispasRed_8,spellChispasWhite_8,spellChispasYellow_8", // tier 3
     "spellMaldicion_8,spellPoisson_8", // tier 4

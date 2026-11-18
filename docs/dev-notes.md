@@ -30,16 +30,6 @@ Author's note: healer teleport is quite rudimentary, we can use the metod we use
 ```
 
 ```
-Date: 2026-11-17 13:03
-Author's note: prologue scroll should be visable only when the game load, so in the button we can see the scene, not before.
-```
-
-```
-Date: 2026-11-17 13:05
-Author's note: remove phisical  attack from our wizard, it is a wizard after all. only spells
-```
-
-```
 Date: 2026-11-17 14:51
 Author's note: we need to think a way to remove the enemy when the wizard is beated. i think an approach like ethe entrance is ncie, rather than animation, just math and other programatic way
 ```

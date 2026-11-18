@@ -382,7 +382,7 @@ function isDivineSpell(spellId) {
 }
 
 // The wizard swings his staff (the artist's cast animation, with the spark of the spell's
-// school or a slash for a staff hit), only while the page has focus.
+// school), only while the page has focus.
 function hopWizard(spellId) {
     if (document.hasFocus()) playWizardAnim("cast", spellId);
 }
@@ -449,7 +449,7 @@ function criticAttack() {
     return damage;
 }
 
-// A normal attack: 50-100% of the attack x mastery, with a spell or the staff. Returns the damage.
+// A normal attack: 50-100% of the attack x mastery, with a spell. Returns the damage.
 function normalAttack() {
     let damage = getRandomInt(state.player.attack * 0.5, state.player.attack) * stat("fAttack");
     damage *= config.balance.sacredDamageMultiplier;
@@ -459,7 +459,7 @@ function normalAttack() {
     damageEnemy(damage);
     stats.count(`spell.school.${spells[spellId].school}`);
     const spellText = spells[spellId].name.toLowerCase();
-    const verb = spells[spellId].school == "Physical" ? pickRandomItem(" uses the , attacks with the ") : pickRandomItem(" cast , attacks with ");
+    const verb = pickRandomItem(" cast , attacks with ");
     print(wizardName() + verb + spellText + " (" + ui.attackIcon + roundNumbertoLetter(damage) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
     spell(spellId, false);
     stats.count("combat.attacks");

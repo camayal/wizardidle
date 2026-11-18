@@ -158,6 +158,23 @@ function withImage(canvasName, src, draw) {
     }
 }
 
+// Call ready() once the scene's background and the wizard's sprite have loaded, so a scroll
+// opened as the game starts (the Prologue) shows over a drawn scene, not before it.
+function whenSceneReady(ready) {
+    if (run.simulation) return ready();
+    const srcs = [art(`${(state.zone.current + state.zone.stage).toLowerCase()}`),
+                  art(`lvl${Math.floor(state.player.lvl / 10) * 10}`)];
+    let left = srcs.length;
+    // a frame later, so the canvases that wait for the same images have drawn first
+    const one = () => { if (--left == 0) requestAnimationFrame(() => ready()); };
+    for (const src of srcs) {
+        if (imageNow(src)) { one(); continue; }
+        const img = imageCache.get(src);
+        img.addEventListener("load", one, { once: true });
+        img.addEventListener("error", one, { once: true });    // a missing picture never blocks the story
+    }
+}
+
 // Draw the wizard; his sprite changes with the level (img/lvl<N>.png, every 10 levels).
 function loadCanvasChar(lvl, squareSide, headLevel) {
     if (run.simulation) return;
@@ -233,20 +250,12 @@ function staffTip(img, tier) {
 }
 
 // On the cast animation, show what he casts (the author's "spark by school"): the school's
-// spark at the staff tip on frames 3-4 instead of the plain glint, or for a staff hit a weapon
-// slash in front of him; heals and other non-attacks keep the glint.
+// spark at the staff tip on frames 3-4 instead of the plain glint; heals and other non-attacks
+// keep the glint. He never hits with the staff (only spells), so Physical has no spark.
 function castEffect(ctx, frame, img, tier, spellId) {
     const school = spellId && spells[spellId] ? spells[spellId].school : "na";
     const unit = ui.charWidth / 32, x0 = wizardX(), y0 = ui.headLevel;
-    if (school == "Physical") {
-        const slash = imageNow(art(`fx_slash`));
-        if (!slash || frame < 2) return;
-        ctx.save();                                     // mirrored: the slash opens toward the enemy
-        ctx.translate(x0 + 50 * unit, y0);
-        ctx.scale(-1, 1);
-        ctx.drawImage(slash, (frame - 2) * 24, 0, 24, 32, 0, 0, 24 * unit, 32 * unit);
-        ctx.restore();
-    } else if (school != "na" && (frame == 3 || frame == 4)) {
+    if (school != "na" && school != "Physical" && (frame == 3 || frame == 4)) {
         const spark = imageNow(art(`fx_spark_${school.toLowerCase()}`));
         if (!spark) return;
         const [tx, ty] = staffTip(img, tier);
@@ -267,8 +276,7 @@ function playWizardAnim(name, spellId) {
     if (pjCanvas.width != pjCanvas.offsetWidth) clearWizardCanvas();   // only when the size changed
     if (name == "cast" && spellId && spells[spellId]) {
         const school = spells[spellId].school;
-        if (school == "Physical") imageNow(art(`fx_slash`));
-        else if (school != "na") imageNow(art(`fx_spark_${school.toLowerCase()}`));
+        if (school != "na" && school != "Physical") imageNow(art(`fx_spark_${school.toLowerCase()}`));
     }
     let step = 0;
     const next = () => {
@@ -780,6 +788,7 @@ export {
     playWizardAnim,
     pixelContext,
     withImage,
+    whenSceneReady,
     clearNPC,
     drawWizard,
     showStage,

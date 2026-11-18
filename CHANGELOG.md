@@ -2,6 +2,8 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- The Prologue scroll opens only once the scene has loaded, so the scene shows below it; a chapter scroll now holds the game the moment it is due, so no event starts behind it.
+- The wizard fights only with spells: the staff hits (Staff, Staff and cause hemorrhage) are gone from his spells; bosses still use them. Breaking pots and crates with the staff stays.
 - Time away: the time the god was not watching changes the wizard a little (away time divided by 108). His faith falls, gold drifts, he may gain a level or two (never up to a chapter). After about a month he has fallen and only your touch lifts him; after more he may die for good, and then a poem is the only thing you are told. A page left hidden for a few minutes counts as away. The help scroll holds a hint about the slow clock.
 - Reloading the game starts with a clean scene: the enemy, hydra or object that was there when the game closed no longer stands frozen on the right.
 - Dev tools, Texts mode: every chapter scroll, dream and console line in drop lists, shown where the game shows it (chapter scroll, the dark of the night, the console); the author notes box becomes a taller editor, each edit shows in the game at once, Save to file adds it to docs/history-notes.md.
