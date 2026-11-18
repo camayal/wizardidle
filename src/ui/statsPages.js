@@ -130,12 +130,21 @@ function achievementsSection() {
 
 // What he carries: only the staff and his gold for now, plus the artefacts he has found. More
 // will come (the staff changes with the story, docs/STORY.md).
+// One staff drawing covers several tiers (the walk art has five designs).
+const STAFF_DESIGNS = [0, 30, 60, 90, 130];
+const STAFF_OF_TIER = { 0: 0, 10: 0, 20: 0, 30: 30, 40: 30, 50: 0, 60: 60, 70: 60, 80: 0, 90: 90, 100: 90, 110: 30, 120: 30,
+    130: 130, 140: 130, 150: 0, 160: 30, 170: 30, 180: 30, 190: 0, 200: 130 };
+function staffIcon() {
+    const tier = Math.min(200, Math.floor(state.player.lvl / 10) * 10);
+    return `staff_${STAFF_DESIGNS.includes(STAFF_OF_TIER[tier]) ? STAFF_OF_TIER[tier] : 0}`;
+}
+
 export function inventoryPageHtml() {
-    const icon = (name) => `<img class='imgInConsole' height='${ui.em || 16}' src='${art(name)}'/> `;
+    const icon = (name) => `<img class='imgInConsole' height='${(ui.em || 16) * 2}' src='${art(name)}'/> `;
     const artefacts = (state.artefacts || []).map((a) => `${icon(a.sprite)}${a.name}<br>`).join('');
     return "<div id='inventory'><span class='titles' id='titleInventory'>Inventory</span><br>" +
         section('Carried') +
-        'Staff<br>' +
+        `${icon(staffIcon())}Staff<br>` +
         `${icon('gold')}${n(state.player.gold)} gold<br>` +
         (artefacts ? section('Artefacts') + artefacts : '') +
         '</div>';
