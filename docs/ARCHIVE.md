@@ -1423,3 +1423,18 @@ Date: 2026-11-17 20:03
 Author's note: when the game start it says no creature defeated yet but it puts bosses and Secrets, only add bosses when the first boss is encountered, and only put secrets when the first hydra is found
 ```
 
+
+### Dev notes done 2026-11-17: enemy leaves when the wizard falls, boss entrances
+
+```
+Date: 2026-11-17 14:51
+Author's note: we need to think a way to remove the enemy when the wizard is beated. i think an approach like ethe entrance is ncie, rather than animation, just math and other programatic way
+```
+
+```
+Date: 2026-11-17 14:52
+Author's note: magic bosses, or flying bosses, need to have similar entrances thatn mages and flying enemies. regarding bosses likes fenix, they need t fly. enemis like kkck can grow from the grown, other boses that can jump or slam, can enter jumping.
+```
+
+### 2026-11-17: A reload starts a clean scene
+- The author's note on a battle cut short by closing the game. The author chose not to restore it: the player is a god who can't watch the world while the game is closed, other gods are there, time isn't his. The real problem was the leftovers: the sprite on the right of the scene (state.npc) was saved and drawn as the page loaded, so a hydra or an enemy stood there doing nothing. It is now forgotten when the save is read (src/state.js). The author's next idea, time away changing the wizard (a little gold and faith, levels after a week, a chance of permadeath after a month), is in the thinker's inbox.

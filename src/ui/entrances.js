@@ -12,6 +12,13 @@
 // than its art (the author: the whole boss should be seen) and the boss grows out of the portal's
 // centre while it turns, standing in its place just before the portal closes behind it.
 //
+// Bosses arrive by what they are (the author's note): fliers fly in, spectres float, the mage bosses
+// step out of their portals and Rojo flickers in like a mage, kkck and the plant and bone kings grow
+// out of the ground, the brutes slam down from a leap, the cube bounces in and medusa slithers.
+//
+// When the wizard falls, the enemy leaves its own way in, played backwards (playLeave): walkers turn
+// and walk off, fliers fly off, risers sink back into the ground, mages fade away.
+//
 // The game is frozen while an enemy arrives; nothing plays in a simulation or in the background.
 
 import { run, ui } from '../runtime.js';
@@ -25,16 +32,19 @@ import { zones } from '../data/zones.js';
 // Families by how they arrive (walk is the default).
 const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
-    float: ["el_espectro", "la_esencia", "el_ojo", "el_elemental", "infraespectro"],
-    rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra"],
-    jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona"],
-    blink: ["el_hechicero", "la_hechicera", "el_vampiro"],
+    float: ["el_espectro", "la_esencia", "el_ojo", "el_elemental", "infraespectro", "etymos"],
+    rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
+        "kkck", "herbus", "skeleton"],
+    jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
+    slam: ["goro", "protromus", "bicaptop"],
+    slither: ["medusa"],
+    blink: ["el_hechicero", "la_hechicera", "el_vampiro", "rojo"],
 };
 const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 16, jump: 14, slam: 20, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28 };
 export const ARRIVALS = Object.keys(FRAMES);
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -115,6 +125,21 @@ function pose(kind, t, k) {
             p.dy = -4 * 18 * u * (1 - u);                                   // the arc
             p.sy = 1.06; p.sx = 0.95;                                      // stretched in the air
         } else { p.sy = 0.82; p.sx = 1.14; p.dust = 1; }                   // lands, squashed
+    } else if (kind == "slam") {                                           // a heavy leap, a hard landing
+        if (t < 0.7) {
+            const u = t / 0.7;
+            p.dx = OFF_RIGHT * (1 - u);
+            p.dy = -4 * 30 * u * (1 - u);
+            p.sy = 1.08; p.sx = 0.94;
+        } else {
+            const v = clamp01((t - 0.7) / 0.3);                            // squashed, rising back, shaking
+            p.sy = 0.72 + 0.28 * v; p.sx = 1.22 - 0.22 * v;
+            p.dx = (k % 2 ? 1 : -1) * 1.5 * (1 - v);
+            p.dust = Math.min(2, Math.floor(v * 3));
+        }
+    } else if (kind == "slither") {                                        // glides in on a sideways wave
+        p.dx = OFF_RIGHT * (1 - t) + (t < 1 ? Math.sin(k * 1.3) * 1.5 : 0);
+        p.sx = t < 1 ? 1 + 0.05 * Math.sin(k * 1.3) : 1;
     } else if (kind == "blink") {
         p.alpha = k % 2 ? 0.25 + 0.75 * t : t;                             // flickers in
         p.sx = Math.max(0.05, easeOut(t));                                 // opens from a line
@@ -203,6 +228,38 @@ export function playExit(done) {
     loop.every("animNPC", step, STEP_MS);
 }
 
+// The wizard has fallen: the enemy that beat him leaves its own way in, played backwards (the
+// author: like the entrances, done with code). npc is the one that was on the scene; it goes on
+// drawing after the fight is cleared, unless another one comes in. The game waits meanwhile.
+const LEAVE = { blink: "fade", slam: "jump" };
+const TURNS = new Set(["walk", "jump", "fly", "slither"]);                 // turn their back to go
+export function playLeave(npc, done) {
+    const gone = () => state.npc && state.npc != npc;                       // someone else is on the scene now
+    if (!npc || run.simulation || !document.hasFocus()) {
+        if (!gone()) clearNPC();
+        return done && done();
+    }
+    const kind = BOSS_PORTAL[npc] ? "fade" : LEAVE[entranceKind(npc)] || entranceKind(npc), total = FRAMES[kind];
+    cancelNPCDraw();
+    loop.freezeGame();
+    let k = 0, waited = 0;
+    const finish = () => {
+        loop.stop("animNPC");
+        loop.thawGame();
+        if (!gone()) pixelContext(npcCanvas).clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        if (done) done();
+    };
+    const step = () => {
+        if (gone() || k > total) return finish();
+        const img = imageNow(art(`${npc}`));
+        if (!img) { if (++waited > 40) k = total + 1; return; }
+        draw(npc, img, Object.assign(pose(kind, 1 - Math.min(1, k / (total - 2)), k), { flip: TURNS.has(kind) }));
+        k++;
+    };
+    step();
+    loop.every("animNPC", step, STEP_MS);
+}
+
 function draw(npc, img, p) {
     const [bx, by, bw, bh] = npcBox(npc);
     const scene = ui.charWidth / 32;
@@ -234,6 +291,10 @@ function draw(npc, img, p) {
         ctx.beginPath();
         ctx.ellipse(cx, cy, Math.max(0.1, rx * p.portal), ry, 0, 0, Math.PI * 2);
         ctx.clip();
+    }
+    if (p.flip) {                                   // turned around, going away
+        ctx.translate(x * 2 + w, 0);
+        ctx.scale(-1, 1);
     }
     ctx.drawImage(img, x, y, w, h);
     if (p.ghost) {

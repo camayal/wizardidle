@@ -15,16 +15,6 @@ Author's note: For elementals, I changed my mind; the entry to battle should be 
 ```
 
 ```
-Date: 2026-11-17 14:51
-Author's note: we need to think a way to remove the enemy when the wizard is beated. i think an approach like ethe entrance is ncie, rather than animation, just math and other programatic way
-```
-
-```
-Date: 2026-11-17 14:52
-Author's note: magic bosses, or flying bosses, need to have similar entrances thatn mages and flying enemies. regarding bosses likes fenix, they need t fly. enemis like kkck can grow from the grown, other boses that can jump or slam, can enter jumping.
-```
-
-```
 Date: 2026-11-17
 Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7). Finish the feature:
 1. A reloaded soft-dead wizard must stay down: no weak self-revive; only the god's touch lifts him.

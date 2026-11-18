@@ -15,7 +15,7 @@ import { bossAttacks, sceneSpells } from '../data/bossAttacks.js';
 import { enemyMoveTiming, playEnemyMove } from '../ui/enemyMoves.js';
 import { bossAttackTiming, hydraAttackTiming, playBossAttack, playHydraAttack, playSceneSpell, sceneSpellTiming,
     startHydraIdle } from '../ui/bossAttacks.js';
-import { playEntrance } from '../ui/entrances.js';
+import { playEntrance, playLeave } from '../ui/entrances.js';
 import { drawFrame, drawWizard, drawWizardPose, loadBackground, loadNPC, npcCanvas, pixelContext, pjCanvas, playHydraGrow,
     playWizardAnim } from '../ui/render.js';
 import { spell } from '../spells.js';
@@ -47,8 +47,8 @@ export const KINDS = {
         play: (t, v, onHit) => playEnemyMove(move(v), onHit),
         timing: (t, v) => enemyMoveTiming(move(v)),
         landing: (t, v) => v.startsWith('cast') ? null : listOf(npcSpells[(enemySprites[t] || {}).type])[0] || null },
-    arrival: { label: 'Enemy: arrival', targets: () => sprites, variants: () => [],
-        play: (t) => { loadNPC(t); playEntrance(); } },
+    arrival: { label: 'Enemy: arrival', targets: () => sprites, variants: () => ['arrive', 'leave (the wizard fell)'],
+        play: (t, v) => { loadNPC(t); if (v && v.startsWith('leave')) { state.npc = ''; playLeave(t); } else playEntrance(); } },
     boss: { label: 'Boss: attack', targets: () => Object.keys(bossAttacks), variants: (t) => (bossAttacks[t] || []).map((a) => a.id),
         setUp: (t) => loadNPC(t),
         play: (t, v, onHit) => playBossAttack(t, bossAttackTiming(t, v).attack, false, onHit),

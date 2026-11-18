@@ -2,6 +2,8 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- When the wizard falls, the enemy leaves the way it came, backwards: walkers turn and walk off, fliers fly away, risers sink into the ground, mages fade out.
+- Boss entrances: kkck, Herbus and King Skeleton grow out of the ground; Goro, Protromus and Bicaptop slam down from a leap; Cuboq bounces in; Etymos floats in; Medusa slithers; Rojo flickers in like a mage.
 - Bestiary: the Bosses heading shows only once the first boss is met, and Secrets only once the first hydra is found.
 - The Kill button asks twice: the first press opens a small parchment saying to press again, that it is permanent; tapping the parchment closes it.
 - The mysterious healer leaves by fading away, the mages' fade-in played backwards, instead of the red pin overlay.

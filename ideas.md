@@ -53,12 +53,13 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-17: Bestiary headings, the enemy leaves, boss entrances
+- The bestiary's Bosses heading waits for the first boss met, Secrets for the first hydra.
+- When the wizard falls the enemy leaves its own way in, backwards (playLeave in src/ui/entrances.js), instead of vanishing at once. Ten bosses that walked in now arrive by what they are: two new kinds, slam (a heavy leap, squash and shake) and slither. The dev tools' Enemy: arrival has "arrive" and "leave" for every sprite. A 2-seed simulation to level 40 (185 falls) ran clean; the look still needs the author's eye.
+
 ### 2026-11-17: Prologue after the scene, a wizard of spells only
 - Two dev notes. The Prologue opened before the scene was drawn: the first run levels the wizard from 0 to 1 before the scene and the wizard are on screen. A chapter scroll now waits for the scene's background and the wizard's sprite (whenSceneReady in src/ui/render.js) and pauses the game at once, so nothing starts behind it.
 - "It is a wizard after all, only spells": the three Physical staff hits left his spell tiers (tier 0 keeps five spells, tier 1 two); bosses keep them in their bossSpell lists, and the staff still breaks pots and crates. The cast animation's staff slash went with them. A 2-seed simulation to level 40 ran clean.
 
 ### 2026-11-17: Time away, numbers and code
 - Built docs/AWAY.md: lastSeen in the save, settlement on load (src/away.js, formulas in src/awayMath.js, numbers in config.away, texts in src/data/awayTexts.js as placeholders: soft-dead line candidate 1, poem draft A). Estimates table added to AWAY.md. Left for later: the hidden-page slow motion and the slowed sound (thinker advises only a sound fade cue; not built, needs the audio module to track the music); reloading a soft-dead wizard still gives the old weak self-revive (the "left again without touching" answer is pending); the protected-chapter rule (no absence death there) is not applied yet; the poem is on a scroll, not over the dark scene as the thinker briefed.
-
-### 2026-11-17: A reload starts a clean scene
-- The author's note on a battle cut short by closing the game. The author chose not to restore it: the player is a god who can't watch the world while the game is closed, other gods are there, time isn't his. The real problem was the leftovers: the sprite on the right of the scene (state.npc) was saved and drawn as the page loaded, so a hydra or an enemy stood there doing nothing. It is now forgotten when the save is read (src/state.js). The author's next idea, time away changing the wizard (a little gold and faith, levels after a week, a chance of permadeath after a month), is in the thinker's inbox.

@@ -19,7 +19,7 @@ import { playSound } from './audio.js';
 import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
-import { playEntrance } from './ui/entrances.js';
+import { playEntrance, playLeave } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
 import { beliefMoment, isDoubting } from './belief.js';
 import { art } from './media.js';
@@ -191,8 +191,9 @@ function wizardFalls() {
     if (fight.hydraCombat && fight.enemyHP > 0) {       // the hydra keeps its wounds for next time
         state.hydraHealth[fight.hydra] = Math.min(1, fight.enemyHP / fight.enemyHPbase);
     }
-    npcCanvas.getContext("2d").clearRect(0, 0, pjCanvas.width, pjCanvas.height);
+    const winner = state.npc;       // empty if it fell in the same round
     clearFight();
+    playLeave(winner);              // it leaves its own way in, backwards (ui/entrances.js)
     scheduleSelfRevive();
 }
 
