@@ -91,6 +91,67 @@ Shown once when the god returns and finds him soft dead. It must say: he is stil
 > A man is gone for good.
 > The {zone} keeps him now.
 
+### Final poems
+
+A bag of eight (Decision 6): one is drawn at each absence permadeath, and none repeats in the same world. The first line of each item is its title. Number 1 is Draft A and number 2 is Draft B, polished: "counted the hours" and "the third time" are gone, since the brief allows no time units and no counts.
+
+1. **No one came**
+   > You looked away, and the world went on without you.
+   > {name} lay in the {zone} and waited,
+   > then he stopped waiting.
+   > For you, time is nothing.
+   > For him it was everything he had.
+   > No one came.
+
+2. **The last call**
+   > {name} called you at dusk, and again at dawn.
+   > After that, he did not call.
+   > A god can be gone for a moment.
+   > A man is gone for good.
+   > The {zone} keeps him now.
+
+3. **The candle**
+   > {name} kept a small light burning for you.
+   > He shielded it from the wind with his hands.
+   > You did not come to see it.
+   > The light went out, and so did he.
+   > He will not light another.
+
+4. **The road**
+   > {name} watched the road for you.
+   > Every shadow on it might have been you.
+   > None of them were.
+   > He is still facing the road,
+   > but his eyes are closed for good.
+
+5. **Stars**
+   > {name} looked up for you
+   > until the stars moved on without him.
+   > You were somewhere else.
+   > He was only here.
+   > Now the {zone} has him, and will not give him back.
+
+6. **Last prayer**
+   > {name} prayed softly, so as not to wake you,
+   > and waited for an answer.
+   > None came.
+   > He forgave you. It was the last thing he did.
+   > He will not rise again.
+
+7. **Dust**
+   > Dust settled on {name} while he waited,
+   > and he did not brush it off.
+   > He wanted you to find him as he was.
+   > You did not find him.
+   > The dust is all that keeps him now.
+
+8. **A blink**
+   > To you it was a blink.
+   > To {name} it was the rest of his life.
+   > He spent all of it waiting for you,
+   > and you did not come.
+   > He is gone, and he will not come back.
+
 ### Cemetery, not erasure
 
 An absence permadeath is a **regular cemetery death** (erasure is only for final-battle losers): a normal tomb (not cracked), his name **not** reversed or struck through, **no echo slot**, no soul in the final battle. He is a regular past wizard, so he can come back as the **ghost rescuer** and write **letters** (FAITH.md). The tomb's parchment note gives the cause in one line, for example *"He waited for you in the {zone}."* A letter from such a wizard (he waited, the god never came) is a strong hook; not decided.
