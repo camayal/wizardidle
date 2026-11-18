@@ -1371,3 +1371,9 @@ Date: 2026-11-15 11:23 (moved from the art notes, 2026-11-17)
 Author's note: hands up can be another moment for the wizard, it can be related with some healing schools and perhaps another specific school defined from the beginning (the natural school that the wizard can dominate naturally, without the help of the staff). Think about this system.
 Artist, 2026-11-17: every tier now rests with both hands down. The tiers that held a flame in the raised hand now show it only in the cast animation, held in the lowered hand. A hands-up pose would be new art.
 ```
+
+```
+Date: 2026-11-17
+Author's note: time away from the game. The player is a god: when the app is closed he cannot see the world, other gods are there, time does not belong to him. So nothing of the scene comes back on reload (done: the scene starts clean), but the time away could change the wizard. Short absence (a few days): same level and region, gold and faith change a little. 1 week to 1 month: he may even gain some levels, without triggering any important story factor or event. More than a month: the same, but the chance that the wizard is permadead grows. Discuss a little with the author before planning.
+```
+(handled: plan in docs/AWAY.md)

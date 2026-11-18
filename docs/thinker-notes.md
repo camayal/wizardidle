@@ -21,8 +21,3 @@ Author's note: @historian and @dev. god the player must be unable to use the kil
 Date: 2026-11-14 23:53
 Author's note: send to @artist, perhaps we can create a generalized animation to read bookx, inspect runes (and other items) e.g. drop the staff, kneel a little bit, intem disapear, wizards with hands close and on top the object that is examining. This is just an idea, we need to determine if is interesting. the way it is working is also nice and kinda signature. consult with  @thinker
 ```
-
-```
-Date: 2026-11-17
-Author's note: time away from the game. The player is a god: when the app is closed he cannot see the world, other gods are there, time does not belong to him. So nothing of the scene comes back on reload (done: the scene starts clean), but the time away could change the wizard. Short absence (a few days): same level and region, gold and faith change a little. 1 week to 1 month: he may even gain some levels, without triggering any important story factor or event. More than a month: the same, but the chance that the wizard is permadead grows. Discuss a little with the author before planning.
-```
