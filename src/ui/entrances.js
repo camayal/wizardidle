@@ -52,10 +52,11 @@ const ENTRANCE = {
 const ELEMENT = { el_elemental1: "fire", el_elemental2: "thunder", el_elemental3: "frost" };
 // The elementals' strips (img/effects/fx/fx_elemental_<element>_enter, the author's picks): 10 frames
 // of 48 x 48 at 1 art px per sprite px, ground = bottom row, no body drawn; the body shows from the
-// reveal frame (0-based).
+// reveal frame (0-based). The entrance plays its school's sound (Fire, Thunder, Frost, as the spells do).
 const ELEMENT_FX = { fire: 3, thunder: 3, frost: 4 };
+const ELEMENT_SOUND = { fire: "Fire", thunder: "Thunder", frost: "Frost" };
 const ELEMENT_FRAMES = 10, ELEMENT_SIZE = 48;
-const elementFx = (npc) => { const e = ELEMENT[npc] || "fire"; return { src: art(`fx_elemental_${e}_enter`), reveal: ELEMENT_FX[e] }; };
+const elementFx = (npc) => { const e = ELEMENT[npc] || "fire"; return { src: art(`fx_elemental_${e}_enter`), reveal: ELEMENT_FX[e], sound: ELEMENT_SOUND[e] }; };
 const FIERY = new Set(["rojo"]);     // lands in a burst of fire and embers (melee with elemental powers)
 const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
@@ -252,7 +253,7 @@ export function playEntrance(done) {
     imageNow(art(`fx_dust`));
     const ground = kind == "rise" ? groundSet(npc) : undefined;
     const efx = kind == "element" ? elementFx(npc) : undefined;
-    if (efx) imageNow(efx.src);
+    if (efx) { imageNow(efx.src); playSound(efx.sound); }
     loop.freezeGame();
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
