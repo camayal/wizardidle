@@ -182,14 +182,14 @@ const chapter = {
             console.log("evento2")
         }
     },
-    lvl60:{
+    lvl160:{
         text:'<span class="titles" id="historyTitle">Chapter IX</span>',
         event: function(){
             // gains faith again while it is above 0
             console.log("evento2")
         }
     },
-    lvl90:{
+    lvl190:{
         text:'<span class="titles" id="historyTitle">Chapter X</span>',
         event: function(){
             // no longer dies: at 0 HP he teleports away and heals completely
@@ -198,7 +198,7 @@ const chapter = {
             console.log("evento2")
         }
     },
-    lvl99:{
+    lvl199:{
         text:'NA',
         event: function(){
             // teleport to Heidan
@@ -207,7 +207,7 @@ const chapter = {
             console.log("evento2")
         }
     },
-    lv200:{
+    lvl200:{
         text:'<span class="titles" id="historyTitle">Chapter XI</span>',
         event: function(){
             // sacred damage x3
@@ -239,27 +239,48 @@ const chapter = {
 // and by then the wizard can already be a level higher (v1 read the new level and crashed).
 let shownChapter;
 
+// Chapters with text waiting for the scroll, oldest first; the first one is on screen (or opening).
+// Two chapters close together (a level gained while a scroll is still closing, several levels at
+// once) each get their own scroll instead of the second replacing the first.
+const chapterQueue = [];
+
 // A chapter was reached: run its event and, if it has text, show it in the scroll.
 function openHistory(){
-    shownChapter = chapter[`lvl${state.player.lvl}`];
+    const reached = chapter[`lvl${state.player.lvl}`];
     // run the chapter's event
     run.afterChapterExe = true;//activate post chapter event
     run.storyDream = "chapter";     // the next rest dreams of it (docs/SLEEP.md)
-    shownChapter.event()
+    reached.event()
 
-    // show the scroll if the chapter has text; the game waits from now on (no event starts behind
-    // it), and the scroll opens once the scene has loaded (the Prologue comes as the game starts)
-    if (shownChapter.text != "NA"){
+    // queue the scroll if the chapter has text; the game waits from now on (no event starts behind it)
+    if (reached.text != "NA"){
         run.pause = true;
-        whenSceneReady(() => {
-            if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
-                scrollClose()
-                el("scrollBackCenter").addEventListener("transitionend", updateHistory);
-            } else{
-                updateHistory();
-            }
-        });
-    } 
+        chapterQueue.push(reached);
+        if (chapterQueue.length == 1) showNextChapter();
+    }
+}
+
+// Open the scroll for the first queued chapter, once the scene has loaded (the Prologue comes as
+// the game starts), closing whatever scroll is open first.
+function showNextChapter(){
+    shownChapter = chapterQueue[0];
+    whenSceneReady(() => {
+        if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {
+            scrollClose()
+            el("scrollBackCenter").addEventListener("transitionend", updateHistory);
+        } else{
+            updateHistory();
+        }
+    });
+}
+
+// The player closed a chapter scroll. Returns true when another chapter follows (its scroll opens
+// next and the game keeps waiting), false when the queue is empty and the game can go on.
+function chapterRead(){
+    chapterQueue.shift();
+    if (chapterQueue.length == 0) return false;
+    showNextChapter();
+    return true;
 }
 
 // Write the current chapter's text into the scroll once it has opened.
@@ -292,5 +313,6 @@ function afterChapter(){
 export {
     afterChapter,
     chapter,
+    chapterRead,
     openHistory,
 };

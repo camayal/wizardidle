@@ -55,6 +55,12 @@ function twoLevelsAhead() {
     state.player.xp = Math.pow(state.player.lvl + 1, p.rXP) * p.factorHP - state.player.xpPerEnemy * 0.01;
 }
 
+// Enough XP that the next XP gained reaches level `target` in one go.
+function xpToReach(target) {
+    const p = config.balance;
+    state.player.xp = Math.pow(target - 1, p.rXP) * p.factorHP - state.player.xpPerEnemy * 0.01;
+}
+
 function moveTo(zone) {
     state.zone.current = zone;
 }
@@ -109,6 +115,11 @@ const scenarios = [
         name: 'Two levels at once with a chapter (9 to 11)',
         check: 'Levels 10 and 11 at once: the level 10 chapter text shows, no error in the browser console (v1 crashed here).',
         setup() { setLevel(9); twoLevelsAhead(); return { event: walkForXP() }; },
+    },
+    {
+        name: 'Two chapters at once (9 to 30)',
+        check: 'Jumps to level 30: the Chapter I scroll opens; closing it opens Chapter II (the shrine), and only closing that one resumes the game.',
+        setup() { setLevel(9); xpToReach(30); return { event: walkForXP() }; },
     },
     {
         name: 'Boss fight',

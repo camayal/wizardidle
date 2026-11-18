@@ -5,6 +5,7 @@ import { deleteSave, state, world } from '../state.js';
 import { run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { pauseToggle } from '../game.js';
+import { chapterRead } from '../story.js';
 import { masterTime } from '../config.js';
 import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, updateHelp, updateKill, updateStats } from './scrolls.js';
 import { el } from './dom.js';
@@ -60,6 +61,7 @@ function realKill(){
 // Close button of the scroll.
 function btnCloseEvent(){
     if (ui.scrollCurrentContent == "history"){//unpause game after history
+       if (chapterRead()) return;     // another chapter waits: its scroll replaces this one
        pauseToggle();
     }
     if (ui.scrollCurrentContent == "away"){//the poem after an absence death: the next wizard

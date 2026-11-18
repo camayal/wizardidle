@@ -558,7 +558,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 
 ## Notes for the code (stage 3)
 
-- **Fix the chapter keys:** `lvl60`/`lvl90` appear twice (the second pair is IX and X: `lvl160`, `lvl190`), `lvl99` → `lvl199`, `lv200` → `lvl200`. Already recorded in the roadmap.
+- ~~**Fix the chapter keys**~~ (done 2026-11-17: IX `lvl160`, X `lvl190`, `lvl199`, XI `lvl200`).
 - **Scroll slots:** each chapter's `text` becomes a template with `⟨place⟩`, `⟨faith⟩` and `⟨echo⟩` keys and a small table of variants, filled by one function when the scroll opens (`{name}`, `{zone}`, `{loop}` too). Zones get a `scenery` field (open, wild, cold, hot, deep, walls); faith uses the belief level from FAITH.md 3.1.
 - **Snapshot the filled text:** the museum shows each scroll as it was read, so store the filled text (not the template) with the chapter's snapshot.
 - **Console beats** (40, 60, 70, 80, 100, 120, 128, 129, 139, 150–159, 170, 190, 199) go in a separate `beats` table keyed by level, so chapters stay readable.
