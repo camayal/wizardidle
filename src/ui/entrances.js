@@ -13,7 +13,7 @@
 // centre while it turns, standing in its place just before the portal closes behind it.
 //
 // Bosses arrive by what they are (the author's note): fliers fly in, spectres float, the mage bosses
-// step out of their portals and so does King Skeleton; Herbus (a shaman) grows out of the ground,
+// step out of their portals, King Skeleton out of his skull arch; Herbus (a shaman) grows out of vines,
 // kkck pushes up a bump of dirt and bursts out of it, the brutes slam down from a leap (Rojo in a
 // burst of fire), the cube bounces in and medusa slithers.
 //
@@ -57,12 +57,13 @@ export const PORTALS = {
     fx_portal_doria: ["#163a8a", "#2f6fdc", "#9cc8ff"],         // the mage bosses' bigger portals
     fx_portal_midas: ["#7a5200", "#d9a520", "#fff1a8"],
     fx_portal_rainbow: ["#d03a3a", "#e8a020", "#3fb04f", "#3f7fe0", "#9b5de5"],
+    fx_portal_skeleton: ["#2a1f33", "#cfc8b0", "#7cff6a"],      // King Skeleton's skull arch
 };
 const MAGE_PORTALS = ["fx_portal_a", "fx_portal_b", "fx_portal_c"];
-// Portals: the three wizard bosses step out of their own; King Skeleton (a magical melee) of the
-// purple mage portal drawn at boss size, until his own cursed one is drawn.
+// Portals: the three wizard bosses step out of their own; King Skeleton (a magical melee) out of
+// his cursed skull arch.
 const BOSS_PORTAL = { doria: "fx_portal_doria", midas: "fx_portal_midas", rainbow: "fx_portal_rainbow",
-    skeleton: "fx_portal_a" };
+    skeleton: "fx_portal_skeleton" };
 // King Skeleton's arch (the author picked it, 2026-11-17): drawn at full size around him (an 80 px
 // wide strip at 1 art px per boss px), he fades in standing inside it, then it fades away behind him.
 const ARCH = new Set(["skeleton"]);
@@ -78,6 +79,10 @@ const HYDRA_ENTER = { mother: { effect: "mud", reveal: 9 }, icedra: { effect: "i
 const HYDRA_FRAME = 96;
 const HYDRA_ENTER_MS = 120;
 const HYDRA_FADE = 5;               // steps the last frame fades over (the last droplets and shards fade out)
+// Bosses with their own entrance strip with the boss drawn in it (the artist's, 100 ms a frame):
+// Herbus grows out of braided vines; the last frame is his sprite, so the swap is seamless.
+const STRIP_ENTER = { herbus: { src: "anim_herbus_enter", frame: 64 } };
+const STRIP_ENTER_MS = 100;
 const OFF_RIGHT = 80;               // sprite px from its place to just past the scene's right edge
 
 export function entranceKind(npc) {
@@ -200,6 +205,7 @@ export function playEntrance(done) {
     if (run.simulation || !document.hasFocus() || !npc) return done && done();
     const hydra = /^(mother|hydskon|icedra)\d+$/.exec(npc);
     if (hydra) return playHydraEnter(npc, hydra[1], done);
+    if (STRIP_ENTER[npc] && !run.forceEntrance) return playStripEnter(npc, done);
     const { kind, portal } = arrivalKind(npc), total = FRAMES[kind];
     cancelNPCDraw();                                // the sprite must not pop up in its place mid-arrival
     imageNow(art(`${npc}`));
@@ -429,6 +435,43 @@ function drawPortal(ctx, cx, cy, rx, ry, scene, colors, spin) {
         ctx.stroke();
     });
     ctx.restore();
+}
+
+// A boss with its own entrance strip (STRIP_ENTER): the frames are drawn in its place, feet on the
+// ground line, then its sprite takes over. If the strip doesn't load, it rises out of the ground.
+function playStripEnter(npc, done) {
+    const { src, frame } = STRIP_ENTER[npc], file = art(src);
+    cancelNPCDraw();
+    imageNow(file);
+    imageNow(art(npc));
+    loop.freezeGame();
+    npcCanvas.width = npcCanvas.offsetWidth;
+    npcCanvas.height = npcCanvas.offsetHeight;
+    let k = 0, waited = 0;
+    const finish = () => {
+        loop.stop("animNPC");
+        loop.thawGame();
+        if (state.npc == npc) loadNPC(npc);
+        if (done) done();
+    };
+    const step = () => {
+        const strip = imageNow(file), img = imageNow(art(npc));
+        if (!strip || !img) {                       // not loaded yet: wait (2 s at most), then rise instead
+            pixelContext(npcCanvas).clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+            if (++waited > 20) { loop.stop("animNPC"); loop.thawGame(); run.forceEntrance = "rise"; playEntrance(done); }
+            return;
+        }
+        const frames = Math.round(strip.naturalWidth / frame);
+        if (state.npc != npc || k >= frames) return finish();
+        const [bx, by, bw, bh] = npcBox(npc);
+        const size = frame * bw / img.naturalWidth;
+        const ctx = pixelContext(npcCanvas);
+        ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+        drawFrame(ctx, strip, k * frame, 0, frame, strip.naturalHeight, bx + (bw - size) / 2, by + bh - size, size, size);
+        k++;
+    };
+    step();
+    loop.every("animNPC", step, STRIP_ENTER_MS);
 }
 
 // A hydra (any head count) arrives under its zone's effect: the strip is centred on the hydra's
