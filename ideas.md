@@ -15,7 +15,7 @@ The index of Wizard Idle v2: where the project stands, one line per idea, and th
 
 ## Inboxes (notes from the dev tools, one per role)
 
-[dev](docs/dev-notes.md) · [art](docs/art-notes.md) · [sound](docs/sound-notes.md) · [thinker](docs/thinker-notes.md) · [author's play-test list](docs/AUTHOR_NOTES.md). Each role reads only its own; a note for another role is moved there, and a handled note is cut to the archive.
+[dev](docs/dev-notes.md) · [art](docs/art-notes.md) · [sound](docs/sound-notes.md) · [thinker](docs/thinker-notes.md). Each role reads only its own; a note for another role is moved there, and a handled note is cut to the archive.
 
 ## Ideas (one line each; the text is in the linked file)
 
