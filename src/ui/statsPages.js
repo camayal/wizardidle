@@ -1,4 +1,4 @@
-// Wizard Idle v2 - the stats scroll.
+// Wizard Idle v2 - the stats scroll, its Inventory page and the Faith scroll.
 //
 // The curated page: a few lines per area, totals instead of long lists.
 // Everything else that is recorded stays hidden, for achievements, quests and playtests.
@@ -95,19 +95,21 @@ function goldSection() {
         line('Lost in battle', n(stats.get('gold.lostInBattle')));
 }
 
-// The belief meter: a bar from the lowest to the highest belief, filled up to his value (empty
-// and marked as lost when the story has locked it).
+// The belief meter: a bar from the lowest to the highest belief, filled up to his value, with a
+// tick at each level line (Atheist, Doubter, Devout); empty and marked lost when the story has
+// locked it.
 function beliefMeter() {
-    const { min, max } = config.belief;
+    const { min, max, devout, doubter, atheist } = config.belief;
+    const at = (v) => Math.round(100 * (v - min) / (max - min));
     const share = state.player.beliefLost ? 0 : Math.max(0, Math.min(1, (state.player.belief - min) / (max - min)));
-    return "<div style='height:0.8em; margin:0.2em 0 0.4em; border:2px solid #462808; background:rgba(70,40,8,0.15)'>" +
-        `<div style='height:100%; width:${Math.round(share * 100)}%; background:#8a5a14'></div></div>`;
+    const ticks = [atheist, doubter, devout].map((v) => `<div style='position:absolute; top:0; bottom:0; left:${at(v)}%; width:2px; background:#462808'></div>`).join('');
+    return "<div style='position:relative; height:1.2em; margin:0.3em 0 0.5em; border:2px solid #462808; background:rgba(70,40,8,0.15)'>" +
+        `<div style='height:100%; width:${Math.round(share * 100)}%; background:#8a5a14'></div>${ticks}</div>`;
 }
 
 function faithSection() {
     const level = beliefLevel();
-    return section('Faith') +
-        line('Faith now', n(state.player.faith)) +
+    return line('Faith now', n(state.player.faith)) +
         // belief (src/belief.js): its level and value, or the story's lock
         line('Belief', state.player.beliefLost ? 'lost &#8856;' : `${level.charAt(0).toUpperCase() + level.slice(1)} (${Math.round(state.player.belief)})`) +
         beliefMeter() +
@@ -139,11 +141,18 @@ export function inventoryPageHtml() {
         '</div>';
 }
 
+// ------------------------------------------------------------------ Faith
+
+// The Faith scroll (the prayer button): faith, the belief meter and where faith came from.
+export function faithPageHtml() {
+    return "<div id='faith'><span class='titles' id='titleFaith'>Faith</span><br><br>" + faithSection() + '</div>';
+}
+
 // ------------------------------------------------------------------ the page
 
 export function statsPageHtml(secondsInGame) {
     return "<div id='stats'><span class='titles' id='titleStats'>Stats</span>" +
         wizardSection(secondsInGame) + battlesSection() + magicSection() + travelsSection() +
-        goldSection() + faithSection() + achievementsSection() +
+        goldSection() + achievementsSection() +
         '</div>';
 }

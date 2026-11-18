@@ -75,3 +75,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): removed the dev panel's freeze on a hidden page (src/dev/tests.js); dev sessions run on like the live game.
 - 2026-11-18 (dev): away poem is a shuffle bag of the thinker's 8 poems (world.poemBag), shown by poemInDark in src/ui/render.js; scroll path removed. Still open: the slowed return sound (musician).
 - 2026-11-18 (dev): Inventory = second tab of the stats scroll (statsPages.js inventoryPageHtml, state.artefacts saved when an artefact is found); belief meter bar in the Faith section; away poems added to the Texts mode. The staff has no icon yet (img/objects/stuff.png is a pile, not a staff): ask the artist for a staff icon.
+- 2026-11-18 (dev): the belief meter lives in a Faith scroll on the prayer button (btn4, next to the map), not in Stats; faith lines moved there.

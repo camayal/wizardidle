@@ -4,7 +4,7 @@
 
 import { initialName, setName } from './game.js';
 import { responsiveLayout } from './ui/layout.js';
-import { archBtn, statsBtn, killBtn, mapBtn, helpBtn, btnCloseEvent } from './ui/menu.js';
+import { archBtn, faithBtn, statsBtn, killBtn, mapBtn, helpBtn, btnCloseEvent } from './ui/menu.js';
 import { pjBtn, centerBtn, npcBtn } from './divine.js';
 import { el } from './ui/dom.js';
 import { DEV } from './config.js';
@@ -17,6 +17,7 @@ const clickHandlers = {
     btn1: archBtn,
     btn2: statsBtn,
     btn3: killBtn,
+    btn4: faithBtn,
     btn5: mapBtn,
     btn6: helpBtn,
     pjDivineBtn: pjBtn,

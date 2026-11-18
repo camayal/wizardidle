@@ -7,7 +7,7 @@ import * as loop from '../loop.js';
 import { pauseToggle } from '../game.js';
 import { chapterRead } from '../story.js';
 import { masterTime } from '../config.js';
-import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, updateHelp, updateKill, updateStats } from './scrolls.js';
+import { localizarBocadillo, scrollClose, scrollOpen, updateAchievements, updateFaith, updateHelp, updateKill, updateStats } from './scrolls.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { clearNPC, playWizardAnim } from './render.js';
@@ -104,6 +104,14 @@ function statsBtn(){
 
 
 
+// Toolbar: open the faith scroll (the prayer button), refreshed while open.
+function faithBtn(){
+    loop.every("stats", updateFaith, masterTime);
+    updateFaith();
+    el("innerTextScroll").style.display = "block";
+    scrollOpen("faith");
+}
+
 // Toolbar: open the achievements scroll.
 function archBtn(){
     updateAchievements();
@@ -115,6 +123,7 @@ function archBtn(){
 export {
     archBtn,
     btnCloseEvent,
+    faithBtn,
     helpBtn,
     killBtn,
     mapBtn,

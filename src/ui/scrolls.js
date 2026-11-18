@@ -13,7 +13,7 @@ import { detectmob, layoutPortrait } from './layout.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
-import { inventoryPageHtml, statsPageHtml } from './statsPages.js';
+import { faithPageHtml, inventoryPageHtml, statsPageHtml } from './statsPages.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
@@ -276,6 +276,15 @@ function updateStats(){
     if (ui.scrollCurrentContent == "stats") placeScrollTabs("stats");  // the Stats and Inventory pages
 }
 
+// Fill the faith scroll (ui/statsPages.js).
+function updateFaith(){
+    el('innerTextScroll').innerHTML = faithPageHtml();
+    el("faith").style.fontSize = `${ui.em}px`;
+    el("faith").style.lineHeight = `${ui.em}px`;
+    el("titleFaith").style.fontSize = `${ui.em * 2.5}px`;
+    el("titleFaith").style.lineHeight = `${ui.em * 2.5}px`;
+}
+
 // The dev bar switch in Help (src/dev/tests.js listens for the event; the game never
 // imports the dev tools).
 el('innerTextScroll').addEventListener('click', (e) => {
@@ -323,6 +332,9 @@ function updateHelp(){
    '</div>' +
    '<div class="faq">Stats</div><div class="a">' +
    '<div class="divTableRow"><div class="divTableCell"><img src="' + art('statsbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Many stats about what happen in the wizard trip. Pure informational.</div></div>' +
+   '</div>' +
+   '<div class="faq">Faith scroll</div><div class="a">' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('plegariabtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Your faith, and the wizard's belief in you: its level, a meter from doubt to devotion, and where faith came from.</div></div>' +
    '</div>' +
    '<div class="faq">Map</div><div class="a">' + 
    '<div class="divTableRow"><div class="divTableCell"><img src="' + art('mapbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
@@ -430,6 +442,7 @@ export {
     scrollClose,
     scrollOpen,
     updateAchievements,
+    updateFaith,
     updateHelp,
     updateKill,
     updateStats,

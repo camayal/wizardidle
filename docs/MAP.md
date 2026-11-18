@@ -44,7 +44,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 - render.js: heading (HP, XP, gold, faith), console, backgrounds, wizard and enemy drawing and idle animation.
 - layout.js: sizes everything from the window, portrait or landscape.
-- menu.js: toolbar buttons. scrolls.js: parchment scroll pages (stats, achievements, help, kill, map). statsPages.js: the Stats page and the Inventory page (the stats scroll's second tab). bestiary.js: kill scroll's bestiary page. cemetery.js: kill scroll's cemetery page (a tomb per dead wizard, name and age carved in the tomb font, a parchment note on tap; erased = cracked tomb).
+- menu.js: toolbar buttons. scrolls.js: parchment scroll pages (stats, achievements, help, kill, map). statsPages.js: the Stats page the Inventory page (the stats scroll's second tab) and the Faith scroll (the prayer button, btn4). bestiary.js: kill scroll's bestiary page. cemetery.js: kill scroll's cemetery page (a tomb per dead wizard, name and age carved in the tomb font, a parchment note on tap; erased = cracked tomb).
 - bossAttacks.js: plays boss attack strips, scene spells, earthquake shake, Medusa's gaze.
 - enemyMoves.js: how normal enemies attack (sprite moved by code plus an effect).
 - entrances.js: how enemies arrive (glide, float, rise, jump, flicker, walk; mages also fade in; rare mages and the mage bosses through fx_portal_* strips).
