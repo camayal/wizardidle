@@ -1438,3 +1438,5 @@ Author's note: magic bosses, or flying bosses, need to have similar entrances th
 
 ### 2026-11-17: A reload starts a clean scene
 - The author's note on a battle cut short by closing the game. The author chose not to restore it: the player is a god who can't watch the world while the game is closed, other gods are there, time isn't his. The real problem was the leftovers: the sprite on the right of the scene (state.npc) was saved and drawn as the page loaded, so a hydra or an enemy stood there doing nothing. It is now forgotten when the save is read (src/state.js). The author's next idea, time away changing the wizard (a little gold and faith, levels after a week, a chance of permadeath after a month), is in the thinker's inbox.
+
+- [x] (done 2026-11-17) Fix the rest message (v1 text bug): `wakeUp()` in `events.js` counts the recovered HP twice when choosing it, so "feels totally renewed" also shows after a partial rest.

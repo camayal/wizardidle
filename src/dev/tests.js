@@ -134,7 +134,7 @@ const scenarios = [
     },
     {
         name: 'Inn rest (City)',
-        check: 'Tired, rests at the inn, wakes up. Known v1 text bug: "totally renewed" also shows after a partial rest.',
+        check: 'Tired, rests at the inn, wakes up.',
         setup() { moveTo('la_Ciudad'); state.player.hp = Math.floor(state.player.hpBase / 2); return { event: EVENT.inn }; },
     },
     {

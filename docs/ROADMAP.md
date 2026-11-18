@@ -37,7 +37,6 @@ Order decided by the author on 2026-11-12: the story depends on the faith rebala
 **3b. The story, planned together with the faith rebalance**
 - [ ] Queue chapters first: with the keys fixed, consecutive levels will have chapters (128–129, 139–140, 149–150, 199–200). The chapter-race fix keeps one chapter at a time, so a second chapter opening while the scroll is still closing would replace the first one's text.
 - [ ] Fix the chapter keys in `src/story.js` (a v1 bug, kept so stage 1 doesn't change gameplay): `lvl60` and `lvl90` appear twice, so the later entries (Chapter IX and X, meant for levels 160 and 190) replace the earlier ones and show at levels 60 and 90; Chapter IV never shows. `lvl99` should be `lvl199`, and `lv200` (missing an `l`) means Chapter XI never fires.
-- [ ] Fix the rest message (v1 text bug): `wakeUp()` in `events.js` counts the recovered HP twice when choosing it, so "feels totally renewed" also shows after a partial rest.
 - [ ] Faith rebalance: belief levels, a free revive, rescuers instead of the self-revive, the chapter X lock, the Last Escape scroll ([FAITH.md](FAITH.md)).
 - [ ] Implement the story from the ideas backlog in `ideas.md` ("Finish the story": chapters III–XI and the final battle, plus the related story ideas), balanced with the playtest tools.
 

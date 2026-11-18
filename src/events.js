@@ -601,8 +601,7 @@ function wakeUp(placesWithInn) {
         rested = (state.player.hpBase - state.player.hp) / getRandomInt(1, 5);
     }
     state.player.hp = state.player.hp + rested;
-    // v1 adds `rested` a second time here, so "totally renewed" also shows after a partial rest
-    if ((state.player.hp + rested) >= state.player.hpBase) {
+    if (state.player.hp >= state.player.hpBase) {
         textRecover = "feels totally renewed,feels well rested,has new energies,regained his health";
     } else {
         textRecover = "feels slightly renewed,feels poorly rested,has some energies,regained some health";
