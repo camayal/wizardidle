@@ -116,7 +116,7 @@ The idea: while the page is hidden (not closed), the game keeps running at 1/108
 - Story side, to ask the author one at a time:
   1. **On return to a soft-dead wizard:** DECIDED 2026-11-17: (a) he lies fallen and the god's touch saves him; returning alone does not.
   2. **If the god returns and leaves again without touching him:** DECIDED 2026-11-17: (a) he stays soft dead and the clock goes on toward permadeath.
-  3. **Protected chapters (STORY.md true death rule):** (a) the story's protector holds him: no soft dead and no permadeath there, silently (recommended: keeps the rule whole); (b) absence overrides the protection; (c) add or talk first.
+  3. **Protected chapters (STORY.md true death rule):** DECIDED 2026-11-17: (a) the protection holds silently: no soft dead and no permadeath there.
   4. **Hidden page:** (a) no slow-motion game, a fade-and-slow sound cue only (recommended); (b) the slow-motion game as proposed; (c) nothing at all; (d) add or talk first.
   5. **Soft-dead line:** (a) candidate 1 (recommended); (b) candidate 2; (c) candidate 3; (d) add or talk first.
   6. **Poem:** (a) one poem, the author or historian writes it from the brief (recommended); (b) Draft A as is; (c) Draft B as is; (d) a small bag of poems that never repeat in one world; (e) add or talk first.
