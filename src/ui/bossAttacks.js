@@ -10,7 +10,8 @@
 import { ui, run, fight } from '../runtime.js';
 import { state } from '../state.js';
 import * as loop from '../loop.js';
-import { bossAttacks, sceneSpells } from '../data/bossAttacks.js';
+import { attackSounds, bossAttacks, sceneSpells } from '../data/bossAttacks.js';
+import { playSoundAt } from '../audio.js';
 import { drawFrame, imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext, playWizardAnim } from './render.js';
 import { el } from './dom.js';
 import { art } from '../media.js';
@@ -116,6 +117,7 @@ export function bossAttackTiming(boss, id) {
 export function playSceneSpell(name, onHit = () => {}) {
     const frames = sceneSpells[name];
     if (run.simulation || !frames) return onHit();
+    if (name == "sandstorm") playSoundAt("wind_gust", 100);
     runSceneSpell(name, frames, 0, (s) => { if (s == Math.floor(frames / 2)) onHit(); });
 }
 
@@ -135,6 +137,8 @@ export function playBossAttack(boss, chosen, stone, onHit) {
         return land();
     }
     const attack = chosen || attacks[Math.floor(looksRandom() * attacks.length)];
+    for (const [sound, ms, volume] of attackSounds[`${boss}.${attack.id}`] || []) playSoundAt(sound, ms, volume);
+    if (stone) playSoundAt("stone_grind", 700);       // the stone starts to climb
     const strip = art(`anim_${boss}_${attack.id}`), scene = attack.scene ? art(`scene_${attack.scene}`) : null;
     imageNow(strip);
     if (scene) imageNow(scene);

@@ -81,6 +81,17 @@ export const bossAttacks = {
     ],
 };
 
+// The sounds of the boss moves, at their own moment: "boss.attack" -> [[sound, ms from the first frame, volume], ...]
+// (approved by the author, docs/SOUNDS.md). Volume is 0.3 unless given. The landing keeps the spell's own sound.
+export const attackSounds = {
+    "protromus.ground_punch": [["thud", 400], ["rumble", 400]],
+    "kkck.roll": [["rock_roll", 400]],
+    "bicaptop.roar": [["roar", 200]], "bicaptop.charge": [["hooves", 200, 1]], "bicaptop.slam": [["rock_smash", 600]],
+    "cuboq.bounce": [["bounce", 0]],
+    "infraespectro.curse": [["curse", 200, 1]],
+    "doria.sonic_boom": [["sonic_boom", 0]], "doria.rune_circle": [["rune_circle", 0]],
+};
+
 // Frames of each scene spell (256 x 64 each). Some are not used by bosses yet (story, powers).
 export const sceneSpells = {
     frost_breath: 16,

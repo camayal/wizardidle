@@ -24,41 +24,16 @@ The author's rules (2026-11-13 and 14):
 A new file should be short (under 1 s unless noted), mono, .ogg, about as loud as the current
 ones, and free to use (CC0 or similar; record the source and licence next to the file).
 
-## Approved, still to wire
+## Wired (2026-11-18)
 
-Approved by ear, each tried against its animation. The files are cut and in `snd/creatures/`
-(2026-11-14); nothing is wired yet.
-A row leaves this table when its sound plays in the game. "Starts at" is counted from the first
-frame of the animation; "Game sound" is the name it will have in `snd/creatures/` (see "The
-files" below).
+The 24 approved moves of the old table now play at their own moment: regular enemies by family in
+`MOVE_SOUND` (src/ui/enemyMoves.js), boss moves in `attackSounds` (src/data/bossAttacks.js), both
+through `playSoundAt` (src/audio.js). The stone grinds on Medusa's gaze when it petrifies him and
+bursts off in src/bossEffects.js; the mother hydra's regrowth plays `squelch` (the other hydras keep
+`hidra`); the Sandstorm plays its wind in `playSceneSpell` (no boss casts it yet). The ram hits and the
+Ogre's smash keep the game's `Physical` sound. Not yet heard in play: the author should try each.
 
-| Move | Game sound | Plays | Volume | Starts at |
-|---|---|---|---|---|
-| Ent: slam | `thud` | 2.11 s | 0.3 | 500 ms (when the blow lands) |
-| Protromus: ground punch | `thud` | 2.11 s | 0.3 | 400 ms |
-| Protromus: earthquake | `rumble` | 2.11 s | 0.3 | 400 ms (the earthquake starts) |
-| Elf: shoot | `arrow` | 1.04 s | 0.3 | 200 ms (the release) |
-| Tauren: charge | `hooves` | 0.88 s | 0.55 | 370 ms (just before the dash) |
-| Capricor: charge | `hooves` | 0.88 s | 0.55 | 370 ms |
-| Kkck: roll | `rock_roll` | 1.87 s | 0.3 | 400 ms (the roll starts) |
-| Bicaptop: roar | `roar` | 1.12 s | 0.3 | 200 ms |
-| Bicaptop: charge | `hooves` | 0.88 s | 1.0 | 200 ms (the charge starts) |
-| Bicaptop: slam | `rock_smash` | 0.94 s | 0.3 | 600 ms (when the slam lands) |
-| Cuboq: bounce | `bounce` | 0.99 s | 0.3 | 0 ms (the first frame) |
-| Imp: pounce | `bite` | 0.74 s | 0.3 | 100 ms |
-| Sandstorm | `wind_gust` | 1.22 s | 0.3 | 100 ms (the scene spell starts) |
-| Medusa's gaze: he turns to stone | `stone_grind` | 1.15 s | 0.3 | 700 ms (the stone starts to climb) |
-| The stone bursts off | `stone_break` | 0.99 s | 0.3 | 400 ms (the stone cracks) |
-| Orc: slash swing | `swing_slash` | 0.08 s | 0.3 | 300 ms (the slash opens) |
-| Warrior: thrust swing | `swing_thrust` | 0.07 s | 0.3 | 200 ms (the spear goes out) |
-| Ogre: smash swing | `Physical` (already in the game, whole) | 0.23 s | 0.3 | 400 ms (the downswing) |
-| Capricor: ram, Tauren: ram (each approved) | `Physical` (already in the game, whole) | 0.23 s | 0.3 | 950 ms (when the ram lands) |
-| Infraespectro: curse | `curse` | 1.80 s | 1.0 | 200 ms (the curse starts) |
-| Doria: sonic boom | `sonic_boom` | 3.12 s | 0.3 | 0 ms (the blow lands at 1000 ms, the move lasts 2300 ms) |
-| Doria: rune circle | `rune_circle` | 4.05 s | 0.3 | 0 ms (the blow lands at 1000 ms, the move lasts 2400 ms) |
-| Swamp hydra: a head grows (each growth, 1 to 2 up to 6 to 7) | `squelch` | 2.33 s | 0.3 | 0 ms (the growth starts) |
-
-All at normal speed, not repeated. Notes for whoever wires them:
+Notes kept from the old table:
 
 - The thud, the rumble and the roll are longer than first asked, approved as they are.
 - The hooves on the Tauren and the Capricor are louder than the game's usual 0.3, and run about

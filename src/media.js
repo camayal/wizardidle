@@ -64,7 +64,9 @@ export function artFolder(name) {
 const SOUND_FOLDERS = {
     schools: ['Arcane', 'Divine', 'Fire', 'Frost', 'Nature', 'Physical', 'Shadow', 'Thunder'],
     wizard: ['hurt1', 'hurt2', 'hurt3', 'hurt4', 'hurt5', 'hurt6', 'revive', 'heal', 'pray', 'drink', 'studybook', 'studyrune'],
-    creatures: ['boss', 'hidra', 'gallina', 'oveja', 'hydra_mud_enter', 'hydra_ice_enter', 'hydra_bones_enter'],
+    creatures: ['boss', 'hidra', 'gallina', 'oveja', 'hydra_mud_enter', 'hydra_ice_enter', 'hydra_bones_enter',
+        'thud', 'rumble', 'rock_roll', 'arrow', 'hooves', 'roar', 'rock_smash', 'stone_break', 'stone_grind', 'bounce',
+        'bite', 'wind_gust', 'swing_slash', 'swing_thrust', 'curse', 'sonic_boom', 'rune_circle', 'squelch'],
     places: ['altar', 'dice', 'coins', 'breakPot', 'breakWood'],
     ui: ['achivement', 'lvlup', 'statUp', 'unlock', 'scroll', 'start'],
 };

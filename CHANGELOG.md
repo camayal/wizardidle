@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Enemy moves have their own sounds, at their own moment: the Ent's thud, the Elf's arrow, the horn charges' hooves, the Orc's and Warrior's swings, the Ogre's smash, the Imp's bite; and the bosses' moves (Protromus, Kkck, Bicaptop, Cuboq, Infraespectro's curse, Doria's boom and rune circle). Medusa's stone grinds as it climbs and cracks when he breaks free, and the Swamp hydra's regrowth squelches.
 - Inventory: the items show in a grid, each in its own square slot (staff, gold with its amount in the corner, then the artefacts); hover a slot for its name.
 - The stats scroll has a second page, Inventory (a strip above it, like the kill scroll's): for now the staff (drawn by his tier: five designs, the artist's icons), his gold and any artefact he has found, such as the mirror shield or the gorgon's-eye amulet. The prayer button (next to the map) opens a Faith scroll: faith now, the belief level with a meter bar (ticks at the Atheist, Doubter and Devout lines) and where faith came from; the Faith section left the Stats page.
 - Texts dev mode: the eight away poems are listed (Dreams drop, "Away poems"), shown over the dark and playable.

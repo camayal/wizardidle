@@ -15,6 +15,7 @@ import { bossAttacks } from './data/bossAttacks.js';
 import { roundNumbertoLetter, YesOrNot } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
+import { playSoundAt } from './audio.js';
 import { fight, run, ui } from './runtime.js';
 import { playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
@@ -87,7 +88,7 @@ export function startOfTurn() {
         fight.stoneTurns--;
         if (fight.stoneTurns == 0) {
             print(`${wizardName()} breaks free from the stone`);
-            if (!run.simulation) playWizardAnim("unpetrify");
+            if (!run.simulation) { playWizardAnim("unpetrify"); playSoundAt("stone_break", 400); }
         } else {
             print(`${wizardName()} is still stone and can't move`);
         }

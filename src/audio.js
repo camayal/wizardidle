@@ -23,6 +23,15 @@ function playSound(ogg, volume = 0.3){
       }
 }
 
+// Play a sound some ms after now: the moment of a move (its swing, its roar), not its landing.
+// Nothing plays if the page is hidden or the game is simulated, like the animations.
+function playSoundAt(ogg, delayMs, volume = 0.3){
+    if (run.simulation) return;
+    if (delayMs <= 0) return playSound(ogg, volume);
+    setTimeout(() => playSound(ogg, volume), delayMs);
+}
+
 export {
     playSound,
+    playSoundAt,
 };

@@ -13,6 +13,7 @@ import { enemySprites } from '../data/enemies.js';
 import { drawFrame as drawStripFrame, imageNow, loadNPC, npcCanvas, pixelContext } from './render.js';
 import { art } from '../media.js';
 import { masterTime } from '../config.js';
+import { playSoundAt } from '../audio.js';
 
 // Melee families by the attack their sprites make (approved by the author): swords slash,
 // bows shoot, spears thrust, heavy weapons smash, horns charge, beasts pounce, heavy bodies
@@ -27,6 +28,16 @@ const MELEE = {
 };
 const DEFAULT_MELEE = "slash";
 export const meleeMoveOf = (family) => MELEE[family] || DEFAULT_MELEE;
+
+// The sound of a move at its own moment, per creature (the author approves each one; a sound is
+// never assumed for another creature): family -> [move, sound, ms from the first frame, volume].
+// docs/SOUNDS.md has the table. The landing keeps the spell's own sound.
+const MOVE_SOUND = {
+    el_ent: ["slam", "thud", 500], el_elfo: ["shoot", "arrow", 200],
+    el_tauren: ["charge", "hooves", 370, 0.55], el_capricor: ["charge", "hooves", 370, 0.55],
+    el_orco: ["slash", "swing_slash", 300], el_guerrero: ["thrust", "swing_thrust", 200],
+    el_ogro: ["smash", "Physical", 400], el_diabillo: ["pounce", "bite", 100],
+};
 
 // The school of an enemy's spell, for its spark.
 const SPELL_SCHOOL = { spellPush1: "arcane", spellPush2: "arcane", spellPush3: "nature", spellPush7: "nature",
@@ -86,7 +97,7 @@ export function enemyMove() {
     if (fight.polymorphed) return { kind: "pounce" };          // a sheep or a chicken just charges
     const sprite = enemySprites[fight.enemyAndNumber];
     if (sprite && sprite.type != "melee" && SPELL_SCHOOL[fight.spellEnemy]) return { kind: "cast", school: SPELL_SCHOOL[fight.spellEnemy] };
-    return { kind: MELEE[fight.enemy] || DEFAULT_MELEE };
+    return { kind: MELEE[fight.enemy] || DEFAULT_MELEE, family: fight.enemy };
 }
 
 // The artist's frames for chargers: running (img/run_<sprite>.png, 32 x 32 frames facing left,
@@ -145,6 +156,8 @@ export function playEnemyMove(move, onHit) {
     const land = () => { if (!hit) { hit = true; onHit(); } };
     if (run.simulation || !document.hasFocus() || !state.npc) return land();
     const npc = state.npc, seq = frames(move.kind, move.school);
+    const sound = MOVE_SOUND[move.family];
+    if (sound && sound[0] == move.kind) playSoundAt(sound[1], sound[2], sound[3]);
     const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
     imageNow(art(`${npc}`));
     for (const frame of seq) if (frame.fx) imageNow(art(`${frame.fx[0]}`));   // start loading
