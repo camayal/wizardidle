@@ -220,6 +220,7 @@ function reviveEV(){
             spell("spellHeal_8",true);
             break;
         case 3:
+            spell("spellPinRed_16",false);  // the old red pin plays over him (the author: keep it on top of the fade)
             playExit();                     // the healer fades away like a mage arrives, backwards
             print(`${wizardName()} is totally recovered (${ui.healIcon}${roundNumbertoLetter(state.player.hpBase)}) and the mysterious guy is gone`)
             updateHeading();

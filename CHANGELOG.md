@@ -2,6 +2,7 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- The mysterious healer vanishes with his old red pin animation again, played over his fade-out.
 - Risers come out of the ground, and sink back into it, in the artist's new ground effects (cracked hole, soil burst, dust plume, sinkhole; a random one each time, a bigger set for the 64 px bosses) instead of the small dust puff; the sprite rises with the effect's frames. The hydras (mother, icedra, hydskon) leave by sinking into their own mud pool, ice spikes or bone heap.
 - Hydra entrances have their own sounds (mud, ice, bones), each with a burst as the hydra shows; the generic hydra sound now plays only when a head regrows.
 - Tools: tools/to_ogg.py turns mp3, wav or flac files (or a whole folder) into the game's .ogg files (mono, game names, the same quality as the cut sounds).
