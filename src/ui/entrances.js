@@ -69,7 +69,7 @@ const BOSS_PORTAL = { doria: "fx_portal_doria", midas: "fx_portal_midas", rainbo
 // wide strip at 1 art px per boss px), he fades in standing inside it, then it fades away behind him.
 const ARCH = new Set(["skeleton"]);
 const STRIP_FRAMES = 16;
-const BOSS_PORTAL_SCALE = 0.85;     // the 80 x 96 boss strips at 85%: 68 x 82, a bit bigger than the 64 px boss (the author: 70% was too small)
+const BOSS_PORTAL_SCALE = 0.9;      // the 80 x 96 boss strips at 90%: 72 x 86, bigger than the 64 px boss (the author: 70% and 85% too small)
 const BOSS_STRIP_WIDTH = 80;        // a smaller strip (the 40 px mage portals) is scaled up to it
 // The strip frame for an arrival step: opens, loops while the enemy steps out, closes.
 const stripFrame = (k) => k < 6 ? k : k < 24 ? 6 + (k - 6) % 6 : Math.min(15, 12 + k - 24);
