@@ -115,7 +115,7 @@ The idea: while the page is hidden (not closed), the game keeps running at 1/108
 - The cap value, and the first estimates for drift, level odds and the permadeath curve (to write next, then adjust after playtests).
 - Story side, to ask the author one at a time:
   1. **On return to a soft-dead wizard:** DECIDED 2026-11-17: (a) he lies fallen and the god's touch saves him; returning alone does not.
-  2. **If the god returns and leaves again without touching him:** (a) he stays soft dead and the clock goes on toward permadeath (recommended); (b) leaving again kills him at once; (c) add or talk first.
+  2. **If the god returns and leaves again without touching him:** DECIDED 2026-11-17: (a) he stays soft dead and the clock goes on toward permadeath.
   3. **Protected chapters (STORY.md true death rule):** (a) the story's protector holds him: no soft dead and no permadeath there, silently (recommended: keeps the rule whole); (b) absence overrides the protection; (c) add or talk first.
   4. **Hidden page:** (a) no slow-motion game, a fade-and-slow sound cue only (recommended); (b) the slow-motion game as proposed; (c) nothing at all; (d) add or talk first.
   5. **Soft-dead line:** (a) candidate 1 (recommended); (b) candidate 2; (c) candidate 3; (d) add or talk first.
