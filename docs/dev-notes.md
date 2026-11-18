@@ -39,3 +39,8 @@ Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7).
 5. Poem: a bag of poems that never repeat in one world (shuffle bag like the dreams); shown over the dark scene like a dream, not a scroll. Keep the placeholders until the author/historian writes them.
 6. A hidden page is settled by calculation on return (no slow-motion game). Keep the live game stopped while hidden. When the page shows after a long absence play one return sound (see sound-notes).
 ```
+
+```
+Date: 2026-11-17 20:03
+Author's note: when the game start it says no creature defeated yet but it puts bosses and Secrets, only add bosses when the first boss is encountered, and only put secrets when the first hydra is found
+```
