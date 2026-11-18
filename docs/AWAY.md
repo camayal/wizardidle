@@ -125,3 +125,29 @@ The idea: while the page is hidden (not closed), the game keeps running at 1/108
 ## To do when built
 
 - Add the 108 line to the game's FAQ (`src/ui/scrolls.js`), worded as a hint, not an explanation.
+
+## Estimates
+
+First numbers (dev, 2026-11-17), all in `config.away`, formulas in `src/awayMath.js`. Not simulated: the simulation runs a wizard on a virtual clock and has no closed-game time, so these were checked by hand and by loading a test save (35, 50 and 90 days) in the browser. Adjust after playtests.
+
+| Number | Value | Why |
+|---|---|---|
+| World time | away / 108 | the decision |
+| Minimum | 5 minutes | a reload or a quick look elsewhere changes nothing |
+| Cap | 90 days away = 20 world hours | a device clock set forward cannot farm; equals "certain death" below |
+| Faith | x0.98 per world hour (compounds, never below 0) | 1 week x0.97, 1 month x0.87, cap x0.67; never up |
+| Gold | up or down by up to 0.5% per world hour, random | a week about 1%, the cap at most 10% |
+| Levels | 0.3 expected per world hour, at most 3 per absence, never up to the next chapter level (or 200) | his normal pace is 3 to 6 levels an hour (docs/playtests), so this is under a tenth of it: a week about half a level, a month 2 |
+| Soft dead | from 6.6 world hours (a little under 1 month) | fallen, hp 0, no self revive; only the god's touch; one console line |
+| Permadeath | 0 before the soft-dead line; rises to 70% at 13.3 world hours (about 2 months); to 100% at 20 (the cap) | only from the soft-dead stage, never from a healthy wizard |
+
+| Away | World hours | Faith left | Levels (expected) | Permadeath |
+|---|---|---|---|---|
+| 1 day | 0.2 | 100% | 0.07 | 0 |
+| 1 week | 1.6 | 97% | 0.5 | 0 |
+| 1 month | 6.7 | 87% | 2 | 0, but soft dead |
+| 1.5 months | 10 | 82% | 3 | 35% |
+| 2 months | 13.3 | 76% | 3 | 70% |
+| 3 months or more | 20 | 67% | 3 | 100% |
+
+Built: the save stores `meta.lastSeen` (stamped every save while the page is visible, kept at the moment of hiding or closing); on load `src/away.js` settles it. A page hidden for 5 minutes or more reloads when shown (the load settles it; not in the dev tools). The soft-dead line and the poem are in `src/data/awayTexts.js` (candidate 1 and draft A as placeholders until the author decides). To try it, in the browser console lower `dev.state.meta.lastSeen` by days in milliseconds and reload.
