@@ -139,15 +139,23 @@ function staffIcon() {
     return `staff_${STAFF_DESIGNS.includes(STAFF_OF_TIER[tier]) ? STAFF_OF_TIER[tier] : 0}`;
 }
 
+// Each item sits in its own square slot (the staff icons are square 32x32 for this); gold shows
+// its amount as a small count in the corner.
+function slotHtml(name, sprite, count) {
+    const em = ui.em || 16;
+    const box = Math.round(em * 3.5);
+    return `<span title='${name}' style='display:inline-block;position:relative;width:${box}px;height:${box}px;` +
+        `margin:2px;border:2px solid #6b4a1e;background:rgba(80,50,20,0.18);vertical-align:top;text-align:center'>` +
+        `<img class='imgInConsole' height='${em * 2}' src='${art(sprite)}' style='margin-top:${Math.round((box - em * 2) / 2 - 2)}px'/>` +
+        (count ? `<span style='position:absolute;right:2px;bottom:0;font-size:${Math.round(em * 0.7)}px'>${count}</span>` : '') +
+        '</span>';
+}
+
 export function inventoryPageHtml() {
-    const icon = (name) => `<img class='imgInConsole' height='${(ui.em || 16) * 2}' src='${art(name)}'/> `;
-    const artefacts = (state.artefacts || []).map((a) => `${icon(a.sprite)}${a.name}<br>`).join('');
+    const slots = [slotHtml('Staff', staffIcon()), slotHtml('Gold', 'gold', n(state.player.gold))]
+        .concat((state.artefacts || []).map((a) => slotHtml(a.name, a.sprite)));
     return "<div id='inventory'><span class='titles' id='titleInventory'>Inventory</span><br>" +
-        section('Carried') +
-        `${icon(staffIcon())}Staff<br>` +
-        `${icon('gold')}${n(state.player.gold)} gold<br>` +
-        (artefacts ? section('Artefacts') + artefacts : '') +
-        '</div>';
+        section('Carried') + slots.join('') + '</div>';
 }
 
 // ------------------------------------------------------------------ Faith

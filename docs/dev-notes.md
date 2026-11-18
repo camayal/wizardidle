@@ -14,11 +14,6 @@ Date: 2026-11-18
 Author's note: Faith scroll: improve its graphic design, it needs to look more divine; the belief meter needs to be more artistic (art from the artist may help).
 ```
 
-```
-Date: 2026-11-18
-Author's note: Inventory: show the items in a grid, each item in its own square slot (the staff icons are square 32x32 for this reason).
-```
-
 ## Open items from the old play-test list (2026-11-18)
 
 [~] some new enemy attacks need some sounds, check which can be reused, and what other should I find (checked: docs/SOUNDS.md lists the reusable sounds and the 10 to find; wiring waits for your OK)

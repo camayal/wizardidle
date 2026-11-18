@@ -1512,3 +1512,8 @@ Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7).
 
 [x] ~~use a tool such as https://github.com/ChristosMaragkos/Oggify or a permanent created script to transform mp3 to ogg. never use tokens to do each transformaion from scratch~~ (done: `python tools/to_ogg.py <files or folder>`; see its help)
 [x] ~~thanks https://ko-fi.com/dragonstudio for a bunch of sounds~~ (done: in the help scroll's sound credits)
+
+```
+Date: 2026-11-18
+Author's note: Inventory: show the items in a grid, each item in its own square slot (the staff icons are square 32x32 for this reason).
+```

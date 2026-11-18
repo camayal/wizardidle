@@ -78,3 +78,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): the belief meter lives in a Faith scroll on the prayer button (btn4, next to the map), not in Stats; faith lines moved there.
 - 2026-11-18 (dev): the dev panel's own freeze is gone and src/away.js watchHidden now runs in dev too: hidden = frozen, long absence = reload and settle, same as live.
 - 2026-11-18 (dev): the artist's five staff icons (img/objects/staff_<design>.png) are on the Inventory page; statsPages.js maps each tier to its design.
+- 2026-11-18 (dev): inventory is a grid of square slots (slotHtml in src/ui/statsPages.js, inline styles, slot = 3.5 em); not run in a browser yet. Asked the thinker about themed scroll backgrounds (cemetery grass, wooden crates), in thinker-notes.

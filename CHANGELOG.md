@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Inventory: the items show in a grid, each in its own square slot (staff, gold with its amount in the corner, then the artefacts); hover a slot for its name.
 - The stats scroll has a second page, Inventory (a strip above it, like the kill scroll's): for now the staff (drawn by his tier: five designs, the artist's icons), his gold and any artefact he has found, such as the mirror shield or the gorgon's-eye amulet. The prayer button (next to the map) opens a Faith scroll: faith now, the belief level with a meter bar (ticks at the Atheist, Doubter and Devout lines) and where faith came from; the Faith section left the Stats page.
 - Texts dev mode: the eight away poems are listed (Dreams drop, "Away poems"), shown over the dark and playable.
 - A wizard who dies for good while the god is away gets a poem, one of eight that never repeat in one world, shown softly over the dark scene (title, then the lines) before the next wizard begins; the fallen line now names the zone he lies in.
