@@ -147,6 +147,6 @@ One by one, in the game's dev mode for sounds (its list is `src/dev/soundNeeds.j
 | Arcangel | golden storm |
 | Etymos | prism pulse, colour burst |
 | Rojo | fire rain |
-| Hydras | strike (Swamp, ice, Dunes), frost breath, a head grows (ice, Dunes). On hold: the author wants new sounds for the hydras |
+| Hydras | strike (Swamp, ice, Dunes), frost breath, a head grows (ice, Dunes). On hold: the author wants new sounds for the hydras (the entrances have theirs since 2026-11-17) |
 | Scene spells no boss casts yet | whirlwind, eclipse, divine light, healing rain |
 | Dice game | the roll: `snd/places/dice.ogg` is 2.07 s and the dice animation now lasts 1.44 s (18 frames of 80 ms), with a new roll possible every 1.5 s. Wanted: about 1.2 to 1.4 s, the clatter early and the dice settled by the end (the author's playtest note, 2026-11-14) |

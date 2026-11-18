@@ -1442,3 +1442,14 @@ Author's note: magic bosses, or flying bosses, need to have similar entrances th
 - [x] (done 2026-11-17) Fix the rest message (v1 text bug): `wakeUp()` in `events.js` counts the recovered HP twice when choosing it, so "feels totally renewed" also shows after a partial rest.
 - [x] (done 2026-11-17) Queue chapters first: with the keys fixed, consecutive levels will have chapters (128–129, 139–140, 149–150, 199–200). The chapter-race fix keeps one chapter at a time, so a second chapter opening while the scroll is still closing would replace the first one's text.
 - [x] (done 2026-11-17) Fix the chapter keys in `src/story.js` (a v1 bug, kept so stage 1 doesn't change gameplay): `lvl60` and `lvl90` appear twice, so the later entries (Chapter IX and X, meant for levels 160 and 190) replace the earlier ones and show at levels 60 and 90; Chapter IV never shows. `lvl99` should be `lvl199`, and `lv200` (missing an `l`) means Chapter XI never fires.
+
+## Wired 2026-11-17: hydra entrances (SOUNDS.md)
+
+Each file fuses the author's two sounds: the "inf" sound from the start of the entrance, the "burst" placed where the hydra shows (its reveal frame; the "inf" fades out over 100 ms from there). Plays with the entrance from frame 0 (playHydraEnter in `src/ui/entrances.js`); approved and wired: snd/creatures/hydra_*_enter.ogg; the generic `hidra` sound now plays only when a head regrows (the author dropped the landing sounds for hydras).
+
+| Game sound | Sources | Burst at | Cut | Volume (fade) | Landing sound |
+|---|---|---|---|---|---|
+| hydra_mud_enter (mother) | inf_hydra_swamp.mp3 + burst_hydra_swamp.mp3 | 1.08 s (frame 9) | 0.000 s to 1.500 s | 0.3 (fade in 0, out 30 ms) | Nature (spellChispasGreen_8), heard |
+| hydra_ice_enter (icedra) | inf_hydra_ice.mp3 + burst_hydra_ice.mp3 | 1.20 s (frame 10) | 0.000 s to 2.500 s | 0.6 (fade in 0, out 30 ms) | Frost (spellChispasBlue_8), heard |
+| hydra_bones_enter (hydskon) | inf_hydra_bones.mp3 + burst_hydra_bone.mp3 | 1.32 s (frame 11) | 0.000 s to 2.100 s | 0.3 (fade in 0, out 30 ms) | Shadow (spellMaldicion_8), heard |
+

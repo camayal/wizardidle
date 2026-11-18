@@ -2,6 +2,7 @@
 
 ## Unreleased (dev-repo, shown as 2.2.0-dev)
 
+- Hydra entrances have their own sounds (mud, ice, bones), each with a burst as the hydra shows; the generic hydra sound now plays only when a head regrows.
 - Tools: tools/to_ogg.py turns mp3, wav or flac files (or a whole folder) into the game's .ogg files (mono, game names, the same quality as the cut sounds).
 - Fixed: chapters show at their own levels: Chapter IV at 90, IX at 160, X at 190, XI at 200 (v1 key typos had IX and X replacing levels 60 and 90, and XI never came).
 - Two chapters reached close together each get their own scroll, one after the other; the game resumes after the last.

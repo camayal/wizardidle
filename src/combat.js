@@ -336,7 +336,7 @@ function enemyDisplayName(sprite) {
 function getHydra(newEncounter = false){
     fight.bossCombat = false;
     fight.hydraCombat = true;
-    playSound("hidra");
+    if (!newEncounter) playSound("hidra");     // a head regrows; a new hydra plays its entrance sound instead
     fight.hydra =  zones[state.zone.current].hidrasName;
     if(!state.hydraHeads[fight.hydra]){state.hydraHeads[fight.hydra] = 1};
     fight.enemy = fight.hydra;

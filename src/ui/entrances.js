@@ -28,6 +28,7 @@ import { state } from '../state.js';
 import * as loop from '../loop.js';
 import { cancelNPCDraw, clearNPC, drawFrame, imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext } from './render.js';
 import { art } from '../media.js';
+import { playSound } from '../audio.js';
 import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 
@@ -75,8 +76,13 @@ const BOSS_STRIP_WIDTH = 80;        // a smaller strip (the 40 px mage portals) 
 const stripFrame = (k) => k < 6 ? k : k < 24 ? 6 + (k - 6) % 6 : Math.min(15, 12 + k - 24);
 // The artist's general hydra entrances (img/bosses/hydras/anim_hydra_<effect>_enter.png): 16 frames
 // of 96 x 96 sprite px with no hydra in them, drawn on top of the hydra at any head count; the
-// hydra shows from the reveal frame (0-based) on.
-const HYDRA_ENTER = { mother: { effect: "mud", reveal: 9 }, icedra: { effect: "ice", reveal: 10 }, hydskon: { effect: "bones", reveal: 11 } };
+// hydra shows from the reveal frame (0-based) on. Each plays its sound from frame 0 (the author's
+// two sounds fused, the burst on the reveal frame; volumes from the author's sound test, docs/SOUNDS.md).
+const HYDRA_ENTER = {
+    mother: { effect: "mud", reveal: 9, sound: "hydra_mud_enter", volume: 0.3 },
+    icedra: { effect: "ice", reveal: 10, sound: "hydra_ice_enter", volume: 0.6 },
+    hydskon: { effect: "bones", reveal: 11, sound: "hydra_bones_enter", volume: 0.3 },
+};
 const HYDRA_FRAME = 96;
 const HYDRA_ENTER_MS = 120;
 const HYDRA_FADE = 5;               // steps the last frame fades over (the last droplets and shards fade out)
@@ -484,8 +490,9 @@ function playStripEnter(npc, done) {
 // A hydra (any head count) arrives under its zone's effect: the strip is centred on the hydra's
 // feet, bottom-aligned, the hydra hidden until the reveal frame, then the last frame fades out.
 function playHydraEnter(npc, hydra, done) {
-    const { effect, reveal } = HYDRA_ENTER[hydra], src = art(`anim_hydra_${effect}_enter`), body = art(npc);
+    const { effect, reveal, sound, volume } = HYDRA_ENTER[hydra], src = art(`anim_hydra_${effect}_enter`), body = art(npc);
     cancelNPCDraw();
+    playSound(sound, volume);
     imageNow(src);
     imageNow(body);
     loop.freezeGame();
