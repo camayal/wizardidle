@@ -72,6 +72,10 @@ export const config = {
         pGetHydra: 0.1,            // only once the hydra mystery is solved
         pDados: 0.1,               // was 0.2: too easy to get stuck in the dice game
         allowChangeZone: 1,        // 1 = use pChangeZone as is, 0 = never change zone
+        zoneStayFree: 12,          // events in one zone before he grows restless (the author: he stayed too long)
+        zoneStayPush: 0.05,        //   then each event adds this to the change-zone chance
+        zoneStayMax: 40,           //   and after this many the next event takes him to another zone
+        pDadosAgain: 0.35,         // after a dice game, chance he stays for another round (gold left)
         // boss effects (docs/SCENE_SPELLS.md; starting values, to playtest)
         petrifyChance: 0.25,       // Medusa's gaze turns him to stone
         petrifyTurns: 2,

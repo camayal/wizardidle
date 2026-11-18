@@ -53,6 +53,7 @@ function newState() {
             current: 'la_Ciudad',
             last: 'la_Torre',
             stage: Math.floor((Math.random() * MAXSTAGES) + 1),
+            stay: 0,                  // events since he arrived in this zone (src/events.js, restless)
         },
         dreamBags: {},                // dream pool -> ids still to play, shuffled (src/dream.js)
         dreamLast: {},                // dream pool -> the dream played last

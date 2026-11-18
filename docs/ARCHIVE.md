@@ -1403,3 +1403,15 @@ Author's note: remove phisical  attack from our wizard, it is a wizard after all
 [x] ~~cemeentery each wizard should ahve a tumb with their name and perhaps age, touch extend information.  ERASURE follow rules, i think it is invert and crossed name and perhaps a cracked tomb. maybe 4 to 5 tombs desings with each one cracked just in case.~~ (done: the Cemetery page shows a tomb per wizard, one of the five designs, name and age carved; a tap opens a small parchment with level, age, victories, falls and dates; an erased wizard lies under the cracked version, name upside down and crossed out)
 [x] ~~some dreams can increase believer score~~ (done: belief dreams and callings raise belief by his level, nightmares sow doubt; shuffle bags so no dream repeats)
 [x] ~~if a battle is interrumpted because i close the game, when i start again previous content (enemies, runes, etc), in in place~~ (done: the author chose not to restore anything, the god can't watch the world while the game is closed; the scene now starts clean, no enemy or object left standing from before. The idea of time away changing the wizard went to the thinker)
+
+## Dev notes done (cut 2026-11-17)
+
+```
+Date: 2026-11-15 16:38
+Author's note: sometimes the wizard spend so much time in a given zone. we need to avoid that, I think createing scenes with the other zoner will help to revolve this.
+```
+
+```
+Date: 2026-11-15 16:40
+Author's note: if the wizar is already in the dice games, why exit and go again, we need to check the way to evaluate the next destignation in the gampling house, that is the actual gambling house, wizard skip leaving and play another round
+```

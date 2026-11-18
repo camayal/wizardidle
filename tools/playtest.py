@@ -65,6 +65,7 @@ def row(label, seed, r):
            'kills': s.get('kill.enemies', 0) + s.get('kill.rare', 0), 'bossKills': s.get('kill.bosses', 0),
            'falls': s.get('death.falls', 0), 'selfRevives': s.get('death.selfRevive', 0),
            'godTouches': s.get('god.touches', 0), 'godHeals': s.get('god.heals', 0),
+           'zoneChanges': s.get('explore.zoneChanges', 0),
            'faith': round(r.get('player', {}).get('faith', 0)), 'gold': round(r.get('player', {}).get('gold', 0))}
     for level in MILESTONES:
         h = hours_at(r, level)
@@ -146,7 +147,7 @@ def main():
         w.writeheader()
         w.writerows(rows)
     pace = summarise(rows, ['hours'] + [f'h{m}' for m in MILESTONES])
-    outcome = summarise(rows, ['kills', 'bossKills', 'falls', 'selfRevives', 'godTouches', 'godHeals', 'freezes', 'faith', 'gold'])
+    outcome = summarise(rows, ['kills', 'bossKills', 'falls', 'selfRevives', 'godTouches', 'godHeals', 'freezes', 'zoneChanges', 'faith', 'gold'])
     belief = summarise(rows, ['beliefEnd', 'firstDoubter', 'firstAtheist', 'backToBeliever', 'h_devout', 'h_believer', 'h_doubter', 'h_atheist'])
     ends = {label: ', '.join(f'{k} {v}' for k, v in sorted(collections.Counter(r['levelEnd'] for r in rows if r['setting'] == label).items()))
             for label in dict.fromkeys(r['setting'] for r in rows)}

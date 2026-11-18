@@ -62,6 +62,7 @@ function getZone() {
         state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
         stats.count(`explore.zone.${state.zone.current}`);
+        state.zone.stay = 0;
         } else {
         state.zone.current = "la_Ciudad";//default start
     }

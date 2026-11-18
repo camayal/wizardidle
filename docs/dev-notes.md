@@ -15,16 +15,6 @@ Author's note: For elementals, I changed my mind; the entry to battle should be 
 ```
 
 ```
-Date: 2026-11-15 16:38
-Author's note: sometimes the wizard spend so much time in a given zone. we need to avoid that, I think createing scenes with the other zoner will help to revolve this.
-```
-
-```
-Date: 2026-11-15 16:40
-Author's note: if the wizar is already in the dice games, why exit and go again, we need to check the way to evaluate the next destignation in the gampling house, that is the actual gambling house, wizard skip leaving and play another round
-```
-
-```
 Date: 2026-11-17 06:58
 Author's note: healer teleport is quite rudimentary, we can use the metod we use in entrance wizards but in reverse to vanish him
 ```

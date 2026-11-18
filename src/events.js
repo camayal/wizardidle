@@ -119,7 +119,9 @@ function event() {
         masterOption = Number(pickRandomItem(state.forceEvent));
     }else{
         masterOption = Math.floor((Math.random() * 5) + 1)
+        if (restless()) masterOption = 2;        // stayed too long: explore takes him away
     }
+    state.zone.stay = (state.zone.stay || 0) + 1;
     switch (masterOption) {
     case 1:
         //Get an enemy and start a battle
@@ -144,8 +146,26 @@ function event() {
 
 };
 
+// He has stayed in this zone for zoneStayMax events (never while zone changes are switched off).
+function restless() {
+    return config.balance.allowChangeZone > 0 && (state.zone.stay || 0) >= config.balance.zoneStayMax;
+}
+
+// Chance to change zone: his exploration skill, plus a push for every event past zoneStayFree.
+function changeZoneChance() {
+    const b = config.balance;
+    const extra = Math.max(0, (state.zone.stay || 0) - b.zoneStayFree) * b.zoneStayPush;
+    return Math.min(1, (stat("pChangeZone") + extra) * b.allowChangeZone);
+}
+
 // Explore: maybe loot, maybe a dice house in town, maybe change zone, otherwise walk on.
+// A restless wizard (see restless) goes straight to another zone.
 function exploreEV() {
+    if (restless()) {
+        print(`${wizardName()} ${pickRandomItem("has seen enough of this place,feels the call of the road,wants to see other lands")}`);
+        startEvent(changeLocality);
+        return;
+    }
     //Evalue if booty or not
     let textDice;
     if (YesOrNot(stat("pBotin"), 0)) {
@@ -153,7 +173,7 @@ function exploreEV() {
         print(`${wizardName()} is searching...`);
         startEvent(getBotin);
     //go to dice house, use the same probability
-    } else if (YesOrNot(config.balance.pDados, 0) && state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado"){
+    } else if (YesOrNot(config.balance.pDados, 0) && (state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado")){
         //check if gold is more than 0
         if(state.player.gold > 0){
             //call the game function
@@ -171,7 +191,7 @@ function exploreEV() {
             nextEvent();
         }
     }else {
-        if (YesOrNot(stat("pChangeZone") * config.balance.allowChangeZone, 0)) {
+        if (YesOrNot(changeZoneChance(), 0)) {
             print(`${wizardName()} is exploring...`);
             startEvent(changeLocality);
         } else {
@@ -208,6 +228,7 @@ function reviveEV(){
         const randomLocality = pickRandomItem("el_Bosque,la_Pradera,el_Poblado,las_Dunas,el_Desierto,el_Pantano")
         state.zone.current = randomLocality;
         state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
+        state.zone.stay = 0;
         stats.count("explore.zoneChanges");
         stats.count(`explore.zone.${randomLocality}`);
         print(`${wizardName()} leaves the healer's cabin`)

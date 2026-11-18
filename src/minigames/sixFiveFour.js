@@ -1,7 +1,8 @@
 // Wizard Idle v2 - The dice game ("six, five, four"): the gambler in town houses, betting, rolling and scoring.
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
-import { getRandomInt, roundNumbertoLetter } from '../utils.js';
+import { getRandomInt, pickRandomItem, roundNumbertoLetter } from '../utils.js';
+import { config } from '../config.js';
 import { state } from '../state.js';
 import { run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
@@ -249,9 +250,17 @@ function finalScoreSixFiveFour(nameDicePlayer){
             }
         break;
         case 2:
-            print(`${wizardName()} exits the gaming house`);
             cargoFirstPlayer = 0;
             resetSixFiveFour()
+            // The author: why walk out and come back in? If he would pick the dice house again,
+            // he stays at the table and plays another round.
+            if (state.player.gold > 0 && Math.random() < config.balance.pDadosAgain) {
+                print(`${wizardName()} ${pickRandomItem("stays for another round,asks for one more game,orders a drink and plays again")}`);
+                endEvent();
+                startEvent(sixfivefour);
+                break;
+            }
+            print(`${wizardName()} exits the gaming house`);
             clearNPC();
             run.restAtInn = false;
             endEvent();
