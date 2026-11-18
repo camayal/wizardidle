@@ -120,7 +120,7 @@ The idea: while the page is hidden (not closed), the game keeps running at 1/108
   4. **Hidden page:** DECIDED 2026-11-17: (a) calculation only, no slow-motion game (the author first picked slow motion, then chose this after hearing that phones freeze hidden tabs and that the game has no music). A hidden page is settled on return. When it shows after a long absence one low, slowed sound effect plays (a distant bell; the musician prepares it, listed in SOUNDS.md).
   5. **Soft-dead line:** DECIDED 2026-11-17: (a) candidate 1.
   6. **Poem:** DECIDED 2026-11-17: (d) a bag of poems that never repeat in one world (shuffle bag, like the dreams). Writing: the author or the historian, from the brief; the drafts are starting points.
-  7. **Does the touch that saves a soft-dead wizard give the usual revive faith (FAITH.md)?** (a) yes, the usual free revive (recommended: he was saved by the god he waited for); (b) no faith; (c) add or talk first.
+  7. **Faith from the saving touch:** DECIDED 2026-11-17: (a) yes, the usual free revive.
 
 ## To do when built
 

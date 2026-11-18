@@ -48,3 +48,14 @@ Author's note: we need to think a way to remove the enemy when the wizard is bea
 Date: 2026-11-17 14:52
 Author's note: magic bosses, or flying bosses, need to have similar entrances thatn mages and flying enemies. regarding bosses likes fenix, they need t fly. enemis like kkck can grow from the grown, other boses that can jump or slam, can enter jumping.
 ```
+
+```
+Date: 2026-11-17
+Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7). Finish the feature:
+1. A reloaded soft-dead wizard must stay down: no weak self-revive; only the god's touch lifts him.
+2. Protected chapters (STORY.md true-death rule): no soft dead and no permadeath from absence there, silently; gold and faith still drift.
+3. The saving touch gives the usual free revive faith (FAITH.md).
+4. Soft-dead console line is candidate 1, with the {zone} filled in.
+5. Poem: a bag of poems that never repeat in one world (shuffle bag like the dreams); shown over the dark scene like a dream, not a scroll. Keep the placeholders until the author/historian writes them.
+6. A hidden page is settled by calculation on return (no slow-motion game). Keep the live game stopped while hidden. When the page shows after a long absence play one return sound (see sound-notes).
+```
