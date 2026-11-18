@@ -1458,3 +1458,12 @@ Each file fuses the author's two sounds: the "inf" sound from the start of the e
 Date: 2026-11-15 16:43
 Author's note: @artist, comming from the ground generalized animation need to be a little more expresive
 ```
+
+## Dev note done 2026-11-17: elementals arrive by their element
+
+```
+Date: 2026-11-15 11:53
+Author's note: For elementals, I changed my mind; the entry to battle should be linked to its element, perhaps animate them adequately.
+```
+
+Done: the "element" arrival in src/ui/entrances.js (fire pillar, lightning strike, ice that shatters).

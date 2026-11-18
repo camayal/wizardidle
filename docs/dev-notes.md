@@ -10,11 +10,6 @@ Author's note: I would like to have one creek in the praire, and keep the one in
 ```
 
 ```
-Date: 2026-11-15 11:53
-Author's note: For elementals, I changed my mind; the entry to battle should be linked to its element, perhaps animate them adequately.
-```
-
-```
 Date: 2026-11-17
 Author's note: time away, decisions are done (docs/AWAY.md, Open questions 1-7). Finish the feature:
 1. A reloaded soft-dead wizard must stay down: no weak self-revive; only the god's touch lifts him.

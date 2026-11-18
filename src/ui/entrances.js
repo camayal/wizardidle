@@ -17,6 +17,10 @@
 // kkck pushes up a bump of dirt and bursts out of it, the brutes slam down from a leap (Rojo in a
 // burst of fire), the cube bounces in and medusa slithers.
 //
+// The elementals come in by their element (the author's note): fire forms inside a pillar of flame,
+// thunder strikes down as a lightning bolt and flickers in among sparks, frost forms inside ice
+// crystals that shatter.
+//
 // When the wizard falls, the enemy leaves its own way in, played backwards (playLeave): walkers turn
 // and walk off, fliers fly off, risers sink back into the ground, mages fade away, the portal bosses
 // go back through their portal.
@@ -35,21 +39,23 @@ import { zones } from '../data/zones.js';
 // Families by how they arrive (walk is the default).
 const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
-    float: ["el_espectro", "la_esencia", "el_ojo", "el_elemental", "infraespectro", "etymos"],
+    float: ["el_espectro", "la_esencia", "el_ojo", "infraespectro", "etymos"],
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
         "herbus"],
     burrow: ["kkck"],
     jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
     slam: ["goro", "protromus", "bicaptop", "rojo"],
     slither: ["medusa"],
+    element: ["el_elemental"],
     blink: ["el_hechicero", "la_hechicera", "el_vampiro"],
 };
+const ELEMENT = { el_elemental1: "fire", el_elemental2: "thunder", el_elemental3: "frost" };
 const FIERY = new Set(["rojo"]);     // lands in a burst of fire and embers (melee with elemental powers)
 const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 11, jump: 14, slam: 26, burrow: 30, slither: 20, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 11, jump: 14, slam: 26, burrow: 30, slither: 20, element: 26, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
 export const ARRIVALS = Object.keys(FRAMES);
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -193,6 +199,11 @@ function pose(kind, t, k) {
     } else if (kind == "slither") {                                        // glides in on a sideways wave
         p.dx = OFF_RIGHT * (1 - t) + (t < 1 ? Math.sin(k * 1.3) * 1.5 : 0);
         p.sx = t < 1 ? 1 + 0.05 * Math.sin(k * 1.3) : 1;
+    } else if (kind == "element") {                                        // forms inside its element (drawElement)
+        const u = clamp01((t - 0.3) / 0.45);
+        p.ev = t;
+        p.alpha = u;
+        p.sy = 0.85 + 0.15 * easeOut(u); p.sx = 1.1 - 0.1 * easeOut(u);
     } else if (kind == "blink") {
         p.alpha = k % 2 ? 0.25 + 0.75 * t : t;                             // flickers in
         p.sx = Math.max(0.05, easeOut(t));                                 // opens from a line
@@ -252,7 +263,7 @@ export function playEntrance(done) {
             if (++waited > 40) k = total + 1;
             return;
         }
-        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { strip: portal, spin: k, fire: FIERY.has(npc), ground }));
+        draw(npc, img, Object.assign(pose(kind, Math.min(1, k / (total - 2)), k), { strip: portal, spin: k, fire: FIERY.has(npc), ground, elem: ELEMENT[npc] || "fire" }));
         k++;
     };
     step();                                         // at once: it never shows in its place first
@@ -337,7 +348,7 @@ function leave(npc, gone, done) {
         const img = imageNow(art(`${npc}`));
         if (!img || (ground && !imageNow(ground.src))) { if (++waited > 40) k = total + 1; return; }
         const back = kind == "rise" ? total - 2 - k : k;     // the ground effect plays backwards
-        draw(npc, img, Object.assign(pose(kind, 1 - Math.min(1, k / (total - 2)), back), { flip: TURNS.has(kind), strip, spin: k, ground }));
+        draw(npc, img, Object.assign(pose(kind, 1 - Math.min(1, k / (total - 2)), back), { flip: TURNS.has(kind), strip, spin: k, ground, elem: ELEMENT[npc] || "fire" }));
         k++;
     };
     step();
@@ -355,6 +366,7 @@ function draw(npc, img, p) {
         y += bh * 1.05 * (1 - easeOut(u));
         x += f < g.up && f >= g.from ? Math.sin(f * 2.2) * 0.8 * scene : 0;     // pushing out
     }
+    if (p.ev !== undefined && p.elem == "thunder" && p.alpha < 1 && p.spin % 2) p.alpha *= 0.3;    // flickers in
     const ctx = pixelContext(npcCanvas);
     ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
     let cx = bx + bw / 2, cy = by + bh * 0.55, rx = bw * 0.42, ry = bh * 0.56;
@@ -395,6 +407,7 @@ function draw(npc, img, p) {
     }
     ctx.restore();
     if (p.mound > 0 || p.clods > 0) drawDirt(ctx, bx + bw / 2 + (p.moundShake || 0) * scene, by + bh, bw / img.naturalWidth, p);
+    if (p.ev !== undefined) drawElement(ctx, p.elem, bx + bw / 2, by + bh, bw, bh, bw / img.naturalWidth, p.ev, p.spin);
     if (p.fire && p.landed !== undefined) drawFire(ctx, bx + bw / 2, by + bh, bw, scene, p.landed);
     const fx = p.ground && p.riseFrame >= 0 && p.riseFrame < GROUND_FRAMES && imageNow(p.ground.src);
     if (fx) {                                       // the hole in front of the feet, 1 art px per sprite px
@@ -424,6 +437,99 @@ function drawFire(ctx, cx, ground, bw, scene, v) {
         ctx.fillStyle = FIRE[Math.min(FIRE.length - 1, Math.floor(lift * 2.5 + v * 2))];
         const size = ember ? px : px * (v < 0.6 ? 3 : 2);
         ctx.fillRect(Math.round(x - size / 2), Math.round(y - size), size, size);
+    }
+    ctx.restore();
+}
+
+// An elemental's arrival (t 0 to 1, k the step): its element drawn at its feet and around it, in
+// square art pixels (a = canvas px per sprite px), by fixed patterns, no randomness. The body forms
+// between t 0.3 and 0.75 (pose); leaving plays it backwards.
+const BOLT = ["#ffffff", "#d8f0ff", "#8fd0ff", "#4a8fe8"];
+const ICE = ["#f2fbff", "#bfe6f7", "#7cc4ea", "#3f86c0"];
+function drawElement(ctx, elem, cx, ground, bw, bh, a, t, k) {
+    const s = Math.max(1, Math.round(a * 2));                               // one fleck: 2 sprite px
+    ctx.save();
+    if (elem == "thunder") {
+        if (t > 0.08 && t < 0.4 && k % 3 != 2) {                             // the bolt, jittering, from the sky
+            const top = 0, steps = 9;
+            let x0 = cx, y0 = top;
+            for (let j = 1; j <= steps; j++) {
+                const x1 = j == steps ? cx : cx + (((j * 53 + k * 17) % 9) - 4) * s * 1.5, y1 = top + (ground - top) * j / steps;
+                const n = Math.max(1, Math.ceil(Math.abs(y1 - y0) / s));
+                for (let m = 0; m < n; m++) {
+                    const x = x0 + (x1 - x0) * m / n, y = y0 + (y1 - y0) * m / n;
+                    ctx.globalAlpha = 0.45; ctx.fillStyle = BOLT[3];
+                    ctx.fillRect(Math.round(x - s * 1.5), Math.round(y), s * 3, s);
+                    ctx.globalAlpha = 1; ctx.fillStyle = BOLT[j % 2];
+                    ctx.fillRect(Math.round(x - s / 2), Math.round(y), s, s);
+                }
+                x0 = x1; y0 = y1;
+            }
+        }
+        if (t > 0.12 && t < 0.7) {                                          // the scorch on the ground
+            ctx.globalAlpha = 0.6 * (1 - clamp01((t - 0.4) / 0.3));
+            ctx.fillStyle = "#1c1c2a";
+            ctx.fillRect(Math.round(cx - bw * 0.3), Math.round(ground - s), Math.round(bw * 0.6), s);
+        }
+        if (t > 0.15 && t < 0.9) {                                          // sparks crackling around it
+            const fade = 1 - clamp01((t - 0.6) / 0.3);
+            for (let i = 0; i < 22; i++) {
+                if ((i + k) % 3 == 0) continue;                                 // they blink
+                const ang = ((i * 47 + k * 11) % 60) / 60 * Math.PI * 2, r = 0.45 + ((i * 31) % 7) / 20;
+                ctx.globalAlpha = fade;
+                ctx.fillStyle = BOLT[(i + k) % BOLT.length];
+                ctx.fillRect(Math.round(cx + Math.cos(ang) * bw * r), Math.round(ground - bh * 0.5 + Math.sin(ang) * bh * r * 0.9), s, s);
+            }
+        }
+    } else if (elem == "frost") {
+        const grow = easeOut(clamp01(t / 0.35)), v = clamp01((t - 0.62) / 0.33);
+        if (v == 0) {                                                       // ice crystals grow up around it
+            const cols = 9, colW = bw * 0.8 / cols;
+            for (let i = 0; i < cols; i++) {
+                const mid = 1 - Math.abs(i - (cols - 1) / 2) / (cols / 2);
+                const h = bh * (0.5 + 0.6 * mid + ((i * 37) % 5) / 20) * grow;
+                const x = cx - bw * 0.4 + i * colW;
+                for (let y = 0; y < h; y += s) {
+                    const r = y / Math.max(1, h), w = colW * (r > 0.75 ? (1 - r) * 4 : 1);    // pointed tips
+                    ctx.globalAlpha = 0.55;
+                    ctx.fillStyle = ICE[i % 3 == 0 ? 1 : r > 0.8 ? 0 : 2];
+                    ctx.fillRect(Math.round(x + (colW - w) / 2), Math.round(ground - y - s), Math.max(1, Math.ceil(w)), s);
+                }
+                ctx.globalAlpha = 0.8; ctx.fillStyle = ICE[3];                   // the crystal's edge
+                ctx.fillRect(Math.round(x), Math.round(ground - h * 0.75), Math.max(1, Math.round(a)), Math.round(h * 0.75));
+            }
+        } else {                                                            // it shatters: shards fly and fall
+            for (let i = 0; i < 26; i++) {
+                const side = i % 2 ? 1 : -1, reach = 0.2 + ((i * 29) % 13) / 13 * 0.6, h0 = ((i * 41) % 11) / 11;
+                const x = cx + side * reach * bw * (0.3 + v);
+                const y = ground - bh * h0 * (1 - v * v) - bh * 0.25 * Math.sin(Math.PI * v) + s;
+                ctx.globalAlpha = Math.max(0, 1 - v);
+                ctx.fillStyle = ICE[i % 4];
+                const size = i % 3 == 0 ? s * 2 : s;
+                ctx.fillRect(Math.round(x), Math.round(Math.min(ground - size, y)), size, size);
+            }
+        }
+    } else {                                                                // fire: a pillar of flame, then it dies down
+        const grow = easeOut(clamp01(t / 0.3)), fade = 1 - clamp01((t - 0.55) / 0.4);
+        const cols = 12, colW = bw * 0.7 / cols;
+        for (let i = 0; i < cols; i++) {
+            const mid = 1 - Math.abs(i - (cols - 1) / 2) / (cols / 2);            // taller in the middle
+            const flick = ((i * 37 + k * 13) % 7) / 7;
+            const h = bh * (0.3 + 0.85 * mid + 0.2 * flick) * grow * (0.3 + 0.7 * fade);
+            const x = cx - bw * 0.35 + i * colW;
+            for (let y = 0; y < h; y += s) {
+                const r = y / Math.max(1, h);
+                ctx.globalAlpha = 0.85 * fade * (1 - r * 0.4);
+                ctx.fillStyle = FIRE[Math.min(FIRE.length - 1, Math.floor(r * 3.5 + (1 - mid)))];
+                ctx.fillRect(Math.round(x), Math.round(ground - y - s), Math.ceil(colW), s);
+            }
+        }
+        for (let i = 0; i < 16; i++) {                                      // embers rising
+            const up = ((i * 29 + k * 7) % 40) / 40;
+            ctx.globalAlpha = Math.max(0, (1 - up) * (0.4 + 0.6 * fade)) * grow;
+            ctx.fillStyle = FIRE[i % 3];
+            ctx.fillRect(Math.round(cx + (((i * 53) % 21) - 10) / 10 * bw * 0.45), Math.round(ground - up * bh * 1.4 - s), s, s);
+        }
     }
     ctx.restore();
 }
