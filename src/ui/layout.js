@@ -192,7 +192,7 @@ function layoutXPPlate(top, width, u) {
     setStyles("xpFill", { backgroundSize: `${8 * u}px ${10 * u}px` });
     setStyles("indicadores", { left: 8 * u, top: top + 14 * u, width: width - 16 * u, height: 12 * u, fontSize: 11 * u, lineHeight: `${12 * u}px`,
         display: "flex", alignItems: "center", justifyContent: "space-between" });
-    setEach(HEADING_ICONS, { height: 9 * u, width: 9 * u });
+    setEach(HEADING_ICONS, { height: 11 * u, width: 11 * u });
 }
 
 // Layout for desktop and phones held upright: heading, scene, then the console.
