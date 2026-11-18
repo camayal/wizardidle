@@ -48,8 +48,3 @@ Author's note: we need to think a way to remove the enemy when the wizard is bea
 Date: 2026-11-17 14:52
 Author's note: magic bosses, or flying bosses, need to have similar entrances thatn mages and flying enemies. regarding bosses likes fenix, they need t fly. enemis like kkck can grow from the grown, other boses that can jump or slam, can enter jumping.
 ```
-
-```
-Date: 2026-11-17 15:22
-Author's note: when the game is reload, sometimes the previous enemy is in the enemy position, we should be sure to remove it before the screen is rendered
-```

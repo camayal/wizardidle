@@ -1360,3 +1360,9 @@ Author's note: @dev art console is quite confusing.  please clear things  up
 
 ### 2026-11-17: Scene spells wipe themselves, faster arrows
 - Two author notes. A scene spell (rain, poison cloud…) sometimes stayed on screen forever: boss and hydra scene spells were drawn by the enemy's animation clock, which other animations (a hit, a death, an entrance) replace, and then nothing cleared the layer. Scene spells now run on their own clock, and a clock can carry a clean-up that runs however it ends (finished, replaced, stopped, or every clock stopped when the wizard dies). Arrows fly 60 px every 50 ms (was 36), 3 frames instead of 4. The flicker note was dropped (the author no longer sees it). Checked by a headless playtest (3 seeds to level 40, no errors), which skips animations, so neither change was watched in a browser.
+
+### 2026-11-17: The Cemetery becomes tombs
+- The author approved the artist's five tombs (A-E), their cracked versions, a 3 x 5 carved pixel font and a small parchment note (img/ui/cemetery/). The Cemetery page of the kill scroll now shows one tomb per dead wizard, newest first, each always the same design (picked from his name and birth), with his name and age carved by code (8 characters a row, long names cut, ages as 1.2K / 3.4M). A tap opens the note with level, age, victories, falls and dates. Records with erased (set only by the final battle, not built yet) get the cracked tomb, the name upside down and crossed out. Dev panel: Cemetery, add or remove ten sample tombs. Checked by a headless screenshot of the page with the samples and a note open, and a headless playtest (2 seeds to level 20, no errors).
+
+### 2026-11-17: Dev note cut (reload)
+- 2026-11-17 15:22, "when the game is reload, sometimes the previous enemy is in the enemy position": done with the clean scene on reload.

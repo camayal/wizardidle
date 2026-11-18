@@ -115,6 +115,10 @@ export const state = newState();
 export const world = newWorld();
 merge(state, read(SAVE_KEY) || {});
 merge(world, read(WORLD_KEY) || {});
+// Nothing of the scene comes back: while the game was closed the god (the player) could not
+// watch the world, and what was on the right of the scene has gone its way. The layout draws
+// state.npc as the page loads, so it is forgotten here, before anything is drawn.
+state.npc = '';
 
 let saving = true;
 

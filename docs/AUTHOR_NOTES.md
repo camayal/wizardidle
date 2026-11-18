@@ -9,7 +9,7 @@
 [] create scenes that are the end of one ad the beginon of the otherone.
 [] in desert wizard walks from left. some of those scenes have ocean on the left of the screen, we need to modify them to make a beach (walkable) or other solution.
 [x] ~~some dreams can increase believer score~~ (done: belief dreams and callings raise belief by his level, nightmares sow doubt; shuffle bags so no dream repeats)
-[] if a battle is interrumpted because i close the game, when i start again previous content (enemies, runes, etc), in in place
+[x] ~~if a battle is interrumpted because i close the game, when i start again previous content (enemies, runes, etc), in in place~~ (done: the author chose not to restore anything, the god can't watch the world while the game is closed; the scene now starts clean, no enemy or object left standing from before. The idea of time away changing the wizard went to the thinker)
 [] add a defensive spells school to avoid damage we can incorporeate thos with the lvl. no overpowered, so rare. ideas: rune shield = circle in front of him; ice block = it can be in fron of him as well; more advance": phase off, and later in the game magic shield, like a multicharge, spell that protect from the following 2 or 3 attacks, this should be an outline probably black + white, that fade with every hit
 [] we need a place to show the inventory i think in the stats, another scroll
 [] faith related aspects is empty we need to put things there, probably a beliefmeter should be there 
