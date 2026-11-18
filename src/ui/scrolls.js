@@ -334,7 +334,7 @@ function updateHelp(){
    '<div class="divTableRow"><div class="divTableCell"><img src="' + art('statsbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Many stats about what happen in the wizard trip. Pure informational.</div></div>' +
    '</div>' +
    '<div class="faq">Faith scroll</div><div class="a">' +
-   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('plegariabtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Your faith, and the wizard's belief in you: its level, a meter from doubt to devotion, and where faith came from.</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('plegariabtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Your faith, and the wizard\'s belief in you: its level, a meter from doubt to devotion, and where faith came from.</div></div>' +
    '</div>' +
    '<div class="faq">Map</div><div class="a">' + 
    '<div class="divTableRow"><div class="divTableCell"><img src="' + art('mapbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">   Here you can see the representation of the continent where everything happens. ' + (state.travelFavor ? "Touching it can teleport the wizard to the selected area." : "") + '</div></div>' +
