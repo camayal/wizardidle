@@ -153,11 +153,20 @@ export function playEnemyMove(move, onHit) {
     npcCanvas.height = npcCanvas.offsetHeight;
     // A move longer than a battle step (a charge across the scene) would still be on its way
     // back when the wizard casts again (the author's note): the game waits for the rest of it.
+    // The hold runs on its own clock, in real time: adding up the frames' lengths fell behind
+    // (each frame runs up to a loop tick late), so the wizard had already cast at the empty spot.
+    let k = 0, froze = false;
     const holdAt = masterTime - HOLD_MARGIN_MS;
-    let k = 0, elapsed = 0, froze = false;
+    if (enemyMoveTiming(move).totalMs > holdAt) {
+        loop.every("enemyMoveHold", () => {
+            loop.stop("enemyMoveHold");
+            if (k < seq.length && state.npc == npc && loop.isRunning("animNPC")) { froze = true; loop.freezeGame(); }
+        }, holdAt);
+    }
     const next = () => {
         if (k >= seq.length || state.npc != npc) {             // done, or the enemy is gone
             loop.stop("animNPC");
+            loop.stop("enemyMoveHold");
             if (froze) loop.thawGame();
             land();
             if (state.npc == npc) loadNPC(npc);
@@ -165,11 +174,9 @@ export function playEnemyMove(move, onHit) {
         }
         drawFrame(npc, seq[k]);
         if (k == hitAt) land();
-        if (!froze && elapsed >= holdAt) { froze = true; loop.freezeGame(); }
         // the next frame comes after this frame's time (100 ms unless the move says otherwise)
         const ms = seq[k].ms || 100;
         loop.every("animNPC", next, ms);
-        elapsed += ms;
         k++;
     };
     next();
