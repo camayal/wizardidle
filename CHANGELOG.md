@@ -1,11 +1,9 @@
 # Changelog
 
-## Unreleased (dev-repo, shown as 2.2.0-dev)
+## 2.2.0 — 2026-11-18
 
-- The XP bar in the artist's gilt frame (option D: gold rules, diamond knobs, a ticked gold fill) on a white plate that also holds the level, HP, gold and faith line in dark text, instead of the plain white bar; each icon sits by its number.
-- Fixed: the wizard really waits for a charger to be back in place before casting; his spell no longer lands on the empty spot while it is still running back (the wait was timed by its frames, which ran late).
+- The XP bar has a gilt frame (gold rules, diamond knobs, a ticked gold fill) on a white plate that also holds the level, HP, gold and faith line in dark text, instead of the plain white bar; each icon sits by its number.
 - The mother hydra now leaves with a dive: she sinks among ripple rings, and a crown of mud splashes up as her head goes under.
-- The mysterious healer vanishes with his old red pin animation again, played over his fade-out.
 - Risers come out of the ground, and sink back into it, in the artist's new ground effects (cracked hole, soil burst, dust plume, sinkhole; a random one each time, a bigger set for the 64 px bosses) instead of the small dust puff; the sprite rises with the effect's frames. The hydras (mother, icedra, hydskon) leave by sinking into their own mud pool, ice spikes or bone heap.
 - Hydra entrances have their own sounds (mud, ice, bones), each with a burst as the hydra shows; the generic hydra sound now plays only when a head regrows.
 - Tools: tools/to_ogg.py turns mp3, wav or flac files (or a whole folder) into the game's .ogg files (mono, game names, the same quality as the cut sounds).
@@ -18,7 +16,7 @@
 - The killing blow takes the wizard's last HP when it lands (a boss's scene spell reaching him, a strike hitting), and he falls then, not before the attack starts; the game waits for that blow.
 - Bestiary: the Bosses heading shows only once the first boss is met, and Secrets only once the first hydra is found.
 - The Kill button asks twice: the first press opens a small parchment saying to press again, that it is permanent; tapping the parchment closes it.
-- The mysterious healer leaves by fading away, the mages' fade-in played backwards, instead of the red pin overlay.
+- The mysterious healer leaves by fading away (the mages' fade-in played backwards), with his red pin animation played over it.
 - Credits: Dragon Studio (ko-fi.com/dragonstudio) for a bunch of sounds.
 - The wizard no longer lingers in one zone: after a while there each walk makes him more likely to move on, and after a long stay he sets off for another zone.
 - Dice houses: after a game he may stay at the table for another round instead of walking out and back in. In the Town he no longer walks into the dice house on almost every exploration (a missing bracket).
@@ -28,9 +26,8 @@
 - Reloading the game starts with a clean scene: the enemy, hydra or object that was there when the game closed no longer stands frozen on the right.
 - Dev tools, Texts mode: every chapter scroll, dream and console line in drop lists, shown where the game shows it (chapter scroll, the dark of the night, the console); the author notes box becomes a taller editor, each edit shows in the game at once, Save to file adds it to docs/history-notes.md.
 - Dream lines are HTML over the dark: bold, italics, colours, sizes and [sprite] icons can be written in a dream; long lines wrap instead of running off the scene.
-
 - Dreams: some dreams raise belief (+1 Devout or Believer, +2 Doubter, +3 Atheist; callings for the doubting), nightmares can shake a Believer or Devout a little but never below the Believer line; the full pool of 56 dreams, none repeats until its whole pool has played, and they happen in the background too.
-- Lighter notes: ideas.md is a short index, idea text sits by topic in docs/ideas/, decisions in docs/DECISIONS.md, one notes inbox per role; the approved boss and hydra sounds are recorded in SOUNDS.md and gone from the dev tools' "needs a sound" list.
+- Dev: lighter notes: ideas.md is a short index, idea text sits by topic in docs/ideas/, decisions in docs/DECISIONS.md, one notes inbox per role; the approved boss and hydra sounds are recorded in SOUNDS.md and gone from the dev tools' "needs a sound" list.
 - A file map, docs/MAP.md: what every file does, how the parts connect, media and dev-tools rules, for anyone starting work.
 - Wizard animations from the artist: casting (with a spark by school, or a staff slash), walking, praying, falling, true death, turned to stone and breaking free, at every tier.
 - Fallen and dead poses: a fallen wizard sits with a skull above him until revived; a true death shows the dead pose; the dead wizard lies face down, hair only, at every tier.
@@ -40,8 +37,7 @@
 - Shrines: the wizard stops a little before the cross, the shrine sound plays once he is inside, and the mystic stays while he walks away.
 - Loot: the wizard walks up to the bag, barrel, box, chest or pot before opening it, then walks on.
 - Sleeping: the dark and the dream stay over the scene when a scroll opens or closes.
-- The bestiary no longer explains hydras under Secrets.
-- The Records page of the stats scroll is gone (achievements do that job; past wizards are in the Cemetery). Each achievement now shows when it was won, in small grey text.
+- Each achievement shows when it was won, in small grey text.
 - Something to find twinkles on the ground before the wizard walks to it.
 - Hydra entrances redrawn: the ice peaks now match the icedra (black outline, faceted faces) and the mud burst no longer leaves a pond behind.
 - Enemies arrive their own way: flyers glide down, floaters drift in, burrowers rise from the ground, hiders jump in, casters flicker in, the rest walk in.
@@ -61,7 +57,7 @@
 - Sleep: he walks into the inn or lays his sleeping bag, the scene goes dark, sometimes with a dream or a nightmare, and he wakes in his place.
 - The revive plays in order: the divine rings over the fallen wizard, the fade, then the hooded healer's cabin.
 - Bestiary: a third tab of the kill scroll, with every creature seen or defeated, ink stains for the unknown, and the hydras as a secret.
-- Stats scroll: a curated stats page and a Records tab (bests, firsts, a journey chart, all your wizards).
+- Stats scroll: a curated stats page.
 - Sprites drawn crisp (sharp pixels).
 - Fixed: exploring could walk the wizard out of a scene and back into the same one.
 - Fixed: the game froze for good above level 190 (guardian fights).
@@ -86,7 +82,6 @@
 - Scene spells (rains, the poison cloud, the rest) no longer stay on screen now and then: they fade away when they end, even if another animation cuts in.
 - Arrows fly faster.
 - The Cemetery is a field of tombs: each fallen wizard has one of five headstones with his name and age carved in it; tap one to read his story on a small parchment. Erased wizards lie under a cracked stone, their name turned and crossed out.
-
 
 ## 2.1.0 — 2026-11-12
 
