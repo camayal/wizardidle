@@ -1366,3 +1366,8 @@ Author's note: @dev art console is quite confusing.  please clear things  up
 
 ### 2026-11-17: Dev note cut (reload)
 - 2026-11-17 15:22, "when the game is reload, sometimes the previous enemy is in the enemy position": done with the clean scene on reload.
+```
+Date: 2026-11-15 11:23 (moved from the art notes, 2026-11-17)
+Author's note: hands up can be another moment for the wizard, it can be related with some healing schools and perhaps another specific school defined from the beginning (the natural school that the wizard can dominate naturally, without the help of the staff). Think about this system.
+Artist, 2026-11-17: every tier now rests with both hands down. The tiers that held a flame in the raised hand now show it only in the cast animation, held in the lowered hand. A hands-up pose would be new art.
+```
