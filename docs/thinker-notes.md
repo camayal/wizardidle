@@ -60,5 +60,7 @@ Achievement ideas (names are drafts):
 - "Generations": 10 wizards in the world · "Keeper of tombs": read every cemetery note
 - "Chronicler": read every chapter so far
 
+Decided (2026-11-17, docs/DECISIONS.md): achievements belong to the player, saved per world so they survive permadeath. Each one is either lifetime (world stats) or one life (the current wizard), and shows which wizard won it. Mark each idea as lifetime or one life in the plan.
+
 Please turn these into a plan with options; dev waits for the author's OK before building.
 ```
