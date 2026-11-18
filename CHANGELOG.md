@@ -5,6 +5,7 @@
 - When the wizard falls, the enemy leaves the way it came, backwards: walkers turn and walk off, fliers fly away, risers sink into the ground, mages fade out, the portal bosses go back through their portal.
 - Boss entrances: King Skeleton fades in inside his cursed skull arch, which then crumbles away; Herbus grows out of braided vines; kkck pushes up a bump of dirt and bursts out of it; Goro, Protromus and Bicaptop slam down from a leap, Rojo in a burst of fire; Cuboq bounces in; Etymos floats in; Medusa slithers.
 - The enemy that fells the wizard finishes its attack and its spell before it leaves.
+- The killing blow takes the wizard's last HP when it lands (a boss's scene spell reaching him, a strike hitting), and he falls then, not before the attack starts; the game waits for that blow.
 - Bestiary: the Bosses heading shows only once the first boss is met, and Secrets only once the first hydra is found.
 - The Kill button asks twice: the first press opens a small parchment saying to press again, that it is permanent; tapping the parchment closes it.
 - The mysterious healer leaves by fading away, the mages' fade-in played backwards, instead of the red pin overlay.

@@ -475,26 +475,38 @@ function enemyAttack() {
     // belief: the god's last heal saved him if this hit would have killed him without it
     if (fight.healedFrom && enemyHit >= fight.healedFrom && state.player.hp - enemyHit > 0) beliefMoment("savedFromKillingBlow");
     fight.healedFrom = 0;
-    if (state.player.hp - enemyHit < 0) {
-        state.player.hp = 0;
-    } else {
-        state.player.hp = state.player.hp - enemyHit;
-    }
+    const takeHit = () => { state.player.hp = Math.max(0, state.player.hp - enemyHit); };
+    // A killing blow (the author: he fell before the boss's scene spell reached him) takes his HP
+    // only when it lands: the game waits for it, then he falls. Other hits count at once, as before.
+    const lethal = Math.round(state.player.hp - enemyHit) <= 0;
+    if (!lethal) takeHit();
     print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`);
+    let hit = false, waiting = false;   // waiting: the blow lands after this round (else battle() sees the fall)
+    const landed = (spellId) => () => {
+        spell(spellId, true);
+        if (!lethal || hit) return;
+        hit = true;
+        takeHit();
+        if (!waiting) return;
+        loop.thawGame();
+        updateHeading();
+        if (Math.round(state.player.hp) <= 0 && !fight.pjDead) wizardFalls();
+    };
     if (fight.bossCombat || fight.hydraCombat) {
         fight.spellEnemy = pickRandomItem(zones[state.zone.current][fight.bossCombat ? "bossSpell" : "hidrasSpells"]);
         const spellId = fight.spellEnemy;
         if (fight.bossCombat && hasBossAttacks(fight.enemy)) {
             const attack = bossAttackFor(fight.enemy, spellId);
             const stone = applyBossEffect(attack);                       // what it does besides the damage
-            playBossAttack(fight.enemy, attack, stone, () => spell(spellId, true));    // the boss's own attack, then its effect
+            playBossAttack(fight.enemy, attack, stone, landed(spellId));    // the boss's own attack, then its effect
         } else {
-            playHydraAttack(spellId, () => spell(spellId, true));     // a strike, or a cast with its scene spell
+            playHydraAttack(spellId, landed(spellId));     // a strike, or a cast with its scene spell
         }
     } else {
         const spellId = fight.spellEnemy;
-        playEnemyMove(enemyMove(), () => spell(spellId, true));     // the blow lands, then its effect
+        playEnemyMove(enemyMove(), landed(spellId));     // the blow lands, then its effect
     }
+    if (lethal && !hit) { waiting = true; loop.freezeGame(); }      // the next step waits for the blow
     stats.count("combat.attacksReceived");
 }
 
