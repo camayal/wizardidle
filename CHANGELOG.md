@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Achievements scroll: each entry has more breathing room (space above and below, a wider gap between icon and text, and a little air before the date), so the list no longer looks cramped.
 
 - Achievements: each wizard now takes his achievements to the cemetery. Once a dead wizard has earned some, the Achievements scroll gets two ribbons: this wizard's page and an "Other wizards" page whose entries say "Earned by: <name>". With no dead wizard earning anything it stays one page with no ribbons.
 - Faith scroll: the stained-glass belief window is much bigger, about 75% of the page width (in whole pixel steps so the art stays sharp), and the gap between the Faith title and the window is smaller.

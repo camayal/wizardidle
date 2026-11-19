@@ -89,3 +89,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 ribbon bookmarks wired for the kill and stats scrolls (RIBBON_SIDE in src/ui/scrolls.js, default left because the close button is top right); achievements (this run / historic) and map layer ribbons wait on decisions in docs/dev-notes.md.
 
 - 2026-11-18 (dev): achievements ribbons wired: cemetery entries carry an `achievements` map (menu.js realKill, away.js dieAway); tabPages() in src/ui/scrolls.js shows run/all ribbons only when world.cemetery holds earned achievements. Old/sample cemetery entries simply have none.
+- 2026-11-18 (dev): achievements list spacing: .achRow cells in index.html (padding 0.7em, wider icon gap); tweak there if still tight
