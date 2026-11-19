@@ -8,6 +8,7 @@ import { playSound } from './audio.js';
 import { print } from './ui/render.js';
 import { updateAchievements } from './ui/scrolls.js';
 import { art } from './media.js';
+import { stats } from './stats.js';
 import { tiers, rarityOf } from './data/rarity.js';
 
 
@@ -25,6 +26,7 @@ const logro = {
         // achievement sound
         playSound("achivement");
         state.achievements[nameLogro.name] = Date.now();
+        stats.first(`first.achievement.${nameLogro.name}`);   // when (play time, level): the odds model reads it
         print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='${art(`achivement`)}'><span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'><b>${nameLogro.title}</b> - ${nameLogro.description}</span>`);
         
         if (ui.scrollCurrentContent == "achievements"){

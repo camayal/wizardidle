@@ -1,7 +1,7 @@
 // Wizard Idle v2 - data module. Content is unchanged from v1 (hand-written by Carlos Alonso Maya Lastra).
 
 // Achievements ("logros"). Unlocking logic lives with the game (logro.set).
-// Adding one: also set its tier in data/rarity.js and re-run the achievement-rates playtest (docs/MAP.md).
+// Adding one: also set its tier in data/rarity.js and re-run a playtest and tools/odds.py (docs/MAP.md); a counter achievement also goes in COUNTERS there.
 // Entries marked planned:true were sketched in v1 but never finished (no title, no trigger).
 // They stay hidden and don't count towards completion until they are designed.
 export const achievements = {

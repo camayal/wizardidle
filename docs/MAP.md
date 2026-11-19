@@ -65,7 +65,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 ## tools/
 
-- serve.py: local server without caching, note saving, and the review drop at review/. land.py: lands a work branch on dev-repo in the main folder by itself (run after every commit by hooks/post-commit, with `git config core.hooksPath tools/hooks`). playtest.py: runs many simulations headless and writes docs/playtests/<date>-<name>/ (summary.md, runs.csv). cut_sounds.py: cuts the approved sounds of sound_cuts.txt into snd/. to_ogg.py: turns whole mp3/wav/flac files (or a folder) into game .ogg files, same settings; never convert sounds by hand.
+- serve.py: local server without caching, note saving, and the review drop at review/. land.py: lands a work branch on dev-repo in the main folder by itself (run after every commit by hooks/post-commit, with `git config core.hooksPath tools/hooks`). odds.py: achievement odds in a second from a playtest's odds-data.json (players who quit at random, counters projected, suggested tier). playtest.py: runs many simulations headless and writes docs/playtests/<date>-<name>/ (summary.md, runs.csv). cut_sounds.py: cuts the approved sounds of sound_cuts.txt into snd/. to_ogg.py: turns whole mp3/wav/flac files (or a folder) into game .ogg files, same settings; never convert sounds by hand.
 
 ## How it connects
 

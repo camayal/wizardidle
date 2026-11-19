@@ -164,6 +164,14 @@ def main():
     belief = summarise(rows, ['beliefEnd', 'firstDoubter', 'firstAtheist', 'backToBeliever', 'h_devout', 'h_believer', 'h_doubter', 'h_atheist'])
     ends = {label: ', '.join(f'{k} {v}' for k, v in sorted(collections.Counter(r['levelEnd'] for r in rows if r['setting'] == label).items()))
             for label in dict.fromkeys(r['setting'] for r in rows)}
+    # what tools/odds.py needs: per run its hours, when each achievement came and the counters
+    flat = lambda v: v['value'] if isinstance(v, dict) and 'value' in v else v
+    firsts = lambda st: {k[len('first.achievement.'):]: round(v['playTimeMs'] / 3600000, 3) for k, v in st.items() if k.startswith('first.achievement.')}
+    with open(os.path.join(folder, 'odds-data.json'), 'w', encoding='utf-8') as f:
+        json.dump([{'setting': lb, 'seed': sd, 'hours': r.get('playTimeHours'), 'level': r.get('level'),
+                    'achievements': firsts(r.get('stats', {})),
+                    'stats': {k: flat(v) for k, v in r.get('stats', {}).items() if isinstance(flat(v), (int, float)) and not k.startswith('first.')}}
+                   for (lb, sd), r in sorted(reports.items()) if not r.get('error')], f)
     with open(os.path.join(folder, 'summary.md'), 'w', encoding='utf-8') as f:
         f.write(f'# Playtest: {args.name} ({datetime.date.today()})\n\n')
         if args.note:
