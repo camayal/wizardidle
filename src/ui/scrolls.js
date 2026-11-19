@@ -224,10 +224,12 @@ function ribbonAt(index) {
 function placeScrollTabs(set) {
     const pages = TAB_SETS[set] || [];
     ribbons.forEach((ribbon, i) => { if (i >= pages.length) ribbon.style.display = "none"; });
-    if (!pages.length) return;
+    const text = el("innerTextScroll");
+    if (!pages.length) { text.style.paddingTop = ""; return; }
     const up = el("scrollBackUp");
     const width = parseFloat(up.style.width);
     const u = width / 320 * RIBBON_SCALE;           // one ribbon pixel on screen
+    text.style.paddingTop = `${12 * u}px`;          // the page starts below the hanging ribbons
     const slot = (RIBBON_W + RIBBON_GAP) * u;
     pages.forEach((page, i) => {
         const open = ui.scrollViews[set] == page;
