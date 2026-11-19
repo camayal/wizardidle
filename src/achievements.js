@@ -52,7 +52,7 @@ function achievementList(){
 function achievementRow(text, time, by){
     if (!logro[text]) return "";
     const earned = by ? `<br><small style="color:#7a6a58">Earned by: ${by}</small>` : "";
-    return `<div class="divTableRow achRow"><div class="divTableCell"><img src="${art(`${logro[text].name}`)}" height="${ui.em * 4}px" /></div><div class="divTableCell"><strong>${logro[text].title}</strong> <br>${logro[text].description}${wonText(time)}${earned}</div></div>`;
+    return `<div class="divTableRow achRow"><div class="divTableCell"><img src="${art(`${logro[text].name}`)}" height="${ui.em * 5}px" /></div><div class="divTableCell"><strong>${logro[text].title}</strong> <br>${logro[text].description}${wonText(time)}${earned}</div></div>`;
 }
 
 // Achievements earned by wizards who died (kept in their cemetery entry), newest first.
