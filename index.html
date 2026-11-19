@@ -304,8 +304,9 @@
             .rarity-divine{ text-shadow:0 0 4px #ffe680; animation:divineSpark 1.2s steps(4) infinite; }
             @keyframes divineSpark{ 0%{text-shadow:0 0 2px #fff6c0, 6px -3px 0 #ffe680} 25%{text-shadow:0 0 6px #ffe680, -6px 2px 0 #fff6c0} 50%{text-shadow:0 0 3px #fff6c0, 4px 4px 0 #ffe680} 75%{text-shadow:0 0 6px #ffe680, -3px -4px 0 #fff6c0} 100%{text-shadow:0 0 2px #fff6c0, 6px -3px 0 #ffe680} }
             .achIcon{ position:relative; display:inline-block; line-height:0; }
-            .achSeal{ position:absolute; left:0; top:0; image-rendering:pixelated; }
-            .seal-divine .achSeal{ animation:sealSpark 1.2s steps(4) infinite; }
+            .achLayer{ position:absolute; left:0; top:0; image-rendering:pixelated; }
+            .achLayer.achPic{ position:relative; }
+            .seal-divine .achLayer:last-child{ animation:sealSpark 1.2s steps(4) infinite; }
             @keyframes sealSpark{ 0%{filter:drop-shadow(0 0 1px #fff6c0)} 50%{filter:brightness(1.4) drop-shadow(0 0 4px #ffe680)} 100%{filter:drop-shadow(0 0 1px #fff6c0)} }
             .achRow .divTableCell:first-child{ flex:none; }
             .divTableRow {
