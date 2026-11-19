@@ -2034,3 +2034,6 @@ Author's note: I would like to have one creek in the praire, and keep the one in
 
 [] in desert wizard walks from left. some of those scenes have ocean on the left of the screen, we need to modify them to make a beach (walkable) or other solution. (planned: docs/MAPS.md, step 1; dev question A there)
 (done 2026-11-19: sea painted out of las_dunas1..5; the walkable shore is later art, docs/MAPS.md)
+
+- Bug (author, 2026-11-19): after inactivity in the tab the game never restarts: it just sits there with an empty console. Dev's first read: either the page reloaded (src/away.js watchHidden, minSeconds 300) and the new load never fires its first event, or a freeze from loop.freezeGame (hide, or a transition's animation stalled while hidden) was never thawed, so the master clock stays stopped. Needs a repro: how long hidden, reload or not, errors in the browser console, whether the dev panel was open.
+

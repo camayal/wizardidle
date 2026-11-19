@@ -7,7 +7,7 @@ import { getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './u
 import { config, masterTime, MAXSTAGES } from './config.js';
 import { stat, state } from './state.js';
 import { stats } from './stats.js';
-import { run, ui } from './runtime.js';
+import { fight, run, ui } from './runtime.js';
 import * as loop from './loop.js';
 import { enemyEV } from './combat.js';
 import { addXP, calculateFe, statObj } from './wizard.js';
@@ -101,6 +101,22 @@ function studyPhase(){
 // Hand control back to the event picker.
 function nextEvent(){
     loop.every("master", event, masterTime);
+}
+
+// Safety net (a long idle session once ended with no clock running at all, the wizard alive and
+// nothing scheduled): if nothing is scheduled for WATCHDOG_BEATS beats and he is not waiting for the
+// god (fallen, paused), the event picker starts again, and the console says so.
+const WATCHDOG_BEATS = 4;
+let watchdogIdle = 0;
+function startWatchdog() {
+    loop.every("watchdog", () => {
+        const waiting = run.pause || fight.pjDead || run.softDead || state.meta.softDead;
+        watchdogIdle = !waiting && loop.idle("watchdog") ? watchdogIdle + 1 : 0;
+        if (watchdogIdle < WATCHDOG_BEATS) return;
+        watchdogIdle = 0;
+        console.warn('[watchdog] no clock was running: the event picker starts again (last event ' + run.previousEvent + ', npc "' + state.npc + '")');
+        nextEvent();
+    }, 5000);
 }
 
 // The event picker, run by the master clock: forced events first (debug), else one of five at random.
@@ -756,6 +772,7 @@ export {
     event,
     nextEvent,
     startEvent,
+    startWatchdog,
     reviveEV,
     statueObj,
 };

@@ -119,6 +119,14 @@ function tick() {
 
 const timer = setInterval(tick, TICK_MS);
 
+// True when nothing at all is scheduled (besides the named clock) and the game is not frozen:
+// the chain of events ended without handing control on, unless he is waiting for the god.
+export function idle(except) {
+    if (frozen || simulated) return false;
+    for (const name of clocks.keys()) if (name != except) return false;
+    return true;
+}
+
 // Debugging: the names of the clocks running now.
 export function clockNames() {
     return [...clocks.keys()].join(',');

@@ -8,7 +8,7 @@ import { state } from './state.js';
 import { stats } from './stats.js';
 import { fight, run, ui } from './runtime.js';
 import { randomName } from './combat.js';
-import { event, nextEvent } from './events.js';
+import { event, nextEvent, startWatchdog } from './events.js';
 import { levelUP } from './wizard.js';
 import { playSound } from './audio.js';
 import { drawWizard, print, showStage, updateHeading, wizardName } from './ui/render.js';
@@ -88,7 +88,8 @@ function start() {
     drawWizard();
     showStage();
     //load previous locality random scenery
-    if (away == "none") nextEvent();    // fallen (soft): waits for the god's touch; dead: the poem
+    if (away == "none" || away == "drift") nextEvent();    // fallen (soft): waits for the god's touch; dead: the poem
+    startWatchdog();
     //trigger event selecter
 
 };
