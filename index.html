@@ -356,7 +356,7 @@
             }
             
             #scrollBackUp {
-                z-index: 2;   /* the roll sits over the ribbons' top edge (ribbons are z-index 1, src/ui/scrolls.js) */
+                z-index: 2;   /* ribbons (z-index 3, src/ui/scrolls.js) hang over the roll; set them to 1 to tuck them under it */
                 transition: opacity 0.2s ease;
             }
 
