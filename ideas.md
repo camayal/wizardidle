@@ -91,3 +91,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): achievements ribbons wired: cemetery entries carry an `achievements` map (menu.js realKill, away.js dieAway); tabPages() in src/ui/scrolls.js shows run/all ribbons only when world.cemetery holds earned achievements. Old/sample cemetery entries simply have none.
 - 2026-11-18 (dev): achievements list spacing: .achRow cells in index.html (padding 0.7em, wider icon gap); tweak there if still tight
 - 2026-11-18 (dev): logro_capricorreturns added (combat.js: cemetery has logro_ultimocapricor); art requested in docs/art-notes.md (icon + static frame idea). Faith meter bug: faithBtn filled before display:block so clientWidth was 0.
+- 2026-11-18 (dev): rarity tiers in src/data/rarity.js (set from the achievement-rates playtest + judgment); rule: re-run the playtest when adding an achievement (MAP.md). Next: artist makes one seal colour per tier (frame C, icon B for capricorreturns).

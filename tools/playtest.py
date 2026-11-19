@@ -93,6 +93,19 @@ def num(v):
     return f'{v:.3g}'
 
 
+def achievement_table(reports, settings):
+    labels = [s.partition(':')[0] for s in settings]
+    seen = {}
+    for (label, seed), r in reports.items():
+        for a in r.get('achievements', []):
+            seen.setdefault(a, collections.Counter())[label] += 1
+    runs = {l: sum(1 for (lb, _), r in reports.items() if lb == l and not r.get('error')) or 1 for l in labels}
+    lines = ['| achievement | ' + ' | '.join(labels) + ' |', '|---|' + '---|' * len(labels)]
+    for a, c in sorted(seen.items(), key=lambda kv: -sum(kv[1].values())):
+        lines.append(f'| {a} | ' + ' | '.join(f'{100 * c[l] // runs[l]}%' for l in labels) + ' |')
+    return '\n'.join(lines)
+
+
 def summarise(rows, columns):
     lines = ['| setting | runs | ' + ' | '.join(columns) + ' |', '|---|---|' + '---|' * len(columns)]
     for label in dict.fromkeys(r['setting'] for r in rows):
@@ -165,6 +178,7 @@ def main():
         f.write('Level at the end: ' + '; '.join(f'**{k}**: {v}' for k, v in ends.items()) + '. '
                 '*firstDoubter* / *firstAtheist*: the wizard\'s level when he first became one (empty: never); '
                 '*backToBeliever*: times he climbed back to Believer; *h_*: hours of play at each level.\n\n')
+        f.write('## Achievements earned (share of runs)\n\n' + achievement_table(reports, args.setting) + '\n\n')
         f.write('*kills* include rare enemies; *freezes* are the v1 guardian freeze above level 190 '
                 '(the game would stop until a reload; the simulation goes on). Every run is in `runs.csv`.\n')
     errors = [r for r in rows if r['error']]

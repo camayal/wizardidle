@@ -94,6 +94,7 @@ Code asks by plain name; only src/media.js knows folders. A name that fits no ru
 - Panels: left holds the dev menus; Modes open on the right: Sounds, Art, Texts. The game waits while a mode is open. Hide from Help, Developer tools.
 - Notes box: type a comment; "Capture moment" freezes the technical details; "Save to file" appends to docs/sound-notes.md, docs/art-notes.md, docs/dev-notes.md or, from the Texts mode, docs/history-notes.md (the edited texts, to copy into the code) (localhost only, via serve.py).
 - Review drop: the folder wizardidle-review/ beside the main folder, outside the project (tools/serve.py serves it at review/ from any working folder). Roles drop new art and sounds only there, never in img/ or snd/; dev copies an approved file into the game. Add a line to its index.txt: `date | who | file | game file it would replace, or - | short note`. Art and Sounds modes list them newest first. Delete handled lines and files.
+- Achievements: every time one is added, give it a tier in src/data/rarity.js and re-run `python tools/playtest.py --name achievement-rates --seeds 12 --setting idle:god=idle --setting active:god=active` (its summary lists the share of runs earning each); the bots do not do everything (no studying, inns, runes), so judge those by hand.
 - Playtests: `python tools/playtest.py` (see its help) or open index.html with `?sim=1`.
 
 ## docs/

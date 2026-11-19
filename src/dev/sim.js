@@ -105,6 +105,7 @@ function finish(reason) {
         stats: state.stats,
         history: state.history,
         world: world.stats,
+        achievements: Object.keys(state.achievements),
     };
     const pre = document.createElement('pre');
     pre.id = 'simReport';
