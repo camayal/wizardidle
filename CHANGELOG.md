@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Faith scroll, plainer: back to the normal scroll (no gold-leaf border, no candle by the title); the header ornament moved to the bottom; the belief arc sits centred with room above and below; no belief number is shown, only the level name (or Lost) under the arc.
 - Dev tools: tools/synth_demo.html plays one short tune two ways, with a plain browser synth and with real instrument samples, to decide how we make our own music.
 
 - Faith scroll: the gold-leaf border now sits inside the parchment on all four sides; before, it added its own width and stuck out on the right and bottom.

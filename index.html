@@ -272,14 +272,6 @@
                 text-align: center;
                 display: block;
             }
-            /* the faith scroll only (data-page is set when a scroll opens): the gold-leaf border */
-            #scrollText[data-page="faith"]{
-                box-sizing: border-box;   /* width/height are set in JS to the parchment: the border sits inside them instead of adding 64px to the right and bottom */
-                border: solid transparent;
-                border-width: 32px;
-                border-image: url("img/ui/faith/faith_border_a_9slice.png") 16 round;
-                image-rendering: pixelated;
-            }
             .faithCandle{ animation: faithFlicker 0.6s steps(4) infinite; }
             @keyframes faithFlicker{ from{background-position:0 0} to{background-position:-160px 0} }
             .faithLit.flare-up{ animation: faithFlareUp 1.5s ease-out; }
