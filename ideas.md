@@ -130,3 +130,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): author decided: la_playa = north-east beach; the south-west palm sand is a second beach, only next to the lake and only reachable from the surrounding zones (recorded in docs/MAPS.md). Needs its own zone/destinations design later.
 - 2026-11-19 (dev): installed the approved aboveground map rework (artist option C2: puffy cloud edges, 14 decorative clouds) as img/ui/mapaboveground.png. Portals and stair arrivals unchanged, so the Heidan spots stay valid.
 - 2026-11-19 (dev): author corrected: the south-west palm sand is the Dunes (las_Dunas), not a separate beach zone. MAPS.md updated.
+- 2026-11-19 (dev): installed the underground map rework (artist option G2, warm brown rock) as img/ui/mapaunderground.png as a base to keep working on. Author wants the ground-map cave and mine entrances to match it exactly (with the artist).

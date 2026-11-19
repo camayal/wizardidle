@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Underground map repainted to look like a natural cave: warm brown cloudy rock with cracks, winding tunnels of varied width with rough walls, a basalt volcano chamber with a lava lake and glow, rails and lamps in the mine, irregular pools and crystal clusters. Still to do: make the cave and mine entrances line up with the ground map.
 - Aboveground map: the cloud lands have puffy, irregular edges and the sky has some small decorative clouds around them.
 - Ground map: the Prairie bridge now crosses something. A spring from the volcano runs down to the road, under the bridge, and joins the main river in a Y; the river has gentle S curves down to the sea, and the Prairie reaches a little further into the southern gulf so the river no longer runs beside the sea.
 - Fixed the game sitting frozen after the tab was left alone for a long time: after the reload that settles the time away, the wizard now goes on with his adventures (before, only a wizard with no change at all restarted). A safety net also restarts the events if nothing has been scheduled for 20 seconds, and says so in the console.
