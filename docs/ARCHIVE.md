@@ -1657,3 +1657,20 @@ Author's note: Faith scroll: improve its graphic design, it needs to look more d
 
 - Achievements in two ribbons (author, 2026-11-18): the achievements scroll gets its own ribbon set: 'this run' achievements (new, tracked per run) and 'historic' (the ones we have today, across all runs). Both stay player-centric. Needs from dev: what counts as a run and a per-run achievement store (check src/stats and the logro data first); and a TAB_SETS entry for the achievements scroll with the two ribbons. Open for the author via thinker: which achievements count per run, and are some historic-only. Icons: icon_achievements_run / icon_achievements_all from the artist.
 - Achievements ribbons, answered (author, 2026-11-18; NOT STARTED, the author will say when): 'this run' = what the current wizard earned; the other scroll lists all achievements (global). With only one wizard in the list of wizards with achievements, a single scroll and NO ribbon is needed; with more (one alive plus dead ones) two scrolls with ribbons: the current wizard's, and everyone else's, whose entries carry the text 'Earned by: <wizard name>'. Dev: record which wizard earned each achievement (a field on the achievement store; check the logro handling in src/), then add a TAB_SETS entry shown only when more than one wizard has earned something.
+
+## Achievement art notes (done 2026-11-18)
+
+```
+Date: 2026-11-18
+Author's note: for @artist, achievements redesign. (1) Extract the images from C:\Users\camayal\OneDrive\Documentos\GitHub\wizardidle-old-ideas\unorganzed_sprites\Sprites\Archivements\Logros.pdn. (2) Idea: make the achievement frame one static piece and let only the inner picture vary per achievement (frame + content layers), so new achievements only need a picture. (3) New achievement icon: "Aren't you extinct?" (logro_capricorreturns), killing the "last" Capricor again with another wizard; funny, Capricor again. The game already looks for art named logro_capricorreturns.
+```
+
+```
+Date: 2026-11-18
+Author's note: for @artist, wax seals by rarity. The author likes frame C (with the seal) and icon B for "Aren't you extinct?". Draw the seal as its own 53x53 transparent sprite at frame C's position, one per tier, hand-drawn (no hue filter): logro_seal_common (grey), _uncommon (green), _rare (blue), _epic (purple), _legendary (orange), _mythic (red), _ancient (teal), _divine (gold; the game adds a sparkle glow in css, you may also draw sparks). Same seal shape, only colours change (a tier detail, like a ring or gem, is welcome). The icons themselves (frame + picture) must come WITHOUT the seal, and make the final logro_capricorreturns (icon B, no seal). Files go to img/ui/achievements/ through the review drop. Addition: the seals get a little more fancy as the tier goes up. Common is plain; each tier adds some detail (a ring, a rim, a gem, wings, a crown, sparks...), up to divine, the most ornate (gold, rays, sparks). Keep the same base shape so they read as a family, and keep them small and readable at 53x53.
+```
+
+```
+Date: 2026-11-18
+Author's note: for @artist, achievement icons become layers: ONE parchment frame (logro_frame.png, 53x53, the frame B look) + the picture alone on a transparent background (same file names as today, e.g. logro_ultimocapricor.png) + the tier seal. The game stacks them, so the pictures must NOT include the parchment or the seal. The extracted layers of Logros.pdn are already picture-only. Please produce logro_frame.png and the picture-only versions of all icons (and logro_capricorreturns picture-only); no_logro stays a full icon for now.
+```

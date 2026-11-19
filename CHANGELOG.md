@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Achievement pictures are now layers: one parchment frame, the picture alone, and a wax seal whose design grows fancier with the tier (plain grey Common up to the golden, rayed Divine). "Aren't you extinct?" has its picture (the Capricor climbing out of its grave).
+
 - Achievements now have a rarity, shown as a coloured tag after the title: Common (grey), Uncommon (green), Rare (blue), Epic (purple), Legendary (orange), Mythic (red), Ancient (teal) and Divine (gold, sparkling). Mythic and Ancient have none yet. The playtest summary now lists how often each achievement is earned.
 
 - New achievement "Aren't you extinct?": kill the "last" Capricor again with a later wizard (the Capricor comes back with each new wizard). Its picture is still to be drawn.
