@@ -1,0 +1,73 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Synth demo: plain Web Audio vs soundfont</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{font:16px system-ui;background:#1a1620;color:#eee;max-width:34em;margin:1em auto;padding:0 1em}
+button{font-size:1.1em;padding:.6em 1em;margin:.3em .3em .3em 0;border-radius:6px;border:0;background:#6b4fa0;color:#fff}
+#st{color:#aaa;min-height:1.4em}
+</style>
+<h2>Same tune, two engines</h2>
+<p>A: plain Web Audio (oscillators + envelopes, no library, nothing to download).<br>
+B: soundfont (WebAudioFont, real instrument samples, needs internet the first time).</p>
+<button id="a">Play A: plain synth</button>
+<button id="b">Play B: soundfont</button>
+<button id="s">Stop</button>
+<p id="st"></p>
+<script src="https://cdn.jsdelivr.net/npm/webaudiofont@3.0.5/npm/dist/WebAudioFontPlayer.js"></script>
+<script>
+// [midi, startBeat, beats, voice]  voice: 0 lead, 1 pad, 2 bass
+const BPM=84, BEAT=60/BPM, LOOPS=2;
+const tune=[];
+const bar=(i,lead,chord,bass)=>{
+  lead.forEach(([m,s,l])=>tune.push([m,i*4+s,l,0]));
+  chord.forEach(m=>tune.push([m,i*4,4,1]));
+  tune.push([bass,i*4,2,2],[bass,i*4+2,2,2]);
+};
+bar(0,[[69,0,1],[72,1,.5],[71,1.5,.5],[69,2,1],[64,3,1]],[57,60,64],45);
+bar(1,[[65,0,1.5],[67,1.5,.5],[69,2,2]],[53,57,60],41);
+bar(2,[[72,0,1],[74,1,.5],[72,1.5,.5],[71,2,1],[67,3,1]],[48,55,60],48);
+bar(3,[[69,0,1],[67,1,1],[64,2,2]],[57,60,64],45);
+const hz=m=>440*Math.pow(2,(m-69)/12), $=id=>document.getElementById(id), st=t=>$('st').textContent=t;
+let ctx, nodes=[], timer;
+function ac(){ if(!ctx) ctx=new (window.AudioContext||webkitAudioContext)(); ctx.resume(); return ctx; }
+function stop(){ nodes.forEach(n=>{try{n.stop()}catch(e){}}); nodes=[]; clearTimeout(timer); if(window.pl&&ctx) pl.cancelQueue(ctx); st('stopped'); }
+const total=()=>16*BEAT*LOOPS;
+
+// A: plain oscillators
+const VOICES=[ {type:'triangle',a:.02,r:.25,g:.22}, {type:'sine',a:.5,r:.8,g:.08}, {type:'square',a:.01,r:.12,g:.10} ];
+function playA(){
+  const c=ac(), t0=c.currentTime+.1, out=c.createGain(); out.gain.value=.8;
+  const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=3000; out.connect(lp); lp.connect(c.destination);
+  for(let k=0;k<LOOPS;k++) tune.forEach(([m,s,l,v])=>{
+    const V=VOICES[v], t=t0+(k*16+s)*BEAT, d=l*BEAT*.95;
+    const o=c.createOscillator(), g=c.createGain(); o.type=V.type; o.frequency.value=hz(m);
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(V.g,t+V.a);
+    g.gain.setValueAtTime(V.g,t+Math.max(V.a,d)); g.gain.linearRampToValueAtTime(0,t+d+V.r);
+    o.connect(g); g.connect(out); o.start(t); o.stop(t+d+V.r+.05); nodes.push(o);
+  });
+  st('playing A (plain synth)'); timer=setTimeout(()=>st('done'),total()*1000+500);
+}
+
+// B: soundfont (FluidR3 GM: harp 0460, strings 0480, acoustic bass 0320)
+const SF=[ ['0460','_tone_0460_FluidR3_GM_sf2_file',.5], ['0480','_tone_0480_FluidR3_GM_sf2_file',.35], ['0320','_tone_0320_FluidR3_GM_sf2_file',.6] ];
+function loadB(c){
+  if(!window.pl){ window.pl=new WebAudioFontPlayer(); }
+  return new Promise(res=>{
+    SF.forEach(([id,v])=>{
+      if(!window[v]) pl.loader.startLoad(c,'https://cdn.jsdelivr.net/gh/surikov/webaudiofontdata@master/sound/'+id+'_FluidR3_GM_sf2_file.js',v);
+    });
+    pl.loader.waitLoad(()=>{ SF.forEach(([,v])=>pl.loader.decodeAfterLoading(c,v)); res(); });
+  });
+}
+async function playB(){
+  if(typeof WebAudioFontPlayer==='undefined'){ st('soundfont library not loaded (no internet?)'); return; }
+  const c=ac(); st('loading instruments...');
+  await loadB(c);
+  const t0=c.currentTime+.2;
+  for(let k=0;k<LOOPS;k++) tune.forEach(([m,s,l,v])=>
+    pl.queueWaveTable(c,c.destination,window[SF[v][1]],t0+(k*16+s)*BEAT,m,l*BEAT,SF[v][2]));
+  st('playing B (soundfont)'); timer=setTimeout(()=>st('done'),total()*1000+500);
+}
+$('a').onclick=()=>{stop();playA()}; $('b').onclick=()=>{stop();playB()}; $('s').onclick=stop;
+</script>
