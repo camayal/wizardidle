@@ -200,7 +200,7 @@ const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cem
 const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
     run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
-const RIBBON_SCALE = 1.55;           // one ribbon pixel = this many pixels of the 320-wide scroll art (2 was too big, 1.5 a bit small)
+const RIBBON_SCALE = 1.51;           // one ribbon pixel = this many pixels of the 320-wide scroll art (2 was too big, 1.5 a bit small)
 const RIBBON_TOP = -5;              // ribbon pixels below the roll's top edge (negative = above it). Test (author): -5, the ribbons start above the roll and hang over it; 3 with the roll over them (ribbon z-index 1) tucks them into it
 const RIBBON_W = 18, RIBBON_ICON = 9, RIBBON_GAP = 3, RIBBON_MARGIN = 6;   // in ribbon pixels (the picture is 18 wide with its flap, 29 tall)
 const RIBBON_H_REST = 25, RIBBON_H_OPEN = 29;                              // the open ribbon hangs 4 lower
