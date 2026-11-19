@@ -153,6 +153,36 @@ function localizarBocadillo(){
 
 
 
+// Block the toolbar while a scroll is open (remembers each button's handler).
+function disableMainButtons() {
+    const eles = document.getElementsByClassName('dis');
+    for (let i=0; i < eles.length; i++) {
+      if (eles[i].onclick) eles[i].prev_click = eles[i].onclick; // save it once: a second disable must not overwrite it with false
+      eles[i].onclick = false;
+    }
+}
+
+// Give the toolbar its handlers back.
+function enableMainButtons() {
+    const eles = document.getElementsByClassName('dis');
+    for (let i=0; i < eles.length; i++)
+       if (eles[i].prev_click) eles[i].onclick = eles[i].prev_click;  // restore the previous value
+}
+
+// Fill the achievements scroll.
+function updateAchievements(){
+    const others = hasOthers();
+    if (!others) ui.scrollViews.achievements = "run";
+    const all = others && ui.scrollViews.achievements == "all";
+    let txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
+    txt += all ? othersList() : achievementList();
+    txt += "</div>"
+    el('innerTextScroll').innerHTML=txt;
+    el("titleAchievements").style.fontSize = `${ui.em * 2.5}px`;
+    el("titleAchievements").style.lineHeight = `${ui.em * 2.5}px`;
+    if (ui.scrollCurrentContent == "achievements") placeScrollTabs("achievements");  // ribbons only when others earned some
+}
+
 // ------------------------------------------------------------------ tabbed scrolls
 // Some scrolls have several pages (Kill / Cemetery / Bestiary). Each page has a small ribbon
 // bookmark with an icon hanging from the scroll's top edge; tapping one brings that page to the
