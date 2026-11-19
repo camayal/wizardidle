@@ -229,7 +229,7 @@ function placeScrollTabs(set) {
     const up = el("scrollBackUp");
     const width = parseFloat(up.style.width);
     const u = width / 320 * RIBBON_SCALE;           // one ribbon pixel on screen
-    text.style.setProperty("--ribbonGap", `${10 * u}px`);   // space after the page title, so the ribbons cover nothing (index.html)
+    text.style.setProperty("--ribbonGap", `${5 * u}px`);   // space after the page title, so the ribbons cover nothing (index.html)
     const slot = (RIBBON_W + RIBBON_GAP) * u;
     pages.forEach((page, i) => {
         const open = ui.scrollViews[set] == page;
