@@ -93,6 +93,7 @@ function dieAway() {
         died: new Date().toISOString(),
         kills: stats.get("kill.enemies") + stats.get("kill.rare"),
         falls: stats.get("death.falls"),
+        achievements: { ...state.achievements },
         away: true,
     });
     stats.count("death.away");

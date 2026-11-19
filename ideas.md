@@ -87,3 +87,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): the author heard both synth demos and chose A, the plain Web Audio synth (no soundfont, no library). Next, if asked: a note-list bench in tools/ and a render to WAV for snd/. Still open: stingers, loops or both.
 - 2026-11-18 faith scroll: level name in title font, spaced caps, stars, per-level colour, more space before stats (docs/SCROLLS.md has no note on the label; art for it would be a later sprite option).
 - 2026-11-18 ribbon bookmarks wired for the kill and stats scrolls (RIBBON_SIDE in src/ui/scrolls.js, default left because the close button is top right); achievements (this run / historic) and map layer ribbons wait on decisions in docs/dev-notes.md.
+
+- 2026-11-18 (dev): achievements ribbons wired: cemetery entries carry an `achievements` map (menu.js realKill, away.js dieAway); tabPages() in src/ui/scrolls.js shows run/all ribbons only when world.cemetery holds earned achievements. Old/sample cemetery entries simply have none.

@@ -7,7 +7,7 @@ import { state, world } from '../state.js';
 import { run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { version } from '../game.js';
-import { achievementList, countLogros } from '../achievements.js';
+import { achievementList, countLogros, hasOthers, othersList } from '../achievements.js';
 import { playSound } from '../audio.js';
 import { detectmob, layoutPortrait } from './layout.js';
 import { realKill } from './menu.js';
@@ -177,12 +177,16 @@ function enableMainButtons() {
 // Fill the achievements scroll.
 function updateAchievements(){
 
+    const others = hasOthers();
+    if (!others) ui.scrollViews.achievements = "run";
+    const all = others && ui.scrollViews.achievements == "all";
     let txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
-    txt += achievementList();
+    txt += all ? othersList() : achievementList();
     txt += "</div>"
     el('innerTextScroll').innerHTML=txt;
     el("titleAchievements").style.fontSize = `${ui.em * 2.5}px`;
     el("titleAchievements").style.lineHeight = `${ui.em * 2.5}px`;  
+    if (ui.scrollCurrentContent == "achievements") placeScrollTabs("achievements");  // ribbons only when others earned some
 
 }
 
@@ -192,9 +196,9 @@ function updateAchievements(){
 // front and plays the scroll sound. The open page's ribbon hangs lower and is lighter (the
 // author chose look A and the one-colour ribbons on 2026-11-18, replacing the paper strips).
 const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"] };
-const PAGE_NAMES = { kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory" };
+const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory" };
 const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
-    stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
+    run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
 const RIBBON_SCALE = 2;             // one ribbon pixel = this many pixels of the 320-wide scroll art
 const RIBBON_W = 9, RIBBON_ICON = 7, RIBBON_GAP = 3, RIBBON_MARGIN = 6;    // in ribbon pixels
@@ -206,6 +210,12 @@ const ribbonImages = ["ribbon_rest", "ribbon_selected", ...Object.values(RIBBON_
     return image;
 });
 
+// The pages of a tabbed scroll; achievements have ribbons only when other wizards earned some.
+function tabPages(set) {
+    if (set == "achievements") return hasOthers() ? ["run", "all"] : null;
+    return TAB_SETS[set] || null;
+}
+
 function ribbonAt(index) {
     while (ribbons.length <= index) {
         const ribbon = document.createElement("div");
@@ -215,7 +225,7 @@ function ribbonAt(index) {
             '<img class="ribbonIcon" style="position:absolute; image-rendering:pixelated">';
         ribbon.onclick = () => {
             const set = ui.scrollCurrentContent;
-            if (!TAB_SETS[set] || ui.scrollViews[set] == ribbon.dataset.page) return;
+            if (!tabPages(set) || ui.scrollViews[set] == ribbon.dataset.page) return;
             ui.scrollViews[set] = ribbon.dataset.page;
             playSound("scroll");
             PAGE_RENDER[set]();
@@ -228,7 +238,7 @@ function ribbonAt(index) {
 
 // Show the ribbons of the scroll's pages (the open one lower), or hide them all.
 function placeScrollTabs(set) {
-    const pages = TAB_SETS[set] || [];
+    const pages = tabPages(set) || [];
     ribbons.forEach((ribbon, i) => { if (i >= pages.length) ribbon.style.display = "none"; });
     const text = el("innerTextScroll");
     if (!pages.length) { text.style.removeProperty("--ribbonGap"); return; }
@@ -256,7 +266,7 @@ function placeScrollTabs(set) {
 
 // The layout was redone (window resized or rotated): fit the ribbons again.
 document.addEventListener("wizardidle:layout", () => {
-    if (TAB_SETS[ui.scrollCurrentContent]) placeScrollTabs(ui.scrollCurrentContent);
+    if (tabPages(ui.scrollCurrentContent)) placeScrollTabs(ui.scrollCurrentContent);
 });
 
 // Fill the stats scroll (ui/statsPages.js).
@@ -434,7 +444,7 @@ function killClick() {
 }
 
 // How each tabbed scroll redraws its front page.
-const PAGE_RENDER = { stats: updateStats, kill: updateKill };
+const PAGE_RENDER = { stats: updateStats, kill: updateKill, achievements: updateAchievements };
 
 export {
     counterText,
