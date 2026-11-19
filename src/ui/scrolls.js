@@ -197,7 +197,7 @@ const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", b
     stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
 const RIBBON_SCALE = 2;             // one ribbon pixel = this many pixels of the 320-wide scroll art
-const RIBBON_W = 9, RIBBON_ICON = 7, RIBBON_GAP = 3, RIBBON_MARGIN = 14;   // in ribbon pixels
+const RIBBON_W = 9, RIBBON_ICON = 7, RIBBON_GAP = 3, RIBBON_MARGIN = 6;    // in ribbon pixels
 const ribbons = [];
 
 function ribbonAt(index) {
