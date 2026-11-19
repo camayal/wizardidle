@@ -105,3 +105,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): ribbons too large (author): RIBBON_SCALE 2 -> 1.5 (still snapped to whole device pixels); ribbons start RIBBON_TOP=3 ribbon px below the roll's top with scrollBackUp z-index 2 over ribbons z-index 1, so the roll covers their first rows. Not seen in a browser.
 - 2026-11-18 (dev): ribbon test per author: ribbons now hang over the top of the roll (RIBBON_TOP 0, z-index 3 over the roll's 2), RIBBON_SCALE 1.8. The tucked-under-the-roll look is RIBBON_TOP 3 + ribbon z-index 1 if wanted back.
 - 2026-11-18 (dev): ribbon test 2: RIBBON_SCALE 1.6, RIBBON_TOP -2 (starts above the roll, over it) because at 0 the start looked mid-roll.
+- 2026-11-18 (dev): ribbon test 3: RIBBON_SCALE 1.5, RIBBON_TOP -6 (4 ribbon px higher still, author).
