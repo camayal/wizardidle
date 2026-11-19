@@ -57,6 +57,7 @@ export function artFolder(name) {
     if (OBJECTS.test(name)) return 'objects';
     if (/^(logro_|no_logro$)/.test(name)) return 'ui/achievements';
     if (/^tomb_/.test(name)) return 'ui/cemetery';
+    if (/^(anim_)?faith_|^anim_faith_/.test(name)) return 'ui/faith';   // the faith scroll's meter, candle, border
     if (UI.test(name)) return 'ui';
     return '';
 }

@@ -98,13 +98,40 @@ function goldSection() {
 // The belief meter: a bar from the lowest to the highest belief, filled up to his value, with a
 // tick at each level line (Atheist, Doubter, Devout); empty and marked lost when the story has
 // locked it.
+// The belief meter: the artist's stained-glass window with the lit glass up to his belief, a
+// marker on the stone ring and the candle of his level (docs/SCROLLS.md 4.2). Drawn at 2x.
+// Locked by the story (lost): the dark window and the cold candle.
+const METER_CENTRE = { x: 47.5, y: 54, r: 44 };
+let lastBelief = null, flare = { dir: '', until: 0 };
 function beliefMeter() {
-    const { min, max, devout, doubter, atheist } = config.belief;
-    const at = (v) => Math.round(100 * (v - min) / (max - min));
-    const share = state.player.beliefLost ? 0 : Math.max(0, Math.min(1, (state.player.belief - min) / (max - min)));
-    const ticks = [atheist, doubter, devout].map((v) => `<div style='position:absolute; top:0; bottom:0; left:${at(v)}%; width:2px; background:#462808'></div>`).join('');
-    return "<div style='position:relative; height:1.2em; margin:0.3em 0 0.5em; border:2px solid #462808; background:rgba(70,40,8,0.15)'>" +
-        `<div style='height:100%; width:${Math.round(share * 100)}%; background:#8a5a14'></div>${ticks}</div>`;
+    const { min, max } = config.belief;
+    const lost = !!state.player.beliefLost;
+    const belief = state.player.belief;
+    if (lastBelief !== null && Math.abs(belief - lastBelief) > 0.01) flare = { dir: belief > lastBelief ? 'up' : 'down', until: Date.now() + 1500 };
+    lastBelief = belief;
+    const t = Math.max(0, Math.min(1, (belief - min) / (max - min)));
+    const f = (name) => `url("${art(name)}")`;
+    const layer = (extra) => `<div style='position:absolute;left:0;top:0;width:96px;height:64px;${extra}'></div>`;
+    let inner = layer(`background:${f(lost ? 'faith_meter_window_lost' : 'faith_meter_window')}`);
+    if (!lost) {
+        const sweep = (180 * t).toFixed(1);
+        const mask = `conic-gradient(from 270deg at ${METER_CENTRE.x}px ${METER_CENTRE.y}px, #000 ${sweep}deg, transparent ${sweep}deg)`;
+        const cls = Date.now() < flare.until ? ` flare-${flare.dir}` : '';
+        inner += `<div class='faithLit${cls}' style='position:absolute;left:0;top:0;width:96px;height:64px;background:${f('faith_meter_glass_lit')};-webkit-mask-image:${mask};mask-image:${mask}'></div>`;
+        const a = Math.PI * (1 - t);
+        const mx = METER_CENTRE.x + METER_CENTRE.r * Math.cos(a) - 2.5, my = METER_CENTRE.y - METER_CENTRE.r * Math.sin(a) - 2.5;
+        inner += layer(`left:${mx.toFixed(1)}px;top:${my.toFixed(1)}px;width:5px;height:5px;background:${f('faith_meter_marker')}`);
+    }
+    inner += `<div class='${lost ? '' : 'faithCandle'}' style='position:absolute;left:28px;top:20px;width:40px;height:40px;background:${f(lost ? 'anim_faith_candle_lost' : 'anim_faith_candle_' + beliefLevel())}'></div>`;
+    return "<div style='width:192px;height:128px;margin:0.3em auto 0.5em'>" +
+        `<div style='position:relative;width:96px;height:64px;transform:scale(2);transform-origin:0 0;image-rendering:pixelated'>${inner}</div></div>`;
+}
+
+// The candle icon of his level for the heading (frames: Devout, Believer, Doubter, Atheist, Lost).
+function candleIcon() {
+    const i = state.player.beliefLost ? 4 : ['devout', 'believer', 'doubter', 'atheist'].indexOf(beliefLevel());
+    return `<span style='display:inline-block;width:40px;height:40px;vertical-align:middle;margin-right:0.2em;image-rendering:pixelated;` +
+        `background:url("${art('faith_icon_candle')}") ${-40 * Math.max(0, i)}px 0/200px 40px'></span>`;
 }
 
 function faithSection() {
@@ -162,7 +189,8 @@ export function inventoryPageHtml() {
 
 // The Faith scroll (the prayer button): faith, the belief meter and where faith came from.
 export function faithPageHtml() {
-    return "<div id='faith'><span class='titles' id='titleFaith'>Faith</span><br><br>" + faithSection() + '</div>';
+    return `<div id='faith'><img src='${art('faith_header_a')}' width='256' style='display:block;margin:0 auto;image-rendering:pixelated'/>` +
+        `<span class='titles' id='titleFaith'>${candleIcon()}Faith</span><br><br>` + faithSection() + '</div>';
 }
 
 // ------------------------------------------------------------------ the page
