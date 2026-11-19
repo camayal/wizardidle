@@ -9,6 +9,7 @@ import * as loop from './loop.js';
 import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
+import { logro } from './achievements.js';
 import { enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { interruptMidasHeal } from './bossEffects.js';
 import { config } from './config.js';
@@ -28,10 +29,16 @@ function pjBtn(){
 // refresh, a little under half a second, plus a short beat).
 const RINGS_MS = 650;
 
+// Every touch of the god counts towards "Feel the divine touch".
+function touchedCheck() {
+    if (stats.get("god.touches") + stats.get("god.heals") + stats.get("god.hits") >= config.touchedAchievement) logro.set(logro.logro_tocado);
+}
+
 // Bring the fallen wizard back at full HP; the healer's scene follows. The author's order: the
 // rings over him where he fell, the fade, then he is in the healer's cabin.
 function reviveByTouch() {
     stats.count("god.touches");
+    touchedCheck();
     if (run.softDead) { run.softDead = false; state.meta.softDead = false; state.meta.awayHours = 0; stats.count("away.savedByTouch"); }
     run.disablePjBtn = true;
     playSound("revive");
@@ -70,6 +77,7 @@ function healByTouch() {
     }
     if ((Math.round(state.player.hp) < Math.round(state.player.hpBase)) && (Math.round(state.player.faith) > 0)) {
         stats.count("god.heals");
+        touchedCheck();
         // belief: a heal at very low HP counts more; whether it saved him shows at the enemy's next hit
         beliefMoment(state.player.hp < state.player.hpBase * config.belief.lowHpLine ? "lowHpHeal" : "touch");
         if (fight.enemy) { fight.healedFrom = state.player.hp; fight.godHelped = true; }
@@ -124,6 +132,7 @@ function npcBtn(){
             updateHeading();
             print(`${wizardName()} ${txt}${ui.heartIcon} ${roundNumbertoLetter(fight.enemyHP)}`)
             stats.count("god.hits");
+            touchedCheck();
         }
     }
 

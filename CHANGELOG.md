@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Four achievements can now be earned: "The librarian" (1000 books), "Someone is throwing rocks" (1000 runes), "BnB, beer and bed" (250 inn visits) and "Feel the divine touch" (100 god revivals, heals and hits together, a first number to tune in config.js). Finding an eagle in the cave now unlocks "Why this animal is here?" (it never did), and the namesake check ignores capital letters, so a typed "Gandalf" can match a random "gandalf".
 - Achievement rarities re-set from the new odds estimate: Common now includes "The last of their kind" and "Shaaaaame on you"; "A new king", "The return of the king", "Atheist!" and "Someone is throwing rocks" are Rare; the chest and pot hunts are Epic; the inn is Legendary; the librarian is Mythic.
 - Dev tool: `tools/odds.py` estimates in a second how many players would ever earn each achievement, counting that players leave the game at random (the longer an achievement takes, the fewer reach it), and suggests a rarity tier. Playtests now save the data it needs.
 

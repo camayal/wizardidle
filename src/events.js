@@ -473,6 +473,8 @@ function findRuneOrBook(){
         }
         print(`${wizardName()} finds ${run.previousEvent == "findRuneorBook" ? "another " : "a "}${run.objectToStudy}`) 
         stats.count(`study.found.${run.objectToStudy}`)
+        if (stats.get("study.found.book") >= 1000) logro.set(logro.logro_libros);
+        if (stats.get("study.found.rune") >= 1000) logro.set(logro.logro_runas);
         run.previousEvent = "findRuneorBook"
         break;
         case 2:
@@ -531,6 +533,7 @@ function arriveToRest(placesWithInn) {
     if (placesWithInn) {
         enterPlace(`${state.zone.current}_taberna`);
         stats.count("inn.rests");
+        if (stats.get("inn.rests") >= 250) logro.set(logro.logro_tabernero);
         stats.count(`inn.zone.${state.zone.current}`);
         print(`${wizardName()} enters in an inn`);
     } else {

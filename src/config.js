@@ -6,6 +6,8 @@
 // Values and comments are the ones from v1's checkDB().
 
 export const config = {
+    // "Feel the divine touch": revivals, heals and hits by the god, added up (a first number to tune).
+    touchedAchievement: 100,
     // Belief (docs/FAITH.md 3.1, the author's starting values, to playtest): its own meter,
     // moved by moments; the level lines, the margin on the way up, and what each level changes.
     belief: {

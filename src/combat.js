@@ -342,6 +342,7 @@ function setUpEnemy() {
     fight.enemyAndNumber = fight.enemy + number;
     stats.count(enemySprites[fight.enemyAndNumber].rare ? "combat.rareEncounters" : "combat.encounters");
     stats.count(`seen.sprite.${fight.enemyAndNumber}`);     // the bestiary shows it from now on
+    if (state.zone.current == "la_Cueva" && (fight.enemyAndNumber == "animalejo12" || fight.enemyAndNumber == "animalejo13")) logro.set(logro.logro_vistoaguilaencueva);
     loadNPC(fight.enemy + number);
     fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
     fight.enemyHPbase = Math.round(fight.enemyHP);
@@ -594,7 +595,7 @@ function randomName() {
     }
     stats.count("names.random");
     if(!!state.player.name){
-    if(name == state.player.name){logro.set(logro.logro_namesake);}
+    if(name.toLowerCase() == state.player.name.toLowerCase()){logro.set(logro.logro_namesake);}
     };
 
     //avoid rename the two sacred
