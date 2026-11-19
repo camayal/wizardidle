@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- New underground map: dark cobbled rock that darkens toward the edges, a warm glow and magma veins around the volcano, glowing crystals, dark pools and a magma pocket, with rough, chipped edges where the rock meets the caves and the mine.
 - Map scroll: when the player peeks at another layer the title just says "Map" (the long layer names overlapped); the zone's name shows only on the wizard's own layer.
 - The game did not start: the map scroll commit had cut three scroll functions (blocking and restoring the toolbar, and the achievements page) by mistake. They are back.
 - Map: the Dunes marker spots (and the mine entrance in the Dunes) moved onto the new beach, so the bubble no longer floats over the sea. The other ground spots were checked against the new map and sit on land.

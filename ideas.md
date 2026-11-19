@@ -120,3 +120,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): ground map spots checked on the new mapa.png; only the Dunes (and la_Mina5) sat in the sea and were moved to the beach sand. Others fine.
 - 2026-11-19 (dev): fixed the game not starting: the map ribbons commit had deleted disableMainButtons, enableMainButtons and updateAchievements from src/ui/scrolls.js (restored).
 - 2026-11-19 (dev): map scroll title shows just "Map" on layers the wizard is not on (long names overlapped).
+- 2026-11-19 (dev): installed the approved underground map (option F2 from the review drop) as img/ui/mapaunderground.png. Bookmark icons (cloud, mountain, cave) still being drawn by the artist.
