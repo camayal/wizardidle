@@ -303,6 +303,17 @@
             .achRow .divTableCell{ display:block; padding:0 !important; line-height:1.05em; }
             .rarity-divine{ text-shadow:0 0 4px #ffe680; animation:divineSpark 1.2s steps(4) infinite; }
             @keyframes divineSpark{ 0%{text-shadow:0 0 2px #fff6c0, 6px -3px 0 #ffe680} 25%{text-shadow:0 0 6px #ffe680, -6px 2px 0 #fff6c0} 50%{text-shadow:0 0 3px #fff6c0, 4px 4px 0 #ffe680} 75%{text-shadow:0 0 6px #ffe680, -3px -4px 0 #fff6c0} 100%{text-shadow:0 0 2px #fff6c0, 6px -3px 0 #ffe680} }
+            .achIcon{ position:relative; display:inline-block; line-height:0; }
+            .achSeal{ position:absolute; left:0; top:0; image-rendering:pixelated; }
+            .seal-common .achSeal{ filter:saturate(0) brightness(1.1); }
+            .seal-uncommon .achSeal{ filter:hue-rotate(110deg); }
+            .seal-rare .achSeal{ filter:hue-rotate(215deg) saturate(1.3); }
+            .seal-epic .achSeal{ filter:hue-rotate(275deg); }
+            .seal-legendary .achSeal{ filter:hue-rotate(28deg) saturate(1.6) brightness(1.25); }
+            .seal-mythic .achSeal{ filter:none; }
+            .seal-ancient .achSeal{ filter:hue-rotate(170deg) saturate(1.2); }
+            .seal-divine .achSeal{ filter:hue-rotate(42deg) saturate(2.2) brightness(1.4); animation:sealSpark 1.2s steps(4) infinite; }
+            @keyframes sealSpark{ 0%{filter:hue-rotate(42deg) saturate(2.2) brightness(1.4) drop-shadow(0 0 1px #fff6c0)} 50%{filter:hue-rotate(42deg) saturate(2.2) brightness(1.8) drop-shadow(0 0 4px #ffe680)} 100%{filter:hue-rotate(42deg) saturate(2.2) brightness(1.4) drop-shadow(0 0 1px #fff6c0)} }
             .achRow .divTableCell:first-child{ flex:none; }
             .divTableRow {
                 display: table-row;

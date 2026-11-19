@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Achievements now have a rarity, shown as a coloured tag before the title: Common (grey), Uncommon (green), Rare (blue), Epic (purple), Legendary (orange), Mythic (red), Ancient (teal) and Divine (gold, sparkling). Mythic and Ancient have none yet. The playtest summary now lists how often each achievement is earned.
+- Achievements now have a rarity, shown as a coloured tag after the title: Common (grey), Uncommon (green), Rare (blue), Epic (purple), Legendary (orange), Mythic (red), Ancient (teal) and Divine (gold, sparkling). Mythic and Ancient have none yet. The playtest summary now lists how often each achievement is earned.
 
 - New achievement "Aren't you extinct?": kill the "last" Capricor again with a later wizard (the Capricor comes back with each new wizard). Its picture is still to be drawn.
 - A new wizard's Achievements scroll now says there are none yet instead of staying blank.

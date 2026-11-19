@@ -57,10 +57,16 @@ function rarityTag(text){
     return `<small class="rarity rarity-${tier.key}" style="color:${tier.color}"><b>${tier.name}</b></small> `;
 }
 
+// The wax seal is one red sprite (a 53x53 layer over the icon, art "logro_seal"); css recolours it
+// per tier with a hue filter (index.html .seal-*). Hidden while the sprite does not exist.
+function sealImg(text){
+    return `<img class="achSeal" src="${art("logro_seal")}" height="${ui.em * 5}px" onerror="this.style.display='none'" />`;
+}
+
 function achievementRow(text, time, by){
     if (!logro[text]) return "";
     const earned = by ? `<br><small style="color:#7a6a58">Earned by: ${by}</small>` : "";
-    return `<div class="divTableRow achRow"><div class="divTableCell"><img src="${art(`${logro[text].name}`)}" height="${ui.em * 5}px" /></div><div class="divTableCell">${rarityTag(text)}<strong>${logro[text].title}</strong> <br>${logro[text].description}${wonText(time)}${earned}</div></div>`;
+    return `<div class="divTableRow achRow"><div class="divTableCell"><span class="achIcon seal-${rarityOf[text] || "common"}"><img src="${art(`${logro[text].name}`)}" height="${ui.em * 5}px" />${sealImg(text)}</span></div><div class="divTableCell"><strong>${logro[text].title}</strong> ${rarityTag(text)}<br>${logro[text].description}${wonText(time)}${earned}</div></div>`;
 }
 
 // Achievements earned by wizards who died (kept in their cemetery entry), newest first.
