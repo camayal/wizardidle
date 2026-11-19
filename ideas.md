@@ -107,3 +107,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): ribbon test 2: RIBBON_SCALE 1.6, RIBBON_TOP -2 (starts above the roll, over it) because at 0 the start looked mid-roll.
 - 2026-11-18 (dev): ribbon test 3: RIBBON_SCALE 1.5, RIBBON_TOP -6 (4 ribbon px higher still, author).
 - 2026-11-18 (dev): ribbon test 4: RIBBON_SCALE 1.55, RIBBON_TOP -5.
+- 2026-11-18 (dev): ribbon position and size approved by the author at scale 1.55, top -5. Note: ribbon pixel size is rounded to whole device pixels (placeScrollTabs), so scale changes jump in steps on some window sizes; kept because the author likes the current look.
