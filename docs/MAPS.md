@@ -13,6 +13,7 @@ Redraw the world maps and add the places they are missing: a better ground map, 
 | Order (author, 2026-11-18) | **Ground map first; the aboveground map is a later, big step** |
 | Heidan on the ground map (author, 2026-11-19) | **The two cloud parts go; only the sacred stairs stay, with a few clouds at the top** |
 | Aboveground map (author, 2026-11-19) | **New art: two massive separate clouds, joined by the portals** |
+| Beaches (author, 2026-11-19) | **`la_playa` is the north-east beach** (spot about 229,80 on the ground map). **The palm sand in the south-west is a second, separate beach** by the lake: it must sit only next to the lake and be reachable only from the zones around it, never from afar (travel destinations must be checked when it gets data). |
 | Water scenes (author, 2026-11-19) | **A river delta and a beach, home of the nagas. Water only on the east side,** so the wizard's spot never moves |
 | Creek (author, 2026-11-15) | **One creek in the Prairie; the Swamp keeps its own.** The maps change to show both |
 | Bridges (author, 2026-11-15) | **One bridge scene per region** |
