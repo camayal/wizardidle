@@ -13,11 +13,14 @@ The review drop lives outside the project, in the folder wizardidle-review/ next
 folder (beside wizardidle-old-ideas/), so nothing a session drops there can get in git's way.
 It is served at /review/ from any working folder; WIZARDIDLE_REVIEW can point elsewhere.
 
+The game's own music is plain text, songs/<name>.txt (format in src/synth.js). The Music mode lists it at
+/__list/songs and saves with a POST to /songs/<name> (letters, numbers and _ only; localhost only).
+
 The dev tools' notes box (src/dev/notes.js) can save here: a POST to /notes/<mode> (sound, art,
 dev, or history for the game's texts) appends the note to docs/<mode>-notes.md. Only from this computer (localhost).
 Standard library only.
 """
-import functools, http.server, json, os, subprocess, sys, urllib.parse
+import functools, http.server, json, os, re, subprocess, sys, urllib.parse
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -64,7 +67,7 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         return super().translate_path(path)
 
     def do_GET(self):
-        if self.path in ('/__list/img', '/__list/snd'):
+        if self.path in ('/__list/img', '/__list/snd', '/__list/songs'):
             top = self.path.rsplit('/', 1)[-1]
             files = []
             for root, dirs, names in os.walk(os.path.join(REPO, top)):
@@ -82,6 +85,21 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         mode = self.path.rsplit('/', 1)[-1]
         local = self.client_address[0] in ('127.0.0.1', '::1')
+        if self.path.startswith('/songs/'):
+            if not local or not re.fullmatch(r'[a-z0-9_]{1,40}', mode):
+                return self.send_error(404)
+            length = int(self.headers.get('Content-Length') or 0)
+            if not 0 < length <= 100000:
+                return self.send_error(400)
+            text = self.rfile.read(length).decode('utf-8', 'replace').replace('\r\n', '\n')
+            os.makedirs(os.path.join(REPO, 'songs'), exist_ok=True)
+            with open(os.path.join(REPO, 'songs', mode + '.txt'), 'w', encoding='utf-8', newline='\n') as f:
+                f.write(text)
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/plain; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(b'saved')
+            return
         if not self.path.startswith('/notes/') or mode not in NOTE_FILES or not local:
             return self.send_error(404)
         length = int(self.headers.get('Content-Length') or 0)

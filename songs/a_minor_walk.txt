@@ -1,0 +1,37 @@
+# The demo tune the author chose (plain synth, option A), as a song file.
+title A minor walk
+tempo 84
+loop 2
+
+# bar 1
+A4 0 1 lead
+C5 1 0.5 lead
+B4 1.5 0.5 lead
+A4 2 1 lead
+E4 3 1 lead
+A3+C4+E4 0 4 pad
+A2 0 2 bass
+A2 2 2 bass
+# bar 2
+F4 4 1.5 lead
+G4 5.5 0.5 lead
+A4 6 2 lead
+F3+A3+C4 4 4 pad
+F2 4 2 bass
+F2 6 2 bass
+# bar 3
+C5 8 1 lead
+D5 9 0.5 lead
+C5 9.5 0.5 lead
+B4 10 1 lead
+G4 11 1 lead
+C3+G3+C4 8 4 pad
+C3 8 2 bass
+C3 10 2 bass
+# bar 4
+A4 12 1 lead
+G4 13 1 lead
+E4 14 2 lead
+A3+C4+E4 12 4 pad
+A2 12 2 bass
+A2 14 2 bass
