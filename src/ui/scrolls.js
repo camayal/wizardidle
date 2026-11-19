@@ -244,7 +244,12 @@ function placeScrollTabs(set) {
     if (!pages.length) { text.style.removeProperty("--ribbonGap"); return; }
     const up = el("scrollBackUp");
     const width = parseFloat(up.style.width);
-    const u = width / 320 * RIBBON_SCALE;           // one ribbon pixel on screen
+    // One ribbon pixel is a whole number of device pixels, and every position is snapped to one:
+    // with a fractional scale the nearest-neighbour drawing drops thin rows of the icon (the
+    // bestiary's dotted row vanished when its ribbon was opened and the icon moved).
+    const dpr = window.devicePixelRatio || 1;
+    const snap = (v) => Math.round(v * dpr) / dpr;
+    const u = Math.max(1, Math.round(width / 320 * RIBBON_SCALE * dpr)) / dpr;   // one ribbon pixel on screen
     text.style.setProperty("--ribbonGap", `${5 * u}px`);   // space after the page title, so the ribbons cover nothing (index.html)
     const slot = (RIBBON_W + RIBBON_GAP) * u;
     pages.forEach((page, i) => {
@@ -254,8 +259,8 @@ function placeScrollTabs(set) {
             : width - RIBBON_MARGIN * u - (pages.length - i) * slot + RIBBON_GAP * u;
         ribbon.dataset.page = page;
         ribbon.title = PAGE_NAMES[page];
-        Object.assign(ribbon.style, { display: "block", left: `${parseFloat(up.style.left) + x}px`,
-            top: `${parseFloat(up.style.top)}px`, width: `${RIBBON_W * u}px`, height: `${(open ? 20 : 16) * u}px` });
+        Object.assign(ribbon.style, { display: "block", left: `${snap(parseFloat(up.style.left) + x)}px`,
+            top: `${snap(parseFloat(up.style.top))}px`, width: `${RIBBON_W * u}px`, height: `${(open ? 20 : 16) * u}px` });
         const body = ribbon.querySelector(".ribbonBody"), bodySrc = art(open ? "ribbon_selected" : "ribbon_rest");
         if (!body.src.endsWith(bodySrc)) body.src = bodySrc;
         const icon = ribbon.querySelector(".ribbonIcon");

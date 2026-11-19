@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Scroll ribbon bookmarks: fixed part of the icon vanishing when a ribbon was opened (the bestiary's dotted row). Ribbon pixels now always land on whole screen pixels.
 - Achievement seals: the two ribbon tails are now wider (2px, notched, hanging past the frame's bottom edge) in each tier's own colour, so they no longer blend into the parchment frame.
 - Dev tools: new Music mode (Modes > Music) to write and play the game's own music, which is code instead of sound files: a song is a plain text note list (songs/<name>.txt, format in the header of src/synth.js), played live with Web Audio. Pick one of the game or the musician's songs from the review drop, edit the text, and it restarts on every edit so you hear the change at once; Save to game writes the file. A first song is in (A minor walk). Nothing in the game plays songs yet.
 - Four achievements can now be earned: "The librarian" (1000 books), "Someone is throwing rocks" (1000 runes), "BnB, beer and bed" (250 inn visits) and "Feel the divine touch" (100 god revivals, heals and hits together, a first number to tune in config.js). Finding an eagle in the cave now unlocks "Why this animal is here?" (it never did), and the namesake check ignores capital letters, so a typed "Gandalf" can match a random "gandalf".
