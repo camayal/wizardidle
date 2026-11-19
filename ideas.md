@@ -112,3 +112,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): RIBBON_SCALE back to 1.5 (author).
 - 2026-11-19 (dev): toolbar dead at start fixed: disableMainButtons no longer overwrites saved handlers on a second call; enable only restores saved ones.
 - 2026-11-19 (dev): docs cleanup: SCROLLS.md archived whole (pilot done, no spread to other scrolls); STATS, AWAY and ROADMAP trimmed to what is still open; finished parts in docs/ARCHIVE.md.
+- 2026-11-19 (dev): docs cleanup 2: SCENE_SPELLS boss effects and FAITH sections 1-2 archived; FAITH has a status paragraph. SCENES.md is untouched: no scene engine exists yet.

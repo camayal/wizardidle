@@ -25,52 +25,9 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 
 ---
 
-## 1. How faith works today
+## Status (2026-11-19)
 
-### One unit for everything: *g*
-
-Almost every faith amount comes from the wizard's max HP (`hpBase`). To compare them, this plan uses **g = the gold of an average kill's lower bound = `hpBase × rGold`** (`rGold` 0.15). A normal kill gives 1–2 g of gold. `calculateFe()` (`src/wizard.js`) returns **1–5 g** (average 3 g), and most faith events use it.
-
-### Gains
-
-| Source | Where | Amount | Notes |
-|---|---|---|---|
-| Praying at a shrine | `doOffering()`, `src/events.js` | 3 × `calculateFe()` ≈ **9 g** | When he enters and doesn't offer gold |
-| Offering at a shrine | `doOffering()` | 10–50% of **the gold he holds** × `fOfrenda` (0.57) | 25% of shrine visits (`pOfrenda`) |
-| God's tithe (touch the shrine) | `centerBtn()`, `src/divine.js` | 25–75% of the gold he holds × `fOfrenda` | The god's only way to *gain* faith |
-| Cleansing a corrupted enemy | `battle()`, `src/combat.js` | 5 × `calculateFe()` ≈ **15 g** | Not while in sin |
-| Perfect sphere statue (Dunes) | `statueObj`, `src/events.js` | ≈ **11 g** | Rare |
-| Chapter II (lvl 30) | `src/story.js` | **all gains ×2** from then on (`faithMultiplier`) | |
-
-### Losses
-
-| Source | Where | Amount | Notes |
-|---|---|---|---|
-| Skipping a shrine | `prayEV()` | `calculateFe()` ≈ **3 g** | He enters only 35% of the time (`pFindCapel`), so **65% of shrine events are skips** |
-| God heals him | `pjBtn()` | HP healed × 1–3 ≈ **1–2 g** per small heal, ~13 g for a full heal | Blocked at faith ≤ 0 |
-| God hits the enemy | `npcBtn()` | damage × 1–3 | Blocked at faith ≤ 0 |
-| **God revives him** | `pjBtn()` (dead) | **free** | **Works at any faith**, even below 0 |
-| He revives himself | `scheduleSelfRevive()`, `src/combat.js` | 1.25 × `hpBase` ≈ **8 g** | After 2 minutes dead |
-| Reloaded while dead | `src/game.js` | 0.25 × `hpBase` ≈ 1.7 g | |
-| Kill while in sin | `battle()` | ≈ 3 g | Coded but never switched on (`state.player.inSin`) |
-
-### Belief and atheism today
-
-- Faith is **just a number**. Below 0 the god's heal and hit touches stop working, and nothing else changes: he still prays, offers and skips shrines at the same rates.
-- The **"Atheist!"** achievement fires at **−10,000 faith** (`src/ui/render.js`), a fixed amount whatever his level.
-- The story plans much more (`src/story.js`, `ideas.md`): chapter III halves the multiplier, chapters IV–VI put him in sin, VIII/IX make altars give nothing while faith is above 0, X refuses all help, XI removes the faith icon. None of it is built.
-
----
-
-## 2. What's off
-
-1. **Revival is free.** The best divine touch costs nothing and works for an atheist. Death never costs the god anything, and the old help ("the healer charges his service in faith") says otherwise.
-2. **Faith grows with hoarded gold.** Offerings and the tithe take a share of the gold he holds, and gold has few uses (the inn, dice). By mid-game one tithe can give hundreds of g, and the god can heal at will. Professions will add gold sinks, which helps, but the share-of-gold rule stays a snowball.
-3. **Atheism isn't a state.** Negative faith only blocks two touches. The wizard behaves exactly the same, so there's no "road" to atheism to watch, just a number going down.
-4. **Fixed thresholds don't scale.** −10,000 is out of reach at level 5 and a few self-revives at level 100.
-5. **Skipping shrines is the main drain** (65% of shrine events), and it's pure chance: the god can't do anything about it.
-
----
+**Built:** the belief meter and its four levels, touch cost and shrine chance by level (`src/belief.js`), the god's super-critic. **Not built:** `faithChange()` and stats per source, the free revive and rescuers (the self-revive in `src/combat.js` still costs faith), offering caps, the price list, winning back an atheist, the Last Escape scroll. Sections 1 and 2 (faith before the meter, what was off) are in the archive.
 
 ## 3. Proposal
 

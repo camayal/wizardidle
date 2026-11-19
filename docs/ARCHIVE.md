@@ -1956,3 +1956,68 @@ Gate before moving on: the whole code base is modern, measurably faster where it
 - **Volcano boss crash** (found 2026-11-12, fixed): the Volcano's boss `fenix` had no entry in the enemy families (v1 too), so every boss fight there threw an error and the game stopped until a reload.
 - **The game freezes above level 190** (found 2026-11-12, **fixed 2026-11-13**: until guardians exist, that chance starts a normal fight): in `enemyEV()` the guardian branch (`pGetGuardian`, 10%, level 191+) is empty, a megaboss v1 never wrote. Nothing starts the next event, so about 2% of events stop the game until the page is reloaded. To fix with the story (the guardians, or skip the branch).
 - **Manifest paths** (found in phase 4): `manifest.json` pointed at `wizardidle/index.html`, which resolves to `/wizardidle/wizardidle/index.html`, so installing the app opened a broken page. Fixed with relative paths and 192/512 px icons.
+
+## Done, from docs/SCENE_SPELLS.md: boss effects (built in src/bossEffects.js, cleaned 2026-11-19)
+
+## Boss effects (decided 2026-11-13)
+
+Most boss scene spells stay **looks only** (the damage is the boss's normal hit). A few get one simple effect:
+
+| Boss attack | Effect (starting values, to playtest) |
+|---|---|
+| **Medusa's petrifying gaze** | **Rare:** about 1 in 4 of her gazes turns him to stone for **2 turns** (Medusa hits freely; the stone can't cast, walk or pray; a fall ends it). After his **first petrification** he can **find a rare artefact that makes him immune for good** (rare: the author, 2026-11-13) (a mirror shield or a gorgon's-eye amulet, found like a rune or book; art to draw). Replaces today's 2.5 s placeholder |
+| **King Midas's golden rays** | **Heal Midas** about **15% of his max HP, at most twice per fight**. The god's touch on Midas while the rays spin **interrupts the heal** |
+| **Blizzard** (rainbow) | On a roll, he **skips his next attack** (slowed by the cold) |
+| **Poison cloud** (kkck) | A little **damage over 2 turns** |
+| **Earthquake** (protromus) | On a roll, he **misses his next spell** (and the scene shakes, as built) |
+
+Stats: `boss.petrified`, `boss.petrifyImmune` (a first), `boss.midasHeal`, `boss.midasHealInterrupted`, `boss.effect.<name>`.
+
+## Done, from docs/FAITH.md: 1. How faith worked before the belief meter, and 2. What was off (cleaned 2026-11-19)
+
+## 1. How faith works today
+
+### One unit for everything: *g*
+
+Almost every faith amount comes from the wizard's max HP (`hpBase`). To compare them, this plan uses **g = the gold of an average kill's lower bound = `hpBase × rGold`** (`rGold` 0.15). A normal kill gives 1–2 g of gold. `calculateFe()` (`src/wizard.js`) returns **1–5 g** (average 3 g), and most faith events use it.
+
+### Gains
+
+| Source | Where | Amount | Notes |
+|---|---|---|---|
+| Praying at a shrine | `doOffering()`, `src/events.js` | 3 × `calculateFe()` ≈ **9 g** | When he enters and doesn't offer gold |
+| Offering at a shrine | `doOffering()` | 10–50% of **the gold he holds** × `fOfrenda` (0.57) | 25% of shrine visits (`pOfrenda`) |
+| God's tithe (touch the shrine) | `centerBtn()`, `src/divine.js` | 25–75% of the gold he holds × `fOfrenda` | The god's only way to *gain* faith |
+| Cleansing a corrupted enemy | `battle()`, `src/combat.js` | 5 × `calculateFe()` ≈ **15 g** | Not while in sin |
+| Perfect sphere statue (Dunes) | `statueObj`, `src/events.js` | ≈ **11 g** | Rare |
+| Chapter II (lvl 30) | `src/story.js` | **all gains ×2** from then on (`faithMultiplier`) | |
+
+### Losses
+
+| Source | Where | Amount | Notes |
+|---|---|---|---|
+| Skipping a shrine | `prayEV()` | `calculateFe()` ≈ **3 g** | He enters only 35% of the time (`pFindCapel`), so **65% of shrine events are skips** |
+| God heals him | `pjBtn()` | HP healed × 1–3 ≈ **1–2 g** per small heal, ~13 g for a full heal | Blocked at faith ≤ 0 |
+| God hits the enemy | `npcBtn()` | damage × 1–3 | Blocked at faith ≤ 0 |
+| **God revives him** | `pjBtn()` (dead) | **free** | **Works at any faith**, even below 0 |
+| He revives himself | `scheduleSelfRevive()`, `src/combat.js` | 1.25 × `hpBase` ≈ **8 g** | After 2 minutes dead |
+| Reloaded while dead | `src/game.js` | 0.25 × `hpBase` ≈ 1.7 g | |
+| Kill while in sin | `battle()` | ≈ 3 g | Coded but never switched on (`state.player.inSin`) |
+
+### Belief and atheism today
+
+- Faith is **just a number**. Below 0 the god's heal and hit touches stop working, and nothing else changes: he still prays, offers and skips shrines at the same rates.
+- The **"Atheist!"** achievement fires at **−10,000 faith** (`src/ui/render.js`), a fixed amount whatever his level.
+- The story plans much more (`src/story.js`, `ideas.md`): chapter III halves the multiplier, chapters IV–VI put him in sin, VIII/IX make altars give nothing while faith is above 0, X refuses all help, XI removes the faith icon. None of it is built.
+
+---
+
+## 2. What's off
+
+1. **Revival is free.** The best divine touch costs nothing and works for an atheist. Death never costs the god anything, and the old help ("the healer charges his service in faith") says otherwise.
+2. **Faith grows with hoarded gold.** Offerings and the tithe take a share of the gold he holds, and gold has few uses (the inn, dice). By mid-game one tithe can give hundreds of g, and the god can heal at will. Professions will add gold sinks, which helps, but the share-of-gold rule stays a snowball.
+3. **Atheism isn't a state.** Negative faith only blocks two touches. The wizard behaves exactly the same, so there's no "road" to atheism to watch, just a number going down.
+4. **Fixed thresholds don't scale.** −10,000 is out of reach at level 5 and a few self-revives at level 100.
+5. **Skipping shrines is the main drain** (65% of shrine events), and it's pure chance: the god can't do anything about it.
+
+---

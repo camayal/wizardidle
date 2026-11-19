@@ -36,19 +36,9 @@ Scene spells are full-scene animations (the size of a zone background, ground ef
 - **Sandstorm / whirlwind:** the road to Heidan (199) and chapter XI.
 - **Divine light:** the final battle, when the hood falls.
 
-## Boss effects (decided 2026-11-13)
+## Boss effects
 
-Most boss scene spells stay **looks only** (the damage is the boss's normal hit). A few get one simple effect:
-
-| Boss attack | Effect (starting values, to playtest) |
-|---|---|
-| **Medusa's petrifying gaze** | **Rare:** about 1 in 4 of her gazes turns him to stone for **2 turns** (Medusa hits freely; the stone can't cast, walk or pray; a fall ends it). After his **first petrification** he can **find a rare artefact that makes him immune for good** (rare: the author, 2026-11-13) (a mirror shield or a gorgon's-eye amulet, found like a rune or book; art to draw). Replaces today's 2.5 s placeholder |
-| **King Midas's golden rays** | **Heal Midas** about **15% of his max HP, at most twice per fight**. The god's touch on Midas while the rays spin **interrupts the heal** |
-| **Blizzard** (rainbow) | On a roll, he **skips his next attack** (slowed by the cold) |
-| **Poison cloud** (kkck) | A little **damage over 2 turns** |
-| **Earthquake** (protromus) | On a roll, he **misses his next spell** (and the scene shakes, as built) |
-
-Stats: `boss.petrified`, `boss.petrifyImmune` (a first), `boss.midasHeal`, `boss.midasHealInterrupted`, `boss.effect.<name>`.
+Built (`src/bossEffects.js`: Medusa's gaze and the immunity artefact, Midas heal, blizzard, poison, earthquake); the table is in the archive.
 
 ## Needs
 
