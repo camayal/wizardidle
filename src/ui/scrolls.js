@@ -187,80 +187,65 @@ function updateAchievements(){
 }
 
 // ------------------------------------------------------------------ tabbed scrolls
-// Some scrolls have several pages (Kill / Cemetery / Bestiary). The
-// other pages' scrolls lie behind and peek out above the front one, each as a strip with its
-// name; clicking a strip brings that page to the front (option (a), chosen by the author on
-// 2026-11-12 from the artist's mockups). The front scroll moves down by the strips and gets
-// shorter by the same amount, so its bottom roll stays where it was.
+// Some scrolls have several pages (Kill / Cemetery / Bestiary). Each page has a small ribbon
+// bookmark with an icon hanging from the scroll's top edge; tapping one brings that page to the
+// front and plays the scroll sound. The open page's ribbon hangs lower and is lighter (the
+// author chose look A and the one-colour ribbons on 2026-11-18, replacing the paper strips).
 const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"] };
 const PAGE_NAMES = { kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory" };
-const TAB_RATIO = 0.092;            // visible strip of each back scroll, of the scroll width
-const TAB_LABEL_RATIO = 0.046;      // its page name, of the scroll width
-const FRONT_PARTS = ["scrollBackUp", "scrollBackCenter", "scrollText", "btnClose"];
-const strips = [];
-let tabBase = null, tabApplied = null;   // heights the layout set, and the ones the tabs set
+const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
+    stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
+const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
+const RIBBON_SCALE = 2;             // one ribbon pixel = this many pixels of the 320-wide scroll art
+const RIBBON_W = 9, RIBBON_ICON = 7, RIBBON_GAP = 3, RIBBON_MARGIN = 14;   // in ribbon pixels
+const ribbons = [];
 
-function stripAt(index) {
-    while (strips.length <= index) {
-        const strip = document.createElement("div");
-        strip.className = "scrollTab";
-        strip.style.cssText = "position:absolute; display:none; cursor:pointer; overflow:hidden;";
-        strip.innerHTML = '<img class="scrollTabPaper" src="' + art('scrollBackCenterShade') + '" style="position:absolute; left:0; width:100%">' +
-            '<img class="scrollTabRoll" src="' + art('scrollBackUpShade') + '" style="position:absolute; left:0; top:0; width:100%">' +
-            '<span class="scrollTabLabel" style="position:absolute; left:0; width:100%; text-align:center; font-family:pixeled_english_fontregular; color:#462808"></span>';
-        strip.onclick = () => {
+function ribbonAt(index) {
+    while (ribbons.length <= index) {
+        const ribbon = document.createElement("div");
+        ribbon.className = "scrollRibbon";
+        ribbon.style.cssText = "position:absolute; display:none; cursor:pointer; z-index:5; image-rendering:pixelated;";
+        ribbon.innerHTML = '<img class="ribbonBody" style="position:absolute; left:0; top:0; width:100%; image-rendering:pixelated">' +
+            '<img class="ribbonIcon" style="position:absolute; image-rendering:pixelated">';
+        ribbon.onclick = () => {
             const set = ui.scrollCurrentContent;
-            if (!TAB_SETS[set]) return;
-            ui.scrollViews[set] = strip.dataset.page;
+            if (!TAB_SETS[set] || ui.scrollViews[set] == ribbon.dataset.page) return;
+            ui.scrollViews[set] = ribbon.dataset.page;
             playSound("scroll");
             PAGE_RENDER[set]();
         };
-        // each new strip lies above the earlier ones and below the front scroll
-        const before = strips.length ? strips[strips.length - 1].nextSibling : el("scroll").firstChild;
-        el("scroll").insertBefore(strip, before);
-        strips.push(strip);
+        el("scroll").appendChild(ribbon);
+        ribbons.push(ribbon);
     }
-    return strips[index];
+    return ribbons[index];
 }
 
-// Show the strips of the scroll's other pages and move the front scroll down, or put it back.
+// Show the ribbons of the scroll's pages (the open one lower), or hide them all.
 function placeScrollTabs(set) {
-    const pages = TAB_SETS[set];
-    const back = pages ? pages.filter((page) => page != ui.scrollViews[set]) : [];
-    strips.forEach((strip, i) => { if (i >= back.length) strip.style.display = "none"; });
-    if (!back.length) {
-        for (const id of FRONT_PARTS) el(id).style.transform = "";
-        tabBase = tabApplied = null;
-        return;
-    }
+    const pages = TAB_SETS[set] || [];
+    ribbons.forEach((ribbon, i) => { if (i >= pages.length) ribbon.style.display = "none"; });
+    if (!pages.length) return;
     const up = el("scrollBackUp");
     const width = parseFloat(up.style.width);
-    const strip = width * TAB_RATIO;
-    const roll = width * 10 / 320;              // the roll image is 320 x 10
-    const label = width * TAB_LABEL_RATIO;
-    back.forEach((page, i) => {
-        const tab = stripAt(i);
-        tab.dataset.page = page;
-        Object.assign(tab.style, { display: "block", left: up.style.left, width: up.style.width,
-            top: `${parseFloat(up.style.top) + i * strip}px`, height: `${strip + roll}px` });
-        Object.assign(tab.querySelector(".scrollTabPaper").style, { top: `${roll}px`, height: `${strip + roll}px` });
-        Object.assign(tab.querySelector(".scrollTabLabel").style, { top: `${roll + (strip - label) / 2}px`,
-            fontSize: `${label}px`, lineHeight: `${label}px` });
-        tab.querySelector(".scrollTabLabel").textContent = PAGE_NAMES[page];
+    const u = width / 320 * RIBBON_SCALE;           // one ribbon pixel on screen
+    const slot = (RIBBON_W + RIBBON_GAP) * u;
+    pages.forEach((page, i) => {
+        const open = ui.scrollViews[set] == page;
+        const ribbon = ribbonAt(i);
+        const x = RIBBON_SIDE == "left" ? RIBBON_MARGIN * u + i * slot
+            : width - RIBBON_MARGIN * u - (pages.length - i) * slot + RIBBON_GAP * u;
+        ribbon.dataset.page = page;
+        ribbon.title = PAGE_NAMES[page];
+        Object.assign(ribbon.style, { display: "block", left: `${parseFloat(up.style.left) + x}px`,
+            top: `${parseFloat(up.style.top)}px`, width: `${RIBBON_W * u}px`, height: `${(open ? 20 : 16) * u}px` });
+        ribbon.querySelector(".ribbonBody").src = art(open ? "ribbon_selected" : "ribbon_rest");
+        const icon = ribbon.querySelector(".ribbonIcon");
+        icon.src = art(RIBBON_ICONS[page]);
+        Object.assign(icon.style, { left: `${u}px`, top: `${(open ? 9 : 5) * u}px`, width: `${RIBBON_ICON * u}px` });
     });
-    const offset = back.length * strip;
-    for (const id of FRONT_PARTS) el(id).style.transform = `translateY(${offset}px)`;
-    // Shorten the front paper and text from the heights the layout chose. If the layout set
-    // new ones since (scroll opened, window resized), those are the new base.
-    const paper = el("scrollBackCenter").style, text = el("scrollText").style;
-    const now = { paper: parseFloat(paper.minHeight), text: parseFloat(text.minHeight) };
-    if (!tabApplied || now.paper !== tabApplied.paper || now.text !== tabApplied.text) tabBase = now;
-    paper.minHeight = `${tabBase.paper - offset}px`;
-    text.minHeight = `${tabBase.text - offset}px`;
-    tabApplied = { paper: parseFloat(paper.minHeight), text: parseFloat(text.minHeight) };
 }
 
-// The layout was redone (window resized or rotated): fit the strips and the front scroll again.
+// The layout was redone (window resized or rotated): fit the ribbons again.
 document.addEventListener("wizardidle:layout", () => {
     if (TAB_SETS[ui.scrollCurrentContent]) placeScrollTabs(ui.scrollCurrentContent);
 });

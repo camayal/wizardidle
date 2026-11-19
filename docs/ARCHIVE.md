@@ -1649,3 +1649,8 @@ Date: 2026-11-18
 Author's note: Faith scroll: improve its graphic design, it needs to look more divine; the belief meter needs to be more artistic (art from the artist may help).
 ```
 
+
+- Ribbon bookmarks (author chose look A, 2026-11-18): replace the scroll strips (src/ui/scrolls.js stripAt/placeScrollTabs, TAB_SETS kill: kill/cemetery/bestiary, stats: stats/inventory) with ribbons hanging from the scroll's top edge, an icon each (no text), the open page's ribbon hangs lower and brighter. Clicking a ribbon keeps playSound("scroll") as the strips do now. Waiting on the artist's ribbon sprite (rest + selected) and per-page icons in the review drop; dev copies approved ones to img/ui/ribbon/ after the author's OK in the Art mode check. Then remove the strip code and the scrollTab CSS if unused, keep the layout offset logic only if the front scroll still needs room.
+- Ribbon position: the close button may sit over the ribbons at the top right; keep the ribbons' side a single setting (RIBBON_SIDE in src/ui/scrolls.js, "right" or "left") so they can move to the top left if the close button is in the way. Check both at phone width.
+
+- Ribbon bookmark, QUICK MOCKUP ONLY (author, 2026-11-18): before investing, make one rough mockup image (not a full sprite set) of the faith scroll with a ribbon bookmark where the page tabs would be, each ribbon showing a small ICON instead of text (the author wants icons, not words), and a second one of the kill scroll's page switch as a ribbon. One or two ribbon looks at most. Put it in the review drop for the author to judge; if liked, then draw proper options and the art dev console step. No dev wiring yet.
