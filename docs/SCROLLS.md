@@ -17,6 +17,10 @@ A third note (2026-11-18), on the faith scroll: *stats like "Your touches" (heal
 | 2026-11-18 | The faith scroll's look | **A: illuminated manuscript** (4.1) |
 | 2026-11-18 | The belief meter | **The stained-glass arc plus the candle** (the author's mix of A and B): the arc shows how close he is to the next level, the candle gives the level at a glance, cold wax when *Lost*. How they fit: 4.2 |
 | 2026-11-18 | Order of work | **A: the faith scroll is the pilot.** The artist draws options, the author picks in the art dev console, then the cemetery and the inventory, the rest later if worth it |
+| 2026-11-18 | Growing stats on a scroll | **A: a short front page and a Ledger page behind it** (6.2) |
+| 2026-11-18 | How the Ledger opens | **B: a ribbon bookmark drawn by the artist**, as a trial on faith. If the author likes it, the ribbon may replace the tabs on the other scrolls (a possible follow-up) |
+| 2026-11-18 | What the faith front shows | **A: one headline number per group with its icon** (Touches, Prayers, Offerings, Shrines), besides the meter and faith |
+| 2026-11-18 | Which scrolls | **A: faith as the pilot**, then other scrolls as their stats grow |
 
 ## 1. Themed scrolls: pros and cons
 
@@ -150,9 +154,4 @@ The ledger in A is the same idea as the stats scroll's Stats/Records tabs, so it
 
 ## 7. Open questions
 
-1. How growing stats are shown (6.2): A, B, C, D, or E.
-2. If A: how the ledger opens: a tab like Stats/Records (recommended), a ribbon bookmark drawn by the artist, or a button on the front.
-3. If A: what the front shows besides the meter and faith: one headline number per group (recommended), nothing else, or the god's latest touch as a line.
-4. Which scrolls: faith as the pilot, then others as they grow (recommended), every scroll with growing stats at once, or faith only.
-
-Earlier questions (1 to 5) are all answered (see Decisions). Waiting on dev's answers to 4.3 and 6.4 before the artist starts.
+None left; all answered (see Decisions). The question in 6.4 still waits for the author's OK before it goes to dev. Possible follow-up: if the ribbon bookmark reads well on faith, try it in place of the tabs on the other scrolls. Waiting on dev's answers to 4.3 and 6.4 before the artist starts.
