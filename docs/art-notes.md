@@ -17,3 +17,8 @@ Author's note: Praire need some scene backround where the road is freatured, @ar
 
 
 
+
+```
+Date: 2026-11-18 (from dev, author's words)
+Author's note: for @artist, the achievement seals are great, but the two tails (ribbon trails) of the seal blend into the parchment frame of the achievement icon (img/ui/achievements, logro_frame + logro_seal_<tier>). Make the tails a little more visible. Ideas welcome: a darker outline or shadow under the tails, a ribbon colour that contrasts with the frame (per tier), or letting the tails hang slightly over the frame edge.
+```
