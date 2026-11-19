@@ -109,3 +109,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-18 (dev): ribbon test 4: RIBBON_SCALE 1.55, RIBBON_TOP -5.
 - 2026-11-18 (dev): ribbon position and size approved by the author at scale 1.55, top -5. Note: ribbon pixel size is rounded to whole device pixels (placeScrollTabs), so scale changes jump in steps on some window sizes; kept because the author likes the current look.
 - 2026-11-18 (dev): RIBBON_SCALE 1.51 (author).
+- 2026-11-18 (dev): RIBBON_SCALE back to 1.5 (author).
