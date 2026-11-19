@@ -1644,3 +1644,8 @@ Landing sound: Physical (spellPush6), heard
 Date: 2026-11-18 19:46
 Author's note: -
 ```
+```
+Date: 2026-11-18
+Author's note: Faith scroll: improve its graphic design, it needs to look more divine; the belief meter needs to be more artistic (art from the artist may help).
+```
+

@@ -43,6 +43,8 @@ function hideScrollContent(){
     el("mapa").style.display = "none"
     el("innerTextScroll").style.display = "none"
     el('innerTextScroll').innerHTML='';
+    ui.faithHtml = '';
+    delete el("scrollText").dataset.page;
     el("scroll").style.zIndex = 0;
     el("scrollBackCenter").removeEventListener("transitionend", hideScrollContent)
 	
@@ -83,6 +85,7 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
     ui.scrollCurrentContent = currentContent;
     playSound("scroll");
     const content = el("scrollText");
+    content.dataset.page = currentContent;   // lets the CSS style one page (the faith border)
     const scrollBack = el("scrollBackCenter");
 
     const orientation = screen.msOrientation || (screen.orientation || screen.mozOrientation || {}).type;
@@ -278,7 +281,10 @@ function updateStats(){
 
 // Fill the faith scroll (ui/statsPages.js).
 function updateFaith(){
-    el('innerTextScroll').innerHTML = faithPageHtml();
+    const html = faithPageHtml();
+    if (html === ui.faithHtml) return;   // unchanged: keep the candle's animation running
+    ui.faithHtml = html;
+    el('innerTextScroll').innerHTML = html;
     el("faith").style.fontSize = `${ui.em}px`;
     el("faith").style.lineHeight = `${ui.em}px`;
     el("titleFaith").style.fontSize = `${ui.em * 2.5}px`;
