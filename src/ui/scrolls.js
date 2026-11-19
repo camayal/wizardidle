@@ -201,7 +201,8 @@ const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", b
     run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
 const RIBBON_SCALE = 2;             // one ribbon pixel = this many pixels of the 320-wide scroll art
-const RIBBON_W = 9, RIBBON_ICON = 7, RIBBON_GAP = 3, RIBBON_MARGIN = 6;    // in ribbon pixels
+const RIBBON_W = 18, RIBBON_ICON = 9, RIBBON_GAP = 3, RIBBON_MARGIN = 6;   // in ribbon pixels (the picture is 18 wide with its flap, 29 tall)
+const RIBBON_H_REST = 25, RIBBON_H_OPEN = 29;                              // the open ribbon hangs 4 lower
 const ribbons = [];
 // Load every ribbon image up front, so a ribbon changing state never shows half-loaded.
 const ribbonImages = ["ribbon_rest", "ribbon_selected", ...Object.values(RIBBON_ICONS)].map((name) => {
@@ -265,19 +266,19 @@ function placeScrollTabs(set) {
         ribbon.dataset.page = page;
         ribbon.title = PAGE_NAMES[page];
         Object.assign(ribbon.style, { display: "block", left: `${snap(parseFloat(up.style.left) + x)}px`,
-            top: `${snap(parseFloat(up.style.top))}px`, width: `${RIBBON_W * u}px`, height: `${(open ? 20 : 16) * u}px` });
+            top: `${snap(parseFloat(up.style.top))}px`, width: `${RIBBON_W * u}px`, height: `${(open ? RIBBON_H_OPEN : RIBBON_H_REST) * u}px` });
         ribbon.querySelector(".ribbonBody.rest").style.display = open ? "none" : "block";
         ribbon.querySelector(".ribbonBody.selected").style.display = open ? "block" : "none";
         const icon = ribbon.querySelector(".ribbonIcon");
         if (!icon.src.endsWith(art(RIBBON_ICONS[page]))) icon.src = art(RIBBON_ICONS[page]);
-        Object.assign(icon.style, { left: `${u}px`, top: `${(open ? 9 : 5) * u}px`, width: `${RIBBON_ICON * u}px` });
+        Object.assign(icon.style, { left: `${3 * u}px`, top: `${(open ? 11 : 7) * u}px`, width: `${RIBBON_ICON * u}px` });
     });
     // Space after the page title, so the page never lies under the open ribbon (the bestiary's
     // wide rows of creatures hid the lower part of its icon): the title ends at least a ribbon's
-    // length (20 ribbon pixels) below the scroll's top edge, plus a little air.
+    // length (RIBBON_H_OPEN ribbon pixels) below the scroll's top edge, plus a little air.
     const title = text.querySelector(".titles");
     if (title) {
-        const ribbonBottom = parseFloat(up.style.top) + 20 * u + up.parentElement.getBoundingClientRect().top;
+        const ribbonBottom = parseFloat(up.style.top) + RIBBON_H_OPEN * u + up.parentElement.getBoundingClientRect().top;
         const titleBottom = title.getBoundingClientRect().bottom;
         text.style.setProperty("--ribbonGap", `${Math.max(5 * u, ribbonBottom - titleBottom + 2 * u)}px`);
     }
