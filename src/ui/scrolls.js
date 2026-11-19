@@ -221,14 +221,19 @@ function ribbonAt(index) {
         const ribbon = document.createElement("div");
         ribbon.className = "scrollRibbon";
         ribbon.style.cssText = "position:absolute; display:none; cursor:pointer; z-index:1000; image-rendering:pixelated;";
-        ribbon.innerHTML = '<img class="ribbonBody" style="position:absolute; left:0; top:0; width:100%; image-rendering:pixelated">' +
+        // both bodies are loaded once and only shown or hidden, so a heavy page (the bestiary) never
+        // catches the ribbon with a picture half swapped
+        const bodyStyle = 'position:absolute; left:0; top:0; width:100%; image-rendering:pixelated';
+        ribbon.innerHTML = `<img class="ribbonBody rest" style="${bodyStyle}" src="${art("ribbon_rest")}">` +
+            `<img class="ribbonBody selected" style="${bodyStyle}" src="${art("ribbon_selected")}">` +
             '<img class="ribbonIcon" style="position:absolute; image-rendering:pixelated">';
         ribbon.onclick = () => {
             const set = ui.scrollCurrentContent;
             if (!tabPages(set) || ui.scrollViews[set] == ribbon.dataset.page) return;
             ui.scrollViews[set] = ribbon.dataset.page;
             playSound("scroll");
-            PAGE_RENDER[set]();
+            placeScrollTabs(set);                         // the ribbons move at once...
+            setTimeout(() => PAGE_RENDER[set](), 0);      // ...and the page, which can be slow to build, after they were painted
         };
         el("scroll").appendChild(ribbon);
         ribbons.push(ribbon);
@@ -261,8 +266,8 @@ function placeScrollTabs(set) {
         ribbon.title = PAGE_NAMES[page];
         Object.assign(ribbon.style, { display: "block", left: `${snap(parseFloat(up.style.left) + x)}px`,
             top: `${snap(parseFloat(up.style.top))}px`, width: `${RIBBON_W * u}px`, height: `${(open ? 20 : 16) * u}px` });
-        const body = ribbon.querySelector(".ribbonBody"), bodySrc = art(open ? "ribbon_selected" : "ribbon_rest");
-        if (!body.src.endsWith(bodySrc)) body.src = bodySrc;
+        ribbon.querySelector(".ribbonBody.rest").style.display = open ? "none" : "block";
+        ribbon.querySelector(".ribbonBody.selected").style.display = open ? "block" : "none";
         const icon = ribbon.querySelector(".ribbonIcon");
         if (!icon.src.endsWith(art(RIBBON_ICONS[page]))) icon.src = art(RIBBON_ICONS[page]);
         Object.assign(icon.style, { left: `${u}px`, top: `${(open ? 9 : 5) * u}px`, width: `${RIBBON_ICON * u}px` });

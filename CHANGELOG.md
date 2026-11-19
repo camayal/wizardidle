@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Scroll ribbons no longer show a half-drawn icon while a slow page (the bestiary, with all its sprites) builds: the ribbon moves first, both ribbon pictures stay loaded, and the page is built right after; the bestiary sprites decode in the background.
 - Scroll ribbon bookmarks: the page now always starts below the open ribbon (the gap after the title is measured instead of fixed), and the ribbons are drawn above the page, so the bestiary's creature rows no longer hide the lower part of its icon.
 - Scroll ribbon bookmarks: fixed part of the icon vanishing when a ribbon was opened (the bestiary's dotted row). Ribbon pixels now always land on whole screen pixels.
 - Achievement seals: the two ribbon tails are now wider (2px, notched, hanging past the frame's bottom edge) in each tier's own colour, so they no longer blend into the parchment frame.

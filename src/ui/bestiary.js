@@ -27,7 +27,7 @@ function cell(sprite, seen, count, scale = 1, unknown = '?') {
     const size = Math.round(SIZE() * scale);
     const rare = enemySprites[sprite] && enemySprites[sprite].rare ? '★' : '';
     const picture = seen || count
-        ? `<img src='${art(`${sprite}`)}' height='${size}'>`
+        ? `<img src='${art(`${sprite}`)}' height='${size}' decoding='async'>`
         : `<canvas class='inkStain' data-sprite='${sprite}' width='32' height='32' style='height:${size}px;image-rendering:pixelated'></canvas>`;
     return `<div style='display:inline-block;min-width:${size + ui.em * 0.6}px;text-align:center;vertical-align:top'>${picture}` +
         `<br><small>${seen || count ? roundNumbertoLetter(count) + rare : unknown}</small></div>`;
