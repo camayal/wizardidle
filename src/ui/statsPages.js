@@ -123,7 +123,7 @@ function beliefMeter() {
         inner += layer(`left:${mx.toFixed(1)}px;top:${my.toFixed(1)}px;width:5px;height:5px;background:${f('faith_meter_marker')}`);
     }
     inner += `<div class='${lost ? '' : 'faithCandle'}' style='position:absolute;left:28px;top:20px;width:40px;height:40px;background:${f(lost ? 'anim_faith_candle_lost' : 'anim_faith_candle_' + beliefLevel())}'></div>`;
-    return "<div style='width:192px;height:128px;margin:1.5em auto 0.5em'>" +
+    return "<div style='width:192px;height:128px;margin:1.5em auto 0.5em !important'>" +
         `<div style='position:relative;width:96px;height:64px;transform:scale(2);transform-origin:0 0;image-rendering:pixelated'>${inner}</div></div>`;
 }
 
