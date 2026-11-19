@@ -5,7 +5,9 @@ Two notes from the author (2026-11-18):
 - *"Would it be a nice idea to make each scroll a little more thematic instead of the same parchment? The cemetery with a grass background; the inventory with a wooden texture and crates; the stats and the bestiary kept as parchment, or each with its own look."*
 - *"Faith scroll: improve its graphic design, it needs to look more divine; the belief meter needs to be more artistic (art from the artist may help)."*
 
-The second is one case of the first, so they share this plan. Dev and the artist wait for the author's OK before building or drawing.
+The second is one case of the first, so they share this plan.
+
+A third note (2026-11-18), on the faith scroll: *stats like "Your touches" (heals, revivals, punishments), prayers, offerings and shrines will keep growing as the plan grows, so plain text lines won't scale.* Section 6 answers it, for faith first and for any scroll whose stats grow. Dev and the artist wait for the author's OK before building or drawing.
 
 ## Decisions (by the author)
 
@@ -101,6 +103,56 @@ Faith, the currency, stays a number with its own icon on the same page.
 2. If the pilot reads well, the cemetery and the inventory follow in the same style.
 3. The rest only if they're worth it.
 
-## 6. Open questions
+## 6. Growing stats on a scroll
 
-None left; all four answered (see Decisions). Waiting on dev's answer to 4.3 before the artist starts.
+### 6.1 The problem
+
+The faith scroll lists its stats as plain lines: your touches (heals, revivals, punishments), prayers, offerings, shrines. [FAITH.md](FAITH.md) already plans more (faith gained and spent by source, highest and lowest faith, times and time at each belief level, touches refused, revives by the god vs by himself), and every stat exists per wizard and per world ([STATS.md](STATS.md)). The page grows a line with every new stat, and it fights the illuminated look decided in 4.1: an illuminated page with thirty lines of numbers is a spreadsheet with a gold border.
+
+The same will happen on the stats scroll (Stats and Records), in the bestiary (per creature) and in the cemetery (per wizard).
+
+Whatever the look, one rule helps every option: **each stat is written down once with its group, its name and (if it has one) its icon**, and the scroll draws its lines from that list. A new stat then lands in the right group by itself, instead of someone fitting a new line into a page by hand. Whether this exists today is question 6.4.
+
+### 6.2 Options
+
+**A. A short front page and a ledger behind it (recommended).** The front of the faith scroll keeps only what the god needs at a glance: the belief meter, faith, and **one headline number per group** (Touches 42 · Prayers 130 · Offerings 18 · Shrines 9), each with its group icon. Every number lives on a second page, the **Ledger** (for faith, *the book of deeds*), opened by a tab like Stats/Records: the groups as sections, each with its icon in the heading and its lines below, this wizard's numbers with a switch to all wizards. A new stat adds one line in its group on the ledger; the front only changes when a whole new group appears. If one group grows long later, its section can fold (C) inside the ledger.
+- *Why first:* the illuminated front stays clean, the pattern already exists (Stats/Records are two tabs of one scroll), and it fits the story: the god keeps a ledger of what he did for the wizard.
+- *Artist:* one small icon per group (4 to 6 for faith), drawn once; the ledger page reuses the faith trim. Optional: a ribbon bookmark instead of a plain tab. Small.
+- *Dev:* a second page on the faith scroll, one grouped-list piece reused by every scroll, the wizard/world switch. Small to medium, mostly once.
+
+**B. Grouped sections with icon chips, all on one page.** Each group gets a small heading and a row of chips (icon + number) that wraps onto more rows as stats are added; tap or hover a chip for its name.
+- Everything visible without turning a page, and denser than text.
+- But every stat needs its own icon, forever; icons without words need a tap to read; and the front of the faith scroll still fills up.
+- *Artist:* one icon per stat, ongoing with every new stat. Medium, and it never ends.
+- *Dev:* a chip piece with a tap or hover name, wrapping rows. Small to medium.
+
+**C. Collapsible groups.** One line per group with its total (Touches 42 ▸); tap to open its lines. The scroll remembers which groups are open.
+- The cheapest, no art, and short when closed.
+- But it is still text on the illuminated page, opening and closing is fiddly on a phone, and an idle player rarely opens anything.
+- *Artist:* nothing (maybe a small arrow in the trim's style). Very small.
+- *Dev:* a fold piece and remembered open groups. Small.
+
+**D. A small icon grid.** Every stat as a tile (icon + number) in one grid, no groups; tap a tile for its name.
+- The most compact, looks like a game.
+- The hardest to read: a grid of twenty icons tells a new player nothing until he taps them all, and the groups (touches vs offerings) disappear.
+- *Artist:* one icon per stat, ongoing, plus a tile frame. Large.
+- *Dev:* the grid at every screen size (phone, landscape, watch), tap names. Medium.
+
+**E. Add an option or talk it through first.**
+
+### 6.3 Other scrolls
+
+The ledger in A is the same idea as the stats scroll's Stats/Records tabs, so it carries over: a short front plus a ledger page for any scroll whose stats grow (records, the bestiary's per-creature numbers, a wizard's page in the cemetery). Faith goes first as the pilot, like the look (5).
+
+### 6.4 Question for dev (to paste)
+
+> Thinker here, for growing stats on scrolls (docs/SCROLLS.md 6). Does the stats module know each stat's name and group, or does each scroll pick and word its own lines by hand? Do the faith and stats scrolls show this wizard's numbers, all wizards', or both? How much work is a new tab on the faith scroll, given that Stats/Records already share a scroll?
+
+## 7. Open questions
+
+1. How growing stats are shown (6.2): A, B, C, D, or E.
+2. If A: how the ledger opens: a tab like Stats/Records (recommended), a ribbon bookmark drawn by the artist, or a button on the front.
+3. If A: what the front shows besides the meter and faith: one headline number per group (recommended), nothing else, or the god's latest touch as a line.
+4. Which scrolls: faith as the pilot, then others as they grow (recommended), every scroll with growing stats at once, or faith only.
+
+Earlier questions (1 to 5) are all answered (see Decisions). Waiting on dev's answers to 4.3 and 6.4 before the artist starts.
