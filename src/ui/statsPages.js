@@ -132,11 +132,17 @@ function faithSection() {
     const level = beliefLevel();
     return beliefMeter() +
         `<div class='faithLevel ${state.player.beliefLost ? 'lost' : level}'>✦ ${state.player.beliefLost ? 'Lost' : level} ✦</div>` +
+        section('Where faith came from') +
         line('From prayers', n(stats.get('faith.gain.prayer'))) +
         line('From offerings', n(stats.get('faith.gain.offering'))) +
         line('From cleansing corruption', n(stats.get('faith.gain.cleanse'))) +
-        line('Shrines visited / passed by', `${n(stats.get('faith.shrines'))} / ${n(stats.get('faith.shrineSkipped'))}`) +
-        line('Your touches', `${n(stats.get('god.heals'))} heals, ${n(stats.get('god.touches'))} revivals, ${n(stats.get('god.hits'))} punishments`);
+        section('Shrines') +
+        line('Visited', n(stats.get('faith.shrines'))) +
+        line('Passed by', n(stats.get('faith.shrineSkipped'))) +
+        section('Your touches') +
+        line('Heals', n(stats.get('god.heals'))) +
+        line('Revivals', n(stats.get('god.touches'))) +
+        line('Punishments', n(stats.get('god.hits')));
 }
 
 function achievementsSection() {

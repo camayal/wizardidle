@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Faith scroll: its stats are grouped under subtitles like the Stats page (Where faith came from, Shrines, Your touches), one line each, still on one page.
 - Faith scroll: the glass arc now sits right under the title; the "Faith now" number moved to the Stats page (Gold and faith). The belief level name is back in the readable normal font (bold, between two stars, coloured by level), and a real gap follows it before the stats; the page's zero-margin rule had been eating the gap.
 - Faith scroll: the belief level name is now written in the title font, in spaced capitals between two small stars, coloured by level (gold-brown for Devout, greying down to Atheist, red for Lost), with more room below it before the stats.
 - Faith scroll: the stained-glass belief meter is now really centred; the page style that zeroes every div margin was overriding its auto margins, so it sat at the left.
