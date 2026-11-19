@@ -71,3 +71,11 @@ Author's note (moved from dev-notes): add a defensive spells school to avoid dam
 
 Please turn this into a plan with options (rarity, level scaling, charges, the art it needs); dev waits for the author's OK before building.
 ```
+
+## Plot for the dark skeleton sprites (author, 2026-11-19)
+
+```
+We need to develop a nice plot with these sprites: a row of six hooded dark skeletons (dark cloak, bony face, a coloured outline or glow on each: cyan, orange, blue, red, green, gold-and-red). The sheet is ../wizardidle-old-ideas/unorganzed_sprites/dark-skelets.png (outside the repo, not wired into the game).
+
+Please turn this into a plan with options (who they are, where they appear, how they tie into the story and the god, boss or enemy or story characters, what the six colours mean); dev and artist wait for the author's OK.
+```
