@@ -1,7 +1,7 @@
 // Wizard Idle v2 - Achievement rarity: eight tiers, from the grey common to the golden divine.
-// The tier of each achievement was set from the achievement-rates playtest (docs/playtests/
-// 2026-11-18-achievement-rates: the bots earn a dozen of them in every run to level 200, those are
-// the common end) and from how rare the deed is for a person. Achievements not listed are common.
+// Tiers come from tools/odds.py (share of players who ever earn it, with players quitting at random;
+// data docs/playtests/2026-11-18-odds-data) and judgment: hydramystery (bots know the mantra, a person must find it)
+// and the never-seen ones (tocado, eagle, capricorreturns, namesake) keep their guessed tier. Re-run odds.py after real testing. Achievements not listed are common.
 
 const tiers = [
     {key: "common",    name: "Common",    color: "#6e6e6e"},
@@ -16,10 +16,13 @@ const tiers = [
 
 const rarityOf = {
     logro_lvl2: "common", logro_primerbossderrotado: "common", logro_primeraderrotaporboss: "common", logro_attack500: "common",
-    logro_killedbysheep: "uncommon", logro_killedbychicken: "uncommon", logro_pots: "uncommon", logro_botines: "uncommon", logro_attack1000: "uncommon",
-    logro_ultimocapricor: "rare", logro_tocado: "rare", logro_level140: "rare", logro_hydramystery: "rare", logro_vistoaguilaencueva: "rare",
-    logro_tabernero: "epic", logro_libros: "epic", logro_runas: "epic", logro_hategod: "epic",
-    logro_level200: "legendary", logro_capricorreturns: "legendary",
+    logro_ultimocapricor: "common", logro_killedbysheep: "common",
+    logro_attack1000: "uncommon", logro_killedbychicken: "uncommon",
+    logro_level140: "rare", logro_level200: "rare", logro_hategod: "rare", logro_runas: "rare", logro_hydramystery: "rare",
+    logro_tocado: "rare", logro_vistoaguilaencueva: "rare",
+    logro_pots: "epic", logro_botines: "epic",
+    logro_tabernero: "legendary", logro_capricorreturns: "legendary",
+    logro_libros: "mythic",
     logro_namesake: "divine",
 };
 

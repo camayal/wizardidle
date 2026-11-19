@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Achievement rarities re-set from the new odds estimate: Common now includes "The last of their kind" and "Shaaaaame on you"; "A new king", "The return of the king", "Atheist!" and "Someone is throwing rocks" are Rare; the chest and pot hunts are Epic; the inn is Legendary; the librarian is Mythic.
 - Dev tool: `tools/odds.py` estimates in a second how many players would ever earn each achievement, counting that players leave the game at random (the longer an achievement takes, the fewer reach it), and suggests a rarity tier. Playtests now save the data it needs.
 
 - Achievement pictures are now layers: one parchment frame, the picture alone, and a wax seal whose design grows fancier with the tier (plain grey Common up to the golden, rayed Divine). "Aren't you extinct?" has its picture (the Capricor climbing out of its grave).
