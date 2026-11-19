@@ -220,7 +220,7 @@ function ribbonAt(index) {
     while (ribbons.length <= index) {
         const ribbon = document.createElement("div");
         ribbon.className = "scrollRibbon";
-        ribbon.style.cssText = "position:absolute; display:none; cursor:pointer; z-index:5; image-rendering:pixelated;";
+        ribbon.style.cssText = "position:absolute; display:none; cursor:pointer; z-index:1000; image-rendering:pixelated;";
         ribbon.innerHTML = '<img class="ribbonBody" style="position:absolute; left:0; top:0; width:100%; image-rendering:pixelated">' +
             '<img class="ribbonIcon" style="position:absolute; image-rendering:pixelated">';
         ribbon.onclick = () => {
@@ -250,7 +250,7 @@ function placeScrollTabs(set) {
     const dpr = window.devicePixelRatio || 1;
     const snap = (v) => Math.round(v * dpr) / dpr;
     const u = Math.max(1, Math.round(width / 320 * RIBBON_SCALE * dpr)) / dpr;   // one ribbon pixel on screen
-    text.style.setProperty("--ribbonGap", `${5 * u}px`);   // space after the page title, so the ribbons cover nothing (index.html)
+    text.style.setProperty("--ribbonGap", "0px");           // measured below (index.html applies it after the page title)
     const slot = (RIBBON_W + RIBBON_GAP) * u;
     pages.forEach((page, i) => {
         const open = ui.scrollViews[set] == page;
@@ -267,6 +267,15 @@ function placeScrollTabs(set) {
         if (!icon.src.endsWith(art(RIBBON_ICONS[page]))) icon.src = art(RIBBON_ICONS[page]);
         Object.assign(icon.style, { left: `${u}px`, top: `${(open ? 9 : 5) * u}px`, width: `${RIBBON_ICON * u}px` });
     });
+    // Space after the page title, so the page never lies under the open ribbon (the bestiary's
+    // wide rows of creatures hid the lower part of its icon): the title ends at least a ribbon's
+    // length (20 ribbon pixels) below the scroll's top edge, plus a little air.
+    const title = text.querySelector(".titles");
+    if (title) {
+        const ribbonBottom = parseFloat(up.style.top) + 20 * u + up.parentElement.getBoundingClientRect().top;
+        const titleBottom = title.getBoundingClientRect().bottom;
+        text.style.setProperty("--ribbonGap", `${Math.max(5 * u, ribbonBottom - titleBottom + 2 * u)}px`);
+    }
 }
 
 // The layout was redone (window resized or rotated): fit the ribbons again.
