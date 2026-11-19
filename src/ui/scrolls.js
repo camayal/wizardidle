@@ -154,7 +154,7 @@ function localizarBocadillo(){
   function disableMainButtons() {
     const eles = document.getElementsByClassName('dis');
     for (let i=0; i < eles.length; i++) {
-      eles[i].prev_click = eles[i].onclick; // save the previous value
+      if (eles[i].onclick) eles[i].prev_click = eles[i].onclick; // save it once: a second disable must not overwrite it with false
       eles[i].onclick = false;
     }
 }
@@ -163,7 +163,7 @@ function localizarBocadillo(){
 function enableMainButtons() {
     const eles = document.getElementsByClassName('dis');
     for (let i=0; i < eles.length; i++)
-       eles[i].onclick = eles[i].prev_click;  // restore the previous value
+       if (eles[i].prev_click) eles[i].onclick = eles[i].prev_click;  // restore the previous value
     };
 
 ////////////////////////////////////////////////
