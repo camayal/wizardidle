@@ -260,7 +260,8 @@ function buildPanel() {
             <label title="The spell's effect and school sound when the blow lands, as in the game"><input type="checkbox" name="landing" checked> landing sound</label></div>
         <div class="row"><span class="blow">● blow</span><span class="muted" data-out="timing"></span></div>
         <div class="row"><label>Verdict <select name="verdict"><option>COMMENT (not approved yet)</option><option>APPROVED</option></select></label>
-            <span class="muted">goes to the author notes</span></div>`;
+            <span class="muted">goes to the author notes</span></div>
+        <div class="row muted">To record the verdict: press <b>Capture moment</b>, write an optional comment, then <b>Save to file</b>.</div>`;
     p = { blow: side.body.querySelector('.blow') };
     for (const node of side.body.querySelectorAll('[name]')) p[node.name] = node;
     for (const node of side.body.querySelectorAll('[data-out]')) p[node.dataset.out] = node;

@@ -20,6 +20,7 @@
 - Tools: tools/to_ogg.py turns mp3, wav or flac files (or a whole folder) into the game's .ogg files (mono, game names, the same quality as the cut sounds).
 - Fixed: chapters show at their own levels: Chapter IV at 90, IX at 160, X at 190, XI at 200 (v1 key typos had IX and X replacing levels 60 and 90, and XI never came).
 - Two chapters reached close together each get their own scroll, one after the other; the game resumes after the last.
+- Sounds mode: a line under the verdict box reminds how to record a verdict (Capture moment, optional comment, Save to file).
 - Fixed: after a partial rest the wizard no longer says he "feels totally renewed"; that line is kept for a full recovery.
 - When the wizard falls, the enemy leaves the way it came, backwards: walkers turn and walk off, fliers fly away, risers sink into the ground, mages fade out, the portal bosses go back through their portal.
 - Boss entrances: King Skeleton fades in inside his cursed skull arch, which then crumbles away; Herbus grows out of braided vines; kkck pushes up a bump of dirt and bursts out of it; Goro, Protromus and Bicaptop slam down from a leap, Rojo in a burst of fire; Cuboq bounces in; Etymos floats in; Medusa slithers.
