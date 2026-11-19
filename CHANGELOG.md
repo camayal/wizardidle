@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Faith scroll: the stained-glass belief window is much bigger, about 75% of the page width (in whole pixel steps so the art stays sharp), and the gap between the Faith title and the window is smaller.
 - Scroll pages now switch with small one-colour ribbon bookmarks hanging from the scroll's top left, each with an icon (kill, cemetery, bestiary; stats, inventory); the ribbon is the banner style (dark wine, a thin gold band with a pin, swallowtail cut), the open page's ribbon hangs lower, and tapping one plays the scroll sound. They replace the paper strips with page names.
 - Faith scroll: its stats are grouped under subtitles like the Stats page (Where faith came from, Shrines, Your touches), one line each, still on one page.
 - Faith scroll: the glass arc now sits right under the title; the "Faith now" number moved to the Stats page (Gold and faith). The belief level name is back in the readable normal font (bold, between two stars, coloured by level), and a real gap follows it before the stats; the page's zero-margin rule had been eating the gap.

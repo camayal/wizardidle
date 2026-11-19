@@ -124,8 +124,11 @@ function beliefMeter() {
         inner += layer(`left:${mx.toFixed(1)}px;top:${my.toFixed(1)}px;width:5px;height:5px;background:${f('faith_meter_marker')}`);
     }
     inner += `<div class='${lost ? '' : 'faithCandle'}' style='position:absolute;left:28px;top:20px;width:40px;height:40px;background:${f(lost ? 'anim_faith_candle_lost' : 'anim_faith_candle_' + beliefLevel())}'></div>`;
-    return "<div style='width:192px;height:128px;margin:1.5em auto 0.5em !important'>" +
-        `<div style='position:relative;width:96px;height:64px;transform:scale(2);transform-origin:0 0;image-rendering:pixelated'>${inner}</div></div>`;
+    // big: about 75% of the page width, in whole pixel steps so the art stays crisp (at least 2x)
+    const pageWidth = document.getElementById('innerTextScroll')?.clientWidth || window.innerWidth * 0.8;
+    const scale = Math.max(2, Math.floor(pageWidth * 0.75 / 96));
+    return `<div style='width:${96 * scale}px;height:${64 * scale}px;margin:0.2em auto 0.5em !important'>` +
+        `<div style='position:relative;width:96px;height:64px;transform:scale(${scale});transform-origin:0 0;image-rendering:pixelated'>${inner}</div></div>`;
 }
 
 function faithSection() {
@@ -187,7 +190,7 @@ export function inventoryPageHtml() {
 
 // The Faith scroll (the prayer button): faith, the belief meter and where faith came from.
 export function faithPageHtml() {
-    return "<div id='faith'><span class='titles' id='titleFaith'>Faith</span><br><br>" + faithSection() +
+    return "<div id='faith'><span class='titles' id='titleFaith'>Faith</span>" + faithSection() +
         `<img src='${art('faith_header_a')}' width='256' style='display:block;margin:1em auto 0;image-rendering:pixelated'/></div>`;
 }
 
