@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- New maps: the ground map is repainted (a lake and a river, a thin land bridge from the Dunes to the Prairie, a beach along the north and east coast, bridges marked in the Prairie and the Swamp; the two Heidan cloud islands are gone, only the sacred stairs with a cluster of clouds at their end remain). Heidan has its own aboveground map now: two big clouds over a blurred copy of the ground, with portals and the props of its scenes; the map button shows it while the wizard is in Heidan. The portals and the new beach zone are still to come.
 - Dunes: the thin strip of sea at the left edge of all five Dunes scenes, where the wizard walks in, is painted out as sand, so he no longer walks through the water. A walkable shore will come back with the map revamp.
 n- Toolbar buttons could stay dead after the game opened, with only the ? working at some point: opening a second scroll right after another (the chapter scrolls) saved a blocked button as its handler. Blocking the toolbar now keeps the real handlers.
 

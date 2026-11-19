@@ -114,17 +114,21 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
   }
 
 
+// Which map picture shows a zone (docs/MAPS.md): el_Heidan is aboveground, the mine, the cave and
+// the volcano are underground, everything else is ground.
+function mapLayerFor(zone){
+    if (zone == "el_Heidan") return "mapaboveground";
+    if (zone == "la_Mina" || zone == "la_Cueva" || zone == "el_Volcan") return "mapaunderground";
+    return "mapa";
+}
+
 // Place the map marker (speech bubble) on the wizard's current stage.
 function localizarBocadillo(){
     if (ui.currentBackGround == "curanderobg"){
         el("bocadilloMapa").style.display ="none";
         el("pjMapa").style.display ="none";
     }else{
-        if(state.zone.current == "la_Mina" || state.zone.current == "la_Cueva" || state.zone.current == "el_Volcan"){
-            el("backMapa").src = art(`mapaunderground`);
-        }else{
-            el("backMapa").src = art(`mapa`);
-        }
+        el("backMapa").src = art(mapLayerFor(state.zone.current));
         if(!ui.currentBackGround.match(/_altar/) && !ui.currentBackGround.match(/_estatua/)){
         const localidad = places[ui.currentBackGround];
         el("zoneMap").innerHTML= `The ${zones[state.zone.current].name}`;
@@ -470,6 +474,7 @@ const PAGE_RENDER = { stats: updateStats, kill: updateKill, achievements: update
 export {
     counterText,
     localizarBocadillo,
+    mapLayerFor,
     scrollClose,
     scrollOpen,
     updateAchievements,
