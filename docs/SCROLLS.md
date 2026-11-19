@@ -154,4 +154,4 @@ The ledger in A is the same idea as the stats scroll's Stats/Records tabs, so it
 
 ## 7. Open questions
 
-None left; all answered (see Decisions). The question in 6.4 is approved to send to dev. Possible follow-up: if the ribbon bookmark reads well on faith, try it in place of the tabs on the other scrolls. Waiting on dev's answers to 4.3 and 6.4 before the artist starts.
+None left; all answered (see Decisions). The question in 6.4 still waits for the author's OK before it goes to dev. Possible follow-up: if the ribbon bookmark reads well on faith, try it in place of the tabs on the other scrolls. Waiting on dev's answers to 4.3 and 6.4 before the artist starts.
