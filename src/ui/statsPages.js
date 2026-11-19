@@ -123,23 +123,15 @@ function beliefMeter() {
         inner += layer(`left:${mx.toFixed(1)}px;top:${my.toFixed(1)}px;width:5px;height:5px;background:${f('faith_meter_marker')}`);
     }
     inner += `<div class='${lost ? '' : 'faithCandle'}' style='position:absolute;left:28px;top:20px;width:40px;height:40px;background:${f(lost ? 'anim_faith_candle_lost' : 'anim_faith_candle_' + beliefLevel())}'></div>`;
-    return "<div style='width:192px;height:128px;margin:0.3em auto 0.5em'>" +
+    return "<div style='width:192px;height:128px;margin:1.5em auto 0.5em'>" +
         `<div style='position:relative;width:96px;height:64px;transform:scale(2);transform-origin:0 0;image-rendering:pixelated'>${inner}</div></div>`;
-}
-
-// The candle icon of his level for the heading (frames: Devout, Believer, Doubter, Atheist, Lost).
-function candleIcon() {
-    const i = state.player.beliefLost ? 4 : ['devout', 'believer', 'doubter', 'atheist'].indexOf(beliefLevel());
-    return `<span style='display:inline-block;width:40px;height:40px;vertical-align:middle;margin-right:0.2em;image-rendering:pixelated;` +
-        `background:url("${art('faith_icon_candle')}") ${-40 * Math.max(0, i)}px 0/200px 40px'></span>`;
 }
 
 function faithSection() {
     const level = beliefLevel();
     return line('Faith now', n(state.player.faith)) +
-        // belief (src/belief.js): its level and value, or the story's lock
-        line('Belief', state.player.beliefLost ? 'lost &#8856;' : `${level.charAt(0).toUpperCase() + level.slice(1)} (${Math.round(state.player.belief)})`) +
         beliefMeter() +
+        `<div style='text-align:center;margin-bottom:1.5em'>${state.player.beliefLost ? 'Lost' : level.charAt(0).toUpperCase() + level.slice(1)}</div>` +
         line('From prayers', n(stats.get('faith.gain.prayer'))) +
         line('From offerings', n(stats.get('faith.gain.offering'))) +
         line('From cleansing corruption', n(stats.get('faith.gain.cleanse'))) +
@@ -189,8 +181,8 @@ export function inventoryPageHtml() {
 
 // The Faith scroll (the prayer button): faith, the belief meter and where faith came from.
 export function faithPageHtml() {
-    return `<div id='faith'><img src='${art('faith_header_a')}' width='256' style='display:block;margin:0 auto;image-rendering:pixelated'/>` +
-        `<span class='titles' id='titleFaith'>${candleIcon()}Faith</span><br><br>` + faithSection() + '</div>';
+    return "<div id='faith'><span class='titles' id='titleFaith'>Faith</span><br><br>" + faithSection() +
+        `<img src='${art('faith_header_a')}' width='256' style='display:block;margin:1em auto 0;image-rendering:pixelated'/></div>`;
 }
 
 // ------------------------------------------------------------------ the page
