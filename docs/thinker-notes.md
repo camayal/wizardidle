@@ -79,3 +79,13 @@ We need to develop a nice plot with these sprites: a row of six hooded dark skel
 
 Please turn this into a plan with options (who they are, where they appear, how they tie into the story and the god, boss or enemy or story characters, what the six colours mean); dev and artist wait for the author's OK.
 ```
+
+## Etymos, the elemental boss: minibosses and a secret bestiary (author, 2026-11-19)
+
+```
+Reference sprites: ../wizardidle-old-ideas/unorganzed_sprites/Sprites/Tiles Gervais/_explored/enemies/elementals/ (ElementalAir, ElementalEarth, ElementalVoid, ElementalWater: elemental creatures; one of them, the void one, is our current boss Etymos, img/bosses/etymos).
+
+Idea: develop a plot around it. When the wizard kills Etymos, he is replaced in later encounters by six minibosses, one per colour Etymos has now: air, fire, poison, water, ice, gold. Killing all six at least once gives a very rare achievement; killing each one gives its own achievement too. The minibosses live in a secret section of the bestiary.
+
+Please turn this into a plan with options (why Etymos breaks into six, where and how often the minibosses appear, their attacks and sprites, the achievement tiers (src/data/rarity.js), how the secret bestiary section shows up); dev and artist wait for the author's OK.
+```
