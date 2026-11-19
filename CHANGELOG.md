@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Ground map: a road now leaves the town going south, turns west, crosses a second small bridge and ends at a new fisher's pier on the south coast (the pier is a place to add later).
 - Underground map repainted to look like a natural cave: warm brown cloudy rock with cracks, winding tunnels of varied width with rough walls, a basalt volcano chamber with a lava lake and glow, rails and lamps in the mine, irregular pools and crystal clusters. The mine ends line up with the ground entrances and each entrance has a patch of daylight; the caves have rough walls, side nooks, rock pillars and a damp sheen.
 - Aboveground map: the cloud lands have puffy, irregular edges and the sky has some small decorative clouds around them.
 - Ground map: the Prairie bridge now crosses something. A spring from the volcano runs down to the road, under the bridge, and joins the main river in a Y; the river has gentle S curves down to the sea, and the Prairie reaches a little further into the southern gulf so the river no longer runs beside the sea.
