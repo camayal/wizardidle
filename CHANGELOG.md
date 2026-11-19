@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Faith scroll: the belief level name is now written in the title font, in spaced capitals between two small stars, coloured by level (gold-brown for Devout, greying down to Atheist, red for Lost), with more room below it before the stats.
 - Faith scroll: the stained-glass belief meter is now really centred; the page style that zeroes every div margin was overriding its auto margins, so it sat at the left.
 - Faith scroll, plainer: back to the normal scroll (no gold-leaf border, no candle by the title); the header ornament moved to the bottom; the belief arc sits centred with room above and below; no belief number is shown, only the level name (or Lost) under the arc.
 - Dev tools: tools/synth_demo.html plays one short tune two ways, with a plain browser synth and with real instrument samples, to decide how we make our own music.

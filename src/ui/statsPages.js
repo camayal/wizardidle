@@ -131,7 +131,7 @@ function faithSection() {
     const level = beliefLevel();
     return line('Faith now', n(state.player.faith)) +
         beliefMeter() +
-        `<div style='text-align:center;margin-bottom:1.5em'>${state.player.beliefLost ? 'Lost' : level.charAt(0).toUpperCase() + level.slice(1)}</div>` +
+        `<div class='faithLevel ${state.player.beliefLost ? 'lost' : level}'>✦ ${state.player.beliefLost ? 'Lost' : level} ✦</div>` +
         line('From prayers', n(stats.get('faith.gain.prayer'))) +
         line('From offerings', n(stats.get('faith.gain.offering'))) +
         line('From cleansing corruption', n(stats.get('faith.gain.cleanse'))) +
