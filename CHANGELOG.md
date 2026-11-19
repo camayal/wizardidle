@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Map: the Dunes marker spots (and the mine entrance in the Dunes) moved onto the new beach, so the bubble no longer floats over the sea. The other ground spots were checked against the new map and sit on land.
 - Map scroll has three ribbon bookmarks (aboveground, ground, underground): it opens on the wizard's own layer and a tap shows another map; the marker shows only on his layer, and the title names the other maps. The Heidan marker spots now sit on the aboveground map's features: the stairs at each end, the two portals and the altar's ruby pedestal.
 - New maps: the ground map is repainted (a lake and a river, a thin land bridge from the Dunes to the Prairie, a beach along the north and east coast, bridges marked in the Prairie and the Swamp; the two Heidan cloud islands are gone, only the sacred stairs with a cluster of clouds at their end remain). Heidan has its own aboveground map now: two big clouds over a blurred copy of the ground, with portals and the props of its scenes; the map button shows it while the wizard is in Heidan. The portals and the new beach zone are still to come.
 - Dunes: the thin strip of sea at the left edge of all five Dunes scenes, where the wizard walks in, is painted out as sand, so he no longer walks through the water. A walkable shore will come back with the map revamp.
