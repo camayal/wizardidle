@@ -88,7 +88,8 @@ function travelsSection() {
 }
 
 function goldSection() {
-    return section('Gold') +
+    return section('Gold and faith') +
+        line('Faith now', n(state.player.faith)) +
         line('Earned', n(stats.get('gold.fromEnemies') + stats.get('gold.fromBosses') + stats.get('gold.fromLoot'))) +
         line('Given to you', n(stats.get('gold.offered'))) +
         line('Spent at inns', n(stats.get('gold.spentAtInns'))) +
@@ -129,8 +130,7 @@ function beliefMeter() {
 
 function faithSection() {
     const level = beliefLevel();
-    return line('Faith now', n(state.player.faith)) +
-        beliefMeter() +
+    return beliefMeter() +
         `<div class='faithLevel ${state.player.beliefLost ? 'lost' : level}'>✦ ${state.player.beliefLost ? 'Lost' : level} ✦</div>` +
         line('From prayers', n(stats.get('faith.gain.prayer'))) +
         line('From offerings', n(stats.get('faith.gain.offering'))) +
