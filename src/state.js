@@ -164,7 +164,19 @@ export function reloadAway() {
     location.reload();
 }
 
-setInterval(saveGame, SAVE_EVERY_MS);
+// The save beat also notices a sleeping computer: a laptop closed with the tab still shown fires
+// no visibility event, so on waking the beat arrives far too late. That is time away too: reload
+// without saving over the moment of leaving, and the load settles it (src/away.js).
+let lastBeat = Date.now();
+setInterval(() => {
+    const gap = (Date.now() - lastBeat) / 1000;
+    lastBeat = Date.now();
+    if (saving && !document.hidden && gap >= config.away.minSeconds) {
+        console.warn('[away] the page slept for ' + Math.round(gap) + ' s without a visibility event: reloading');
+        return reloadAway();
+    }
+    saveGame();
+}, SAVE_EVERY_MS);
 window.addEventListener('pagehide', saveLeaving);
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') saveLeaving();

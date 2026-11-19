@@ -122,3 +122,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): map scroll title shows just "Map" on layers the wizard is not on (long names overlapped).
 - 2026-11-19 (dev): installed the approved underground map (option F2 from the review drop) as img/ui/mapaunderground.png. Bookmark icons (cloud, mountain, cave) still being drawn by the artist.
 - 2026-11-19 (dev): installed map bookmark icon set 2 (cloud, mountain, cave) into img/ui/ribbon/icon_map_*.png.
+- 2026-11-19 (dev): freeze after hibernation: the save beat in src/state.js now reloads when it wakes late (>= away.minSeconds) without a visibility event. Root cause of the empty clock list (all clocks gone, nothing queued) not found; if it still freezes, check the browser console for the [away] warning and red errors. Added loop.loopInfo().

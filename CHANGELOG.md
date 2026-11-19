@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Waking a laptop that slept with the game tab open now reloads the game, so the time away is settled. Before, no visibility event fired, the away time was lost and the game could sit frozen with no events until a manual reload. Also added loop.loopInfo() for debugging (dev console: dev.loop.loopInfo()).
 - Map scroll bookmarks have new icons: a cloud (aboveground), a mountain (ground) and a cave (underground).
 - New underground map: dark cobbled rock that darkens toward the edges, a warm glow and magma veins around the volcano, glowing crystals, dark pools and a magma pocket, with rough, chipped edges where the rock meets the caves and the mine.
 - Map scroll: when the player peeks at another layer the title just says "Map" (the long layer names overlapped); the zone's name shows only on the wizard's own layer.

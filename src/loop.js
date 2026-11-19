@@ -123,3 +123,10 @@ const timer = setInterval(tick, TICK_MS);
 export function clockNames() {
     return [...clocks.keys()].join(',');
 }
+
+// Debugging: the whole loop state (frozen depth, each clock and how late it is).
+export function loopInfo() {
+    const t = now();
+    return { frozen, simulated, speed, hidden: document.hidden,
+        clocks: [...clocks].map(([name, c]) => ({ name, ms: c.ms, dueIn: Math.round(c.due - t) })) };
+}
