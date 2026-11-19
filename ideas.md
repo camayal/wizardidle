@@ -119,3 +119,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): map scroll ribbons built (MAP_PAGES in src/ui/scrolls.js, ui.scrollViews.map); Heidan spots moved onto the aboveground map (3 = NE portal, 4 = SE stairs, 5 = SE portal, altar = ruby pedestal). Not run in a browser. Ground map spots still to re-check against the new art.
 - 2026-11-19 (dev): ground map spots checked on the new mapa.png; only the Dunes (and la_Mina5) sat in the sea and were moved to the beach sand. Others fine.
 - 2026-11-19 (dev): fixed the game not starting: the map ribbons commit had deleted disableMainButtons, enableMainButtons and updateAchievements from src/ui/scrolls.js (restored).
+- 2026-11-19 (dev): map scroll title shows just "Map" on layers the wizard is not on (long names overlapped).

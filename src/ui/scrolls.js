@@ -124,7 +124,6 @@ function mapLayerFor(zone){
 
 // The three map pages (the map scroll's ribbons, top to bottom of the world) and their pictures.
 const MAP_PAGES = { above: "mapaboveground", ground: "mapa", underground: "mapaunderground" };
-const MAP_NAMES = { above: "Aboveground", ground: "Ground", underground: "Underground" };
 
 // The map page that shows a zone.
 function mapPageFor(zone){
@@ -139,7 +138,7 @@ function localizarBocadillo(){
     el("backMapa").src = art(MAP_PAGES[page]);
     const hide = () => { el("bocadilloMapa").style.display ="none"; el("pjMapa").style.display ="none"; };
     if (ui.currentBackGround == "curanderobg") return hide();
-    el("zoneMap").innerHTML = page == mine ? `The ${zones[state.zone.current].name}` : `${MAP_NAMES[page]} map`;
+    el("zoneMap").innerHTML = page == mine ? `The ${zones[state.zone.current].name}` : "Map";
     if (page != mine || ui.currentBackGround.match(/_altar/) || ui.currentBackGround.match(/_estatua/)) return hide();
     const localidad = places[ui.currentBackGround];
     const mapWidth = el("backMapa").style.width;

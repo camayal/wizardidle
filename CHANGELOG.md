@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Map scroll: when the player peeks at another layer the title just says "Map" (the long layer names overlapped); the zone's name shows only on the wizard's own layer.
 - The game did not start: the map scroll commit had cut three scroll functions (blocking and restoring the toolbar, and the achievements page) by mistake. They are back.
 - Map: the Dunes marker spots (and the mine entrance in the Dunes) moved onto the new beach, so the bubble no longer floats over the sea. The other ground spots were checked against the new map and sit on land.
 - Map scroll has three ribbon bookmarks (aboveground, ground, underground): it opens on the wizard's own layer and a tap shows another map; the marker shows only on his layer, and the title names the other maps. The Heidan marker spots now sit on the aboveground map's features: the stairs at each end, the two portals and the altar's ruby pedestal.
