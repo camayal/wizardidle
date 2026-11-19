@@ -122,87 +122,47 @@ function mapLayerFor(zone){
     return "mapa";
 }
 
-// Place the map marker (speech bubble) on the wizard's current stage.
+// The three map pages (the map scroll's ribbons, top to bottom of the world) and their pictures.
+const MAP_PAGES = { above: "mapaboveground", ground: "mapa", underground: "mapaunderground" };
+const MAP_NAMES = { above: "Aboveground", ground: "Ground", underground: "Underground" };
+
+// The map page that shows a zone.
+function mapPageFor(zone){
+    return Object.keys(MAP_PAGES).find((page) => MAP_PAGES[page] == mapLayerFor(zone));
+}
+
+// Draw the map page that is open (the wizard's own layer when the scroll opens, or the ribbon the
+// player tapped) and put the marker (speech bubble) on the wizard's current stage, only on his layer.
 function localizarBocadillo(){
-    if (ui.currentBackGround == "curanderobg"){
-        el("bocadilloMapa").style.display ="none";
-        el("pjMapa").style.display ="none";
-    }else{
-        el("backMapa").src = art(mapLayerFor(state.zone.current));
-        if(!ui.currentBackGround.match(/_altar/) && !ui.currentBackGround.match(/_estatua/)){
-        const localidad = places[ui.currentBackGround];
-        el("zoneMap").innerHTML= `The ${zones[state.zone.current].name}`;
-        const mapWidth = el("backMapa").style.width;
-        el("bocadilloMapa").style.display ="block";
-        el("pjMapa").style.display ="block";
-        el("bocadilloMapa").style.left = `${parseInt(mapWidth) * localidad.x}px`;
-        el("bocadilloMapa").style.top = `${parseInt(mapWidth) * localidad.y}px`;
-        el("pjMapa").style.left = `${parseInt(mapWidth) * localidad.x * 1.01}px`;
-        el("pjMapa").style.top = `${parseInt(mapWidth) * localidad.y * 0.98}px`;
-        }else{
-            el("bocadilloMapa").style.display ="none";
-            el("pjMapa").style.display ="none";
-        }
-    }
-    
+    const mine = mapPageFor(state.zone.current);
+    const page = MAP_PAGES[ui.scrollViews.map] ? ui.scrollViews.map : mine;
+    el("backMapa").src = art(MAP_PAGES[page]);
+    const hide = () => { el("bocadilloMapa").style.display ="none"; el("pjMapa").style.display ="none"; };
+    if (ui.currentBackGround == "curanderobg") return hide();
+    el("zoneMap").innerHTML = page == mine ? `The ${zones[state.zone.current].name}` : `${MAP_NAMES[page]} map`;
+    if (page != mine || ui.currentBackGround.match(/_altar/) || ui.currentBackGround.match(/_estatua/)) return hide();
+    const localidad = places[ui.currentBackGround];
+    const mapWidth = el("backMapa").style.width;
+    el("bocadilloMapa").style.display ="block";
+    el("pjMapa").style.display ="block";
+    el("bocadilloMapa").style.left = `${parseInt(mapWidth) * localidad.x}px`;
+    el("bocadilloMapa").style.top = `${parseInt(mapWidth) * localidad.y}px`;
+    el("pjMapa").style.left = `${parseInt(mapWidth) * localidad.x * 1.01}px`;
+    el("pjMapa").style.top = `${parseInt(mapWidth) * localidad.y * 0.98}px`;
 }
 
 
-
-
-
-
-
-
-// Block the toolbar while a scroll is open (remembers each button's handler).
-  function disableMainButtons() {
-    const eles = document.getElementsByClassName('dis');
-    for (let i=0; i < eles.length; i++) {
-      if (eles[i].onclick) eles[i].prev_click = eles[i].onclick; // save it once: a second disable must not overwrite it with false
-      eles[i].onclick = false;
-    }
-}
-
-// Give the toolbar its handlers back.
-function enableMainButtons() {
-    const eles = document.getElementsByClassName('dis');
-    for (let i=0; i < eles.length; i++)
-       if (eles[i].prev_click) eles[i].onclick = eles[i].prev_click;  // restore the previous value
-    };
-
-////////////////////////////////////////////////
-//  ████████╗███████╗██╗  ██╗████████╗███████╗//
-//  ╚══██╔══╝██╔════╝╚██╗██╔╝╚══██╔══╝██╔════╝//
-//     ██║   █████╗   ╚███╔╝    ██║   ███████╗//
-//     ██║   ██╔══╝   ██╔██╗    ██║   ╚════██║//
-//     ██║   ███████╗██╔╝ ██╗   ██║   ███████║//
-//     ╚═╝   ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝//
-////////////////////////////////////////////////
-// Fill the achievements scroll.
-function updateAchievements(){
-
-    const others = hasOthers();
-    if (!others) ui.scrollViews.achievements = "run";
-    const all = others && ui.scrollViews.achievements == "all";
-    let txt = "<div id='achievements'><span class='titles' id='titleAchievements'>Achievements</span><br>"
-    txt += all ? othersList() : achievementList();
-    txt += "</div>"
-    el('innerTextScroll').innerHTML=txt;
-    el("titleAchievements").style.fontSize = `${ui.em * 2.5}px`;
-    el("titleAchievements").style.lineHeight = `${ui.em * 2.5}px`;  
-    if (ui.scrollCurrentContent == "achievements") placeScrollTabs("achievements");  // ribbons only when others earned some
-
-}
 
 // ------------------------------------------------------------------ tabbed scrolls
 // Some scrolls have several pages (Kill / Cemetery / Bestiary). Each page has a small ribbon
 // bookmark with an icon hanging from the scroll's top edge; tapping one brings that page to the
 // front and plays the scroll sound. The open page's ribbon hangs lower and is lighter (the
 // author chose look A and the one-colour ribbons on 2026-11-18, replacing the paper strips).
-const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"] };
-const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory" };
+const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"], map: ["above", "ground", "underground"] };
+const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory", above: "Aboveground", ground: "Ground", underground: "Underground" };
 const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
-    run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
+    run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory",
+    above: "icon_map_above", ground: "icon_map_ground", underground: "icon_map_underground" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
 const RIBBON_SCALE = 1.5;           // one ribbon pixel = this many pixels of the 320-wide scroll art (2 was too big, 1.5 a bit small)
 const RIBBON_TOP = -5;              // ribbon pixels below the roll's top edge (negative = above it). Test (author): -5, the ribbons start above the roll and hang over it; 3 with the roll over them (ribbon z-index 1) tucks them into it
@@ -469,12 +429,12 @@ function killClick() {
 }
 
 // How each tabbed scroll redraws its front page.
-const PAGE_RENDER = { stats: updateStats, kill: updateKill, achievements: updateAchievements };
+const PAGE_RENDER = { stats: updateStats, kill: updateKill, achievements: updateAchievements, map: localizarBocadillo };
 
 export {
     counterText,
     localizarBocadillo,
-    mapLayerFor,
+    mapPageFor,
     scrollClose,
     scrollOpen,
     updateAchievements,

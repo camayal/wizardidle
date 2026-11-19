@@ -7,7 +7,7 @@ import * as loop from '../loop.js';
 import { pauseToggle } from '../game.js';
 import { chapterRead } from '../story.js';
 import { masterTime } from '../config.js';
-import { localizarBocadillo, mapLayerFor, scrollClose, scrollOpen, updateAchievements, updateFaith, updateHelp, updateKill, updateStats } from './scrolls.js';
+import { localizarBocadillo, mapPageFor, scrollClose, scrollOpen, updateAchievements, updateFaith, updateHelp, updateKill, updateStats } from './scrolls.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { clearNPC, playWizardAnim } from './render.js';
@@ -71,7 +71,7 @@ function btnCloseEvent(){
 
 // Toolbar: open the map with the wizard's position.
 function mapBtn(){
-    el("backMapa").src = art(mapLayerFor(state.zone.current));
+    ui.scrollViews.map = mapPageFor(state.zone.current);   // opens on the wizard's own layer; the ribbons switch it
     el("bocadilloMapa").src = art(`bocadillo`);
     el("pjMapa").src = art(`lvl${Math.floor(state.player.lvl / 10) * 10}`);
     el("mapa").style.display = "block";

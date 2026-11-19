@@ -10,7 +10,7 @@ earlier one.
 [] create scenes that are the end of one ad the beginon of the otherone. (planned: docs/MAPS.md, border scenes)
 
 - Own music (2026-11-18): built as code, no WAVs: Music mode in the dev console (src/dev/music.js, src/synth.js, songs/). Still open for the author: where songs play in the game, stingers only, loops, or both (musician suggests stingers first). The musician can drop songs as <name>.song.txt in the review drop.
-- Map revamp, Prairie creek, bridges, map layers and ribbons: planned in docs/MAPS.md (ribbons still wait for the map art).
+- Map revamp, Prairie creek, bridges: planned in docs/MAPS.md (map ribbons built; ground map spots still to re-check against the new art).
 
 - Achievements (2026-11-18): libros, runas, tabernero, tocado and the eagle are now wired (tocado = 100 god touches in config.touchedAchievement). Still to do: re-run a playtest and tools/odds.py to confirm the tiers; capricorreturns and namesake are only rare by design.
 
