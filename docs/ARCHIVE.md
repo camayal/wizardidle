@@ -1679,3 +1679,7 @@ Author's note: for @artist, achievement icons become layers: ONE parchment frame
 - Achievements with no unlock code yet (2026-11-18): logro_libros (1000 books: counter study.found.book), logro_runas (1000 runes: study.found.rune), logro_tabernero (250 inn visits: inn.rests) and logro_tocado ("touched many times": god.touches, number to decide). Each needs a logro.set call (like botines/pots in events.js, but use stats.get, not counterText). Counter ones are already in COUNTERS in tools/odds.py; re-run a playtest and odds.py afterwards. Bots never earned logro_vistoaguilaencueva, logro_namesake or logro_capricorreturns: check their triggers work.
 
 - Own music (author decided 2026-11-18): plain Web Audio synth, no soundfont, no library (heard tools/synth_demo.html, chose A). Next: a note-list bench in tools/ (lines like 'C4 0.0 0.5 lead', pick instrument and envelope, play), render with OfflineAudioContext to WAV into the review drop, dev copies approved files to snd/. Still open for the author: stingers only, loops, or both (musician suggests stingers first).
+```
+Date: 2026-11-18 (from dev, author's words)
+Author's note: for @artist, the achievement seals are great, but the two tails (ribbon trails) of the seal blend into the parchment frame of the achievement icon (img/ui/achievements, logro_frame + logro_seal_<tier>). Make the tails a little more visible. Ideas welcome: a darker outline or shadow under the tails, a ribbon colour that contrasts with the frame (per tier), or letting the tails hang slightly over the frame edge.
+```
