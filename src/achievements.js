@@ -57,10 +57,10 @@ function rarityTag(text){
     return `<small class="rarity rarity-${tier.key}" style="color:${tier.color}"><b>${tier.name}</b></small> `;
 }
 
-// The wax seal is one red sprite (a 53x53 layer over the icon, art "logro_seal"); css recolours it
-// per tier with a hue filter (index.html .seal-*). Hidden while the sprite does not exist.
+// The wax seal is the artist's sprite of the tier (a 53x53 layer over the icon, art "logro_seal_<tier>").
+// Hidden while the sprite does not exist.
 function sealImg(text){
-    return `<img class="achSeal" src="${art("logro_seal")}" height="${ui.em * 5}px" onerror="this.style.display='none'" />`;
+    return `<img class="achSeal" src="${art("logro_seal_" + (rarityOf[text] || "common"))}" height="${ui.em * 5}px" onerror="this.style.display='none'" />`;
 }
 
 function achievementRow(text, time, by){
