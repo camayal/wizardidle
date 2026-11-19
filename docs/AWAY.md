@@ -1,6 +1,6 @@
 # Time away from the game
 
-A plan for what happens to the wizard while the god is not watching. From the author's note of 2026-11-17. Nothing is built yet.
+A plan for what happens to the wizard while the god is not watching. From the author's note of 2026-11-17. Built (see the note at the end of Estimates); the open items are the final texts and the FAQ line.
 
 ## The idea
 
@@ -155,21 +155,6 @@ A bag of eight (Decision 6): one is drawn at each absence permadeath, and none r
 ### Cemetery, not erasure
 
 An absence permadeath is a **regular cemetery death** (erasure is only for final-battle losers): a normal tomb (not cracked), his name **not** reversed or struck through, **no echo slot**, no soul in the final battle. He is a regular past wizard, so he can come back as the **ghost rescuer** and write **letters** (FAITH.md). The tomb's parchment note gives the cause in one line, for example *"He waited for you in the {zone}."* A letter from such a wizard (he waited, the god never came) is a strong hook; not decided.
-
-### Hidden page in slow motion: the idea weighed
-
-The idea: while the page is hidden (not closed), the game keeps running at 1/108 speed with the sound low and slowed, so the player can feel time passing for the wizard; a closed app is settled by calculation on return.
-
-**Pros**
-- Poetic: the god's eye drifts away and the world goes on, far and slow. Fits "the god cannot see the world".
-- An audible hint at the slow clock, for players who like to guess the factor.
-
-**Cons**
-- **It is a simulation**, against the "no simulation" wish, and a second path for the same thing: the live slow game and the return calculation could disagree (a fight half-played when the page shows again, two rules for dying while away).
-- **Nothing visible happens.** A hidden page cannot be seen, and at 1/108 a short fight lasts most of an hour; only the sound would ever reach the player.
-- Sound from a hidden page annoys (another tab, a phone in a pocket) and costs battery on phones. Browsers also slow hidden pages down on their own, so a live run would be unreliable anyway.
-
-**Recommendation: no slow-motion game.** Keep the decided rule (hidden = closed, settled by the 108 calculation). Keep the one good part, the feeling, as a **sound cue only**: when the page hides, the music slows and fades to silence over a few seconds; when it shows, the music comes back. One cue, no simulation, the same story ("you looked away").
 
 ## Open questions
 

@@ -100,7 +100,7 @@ function goldSection() {
 // tick at each level line (Atheist, Doubter, Devout); empty and marked lost when the story has
 // locked it.
 // The belief meter: the artist's stained-glass window with the lit glass up to his belief, a
-// marker on the stone ring and the candle of his level (docs/SCROLLS.md 4.2). Drawn at 2x.
+// marker on the stone ring and the candle of his level. Drawn at 2x.
 // Locked by the story (lost): the dark window and the cold candle.
 const METER_CENTRE = { x: 47.5, y: 54, r: 44 };
 let lastBelief = null, flare = { dir: '', until: 0 };

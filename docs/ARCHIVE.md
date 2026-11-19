@@ -1683,3 +1683,276 @@ Author's note: for @artist, achievement icons become layers: ONE parchment frame
 Date: 2026-11-18 (from dev, author's words)
 Author's note: for @artist, the achievement seals are great, but the two tails (ribbon trails) of the seal blend into the parchment frame of the achievement icon (img/ui/achievements, logro_frame + logro_seal_<tier>). Make the tails a little more visible. Ideas welcome: a darker outline or shadow under the tails, a ribbon colour that contrasts with the frame (per tier), or letting the tails hang slightly over the frame edge.
 ```
+
+## Done, docs/SCROLLS.md: scroll looks plan, whole file (pilot done 2026-11-19; the author decided heavy decoration is not spread to other scrolls)
+
+# Scroll looks plan
+
+Two notes from the author (2026-11-18):
+
+- *"Would it be a nice idea to make each scroll a little more thematic instead of the same parchment? The cemetery with a grass background; the inventory with a wooden texture and crates; the stats and the bestiary kept as parchment, or each with its own look."*
+- *"Faith scroll: improve its graphic design, it needs to look more divine; the belief meter needs to be more artistic (art from the artist may help)."*
+
+The second is one case of the first, so they share this plan.
+
+A third note (2026-11-18), on the faith scroll: *stats like "Your touches" (heals, revivals, punishments), prayers, offerings and shrines will keep growing as the plan grows, so plain text lines won't scale.* Section 6 answers it, for faith first and for any scroll whose stats grow. Dev and the artist wait for the author's OK before building or drawing.
+
+## Decisions (by the author)
+
+| Date | Question | Answer |
+|---|---|---|
+| 2026-11-18 | Themed scrolls | **A: themed trim on the shared parchment.** Faith and the cemetery deserve it most; stats, achievements and help stay plain |
+| 2026-11-18 | The faith scroll's look | **A: illuminated manuscript** (4.1) |
+| 2026-11-18 | The belief meter | **The stained-glass arc plus the candle** (the author's mix of A and B): the arc shows how close he is to the next level, the candle gives the level at a glance, cold wax when *Lost*. How they fit: 4.2 |
+| 2026-11-18 | Order of work | **A: the faith scroll is the pilot.** The artist draws options, the author picks in the art dev console, then the cemetery and the inventory, the rest later if worth it |
+| 2026-11-18 | Growing stats on a scroll | **A: a short front page and a Ledger page behind it** (6.2) |
+| 2026-11-18 | How the Ledger opens | **B: a ribbon bookmark drawn by the artist**, as a trial on faith. If the author likes it, the ribbon may replace the tabs on the other scrolls (a possible follow-up) |
+| 2026-11-18 | What the faith front shows | **A: one headline number per group with its icon** (Touches, Prayers, Offerings, Shrines), besides the meter and faith |
+| 2026-11-18 | Which scrolls | **A: faith as the pilot**, then other scrolls as their stats grow |
+
+## 1. Themed scrolls: pros and cons
+
+Today one parchment style serves every scroll: stats (with the inventory tab), achievements, help, kill (bestiary, cemetery), map, faith, and the chapter scrolls.
+
+**Pros of themed scrolls**
+
+- Each scroll is known at a glance: you can tell where you are before reading a word.
+- Flavour: the cemetery feels like a graveyard, the inventory like a storeroom, the faith scroll like something holy.
+- The faith redesign stops being a lone exception and becomes the first of a family.
+- The artist gets small, self-contained pieces to draw (a good fit for "options first").
+
+**Cons of themed scrolls**
+
+- **The parchment is part of the story.** The scroll is how the wizard's world reaches you, the god ([STORY.md](STORY.md)). If the inventory becomes a wooden crate, the idea of "pages you read" weakens.
+- **Readability.** Text and small icons on grass or wood grain are harder to read than on plain parchment, mostly on phones.
+- **Tabs that change look.** The kill scroll holds the bestiary and the cemetery; the stats scroll holds the inventory. A full theme per tab means the scroll changes its whole look when you switch tabs, which can feel like opening another window.
+- **Upkeep.** Every new widget (button, tab, list, popup note) must be checked on every theme. With the landscape and watch layouts planned (thinker notes, 2026-11-15), each theme must also stretch to more sizes.
+- **Art cost** grows with every full texture (see 3).
+
+## 2. Options
+
+**A. Themed trim on the shared parchment (recommended).** Every scroll keeps the same parchment page, frame shape, tabs and text area, so text always sits on plain parchment. Each scroll gets its own **border, corner ornaments and a header piece**, and themed **content pieces** where they fit:
+
+| Scroll | Trim | Content pieces |
+|---|---|---|
+| Faith | Gold-leaf illuminated border, rays from the header, a lighter vellum tint | The belief meter (see 4) |
+| Kill: cemetery | Moss and grass creeping up the bottom edge, a wrought-iron header | The tombs already drawn |
+| Stats: inventory | A wooden frame | Inventory slots drawn as small crates or shelves |
+| Kill: bestiary | Claw marks or a hunter's leather corner | none |
+| Map | A compass rose corner | none |
+| Stats, achievements, help | Plain parchment (the default) | none |
+
+Like an illuminated manuscript: one book, each chapter with its own illumination. Switching tabs only changes the trim, so it never feels like another window.
+
+**B. Full themed backgrounds.** Grass behind the cemetery, wood behind the inventory, and so on. The strongest flavour, with all the costs in 1.
+
+**C. One parchment for all; only the faith scroll changes.** Cheapest, and it keeps today's unity, but the faith scroll then stands alone.
+
+## 3. What it costs the artist
+
+- **A:** per themed scroll, one border set that stretches to any size (four corners plus edge pieces that repeat) and one header ornament. Content pieces (crate slots, the belief meter) are separate sprites. Corners and edges fit every layout without being redrawn.
+- **B:** per scroll, a full texture that repeats without visible seams at every size, plus text, button and tab colours checked on each texture. Several times the work of A, and readability needs testing on a phone.
+- **C:** only the faith set from A.
+
+Under any option the artist draws options first on one scroll (faith), the author picks in the art dev console, then the rest follows in the same style.
+
+## 4. The faith scroll
+
+### 4.1 Look
+
+- **Illuminated manuscript (recommended):** gold-leaf border with vines, soft rays fanning down from a header ornament (a halo or a small sun), a lighter, warmer vellum than the other scrolls, and a few slow motes of light drifting over the page.
+- **Temple tablet:** pale stone with gold inlay, as if carved at a shrine. Holy, but heavy, and stone reads less like a scroll.
+- **Night sky:** deep blue vellum with stars and gold letters. Striking, but light text on dark breaks with every other scroll and is harder to read.
+
+### 4.2 The belief meter
+
+Belief runs from −100 to +100 across four levels (Devout, Believer, Doubter, Atheist), and at chapter X it becomes *Lost*, shown as a symbol ([FAITH.md](FAITH.md) 3.1). The god decides whether to touch based on how close the wizard is to the next line, so the meter should show **the level and roughly where in it** he stands.
+
+- **Stained-glass arc (recommended):** a half-circle window of four panes, one per level, from dark (Atheist) to radiant (Devout). Light fills the arc up to his belief, and a small marker shows the exact point. When belief rises, the pane flares; when it falls, it dims. *Lost:* the glass goes dark and cracks, and the lost symbol sits in the middle.
+- **Candle:** a tall flame with a halo for Devout, a steady flame for Believer, a guttering one for Doubter, a smoking wick for Atheist, and cold wax for *Lost*. Very readable at icon size and tied to the shrines, but it shows only the level, not how close he is to the next line.
+- **Sun and eclipse:** a full sun for Devout, slowly eclipsed down to a black sun for Atheist; *Lost* is a sun that's fully gone. Shows the value, but the middle steps look alike.
+- **Scales:** light against dark. Shows the value, but reads like justice more than faith.
+
+**Decided: the arc and the candle together.** How they fit:
+
+- **On the scroll:** the candle stands at the foot of the arc, in the middle of the half-circle, like a candle lit before a church window. The arc gives the exact value; the candle gives the level at a glance. Its glow lights the panes from below, so the two read as one picture.
+- **The candle's four states** follow the level: a tall flame with a halo (Devout), a steady flame (Believer), a guttering flame (Doubter), a smoking wick (Atheist). It flickers gently while lit.
+- **When belief moves:** a gain makes the pane flare and the flame jump; a loss dims the pane and makes the flame shrink and gutter. When the level changes, the candle shifts to its new state.
+- ***Lost:*** the glass goes dark and cracks, the candle is cold wax, and the lost symbol sits in the arc above it.
+- **In the heading** (next to faith): the candle alone, small. It reads at icon size where the arc would not, and it's the same object the god sees on the scroll.
+
+The artist draws options for the arc and the candle together, as one piece.
+
+Faith, the currency, stays a number with its own icon on the same page.
+
+### 4.3 Question for dev (to paste)
+
+> Thinker here, for the faith scroll redesign (docs/SCROLLS.md). What does the faith scroll show today, from top to bottom (faith number, belief bar, level name, shrines, offerings, anything else)? Is the belief bar drawn by code or a sprite, and does the heading have a belief icon yet? Can one scroll page have its own border without changing the others, and can a small sprite animate on a scroll (a candle flicker)?
+
+## 5. Order (decided)
+
+1. The faith scroll as the pilot: the artist draws options for its border and the belief meter, the author picks.
+2. If the pilot reads well, the cemetery and the inventory follow in the same style.
+3. The rest only if they're worth it.
+
+## 6. Growing stats on a scroll
+
+### 6.1 The problem
+
+The faith scroll lists its stats as plain lines: your touches (heals, revivals, punishments), prayers, offerings, shrines. [FAITH.md](FAITH.md) already plans more (faith gained and spent by source, highest and lowest faith, times and time at each belief level, touches refused, revives by the god vs by himself), and every stat exists per wizard and per world ([STATS.md](STATS.md)). The page grows a line with every new stat, and it fights the illuminated look decided in 4.1: an illuminated page with thirty lines of numbers is a spreadsheet with a gold border.
+
+The same will happen on the stats scroll (Stats and Records), in the bestiary (per creature) and in the cemetery (per wizard).
+
+Whatever the look, one rule helps every option: **each stat is written down once with its group, its name and (if it has one) its icon**, and the scroll draws its lines from that list. A new stat then lands in the right group by itself, instead of someone fitting a new line into a page by hand. Whether this exists today is question 6.4.
+
+### 6.2 Options
+
+**A. A short front page and a ledger behind it (recommended).** The front of the faith scroll keeps only what the god needs at a glance: the belief meter, faith, and **one headline number per group** (Touches 42 · Prayers 130 · Offerings 18 · Shrines 9), each with its group icon. Every number lives on a second page, the **Ledger** (for faith, *the book of deeds*), opened by a tab like Stats/Records: the groups as sections, each with its icon in the heading and its lines below, this wizard's numbers with a switch to all wizards. A new stat adds one line in its group on the ledger; the front only changes when a whole new group appears. If one group grows long later, its section can fold (C) inside the ledger.
+- *Why first:* the illuminated front stays clean, the pattern already exists (Stats/Records are two tabs of one scroll), and it fits the story: the god keeps a ledger of what he did for the wizard.
+- *Artist:* one small icon per group (4 to 6 for faith), drawn once; the ledger page reuses the faith trim. Optional: a ribbon bookmark instead of a plain tab. Small.
+- *Dev:* a second page on the faith scroll, one grouped-list piece reused by every scroll, the wizard/world switch. Small to medium, mostly once.
+
+**B. Grouped sections with icon chips, all on one page.** Each group gets a small heading and a row of chips (icon + number) that wraps onto more rows as stats are added; tap or hover a chip for its name.
+- Everything visible without turning a page, and denser than text.
+- But every stat needs its own icon, forever; icons without words need a tap to read; and the front of the faith scroll still fills up.
+- *Artist:* one icon per stat, ongoing with every new stat. Medium, and it never ends.
+- *Dev:* a chip piece with a tap or hover name, wrapping rows. Small to medium.
+
+**C. Collapsible groups.** One line per group with its total (Touches 42 ▸); tap to open its lines. The scroll remembers which groups are open.
+- The cheapest, no art, and short when closed.
+- But it is still text on the illuminated page, opening and closing is fiddly on a phone, and an idle player rarely opens anything.
+- *Artist:* nothing (maybe a small arrow in the trim's style). Very small.
+- *Dev:* a fold piece and remembered open groups. Small.
+
+**D. A small icon grid.** Every stat as a tile (icon + number) in one grid, no groups; tap a tile for its name.
+- The most compact, looks like a game.
+- The hardest to read: a grid of twenty icons tells a new player nothing until he taps them all, and the groups (touches vs offerings) disappear.
+- *Artist:* one icon per stat, ongoing, plus a tile frame. Large.
+- *Dev:* the grid at every screen size (phone, landscape, watch), tap names. Medium.
+
+**E. Add an option or talk it through first.**
+
+### 6.3 Other scrolls
+
+The ledger in A is the same idea as the stats scroll's Stats/Records tabs, so it carries over: a short front plus a ledger page for any scroll whose stats grow (records, the bestiary's per-creature numbers, a wizard's page in the cemetery). Faith goes first as the pilot, like the look (5).
+
+### 6.4 Question for dev (to paste)
+
+> Thinker here, for growing stats on scrolls (docs/SCROLLS.md 6). Does the stats module know each stat's name and group, or does each scroll pick and word its own lines by hand? Do the faith and stats scrolls show this wizard's numbers, all wizards', or both? How much work is a new tab on the faith scroll, given that Stats/Records already share a scroll?
+
+## 7. Open questions
+
+None left; all answered (see Decisions). The question in 6.4 still waits for the author's OK before it goes to dev. Possible follow-up: if the ribbon bookmark reads well on faith, try it in place of the tabs on the other scrolls. Waiting on dev's answers to 4.3 and 6.4 before the artist starts.
+
+## Done, from docs/STATS.md: 1. Stats today (cleaned 2026-11-19)
+
+## 1. Stats today
+
+- **`count(name, amount = 1)`** (`src/state.js`) adds to `state.counters[name]`. That's the only kind of stat: **55 distinct counters**, several split by a key (`zone_*`, `enemy_*`, `typeBoss_*`, `school_*`, `altar_zone_*`, `BotinGot_*`, `Polymorph_*`, `study_*`, `taberna_zone_*`…). Some are really totals (`GoldFromEnemies`, `FeByPray`, `GoldOffered` add amounts).
+- **`meta.playTimeMs`** is play time.
+- **The world save** (`wizardidle2:world`) keeps the cemetery and the device id, and **no stats across wizards**.
+- **Missing:** records (highest / lowest), firsts (when something first happened), per-level history, anything across wizards, and the **dice game tracks nothing**.
+- The stats scroll (`updateStats()`, `src/ui/scrolls.js`) shows a hand-picked set, built section by section.
+- Saves since 2.0.0 hold these counters. *Decided:* they don't need to keep working; the counters are renamed without a migration.
+
+## Done, from docs/STATS.md: 3. Playtest tools and 4. Build order (cleaned 2026-11-19)
+
+## 3. Playtest tools
+
+### What they do
+
+Run the real game **much faster than real time**, with a **fixed random seed** and a **god bot**, from level 1 to a target level, and write a report. Different settings (e.g. `offeringMode: "cap"` vs `"share"`) run on the same seeds, so the comparison is fair.
+
+### How
+
+| Piece | What | Where |
+|---|---|---|
+| **Fast-forward loop** | `src/loop.js` gets a simulation mode: instead of waiting, it jumps straight to the next clock that is due. A virtual clock (`loop.now()`) replaces `performance.now()` for play time | `src/loop.js` |
+| **The last stray timer** | The self-revive `setTimeout` (`src/combat.js`) becomes a loop clock, so it runs on the virtual clock too | `src/combat.js` |
+| **Fixed seed** | In simulation mode `Math.random` (13 calls) is replaced by a seeded generator, so a seed always plays the same run | the simulation entry point |
+| **No sound, light drawing** | Audio is muted and animations are skipped in simulation mode | `src/audio.js`, `src/spells.js` |
+| **God bots** | *Idle*: never touches. *Active*: heals below 30% HP, revives at once, tithes at every shrine, tries to win back an atheist, uses the professions touches. *Custom*: rules from the URL | `src/dev/bots.js`, loaded only in simulation mode |
+| **Settings from the URL** | `index.html?sim=1&seed=7&god=active&until=100&set=offeringMode:cap` overrides `config` values for the run | the simulation entry point |
+| **Report** | At the end, the per-level history, the stats and the settings, written as JSON into the page | the simulation entry point |
+| **Runner** | A Python script (standard library only; Edge and Python are already on the machine, Node isn't) serves the game locally, runs headless Edge for each setting × seed, collects the reports, and writes a summary table (and a chart) | `tools/playtest.py` |
+| **Results** | One folder per question: `docs/playtests/2026-11-xx-offerings/` with the summary and the settings, so each decision is written down with its numbers | `docs/playtests/` |
+
+The simulation mode only switches on with `?sim=1`. Normal play is unaffected.
+
+### First questions to answer with it
+
+From FAITH.md: offerings (share / cap / sqrt / level), the revive boost and faith farming, the belief thresholds, the shrine chance, and the professions touch prices. Plus a standing check after every change: **the pace still matches** (levels per hour and kills per level against the previous version, as in every phase so far).
+
+## 4. Build order
+
+1. `src/stats.js` with the four kinds, every `count()` call renamed, `state.stats` / `world.stats`, per-level history, the curated stats scroll and the records page. No gameplay change.
+2. Fast-forward loop, the self-revive clock, seed, mute: simulation mode. Check a seeded run plays the same twice.
+3. God bots and the URL settings; the report.
+4. `tools/playtest.py` and the first summary: today's game with the idle and active god, 10 seeds to level 200 (the baseline every later change is compared with).
+5. `faithChange()` and the faith stats, then the faith playtests (FAITH.md, step 1 onwards).
+6. Professions and dice stats with their features; data-driven achievements.
+
+## Done, from docs/AWAY.md: Hidden page in slow motion (decided against) (cleaned 2026-11-19)
+
+### Hidden page in slow motion: the idea weighed
+
+The idea: while the page is hidden (not closed), the game keeps running at 1/108 speed with the sound low and slowed, so the player can feel time passing for the wizard; a closed app is settled by calculation on return.
+
+**Pros**
+- Poetic: the god's eye drifts away and the world goes on, far and slow. Fits "the god cannot see the world".
+- An audible hint at the slow clock, for players who like to guess the factor.
+
+**Cons**
+- **It is a simulation**, against the "no simulation" wish, and a second path for the same thing: the live slow game and the return calculation could disagree (a fight half-played when the page shows again, two rules for dying while away).
+- **Nothing visible happens.** A hidden page cannot be seen, and at 1/108 a short fight lasts most of an hour; only the sound would ever reach the player.
+- Sound from a hidden page annoys (another tab, a phone in a pocket) and costs battery on phones. Browsers also slow hidden pages down on their own, so a live run would be unreliable anyway.
+
+**Recommendation: no slow-motion game.** Keep the decided rule (hidden = closed, settled by the 108 calculation). Keep the one good part, the feeling, as a **sound cue only**: when the page hides, the music slows and fades to silence over a few seconds; when it shows, the music comes back. One cue, no simulation, the same story ("you looked away").
+
+## Done, from docs/ROADMAP.md: stages 1 and 2 (the only open item moved below) (cleaned 2026-11-19)
+
+## 1. Clean up the code (done 2026-11-11)
+
+- [x] Update the code to modern JavaScript (`let`/`const`, template strings, arrow functions where they help).
+- [x] Remove redundancy: repeated blocks (e.g. the same "end of event, back to the event picker" code in many places), copy-pasted texts, duplicated constants.
+- [x] Make it more manageable: smaller functions with clear names, related code together.
+- [x] Annotate each part of the code: a short comment per module and per function saying what it does. No excessive comments.
+- [x] Keep gameplay identical, checked with the same tests as the v2 rebuild.
+
+## 2. Modern, faster, less redundant (done 2026-11-12, released as 2.1.0)
+
+Gate before moving on: the whole code base is modern, measurably faster where it matters (game loop, drawing, console output), and free of the redundancy found in stage 1.
+
+*Result:* measured over 10- and 30-minute games (animation frames, images, sounds, console writes). Drawing was the only real cost and was fixed. The console was measured as cheap (30–60 writes a minute) and left as it is; a lighter `print()` (one element per line instead of rewriting the whole console) can come later if needed.
+
+- [x] Spell animations never stop (a v1 bug, found in stage 1): when the last frame is drawn, `spell()` cancels the frame request but then requests another one, so every spell ever cast keeps redrawing about 60 times per second, each loop clearing the shared spell canvas. Fix first: it costs CPU and can make spells flicker. *Fixed 2026-11-12: over a 30-minute game, 72,329 animation callbacks (peak 646/s) became 3,730 (peak 50/s).*
+- [x] Images loaded once and reused (v1 created a new image on every redraw), with stale late loads ignored.
+- [x] Dead speed-debug branches (`masterTime < 500`) removed; enemy flags are real booleans; the medium-length event functions split into named steps.
+- [x] Offline file list and cache version generated at deploy (`.github/scripts/precache.py`); `service-worker.js` went from 22 KB to 3 KB.
+- [ ] Later: the cache version is the commit, so every deploy (even docs-only) makes installed players re-download all ~6 MB. Derive it from a hash of the cached files, or keep art and sound in a long-lived cache of their own.
+- [x] Chapter race fixed: when the scroll had to close first, the chapter text was read for the level reached by then (two levels at once could crash).
+
+## Done, from docs/ROADMAP.md: the v2 rebuild (cleaned 2026-11-19)
+
+## Done: the v2 rebuild (2.0.0, live since 2026-11-11)
+
+- [x] **Structure.** ES modules under `src/`, game data in `src/data/`, no build step.
+- [x] **State.** One plain-JSON save (`src/state.js`), balance in `src/config.js`, kill no longer wipes other site data.
+- [x] **Systems.** 15 modules, shared runtime objects (`src/runtime.js`), one game loop (`src/loop.js`).
+- [x] **Polish and release.** v1 bugs fixed (below), offline mode, fixed manifest, version 2.0.0.
+
+## Done, from docs/ROADMAP.md: v1 bugs fixed (cleaned 2026-11-19)
+
+- ~~**Level 210+ crashes every attack.**~~ Fixed: past level 200 the wizard keeps using the 21 existing spell tiers instead of asking for a 22nd (`knownTier()` in `spells.js`). Verified by stress runs from level 205 up to 270.
+- ~~**"acá hay un BUG" (v1 author's own note).**~~ Root cause found: the wizard and the enemy can fall in the same round. The enemy's death cleared `fight.enemy` and restarted the event picker; the wizard's death then read `enemyTypes[""]` and crashed, and events would keep running while he lay dead. Fixed: a fallen enemy takes no gold, and the event picker stops until the wizard revives.
+- ~~**"another Boss" never shows.**~~ Fixed: the text is chosen before `previousEvent` is overwritten.
+- ~~**Easter egg check uses an unset variable.**~~ Fixed: the "HEY GUY LOOK AT ME!" check only runs for normal enemies.
+- ~~**`stats.random()` assumes two methods.**~~ Fixed: picks from the skills explicitly.
+- ~~**Boss fights read the previous enemy.**~~ On closer reading this was not a real bug: gold and XP already branch on boss / hydra / normal enemy. The one weak spot, a hydra without gold reading the last normal enemy, can't happen today (every hydra drops gold) and was hardened anyway.
+- ~~**Placeholder achievements.**~~ The 13 unfinished ones are marked `planned:true`, stay hidden and no longer count towards completion (which made 100% impossible). Designing them is in the ideas backlog.
+- ~~**Typos in player-facing text.**~~ Fixed: explosion, tries, Cemetery, Grotto, increased studying, restoration, intellect, Completion, defeated, loses, eradication, environment, BEGINNING, shrine (was "shire").
+- ~~**Forest's Capricor is decided at load.**~~ Fixed in phase 2: the check moved into game start.
+- ~~**Clocks may survive a wizard's death.**~~ Fixed in phase 3: the game loop allows each named clock only once, and kill stops them all.
+- **Volcano boss crash** (found 2026-11-12, fixed): the Volcano's boss `fenix` had no entry in the enemy families (v1 too), so every boss fight there threw an error and the game stopped until a reload.
+- **The game freezes above level 190** (found 2026-11-12, **fixed 2026-11-13**: until guardians exist, that chance starts a normal fight): in `enemyEV()` the guardian branch (`pGetGuardian`, 10%, level 191+) is empty, a megaboss v1 never wrote. Nothing starts the next event, so about 2% of events stop the game until the page is reloaded. To fix with the story (the guardians, or skip the branch).
+- **Manifest paths** (found in phase 4): `manifest.json` pointed at `wizardidle/index.html`, which resolves to `/wizardidle/wizardidle/index.html`, so installing the app opened a broken page. Fixed with relative paths and 192/512 px icons.
