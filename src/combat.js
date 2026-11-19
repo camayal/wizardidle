@@ -7,7 +7,7 @@ import { zones } from './data/zones.js';
 import { npcSpells, spells } from './data/spells.js';
 import { capitalize, getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, RAREMULTIPLIER, selfrevivetime } from './config.js';
-import { stat, state } from './state.js';
+import { stat, state, world } from './state.js';
 import { stats } from './stats.js';
 import { fight, run, ui } from './runtime.js';
 import * as loop from './loop.js';
@@ -81,7 +81,10 @@ function defeatEnemy() {
     // belief: a close call he came through on his own
     if (!fight.godHelped && state.player.hp < state.player.hpBase * config.belief.closeCallLine) beliefMoment("closeCall");
     if (fight.enemy == "el_capricor") {
+        // another wizard already killed "the last" one: it came back, and died again
+        const again = world.cemetery.some((dead) => dead.achievements?.logro_ultimocapricor);
         logro.set(logro.logro_ultimocapricor);
+        if (again) logro.set(logro.logro_capricorreturns);
         zones.el_Bosque.enemies = "el_Elfo,Animalejo,el_Ent,el_Herbo,la_Amazona";
     }
     fight.polymorphed = false;

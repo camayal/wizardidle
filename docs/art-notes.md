@@ -14,3 +14,8 @@ Date: 2026-11-15 11:44
 Author's note: Praire need some scene backround where the road is freatured, @artist
 ```
 
+
+```
+Date: 2026-11-18
+Author's note: for @artist, achievements redesign. (1) Extract the images from C:\Users\camayal\OneDrive\Documentos\GitHub\wizardidle-old-ideas\unorganzed_sprites\Sprites\Archivements\Logros.pdn. (2) Idea: make the achievement frame one static piece and let only the inner picture vary per achievement (frame + content layers), so new achievements only need a picture. (3) New achievement icon: "Aren't you extinct?" (logro_capricorreturns), killing the "last" Capricor again with another wizard; funny, Capricor again. The game already looks for art named logro_capricorreturns.
+```

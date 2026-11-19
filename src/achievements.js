@@ -41,12 +41,13 @@ function wonText(time){
 }
 
 // Table rows (icon, title, description, when won) for every achievement the wizard has unlocked.
+const NONE_YET = `<div style="text-align:center;font-style:italic;color:#7a6a58;margin-top:1.5em">No achievements yet. This wizard's story is still to be written.</div>`;
 function achievementList(){
     let out = "";
     for (const [text, time] of Object.entries(state.achievements)){
         out += achievementRow(text, time, "");
     }
-    return out;
+    return out || NONE_YET;
 }
 
 function achievementRow(text, time, by){

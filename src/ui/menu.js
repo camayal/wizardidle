@@ -108,8 +108,8 @@ function statsBtn(){
 // Toolbar: open the faith scroll (the prayer button), refreshed while open.
 function faithBtn(){
     loop.every("stats", updateFaith, masterTime);
+    el("innerTextScroll").style.display = "block";   // before the first fill: the meter measures the page width
     updateFaith();
-    el("innerTextScroll").style.display = "block";
     scrollOpen("faith");
 }
 

@@ -31,6 +31,7 @@ export const achievements = {
     logro_tabernero: {name:"logro_tabernero", title:"BnB, beer and bed", description:"Spend some time in a inn, visit 250 times a inn"},
     logro_tocado: {name:"logro_tocado", title:"Feel the divine touch", description:"Touched many times"},
     logro_ultimocapricor: {name:"logro_ultimocapricor", title:"The last of their kind", description:"Kill the last existing Capricor, an ateist lineage with no revive posibilities, are you happy?"},
+    logro_capricorreturns: {name:"logro_capricorreturns", title:"Aren't you extinct?", description:"Kill the \"last\" Capricor again, with another wizard"},
     logro_vistoaguilaencueva: {name:"logro_vistoaguilaencueva", title:"Why this animal is here?", description:"Found a eagle in the cave"},
     logro_killedbysheep: {name:"logro_killedbysheep", title:"Shaaaaame on you", description:"Killed by a powerful sheep"},//ok
     logro_killedbychicken: {name:"logro_killedbychicken", title:"The last cluck-cluck", description:"Badly defeated by a demonic chicken"},//ok
