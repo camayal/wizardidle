@@ -14,4 +14,4 @@ Date: 2026-11-15 11:44
 Author's note: Praire need some scene backround where the road is freatured, @artist
 ```
 
-- Ribbon bookmark (author wants to SEE it, 2026-11-18, one-page faith scroll, no ledger): draw a ribbon bookmark as a possible replacement for the scroll-switching tabs (Stats/Records, kill scroll pages). Options first, shown in the art dev console; then dev wires the pick on one scroll to judge.
+- Ribbon bookmark, QUICK MOCKUP ONLY (author, 2026-11-18): before investing, make one rough mockup image (not a full sprite set) of the faith scroll with a ribbon bookmark where the page tabs would be, and a second one of the kill scroll's page switch as a ribbon. One or two ribbon looks at most. Put it in the review drop for the author to judge; if liked, then draw proper options and the art dev console step. No dev wiring yet.
