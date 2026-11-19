@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Dunes: the thin strip of sea at the left edge of all five Dunes scenes, where the wizard walks in, is painted out as sand, so he no longer walks through the water. A walkable shore will come back with the map revamp.
 n- Toolbar buttons could stay dead after the game opened, with only the ? working at some point: opening a second scroll right after another (the chapter scrolls) saved a blocked button as its handler. Blocking the toolbar now keeps the real handlers.
 
 - Scroll ribbon bookmarks are new and a bit smaller: a crimson cloth banner with gold trim, a folded flap and a swallowtail, hanging over the roll at the top of the scroll, with ten new 9x9 icons (trophy for all achievements, skull, tombstone, beast, pouch, chart and the three map layers). Opening the bestiary no longer leaves a half-drawn icon.

@@ -22,6 +22,7 @@ The index of Wizard Idle v2: where the project stands, one line per idea, and th
 New idea: one line here, its text in the matching file. Nothing here is a commitment.
 
 **With a plan**
+- Map revamp: ground and aboveground maps, delta and beach with nagas, bridges, border scenes → [docs/MAPS.md](docs/MAPS.md)
 - Faith rebalance, belief levels, rescuers → [docs/FAITH.md](docs/FAITH.md)
 - Professions: reagents, items, vendors → [docs/PROFESSIONS.md](docs/PROFESSIONS.md)
 - Stats for almost everything, playtest tools → [docs/STATS.md](docs/STATS.md)
@@ -113,3 +114,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): toolbar dead at start fixed: disableMainButtons no longer overwrites saved handlers on a second call; enable only restores saved ones.
 - 2026-11-19 (dev): docs cleanup: SCROLLS.md archived whole (pilot done, no spread to other scrolls); STATS, AWAY and ROADMAP trimmed to what is still open; finished parts in docs/ARCHIVE.md.
 - 2026-11-19 (dev): docs cleanup 2: SCENE_SPELLS boss effects and FAITH sections 1-2 archived; FAITH has a status paragraph. SCENES.md is untouched: no scene engine exists yet.
+- 2026-11-19 (dev): step 1 of docs/MAPS.md done: the sea strip at the left edge of las_dunas1..5 is painted out (the artist's files, approved by the author). New bug noted in dev-notes: the tab never restarts after inactivity (empty console), needs a repro.
