@@ -199,6 +199,12 @@ const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the cl
 const RIBBON_SCALE = 2;             // one ribbon pixel = this many pixels of the 320-wide scroll art
 const RIBBON_W = 9, RIBBON_ICON = 7, RIBBON_GAP = 3, RIBBON_MARGIN = 6;    // in ribbon pixels
 const ribbons = [];
+// Load every ribbon image up front, so a ribbon changing state never shows half-loaded.
+const ribbonImages = ["ribbon_rest", "ribbon_selected", ...Object.values(RIBBON_ICONS)].map((name) => {
+    const image = new Image();
+    image.src = art(name);
+    return image;
+});
 
 function ribbonAt(index) {
     while (ribbons.length <= index) {
@@ -240,9 +246,10 @@ function placeScrollTabs(set) {
         ribbon.title = PAGE_NAMES[page];
         Object.assign(ribbon.style, { display: "block", left: `${parseFloat(up.style.left) + x}px`,
             top: `${parseFloat(up.style.top)}px`, width: `${RIBBON_W * u}px`, height: `${(open ? 20 : 16) * u}px` });
-        ribbon.querySelector(".ribbonBody").src = art(open ? "ribbon_selected" : "ribbon_rest");
+        const body = ribbon.querySelector(".ribbonBody"), bodySrc = art(open ? "ribbon_selected" : "ribbon_rest");
+        if (!body.src.endsWith(bodySrc)) body.src = bodySrc;
         const icon = ribbon.querySelector(".ribbonIcon");
-        icon.src = art(RIBBON_ICONS[page]);
+        if (!icon.src.endsWith(art(RIBBON_ICONS[page]))) icon.src = art(RIBBON_ICONS[page]);
         Object.assign(icon.style, { left: `${u}px`, top: `${(open ? 9 : 5) * u}px`, width: `${RIBBON_ICON * u}px` });
     });
 }
