@@ -1524,3 +1524,123 @@ Author's note: Inventory: show the items in a grid, each item in its own square 
 Date: 2026-11-18
 Author's note (question, answer with pros and cons, then options): would it be a nice idea to make each scroll a little more thematic instead of the same parchment? Examples: the cemetery with a grass background; the inventory with a wooden texture and crates/boxes; the stats and the bestiary kept as parchment, or each with its own look. Combining different looks could break our current status (the one scroll style used by stats, achievements, help, kill, map, faith). Please list pros and cons, a recommendation, and what it would cost the artist; dev waits for the author's OK before building.
 ```
+
+
+## Sound notes, approved 2026-11-18 (wired)
+
+```
+Sound test ETY.colour_burst: Etymos: colour burst
+Scene: Boss: attack: etymos / colour_burst (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-gentle-underwater-swish-499658.mp3 (from the picked folder)
+Cut: 0.000 s to 0.463 s (file 2.904 s)
+Speed: 3x | Extend: 6x | Plays for 0.93 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 250 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Nature (spellChispasGreen_8), heard
+Date: 2026-11-18 19:32
+Author's note: -
+```
+
+```
+Date: 2026-11-18 19:35
+Author's note: -
+```
+
+```
+Sound test ETY.orb_pulse: Etymos: prism pulse
+Scene: Boss: attack: etymos / orb_pulse (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-eerie-resonant-tone-478368.mp3 (from the picked folder)
+Cut: 0.000 s to 2.500 s (file 3.120 s)
+Speed: 1x | Extend: 1x | Plays for 2.50 s
+Fade in 0 ms, fade out 570 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2500 ms)
+Landing sound: Frost (spellChispasBlue_8), heard
+Date: 2026-11-18 19:35
+Author's note: -
+```
+
+```
+Sound test ARC.lightning: Arcangel: lightning
+Scene: Boss: attack: arcangel / lightning (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-thunder-2-631455.mp3 (from the picked folder)
+Cut: 0.000 s to 1.987 s (file 3.056 s)
+Speed: 1x | Extend: 1x | Plays for 1.99 s
+Fade in 0 ms, fade out 780 ms | Volume 0.3
+Starts at 0 ms (blow lands at 900 ms, the move lasts 2200 ms)
+Landing sound: Thunder (spellChispasReddish_8), heard
+Date: 2026-11-18 19:36
+Author's note: -
+```
+
+```
+Sound test EN.golem.slam: Regular enemies: slam (Golem)
+Scene: Enemy: attack: el_golem1 / slam (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-heavy-boulder-thud-515257.mp3 (from the picked folder)
+Cut: 0.000 s to 0.888 s (file 2.112 s)
+Speed: 1x | Extend: 1x | Plays for 0.89 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 500 ms, the move lasts 700 ms)
+Landing sound: Physical (spellPush9), heard
+Date: 2026-11-18 19:37
+Author's note: -
+```
+
+```
+Sound test SKE.curse: Skeleton: curse
+Scene: Boss: attack: skeleton / curse (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-creepy-whisper-472369.mp3 (from the picked folder)
+Cut: 0.000 s to 1.660 s (file 3.120 s)
+Speed: 1x | Extend: 1x | Plays for 1.66 s
+Fade in 0 ms, fade out 660 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1300 ms, the move lasts 3000 ms)
+Landing sound: Arcane (spellRainPurple_24), heard
+Date: 2026-11-18 19:40
+Author's note: -
+```
+
+```
+Sound test ROJ.slam: Rojo: slam
+Scene: Boss: attack: rojo / slam (wizard tier 0)
+Verdict: APPROVED
+Sound: freesound_community-magic-spell-6005.mp3 (from the picked folder)
+Cut: whole file (file 1.680 s)
+Speed: 1x | Extend: 1x | Plays for 1.68 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at -100 ms (blow lands at 1300 ms, the move lasts 2600 ms)
+Landing sound: Physical (spellPush9), heard
+Date: 2026-11-18 19:44
+Author's note: -
+```
+
+```
+Sound test ROJ.flaming_punch: Rojo: flaming punch
+Scene: Boss: attack: rojo / flaming_punch (wizard tier 0)
+Verdict: APPROVED
+Sound: freesound_community-magic-spell-6005.mp3 (from the picked folder)
+Cut: whole file (file 1.680 s)
+Speed: 1.35x | Extend: 1x | Plays for 1.24 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2300 ms)
+Landing sound: Physical (spellPush10), heard
+Date: 2026-11-18 19:46
+Author's note: -
+```
+
+```
+Sound test ROJ.fire_rain: Rojo: fire rain
+Scene: Boss: attack: rojo / fire_rain (wizard tier 0)
+Verdict: APPROVED
+Sound: dragon-studio-fire-spell-impact-393921.mp3 (from the picked folder)
+Cut: 0.000 s to 2.400 s (file 2.900 s)
+Speed: 1x | Extend: 1x | Plays for 2.40 s
+Fade in 0 ms, fade out 30 ms | Volume 0.3
+Starts at 0 ms (blow lands at 1000 ms, the move lasts 2400 ms)
+Landing sound: Physical (spellPush6), heard
+Date: 2026-11-18 19:46
+Author's note: -
+```

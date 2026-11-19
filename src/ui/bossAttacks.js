@@ -137,7 +137,10 @@ export function playBossAttack(boss, chosen, stone, onHit) {
         return land();
     }
     const attack = chosen || attacks[Math.floor(looksRandom() * attacks.length)];
-    for (const [sound, ms, volume] of attackSounds[`${boss}.${attack.id}`] || []) playSoundAt(sound, ms, volume);
+    // a sound that starts before the move (negative ms) holds the move back by that much
+    const sounds = attackSounds[`${boss}.${attack.id}`] || [];
+    const lead = Math.max(0, ...sounds.map(([, ms]) => -ms));
+    for (const [sound, ms, volume] of sounds) playSoundAt(sound, ms + lead, volume);
     if (stone) playSoundAt("stone_grind", 700);       // the stone starts to climb
     const strip = art(`anim_${boss}_${attack.id}`), scene = attack.scene ? art(`scene_${attack.scene}`) : null;
     imageNow(strip);
@@ -151,7 +154,6 @@ export function playBossAttack(boss, chosen, stone, onHit) {
     const k = bw / 64;                                  // screen px per art px
     npcCanvas.width = npcCanvas.offsetWidth;
     npcCanvas.height = npcCanvas.offsetHeight;
-    if (scene) runSceneSpell(attack.scene, sceneFrames, attack.sceneAt);
     let i = 0;
     const next = () => {
         if (i >= total || state.npc != boss) {           // done, or the boss is gone
@@ -172,8 +174,13 @@ export function playBossAttack(boss, chosen, stone, onHit) {
         if (i == hitAt) land();
         i++;
     };
-    next();
-    loop.every("animNPC", next, 100);
+    const start = () => {
+        if (state.npc != boss) return land();
+        if (scene) runSceneSpell(attack.scene, sceneFrames, attack.sceneAt);
+        next();
+        loop.every("animNPC", next, 100);
+    };
+    if (lead) setTimeout(start, lead); else start();
 }
 
 // ------------------------------------------------------------------ hydras

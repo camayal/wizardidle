@@ -33,7 +33,7 @@ export const meleeMoveOf = (family) => MELEE[family] || DEFAULT_MELEE;
 // never assumed for another creature): family -> [move, sound, ms from the first frame, volume].
 // docs/SOUNDS.md has the table. The landing keeps the spell's own sound.
 const MOVE_SOUND = {
-    el_ent: ["slam", "thud", 500], el_elfo: ["shoot", "arrow", 200],
+    el_ent: ["slam", "thud", 500], el_golem: ["slam", "golem_slam", 0], el_elfo: ["shoot", "arrow", 200],
     el_tauren: ["charge", "hooves", 370, 0.55], el_capricor: ["charge", "hooves", 370, 0.55],
     el_orco: ["slash", "swing_slash", 300], el_guerrero: ["thrust", "swing_thrust", 200],
     el_ogro: ["smash", "Physical", 400], el_diabillo: ["pounce", "bite", 100],

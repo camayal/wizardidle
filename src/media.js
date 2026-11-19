@@ -66,7 +66,10 @@ const SOUND_FOLDERS = {
     wizard: ['hurt1', 'hurt2', 'hurt3', 'hurt4', 'hurt5', 'hurt6', 'revive', 'heal', 'pray', 'drink', 'studybook', 'studyrune'],
     creatures: ['boss', 'hidra', 'gallina', 'oveja', 'hydra_mud_enter', 'hydra_ice_enter', 'hydra_bones_enter',
         'thud', 'rumble', 'rock_roll', 'arrow', 'hooves', 'roar', 'rock_smash', 'stone_break', 'stone_grind', 'bounce',
-        'bite', 'wind_gust', 'swing_slash', 'swing_thrust', 'curse', 'sonic_boom', 'rune_circle', 'squelch'],
+        'bite', 'wind_gust', 'swing_slash', 'swing_thrust', 'curse', 'sonic_boom', 'rune_circle', 'squelch',
+        'midas_orbs', 'midas_rays', 'midas_touch', 'rojo_slam', 'rojo_punch', 'rojo_fire_rain', 'cuboq_spit', 'skeleton_slash',
+        'skeleton_curse', 'ice_spikes', 'blizzard', 'fire_breath', 'wing_flap', 'flame_pillar', 'earth_spikes', 'goro_flurry',
+        'goro_charge', 'arcane_flare', 'phase', 'vines', 'spores', 'lightning', 'colour_burst', 'prism_pulse', 'golem_slam'],
     places: ['altar', 'dice', 'coins', 'breakPot', 'breakWood'],
     ui: ['achivement', 'lvlup', 'statUp', 'unlock', 'scroll', 'start'],
 };

@@ -15,14 +15,14 @@ import { art } from './media.js';
 
 // Play a spell animation from img/<spell>.png on the wizard or the enemy (bigger on a critic) and its sound.
 // at: {x, y} in scene sprite px (256 x 64) to place the effect somewhere else, e.g. above a find.
-function spell(img, pj, critic = 0, center = 0, at = null){
+function spell(img, pj, critic = 0, center = 0, at = null, silent = false){
     if (run.simulation) return;
     const frameWidth = 30, frameHeight = 30;    // size of one frame in the sprite sheet
     let currentFrame = 0, shift = 0;            // animation position, advanced every frame
 
 
     let volume;
-    if (spells[img].school != "na"){
+    if (spells[img].school != "na" && !silent){
         if(critic){volume = 1}
         playSound(spells[img].school, volume);
 

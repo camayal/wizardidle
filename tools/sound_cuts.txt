@@ -1,6 +1,7 @@
 # The cuts of tools/cut_sounds.py: one game sound per line.
 #
-#   name | folder of snd/ | source file | from (s) | to (s)
+#   name | folder of snd/ | source file | from (s) | to (s) [| speed | extend | fade out (ms)]
+#   speed (1 = as is, pitch follows), extend (the cut repeated N times) and fade out (30 ms) are optional.
 #
 # name is the game's name (snd/<folder>/<name>.ogg): short, lowercase, words joined by _.
 # A source is a file of the sounds folder outside the repo, or a path starting with snd/ for a
@@ -25,3 +26,28 @@ curse        | creatures | freesound_community-deathmagic-94937.mp3 | 1.717 | 3.
 sonic_boom   | creatures | dragon-studio-ghostly-tone-499659.mp3 | - | -
 rune_circle  | creatures | coghezzi-sacred-rune-lock-02-arcane-seal-activation-536458.mp3 | - | -
 squelch      | creatures | universfield-wet-squelch-276679.mp3 | - | -
+midas_orbs | creatures | dragon-studio-bubble-gum-popping-467465.mp3 | - | - | 1.6 | 1 | 30
+midas_rays | creatures | dragon-studio-eerie-resonant-tone-478368.mp3 | - | -
+midas_touch | creatures | dragon-studio-glass-wail-570451.mp3 | - | -
+rojo_slam | creatures | dragon-studio-elemental-spell-impact-flame-448566.mp3 | 0 | 2.541 | 1 | 1 | 140
+rojo_punch | creatures | dragon-studio-elemental-spell-impact-flame-448566.mp3 | 2.559 | 5.592
+rojo_fire_rain | creatures | dragon-studio-fire-spell-impact-393921.mp3 | 0 | 2.4
+cuboq_spit | creatures | dragon-studio-clean-minimal-pop-467466.mp3 | - | - | 0.45
+skeleton_slash | creatures | dragon-studio-simple-whoosh-copyright-free-631457.mp3 | - | -
+skeleton_curse | creatures | freesound_community-deathmagic-94937.mp3 | - | -
+ice_spikes | creatures | dragon-studio-glass-cracking-504028.mp3 | - | - | 0.65
+blizzard | creatures | dragon-studio-freezing-winter-wind-499654.mp3 | 0 | 2.2 | 1 | 1 | 1000
+fire_breath | creatures | dragon-studio-fire-spell-impact-393921.mp3 | - | -
+wing_flap | creatures | dragon-studio-bush-rustling-467467.mp3 | - | - | 0.45
+flame_pillar | creatures | dragon-studio-elemental-spell-impact-flame-448566.mp3 | 0 | 2.2 | 1 | 1 | 870
+earth_spikes | creatures | dragon-studio-colossal-footsteps-467495.mp3 | - | - | 2.55
+goro_flurry | creatures | dragon-studio-beast-growl-sound-376873.mp3 | - | - | 1.05
+goro_charge | creatures | dragon-studio-heavy-boulder-thud-515257.mp3 | 0.343 | 0.678 | 1.25 | 3
+arcane_flare | creatures | dragon-studio-creepy-sound-effect-570459.mp3 | 0 | 1.702 | 1 | 1 | 810
+phase | creatures | dragon-studio-velvet-whoosh-sfx-570450.mp3 | 0 | 0.473 | 0.7
+vines | creatures | yodguard-bouncy_jelly_creature_movement-387893.mp3 | 0 | 1.132 | 0.4
+spores | creatures | dragon-studio-sand-transition-451861.mp3 | 0 | 2.4 | 0.85 | 1 | 500
+lightning | creatures | dragon-studio-thunder-4-631461.mp3 | 0 | 2.233 | 1 | 1 | 810
+colour_burst | creatures | dragon-studio-gentle-underwater-swish-499658.mp3 | 0 | 0.463 | 3 | 6
+prism_pulse | creatures | dragon-studio-eerie-resonant-tone-478368.mp3 | 0 | 2.5 | 1 | 1 | 570
+golem_slam | creatures | dragon-studio-heavy-boulder-thud-515257.mp3 | 0 | 0.888

@@ -90,7 +90,22 @@ export const attackSounds = {
     "cuboq.bounce": [["bounce", 0]],
     "infraespectro.curse": [["curse", 200, 1]],
     "doria.sonic_boom": [["sonic_boom", 0]], "doria.rune_circle": [["rune_circle", 0]],
+    "midas.rainbow_orbs": [["midas_orbs", 0]], "midas.golden_rays": [["midas_rays", 0]], "midas.golden_touch": [["midas_touch", 0]],
+    "rojo.slam": [["rojo_slam", 0]], "rojo.flaming_punch": [["rojo_punch", 0]], "rojo.fire_rain": [["rojo_fire_rain", 0]],
+    "cuboq.spit": [["cuboq_spit", 0]],
+    "skeleton.great_slash": [["skeleton_slash", 740]], "skeleton.curse": [["skeleton_curse", -1140]],
+    "rainbow.ice_spikes": [["ice_spikes", 0]], "rainbow.blizzard": [["blizzard", 0]],
+    "fenix.fire_breath": [["fire_breath", 0]], "fenix.wing_flap": [["wing_flap", 0]], "fenix.flame_pillar": [["flame_pillar", 0]],
+    "protromus.earth_spikes": [["earth_spikes", 0, 0.82]],
+    "goro.flurry": [["goro_flurry", 0]], "goro.slam": [["thud", 0]], "goro.charge": [["goro_charge", 0]],
+    "infraespectro.arcane_flare": [["arcane_flare", 0]], "infraespectro.phase": [["phase", 0]],
+    "herbus.vines": [["vines", 0]], "herbus.spores": [["spores", -360]],
+    "arcangel.lightning": [["lightning", 0]],
+    "etymos.orb_pulse": [["prism_pulse", 0]], "etymos.colour_burst": [["colour_burst", 250]],
 };
+
+// Moves whose landing spell stays silent (the author muted its school sound while approving the move's own).
+export const mutedLanding = new Set(["midas.golden_rays", "skeleton.curse"]);
 
 // Frames of each scene spell (256 x 64 each). Some are not used by bosses yet (story, powers).
 export const sceneSpells = {

@@ -18,6 +18,7 @@ import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
+import { mutedLanding } from './data/bossAttacks.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
 import { playEntrance, playLeave } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
@@ -510,8 +511,8 @@ function enemyAttack() {
     if (!lethal) takeHit();
     print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`);
     let hit = false, waiting = false;   // waiting: the blow lands after this round (else battle() sees the fall)
-    const landed = (spellId) => () => {
-        spell(spellId, true);
+    const landed = (spellId, silent = false) => () => {
+        spell(spellId, true, 0, 0, null, silent);
         if (!lethal || hit) return;
         hit = true;
         takeHit();
@@ -526,7 +527,7 @@ function enemyAttack() {
         if (fight.bossCombat && hasBossAttacks(fight.enemy)) {
             const attack = bossAttackFor(fight.enemy, spellId);
             const stone = applyBossEffect(attack);                       // what it does besides the damage
-            playBossAttack(fight.enemy, attack, stone, landed(spellId));    // the boss's own attack, then its effect
+            playBossAttack(fight.enemy, attack, stone, landed(spellId, mutedLanding.has(`${fight.enemy}.${attack.id}`)));    // the boss's own attack, then its effect
         } else {
             playHydraAttack(spellId, landed(spellId));     // a strike, or a cast with its scene spell
         }

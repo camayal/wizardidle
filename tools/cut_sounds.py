@@ -1,7 +1,8 @@
 """Wizard Idle v2 - cut the approved sounds and save them as the game's .ogg files.
 
 The list is tools/sound_cuts.txt: one line per game sound (its name, its folder of snd/, the
-source file, where the cut starts and ends). For each line this reads the source (mp3, ogg,
+source file, where the cut starts and ends, and optionally speed, extend and fade out in ms,
+as the sounds mode has them). For each line this reads the source (mp3, ogg,
 wav, flac), keeps the cut, mixes it to mono, fades the end out and writes
 snd/<folder>/<name>.ogg (Ogg Vorbis). The volume is not changed: the game sets it when it plays.
 
@@ -38,15 +39,17 @@ def read_cuts():
         if not line:
             continue
         parts = [p.strip() for p in line.split('|')]
-        if len(parts) != 5:
-            sys.exit(f'{CUTS.name} line {n}: expected 5 fields, found {len(parts)}')
-        name, folder, source, start, end = parts
+        if not 5 <= len(parts) <= 8:
+            sys.exit(f'{CUTS.name} line {n}: expected 5 to 8 fields, found {len(parts)}')
+        name, folder, source, start, end = parts[:5]
+        extra = [float(x) for x in parts[5:]] + [1, 1, FADE_OUT_MS][len(parts) - 5:]
         if name != name.lower() or ' ' in name or '-' in name:
             sys.exit(f'{CUTS.name} line {n}: "{name}" is not a game name (lowercase, words joined by _)')
         cuts.append({
             'name': name, 'folder': folder, 'source': source,
             'start': None if start == '-' else float(start),
             'end': None if end == '-' else float(end),
+            'speed': extra[0], 'extend': int(extra[1]), 'fade': extra[2],
         })
     names = [c['name'] for c in cuts]
     for name in set(names):
@@ -88,7 +91,12 @@ def cut_one(cut, src, sf, np):
     if not 0 <= a < b:
         sys.exit(f'{cut["name"]}: the cut {cut["start"]} to {cut["end"]} s is outside the file ({len(mono) / rate:.3f} s)')
     piece = mono[a:b].copy()
-    fade = min(len(piece), round(FADE_OUT_MS / 1000 * rate))
+    if cut['extend'] > 1:                  # the cut repeated, as the sounds mode loops it
+        piece = np.tile(piece, cut['extend'])
+    if cut['speed'] != 1:                  # faster or slower with the pitch, like the browser's playbackRate
+        n = round(len(piece) / cut['speed'])
+        piece = np.interp(np.arange(n) * cut['speed'], np.arange(len(piece)), piece).astype('float32')
+    fade = min(len(piece), round(cut['fade'] / 1000 * rate))
     if fade:
         piece[-fade:] *= np.linspace(1, 0, fade, dtype='float32')
     out = REPO / 'snd' / cut['folder'] / f'{cut["name"]}.ogg'
