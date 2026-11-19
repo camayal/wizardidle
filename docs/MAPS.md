@@ -28,6 +28,8 @@ Redraw the world maps and add the places they are missing: a better ground map, 
 | Bridges (author, 2026-11-19) | **Where there is a river or creek: the Prairie and the Swamp each get a bridge** (supersedes "every zone"; other zones only if they gain water) |
 | Border scenes (author, 2026-11-19) | **Every pair at once** |
 | Aboveground map (author, 2026-11-19) | **Same size and style as the ground map** |
+| Delta dropped (author, 2026-11-19) | **No delta: the beach alone is enough** (no `el_delta` zone; the nagas live at the beach; supersedes the delta, two-zones and river-system rows where they mention it). The river must not run into the sea and back onto land. The Dunes grow a little to give a well-placed beach, like a long land bridge joining the Prairie on the north-west, which turns the west gulf into a lake the river flows from. The north Prairie beach stays and extends to the beginning of the Desert. The Heidan clouds on the ground map become about 5 |
+| Ground map layout (author, 2026-11-19) | **Approved: `map_layout_options/mapa_b4.png`** (option B with a thin land bridge; the big lake and its river; the small lake by the city removed; the wide beach with the sand spit, extended to the Desert; bridges in the Prairie and Swamp; a cluster of about 5 clouds at the end of each sacred stair). Not installed as img/ui/mapa.png yet; the map spots must be re-checked when it is |
 
 *Open decisions are at the end; answers move up here.*
 
