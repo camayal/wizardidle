@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Faith scroll: the gold-leaf border now sits inside the parchment on all four sides; before, it added its own width and stuck out on the right and bottom.
 - The Faith scroll has its new look: a gold-leaf border and a header ornament (only on this scroll), and the belief meter is now a stained-glass window whose light fills up to his belief, with a marker on the ring and a flickering candle for his level (cold wax when belief is lost); a small candle icon sits by the title. The glass flares when belief rises and dims when it falls.
 - Dev tools, Sounds mode: "Save to file" now always writes the sound details (sound, settings, verdict) into the note; before, they only went in after "Capture moment", so an approval saved without capturing came out as an empty note.
 - Enemy moves have their own sounds, at their own moment: the Ent's thud, the Elf's arrow, the horn charges' hooves, the Orc's and Warrior's swings, the Ogre's smash, the Imp's bite; and the bosses' moves (Protromus, Kkck, Bicaptop, Cuboq, Infraespectro's curse, Doria's boom and rune circle). Medusa's stone grinds as it climbs and cracks when he breaks free, and the Swamp hydra's regrowth squelches.

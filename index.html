@@ -274,6 +274,7 @@
             }
             /* the faith scroll only (data-page is set when a scroll opens): the gold-leaf border */
             #scrollText[data-page="faith"]{
+                box-sizing: border-box;   /* width/height are set in JS to the parchment: the border sits inside them instead of adding 64px to the right and bottom */
                 border: solid transparent;
                 border-width: 32px;
                 border-image: url("img/ui/faith/faith_border_a_9slice.png") 16 round;
