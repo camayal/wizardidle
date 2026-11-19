@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Scroll ribbon bookmarks are smaller (three quarters of the size) and now hang from the roll of the scroll: the roll covers the top of each ribbon, as if it were tucked into it.
 - Scroll ribbon bookmarks are bigger and new: a crimson cloth banner with gold trim, a folded flap and a swallowtail (the author's drawing), with ten new 9x9 icons (trophy for all achievements, skull, tombstone, beast, pouch, chart and the three map layers).
 - Scroll ribbons no longer show a half-drawn icon while a slow page (the bestiary, with all its sprites) builds: the ribbon moves first, both ribbon pictures stay loaded, and the page is built right after; the bestiary sprites decode in the background.
 - Scroll ribbon bookmarks: the page now always starts below the open ribbon (the gap after the title is measured instead of fixed), and the ribbons are drawn above the page, so the bestiary's creature rows no longer hide the lower part of its icon.

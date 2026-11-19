@@ -200,7 +200,8 @@ const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cem
 const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
     run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
-const RIBBON_SCALE = 2;             // one ribbon pixel = this many pixels of the 320-wide scroll art
+const RIBBON_SCALE = 1.5;           // one ribbon pixel = this many pixels of the 320-wide scroll art (was 2: too big)
+const RIBBON_TOP = 3;               // ribbon pixels below the roll's top edge: the roll is 5 ribbon pixels thick and covers the ribbon's first 2 rows, so it hangs from the roll
 const RIBBON_W = 18, RIBBON_ICON = 9, RIBBON_GAP = 3, RIBBON_MARGIN = 6;   // in ribbon pixels (the picture is 18 wide with its flap, 29 tall)
 const RIBBON_H_REST = 25, RIBBON_H_OPEN = 29;                              // the open ribbon hangs 4 lower
 const ribbons = [];
@@ -221,7 +222,7 @@ function ribbonAt(index) {
     while (ribbons.length <= index) {
         const ribbon = document.createElement("div");
         ribbon.className = "scrollRibbon";
-        ribbon.style.cssText = "position:absolute; display:none; cursor:pointer; z-index:1000; image-rendering:pixelated;";
+        ribbon.style.cssText = "position:absolute; display:none; cursor:pointer; z-index:1; image-rendering:pixelated;";
         // both bodies are loaded once and only shown or hidden, so a heavy page (the bestiary) never
         // catches the ribbon with a picture half swapped
         const bodyStyle = 'position:absolute; left:0; top:0; width:100%; image-rendering:pixelated';
@@ -266,7 +267,7 @@ function placeScrollTabs(set) {
         ribbon.dataset.page = page;
         ribbon.title = PAGE_NAMES[page];
         Object.assign(ribbon.style, { display: "block", left: `${snap(parseFloat(up.style.left) + x)}px`,
-            top: `${snap(parseFloat(up.style.top))}px`, width: `${RIBBON_W * u}px`, height: `${(open ? RIBBON_H_OPEN : RIBBON_H_REST) * u}px` });
+            top: `${snap(parseFloat(up.style.top) + RIBBON_TOP * u)}px`, width: `${RIBBON_W * u}px`, height: `${(open ? RIBBON_H_OPEN : RIBBON_H_REST) * u}px` });
         ribbon.querySelector(".ribbonBody.rest").style.display = open ? "none" : "block";
         ribbon.querySelector(".ribbonBody.selected").style.display = open ? "block" : "none";
         const icon = ribbon.querySelector(".ribbonIcon");
@@ -278,7 +279,7 @@ function placeScrollTabs(set) {
     // length (RIBBON_H_OPEN ribbon pixels) below the scroll's top edge, plus a little air.
     const title = text.querySelector(".titles");
     if (title) {
-        const ribbonBottom = parseFloat(up.style.top) + RIBBON_H_OPEN * u + up.parentElement.getBoundingClientRect().top;
+        const ribbonBottom = parseFloat(up.style.top) + (RIBBON_TOP + RIBBON_H_OPEN) * u + up.parentElement.getBoundingClientRect().top;
         const titleBottom = title.getBoundingClientRect().bottom;
         text.style.setProperty("--ribbonGap", `${Math.max(5 * u, ribbonBottom - titleBottom + 2 * u)}px`);
     }
