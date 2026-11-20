@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- Crossing a bridge is now part of the trip: when a trip goes over the spring, south or swamp bridge (by your Travel links), the wizard walks across its two scenes, west half then east half, and the other way round, walking right to left, when he comes from the east side. Untested in a browser; mouths and stairs come next.
+- Crossing a bridge is now part of the trip: when a trip goes over the spring, south or swamp bridge (by your Travel links), the wizard walks across its two scenes, west half then east half, and the other way round, walking right to left, when he comes from the east side. The Heidan stairs are walked too (three scenes, right going up, left going down) and the cave and mine mouths: he stops at the opening, the scene fades like a dream into the underground one and he walks on from its opening (always left to right). Only trips that change zone show them. Untested in a browser.
 - Scene art from the author's review: the Prairie far town (la_pradera2) and a stone spring bridge on the ground map are in the game. The new scenes (northTown, fueraCity, the tower crossroads, mine timbers, Heidan 9-11), the bridges, cave and mine mouths, ladder, pier and stairs are saved in img/places/connectors (the scenes themselves are stages, see below).
 - The new scenes are now real stages of the game with standard names (Prairie 6-14, Mine 6-7, Cave 6, Volcano 6, Duenon 6, Swamp 6-7, Heidan 6-11), and travelling follows the links you set in Travel mode: the game picks moves and destinations from your Accessible and Difficult links and ignores Impossible ones.
 - Scenes can have a front layer drawn over the wizard and every sprite, so he walks behind structures; the two mine scenes (mina_cueva1, mina_cueva_2) have theirs.

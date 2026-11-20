@@ -1,9 +1,9 @@
 // Wizard Idle v2 - Moving around: changing zone, moving between the stages of a zone, picking backgrounds.
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
-import { zones } from './data/zones.js';
+import { places, zones } from './data/zones.js';
 import { connectorsBetween, destinations, moves, spotX } from './travelGraph.js';
-import { connectorScenes } from './data/connectors.js';
+import { connectorScenes, DOOR_STOP, mouthDoors, stairScenes } from './data/connectors.js';
 import { pickRandomItem } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
@@ -14,15 +14,32 @@ import { loadBackground, print, showStage, walkAcross, walkThroughScene, walkWiz
 
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
 
-// The connector scenes between two stages, with the direction he walks them: [{scenes, dir}] or null.
-// The bridge is entered from the side he stands on (origin east of the bridge: he walks west).
+// The connector scenes between two stages as walking steps (render.walkAcross), or null when the trip has none.
+// A bridge is entered from the side he stands on (origin east of the bridge: he walks west); stairs by
+// going up or down; a mouth always left to right, stopping at its opening and fading into its twin.
 function crossing(origin, target) {
-    const bridges = connectorsBetween(origin, target).filter(c => connectorScenes[c]);
-    if (!bridges.length) return null;
-    const x = spotX(origin), bx = spotX(bridges[0]);
-    const dir = x !== undefined && bx !== undefined && x > bx ? -1 : 1;
-    const scenes = bridges.flatMap(c => connectorScenes[c]);
-    return { scenes: dir > 0 ? scenes : scenes.slice().reverse(), dir };
+    // within one zone a connector only passes the trip on (all the Town's stages link to the same bridge): no crossing
+    if (places[origin].zone === places[target].zone) return null;
+    const chain = connectorsBetween(origin, target), steps = [], x = spotX(origin);
+    for (let i = 0; i < chain.length; i++) {
+        const c = chain[i];
+        if (connectorScenes[c]) {
+            const bx = spotX(c), dir = x !== undefined && bx !== undefined && x > bx ? -1 : 1;
+            const scenes = dir > 0 ? connectorScenes[c] : connectorScenes[c].slice().reverse();
+            scenes.forEach(scene => steps.push({ scene, dir }));
+        } else if (stairScenes[c] || Object.values(stairScenes).some(s => s.top === c)) {
+            const ground = stairScenes[c] ? c : Object.keys(stairScenes).find(k => stairScenes[k].top === c);
+            if (c !== ground || !chain.includes(stairScenes[c].top)) continue;   // the top point is handled with its ground point
+            const up = chain.indexOf(c) < chain.indexOf(stairScenes[c].top);
+            const scenes = up ? stairScenes[c].scenes : stairScenes[c].scenes.slice().reverse();
+            scenes.forEach(scene => steps.push({ scene, dir: up ? 1 : -1 }));
+        } else if (mouthDoors[c] !== undefined && chain[i + 1] && mouthDoors[chain[i + 1]] !== undefined) {
+            const twin = chain[++i];
+            steps.push({ scene: c, dir: 1, end: mouthDoors[c] - DOOR_STOP, fade: true });
+            steps.push({ scene: twin, dir: 1, start: mouthDoors[twin] - DOOR_STOP });
+        }
+    }
+    return steps.length ? { steps, dir: steps[0].dir } : null;
 }
 
 // Steps of travelling: leave the zone, enter a new one and show its legend.
@@ -43,10 +60,10 @@ function changeLocality() {
         break;
     case 2:
         if (run.crossing) {                  // over a bridge: its scenes first, then the new stage
-            const { scenes, dir } = run.crossing;
+            const { steps } = run.crossing;
             run.crossing = null;
             print(`${wizardName()} is entering to the ${zones[state.zone.current].name}, ${pickRandomItem(zones[state.zone.current].legend)}`);
-            walkAcross(scenes, dir, showStage);
+            walkAcross(steps, showStage);
             break;
         }
         //change background
@@ -78,7 +95,7 @@ function pickRandomBackgroundForCurrentZone(onArrive) {
         loadBackground(randomLocality);
     };
     const cross = crossing(origin, randomLocality);
-    if (cross) walkAcross(cross.scenes, cross.dir, change, onArrive);
+    if (cross) walkAcross(cross.steps, change, onArrive);
     else walkThroughScene(change, onArrive);
 };
 

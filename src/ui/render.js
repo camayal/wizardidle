@@ -364,17 +364,29 @@ function walkBackThroughScene(changeScene, onArrive) {
     });
 }
 
-// Across a connector (a bridge): he leaves the scene by the side he is going to (dir 1 = east, to the
-// right; -1 = west, to the left, the walk strip mirrored), crosses each of its scenes in turn, then
-// changeScene shows the real destination and he walks in to his place from the same side.
-function walkAcross(scenes, dir, changeScene, onArrive) {
-    const out = dir > 0 ? OFF_RIGHT : OFF_LEFT, inn = dir > 0 ? OFF_LEFT : OFF_RIGHT;
+// Across a connector (bridge, stairs, cave or mine mouth): its scenes in turn. steps is a list of
+// {scene, dir, start, end, fade}: he walks right (dir 1) or left (dir -1, the walk strip mirrored) from
+// `start` to `end` (offsets; by default from just outside one edge to just outside the other). With
+// fade he stops at `end` (a door) and the scene fades into the next one, where he appears at that
+// step's `start` (its opening). The first step is reached by walking out of the scene he is in; at the
+// end changeScene shows the real destination and he walks in to his place from the same side.
+function walkAcross(steps, changeScene, onArrive) {
+    const side = (d) => d > 0 ? OFF_RIGHT : OFF_LEFT, entry = (d) => d > 0 ? OFF_LEFT : OFF_RIGHT;
+    const startOf = (s) => s.start != null ? s.start : entry(s.dir);
     const play = (i) => {
-        if (i < scenes.length) loadBackground(scenes[i]); else changeScene();
-        ui.wizardOffset = inn;
-        if (i < scenes.length) walkWizardTo(out, () => play(i + 1)); else walkWizardTo(0, onArrive);
+        const s = steps[i], more = i + 1 < steps.length;
+        ui.wizardOffset = startOf(s);
+        walkWizardTo(s.end != null ? s.end : side(s.dir), () => {
+            const show = () => {
+                if (more) loadBackground(steps[i + 1].scene); else changeScene();
+                ui.wizardOffset = more ? startOf(steps[i + 1]) : entry(s.dir);
+                if (!run.simulation) drawWizard();
+            };
+            const next = () => more ? play(i + 1) : walkWizardTo(0, onArrive);
+            if (s.fade) fadeScene(show, next); else { show(); next(); }
+        });
     };
-    walkWizardTo(out, () => play(0));
+    walkWizardTo(side(steps[0].dir), () => { loadBackground(steps[0].scene); play(0); });
 }
 
 function wizardX() {
