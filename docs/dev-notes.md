@@ -30,3 +30,12 @@ earlier one.
 - Update to the scene questions above (2026-11-20, later): the six bridge scenes were redone as one 512px picture per bridge cut in half at the seam (`_west` + `_east` line up when shown side by side, so the game must show them as neighbours with no gap); the deck covers rows 34-60 and the river shows only behind it (rows 12-33). All ground mouths (147_31, 27_114, 87_224, 229_64, 33_165, 218_182) were redrawn bedded into their terrain, and mouth_130_120 now sits in a basalt slope at the back. Still open for the author to review in the drop (`scene_connectors/`, `scene_future/`): the redone bridges, the bedded mouths, the stairs (seen from above), the pier, the ladder scenes, el_Duenon7, el_Pantano_fishing, el_Pantano9_fueracastle, la_Pradera_northTown, la_Pradera_fueraCity, future_cave_NW, pradera_pantano_E/_w. New questions for the author: (a) the bridge halves must be shown as one place: should the game join them in one wide scene or just place them next to each other? (b) which scenes keep the shared grass texture twig removal, (c) does each connector pair need an exit marker drawn (path, gate) per SCENES.md "exits are drawn in the scene"? The author left the computer unattended on 2026-11-20; nothing is wired into the game.
 
 - ladder_cueva4_mina2 mine side: floor shaft x 101-143, y 47-62 may sit on the walk line; revisit walkable path later (artist, 2026-11-20).
+
+## Next for dev: connectors as scenes (2026-11-20)
+The connector art is in img/places/connectors/ (bridge_south/spring/swamp _west and _east, mouth_<x>_<y> and _under for the seven mouths, enter_mine_s, ladder_cueva4_mina2_cave and _mine, pier_land, pier_end, stairs_n and stairs_s base/mid/top). No trip shows them yet.
+- Decide with the author how they appear: when a trip crosses a connector point linked in Travel mode (bridge, mouth, stairs, ladder, pier), show its scenes in order (west half then east half; mouth outside then under; stairs base, mid, top).
+- The pathfinder (route in src/travelGraph.js) already gives the connector points on a trip; keep it for the story too.
+- Test the front overlays (la_mina6, la_mina7) and the new stages in a browser first: nothing was run here.
+- Floor shaft of ladder_cueva4_mina2 mine side may sit on the walk line.
+- After that: la_playa zone data (docs/MAPS.md step 5).
+
