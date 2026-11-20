@@ -116,6 +116,15 @@ def read_positions():
         return {}
 
 
+def read_points():
+    """Points added in the dev tools: {name: {kind: future|connector, layer, x, y}}."""
+    try:
+        s = open(os.path.join(REPO, 'src/data/travelOverrides.js'), encoding='utf-8').read()
+        return json.loads(re.search(r'travelPoints = (\{.*?\});', s, re.S).group(1))
+    except (OSError, AttributeError, ValueError):
+        return {}
+
+
 def build():
     global BRIDGES
     cfg, places, moved = read_config(), read_places(), read_positions()
@@ -144,6 +153,9 @@ def build():
         anchors[name] = node(layer, sx, sy)
     for name, kind, x, y in waypoints:
         node('ground', x, y, kind, name)
+    for name, d in read_points().items():
+        if d.get('layer') in LAYERS:
+            node(d['layer'], int(d['x']), int(d['y']), d.get('kind', 'connector'), name)
     for name, x, y in mouths:
         node('ground', x, y, 'mouth', name)
         node('under', x, y, 'mouth', name + '_under')

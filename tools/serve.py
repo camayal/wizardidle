@@ -135,6 +135,8 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
             zones_path = os.path.join(REPO, 'src', 'data', 'zones.js')
             with open(zones_path, encoding='utf-8', newline='') as f:
                 zones = f.read()
+            points = {k: v for k, v in data.get('points', {}).items() if re.fullmatch(r'\w+', k) and v.get('kind') in ('future', 'connector')
+                      and v.get('layer') in ('ground', 'above', 'under')}
             positions, stages = {}, 0
             for name, xy in data.get('positions', {}).items():
                 if not re.fullmatch(r'\w+', name) or len(xy) != 2:
@@ -152,9 +154,10 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
                 head = f.read().split('export const')[0]
             with open(target, 'w', encoding='utf-8', newline='\n') as f:
                 f.write(head + 'export const travelOverrides = ' + json.dumps(verdicts, indent=4) + ';\n'
-                        + 'export const travelPositions = ' + json.dumps(positions, indent=4) + ';\n')
+                        + 'export const travelPositions = ' + json.dumps(positions, indent=4) + ';\n'
+                        + 'export const travelPoints = ' + json.dumps(points, indent=4) + ';\n')
             done = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'travel_graph.py')], capture_output=True, text=True)
-            msg = f'saved {len(verdicts)} verdicts, {stages} stage and {len(positions)} waypoint positions; graph ' + \
+            msg = f'saved {len(verdicts)} verdicts, {stages} stage and {len(positions)} waypoint positions, {len(points)} added points; graph ' + \
                 ('regenerated: reload the page' if done.returncode == 0 else 'NOT regenerated: ' + done.stderr[-200:])
         else:
             import base64, time
