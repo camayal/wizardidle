@@ -23,6 +23,15 @@ const doorSteps = (a, b) => [
     { scene: a, dir: 1, end: mouthDoors[a] - DOOR_STOP, fade: true },
     { scene: b, dir: 1, start: mouthDoors[b] - DOOR_STOP },
 ];
+// The south mine's mouth has a tunnel scene (enter_mine_S, a plain walk left to right) behind its underground
+// side: after it going in, before it coming out.
+const MINE_TUNNEL = { scene: "enter_mine_S", dir: 1 };
+function mouthSteps(a, b) {
+    const steps = doorSteps(a, b);
+    if (b === "mouth_33_165_under") steps.push(MINE_TUNNEL);
+    if (a === "mouth_33_165_under") steps.unshift(MINE_TUNNEL);
+    return steps;
+}
 const LADDER = "ladder_cueva4_mina2", LADDER_CAVE = "ladder_cueva4_mina2_cave", LADDER_MINE = "ladder_cueva4_mina2_mine";
 
 // The connector scenes between two stages as walking steps, or null when the trip has none.
@@ -45,7 +54,7 @@ function crossing(origin, target) {
             const fromCave = places[origin].zone === "la_Cueva";
             steps.push(...(fromCave ? doorSteps(LADDER_CAVE, LADDER_MINE) : doorSteps(LADDER_MINE, LADDER_CAVE)));
         } else if (mouthDoors[c] !== undefined && chain[i + 1] && mouthDoors[chain[i + 1]] !== undefined) {
-            steps.push(...doorSteps(c, chain[++i]));
+            steps.push(...mouthSteps(c, chain[++i]));
         }
     }
     return steps.length ? { steps, dir: steps[0].dir } : null;
@@ -64,7 +73,7 @@ function connectorTests() {
         { label: "ladder: mine to cave (up)", steps: doorSteps(LADDER_MINE, LADDER_CAVE) });
     const mouths = Object.keys(mouthDoors).filter(k => !k.endsWith("_under") && k.startsWith("mouth_"));
     for (const m of mouths) {
-        list.push({ label: `${m}: in`, steps: doorSteps(m, `${m}_under`) }, { label: `${m}: out`, steps: doorSteps(`${m}_under`, m) });
+        list.push({ label: `${m}: in`, steps: mouthSteps(m, `${m}_under`) }, { label: `${m}: out`, steps: mouthSteps(`${m}_under`, m) });
     }
     list.push({ label: "pier: out and back", steps: pierSteps });
     return list;
