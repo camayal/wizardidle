@@ -27,7 +27,7 @@ const waypoints = g.nodes.map((n) => n[4]).filter(Boolean).sort();
 const names = g.nodes.map((n, i) => { const at = stages.filter((s) => g.anchors[s] === i); return at.length ? at : n[4] ? [n[4]] : []; });
 const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth moves with its underground twin
 const CUSTOM = ['future', 'connector'];         // kinds of the points added by hand
-let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], placing = '', moved = {}, points = {}, newPoint = null;
+let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = {}, points = {}, newPoint = null;
 g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2] }; });
 
 const tgt = () => tgts[tgts.length - 1] || '';           // the last target: the one "change coord" moves
@@ -101,9 +101,11 @@ function draw() {
         ctx.lineWidth = 2; ctx.strokeStyle = isTgt ? '#f0f' : '#000'; ctx.stroke();
         if (isTgt) { ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X, Y, 12, 0, 7); ctx.stroke(); }
         if (isSrc) { ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(X, Y, 3, 0, 7); ctx.fill(); }      // a black dot marks the source
+        if (showNums) {
         const n = Object.keys(overrides).filter((key) => key.split('|').some((s) => names[i].includes(s))).length;   // manual links of this spot: 0 = not done yet
         ctx.font = 'bold 12px sans-serif'; ctx.textBaseline = 'middle'; ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.fillStyle = n ? '#000' : '#c00';
         ctx.strokeText(n, X + 11, Y - 9); ctx.fillText(n, X + 11, Y - 9);
+        }
         ctx.globalAlpha = 1;
     });
     for (const [name, d] of Object.entries(points)) {       // added but not in the graph yet: save and reload to connect
@@ -212,6 +214,7 @@ export async function open(devTools) {
             <div data-id="layers" style="display:flex;flex-direction:column;gap:4px">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
             <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
         </div>
+        <div class="row"><button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button></div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
             <span>Only the direct links of the source are drawn, as straight lines; a spot reached only through another is not a neighbour.</span>
@@ -224,6 +227,8 @@ export async function open(devTools) {
         <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;
     p = {};
     side.body.querySelectorAll('[data-id]').forEach((e) => { p[e.dataset.id] = e; });
+    p.deselect.onclick = () => { tgts = []; choose('src', ''); };
+    p.nums.onclick = () => { showNums = !showNums; p.nums.textContent = showNums ? 'Hide numbers' : 'Show numbers'; draw(); };
     p.srcSel.onchange = () => choose('src', p.srcSel.value);
     p.tgtSel.onchange = () => choose('tgt', p.tgtSel.value);
     p.srcPlace.onclick = () => { placing = placing === 'src' ? '' : src ? 'src' : ''; draw(); };
