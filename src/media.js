@@ -27,7 +27,6 @@ import { zones } from './data/zones.js';
 import { bossAttacks } from './data/bossAttacks.js';
 
 const BOSSES = new Set([...Object.keys(bossAttacks), ...Object.values(zones).map((z) => z.boss).filter(Boolean)]);
-const FUTURE_SCENES = new Set(['la_pradera_northtown', 'la_pradera_fueracity', 'intersection_city_tower', 'pradera_pantano_e', 'mina_cueva1', 'mina_cueva_2', 'el_heidan9', 'el_heidan10', 'el_heidan11']);
 const ZONES = new Set(Object.keys(zones).map((z) => z.toLowerCase()));
 const HYDRA = /^(?:anim_)?(mother|icedra|hydskon)(?:\d+|_.+)$/;
 const WIZARD_ANIM = { cast: 'cast', walk: 'walk', pray: 'pray', fall_sit: 'fall', fall_dead: 'fall', petrify: 'petrify', unpetrify: 'unpetrify' };
@@ -52,10 +51,9 @@ export function artFolder(name) {
     if (/^spell/.test(name)) return 'effects/spells';
     if (/^scene_/.test(name)) return 'effects/scene';
     if (/^overlay_/.test(name)) return 'places/overlays';      // front layer of a scene (data/overlays.js)
-    if (FUTURE_SCENES.has(name)) return 'places/future';       // scenes not yet in a zone (docs/TRAVEL.md future points)
     if (/^(bridge|mouth|enter_mine|ladder|pier|stairs)_/.test(name)) return 'places/connectors';     // the connector scenes (bridges, cave and mine mouths, ladders, pier, stairs)
     if (/^fx_/.test(name)) return 'effects/fx';
-    if ((m = /^([a-z]+_[a-z]+?)(\d|_altar|_estatua|_taberna|_casadados)$/.exec(name)) && ZONES.has(m[1])) return `places/${m[1]}`;
+    if ((m = /^([a-z]+_[a-z]+?)(\d+|_altar|_estatua|_taberna|_casadados)$/.exec(name)) && ZONES.has(m[1])) return `places/${m[1]}`;
     if (name == 'casadados') return 'places';        // a plain dice house
     if (STORY.test(name)) return 'story';
     if (OBJECTS.test(name)) return 'objects';

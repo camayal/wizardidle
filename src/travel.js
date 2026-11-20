@@ -1,7 +1,8 @@
 // Wizard Idle v2 - Moving around: changing zone, moving between the stages of a zone, picking backgrounds.
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
-import { places, zones } from './data/zones.js';
+import { zones } from './data/zones.js';
+import { destinations, moves } from './travelGraph.js';
 import { pickRandomItem } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
@@ -48,7 +49,7 @@ function changeLocality() {
 // Move to another stage of the current zone. The stage is kept too: it was not, so the next
 // move could pick the scene he was already in (the author: he walked to the same scene).
 function pickRandomBackgroundForCurrentZone() {
-    const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].moves)
+    const randomLocality = pickRandomItem(moves(state.zone.current + state.zone.stage).join(","))
     state.zone.stage = Number(randomLocality.match(/\d+$/));
     loadBackground(randomLocality);
 };
@@ -58,7 +59,7 @@ function pickRandomBackgroundForCurrentZone() {
 function getZone() {
     if (state.zone.current !== undefined) {
         stats.count("explore.zoneChanges");
-        const randomLocality = pickRandomItem(places[state.zone.current + state.zone.stage].destinations)
+        const randomLocality = pickRandomItem(destinations(state.zone.current + state.zone.stage).join(","))
         state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
         stats.count(`explore.zone.${state.zone.current}`);

@@ -2062,3 +2062,5 @@ The author wants a front layer so the wizard walks "through" structures. First t
 - `scene_future/overlay_mina_cueva_2.png` over the scene `mina_cueva_2` (nearer tunnel timber sets)
 Each is a transparent 256x64 PNG, the same size as the scene, placed at 0,0 over it. Draw it above the wizard and all sprites (top layer) and ignore clicks on it. Mock: `scene_future/overlay_mina_mock.png`. The wizard's height in the mock was a guess, so check it against his real walk line.
 Done 2026-11-20 (dev): overlayCanvas over the spell canvas, src/data/overlays.js lists the scenes, art in img/places/overlays/.
+
+Done 2026-11-20 (dev): future scenes registered as numbered stages (la_Pradera6-14, la_Mina6-7, la_Cueva6, el_Volcan6, el_Duenon6, el_Pantano6-7, el_Heidan6-11); the game travels by the author's manual links.

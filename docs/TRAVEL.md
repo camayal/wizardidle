@@ -77,6 +77,10 @@ Leave for later: creating the in-between scenes, how they are composed and chose
 - Overlay built (dev tools, Modes > Travel, src/dev/travel.js). Left: the aboveground portals, step 6.
 - Manual curation (Modes > Travel): source and target by list or click/shift-click (waypoints are named: bridge_spring, bridge_swamp, bridge_south, pier, mouth_X_Y and _under, stairs and stairs_above), weight Accessible/Difficult/Impossible/Auto, "change coord". Save writes src/data/travelOverrides.js (verdicts + travelPositions), moves a scene in zones.js, regenerates the graph (reload after). Verdicts also set the edge weight in travelGraph.js rebuild() (config.travel accessibleCost, difficultFactor, difficultMin) and force the lists of moves() and destinations(). Capture writes docs/travel-captures/.  New points (kind future or connector, any layer) are saved as travelPoints in travelOverrides.js and the generator makes nodes of them; red is drawn at low opacity.
 
+## Manual links are the graph (2026-11-20)
+
+The author's decision: his manual links (travelOverrides.js) are the graph, not corrections over an automatic one. `moves()` and `destinations()` now come only from them and `travel.js` uses them (step 6 for the lists). Accessible and Difficult both count, Impossible does not; a point that is not a stage (bridges, mouth `_under` points, stairs) passes the trip to the stages linked to it; a stage with no link uses the old typed string. The future scenes became numbered stages (la_Pradera7-14, la_Mina6-7, la_Cueva6, el_Volcan6, el_Duenon6, el_Pantano6-7, el_Heidan6-11, la_Pradera6) with art in img/places/<zone>/; the beach points (la_playa1-6) have no zone yet, so they stay points. The automatic edges are still generated for the dev tools' costs and drawing.
+
 ## Open for the author (come back to these)
 
 - **Stairs position:** the sacred stairs to Heidan are a guess at (212,205), the ladder in the south-east. Where should they be?

@@ -84,39 +84,46 @@ function route(a, b) {
     return routeIds(a, b).map((n) => { const [layer, x, y] = g.nodes[n]; return { layer, x, y }; });
 }
 
-// Stage names in order of cost from one stage, split into other zones and the same zone.
-function byCost(stage) {
-    const { dist } = from(g.anchors[stage]), z = places[stage].zone;
-    const cost = n => dist[g.anchors[n]];
-    const names = Object.keys(g.anchors).filter(n => n !== stage).sort((a, b) => cost(a) - cost(b));
-    return {
-        other: names.filter(n => places[n].zone !== z).map(n => [n, cost(n)]),
-        same: names.filter(n => places[n].zone === z).map(n => [n, cost(n)]),
-    };
+// The graph IS the author's manual links (Modes > Travel, data/travelOverrides.js): Accessible and Difficult
+// both lead somewhere, Impossible does not. A stage is anything in `places`; a point that is not a stage
+// (a bridge, a cave mouth, the stairs) only passes the trip on to the stages linked to it.
+// Stages linked to a stage, directly or through such points, as {stage name: true}.
+function linked(stage) {
+    const nb = {};
+    for (const [k, v] of Object.entries(overrides)) {
+        if (v === 'far') continue;
+        const [a, b] = k.split('|');
+        (nb[a] = nb[a] || []).push(b);
+        (nb[b] = nb[b] || []).push(a);
+    }
+    const found = {}, seen = new Set([stage]), todo = [stage];
+    while (todo.length) {
+        for (const n of nb[todo.pop()] || []) {
+            if (seen.has(n)) continue;
+            seen.add(n);
+            if (places[n]) found[n] = true; else todo.push(n);     // a stage ends the walk, a connector passes it on
+        }
+    }
+    for (const n of Object.keys(found)) if (verdict(stage, n) === 'far') delete found[n];
+    return Object.keys(found);
 }
 
-// The automatic list changed by the manual verdicts: a stage with this list's verdict is added, one with
-// another verdict is dropped.
-function withVerdicts(stage, auto, kind) {
-    const out = auto.filter(n => !verdict(stage, n));
-    for (const n of Object.keys(g.anchors)) if (n !== stage && verdict(stage, n) === kind) out.push(n);
-    return out;
-}
-
-// The stages he may go to in another zone: the ones under the limit, else the nearest three.
+// The stages he may go to in another zone, from the manual links; none linked yet: the old typed list.
 function destinations(stage) {
-    const { other } = byCost(stage), t = config.travel;
-    const near = other.filter(([, c]) => c <= t.destinationLimit);
-    const auto = (near.length ? near : other.slice(0, 3)).map(([n]) => n);
-    return withVerdicts(stage, auto, 'dest');
+    const z = places[stage].zone, list = linked(stage).filter(n => places[n].zone !== z);
+    return list.length ? list : oldList(stage, 'destinations');
 }
 
-// The stages he may walk to inside his zone: the ones under the limit, else the nearest two.
+// The stages he may walk to inside his zone, from the manual links; none linked yet: the old typed list.
 function moves(stage) {
-    const { same } = byCost(stage), t = config.travel;
-    const near = same.filter(([, c]) => c <= t.moveLimit);
-    const auto = (near.length ? near : same.slice(0, 2)).map(([n]) => n);
-    return withVerdicts(stage, auto, 'move');
+    const z = places[stage].zone, list = linked(stage).filter(n => places[n].zone === z);
+    return list.length ? list : oldList(stage, 'moves');
+}
+
+// The typed strings of zones.js (kept for stages not linked yet); a new stage with none borrows its zone's first stage.
+function oldList(stage, key) {
+    const own = places[stage][key], first = places[`${places[stage].zone}1`][key];
+    return (own || first).split(',').filter(Boolean);
 }
 
 rebuild();
