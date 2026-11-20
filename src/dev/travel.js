@@ -7,7 +7,7 @@
 // positions (zones.js for scenes, travelPositions for waypoints) and regenerates the graph; reload after.
 // The map shows the cheapest paths from the source: green = a move inside the zone, yellow = a destination
 // in another zone, red = too far. Clicking a scene also shows that scene in the game.
-// The source has a black dot in its centre. Shift-click adds or drops targets: the weight buttons set the link from the source to every target at once. The map layers (ground, above, under) are buttons beside the map.
+// The source has a black dot in its centre. Shift-click adds or drops targets: the weight buttons set the link from the source to every target at once. The map layers (above, ground, under) are buttons beside the map, with the weight buttons below them.
 // Opened from the dev panel (Modes > Travel), on the right of the game; the game waits until it is closed.
 
 import { travelGraph as g } from '../data/travelGraph.js';
@@ -18,7 +18,7 @@ import { sidePanel } from './panel.js';
 import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
 
-const MAPS = { ground: 'img/ui/mapa.png', above: 'img/ui/mapaboveground.png', under: 'img/ui/mapaunderground.png' };
+const MAPS = { above: 'img/ui/mapaboveground.png', ground: 'img/ui/mapa.png', under: 'img/ui/mapaunderground.png' };
 const ZOOM = 2, COLORS = { move: '#2fd02f', dest: '#f2d21c', far: '#e03030' };
 const NAMES = { move: 'Accessible', dest: 'Difficult', far: 'Impossible' };
 const DRAFT = 'wizardidle2:travelDraft';
@@ -203,15 +203,17 @@ export async function open(devTools) {
         <div class="row"><b>Target:</b><select data-id="tgtSel">${options()}</select><button data-id="tgtPlace">change coord</button></div>
         <div class="row"><b>New point:</b><select data-id="newKind"><option value="future">future scene</option><option value="connector">connector (bridge, stairs...)</option></select>
             <input data-id="newName" placeholder="name (letters, digits, _)" size="18"><button data-id="newAdd">Add point</button></div>
-        <div class="row"><b>Adjust travel weight:</b><span data-id="weights">
-            <button data-v="move" style="background:${COLORS.move}">Accessible</button>
-            <button data-v="dest" style="background:${COLORS.dest}">Difficult</button>
-            <button data-v="far" style="background:${COLORS.far};color:#fff">Impossible</button>
-            <button data-v="">Auto</button></span></div>
         <div data-id="linkInfo"></div>
         <div data-id="summary" class="muted"></div>
         <div style="display:flex;gap:6px;align-items:flex-start">
+            <div style="display:flex;flex-direction:column;gap:4px">
             <div data-id="layers" style="display:flex;flex-direction:column;gap:4px">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
+            <div data-id="weights" style="display:flex;flex-direction:column;gap:4px;margin-top:10px"><b>Weight</b>
+                <button data-v="move" style="background:${COLORS.move}">Accessible</button>
+                <button data-v="dest" style="background:${COLORS.dest}">Difficult</button>
+                <button data-v="far" style="background:${COLORS.far};color:#fff">Impossible</button>
+                <button data-v="">Auto</button></div>
+            </div>
             <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
         </div>
         <div class="row"><button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button></div>
