@@ -28,6 +28,7 @@ const waypoints = g.nodes.map((n) => n[4]).filter(Boolean).sort();
 const names = g.nodes.map((n, i) => { const at = stages.filter((s) => g.anchors[s] === i); return at.length ? at : n[4] ? [n[4]] : []; });
 const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth moves with its underground twin
 const CUSTOM = ['future', 'connector'];         // kinds of the points added by hand
+const touched = new Set();                      // links given a verdict since this page was opened
 let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = {}, points = {}, newPoint = null;
 g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2], note: (travelPoints[n[4]] || {}).note || '' }; });
 const kindOf = (i) => (points[names[i][0]] || {}).kind || g.nodes[i][3];       // a point's type can be switched before the graph is rebuilt
@@ -97,9 +98,8 @@ function draw() {
         ctx.globalAlpha = k === 'far' && !isSrc && !isTgt ? 0.3 : 1;      // red is see-through
         ctx.fillStyle = isSrc ? '#fff' : k ? COLORS[k] : kind === 'future' ? '#f90' : scene ? '#ddd' : '#9be';
         ctx.beginPath();
-        if (scene) ctx.arc(X, Y, 7, 0, 7);
-        else if (kind === 'future') { ctx.moveTo(X, Y - 9); ctx.lineTo(X + 9, Y); ctx.lineTo(X, Y + 9); ctx.lineTo(X - 9, Y); ctx.closePath(); }
-        else ctx.rect(X - 6, Y - 6, 12, 12);
+        if (scene || kind === 'future') ctx.arc(X, Y, 7, 0, 7);       // round: a scene or a future scene
+        else ctx.rect(X - 6, Y - 6, 12, 12);                          // square: a connector
         ctx.fill();
         ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();                  // a white halo, then a black ring: seen on any map
         ctx.lineWidth = 2; ctx.strokeStyle = isTgt ? '#f0f' : '#000'; ctx.stroke();
@@ -114,8 +114,10 @@ function draw() {
     });
     for (const [name, d] of Object.entries(points)) {       // added but not in the graph yet: save and reload to connect
         if (d.layer !== layer || name in byName) continue;
-        ctx.fillStyle = '#fff'; ctx.strokeStyle = '#f0f'; ctx.lineWidth = 2;
-        ctx.strokeRect(d.x * ZOOM - 6, d.y * ZOOM - 6, 12, 12);
+        ctx.fillStyle = d.kind === 'future' ? '#f90' : '#9be'; ctx.strokeStyle = '#f0f'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        if (d.kind === 'future') ctx.arc(d.x * ZOOM, d.y * ZOOM, 7, 0, 7); else ctx.rect(d.x * ZOOM - 6, d.y * ZOOM - 6, 12, 12);
+        ctx.fill(); ctx.stroke();
     }
     const count = (k) => Object.values(kinds).filter((v) => v === k).length;
     p.summary.textContent = src ? `${src}: ${count('move')} accessible, ${count('dest')} difficult, ${count('far')} red (see-through) direct links` : '';
@@ -138,7 +140,7 @@ function drawLink() {
             const v = verdict(src, t), ak = autoKind(src, t), auto = ak ? NAMES[ak] : 'no direct link';
             return `<b>${esc(src)}</b> &harr; <b>${esc(t)}</b>: ${v ? `manual <b>${NAMES[v]}</b> (auto: ${auto})` : `auto <b>${auto}</b>`}`;
         }).join('<br>');
-    p.count.textContent = `${Object.keys(overrides).length} verdicts, ${Object.keys(moved).length} moved spots (unsaved changes stay in this browser)`;
+    p.count.textContent = `${touched.size} verdicts this session, ${Object.keys(moved).length} moved spots (unsaved changes stay in this browser)`;
 }
 
 // Set the weight of a link for every scene sharing the two spots (the five scenes of the Castle are one spot).
@@ -149,6 +151,7 @@ function setVerdict(v) {
         for (const a of spot(src)) {
             for (const b of spot(t)) {
                 if (a === b) continue;
+                touched.add(pairKey(a, b));
                 if (v) overrides[pairKey(a, b)] = v; else delete overrides[pairKey(a, b)];
             }
         }
@@ -236,7 +239,7 @@ export async function open(devTools) {
             <span><b style="color:${COLORS.move}">&#9632;</b> Accessible: an easy link (cost up to ${config.travel.moveLimit})</span>
             <span><b style="color:${COLORS.dest}">&#9632;</b> Difficult: a hard link, e.g. across a river (up to ${config.travel.difficultLimit})</span>
             <span><b style="color:${COLORS.far}">&#9632;</b> Impossible: a link too dear or removed; drawn see-through</span>
-            <span>white dot with a black centre: the source; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene; blue square: bridge, pier, entrance, stairs or connector; orange diamond: a future scene; red is drawn see-through; dashed: a manual link; the small number beside a spot is how many manual links it has (red 0 = not done yet)</span>
+            <span>white dot with a black centre: the source; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene (grey) or a future scene (orange); blue square: bridge, pier, entrance, stairs or connector; red is drawn see-through; dashed: a manual link; the small number beside a spot is how many manual links it has (red 0 = not done yet)</span>
             <span class="muted">Cost = walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked. To link two spots that are not neighbours, pick both and press Accessible or Difficult. Accessible sets a link's cost to ${config.travel.accessibleCost}, Difficult multiplies it by ${config.travel.difficultFactor} (at least ${config.travel.difficultMin}), Impossible removes it.</span>
         </div>
         <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;
