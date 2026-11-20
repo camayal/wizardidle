@@ -100,6 +100,8 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b'saved')
             return
+        if self.path in ('/travel/overrides', '/travel/capture'):
+            return self.travel_post(local)
         if not self.path.startswith('/notes/') or mode not in NOTE_FILES or not local:
             return self.send_error(404)
         length = int(self.headers.get('Content-Length') or 0)
@@ -116,6 +118,39 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Content-Type', 'text/plain; charset=utf-8')
         self.end_headers()
         self.wfile.write(b'saved')
+
+
+    def travel_post(self, local):
+        # The Travel mode (src/dev/travel.js): /travel/overrides rewrites src/data/travelOverrides.js; /travel/capture
+        # writes a snapshot, docs/travel-captures/<time>-<stage>.png and .json (the picture and the verdicts).
+        length = int(self.headers.get('Content-Length') or 0)
+        if not local or not 0 < length <= 5000000:
+            return self.send_error(400)
+        data = json.loads(self.rfile.read(length).decode('utf-8'))
+        if self.path.endswith('/overrides'):
+            body = {k: v for k, v in sorted(data.items()) if v in ('move', 'dest', 'far') and re.fullmatch(r'\w+\|\w+', k)}
+            target = os.path.join(REPO, 'src', 'data', 'travelOverrides.js')
+            with open(target, encoding='utf-8') as f:
+                head = f.read().split('export const')[0]
+            with open(target, 'w', encoding='utf-8', newline='\n') as f:
+                f.write(head + 'export const travelOverrides = ' + json.dumps(body, indent=4) + ';\n')
+            msg = f'saved {len(body)} verdicts'
+        else:
+            import base64, time
+            stage = re.sub(r'\W', '', str(data.get('stage', '')))[:40] or 'map'
+            folder = os.path.join(REPO, 'docs', 'travel-captures')
+            os.makedirs(folder, exist_ok=True)
+            name = time.strftime('%Y%m%d-%H%M%S') + '-' + stage
+            png = str(data.get('png', '')).split(',', 1)[-1]
+            with open(os.path.join(folder, name + '.png'), 'wb') as f:
+                f.write(base64.b64decode(png))
+            with open(os.path.join(folder, name + '.json'), 'w', encoding='utf-8', newline='\n') as f:
+                json.dump({'stage': data.get('stage'), 'layer': data.get('layer'), 'verdicts': data.get('overrides', {})}, f, indent=2)
+            msg = 'saved docs/travel-captures/' + name
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/plain; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(msg.encode('utf-8'))
 
 
 if __name__ == '__main__':

@@ -11,6 +11,12 @@
 import { travelGraph as g } from './data/travelGraph.js';
 import { places } from './data/zones.js';
 import { config } from './config.js';
+import { travelOverrides } from './data/travelOverrides.js';
+
+// Manual verdicts of a pair of stages (see data/travelOverrides.js); the dev tools edit this object.
+const overrides = { ...travelOverrides };
+const pairKey = (a, b) => a < b ? `${a}|${b}` : `${b}|${a}`;
+const verdict = (a, b) => overrides[pairKey(a, b)] || '';
 
 const SIZE = 250;
 const adj = g.nodes.map(() => []);
@@ -69,18 +75,28 @@ function byCost(stage) {
     };
 }
 
+// The automatic list changed by the manual verdicts: a stage with this list's verdict is added, one with
+// another verdict is dropped.
+function withVerdicts(stage, auto, kind) {
+    const out = auto.filter(n => !verdict(stage, n));
+    for (const n of Object.keys(g.anchors)) if (n !== stage && verdict(stage, n) === kind) out.push(n);
+    return out;
+}
+
 // The stages he may go to in another zone: the ones under the limit, else the nearest three.
 function destinations(stage) {
     const { other } = byCost(stage), t = config.travel;
     const near = other.filter(([, c]) => c <= t.destinationLimit);
-    return (near.length ? near : other.slice(0, 3)).map(([n]) => n);
+    const auto = (near.length ? near : other.slice(0, 3)).map(([n]) => n);
+    return withVerdicts(stage, auto, 'dest');
 }
 
 // The stages he may walk to inside his zone: the ones under the limit, else the nearest two.
 function moves(stage) {
     const { same } = byCost(stage), t = config.travel;
     const near = same.filter(([, c]) => c <= t.moveLimit);
-    return (near.length ? near : same.slice(0, 2)).map(([n]) => n);
+    const auto = (near.length ? near : same.slice(0, 2)).map(([n]) => n);
+    return withVerdicts(stage, auto, 'move');
 }
 
-export { travelCost, route, destinations, moves, SIZE };
+export { travelCost, route, destinations, moves, overrides, pairKey, verdict, SIZE };

@@ -75,6 +75,7 @@ Leave for later: creating the in-between scenes, how they are composed and chose
 - Result at limit 45: 346 derived destinations against 346 hand-typed, 237 shared; moves 194 derived, 192 shared of 241. Sea and river read from the ground map only; the underground and aboveground maps are walked as plain land.
 - To confirm with the author: the position of the sacred stairs (a guess, 212,205, the ladder at the south-east); the Heidan has no good ground link (old strings reach it from the Forest, Swamp, Desert); `las_Dunas3` (17,132) is cut off by sea (cost 589); Pantano1-3, Cueva1-2, Tundra1 sit just over the limit and use the nearest-three fallback; 24 one-way links in the old strings (listed by the tool).
 - Overlay built (dev tools, Modes > Travel, src/dev/travel.js). Left: the aboveground portals, step 6.
+- Manual curation: in the Travel mode shift-click a second scene and set the pair green/yellow/red/auto; "Save verdicts" writes src/data/travelOverrides.js (tools/serve.py), which moves() and destinations() apply on top of the graph (a verdict works both ways, for every scene sharing the two spots). "Capture" writes docs/travel-captures/<time>-<stage>.png and .json.
 
 ## Open for the author (come back to these)
 
