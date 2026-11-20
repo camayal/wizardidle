@@ -14,7 +14,18 @@ import { loadBackground, print, showStage, walkAcross, walkThroughScene, walkWiz
 
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
 
-// The connector scenes between two stages as walking steps (render.walkAcross), or null when the trip has none.
+// The walking steps (render.walkAcross) of each kind of connector.
+const bridgeSteps = (c, dir) => (dir > 0 ? connectorScenes[c] : connectorScenes[c].slice().reverse()).map(scene => ({ scene, dir }));
+const stairSteps = (ground, up) => (up ? stairScenes[ground].scenes : stairScenes[ground].scenes.slice().reverse()).map(scene => ({ scene, dir: up ? 1 : -1 }));
+// A cave or mine mouth, or the ladder: he walks to the opening of the first scene (left to right), the scene fades
+// into the second, and he walks on from the opening there.
+const doorSteps = (a, b) => [
+    { scene: a, dir: 1, end: mouthDoors[a] - DOOR_STOP, fade: true },
+    { scene: b, dir: 1, start: mouthDoors[b] - DOOR_STOP },
+];
+const LADDER = "ladder_cueva4_mina2", LADDER_CAVE = "ladder_cueva4_mina2_cave", LADDER_MINE = "ladder_cueva4_mina2_mine";
+
+// The connector scenes between two stages as walking steps, or null when the trip has none.
 // A bridge is entered from the side he stands on (origin east of the bridge: he walks west); stairs by
 // going up or down; a mouth always left to right, stopping at its opening and fading into its twin.
 function crossing(origin, target) {
@@ -24,22 +35,39 @@ function crossing(origin, target) {
     for (let i = 0; i < chain.length; i++) {
         const c = chain[i];
         if (connectorScenes[c]) {
-            const bx = spotX(c), dir = x !== undefined && bx !== undefined && x > bx ? -1 : 1;
-            const scenes = dir > 0 ? connectorScenes[c] : connectorScenes[c].slice().reverse();
-            scenes.forEach(scene => steps.push({ scene, dir }));
+            const bx = spotX(c);
+            steps.push(...bridgeSteps(c, x !== undefined && bx !== undefined && x > bx ? -1 : 1));
         } else if (stairScenes[c] || Object.values(stairScenes).some(s => s.top === c)) {
             const ground = stairScenes[c] ? c : Object.keys(stairScenes).find(k => stairScenes[k].top === c);
             if (c !== ground || !chain.includes(stairScenes[c].top)) continue;   // the top point is handled with its ground point
-            const up = chain.indexOf(c) < chain.indexOf(stairScenes[c].top);
-            const scenes = up ? stairScenes[c].scenes : stairScenes[c].scenes.slice().reverse();
-            scenes.forEach(scene => steps.push({ scene, dir: up ? 1 : -1 }));
+            steps.push(...stairSteps(c, chain.indexOf(c) < chain.indexOf(stairScenes[c].top)));
+        } else if (c === LADDER) {
+            const fromCave = places[origin].zone === "la_Cueva";
+            steps.push(...(fromCave ? doorSteps(LADDER_CAVE, LADDER_MINE) : doorSteps(LADDER_MINE, LADDER_CAVE)));
         } else if (mouthDoors[c] !== undefined && chain[i + 1] && mouthDoors[chain[i + 1]] !== undefined) {
-            const twin = chain[++i];
-            steps.push({ scene: c, dir: 1, end: mouthDoors[c] - DOOR_STOP, fade: true });
-            steps.push({ scene: twin, dir: 1, start: mouthDoors[twin] - DOOR_STOP });
+            steps.push(...doorSteps(c, chain[++i]));
         }
     }
     return steps.length ? { steps, dir: steps[0].dir } : null;
+}
+
+// Dev tools: every connector walk as {label, steps}, to force a crossing in the game (src/dev/tests.js).
+function connectorTests() {
+    const list = [];
+    for (const c of Object.keys(connectorScenes)) {
+        list.push({ label: `${c}: west to east`, steps: bridgeSteps(c, 1) }, { label: `${c}: east to west`, steps: bridgeSteps(c, -1) });
+    }
+    for (const g of Object.keys(stairScenes)) {
+        list.push({ label: `${g}: up`, steps: stairSteps(g, true) }, { label: `${g}: down`, steps: stairSteps(g, false) });
+    }
+    list.push({ label: "ladder: cave to mine (down)", steps: doorSteps(LADDER_CAVE, LADDER_MINE) },
+        { label: "ladder: mine to cave (up)", steps: doorSteps(LADDER_MINE, LADDER_CAVE) });
+    const mouths = Object.keys(mouthDoors).filter(k => !k.endsWith("_under") && k.startsWith("mouth_"));
+    for (const m of mouths) {
+        list.push({ label: `${m}: in`, steps: doorSteps(m, `${m}_under`) }, { label: `${m}: out`, steps: doorSteps(`${m}_under`, m) });
+    }
+    list.push({ label: "pier: out and back", steps: pierSteps });
+    return list;
 }
 
 // The pier (a dead end): can he walk out on it from this stage, and the walk out and back to the same stage.
@@ -128,6 +156,7 @@ function getZone() {
 ;
 
 export {
+    connectorTests,
     canVisitPier,
     visitPier,
     changeLocality,

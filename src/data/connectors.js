@@ -36,5 +36,6 @@ export const mouthDoors = {
     mouth_27_114: 165, mouth_27_114_under: 171,
     mouth_33_165: 152, mouth_33_165_under: 166,
     mouth_87_224: 140, mouth_87_224_under: 171,
+    ladder_cueva4_mina2_cave: 150, ladder_cueva4_mina2_mine: 122,      // the ladder and the floor shaft
 };
 export const DOOR_STOP = 48;     // the wizard's offset is the door minus this to stand in front of it

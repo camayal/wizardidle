@@ -22,10 +22,11 @@ import { enemySprites, enemyTypes } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStage, updateHeading } from '../ui/render.js';
+import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStage, updateHeading, walkAcross } from '../ui/render.js';
 import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
+import { connectorTests } from '../travel.js';
 import { scrollOpen } from '../ui/scrolls.js';
 import { sidePanel } from './panel.js';
 import { buildNotesBox, setNoteSource } from './notes.js';
@@ -319,6 +320,10 @@ function pickerHtml() {
         Hydras: `
             <div class="row"><select data-f="hydra">${opts(Object.keys(HYDRA_NAMES), Object.values(HYDRA_NAMES))}</select>
                 <label>Heads <select data-f="heads"></select></label><button data-do="hydra">Fight</button></div>`,
+        Connectors: `
+            <div class="row"><select data-f="connector">${connectorTests().map((t, i) => `<option value="${i}">${t.label}</option>`).join('')}</select>
+                <button data-do="connector">Walk it</button></div>
+            <div class="note">Plays a connector's scenes on the spot, from the scene he is in; he ends in the scene he started in.</div>`,
         Enemies: `
             <div class="row"><select data-f="pick">${opts(Object.keys(ENEMY_PICKS))}<option value="exact">exact sprite (below)</option></select></div>
             <div class="row"><input type="text" data-f="sprite" list="devEnemyList" spellcheck="false" placeholder="sprite, e.g. el_hechicero10">
@@ -340,6 +345,12 @@ const pickerActions = {
         else drawWizard();
     },
     gift(f) { GIFTS[f('gift')](); updateHeading(); },
+    connector(f) {
+        const steps = connectorTests()[Number(f('connector'))].steps;
+        loop.stop('master');
+        clearNPC();
+        walkAcross(steps, showStage, nextEvent);
+    },
     boss(f) {
         const zone = f('boss'), petrify = f('petrify');
         liveFight(() => {
