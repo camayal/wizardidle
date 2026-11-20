@@ -20,7 +20,7 @@ import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
 
 const MAPS = { above: 'img/ui/mapaboveground.png', ground: 'img/ui/mapa.png', under: 'img/ui/mapaunderground.png' };
-const ZOOM = 2, COLORS = { move: '#2fd02f', dest: '#f2d21c', far: '#e03030' };
+const ZOOM = 2, COLORS = { move: '#2fd02f', dest: '#f2d21c', far: '#e03030' }, FUTURE = '#f0f';
 const NAMES = { move: 'Accessible', dest: 'Difficult', far: 'Impossible' };
 const DRAFT = 'wizardidle2:travelDraft';
 const stages = Object.keys(g.anchors).sort();
@@ -29,8 +29,24 @@ const names = g.nodes.map((n, i) => { const at = stages.filter((s) => g.anchors[
 const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth moves with its underground twin
 const CUSTOM = ['future', 'connector'];         // kinds of the points added by hand
 const touched = new Set();                      // links given a verdict since this page was opened
+let checking = false;
 let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = {}, points = {}, newPoint = null;
 g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2], note: (travelPoints[n[4]] || {}).note || '' }; });
+// The spots not joined to the biggest group of linked spots (impossible links do not count): [node, ...].
+function lost() {
+    const group = g.nodes.map(() => -1), sizes = [];
+    g.nodes.forEach((n, s) => {
+        if (group[s] >= 0 || !names[s].length) return;
+        const id = sizes.length; let size = 0; const todo = [s]; group[s] = id;
+        while (todo.length) {
+            const u = todo.pop(); size++;
+            for (const [j] of neighbors(names[u][0])) if (group[j] < 0) { group[j] = id; todo.push(j); }
+        }
+        sizes.push(size);
+    });
+    const main = sizes.indexOf(Math.max(...sizes));
+    return g.nodes.map((n, i) => i).filter((i) => names[i].length && group[i] !== main).sort((a, b) => group[a] - group[b]);
+}
 const kindOf = (i) => (points[names[i][0]] || {}).kind || g.nodes[i][3];       // a point's type can be switched before the graph is rebuilt
 const isCustom = (n) => n in points;
 
@@ -96,7 +112,7 @@ function draw() {
         const [x, y] = pos(i), scene = names[i].some(isStage), k = kinds[i];
         const isSrc = i === byName[src], isTgt = tgts.some((t) => byName[t] === i), X = x * ZOOM, Y = y * ZOOM;
         ctx.globalAlpha = k === 'far' && !isSrc && !isTgt ? 0.3 : 1;      // red is see-through
-        ctx.fillStyle = isSrc ? '#fff' : k ? COLORS[k] : kind === 'future' ? '#f90' : scene ? '#ddd' : '#9be';
+        ctx.fillStyle = isSrc ? '#fff' : k ? COLORS[k] : kind === 'future' ? FUTURE : scene ? '#ddd' : '#9be';
         ctx.beginPath();
         if (scene || kind === 'future') ctx.arc(X, Y, 8, 0, 7);       // round: a scene or a future scene
         else ctx.rect(X - 7, Y - 7, 14, 14);                          // square: a connector
@@ -114,10 +130,15 @@ function draw() {
     });
     for (const [name, d] of Object.entries(points)) {       // added but not in the graph yet: save and reload to connect
         if (d.layer !== layer || name in byName) continue;
-        ctx.fillStyle = '#f0f'; ctx.strokeStyle = '#000'; ctx.lineWidth = 2;      // magenta: new, not in the graph yet
+        ctx.fillStyle = d.kind === 'future' ? FUTURE : '#9be'; ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.setLineDash([3, 2]);      // dashed: new, not in the graph yet
         ctx.beginPath();
         if (d.kind === 'future') ctx.arc(d.x * ZOOM, d.y * ZOOM, 7, 0, 7); else ctx.rect(d.x * ZOOM - 6, d.y * ZOOM - 6, 12, 12);
-        ctx.fill(); ctx.stroke();
+        ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+    }
+    if (checking) for (const i of lost()) {      // isolated spots: a thick red ring
+        const [x, y] = pos(i);
+        if (g.nodes[i][0] !== layer) continue;
+        ctx.strokeStyle = '#e00'; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(x * ZOOM, y * ZOOM, 15, 0, 7); ctx.stroke();
     }
     const count = (k) => Object.values(kinds).filter((v) => v === k).length;
     p.summary.textContent = src ? `${src}: ${count('move')} accessible, ${count('dest')} difficult, ${count('far')} red (see-through) direct links` : '';
@@ -141,6 +162,11 @@ function drawLink() {
             const v = verdict(src, t), ak = autoKind(src, t), auto = ak ? NAMES[ak] : 'no direct link';
             return `<b>${esc(src)}</b> &harr; <b>${esc(t)}</b>: ${v ? `manual <b>${NAMES[v]}</b> (auto: ${auto})` : `auto <b>${auto}</b>`}`;
         }).join('<br>'));
+    if (checking) {
+        const bad = lost();
+        p.checkInfo.innerHTML = bad.length ? `<b style="color:#e00">${bad.length} spots are cut off from the main map</b> (red rings): ` + bad.map((i) => `${esc(names[i].join('/'))} (${g.nodes[i][0]})`).join(', ')
+            : '<b style="color:#2a2">Every spot is connected to the main map.</b>';
+    } else p.checkInfo.textContent = '';
     p.count.textContent = `${touched.size} verdicts this session, ${Object.keys(moved).length} moved spots (unsaved changes stay in this browser)`;
 }
 
@@ -228,11 +254,12 @@ export async function open(devTools) {
                 <button data-id="align" title="move the target(s) onto the source, e.g. the two ends of a connector">Align to source</button>
                 <button data-id="swap" title="future scene becomes a connector and the other way round (source and targets)">Future &harr; connector</button></div>
             <div style="display:flex;flex-direction:column;gap:4px"><b>View</b>
-                <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button></div>
+                <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button><button data-id="check" title="ring every spot that no chain of links joins to the main map">Check connections</button></div>
             </div>
             <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
         </div>
         <div data-id="linkInfo"></div>
+        <div data-id="checkInfo"></div>
         <div class="row"><b data-id="noteLabel">Notes:</b><textarea data-id="note" rows="2" style="flex:1" placeholder="notes for the future (select a future scene or connector you added)" disabled></textarea></div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
@@ -240,7 +267,7 @@ export async function open(devTools) {
             <span><b style="color:${COLORS.move}">&#9632;</b> Accessible: an easy link (cost up to ${config.travel.moveLimit})</span>
             <span><b style="color:${COLORS.dest}">&#9632;</b> Difficult: a hard link, e.g. across a river (up to ${config.travel.difficultLimit})</span>
             <span><b style="color:${COLORS.far}">&#9632;</b> Impossible: a link too dear or removed; drawn see-through</span>
-            <span>white dot with a black centre: the source; magenta fill: a new point not saved yet; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene (grey) or a future scene (orange); blue square: bridge, pier, entrance, stairs or connector; red is drawn see-through; dashed: a manual link; the small number beside a spot is how many manual links it has (red 0 = not done yet)</span>
+            <span>white dot with a black centre: the source; dashed outline: a new point not saved yet; magenta ring: a target; red ring: cut off from the main map (Check connections) (shift-click adds or drops targets, the list picks just one); round: a scene (grey) or a future scene (magenta); blue square: bridge, pier, entrance, stairs or connector; red is drawn see-through; dashed: a manual link; the small number beside a spot is how many manual links it has (red 0 = not done yet)</span>
             <span class="muted">Cost = walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked. To link two spots that are not neighbours, pick both and press Accessible or Difficult. Accessible sets a link's cost to ${config.travel.accessibleCost}, Difficult multiplies it by ${config.travel.difficultFactor} (at least ${config.travel.difficultMin}), Impossible removes it.</span>
         </div>
         <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;
@@ -267,6 +294,7 @@ export async function open(devTools) {
     };
     p.note.oninput = () => { if (isCustom(src)) { points[src].note = p.note.value.slice(0, 500); save(); } };
     p.deselect.onclick = () => { tgts = []; choose('src', ''); };
+    p.check.onclick = () => { checking = !checking; p.check.textContent = checking ? 'Hide check' : 'Check connections'; draw(); };
     p.nums.onclick = () => { showNums = !showNums; p.nums.textContent = showNums ? 'Hide numbers' : 'Show numbers'; draw(); };
     p.srcSel.onchange = () => choose('src', p.srcSel.value);
     p.tgtSel.onchange = () => choose('tgt', p.tgtSel.value);
