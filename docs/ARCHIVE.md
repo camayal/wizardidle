@@ -2037,3 +2037,28 @@ Author's note: I would like to have one creek in the praire, and keep the one in
 
 - Bug (author, 2026-11-19): after inactivity in the tab the game never restarts: it just sits there with an empty console. Dev's first read: either the page reloaded (src/away.js watchHidden, minSeconds 300) and the new load never fires its first event, or a freeze from loop.freezeGame (hide, or a transition's animation stalled while hidden) was never thawed, so the master clock stays stopped. Needs a repro: how long hidden, reload or not, errors in the browser console, whether the dev panel was open.
 
+
+
+## Author review 2026-11-20 (scene_future / scene_connectors)
+Approved: el_Duenon7, el_Pantano_fishing, el_Pantano9_fueracastle, la_Pradera_fueraCity, future_cave_NW, pradera_pantano_w, la_Pradera6, la_pradera_n_dunasS, la_Pradera_n_dunasN, intersection_city_tower, la_playa1/2/3/4/6, el_heidan6/7/8.
+Changes:
+- la_Pradera_northTown: town more populated, like the town scenes; the prairie scene with the same "town" prop gets the same change.
+- pradera_pantano_E: the globs on the pasture are dull; add vegetation on top, left of the pond.
+- mina_cueva1: the map shows a wooden structure connecting both areas.
+- mina_cueva_2: the map shows a wooden structure holding the tunnel.
+- el_heidan9: the black structure has gold at its base on the map; add a gold base.
+- el_heidan10: missing blue elements (blue gems).
+- el_heidan11: the map has no black structure; remove it.
+- bridge_spring: add the road ending at the bridge into the prairie; make the bridge narrower so the river shows at the bottom.
+- bridge_south: same (narrower, road important); east side: the town visible far away, matching the new far-town used in other scenes.
+- bridge_swamp: narrower so the creek shows at the bottom.
+- mouths 147_31, 27_114 (outside and under): not liked. Outside: more interesting boulder or piled big rocks; mine = wood-reinforced gate; cave = natural opening. Under for natural caves: natural opening, not a built structure. Apply to all other mouths too.
+- Pending author review: contact sheet wizardidle-review/connectors_sheet.png (remaining mouths, enter_mine_S, ladder, pier, stairs).
+All items above done 2026-11-20 (artist, reviewed one by one with the author).
+
+## Front overlays for scenes (from artist, 2026-11-20)
+The author wants a front layer so the wizard walks "through" structures. First two files, approved for now, in the review drop:
+- `scene_future/overlay_mina_cueva1.png` over the scene `mina_cueva1` (a nearer timber portal)
+- `scene_future/overlay_mina_cueva_2.png` over the scene `mina_cueva_2` (nearer tunnel timber sets)
+Each is a transparent 256x64 PNG, the same size as the scene, placed at 0,0 over it. Draw it above the wizard and all sprites (top layer) and ignore clicks on it. Mock: `scene_future/overlay_mina_mock.png`. The wizard's height in the mock was a guess, so check it against his real walk line.
+Done 2026-11-20 (dev): overlayCanvas over the spell canvas, src/data/overlays.js lists the scenes, art in img/places/overlays/.

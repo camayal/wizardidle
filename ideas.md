@@ -54,6 +54,9 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-20: Scene art wired, front overlays
+- The artist's review queue is done: two files replace game art (la_pradera2, ground map stone bridge), the rest is copied into img/places/future, connectors and overlays with media.js rules. A front layer (overlayCanvas, src/data/overlays.js) draws over the wizard for mina_cueva1 and mina_cueva_2; untested in a browser (no way to run it here). Not done, for the author: making the new scenes real stages in the travel graph (zones, moves, which background each connector half uses) is his curation in Travel mode and a design call. Open: floor shaft in ladder mine side vs the walk line.
+
 ### 2026-11-17: Bestiary headings, the enemy leaves, boss entrances
 - Stats for most of the game (the author's decision, docs/DECISIONS.md): every stat now also counts per world, so achievements (the player's, decided today) outlive permadeath. New counters for wins, damage, falls by enemy, zone and level, time away (soft dead, permadeath, saved by the touch), the dice house, dreams seen, chapters, the kill button and the cemetery; the list is in docs/STATS.md. Achievement ideas wait in the thinker's inbox. A 4-run simulation to level 40 ran clean.
 - The elementals arrive by their element (the author's dev note): a new "element" arrival in src/ui/entrances.js under the artist's strips, the author's picks (img/effects/fx/fx_elemental_<fire|thunder|frost>_enter: fire A flame pillar, thunder A single strike, frost B crystal crown; 10 frames of 48 x 48, body from the reveal frame). A first version drawn by code was dropped (frost not nice enough). They leave by fading out while drifting towards the wizard (the author). The entrance plays its school's sound (Fire, Thunder, Frost, like the spells). Checked frame by frame in a headless browser.

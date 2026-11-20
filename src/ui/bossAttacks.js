@@ -18,7 +18,7 @@ import { art } from '../media.js';
 
 const FW = 104, FH = 80;            // a boss frame; the 64 x 64 boss rests at (36, 12) in it
 const SHAKE = [0, 1, -1, 2, -2, 2, -2, 1, -1, 2, -2, 1, -1, 1, 0, 0];     // the earthquake, px per frame
-const SHAKEN = ["esceneCanvas", "pjCanvas", "npcCanvas", "spellCanvas"];
+const SHAKEN = ["esceneCanvas", "pjCanvas", "npcCanvas", "spellCanvas", "overlayCanvas"];
 
 // The canvas for scene spells: over the whole scene, above the characters.
 let sceneCanvas;

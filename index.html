@@ -174,10 +174,13 @@
 
             
 
-            #main, #spellCanvas, #console, #backConsole, #marco, #esceneCanvas, #pjCanvas, #npcCanvas, #heading, #xpbar, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #pjName, #xpPlate, #XPprogressBar, #indicadores, #statusText, #launcher, #fondoLauncher, #inputName, #labelInputName, #nubes,  #startBtn, #textStartBtn, #title1, #title2, #footer, #scroll, #scrollBackCenter, #scrollBackUp, #scrollBackDown, #btnClose, #scrollText, #pjDivineBtn, #npcDivineBtn, #centerDivineBtn, #backMapa, #bocadilloMapa, #pjMapa {
+            #main, #spellCanvas, #overlayCanvas, #console, #backConsole, #marco, #esceneCanvas, #pjCanvas, #npcCanvas, #heading, #xpbar, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #pjName, #xpPlate, #XPprogressBar, #indicadores, #statusText, #launcher, #fondoLauncher, #inputName, #labelInputName, #nubes,  #startBtn, #textStartBtn, #title1, #title2, #footer, #scroll, #scrollBackCenter, #scrollBackUp, #scrollBackDown, #btnClose, #scrollText, #pjDivineBtn, #npcDivineBtn, #centerDivineBtn, #backMapa, #bocadilloMapa, #pjMapa {
                 position: absolute;
             }
 
+
+            /* front layer of a scene (src/data/overlays.js): drawn over the characters, never takes clicks */
+            #overlayCanvas { pointer-events: none; }
 
             #fondoLauncher, #nubes {
                 z-index: 100;
@@ -340,7 +343,7 @@
 
             /* crisp pixels: images are enlarged as sharp squares instead of blurred (the
                canvases do the same in src/ui/render.js); remove the class on <html> to compare */
-            html.crisp img, html.crisp #esceneCanvas {
+            html.crisp img, html.crisp #esceneCanvas, html.crisp #overlayCanvas {
                 image-rendering: pixelated;
             }
 
@@ -487,6 +490,7 @@
         <canvas id="pjCanvas"></canvas>
         <canvas id="npcCanvas"></canvas>
         <canvas id="spellCanvas"></canvas>
+        <canvas id="overlayCanvas"></canvas>
         <button class="transparentBtn" id="pjDivineBtn"></button>
         <button class="transparentBtn" id="centerDivineBtn"></button>
         <button class="transparentBtn" id="npcDivineBtn"></button>

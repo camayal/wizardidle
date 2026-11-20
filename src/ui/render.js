@@ -15,6 +15,7 @@ import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { spells } from '../data/spells.js';
 import { art } from '../media.js';
+import { overlays } from '../data/overlays.js';
 import { markup } from './text.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +91,10 @@ function loadBackground(back) {
     withImage("background", art(`${back.toLowerCase()}`), () => {
         esceneCanvas.style.background = `url('${art(`${back.toLowerCase()}`)}') no-repeat`;
         esceneCanvas.style.backgroundSize = "contain";
+        // the front layer of this scene, if it has one (cleared otherwise)
+        const front = el("overlayCanvas").style, name = back.toLowerCase();
+        front.background = overlays.has(name) ? `url('${art(`overlay_${name}`)}') no-repeat` : "none";
+        front.backgroundSize = "contain";
     });
     //change bocadillo location
     localizarBocadillo();
