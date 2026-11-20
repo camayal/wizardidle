@@ -151,3 +151,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): aboveground map installed (artist: crisp A, ground at 50%, stairs B with cloud puffs). Same 250x250, so travel points on 'above' keep their spots.
 - 2026-11-19 (dev): Travel mode: Deselect all and Hide/Show numbers buttons (showNums). Untested in a browser.
 - 2026-11-19 (dev): Travel mode: weight buttons under the layer buttons (left of the map); layers ordered above, ground, under. Untested in a browser.
+- 2026-11-19 (dev): aboveground map replaced by artist option clouds_a (small cloud islets at both stair ends). Ground map clouds at the stairs: with the artist.

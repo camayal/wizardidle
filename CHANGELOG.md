@@ -9,7 +9,7 @@
 - Travel mode: each spot shows a small number again: how many manual links it has (red 0 means not done yet), so you can see which spots you already linked.
 - Travel mode: the weight buttons moved to the left of the map, under the layer buttons, and the layers are now in the order above, ground, under.
 - Travel mode: a "Deselect all" button clears the source and targets, and a "Hide numbers / Show numbers" button toggles the link counts beside the spots.
-- Aboveground map redrawn in crisp pixel art (no more blur): the ground below is smaller, as if Heidan floated high above it, and the stairs and ladder end in small clouds that act as gates.
+- Aboveground map redrawn in crisp pixel art (no more blur): the ground below is smaller, as if Heidan floated high above it, and the stairs and ladder end in small cloud islands that act as gates.
 - Travel mode: clicking a scene on the map also shows that scene in the game, as a reference for the corrections.
 - Developer tools: the mode buttons now show just one word (Sounds, Art, Travel, Music, Texts), and the Travel mode has a colour legend.
 - Behind the scenes: the first version of the travel graph. A tool reads the map and the scene positions and works out how far apart places really are (rivers and sea cost extra, bridges are free crossings, cave mouths and the stairs join the layers). The game does not use it yet; it will replace the hand-typed lists of where the wizard can go once the author has reviewed the differences.
