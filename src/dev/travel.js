@@ -7,7 +7,7 @@
 // positions (zones.js for scenes, travelPositions for waypoints) and regenerates the graph; reload after.
 // The map shows the cheapest paths from the source: green = a move inside the zone, yellow = a destination
 // in another zone, red = too far. Clicking a scene also shows that scene in the game.
-// Each spot shows the number of its green and yellow direct links; the map layers (ground, above, under) are buttons beside the map.
+// The source has a black dot in its centre. Shift-click adds or drops targets: the weight buttons set the link from the source to every target at once. The map layers (ground, above, under) are buttons beside the map.
 // Opened from the dev panel (Modes > Travel), on the right of the game; the game waits until it is closed.
 
 import { travelGraph as g } from '../data/travelGraph.js';
@@ -27,9 +27,10 @@ const waypoints = g.nodes.map((n) => n[4]).filter(Boolean).sort();
 const names = g.nodes.map((n, i) => { const at = stages.filter((s) => g.anchors[s] === i); return at.length ? at : n[4] ? [n[4]] : []; });
 const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth moves with its underground twin
 const CUSTOM = ['future', 'connector'];         // kinds of the points added by hand
-let side, p, tools, imgs = {}, layer = 'ground', src = '', tgt = '', placing = '', moved = {}, points = {}, newPoint = null;
+let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], placing = '', moved = {}, points = {}, newPoint = null;
 g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2] }; });
 
+const tgt = () => tgts[tgts.length - 1] || '';           // the last target: the one "change coord" moves
 const layerOf = (n) => g.nodes[byName[n]][0];
 const isStage = (n) => n in g.anchors;
 const pos = (i) => moved[baseOf(names[i][0] || '')] || [g.nodes[i][1], g.nodes[i][2]];
@@ -88,7 +89,7 @@ function draw() {
     g.nodes.forEach(([l, , , kind], i) => {
         if (l !== layer) return;
         const [x, y] = pos(i), scene = names[i].some(isStage), k = kinds[i];
-        const isSrc = i === byName[src], isTgt = i === byName[tgt], X = x * ZOOM, Y = y * ZOOM;
+        const isSrc = i === byName[src], isTgt = tgts.some((t) => byName[t] === i), X = x * ZOOM, Y = y * ZOOM;
         ctx.globalAlpha = k === 'far' && !isSrc && !isTgt ? 0.3 : 1;      // red is see-through
         ctx.fillStyle = isSrc ? '#fff' : k ? COLORS[k] : kind === 'future' ? '#f90' : scene ? '#ddd' : '#9be';
         ctx.beginPath();
@@ -99,12 +100,7 @@ function draw() {
         ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();                  // a white halo, then a black ring: seen on any map
         ctx.lineWidth = 2; ctx.strokeStyle = isTgt ? '#f0f' : '#000'; ctx.stroke();
         if (isTgt) { ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X, Y, 12, 0, 7); ctx.stroke(); }
-        const own = names[i][0];                // the number of green and yellow direct links of this spot
-        if (own && byName[own] !== undefined) {
-            const n = neighbors(own).filter(([j, cost]) => j !== byName[own] && edgeKind(own, j, cost) !== 'far').length;
-            ctx.font = 'bold 13px sans-serif'; ctx.textBaseline = 'middle'; ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.fillStyle = '#000';
-            ctx.strokeText(n, X + 11, Y - 9); ctx.fillText(n, X + 11, Y - 9);
-        }
+        if (isSrc) { ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(X, Y, 3, 0, 7); ctx.fill(); }      // a black dot marks the source
         ctx.globalAlpha = 1;
     });
     for (const [name, d] of Object.entries(points)) {       // added but not in the graph yet: save and reload to connect
@@ -118,27 +114,31 @@ function draw() {
 }
 
 function drawLink() {
-    const has = src && tgt && src !== tgt, v = has ? verdict(src, tgt) : '';
+    const has = src && tgts.some((t) => t !== src), vs = has ? tgts.filter((t) => t !== src).map((t) => verdict(src, t)) : [];
     p.srcPlace.style.fontWeight = placing === 'src' ? 'bold' : '';
     p.tgtPlace.style.fontWeight = placing === 'tgt' ? 'bold' : '';
     p.newAdd.textContent = placing === 'new' ? 'click the map...' : 'Add point';
     p.srcPlace.textContent = placing === 'src' ? 'click the map...' : 'change coord';
-    p.tgtPlace.textContent = placing === 'tgt' ? 'click the map...' : 'change coord';
-    for (const b of p.weights.querySelectorAll('button')) b.style.outline = has && b.dataset.v === v ? '3px solid #000' : '';
-    const ak = has ? autoKind(src, tgt) : '', auto = ak ? NAMES[ak] : 'no direct link';
-    p.linkInfo.innerHTML = !has ? '<span class="muted">Pick a source and a target to set the weight of their link.</span>' :
-        `<b>${esc(src)}</b> &harr; <b>${esc(tgt)}</b>: ${v ? `manual <b>${NAMES[v]}</b> (auto: ${auto})` : `auto <b>${auto}</b>`}`;
+    p.tgtPlace.textContent = placing === 'tgt' ? 'click the map...' : 'change coord (last target)';
+    for (const b of p.weights.querySelectorAll('button')) b.style.outline = has && vs.every((v) => v === b.dataset.v) ? '3px solid #000' : '';
+    p.linkInfo.innerHTML = !has ? '<span class="muted">Pick a source and one or more targets (shift-click adds or removes a target) to set the weight of their links.</span>' :
+        tgts.filter((t) => t !== src).map((t) => {
+            const v = verdict(src, t), ak = autoKind(src, t), auto = ak ? NAMES[ak] : 'no direct link';
+            return `<b>${esc(src)}</b> &harr; <b>${esc(t)}</b>: ${v ? `manual <b>${NAMES[v]}</b> (auto: ${auto})` : `auto <b>${auto}</b>`}`;
+        }).join('<br>');
     p.count.textContent = `${Object.keys(overrides).length} verdicts, ${Object.keys(moved).length} moved spots (unsaved changes stay in this browser)`;
 }
 
 // Set the weight of a link for every scene sharing the two spots (the five scenes of the Castle are one spot).
 function setVerdict(v) {
-    if (!src || !tgt || src === tgt) return;
+    if (!src || !tgts.length) return;
     const spot = (n) => isStage(n) ? stages.filter((m) => g.anchors[m] === g.anchors[n]) : [n];
-    for (const a of spot(src)) {
-        for (const b of spot(tgt)) {
-            if (a === b) continue;
-            if (v) overrides[pairKey(a, b)] = v; else delete overrides[pairKey(a, b)];
+    for (const t of tgts) {
+        for (const a of spot(src)) {
+            for (const b of spot(t)) {
+                if (a === b) continue;
+                if (v) overrides[pairKey(a, b)] = v; else delete overrides[pairKey(a, b)];
+            }
         }
     }
     rebuild(); save(); draw();
@@ -160,7 +160,7 @@ function nearest(ev) {
         const d = Math.hypot(pos(i)[0] - x, pos(i)[1] - y);
         if (l === layer && d < bd && names[i].length) { best = i; bd = d; }
     });
-    return { i: best, x, y, name: best < 0 ? '' : names[best].find((n) => n === src || n === tgt) || names[best][0] };
+    return { i: best, x, y, name: best < 0 ? '' : names[best].find((n) => n === src || tgts.includes(n)) || names[best][0] };
 }
 
 // The game's own scene of a stage, as a reference for the curation (the stage name is its background name).
@@ -177,8 +177,10 @@ function setLayer(l) {
 }
 
 function choose(role, n) {
-    if (role === 'src') src = n; else tgt = n;
-    p.srcSel.value = src; p.tgtSel.value = tgt;
+    if (role === 'src') src = n;
+    else if (role === 'tgt') tgts = n ? [n] : [];                   // the list: one target
+    else if (n) tgts = tgts.includes(n) ? tgts.filter((t) => t !== n) : [...tgts, n];       // shift-click: add or drop a target
+    p.srcSel.value = src; p.tgtSel.value = tgt();
     placing = '';
     if (n) { show(n); setLayer(layerOf(n)); } else draw();
 }
@@ -213,7 +215,7 @@ export async function open(devTools) {
             <span><b style="color:${COLORS.move}">&#9632;</b> Accessible: an easy link (cost up to ${config.travel.moveLimit})</span>
             <span><b style="color:${COLORS.dest}">&#9632;</b> Difficult: a hard link, e.g. across a river (up to ${config.travel.difficultLimit})</span>
             <span><b style="color:${COLORS.far}">&#9632;</b> Impossible: a link too dear or removed; drawn see-through</span>
-            <span>white dot: the source; magenta ring: the target; round: a scene; blue square: bridge, pier, entrance, stairs or connector; orange diamond: a future scene; red is drawn see-through; dashed: a manual link</span>
+            <span>white dot with a black centre: the source; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene; blue square: bridge, pier, entrance, stairs or connector; orange diamond: a future scene; red is drawn see-through; dashed: a manual link</span>
             <span class="muted">Cost = walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked. To link two spots that are not neighbours, pick both and press Accessible or Difficult. Accessible sets a link's cost to ${config.travel.accessibleCost}, Difficult multiplies it by ${config.travel.difficultFactor} (at least ${config.travel.difficultMin}), Impossible removes it.</span>
         </div>
         <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;
@@ -222,7 +224,7 @@ export async function open(devTools) {
     p.srcSel.onchange = () => choose('src', p.srcSel.value);
     p.tgtSel.onchange = () => choose('tgt', p.tgtSel.value);
     p.srcPlace.onclick = () => { placing = placing === 'src' ? '' : src ? 'src' : ''; draw(); };
-    p.tgtPlace.onclick = () => { placing = placing === 'tgt' ? '' : tgt ? 'tgt' : ''; draw(); };
+    p.tgtPlace.onclick = () => { placing = placing === 'tgt' ? '' : tgt() ? 'tgt' : ''; draw(); };
     p.newAdd.onclick = () => {
         const name = p.newName.value.trim().replace(/\W+/g, '_');
         if (!name || name in byName || name in points) { p.tip.textContent = 'Give the new point a name nobody uses yet.'; return; }
@@ -238,10 +240,10 @@ export async function open(devTools) {
             p.tip.textContent = `${newPoint.name} added: Save verdict and reload to connect it.`;
             placing = ''; newPoint = null; p.newName.value = ''; save(); draw();
         } else if (placing) {          // move the chosen spot (every scene sharing it, and a cave mouth's twin)
-            const n = placing === 'src' ? src : tgt;
+            const n = placing === 'src' ? src : tgt();
             for (const m of names[byName[n]]) moved[baseOf(m)] = [Math.round(h.x), Math.round(h.y)];
             placing = ''; save(); draw();
-        } else if (h.name) choose(e.shiftKey ? 'tgt' : 'src', h.name);
+        } else if (h.name) choose(e.shiftKey ? 'more' : 'src', h.name);
     };
     p.canvas.onmousemove = (e) => {
         const s = nearest(e).name;
