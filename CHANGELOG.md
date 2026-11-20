@@ -3,6 +3,7 @@
 ## Unreleased
 - Developer tools: a new Travel mode shows the map with the cheapest paths from any scene (green: moves in the zone, yellow: destinations, red: too far), to judge the travel numbers by eye before the game uses them.
 - Travel mode: shift-click a second scene to correct the link between two scenes (green move, yellow destination, red not offered, or back to automatic). The corrections are saved to a file the game reads (src/data/travelOverrides.js), and a Capture button saves the map as a picture with the corrections beside it (docs/travel-captures/).
+- Travel mode: clicking a scene on the map also shows that scene in the game, as a reference for the corrections.
 - Developer tools: the mode buttons now show just one word (Sounds, Art, Travel, Music, Texts), and the Travel mode has a colour legend.
 - Behind the scenes: the first version of the travel graph. A tool reads the map and the scene positions and works out how far apart places really are (rivers and sea cost extra, bridges are free crossings, cave mouths and the stairs join the layers). The game does not use it yet; it will replace the hand-typed lists of where the wizard can go once the author has reviewed the differences.
 - Ground map: a road now leaves the town going south, turns west, crosses a second small bridge and ends at a new fisher's pier on the south coast (the pier is a place to add later).

@@ -11,6 +11,7 @@ import { places } from '../data/zones.js';
 import { travelCost, route, destinations, moves, overrides, pairKey, verdict, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
 import { sidePanel } from './panel.js';
+import { loadBackground } from '../ui/render.js';
 import { esc } from './review.js';
 
 const MAPS = { ground: 'img/ui/mapa.png', above: 'img/ui/mapaboveground.png', under: 'img/ui/mapaunderground.png' };
@@ -129,7 +130,13 @@ function setLayer(l) {
     draw();
 }
 
+// The game's own scene of a stage, as a reference for the curation (the stage name is its background name).
+function show(n) {
+    try { loadBackground(n); } catch (e) { /* no background for this stage */ }
+}
+
 function pick(n) {
+    show(n);
     stage = n; if (target === stage) target = ''; p.list.value = n;
     setLayer(layerOf(n));
 }
@@ -162,9 +169,9 @@ export async function open(devTools) {
     p.canvas.onclick = (e) => {
         const s = nearest(e).name;
         if (!s) return;
-        if (e.shiftKey) { target = s; p.tlist.value = s; draw(); } else { target = ''; p.tlist.value = ''; pick(s); }
+        if (e.shiftKey) { show(s); target = s; p.tlist.value = s; draw(); } else { target = ''; p.tlist.value = ''; pick(s); }
     };
-    p.tlist.onchange = () => { target = p.tlist.value; draw(); };
+    p.tlist.onchange = () => { target = p.tlist.value; if (target) show(target); draw(); };
     p.link.onclick = (e) => { if (e.target.dataset.v !== undefined && target) setVerdict(e.target.dataset.v); };
     p.save.onclick = async () => { await post('travel/overrides', overrides, 'Save'); try { localStorage.removeItem(DRAFT); } catch (e) { /* none */ } };
     p.capture.onclick = () => post('travel/capture', { png: p.canvas.toDataURL('image/png'), stage, layer, overrides }, 'Capture');
