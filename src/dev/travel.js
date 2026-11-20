@@ -140,7 +140,7 @@ function drawLink() {
         tgts.filter((t) => t !== src).map((t) => {
             const v = verdict(src, t), ak = autoKind(src, t), auto = ak ? NAMES[ak] : 'no direct link';
             return `<b>${esc(src)}</b> &harr; <b>${esc(t)}</b>: ${v ? `manual <b>${NAMES[v]}</b> (auto: ${auto})` : `auto <b>${auto}</b>`}`;
-        }).join('<br>')));
+        }).join('<br>'));
     p.count.textContent = `${touched.size} verdicts this session, ${Object.keys(moved).length} moved spots (unsaved changes stay in this browser)`;
 }
 
