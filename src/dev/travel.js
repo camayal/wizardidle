@@ -194,6 +194,8 @@ export async function open(devTools) {
     side.body.innerHTML = `
         <div class="row"><b>Source:</b><select data-id="srcSel">${options()}</select><button data-id="srcPlace">change coord</button></div>
         <div class="row"><b>Target:</b><select data-id="tgtSel">${options()}</select><button data-id="tgtPlace">change coord</button></div>
+        <div class="row"><b>New point:</b><select data-id="newKind"><option value="future">future scene</option><option value="connector">connector (bridge, stairs...)</option></select>
+            <input data-id="newName" placeholder="name (letters, digits, _)" size="18"><button data-id="newAdd">Add point</button></div>
         <div class="row"><b>Adjust travel weight:</b><span data-id="weights">
             <button data-v="move" style="background:${COLORS.move}">Accessible</button>
             <button data-v="dest" style="background:${COLORS.dest}">Difficult</button>
@@ -201,9 +203,6 @@ export async function open(devTools) {
             <button data-v="">Auto</button></span></div>
         <div data-id="linkInfo"></div>
         <div data-id="summary" class="muted"></div>
-        <div class="row"><b>New point:</b><select data-id="newKind"><option value="future">future scene</option><option value="connector">connector (bridge, stairs...)</option></select>
-            <input data-id="newName" placeholder="name (letters, digits, _)" size="18"><button data-id="newAdd">Add point</button>
-            <button data-id="newDel">Delete source point</button></div>
         <div style="display:flex;gap:6px;align-items:flex-start">
             <div data-id="layers" style="display:flex;flex-direction:column;gap:4px">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
             <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
@@ -229,10 +228,6 @@ export async function open(devTools) {
         if (!name || name in byName || name in points) { p.tip.textContent = 'Give the new point a name nobody uses yet.'; return; }
         newPoint = { name, kind: p.newKind.value };
         placing = 'new'; p.tip.textContent = `Click the map (${layer}) to put ${name}.`; draw();
-    };
-    p.newDel.onclick = () => {
-        if (!points[src]) { p.tip.textContent = 'The source is not a point added by hand.'; return; }
-        delete points[src]; src = ''; save(); p.tip.textContent = 'Deleted: Save verdict and reload to drop it from the graph.'; choose('src', '');
     };
     p.weights.onclick = (e) => { if (e.target.dataset.v !== undefined) setVerdict(e.target.dataset.v); };
     p.layers.onclick = (e) => e.target.dataset.l && setLayer(e.target.dataset.l);
