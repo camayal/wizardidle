@@ -162,3 +162,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): Travel mode: link list moved under the map; a new source clears the targets. Untested in a browser.
 - 2026-11-20 (dev): Travel mode: pending points magenta; Future<->connector works on built-in bridge/pier/stairs (travelPoints entry with the same name; travel_graph.py changes that node's kind instead of adding one). Bridges still cancel river price by name list, whatever their type. Untested in a browser.
 - 2026-11-20 (dev): Travel mode: future scenes magenta, pending = dashed outline; Check connections button (lost(): components over neighbors(), all but the biggest group are ringed and listed). Cave-mouth twins and the castle's five scenes count as one spot each. Untested in a browser.
+- 2026-11-20 (dev): artist drew 27 future + 31 connector scenes in the review drop; open questions saved in docs/dev-notes.md (walk line rows, mouth types, mirrors, wiring). Nothing wired yet.
