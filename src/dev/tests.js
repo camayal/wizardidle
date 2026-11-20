@@ -216,11 +216,11 @@ const scenarios = [
 // Shown in the dev panel by group; sub starts a small heading inside the group.
 
 const actions = [
-    { group: 'Modes', name: 'Sounds: choose a sound for a move', run() { openMode('sounds'); } },
-    { group: 'Modes', name: 'Art: play animations, scenes and other art', run() { openMode('art'); } },
-    { group: 'Modes', name: 'Travel: the map with the cheapest paths from a scene', run() { openMode('travel'); } },
-    { group: 'Modes', name: 'Music: write and play songs made with code', run() { openMode('music'); } },
-    { group: 'Modes', name: 'Texts: read and edit the story, dreams and console lines in place', run() { openMode('texts'); } },
+    { group: 'Modes', name: 'Sounds', run() { openMode('sounds'); } },
+    { group: 'Modes', name: 'Art', run() { openMode('art'); } },
+    { group: 'Modes', name: 'Travel', run() { openMode('travel'); } },
+    { group: 'Modes', name: 'Music', run() { openMode('music'); } },
+    { group: 'Modes', name: 'Texts', run() { openMode('texts'); } },
 
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { group: 'Game', name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },

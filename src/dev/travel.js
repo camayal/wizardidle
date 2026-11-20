@@ -90,7 +90,15 @@ export async function open(devTools) {
         <span data-id="layers">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join(' ')}</span></div>
         <div data-id="info" class="muted"></div>
         <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="width:100%;image-rendering:pixelated;cursor:crosshair"></canvas>
-        <div data-id="tip" class="muted">Click a scene to see its paths. Green: move in the zone. Yellow: destination. Red: too far.</div>`;
+        <div class="row" data-id="legend" style="gap:2px 12px">
+            <span><b style="color:${COLORS.move}">&#9632;</b> green: a move inside the zone (cost under ${config.travel.moveLimit})</span>
+            <span><b style="color:${COLORS.dest}">&#9632;</b> yellow: a destination in another zone (cost under ${config.travel.destinationLimit})</span>
+            <span><b style="color:${COLORS.far}">&#9632;</b> red: too far, not offered</span>
+            <span><b style="color:#fff;text-shadow:0 0 2px #000">&#9679;</b> white dot: the chosen scene</span>
+            <span><b style="color:#9be">&#9632;</b> blue square: a waypoint (bridge, pier, cave mouth, stairs); round dots are scenes</span>
+            <span class="muted">Cost = steps of walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked, stairs and cave mouths have their own price.</span>
+        </div>
+        <div data-id="tip" class="muted">Click a scene to see its paths. Hover for its name and cost.</div>`;
     p = {};
     side.body.querySelectorAll('[data-id]').forEach((e) => { p[e.dataset.id] = e; });
     p.list.onchange = () => pick(p.list.value);
