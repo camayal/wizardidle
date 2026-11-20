@@ -121,4 +121,7 @@ function moves(stage) {
 
 rebuild();
 
-export { byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
+// The direct links of a spot: [[node, cost], ...], after the manual verdicts (the dev tools draw them).
+const neighbors = (spot) => adj[nodeOf(spot)] || [];
+
+export { neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
