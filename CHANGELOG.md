@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Behind the scenes: the first version of the travel graph. A tool reads the map and the scene positions and works out how far apart places really are (rivers and sea cost extra, bridges are free crossings, cave mouths and the stairs join the layers). The game does not use it yet; it will replace the hand-typed lists of where the wizard can go once the author has reviewed the differences.
 - Ground map: a road now leaves the town going south, turns west, crosses a second small bridge and ends at a new fisher's pier on the south coast (the pier is a place to add later).
 - Underground map repainted to look like a natural cave: warm brown cloudy rock with cracks, winding tunnels of varied width with rough walls, a basalt volcano chamber with a lava lake and glow, rails and lamps in the mine, irregular pools and crystal clusters. The mine ends line up with the ground entrances and each entrance has a patch of daylight; the caves have rough walls, side nooks, rock pillars and a damp sheen.
 - Aboveground map: the cloud lands have puffy, irregular edges and the sky has some small decorative clouds around them.

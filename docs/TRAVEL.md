@@ -1,6 +1,6 @@
 # Travel graph plan
 
-Replaces the hand-typed `moves` and `destinations` strings of every stage in `src/data/zones.js` with a **graph computed from map coordinates**. Agreed with the author on 2026-11-19. Nothing is built yet.
+Replaces the hand-typed `moves` and `destinations` strings of every stage in `src/data/zones.js` with a **graph computed from map coordinates**. Agreed with the author on 2026-11-19. **Built 2026-11-19: steps 1-3, 5 and a PNG overlay; the game still uses the old strings (step 6 waits for the author).** See "Built" at the end.
 
 ## Why
 
@@ -66,3 +66,12 @@ Leave for later: creating the in-between scenes, how they are composed and chose
 - The dead-end cave tunnel at about (40,147) underground has no ground entrance: make it a seventh entrance or join the mine entrance at (33,165)?
 - Art still needed (artist): bridge scenes (Prairie, Swamp, south), the fisher's pier scene, the beach zone, Prairie creek variants, border scenes, the walkable Dunes shore, Heidan split and portal visuals.
 - The review drop holds old option files (map_bridge, map_above, map_under, map_pier) that can be deleted.
+
+## Built (2026-11-19)
+
+- `tools/travel_graph.py` writes `src/data/travelGraph.js` (83 nodes, 431 edges) and prints the check; `--compare` lists the differences with the old strings; `--paths <stage> <png>` draws the cheapest paths (green = move, yellow = destination, red = too far).
+- `src/travelGraph.js`: `travelCost`, `route`, `destinations`, `moves`. Dijkstra runs in the game (80 nodes), not offline: only the edges are precomputed. Not yet called by `travel.js`.
+- Numbers in `config.travel`: land 1, road 1 (the sand of the beaches is not a road, so no discount; the map has no drawn roads yet), river 60 per crossing (bridges within 7 px are free), sea 50, cave mouth 15, stairs 30, edge search 60, destination limit 45, move limit 45. If nothing is under a limit the nearest three destinations or two moves are taken.
+- Result at limit 45: 346 derived destinations against 346 hand-typed, 237 shared; moves 194 derived, 192 shared of 241. Sea and river read from the ground map only; the underground and aboveground maps are walked as plain land.
+- To confirm with the author: the position of the sacred stairs (a guess, 212,205, the ladder at the south-east); the Heidan has no good ground link (old strings reach it from the Forest, Swamp, Desert); `las_Dunas3` (17,132) is cut off by sea (cost 589); Pantano1-3, Cueva1-2, Tundra1 sit just over the limit and use the nearest-three fallback; 24 one-way links in the old strings (listed by the tool).
+- Left: the dev-tools overlay (the PNG stands in), the aboveground portals, step 6.

@@ -26,6 +26,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - divine.js: the god's three touches (wizard, scene, enemy).
 - story.js: chapters unlocked by level, history scroll, story events.
 - travel.js: changing zone and stage, picking backgrounds.
+- travelGraph.js: travelCost, route, destinations, moves over the generated graph (data/travelGraph.js, from tools/travel_graph.py); not yet used by travel.js (docs/TRAVEL.md).
 - achievements.js: unlocking and listing achievements.
 - away.js: time away (docs/AWAY.md): settles away time / 108 on load (faith, gold, levels, soft dead, permadeath and the poem) and reloads a long-hidden page. awayMath.js: its formulas; data/awayTexts.js: its texts; numbers in config.away.
 - stats.js: counters, totals and records (`stats.count/add/max/min`), play time. Read by achievements and stats pages.
@@ -67,7 +68,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 ## tools/
 
-- serve.py: local server without caching, note saving, and the review drop at review/. land.py: lands a work branch on dev-repo in the main folder by itself (run after every commit by hooks/post-commit, with `git config core.hooksPath tools/hooks`). odds.py: achievement odds in a second from a playtest's odds-data.json (players who quit at random, counters projected, suggested tier). playtest.py: runs many simulations headless and writes docs/playtests/<date>-<name>/ (summary.md, runs.csv). cut_sounds.py: cuts the approved sounds of sound_cuts.txt into snd/. to_ogg.py: turns whole mp3/wav/flac files (or a folder) into game .ogg files, same settings; never convert sounds by hand.
+- travel_graph.py: builds src/data/travelGraph.js from the maps and zones.js and checks it (--compare with the old strings, --paths <stage> <png> to draw the cheapest paths). serve.py: local server without caching, note saving, and the review drop at review/. land.py: lands a work branch on dev-repo in the main folder by itself (run after every commit by hooks/post-commit, with `git config core.hooksPath tools/hooks`). odds.py: achievement odds in a second from a playtest's odds-data.json (players who quit at random, counters projected, suggested tier). playtest.py: runs many simulations headless and writes docs/playtests/<date>-<name>/ (summary.md, runs.csv). cut_sounds.py: cuts the approved sounds of sound_cuts.txt into snd/. to_ogg.py: turns whole mp3/wav/flac files (or a folder) into game .ogg files, same settings; never convert sounds by hand.
 
 ## How it connects
 

@@ -57,6 +57,19 @@ export const config = {
         deadCertainHours: 20,      // the cap: permadeath is certain
         protectedLevels: [[130, 139], [149, 159], [190, 200]],  // chapters VI, VIII, X and XI: the story takes the god's click away, so no soft dead and no permadeath there (STORY.md, true death rule)
     },
+    // Travel graph (docs/TRAVEL.md): the cost of walking, in map pixels. tools/travel_graph.py reads
+    // the terrain numbers, the game reads the limits. First guesses, tuned with the overlay.
+    travel: {
+        landCost: 1,               // one pixel of land
+        roadCost: 1,               // one pixel of road (the sand of the beaches is not a road: no discount yet)
+        riverCost: 60,             // a flat price per river crossing (none on a bridge)
+        seaCost: 50,               // one pixel of sea or lake
+        entranceCost: 15,          // a cave or mine mouth, between the ground and the underground
+        stairsCost: 30,            // the sacred stairs up to Heidan
+        searchDistance: 60,        // two spots this close (map pixels) get a direct edge
+        destinationLimit: 45,      // a place this cheap away is a destination (the adapter)
+        moveLimit: 45,             // a stage of the same zone this cheap away is a move
+    },
     // Fixed rules of the world.
     balance: {
         rXP: 1.1,                  // XP curve exponent
