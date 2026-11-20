@@ -159,3 +159,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (author, idea): in the future every connector (bridges, stairs, ladder...) becomes a real scene; for now they are the important links of the travel graph. Switch them with the Future<->connector button when each gets its scene. The three built-in bridges are generator waypoints and can't be switched yet.
 - 2026-11-20 (dev): Travel mode: future=circle, connector=square (pending points too, they showed a fixed square so the Future<->connector switch looked dead); verdict counter is per page session (touched set). Untested in a browser.
 - 2026-11-20 (dev): Travel mode: selected added points list their type (circle/square) above the link info; shapes bigger. Swap logic itself read fine; if it still fails the author should say which point and what the tip says.
+- 2026-11-20 (dev): Travel mode: link list moved under the map; a new source clears the targets. Untested in a browser.

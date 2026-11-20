@@ -193,7 +193,7 @@ function setLayer(l) {
 }
 
 function choose(role, n) {
-    if (role === 'src') src = n;
+    if (role === 'src') { if (n !== src) tgts = []; src = n; }       // a new source starts with no targets
     else if (role === 'tgt') tgts = n ? [n] : [];                   // the list: one target
     else if (n) tgts = tgts.includes(n) ? tgts.filter((t) => t !== n) : [...tgts, n];       // shift-click: add or drop a target
     p.srcSel.value = src; p.tgtSel.value = tgt();
@@ -214,7 +214,6 @@ export async function open(devTools) {
         <div class="row"><b>Target:</b><select data-id="tgtSel">${options()}</select><button data-id="tgtPlace">change coord</button></div>
         <div class="row"><b>New point:</b><select data-id="newKind"><option value="future">future scene</option><option value="connector">connector (bridge, stairs...)</option></select>
             <input data-id="newName" placeholder="name (letters, digits, _)" size="18"><button data-id="newAdd">Add point</button></div>
-        <div data-id="linkInfo"></div>
         <div data-id="summary" class="muted"></div>
         <div style="display:flex;gap:6px;align-items:flex-start">
             <div style="display:flex;flex-direction:column;gap:4px">
@@ -233,6 +232,7 @@ export async function open(devTools) {
             </div>
             <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
         </div>
+        <div data-id="linkInfo"></div>
         <div class="row"><b data-id="noteLabel">Notes:</b><textarea data-id="note" rows="2" style="flex:1" placeholder="notes for the future (select a future scene or connector you added)" disabled></textarea></div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
