@@ -12,6 +12,7 @@
 - Travel mode: to link spots on two different maps, pick the source, switch the map layer and click the other spot (a plain click on a map other than the source's now picks a target; "Deselect all" starts over).
 - Travel mode: future scenes are now round (orange) and connectors square (blue), so the type is visible at a glance; a point you just added (not in the graph yet) already shows its shape and colour, and switching its type with "Future <-> connector" changes it on the spot. The verdict counter at the bottom counts only the links you set since you opened the page, not all saved ones.
 - Travel mode: the list of links (and the type of the selected added points) now sits just below the map, and picking a new source, by a plain click or the list, drops the previous targets.
+- Travel mode: new points not saved yet are drawn magenta, and the "Future <-> connector" button now also works on the built-in bridges, the pier and the stairs (the type is kept in travelPoints and the graph generator applies it on save).
 - Travel mode: the Deselect all and Hide/Show numbers buttons moved to the left column, between the layer and weight buttons.
 - Travel mode: the weight buttons moved to the left of the map, under the layer buttons, and the layers are now in the order above, ground, under.
 - Travel mode: a "Deselect all" button clears the source and targets, and a "Hide numbers / Show numbers" button toggles the link counts beside the spots.

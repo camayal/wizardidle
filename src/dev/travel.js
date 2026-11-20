@@ -114,7 +114,7 @@ function draw() {
     });
     for (const [name, d] of Object.entries(points)) {       // added but not in the graph yet: save and reload to connect
         if (d.layer !== layer || name in byName) continue;
-        ctx.fillStyle = d.kind === 'future' ? '#f90' : '#9be'; ctx.strokeStyle = '#f0f'; ctx.lineWidth = 2;
+        ctx.fillStyle = '#f0f'; ctx.strokeStyle = '#000'; ctx.lineWidth = 2;      // magenta: new, not in the graph yet
         ctx.beginPath();
         if (d.kind === 'future') ctx.arc(d.x * ZOOM, d.y * ZOOM, 7, 0, 7); else ctx.rect(d.x * ZOOM - 6, d.y * ZOOM - 6, 12, 12);
         ctx.fill(); ctx.stroke();
@@ -240,7 +240,7 @@ export async function open(devTools) {
             <span><b style="color:${COLORS.move}">&#9632;</b> Accessible: an easy link (cost up to ${config.travel.moveLimit})</span>
             <span><b style="color:${COLORS.dest}">&#9632;</b> Difficult: a hard link, e.g. across a river (up to ${config.travel.difficultLimit})</span>
             <span><b style="color:${COLORS.far}">&#9632;</b> Impossible: a link too dear or removed; drawn see-through</span>
-            <span>white dot with a black centre: the source; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene (grey) or a future scene (orange); blue square: bridge, pier, entrance, stairs or connector; red is drawn see-through; dashed: a manual link; the small number beside a spot is how many manual links it has (red 0 = not done yet)</span>
+            <span>white dot with a black centre: the source; magenta fill: a new point not saved yet; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene (grey) or a future scene (orange); blue square: bridge, pier, entrance, stairs or connector; red is drawn see-through; dashed: a manual link; the small number beside a spot is how many manual links it has (red 0 = not done yet)</span>
             <span class="muted">Cost = walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked. To link two spots that are not neighbours, pick both and press Accessible or Difficult. Accessible sets a link's cost to ${config.travel.accessibleCost}, Difficult multiplies it by ${config.travel.difficultFactor} (at least ${config.travel.difficultMin}), Impossible removes it.</span>
         </div>
         <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;
@@ -253,8 +253,14 @@ export async function open(devTools) {
         save(); draw();
     };
     p.swap.onclick = () => {           // future scene <-> connector, for the points added by hand
-        const list = [src, ...tgts].filter((n) => n && isCustom(n));
-        if (!list.length) { p.tip.textContent = 'Select a future scene or connector that you added.'; return; }
+        for (const n of [src, ...tgts]) {   // a built-in bridge, the pier or the stairs can be switched too: it becomes an entry of ours
+            if (n && !isCustom(n) && byName[n] !== undefined && ['bridge', 'pier', 'stairs'].includes(g.nodes[byName[n]][3])) {
+                const [x, y] = pos(byName[n]);
+                points[n] = { kind: 'connector', layer: layerOf(n), x, y, note: '' };
+            }
+        }
+        const list = [src, ...tgts].filter((n, i, a) => n && isCustom(n) && a.indexOf(n) === i);
+        if (!list.length) { p.tip.textContent = 'Select a future scene, a connector, a bridge, the pier or the stairs.'; return; }
         for (const n of list) points[n].kind = points[n].kind === 'future' ? 'connector' : 'future';
         save(); draw();
         p.tip.textContent = `${list.join(', ')}: type switched. Save verdict and reload to apply it to the graph.`;

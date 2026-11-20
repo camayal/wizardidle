@@ -155,7 +155,11 @@ def build():
         node('ground', x, y, kind, name)
     for name, d in read_points().items():
         if d.get('layer') in LAYERS:
-            node(d['layer'], int(d['x']), int(d['y']), d.get('kind', 'connector'), name)
+            old = [n for n in nodes if n['name'] == name]
+            if old:                         # a bridge, the pier or the stairs switched to another type in the dev tools
+                old[0]['kind'] = d.get('kind', 'connector')
+            else:
+                node(d['layer'], int(d['x']), int(d['y']), d.get('kind', 'connector'), name)
     for name, x, y in mouths:
         node('ground', x, y, 'mouth', name)
         node('under', x, y, 'mouth', name + '_under')
