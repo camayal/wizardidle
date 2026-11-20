@@ -214,7 +214,7 @@ function exploreEV() {
             startEvent(changeLocality);
         } else {
             print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
-            walkThroughScene(pickRandomBackgroundForCurrentZone, () => {   // walks on to the next spot
+            pickRandomBackgroundForCurrentZone(() => {   // walks on to the next spot
                 addXP(0.5);
                 nextEvent();
             });

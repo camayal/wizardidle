@@ -364,6 +364,19 @@ function walkBackThroughScene(changeScene, onArrive) {
     });
 }
 
+// Across a connector (a bridge): he leaves the scene by the side he is going to (dir 1 = east, to the
+// right; -1 = west, to the left, the walk strip mirrored), crosses each of its scenes in turn, then
+// changeScene shows the real destination and he walks in to his place from the same side.
+function walkAcross(scenes, dir, changeScene, onArrive) {
+    const out = dir > 0 ? OFF_RIGHT : OFF_LEFT, inn = dir > 0 ? OFF_LEFT : OFF_RIGHT;
+    const play = (i) => {
+        if (i < scenes.length) loadBackground(scenes[i]); else changeScene();
+        ui.wizardOffset = inn;
+        if (i < scenes.length) walkWizardTo(out, () => play(i + 1)); else walkWizardTo(0, onArrive);
+    };
+    walkWizardTo(out, () => play(0));
+}
+
 function wizardX() {
     return ui.squareSide + (ui.wizardOffset || 0) * ui.charWidth / 32;
 }
@@ -813,6 +826,7 @@ export {
     looksRandom,
     showBlink,
     walkWizardTo,
+    walkAcross,
     playHydraGrow,
     imageNow,
     drawWizardPose,

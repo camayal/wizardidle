@@ -88,7 +88,7 @@ function route(a, b) {
 // both lead somewhere, Impossible does not. A stage is anything in `places`; a point that is not a stage
 // (a bridge, a cave mouth, the stairs) only passes the trip on to the stages linked to it.
 // Stages linked to a stage, directly or through such points, as {stage name: true}.
-function linked(stage) {
+function linkMap() {
     const nb = {};
     for (const [k, v] of Object.entries(overrides)) {
         if (v === 'far') continue;
@@ -96,6 +96,11 @@ function linked(stage) {
         (nb[a] = nb[a] || []).push(b);
         (nb[b] = nb[b] || []).push(a);
     }
+    return nb;
+}
+
+function linked(stage) {
+    const nb = linkMap();
     const found = {}, seen = new Set([stage]), todo = [stage];
     while (todo.length) {
         for (const n of nb[todo.pop()] || []) {
@@ -106,6 +111,27 @@ function linked(stage) {
     }
     for (const n of Object.keys(found)) if (verdict(stage, n) === 'far') delete found[n];
     return Object.keys(found);
+}
+
+// The connector points (bridges, mouths, stairs) a trip from one stage to another passes, in order; [] when
+// the link is direct. The shortest way through the manual links, a stage ending the walk.
+function connectorsBetween(a, b) {
+    const nb = linkMap(), prev = { [a]: null }, todo = [a];
+    while (todo.length) {
+        const n = todo.shift();
+        if (n === b) break;
+        if (n !== a && places[n]) continue;
+        for (const m of nb[n] || []) if (!(m in prev)) { prev[m] = n; todo.push(m); }
+    }
+    const chain = [];
+    for (let n = prev[b]; n && n !== a; n = prev[n]) chain.unshift(n);
+    return b in prev ? chain : [];
+}
+
+// Where a named point sits on its map (x in map pixels), or undefined.
+function spotX(name) {
+    const i = byName[name];
+    return i === undefined ? undefined : g.nodes[i][1];
 }
 
 // The stages he may go to in another zone, from the manual links; none linked yet: the old typed list.
@@ -131,4 +157,4 @@ rebuild();
 // The direct links of a spot: [[node, cost], ...], after the manual verdicts (the dev tools draw them).
 const neighbors = (spot) => adj[nodeOf(spot)] || [];
 
-export { neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
+export { connectorsBetween, spotX, neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
