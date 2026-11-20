@@ -98,8 +98,8 @@ function draw() {
         ctx.globalAlpha = k === 'far' && !isSrc && !isTgt ? 0.3 : 1;      // red is see-through
         ctx.fillStyle = isSrc ? '#fff' : k ? COLORS[k] : kind === 'future' ? '#f90' : scene ? '#ddd' : '#9be';
         ctx.beginPath();
-        if (scene || kind === 'future') ctx.arc(X, Y, 7, 0, 7);       // round: a scene or a future scene
-        else ctx.rect(X - 6, Y - 6, 12, 12);                          // square: a connector
+        if (scene || kind === 'future') ctx.arc(X, Y, 8, 0, 7);       // round: a scene or a future scene
+        else ctx.rect(X - 7, Y - 7, 14, 14);                          // square: a connector
         ctx.fill();
         ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();                  // a white halo, then a black ring: seen on any map
         ctx.lineWidth = 2; ctx.strokeStyle = isTgt ? '#f0f' : '#000'; ctx.stroke();
@@ -135,11 +135,12 @@ function drawLink() {
     p.srcPlace.textContent = placing === 'src' ? 'click the map...' : 'change coord';
     p.tgtPlace.textContent = placing === 'tgt' ? 'click the map...' : 'change coord (last target)';
     for (const b of p.weights.querySelectorAll('button')) b.style.outline = has && vs.every((v) => v === b.dataset.v) ? '3px solid #000' : '';
-    p.linkInfo.innerHTML = !has ? '<span class="muted">Pick a source and one or more targets (shift-click adds or removes a target) to set the weight of their links.</span>' :
+    const picked = [src, ...tgts].filter((n, i, a) => n && a.indexOf(n) === i && isCustom(n)).map((n) => `<b>${esc(n)}</b>: ${points[n].kind === 'future' ? 'future scene (circle)' : 'connector (square)'}`).join(' &middot; ');
+    p.linkInfo.innerHTML = (picked ? `<div>${picked}</div>` : '') + (!has ? '<span class="muted">Pick a source and one or more targets (shift-click adds or removes a target) to set the weight of their links.</span>' :
         tgts.filter((t) => t !== src).map((t) => {
             const v = verdict(src, t), ak = autoKind(src, t), auto = ak ? NAMES[ak] : 'no direct link';
             return `<b>${esc(src)}</b> &harr; <b>${esc(t)}</b>: ${v ? `manual <b>${NAMES[v]}</b> (auto: ${auto})` : `auto <b>${auto}</b>`}`;
-        }).join('<br>');
+        }).join('<br>')));
     p.count.textContent = `${touched.size} verdicts this session, ${Object.keys(moved).length} moved spots (unsaved changes stay in this browser)`;
 }
 
