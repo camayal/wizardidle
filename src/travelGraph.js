@@ -19,12 +19,31 @@ const pairKey = (a, b) => a < b ? `${a}|${b}` : `${b}|${a}`;
 const verdict = (a, b) => overrides[pairKey(a, b)] || '';
 
 const SIZE = 250;
-const adj = g.nodes.map(() => []);
-for (const [a, b, c] of g.edges) { adj[a].push([b, c]); adj[b].push([a, c]); }
+const byName = { ...g.anchors };     // stage names and the waypoints' names (bridges, pier, cave mouths, stairs) -> node
+g.nodes.forEach((n, i) => { if (n[4]) byName[n[4]] = i; });
+const cache = new Map();            // source node -> {dist, prev}; cleared when the graph changes
+let adj = [];
+
+// The adjacency lists: the generated edges, then the manual verdicts on top (a pair set Accessible gets a cheap
+// edge, Difficult a dear one, Impossible none). The dev tools call this after changing the verdicts.
+function rebuild() {
+    const edges = new Map(g.edges.map(([a, b, c]) => [`${a},${b}`, c])), t = config.travel;
+    for (const [k, v] of Object.entries(overrides)) {
+        const [x, y] = k.split('|'), a = byName[x], b = byName[y];
+        if (a === undefined || b === undefined || a === b) continue;
+        const key = a < b ? `${a},${b}` : `${b},${a}`;
+        if (v === 'far') edges.delete(key);
+        else if (v === 'move') edges.set(key, t.accessibleCost);
+        else edges.set(key, Math.max((edges.get(key) || 0) * t.difficultFactor, t.difficultMin));
+    }
+    adj = g.nodes.map(() => []);
+    for (const [key, c] of edges) { const [a, b] = key.split(',').map(Number); adj[a].push([b, c]); adj[b].push([a, c]); }
+    cache.clear();
+}
 
 // The node of a spot; a free point joins the graph at its nearest node of the same layer.
 function nodeOf(spot) {
-    if (typeof spot === "string") return g.anchors[spot];
+    if (typeof spot === "string") return byName[spot];
     let best = -1, bestD = Infinity;
     g.nodes.forEach(([layer, x, y], i) => {
         const d = Math.hypot(x - spot.x, y - spot.y);
@@ -33,7 +52,6 @@ function nodeOf(spot) {
     return best;
 }
 
-const cache = new Map();            // source node -> {dist, prev}; the graph never changes while running
 function from(src) {
     if (cache.has(src)) return cache.get(src);
     const dist = g.nodes.map(() => Infinity), prev = g.nodes.map(() => -1), done = g.nodes.map(() => false);
@@ -54,14 +72,16 @@ function travelCost(a, b) {
     return from(nodeOf(a)).dist[nodeOf(b)];
 }
 
-function route(a, b) {
+// The cheapest path as a list of node numbers (g.nodes), the way the dev tools draw it.
+function routeIds(a, b) {
     const { prev } = from(nodeOf(a));
-    const path = [];
-    for (let n = nodeOf(b); n >= 0; n = prev[n]) {
-        const [layer, x, y] = g.nodes[n];
-        path.unshift({ layer, x, y });
-    }
-    return path;
+    const ids = [];
+    for (let n = nodeOf(b); n >= 0; n = prev[n]) ids.unshift(n);
+    return ids;
+}
+
+function route(a, b) {
+    return routeIds(a, b).map((n) => { const [layer, x, y] = g.nodes[n]; return { layer, x, y }; });
 }
 
 // Stage names in order of cost from one stage, split into other zones and the same zone.
@@ -99,4 +119,6 @@ function moves(stage) {
     return withVerdicts(stage, auto, 'move');
 }
 
-export { travelCost, route, destinations, moves, overrides, pairKey, verdict, SIZE };
+rebuild();
+
+export { byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };

@@ -1,30 +1,56 @@
 // Wizard Idle v2 - dev tools: the travel mode (only while developing). See docs/TRAVEL.md.
 //
-// The map of a layer with the cheapest paths from a chosen scene (click a scene, or pick it in the
-// list), to judge the travel numbers by eye. Green = a move inside the zone, yellow = a destination
-// in another zone, red = too far (not offered). Dots are the scenes (one per map spot), squares the
-// waypoints (bridges, pier, cave mouths, stairs). Hover a dot for its name and cost.
-// Opened from the dev panel (Modes > Travel), on the right of the game; the game waits until closed.
+// Curate the travel graph by hand. Pick a source and a target (the lists, or click a spot on the map and
+// shift-click another; scenes, bridges, the pier, cave mouths and stairs all count), set the weight of the
+// link between them (Accessible / Difficult / Impossible / Auto) and move a spot's coordinates ("change
+// coord", then click the map). "Save verdict" writes the verdicts (src/data/travelOverrides.js) and the new
+// positions (zones.js for scenes, travelPositions for waypoints) and regenerates the graph; reload after.
+// The map shows the cheapest paths from the source: green = a move inside the zone, yellow = a destination
+// in another zone, red = too far. Clicking a scene also shows that scene in the game.
+// Opened from the dev panel (Modes > Travel), on the right of the game; the game waits until it is closed.
 
 import { travelGraph as g } from '../data/travelGraph.js';
 import { places } from '../data/zones.js';
-import { travelCost, route, destinations, moves, overrides, pairKey, verdict, SIZE } from '../travelGraph.js';
+import { travelCost, routeIds, destinations, moves, overrides, pairKey, verdict, byName, rebuild, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
 import { sidePanel } from './panel.js';
-import { loadBackground } from '../ui/render.js';
 import { esc } from './review.js';
+import { loadBackground } from '../ui/render.js';
 
 const MAPS = { ground: 'img/ui/mapa.png', above: 'img/ui/mapaboveground.png', under: 'img/ui/mapaunderground.png' };
 const ZOOM = 2, COLORS = { move: '#2fd02f', dest: '#f2d21c', far: '#e03030' };
-const DRAFT = 'wizardidle2:travelOverrides';
-const NAMES = { move: 'green', dest: 'yellow', far: 'red' };
-let side, p, tools, stage = 'la_Pradera1', target = '', layer = 'ground', imgs = {};
+const NAMES = { move: 'Accessible', dest: 'Difficult', far: 'Impossible' };
+const DRAFT = 'wizardidle2:travelDraft';
 const stages = Object.keys(g.anchors).sort();
-const layerOf = (n) => g.nodes[g.anchors[n]][0];
+const waypoints = g.nodes.map((n) => n[4]).filter(Boolean).sort();
+const names = g.nodes.map((n, i) => { const at = stages.filter((s) => g.anchors[s] === i); return at.length ? at : n[4] ? [n[4]] : []; });
+const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth moves with its underground twin
+let side, p, tools, imgs = {}, layer = 'ground', src = '', tgt = '', placing = '', moved = {};
+
+const layerOf = (n) => g.nodes[byName[n]][0];
+const isStage = (n) => n in g.anchors;
+const pos = (i) => moved[baseOf(names[i][0] || '')] || [g.nodes[i][1], g.nodes[i][2]];
+const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify({ verdicts: overrides, positions: moved })); } catch (e) { /* no storage: fine */ } };
+
+// The class of a source -> stage link: the game's own lists for a scene, the cost for a waypoint.
+function kindOf(a, b) {
+    if (verdict(a, b)) return verdict(a, b);
+    if (isStage(a)) return moves(a).includes(b) ? 'move' : destinations(a).includes(b) ? 'dest' : 'far';
+    return travelCost(a, b) <= config.travel.destinationLimit ? 'dest' : 'far';
+}
+
+function autoKind(a, b) {       // what the graph says without the manual verdict
+    const key = pairKey(a, b), had = overrides[key];
+    delete overrides[key]; rebuild();
+    const k = isStage(a) && isStage(b) ? kindOf(a, b) : travelCost(a, b) <= config.travel.moveLimit ? 'move' : 'far';
+    if (had) overrides[key] = had;
+    rebuild();
+    return k;
+}
 
 function line(ctx, a, b, color) {
     ctx.strokeStyle = color; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(a.x * ZOOM, a.y * ZOOM); ctx.lineTo(b.x * ZOOM, b.y * ZOOM); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(a[0] * ZOOM, a[1] * ZOOM); ctx.lineTo(b[0] * ZOOM, b[1] * ZOOM); ctx.stroke();
 }
 
 function draw() {
@@ -33,94 +59,90 @@ function draw() {
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, c.width, c.height);
     if (imgs[layer] && imgs[layer].complete) ctx.drawImage(imgs[layer], 0, 0, c.width, c.height);
-    const mv = new Set(moves(stage)), ds = new Set(destinations(stage));
-    const kind = (n) => mv.has(n) ? 'move' : ds.has(n) ? 'dest' : 'far';
-    // the paths: far first so the useful ones stay on top
-    for (const k of ['far', 'dest', 'move']) {
-        const seen = new Set();
-        for (const n of stages) {
-            if (n === stage || kind(n) !== k || seen.has(g.anchors[n])) continue;
-            seen.add(g.anchors[n]);
-            const r = route(stage, n);
-            for (let i = 1; i < r.length; i++) if (r[i].layer === layer && r[i - 1].layer === layer) line(ctx, r[i - 1], r[i], COLORS[k]);
+    const kinds = {};
+    if (src) {
+        for (const n of stages) if (n !== src) kinds[n] = kindOf(src, n);
+        for (const k of ['far', 'dest', 'move']) {      // far first so the useful paths stay on top
+            const seen = new Set();
+            for (const n of stages) {
+                if (n === src || kinds[n] !== k || seen.has(g.anchors[n])) continue;
+                seen.add(g.anchors[n]);
+                const ids = routeIds(src, n);
+                for (let i = 1; i < ids.length; i++) {
+                    if (g.nodes[ids[i]][0] === layer && g.nodes[ids[i - 1]][0] === layer) line(ctx, pos(ids[i - 1]), pos(ids[i]), COLORS[k]);
+                }
+            }
         }
+        ctx.setLineDash([4, 3]);        // the manual links of the source, straight
+        for (const [key, v] of Object.entries(overrides)) {
+            const [a, b] = key.split('|'), other = a === src ? b : b === src ? a : '';
+            if (other && byName[other] !== undefined && layerOf(other) === layer && layerOf(src) === layer) {
+                line(ctx, pos(byName[src]), pos(byName[other]), COLORS[v]);
+            }
+        }
+        ctx.setLineDash([]);
     }
-    // the manual links of this scene, straight and dashed (they may not follow a path)
-    ctx.setLineDash([4, 3]);
-    for (const n of stages) {
-        const v = n !== stage && verdict(stage, n);
-        if (!v || layerOf(n) !== layer || layerOf(stage) !== layer) continue;
-        const [, ax, ay] = g.nodes[g.anchors[stage]], [, bx, by] = g.nodes[g.anchors[n]];
-        line(ctx, { x: ax, y: ay }, { x: bx, y: by }, COLORS[v]);
-    }
-    ctx.setLineDash([]);
-    // the nodes
-    g.nodes.forEach(([l, x, y, type], i) => {
+    g.nodes.forEach(([l], i) => {
         if (l !== layer) return;
-        const names = stages.filter((n) => g.anchors[n] === i);
-        ctx.fillStyle = i === g.anchors[stage] ? '#fff' : names.length ? COLORS[kind(names[0])] : '#9be';
-        ctx.strokeStyle = '#000'; ctx.lineWidth = 1;
-        const s = names.length ? 4 : 3;
+        const [x, y] = pos(i), scene = names[i].some(isStage), n = names[i].find((m) => kinds[m]);
+        ctx.fillStyle = i === byName[src] ? '#fff' : n ? COLORS[kinds[n]] : '#9be';
+        ctx.strokeStyle = i === byName[tgt] ? '#f0f' : '#000'; ctx.lineWidth = i === byName[tgt] ? 3 : 1;
         ctx.beginPath();
-        if (names.length) ctx.arc(x * ZOOM, y * ZOOM, s, 0, 7); else ctx.rect(x * ZOOM - s, y * ZOOM - s, 2 * s, 2 * s);
+        if (scene) ctx.arc(x * ZOOM, y * ZOOM, 4, 0, 7); else ctx.rect(x * ZOOM - 4, y * ZOOM - 4, 8, 8);
         ctx.fill(); ctx.stroke();
     });
-    if (target && layerOf(target) === layer) {
-        const [, x, y] = g.nodes[g.anchors[target]];
-        ctx.strokeStyle = '#f0f'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(x * ZOOM, y * ZOOM, 8, 0, 7); ctx.stroke();
-    }
     drawLink();
-    const n = (k) => stages.filter((s) => s !== stage && kind(s) === k).length;
-    p.info.innerHTML = `<b>${esc(stage)}</b> (${esc(layerOf(stage))}): ${mv.size} moves, ${ds.size} destinations
-        (limits ${config.travel.moveLimit} / ${config.travel.destinationLimit}), ${n('far')} too far.`;
 }
-
-const auto = (a, b) => {       // what the graph says without the manual verdict
-    const had = overrides[pairKey(a, b)];
-    delete overrides[pairKey(a, b)];
-    const k = moves(a).includes(b) ? 'move' : destinations(a).includes(b) ? 'dest' : 'far';
-    if (had) overrides[pairKey(a, b)] = had;
-    return k;
-};
 
 function drawLink() {
-    const box = p.link;
-    if (!target || target === stage) { box.innerHTML = '<span class="muted">Shift-click a second scene (or pick it here) to correct the link from it.</span>'; return; }
-    const manual = verdict(stage, target), a = auto(stage, target);
-    box.innerHTML = `<b>${esc(stage)}</b> &harr; <b>${esc(target)}</b>: ${manual ? `manual <b>${NAMES[manual]}</b> (auto: ${NAMES[a]})` : `auto <b>${NAMES[a]}</b>`}
-        <div class="row"><button data-v="move">Green</button><button data-v="dest">Yellow</button><button data-v="far">Red</button><button data-v="">Auto</button></div>`;
+    const has = src && tgt && src !== tgt, v = has ? verdict(src, tgt) : '';
+    p.srcPlace.style.fontWeight = placing === 'src' ? 'bold' : '';
+    p.tgtPlace.style.fontWeight = placing === 'tgt' ? 'bold' : '';
+    p.srcPlace.textContent = placing === 'src' ? 'click the map...' : 'change coord';
+    p.tgtPlace.textContent = placing === 'tgt' ? 'click the map...' : 'change coord';
+    for (const b of p.weights.querySelectorAll('button')) b.style.outline = has && b.dataset.v === v ? '3px solid #000' : '';
+    const auto = has ? NAMES[autoKind(src, tgt)] : '';
+    p.linkInfo.innerHTML = !has ? '<span class="muted">Pick a source and a target to set the weight of their link.</span>' :
+        `<b>${esc(src)}</b> &harr; <b>${esc(tgt)}</b>: ${v ? `manual <b>${NAMES[v]}</b> (auto: ${auto})` : `auto <b>${auto}</b>`}, cost ${Math.round(travelCost(src, tgt))}`;
+    p.count.textContent = `${Object.keys(overrides).length} verdicts, ${Object.keys(moved).length} moved spots (unsaved changes stay in this browser)`;
 }
 
-// Set the verdict of a link for every stage sharing the two spots (the five scenes of the Castle are one spot).
+// Set the weight of a link for every scene sharing the two spots (the five scenes of the Castle are one spot).
 function setVerdict(v) {
-    const spot = (n) => stages.filter((m) => g.anchors[m] === g.anchors[n]);
-    for (const a of spot(stage)) for (const b of spot(target)) {
-        if (a === b) continue;
-        if (v) overrides[pairKey(a, b)] = v; else delete overrides[pairKey(a, b)];
+    if (!src || !tgt || src === tgt) return;
+    const spot = (n) => isStage(n) ? stages.filter((m) => g.anchors[m] === g.anchors[n]) : [n];
+    for (const a of spot(src)) {
+        for (const b of spot(tgt)) {
+            if (a === b) continue;
+            if (v) overrides[pairKey(a, b)] = v; else delete overrides[pairKey(a, b)];
+        }
     }
-    try { localStorage.setItem(DRAFT, JSON.stringify(overrides)); } catch (e) { /* no storage: fine */ }
-    p.count.textContent = `${Object.keys(overrides).length} verdicts (unsaved changes are kept in this browser)`;
-    draw();
+    rebuild(); save(); draw();
 }
 
 async function post(url, body, what) {
     try {
         const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
         p.tip.textContent = r.ok ? `${what}: ${await r.text()}` : `${what} failed (${r.status}): run tools/serve.py from this computer`;
-    } catch (e) { p.tip.textContent = `${what} failed: ${e.message}`; }
+        return r.ok;
+    } catch (e) { p.tip.textContent = `${what} failed: ${e.message}`; return false; }
 }
 
 function nearest(ev) {
     const r = p.canvas.getBoundingClientRect();
     const x = (ev.clientX - r.left) * p.canvas.width / r.width / ZOOM, y = (ev.clientY - r.top) * p.canvas.height / r.height / ZOOM;
-    let best = '', bd = 8;
-    for (const n of stages) {
-        const [l, nx, ny] = g.nodes[g.anchors[n]];
-        const d = Math.hypot(nx - x, ny - y);
-        if (l === layer && d < bd) { best = n; bd = d; }
-    }
-    return { name: best, x, y };
+    let best = -1, bd = 8;
+    g.nodes.forEach(([l], i) => {
+        const d = Math.hypot(pos(i)[0] - x, pos(i)[1] - y);
+        if (l === layer && d < bd && names[i].length) { best = i; bd = d; }
+    });
+    return { i: best, x, y, name: best < 0 ? '' : names[best].find((n) => n === src || n === tgt) || names[best][0] };
+}
+
+// The game's own scene of a stage, as a reference for the curation (the stage name is its background name).
+function show(n) {
+    if (!isStage(n)) return;
+    try { loadBackground(n); } catch (e) { /* no background for this stage */ }
 }
 
 function setLayer(l) {
@@ -130,58 +152,72 @@ function setLayer(l) {
     draw();
 }
 
-// The game's own scene of a stage, as a reference for the curation (the stage name is its background name).
-function show(n) {
-    try { loadBackground(n); } catch (e) { /* no background for this stage */ }
+function choose(role, n) {
+    if (role === 'src') src = n; else tgt = n;
+    p.srcSel.value = src; p.tgtSel.value = tgt;
+    placing = '';
+    if (n) { show(n); setLayer(layerOf(n)); } else draw();
 }
 
-function pick(n) {
-    show(n);
-    stage = n; if (target === stage) target = ''; p.list.value = n;
-    setLayer(layerOf(n));
-}
+const options = () => `<option value="">(drop to select)</option><optgroup label="Scenes">${stages.map((n) => `<option>${n}</option>`).join('')}</optgroup>
+    <optgroup label="Bridges, entrances, stairs">${waypoints.map((n) => `<option>${n}</option>`).join('')}</optgroup>`;
 
 export async function open(devTools) {
     tools = devTools;
     tools.setSpeed(1);
-    side = sidePanel('right', 'Travel: the cheapest paths from a scene', () => close());
-    side.body.innerHTML = `<div class="row"><select data-id="list">${stages.map((n) => `<option>${n}</option>`).join('')}</select>
-        <span data-id="layers">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join(' ')}</span></div>
-        <div data-id="info" class="muted"></div>
+    tools.resetScene();             // the game waits while the mode is open: the scene stays as picked
+    side = sidePanel('right', 'Travel: curate the links', () => close());
+    side.body.innerHTML = `
+        <div class="row"><b>Source:</b><select data-id="srcSel">${options()}</select><button data-id="srcPlace">change coord</button></div>
+        <div class="row"><b>Target:</b><select data-id="tgtSel">${options()}</select><button data-id="tgtPlace">change coord</button></div>
+        <div class="row"><b>Adjust travel weight:</b><span data-id="weights">
+            <button data-v="move" style="background:${COLORS.move}">Accessible</button>
+            <button data-v="dest" style="background:${COLORS.dest}">Difficult</button>
+            <button data-v="far" style="background:${COLORS.far};color:#fff">Impossible</button>
+            <button data-v="">Auto</button></span></div>
+        <div data-id="linkInfo"></div>
+        <div data-id="layers">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join(' ')}</div>
         <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="width:100%;image-rendering:pixelated;cursor:crosshair"></canvas>
-        <div class="row" data-id="legend" style="gap:2px 12px">
-            <span><b style="color:${COLORS.move}">&#9632;</b> green: a move inside the zone (cost under ${config.travel.moveLimit})</span>
-            <span><b style="color:${COLORS.dest}">&#9632;</b> yellow: a destination in another zone (cost under ${config.travel.destinationLimit})</span>
-            <span><b style="color:${COLORS.far}">&#9632;</b> red: too far, not offered</span>
-            <span><b style="color:#fff;text-shadow:0 0 2px #000">&#9679;</b> white dot: the chosen scene</span>
-            <span><b style="color:#9be">&#9632;</b> blue square: a waypoint (bridge, pier, cave mouth, stairs); round dots are scenes</span>
-            <span class="muted">Cost = steps of walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked, stairs and cave mouths have their own price.</span>
+        <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
+        <div class="row" style="gap:2px 12px">
+            <span><b style="color:${COLORS.move}">&#9632;</b> Accessible / a move inside the zone (cost under ${config.travel.moveLimit})</span>
+            <span><b style="color:${COLORS.dest}">&#9632;</b> Difficult / a destination in another zone (under ${config.travel.destinationLimit})</span>
+            <span><b style="color:${COLORS.far}">&#9632;</b> Impossible / too far, not offered</span>
+            <span>white dot: the source; magenta ring: the target; round: a scene; blue square: bridge, pier, entrance or stairs; dashed: a manual link</span>
+            <span class="muted">Cost = walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked. Accessible sets a link's cost to ${config.travel.accessibleCost}, Difficult multiplies it by ${config.travel.difficultFactor} (at least ${config.travel.difficultMin}), Impossible removes it.</span>
         </div>
-        <div class="row"><select data-id="tlist"><option value="">(target scene)</option>${stages.map((n) => `<option>${n}</option>`).join('')}</select></div>
-        <div data-id="link"></div>
-        <div class="row"><button data-id="save">Save verdicts to file</button><button data-id="capture">Capture the map</button>
-            <span data-id="count" class="muted"></span></div>
-        <div data-id="tip" class="muted">Click a scene to see its paths; shift-click another to correct the link between them. Hover for its name and cost.</div>`;
+        <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;
     p = {};
     side.body.querySelectorAll('[data-id]').forEach((e) => { p[e.dataset.id] = e; });
-    p.list.onchange = () => pick(p.list.value);
+    p.srcSel.onchange = () => choose('src', p.srcSel.value);
+    p.tgtSel.onchange = () => choose('tgt', p.tgtSel.value);
+    p.srcPlace.onclick = () => { placing = placing === 'src' ? '' : src ? 'src' : ''; draw(); };
+    p.tgtPlace.onclick = () => { placing = placing === 'tgt' ? '' : tgt ? 'tgt' : ''; draw(); };
+    p.weights.onclick = (e) => { if (e.target.dataset.v !== undefined) setVerdict(e.target.dataset.v); };
     p.layers.onclick = (e) => e.target.dataset.l && setLayer(e.target.dataset.l);
     p.canvas.onclick = (e) => {
-        const s = nearest(e).name;
-        if (!s) return;
-        if (e.shiftKey) { show(s); target = s; p.tlist.value = s; draw(); } else { target = ''; p.tlist.value = ''; pick(s); }
+        const h = nearest(e);
+        if (placing) {          // move the chosen spot (every scene sharing it, and a cave mouth's twin)
+            const n = placing === 'src' ? src : tgt;
+            for (const m of names[byName[n]]) moved[baseOf(m)] = [Math.round(h.x), Math.round(h.y)];
+            placing = ''; save(); draw();
+        } else if (h.name) choose(e.shiftKey ? 'tgt' : 'src', h.name);
     };
-    p.tlist.onchange = () => { target = p.tlist.value; if (target) show(target); draw(); };
-    p.link.onclick = (e) => { if (e.target.dataset.v !== undefined && target) setVerdict(e.target.dataset.v); };
-    p.save.onclick = async () => { await post('travel/overrides', overrides, 'Save'); try { localStorage.removeItem(DRAFT); } catch (e) { /* none */ } };
-    p.capture.onclick = () => post('travel/capture', { png: p.canvas.toDataURL('image/png'), stage, layer, overrides }, 'Capture');
-    try { Object.assign(overrides, JSON.parse(localStorage.getItem(DRAFT) || '{}')); } catch (e) { /* no draft */ }
-    p.count.textContent = `${Object.keys(overrides).length} verdicts`;
     p.canvas.onmousemove = (e) => {
         const s = nearest(e).name;
-        p.tip.textContent = s ? `${s}: cost ${Math.round(travelCost(stage, s))}${places[s] ? ` (${places[s].zone})` : ''}` : 'Click a scene to see its paths.';
+        p.tip.textContent = s ? `${s}${places[s] ? ` (${places[s].zone})` : ''}${src && s !== src ? `: cost ${Math.round(travelCost(src, s))} from ${src}` : ''}` : 'Click a spot for the source, shift-click one for the target.';
     };
-    pick(stage);
+    p.save.onclick = async () => {
+        if (await post('travel/overrides', { verdicts: overrides, positions: moved }, 'Save')) { try { localStorage.removeItem(DRAFT); } catch (e) { /* none */ } }
+    };
+    p.capture.onclick = () => post('travel/capture', { png: p.canvas.toDataURL('image/png'), stage: src, layer, overrides, moved }, 'Capture');
+    try {
+        const d = JSON.parse(localStorage.getItem(DRAFT) || '{}');
+        Object.assign(overrides, d.verdicts || {});
+        moved = d.positions || {};
+        rebuild();
+    } catch (e) { /* no draft */ }
+    choose('src', src || 'la_Pradera1');
 }
 
 export function close(resume = true) {

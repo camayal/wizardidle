@@ -66,6 +66,9 @@ export const config = {
         seaCost: 50,               // one pixel of sea or lake
         entranceCost: 15,          // a cave or mine mouth, between the ground and the underground
         stairsCost: 30,            // the sacred stairs up to Heidan
+        accessibleCost: 5,         // a link set Accessible by hand in the dev tools: this cost
+        difficultFactor: 3,        // a link set Difficult: its cost times this, at least difficultMin
+        difficultMin: 100,
         searchDistance: 60,        // two spots this close (map pixels) get a direct edge
         destinationLimit: 45,      // a place this cheap away is a destination (the adapter)
         moveLimit: 45,             // a stage of the same zone this cheap away is a move

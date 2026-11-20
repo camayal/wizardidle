@@ -128,13 +128,34 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
             return self.send_error(400)
         data = json.loads(self.rfile.read(length).decode('utf-8'))
         if self.path.endswith('/overrides'):
-            body = {k: v for k, v in sorted(data.items()) if v in ('move', 'dest', 'far') and re.fullmatch(r'\w+\|\w+', k)}
+            # {verdicts: {"a|b": move|dest|far}, positions: {name: [x, y]} in map pixels}. A stage's position goes to
+            # zones.js (the source of truth); a waypoint's to travelPositions here; then the graph is regenerated.
+            verdicts = {k: v for k, v in sorted(data.get('verdicts', {}).items())
+                        if v in ('move', 'dest', 'far') and re.fullmatch(r'\w+\|\w+', k)}
+            zones_path = os.path.join(REPO, 'src', 'data', 'zones.js')
+            with open(zones_path, encoding='utf-8', newline='') as f:
+                zones = f.read()
+            positions, stages = {}, 0
+            for name, xy in data.get('positions', {}).items():
+                if not re.fullmatch(r'\w+', name) or len(xy) != 2:
+                    continue
+                x, y = max(0, min(250, round(float(xy[0])))), max(0, min(250, round(float(xy[1]))))
+                new, n = re.subn(r'(\b' + name + r': \{zone:"\w+",x:)[\d.]+(,y:)[\d.]+', r'\g<1>%s\g<2>%s' % (round(x / 250, 3), round(y / 250, 3)), zones)
+                if n:
+                    zones, stages = new, stages + 1
+                else:
+                    positions[name] = [x, y]
+            with open(zones_path, 'w', encoding='utf-8', newline='') as f:
+                f.write(zones)
             target = os.path.join(REPO, 'src', 'data', 'travelOverrides.js')
             with open(target, encoding='utf-8') as f:
                 head = f.read().split('export const')[0]
             with open(target, 'w', encoding='utf-8', newline='\n') as f:
-                f.write(head + 'export const travelOverrides = ' + json.dumps(body, indent=4) + ';\n')
-            msg = f'saved {len(body)} verdicts'
+                f.write(head + 'export const travelOverrides = ' + json.dumps(verdicts, indent=4) + ';\n'
+                        + 'export const travelPositions = ' + json.dumps(positions, indent=4) + ';\n')
+            done = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'travel_graph.py')], capture_output=True, text=True)
+            msg = f'saved {len(verdicts)} verdicts, {stages} stage and {len(positions)} waypoint positions; graph ' + \
+                ('regenerated: reload the page' if done.returncode == 0 else 'NOT regenerated: ' + done.stderr[-200:])
         else:
             import base64, time
             stage = re.sub(r'\W', '', str(data.get('stage', '')))[:40] or 'map'
