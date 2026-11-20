@@ -141,3 +141,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): Travel mode reworked (source/target lists, weight buttons, change coord, save regenerates graph; game stops while open). Untested in a browser (no node here). Later: click on an edge line itself.
 - 2026-11-19 (dev): Travel mode: add future-scene and connector points (travelPoints), red drawn see-through. Untested in a browser.
 - 2026-11-19 (dev): Travel mode shows direct links only (neighbors() in travelGraph.js, config.travel.difficultLimit 150), bigger circles. The game adapter moves()/destinations() still use shortest-path costs: when step 6 happens they should become the direct green/yellow links.
+- 2026-11-19 (dev): Travel mode: layer buttons beside the map, per-spot count of green+yellow direct links. Untested in a browser.

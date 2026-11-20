@@ -7,6 +7,7 @@
 // positions (zones.js for scenes, travelPositions for waypoints) and regenerates the graph; reload after.
 // The map shows the cheapest paths from the source: green = a move inside the zone, yellow = a destination
 // in another zone, red = too far. Clicking a scene also shows that scene in the game.
+// Each spot shows the number of its green and yellow direct links; the map layers (ground, above, under) are buttons beside the map.
 // Opened from the dev panel (Modes > Travel), on the right of the game; the game waits until it is closed.
 
 import { travelGraph as g } from '../data/travelGraph.js';
@@ -98,6 +99,12 @@ function draw() {
         ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();                  // a white halo, then a black ring: seen on any map
         ctx.lineWidth = 2; ctx.strokeStyle = isTgt ? '#f0f' : '#000'; ctx.stroke();
         if (isTgt) { ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X, Y, 12, 0, 7); ctx.stroke(); }
+        const own = names[i][0];                // the number of green and yellow direct links of this spot
+        if (own && byName[own] !== undefined) {
+            const n = neighbors(own).filter(([j, cost]) => j !== byName[own] && edgeKind(own, j, cost) !== 'far').length;
+            ctx.font = 'bold 13px sans-serif'; ctx.textBaseline = 'middle'; ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.fillStyle = '#000';
+            ctx.strokeText(n, X + 11, Y - 9); ctx.fillText(n, X + 11, Y - 9);
+        }
         ctx.globalAlpha = 1;
     });
     for (const [name, d] of Object.entries(points)) {       // added but not in the graph yet: save and reload to connect
@@ -197,8 +204,10 @@ export async function open(devTools) {
         <div class="row"><b>New point:</b><select data-id="newKind"><option value="future">future scene</option><option value="connector">connector (bridge, stairs...)</option></select>
             <input data-id="newName" placeholder="name (letters, digits, _)" size="18"><button data-id="newAdd">Add point</button>
             <button data-id="newDel">Delete source point</button></div>
-        <div data-id="layers">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join(' ')}</div>
-        <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="width:100%;image-rendering:pixelated;cursor:crosshair"></canvas>
+        <div style="display:flex;gap:6px;align-items:flex-start">
+            <div data-id="layers" style="display:flex;flex-direction:column;gap:4px">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
+            <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
+        </div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
             <span>Only the direct links of the source are drawn, as straight lines; a spot reached only through another is not a neighbour.</span>
