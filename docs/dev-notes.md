@@ -33,7 +33,8 @@ earlier one.
 
 ## Next for dev: connectors as scenes (2026-11-20)
 The connector art is in img/places/connectors/ (bridge_south/spring/swamp _west and _east, mouth_<x>_<y> and _under for the seven mouths, enter_mine_s, ladder_cueva4_mina2_cave and _mine, pier_land, pier_end, stairs_n and stairs_s base/mid/top). No trip shows them yet.
-- Decide with the author how they appear: when a trip crosses a connector point linked in Travel mode (bridge, mouth, stairs, ladder, pier), show its scenes in order (west half then east half; mouth outside then under; stairs base, mid, top).
+- Author's answers (2026-11-20): (1) a connector shows its scenes one after the other (the Heidan stairs are three steps). (2) The order depends on the origin: when the trip's edge goes mostly east to west, mirror everything (scene, wizard, spells, scene spells), not only on connectors, so crossing a bridge varies. (3) A connector is 2 to 3 scenes: he lands at a mouth (or the other ground paths), walks into it, fades out like a dream, appears in the cave and walks east to the next scene. (4) Special cases may let him jump (the shaft); later, about level 100, short teleports to hop obstacles and reach other scenes.
+- Three parts, to split: A) mirror mode for a whole scene (flag on ui; one flip for esceneCanvas, pjCanvas, npcCanvas, spellCanvas, overlayCanvas, enemy moves and entrances); B) a connector sequence in travel.js (scenes in order, walk in, dream fade); C) jump and teleport later (level gate). Open for thinker: scene length and enemies inside connector scenes, mirrored art with text or lopsided light, how the mirror is chosen (edge direction from the map coordinates).
 - The pathfinder (route in src/travelGraph.js) already gives the connector points on a trip; keep it for the story too.
 - Test the front overlays (la_mina6, la_mina7) and the new stages in a browser first: nothing was run here.
 - Floor shaft of ladder_cueva4_mina2 mine side may sit on the walk line.
