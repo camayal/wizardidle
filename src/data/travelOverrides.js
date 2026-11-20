@@ -54,24 +54,24 @@ export const travelOverrides = {
     "el_Bosque5|la_Tundra3": "move",
     "el_Bosque5|la_Tundra4": "move",
     "el_Castillo1|el_Pantano6": "move",
-    "el_Castillo1|la_Pradera5": "move",
-    "el_Castillo1|la_playa4": "move",
+    "el_Castillo1|la_Pradera5": "far",
+    "el_Castillo1|la_playa4": "far",
     "el_Castillo1|la_playa6": "move",
     "el_Castillo2|el_Pantano6": "move",
-    "el_Castillo2|la_Pradera5": "move",
-    "el_Castillo2|la_playa4": "move",
+    "el_Castillo2|la_Pradera5": "far",
+    "el_Castillo2|la_playa4": "far",
     "el_Castillo2|la_playa6": "move",
     "el_Castillo3|el_Pantano6": "move",
-    "el_Castillo3|la_Pradera5": "move",
-    "el_Castillo3|la_playa4": "move",
+    "el_Castillo3|la_Pradera5": "far",
+    "el_Castillo3|la_playa4": "far",
     "el_Castillo3|la_playa6": "move",
     "el_Castillo4|el_Pantano6": "move",
-    "el_Castillo4|la_Pradera5": "move",
-    "el_Castillo4|la_playa4": "move",
+    "el_Castillo4|la_Pradera5": "far",
+    "el_Castillo4|la_playa4": "far",
     "el_Castillo4|la_playa6": "move",
     "el_Castillo5|el_Pantano6": "move",
-    "el_Castillo5|la_Pradera5": "move",
-    "el_Castillo5|la_playa4": "move",
+    "el_Castillo5|la_Pradera5": "far",
+    "el_Castillo5|la_playa4": "far",
     "el_Castillo5|la_playa6": "move",
     "el_Desierto1|el_Desierto2": "move",
     "el_Desierto1|el_Desierto3": "move",
@@ -302,12 +302,7 @@ export const travelOverrides = {
     "stairs_N|stairs_n_ground": "move",
     "stairs|stairs_above": "move"
 };
-export const travelPositions = {
-    "mouth_33_165": [
-        34,
-        166
-    ]
-};
+export const travelPositions = {};
 export const travelPoints = {
     "ladder_cueva4_mina2": {
         "kind": "connector",
@@ -370,55 +365,6 @@ export const travelPoints = {
         "layer": "under",
         "x": 34,
         "y": 166,
-        "note": ""
-    },
-    "el_Heidan6": {
-        "kind": "future",
-        "layer": "above",
-        "x": 122,
-        "y": 42,
-        "note": ""
-    },
-    "el_Heidan7": {
-        "kind": "future",
-        "layer": "above",
-        "x": 100,
-        "y": 16,
-        "note": ""
-    },
-    "el_Heidan8": {
-        "kind": "future",
-        "layer": "above",
-        "x": 187,
-        "y": 234,
-        "note": ""
-    },
-    "el_Heidan9": {
-        "kind": "future",
-        "layer": "above",
-        "x": 217,
-        "y": 232,
-        "note": ""
-    },
-    "la_Pradera6": {
-        "kind": "future",
-        "layer": "ground",
-        "x": 57,
-        "y": 80,
-        "note": ""
-    },
-    "el_Heidan10": {
-        "kind": "future",
-        "layer": "above",
-        "x": 163,
-        "y": 174,
-        "note": ""
-    },
-    "el_Heidan11": {
-        "kind": "future",
-        "layer": "above",
-        "x": 121,
-        "y": 213,
         "note": ""
     }
 };
