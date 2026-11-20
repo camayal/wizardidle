@@ -2,8 +2,8 @@
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
 import { places, zones } from './data/zones.js';
-import { connectorsBetween, destinations, moves, spotX } from './travelGraph.js';
-import { connectorScenes, DOOR_STOP, mouthDoors, stairScenes } from './data/connectors.js';
+import { connectorsBetween, destinations, moves, reachesPoint, spotX } from './travelGraph.js';
+import { connectorScenes, DOOR_STOP, mouthDoors, pierSteps, stairScenes } from './data/connectors.js';
 import { pickRandomItem } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
@@ -40,6 +40,12 @@ function crossing(origin, target) {
         }
     }
     return steps.length ? { steps, dir: steps[0].dir } : null;
+}
+
+// The pier (a dead end): can he walk out on it from this stage, and the walk out and back to the same stage.
+const canVisitPier = () => reachesPoint(state.zone.current + state.zone.stage, "pier");
+function visitPier(onArrive) {
+    walkAcross(pierSteps, showStage, onArrive);
 }
 
 // Steps of travelling: leave the zone, enter a new one and show its legend.
@@ -122,6 +128,8 @@ function getZone() {
 ;
 
 export {
+    canVisitPier,
+    visitPier,
     changeLocality,
     pickRandomBackgroundForCurrentZone,
 };

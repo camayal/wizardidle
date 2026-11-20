@@ -96,6 +96,7 @@ export const config = {
         zoneStayFree: 12,          // events in one zone before he grows restless (the author: he stayed too long)
         zoneStayPush: 0.05,        //   then each event adds this to the change-zone chance
         zoneStayMax: 40,           //   and after this many the next event takes him to another zone
+        pPier: 0.08,               // placeholder, chance an exploring wizard near the pier walks out on it (not playtested)
         pDadosAgain: 0.35,         // after a dice game, chance he stays for another round (gold left)
         // boss effects (docs/SCENE_SPELLS.md; starting values, to playtest)
         petrifyChance: 0.25,       // Medusa's gaze turns him to stone

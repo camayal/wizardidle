@@ -11,7 +11,7 @@ import { fight, run, ui } from './runtime.js';
 import * as loop from './loop.js';
 import { enemyEV } from './combat.js';
 import { addXP, calculateFe, statObj } from './wizard.js';
-import { changeLocality, pickRandomBackgroundForCurrentZone } from './travel.js';
+import { canVisitPier, changeLocality, pickRandomBackgroundForCurrentZone, visitPier } from './travel.js';
 import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
@@ -208,6 +208,13 @@ function exploreEV() {
             print(`${wizardName()} finds a gaming house but does not have gold to bet`);
             nextEvent();
         }
+    }else if (canVisitPier() && YesOrNot(config.balance.pPier, 0)) {
+        print(`${wizardName()} ${pickRandomItem("walks out on the pier,goes to the end of the pier,wants to see the water from the pier")}`);
+        visitPier(() => {
+            print(`${wizardName()} comes back from the pier`);
+            addXP(0.5);
+            nextEvent();
+        });
     }else {
         if (YesOrNot(changeZoneChance(), 0)) {
             print(`${wizardName()} is exploring...`);

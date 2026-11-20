@@ -17,6 +17,16 @@ export const stairScenes = {
     stairs_n_ground: { top: "stairs_N", scenes: ["stairs_n_base", "stairs_n_mid", "stairs_n_top"] },
 };
 
+// The pier is a dead end (the future fishing place): he walks out to its end, stops there, and walks back
+// the way he came, right to left. One trip of steps for render.walkAcross; the stop is in ms.
+export const PIER_STAY_MS = 3000, PIER_STOP = 100;
+export const pierSteps = [
+    { scene: "pier_land", dir: 1 },
+    { scene: "pier_end", dir: 1, end: PIER_STOP, pause: PIER_STAY_MS },
+    { scene: "pier_end", dir: -1, start: PIER_STOP },
+    { scene: "pier_land", dir: -1 },
+];
+
 // Centre of each mouth's opening in its scene, in scene pixels (read off the art, a 256 x 64 scene).
 export const mouthDoors = {
     mouth_130_120: 150, mouth_130_120_under: 169,

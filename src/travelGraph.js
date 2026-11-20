@@ -128,6 +128,20 @@ function connectorsBetween(a, b) {
     return b in prev ? chain : [];
 }
 
+// True when a stage reaches a named connector point (the pier) through the manual links, a stage ending the walk.
+function reachesPoint(stage, point) {
+    const nb = linkMap(), seen = new Set([stage]), todo = [stage];
+    while (todo.length) {
+        for (const n of nb[todo.pop()] || []) {
+            if (n === point) return true;
+            if (seen.has(n) || places[n]) continue;
+            seen.add(n);
+            todo.push(n);
+        }
+    }
+    return false;
+}
+
 // Where a named point sits on its map (x in map pixels), or undefined.
 function spotX(name) {
     const i = byName[name];
@@ -157,4 +171,4 @@ rebuild();
 // The direct links of a spot: [[node, cost], ...], after the manual verdicts (the dev tools draw them).
 const neighbors = (spot) => adj[nodeOf(spot)] || [];
 
-export { connectorsBetween, spotX, neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
+export { reachesPoint, connectorsBetween, spotX, neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
