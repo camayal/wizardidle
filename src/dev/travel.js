@@ -208,6 +208,7 @@ export async function open(devTools) {
         <div style="display:flex;gap:6px;align-items:flex-start">
             <div style="display:flex;flex-direction:column;gap:4px">
             <div data-id="layers" style="display:flex;flex-direction:column;gap:4px">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px"><button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button></div>
             <div data-id="weights" style="display:flex;flex-direction:column;gap:4px;margin-top:10px"><b>Weight</b>
                 <button data-v="move" style="background:${COLORS.move}">Accessible</button>
                 <button data-v="dest" style="background:${COLORS.dest}">Difficult</button>
@@ -216,7 +217,6 @@ export async function open(devTools) {
             </div>
             <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
         </div>
-        <div class="row"><button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button></div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
             <span>Only the direct links of the source are drawn, as straight lines; a spot reached only through another is not a neighbour.</span>
