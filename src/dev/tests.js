@@ -218,6 +218,7 @@ const scenarios = [
 const actions = [
     { group: 'Modes', name: 'Sounds: choose a sound for a move', run() { openMode('sounds'); } },
     { group: 'Modes', name: 'Art: play animations, scenes and other art', run() { openMode('art'); } },
+    { group: 'Modes', name: 'Travel: the map with the cheapest paths from a scene', run() { openMode('travel'); } },
     { group: 'Modes', name: 'Music: write and play songs made with code', run() { openMode('music'); } },
     { group: 'Modes', name: 'Texts: read and edit the story, dreams and console lines in place', run() { openMode('texts'); } },
 

@@ -27,6 +27,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - story.js: chapters unlocked by level, history scroll, story events.
 - travel.js: changing zone and stage, picking backgrounds.
 - travelGraph.js: travelCost, route, destinations, moves over the generated graph (data/travelGraph.js, from tools/travel_graph.py); not yet used by travel.js (docs/TRAVEL.md).
+- dev/travel.js: dev mode (Modes > Travel): the map of a layer with the cheapest paths from a clicked scene (green move, yellow destination, red too far).
 - achievements.js: unlocking and listing achievements.
 - away.js: time away (docs/AWAY.md): settles away time / 108 on load (faith, gold, levels, soft dead, permadeath and the poem) and reloads a long-hidden page. awayMath.js: its formulas; data/awayTexts.js: its texts; numbers in config.away.
 - stats.js: counters, totals and records (`stats.count/add/max/min`), play time. Read by achievements and stats pages.

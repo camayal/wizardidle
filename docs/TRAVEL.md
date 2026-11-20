@@ -74,7 +74,7 @@ Leave for later: creating the in-between scenes, how they are composed and chose
 - Numbers in `config.travel`: land 1, road 1 (the sand of the beaches is not a road, so no discount; the map has no drawn roads yet), river 60 per crossing (bridges within 7 px are free), sea 50, cave mouth 15, stairs 30, edge search 60, destination limit 45, move limit 45. If nothing is under a limit the nearest three destinations or two moves are taken.
 - Result at limit 45: 346 derived destinations against 346 hand-typed, 237 shared; moves 194 derived, 192 shared of 241. Sea and river read from the ground map only; the underground and aboveground maps are walked as plain land.
 - To confirm with the author: the position of the sacred stairs (a guess, 212,205, the ladder at the south-east); the Heidan has no good ground link (old strings reach it from the Forest, Swamp, Desert); `las_Dunas3` (17,132) is cut off by sea (cost 589); Pantano1-3, Cueva1-2, Tundra1 sit just over the limit and use the nearest-three fallback; 24 one-way links in the old strings (listed by the tool).
-- Left: the dev-tools overlay (the PNG stands in), the aboveground portals, step 6.
+- Overlay built (dev tools, Modes > Travel, src/dev/travel.js). Left: the aboveground portals, step 6.
 
 ## Open for the author (come back to these)
 
