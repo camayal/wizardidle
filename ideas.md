@@ -153,3 +153,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): Travel mode: weight buttons under the layer buttons (left of the map); layers ordered above, ground, under. Untested in a browser.
 - 2026-11-19 (dev): aboveground map replaced by artist option clouds_a (small cloud islets at both stair ends). Ground map clouds at the stairs: with the artist.
 - 2026-11-19 (dev): Travel mode: Deselect all and Hide numbers moved to the left column. Untested in a browser.
+- 2026-11-19 (dev): Travel mode: plain click on another layer than the source picks a target (cross-map links). Untested in a browser; if it still fails the author should say what happens.

@@ -253,7 +253,7 @@ export async function open(devTools) {
             const n = placing === 'src' ? src : tgt();
             for (const m of names[byName[n]]) moved[baseOf(m)] = [Math.round(h.x), Math.round(h.y)];
             placing = ''; save(); draw();
-        } else if (h.name) choose(e.shiftKey ? 'more' : 'src', h.name);
+        } else if (h.name) choose(e.shiftKey || (src && layerOf(src) !== layer) ? 'more' : 'src', h.name);   // a plain click on another map than the source's picks a target
     };
     p.canvas.onmousemove = (e) => {
         const s = nearest(e).name;
