@@ -6,6 +6,24 @@
 export const travelOverrides = {};
 export const travelPositions = {};
 export const travelPoints = {
+    "future_cave_NW": {
+        "kind": "future",
+        "layer": "under",
+        "x": 60,
+        "y": 44
+    },
+    "future_chamber": {
+        "kind": "future",
+        "layer": "under",
+        "x": 80,
+        "y": 132
+    },
+    "ladder_cueva4_mina2": {
+        "kind": "connector",
+        "layer": "under",
+        "x": 112,
+        "y": 162
+    },
     "stairs_N": {
         "kind": "connector",
         "layer": "above",

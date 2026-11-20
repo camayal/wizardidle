@@ -145,3 +145,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): Travel mode: weight buttons moved above the map, Delete source point removed (dangerous). Untested in a browser.
 - 2026-11-19 (dev): Travel graph reset on the author's request: config.travel.manualLinksOnly = 1 makes tools/travel_graph.py write 0 edges, travelOverrides emptied (old state in commit 18743d0). Set it to 0 to get the computed links back.
 - 2026-11-19 (dev): el_volcan scenes recoloured (dark basalt rock, approved version A, from the artist); the new underground map waits for approval.
+- 2026-11-19 (dev): new underground map installed (artist option A + ladder + chamber floor). Travel points added on 'under': future_cave_NW (60,44), future_chamber (80,132), ladder_cueva4_mina2 (112,162). The (130,120) volcano mouth and the chamber link: the graph is blank, author links by hand.
