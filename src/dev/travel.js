@@ -101,6 +101,9 @@ function draw() {
         ctx.lineWidth = 2; ctx.strokeStyle = isTgt ? '#f0f' : '#000'; ctx.stroke();
         if (isTgt) { ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(X, Y, 12, 0, 7); ctx.stroke(); }
         if (isSrc) { ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(X, Y, 3, 0, 7); ctx.fill(); }      // a black dot marks the source
+        const n = Object.keys(overrides).filter((key) => key.split('|').some((s) => names[i].includes(s))).length;   // manual links of this spot: 0 = not done yet
+        ctx.font = 'bold 12px sans-serif'; ctx.textBaseline = 'middle'; ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.fillStyle = n ? '#000' : '#c00';
+        ctx.strokeText(n, X + 11, Y - 9); ctx.fillText(n, X + 11, Y - 9);
         ctx.globalAlpha = 1;
     });
     for (const [name, d] of Object.entries(points)) {       // added but not in the graph yet: save and reload to connect
@@ -215,7 +218,7 @@ export async function open(devTools) {
             <span><b style="color:${COLORS.move}">&#9632;</b> Accessible: an easy link (cost up to ${config.travel.moveLimit})</span>
             <span><b style="color:${COLORS.dest}">&#9632;</b> Difficult: a hard link, e.g. across a river (up to ${config.travel.difficultLimit})</span>
             <span><b style="color:${COLORS.far}">&#9632;</b> Impossible: a link too dear or removed; drawn see-through</span>
-            <span>white dot with a black centre: the source; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene; blue square: bridge, pier, entrance, stairs or connector; orange diamond: a future scene; red is drawn see-through; dashed: a manual link</span>
+            <span>white dot with a black centre: the source; magenta ring: a target (shift-click adds or drops targets, the list picks just one); round: a scene; blue square: bridge, pier, entrance, stairs or connector; orange diamond: a future scene; red is drawn see-through; dashed: a manual link; the small number beside a spot is how many manual links it has (red 0 = not done yet)</span>
             <span class="muted">Cost = walking in map pixels: rivers add a lot, bridges are free, the sea is nearly blocked. To link two spots that are not neighbours, pick both and press Accessible or Difficult. Accessible sets a link's cost to ${config.travel.accessibleCost}, Difficult multiplies it by ${config.travel.difficultFactor} (at least ${config.travel.difficultMin}), Impossible removes it.</span>
         </div>
         <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;

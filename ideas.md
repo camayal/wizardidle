@@ -147,3 +147,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): el_volcan scenes recoloured (dark basalt rock, approved version A, from the artist); the new underground map waits for approval.
 - 2026-11-19 (dev): new underground map installed (artist option A + ladder + chamber floor). Travel points added on 'under': future_cave_NW (60,44), future_chamber (80,132), ladder_cueva4_mina2 (112,162). The (130,120) volcano mouth and the chamber link: the graph is blank, author links by hand.
 - 2026-11-19 (dev): Travel mode: source marked with a black dot, link numbers removed, several targets by shift-click (tgts list). Untested in a browser (no node here).
+- 2026-11-19 (dev): Travel mode: small number beside each spot = its manual links (red 0 = not done). Untested in a browser.
