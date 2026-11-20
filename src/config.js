@@ -73,6 +73,7 @@ export const config = {
         searchDistance: 60,        // two spots this close (map pixels) get a direct edge
         destinationLimit: 45,      // a place this cheap away is a destination (the adapter)
         moveLimit: 45,             // a stage of the same zone this cheap away is a move
+        manualLinksOnly: 1,        // 1: tools/travel_graph.py makes no links, every link is set by hand in the dev tools; 0: it computes them from the map
     },
     // Fixed rules of the world.
     balance: {

@@ -163,6 +163,8 @@ def build():
     node('above', *stairs, 'stairs', 'stairs_above')
 
     edges = {}
+    if cfg.get('manualLinksOnly'):          # the links are all set by hand in the dev tools (Modes > Travel)
+        return cfg, places, nodes, edges, anchors, warns
     for layer in LAYERS:
         ids = [i for i, n in enumerate(nodes) if n['layer'] == layer]
         for a in ids:
