@@ -137,6 +137,10 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
                 zones = f.read()
             points = {k: v for k, v in data.get('points', {}).items() if re.fullmatch(r'\w+', k) and v.get('kind') in ('future', 'connector')
                       and v.get('layer') in ('ground', 'above', 'under')}
+            for v in points.values():
+                v['note'] = str(v.get('note', ''))[:500]
+                if not v['note']:
+                    v.pop('note')
             positions, stages = {}, 0
             for name, xy in data.get('positions', {}).items():
                 if not re.fullmatch(r'\w+', name) or len(xy) != 2:

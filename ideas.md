@@ -155,3 +155,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): Travel mode: Deselect all and Hide numbers moved to the left column. Untested in a browser.
 - 2026-11-19 (dev): Travel mode: plain click on another layer than the source picks a target (cross-map links). Untested in a browser; if it still fails the author should say what happens.
 - 2026-11-19 (dev): ground map replaced by artist option clouds_c_v2 (5 sky-colour clouds over each stair tip). Only open sea changed; map spots unaffected.
+- 2026-11-19 (dev): Travel mode: Tools section, Align to source, Future<->connector switch, notes per added point (travelPoints[].note, kept by serve.py, <=500 chars). Notes only editable once the point is in the graph (save + reload). Untested in a browser.

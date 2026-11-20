@@ -14,6 +14,7 @@ import { travelGraph as g } from '../data/travelGraph.js';
 import { places } from '../data/zones.js';
 import { neighbors, overrides, pairKey, verdict, byName, rebuild, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
+import { travelPoints } from '../data/travelOverrides.js';
 import { sidePanel } from './panel.js';
 import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
@@ -28,7 +29,9 @@ const names = g.nodes.map((n, i) => { const at = stages.filter((s) => g.anchors[
 const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth moves with its underground twin
 const CUSTOM = ['future', 'connector'];         // kinds of the points added by hand
 let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = {}, points = {}, newPoint = null;
-g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2] }; });
+g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2], note: (travelPoints[n[4]] || {}).note || '' }; });
+const kindOf = (i) => (points[names[i][0]] || {}).kind || g.nodes[i][3];       // a point's type can be switched before the graph is rebuilt
+const isCustom = (n) => n in points;
 
 const tgt = () => tgts[tgts.length - 1] || '';           // the last target: the one "change coord" moves
 const layerOf = (n) => g.nodes[byName[n]][0];
@@ -86,8 +89,9 @@ function draw() {
         ctx.globalAlpha = 1;
         ctx.setLineDash([]);
     }
-    g.nodes.forEach(([l, , , kind], i) => {
+    g.nodes.forEach(([l], i) => {
         if (l !== layer) return;
+        const kind = kindOf(i);
         const [x, y] = pos(i), scene = names[i].some(isStage), k = kinds[i];
         const isSrc = i === byName[src], isTgt = tgts.some((t) => byName[t] === i), X = x * ZOOM, Y = y * ZOOM;
         ctx.globalAlpha = k === 'far' && !isSrc && !isTgt ? 0.3 : 1;      // red is see-through
@@ -120,6 +124,9 @@ function draw() {
 
 function drawLink() {
     const has = src && tgts.some((t) => t !== src), vs = has ? tgts.filter((t) => t !== src).map((t) => verdict(src, t)) : [];
+    const own = isCustom(src);
+    p.note.disabled = !own; p.noteLabel.textContent = own ? `Notes for ${src}:` : 'Notes:';
+    if (document.activeElement !== p.note) p.note.value = own ? points[src].note || '' : '';
     p.srcPlace.style.fontWeight = placing === 'src' ? 'bold' : '';
     p.tgtPlace.style.fontWeight = placing === 'tgt' ? 'bold' : '';
     p.newAdd.textContent = placing === 'new' ? 'click the map...' : 'Add point';
@@ -208,15 +215,21 @@ export async function open(devTools) {
         <div style="display:flex;gap:6px;align-items:flex-start">
             <div style="display:flex;flex-direction:column;gap:4px">
             <div data-id="layers" style="display:flex;flex-direction:column;gap:4px">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
-            <div style="display:flex;flex-direction:column;gap:4px;margin-top:10px"><button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button></div>
-            <div data-id="weights" style="display:flex;flex-direction:column;gap:4px;margin-top:10px"><b>Weight</b>
+            <h4 style="margin:12px 0 0">Tools</h4>
+            <div data-id="weights" style="display:flex;flex-direction:column;gap:4px"><b>Weight</b>
                 <button data-v="move" style="background:${COLORS.move}">Accessible</button>
                 <button data-v="dest" style="background:${COLORS.dest}">Difficult</button>
                 <button data-v="far" style="background:${COLORS.far};color:#fff">Impossible</button>
                 <button data-v="">Auto</button></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><b>Points</b>
+                <button data-id="align" title="move the target(s) onto the source, e.g. the two ends of a connector">Align to source</button>
+                <button data-id="swap" title="future scene becomes a connector and the other way round (source and targets)">Future &harr; connector</button></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><b>View</b>
+                <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button></div>
             </div>
             <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
         </div>
+        <div class="row"><b data-id="noteLabel">Notes:</b><textarea data-id="note" rows="2" style="flex:1" placeholder="notes for the future (select a future scene or connector you added)" disabled></textarea></div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
             <span>Only the direct links of the source are drawn, as straight lines; a spot reached only through another is not a neighbour.</span>
@@ -229,6 +242,20 @@ export async function open(devTools) {
         <div data-id="tip" class="muted">Click a spot for the source, shift-click one for the target. Hover for its name and cost.</div>`;
     p = {};
     side.body.querySelectorAll('[data-id]').forEach((e) => { p[e.dataset.id] = e; });
+    p.align.onclick = () => {          // the targets go onto the source (every scene sharing them)
+        if (!src || !tgts.some((t) => t !== src)) { p.tip.textContent = 'Pick a source and a target first: the target moves onto the source.'; return; }
+        const [x, y] = pos(byName[src]);
+        for (const t of tgts) if (t !== src) for (const m of names[byName[t]]) moved[baseOf(m)] = [x, y];
+        save(); draw();
+    };
+    p.swap.onclick = () => {           // future scene <-> connector, for the points added by hand
+        const list = [src, ...tgts].filter((n) => n && isCustom(n));
+        if (!list.length) { p.tip.textContent = 'Select a future scene or connector that you added.'; return; }
+        for (const n of list) points[n].kind = points[n].kind === 'future' ? 'connector' : 'future';
+        save(); draw();
+        p.tip.textContent = `${list.join(', ')}: type switched. Save verdict and reload to apply it to the graph.`;
+    };
+    p.note.oninput = () => { if (isCustom(src)) { points[src].note = p.note.value.slice(0, 500); save(); } };
     p.deselect.onclick = () => { tgts = []; choose('src', ''); };
     p.nums.onclick = () => { showNums = !showNums; p.nums.textContent = showNums ? 'Hide numbers' : 'Show numbers'; draw(); };
     p.srcSel.onchange = () => choose('src', p.srcSel.value);

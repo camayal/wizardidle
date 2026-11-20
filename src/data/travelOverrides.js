@@ -19,6 +19,13 @@ export const travelOverrides = {
     "el_Duenon3|el_Duenon5": "move",
     "el_Duenon4|el_Duenon5": "move",
     "el_Duenon5|mouth_87_224": "move",
+    "el_Heidan1|el_Heidan3": "dest",
+    "el_Heidan2|el_Heidan3": "move",
+    "el_Heidan2|stairs_N": "move",
+    "el_Heidan3|el_Heidan5": "move",
+    "el_Heidan4|el_Heidan5": "move",
+    "el_Heidan4|stairs_above": "move",
+    "el_Heidan5|stairs_above": "move",
     "el_Volcan1|el_Volcan2": "move",
     "el_Volcan1|el_Volcan3": "move",
     "el_Volcan1|el_Volcan4": "move",
@@ -97,12 +104,18 @@ export const travelOverrides = {
     "las_Dunas2|las_Dunas5": "move",
     "las_Dunas2|mouth_33_165": "move",
     "las_Dunas3|mouth_27_114": "move",
-    "las_Dunas4|mouth_33_165": "move"
+    "las_Dunas4|mouth_33_165": "move",
+    "mouth_130_120|mouth_130_120_under": "move",
+    "mouth_147_31|mouth_147_31_under": "move",
+    "mouth_218_182|mouth_218_182_under": "move",
+    "mouth_229_64|mouth_229_64_under": "move",
+    "mouth_27_114|mouth_27_114_under": "move",
+    "stairs_N|stairs_n_ground": "move"
 };
 export const travelPositions = {
-    "stairs": [
-        214,
-        213
+    "mouth_33_165": [
+        33,
+        165
     ]
 };
 export const travelPoints = {
@@ -147,5 +160,107 @@ export const travelPoints = {
         "layer": "ground",
         "x": 79,
         "y": 43
+    },
+    "pradera_pantano_w": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 86,
+        "y": 61
+    },
+    "pradera_pantano_E": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 203,
+        "y": 50
+    },
+    "la_playa1": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 232,
+        "y": 39
+    },
+    "la_playa2": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 225,
+        "y": 81
+    },
+    "la_playa3": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 234,
+        "y": 116
+    },
+    "la_playa4": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 216,
+        "y": 117
+    },
+    "la_playa6": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 190,
+        "y": 113
+    },
+    "la_Pradera_lago": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 68,
+        "y": 135
+    },
+    "la_Pradera_fueraCity": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 58,
+        "y": 109
+    },
+    "intersection_city_tower": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 89,
+        "y": 139
+    },
+    "el_Duenon7": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 155,
+        "y": 198
+    },
+    "el_Pantano9_fueracastle": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 164,
+        "y": 87
+    },
+    "el_Pantano_fishing": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 167,
+        "y": 69
+    },
+    "la_Pradera_northTown": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 180,
+        "y": 130
+    },
+    "la_pradera_n_dunasS": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 68,
+        "y": 163
+    },
+    "la_Pradera_n_dunasN": {
+        "kind": "future",
+        "layer": "ground",
+        "x": 19,
+        "y": 118
+    },
+    "enter_mine_S": {
+        "kind": "connector",
+        "layer": "under",
+        "x": 34,
+        "y": 166
     }
 };
