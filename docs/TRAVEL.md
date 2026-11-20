@@ -75,3 +75,12 @@ Leave for later: creating the in-between scenes, how they are composed and chose
 - Result at limit 45: 346 derived destinations against 346 hand-typed, 237 shared; moves 194 derived, 192 shared of 241. Sea and river read from the ground map only; the underground and aboveground maps are walked as plain land.
 - To confirm with the author: the position of the sacred stairs (a guess, 212,205, the ladder at the south-east); the Heidan has no good ground link (old strings reach it from the Forest, Swamp, Desert); `las_Dunas3` (17,132) is cut off by sea (cost 589); Pantano1-3, Cueva1-2, Tundra1 sit just over the limit and use the nearest-three fallback; 24 one-way links in the old strings (listed by the tool).
 - Left: the dev-tools overlay (the PNG stands in), the aboveground portals, step 6.
+
+## Open for the author (come back to these)
+
+- **Stairs position:** the sacred stairs to Heidan are a guess at (212,205), the ladder in the south-east. Where should they be?
+- **Heidan link:** the old strings reach Heidan from the Forest, Swamp and Desert; the graph reaches it only from the Desert. Decide how Heidan is joined to the ground (one stair, several, portals).
+- **`las_Dunas3` (17,132):** cut off by sea (cost 589). Move the spot or add a link (the walkable Dunes shore).
+- **Just over the limit:** Pantano1-3, Cueva1-2 and Tundra1 use the nearest-three fallback. Raise the limit, move spots or accept.
+- **One-way links:** 24 in the old strings (`python tools/travel_graph.py` lists them); the derived graph has none.
+- **Step 6:** review `python tools/travel_graph.py --compare`, then switch `travel.js` to `destinations()` and `moves()` and remove the old strings.
