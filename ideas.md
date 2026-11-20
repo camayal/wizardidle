@@ -144,3 +144,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): Travel mode: layer buttons beside the map, per-spot count of green+yellow direct links. Untested in a browser.
 - 2026-11-19 (dev): Travel mode: weight buttons moved above the map, Delete source point removed (dangerous). Untested in a browser.
 - 2026-11-19 (dev): Travel graph reset on the author's request: config.travel.manualLinksOnly = 1 makes tools/travel_graph.py write 0 edges, travelOverrides emptied (old state in commit 18743d0). Set it to 0 to get the computed links back.
+- 2026-11-19 (dev): el_volcan scenes recoloured (dark basalt rock, approved version A, from the artist); the new underground map waits for approval.
