@@ -179,3 +179,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): south and swamp rails cut 2 more rows (4 total); the stairs front railings were disliked and removed from the game; artist asked for short ornaments instead.
 - 2026-11-20 (dev): stairs newel-post overlays wired to test (overlays.js); LANDSCAPE.md plan exists, question 1 answered (columns appear when needed).
 - 2026-11-20 (dev): Beach zone wired: la_playa scenes, ten naga sprites (la_naga), bosses lamia and greater_naga, couple-of-bosses support. Open: names of our own for the champion and oracle, real boss attacks, beach altar, water spells.
+- 2026-11-20 (dev): Water school added (placeholder art/sound copied from frost); art and sound notes left. Next: boss attacks for the lamia and greater naga once the author picks them.
