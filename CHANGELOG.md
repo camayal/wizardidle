@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- The wizard now walks behind the bridge rails: the six bridge scenes have front overlays (a low stone wall on the spring bridge, the rope rail and posts on the south and swamp bridges). The artist drew them for feet on row 57; his feet are on row 60, so the stone wall was moved down 3 rows (the rope rails already reach the bottom). The other connectors need none.
+- Leaving an inn or a dice house in the Town or City: out through the door, a fade to the street at that door, then he walks right out of the scene and into the next, like any trip (the author's idea, taken from the connectors). Untested in a real run.
 - Leaving a connector (the end of a bridge, stairs, mouth, ladder or the pier) no longer makes him walk in again from the side: after the last connector scene the real scene shows with him standing in his place and the game goes on as usual.
 - Connector scenes are scenes now, not just steps: each bridge, stairs, mouth, ladder, tunnel and pier scene is registered (data/connectors.js, connectorSceneInfo) with its connector, its place in the walk (2 of 3) and its spot on the map. While he is in one the map shows him at that connector's point (on the right map layer), the map page is titled with its name, and the console says "<name> comes to the south bridge". Fights and finds inside them, and zone-style stage entries, are not done yet.
 - Fixed: the wizard vanished in every connector walk (bridges, stairs, mouths, ladder, pier): the map's position dot looked the scene up as a map place and failed on connector scenes, stopping the walk with the scene shown and him off screen. It now just hides the dot there. Checked in a headless browser: the bridge walk and the mouth fade plus tunnel walk now run to the end.

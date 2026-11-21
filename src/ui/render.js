@@ -683,16 +683,30 @@ function goInside(bg, npc, done, fade) {
     }, () => (door != null ? walkWizardTo(0, done) : done && done()), () => imageNow(src) != null);
 }
 
-// He leaves the place: out through its door and a fade back outside (changeScene draws the
-// outside), or, where there is no door, he walks out of the scene to the right and in again.
+// He leaves the place: out through its door and a fade to the street at that door (where the street is
+// known, STREET_DOORS), where he walks right out of the scene and in again to the next scene (like any trip,
+// the author's idea from the connectors); with no street he stands in changeScene's scene at his place. Where
+// there is no door at all, he walks out of the scene to the right and in again.
 function leavePlace(changeScene, done) {
-    const door = DOORS[(ui.currentBackGround || "").toLowerCase()];
+    const key = (ui.currentBackGround || "").toLowerCase(), door = DOORS[key], street = STREET_DOORS[key];
     if (door == null) return walkThroughScene(changeScene, done);
     walkWizardTo(door - 48, () => fadeScene(() => {
-        ui.wizardOffset = 0;
-        changeScene();
+        if (street && !run.simulation) {
+            loadBackground(street[0]);
+            ui.wizardOffset = street[1] - 48;           // at the door in the street
+        } else {
+            ui.wizardOffset = 0;
+            changeScene();
+        }
         if (!run.simulation) drawWizard();
-    }, done));
+    }, () => {
+        if (!street) return done && done();
+        walkWizardTo(OFF_RIGHT, () => {                  // out of the scene to the right, into the next from the left
+            changeScene();
+            ui.wizardOffset = OFF_LEFT;
+            walkWizardTo(0, done);
+        });
+    }));
 }
 
 // Remove the enemy (or object) from the right side of the scene.
