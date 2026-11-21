@@ -110,7 +110,7 @@ function responsiveLayout() {
 
     
      
-     ui.headLevel = ui.objectSize * 0.0859375;      // head at row 22 of 256 (was 28: the walk line raised 6 sprite px, 2026-11-20)
+     ui.headLevel = ui.objectSize * 0.09375;      // head at row 24 of 256 (was 28: the walk line raised 4 sprite px, 2026-11-20)
      ui.charWidth = ui.charHeight = ui.squareSide = ui.objectSize * 0.125;//64;
      //load chars if was ok to redraw
     if (state.npc) {
