@@ -18,6 +18,8 @@ import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
 import { art } from '../media.js';
+import { connectorSceneInfo } from '../data/connectors.js';
+import { pointSpot } from '../travelGraph.js';
 
 let scrollIDContent;
 
@@ -133,15 +135,17 @@ function mapPageFor(zone){
 // Draw the map page that is open (the wizard's own layer when the scroll opens, or the ribbon the
 // player tapped) and put the marker (speech bubble) on the wizard's current stage, only on his layer.
 function localizarBocadillo(){
-    const mine = mapPageFor(state.zone.current);
+    // a connector scene sits on the map at its connector's point, on that point's layer
+    const info = connectorSceneInfo(ui.currentBackGround), spot = info && pointSpot(info.point);
+    const mine = spot ? ({ ground: "ground", under: "underground", above: "above" })[spot.layer] : mapPageFor(state.zone.current);
     const page = MAP_PAGES[ui.scrollViews.map] ? ui.scrollViews.map : mine;
     el("backMapa").src = art(MAP_PAGES[page]);
     const hide = () => { el("bocadilloMapa").style.display ="none"; el("pjMapa").style.display ="none"; };
     if (ui.currentBackGround == "curanderobg") return hide();
-    el("zoneMap").innerHTML = page == mine ? `The ${zones[state.zone.current].name}` : "Map";
+    el("zoneMap").innerHTML = page == mine ? (info ? info.label[0].toUpperCase() + info.label.slice(1) : `The ${zones[state.zone.current].name}`) : "Map";
     if (page != mine || ui.currentBackGround.match(/_altar/) || ui.currentBackGround.match(/_estatua/)) return hide();
-    const localidad = places[ui.currentBackGround];
-    if (!localidad) return hide();       // a connector scene (bridge, mouth...) is not a place on the map
+    const localidad = spot || places[ui.currentBackGround];
+    if (!localidad) return hide();
     const mapWidth = el("backMapa").style.width;
     el("bocadilloMapa").style.display ="block";
     el("pjMapa").style.display ="block";

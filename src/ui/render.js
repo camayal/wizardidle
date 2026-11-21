@@ -16,6 +16,7 @@ import { stats } from '../stats.js';
 import { spells } from '../data/spells.js';
 import { art } from '../media.js';
 import { overlays } from '../data/overlays.js';
+import { connectorSceneInfo } from '../data/connectors.js';
 import { markup } from './text.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -390,7 +391,12 @@ function walkAcross(steps, changeScene, onArrive) {
             } else go();
         });
     };
-    walkWizardTo(side(steps[0].dir), () => { loadBackground(steps[0].scene); play(0); });
+    walkWizardTo(side(steps[0].dir), () => {
+        loadBackground(steps[0].scene);
+        const info = connectorSceneInfo(steps[0].scene);
+        if (info && !run.simulation) print(`${wizardName()} comes to ${info.label}`);
+        play(0);
+    });
 }
 
 function wizardX() {

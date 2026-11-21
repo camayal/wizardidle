@@ -39,3 +39,20 @@ export const mouthDoors = {
     ladder_cueva4_mina2_cave: 150, ladder_cueva4_mina2_mine: 122,      // the ladder and the floor shaft
 };
 export const DOOR_STOP = 48;     // the wizard's offset is the door minus this to stand in front of it
+
+// Every connector scene as a scene of its own (the registry the map, the console and the tools read):
+// scene (lower case) -> { point: the connector's name in the travel graph, label, n: place in its trip, of: scenes in the trip }.
+// A connector joins two zones and is usually several scenes; "point" says where it sits on the map.
+const SCENE_INFO = {};
+const addScenes = (point, label, scenes) => scenes.forEach((s, i) =>
+    { SCENE_INFO[s.toLowerCase()] = { point, label, n: i + 1, of: scenes.length }; });
+for (const [c, scenes] of Object.entries(connectorScenes)) addScenes(c, `the ${c.replace("bridge_", "")} bridge`, scenes);
+for (const [c, s] of Object.entries(stairScenes)) addScenes(c, "the Heidan stairs", s.scenes);
+addScenes("pier", "the pier", ["pier_land", "pier_end"]);
+addScenes("enter_mine_S", "the south mine tunnel", ["enter_mine_S"]);
+addScenes("ladder_cueva4_mina2", "the ladder between the cave and the mine", ["ladder_cueva4_mina2_cave", "ladder_cueva4_mina2_mine"]);
+for (const m of Object.keys(mouthDoors).filter((k) => k.startsWith("mouth_") && !k.endsWith("_under"))) {
+    addScenes(m, `the mouth at ${m.replace("mouth_", "").replace("_", ",")}`, [m]);
+    addScenes(`${m}_under`, `the mouth at ${m.replace("mouth_", "").replace("_", ",")}, inside`, [`${m}_under`]);
+}
+export const connectorSceneInfo = (scene) => SCENE_INFO[String(scene).toLowerCase()];

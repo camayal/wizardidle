@@ -148,6 +148,14 @@ function spotX(name) {
     return i === undefined ? undefined : g.nodes[i][1];
 }
 
+// Where a named point sits on its map as fractions of the map and its layer ("ground", "under", "above"), or undefined.
+function pointSpot(name) {
+    const i = byName[name];
+    if (i === undefined) return undefined;
+    const [layer, x, y] = g.nodes[i];
+    return { layer, x: x / SIZE, y: y / SIZE };
+}
+
 // The stages he may go to in another zone, from the manual links; none linked yet: the old typed list.
 function destinations(stage) {
     const z = places[stage].zone, list = linked(stage).filter(n => places[n].zone !== z);
@@ -171,4 +179,4 @@ rebuild();
 // The direct links of a spot: [[node, cost], ...], after the manual verdicts (the dev tools draw them).
 const neighbors = (spot) => adj[nodeOf(spot)] || [];
 
-export { reachesPoint, connectorsBetween, spotX, neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
+export { reachesPoint, connectorsBetween, spotX, pointSpot, neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };

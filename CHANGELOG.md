@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Connector scenes are scenes now, not just steps: each bridge, stairs, mouth, ladder, tunnel and pier scene is registered (data/connectors.js, connectorSceneInfo) with its connector, its place in the walk (2 of 3) and its spot on the map. While he is in one the map shows him at that connector's point (on the right map layer), the map page is titled with its name, and the console says "<name> comes to the south bridge". Fights and finds inside them, and zone-style stage entries, are not done yet.
 - Fixed: the wizard vanished in every connector walk (bridges, stairs, mouths, ladder, pier): the map's position dot looked the scene up as a map place and failed on connector scenes, stopping the walk with the scene shown and him off screen. It now just hides the dot there. Checked in a headless browser: the bridge walk and the mouth fade plus tunnel walk now run to the end.
 - The ladder between the cave and the mine is crossed like a mouth: he walks to the ladder, the scene fades and he appears at the mine's shaft (or the other way up). Developer tools: a new Connectors list in the dev panel forces any bridge, stairs, mouth, ladder or the pier walk on the spot, both directions, so they can be watched without waiting for a trip. Untested in a browser.
 - The south mine's mouth (the desert dunes) now has its tunnel scene: after fading underground he walks through enter_mine_S, and before the fade coming out. Where that scene really belongs is a guess: tell me if it sits elsewhere. Untested in a browser.
