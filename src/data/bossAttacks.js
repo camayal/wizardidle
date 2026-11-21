@@ -73,7 +73,7 @@ export const bossAttacks = {
         { id: "serpent_gaze", frames: 10 },
     ],
     greater_naga: [
-        { id: "tide_charge", frames: 18, path: [0, 0, -20, -39, -59, -79, -98, -118, -118, -118, -114, -98, -79, -59, -39, -20, 0, 0] },
+        { id: "tide_charge", frames: 18, scene: "tide_charge", sceneAt: 2, path: [0, 0, -20, -39, -59, -79, -98, -118, -118, -118, -114, -98, -79, -59, -39, -20, 0, 0] },
         { id: "fury_slaps", frames: 12 },
         { id: "coil_crush", frames: 11 },
     ],
@@ -126,7 +126,7 @@ export const sceneSpells = {
     golden_rays: 18, spore_storm: 16, slime_spit: 14, curse: 22,
     fire_tornado: 18, fire_breath: 16, petrify_gaze: 18, poison_dart: 15,
     golden_storm: 16, prism_pulse: 18, colour_burst: 16, fire_fist: 14,
-    maelstrom: 16, tidal_wave: 16, fire_peak: 14, fire_rain: 16, arcane_rain: 16, poison_rain: 16,
+    maelstrom: 16, tidal_wave: 16, tide_charge: 16, fire_peak: 14, fire_rain: 16, arcane_rain: 16, poison_rain: 16,
     lightning: 14, blizzard: 16, flame_pillar: 15, meteor_shower: 20,
     earthquake: 16, divine_light: 16, eclipse: 18, sandstorm: 16,
     whirlwind: 18, healing_rain: 18, entangling_vines: 16,
