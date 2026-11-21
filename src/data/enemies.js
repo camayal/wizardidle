@@ -715,7 +715,7 @@ export const enemySprites = {
     la_hidra9: {type:"melee", rare:false, corrupted:false, altName:""},
     la_naga1: {type:"melee", rare:false, corrupted:false, altName:"naga"},
     la_naga2: {type:"melee", rare:false, corrupted:false, altName:"naga warrior"},
-    la_naga3: {type:"melee", rare:false, corrupted:false, altName:"naga warrior"},
+    la_naga3: {type:"melee", rare:true, corrupted:false, altName:"naga warlord"},
     la_naga4: {type:"melee", rare:false, corrupted:false, altName:"guardian naga"},
     la_naga5: {type:"melee", rare:false, corrupted:false, altName:"guardian serpent"},
     la_naga6: {type:"range", rare:false, corrupted:false, altName:"naga sharpshooter"},
