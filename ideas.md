@@ -174,3 +174,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): TRIAL walk line +2 px everywhere (headLevel 0.109375 -> 0.1015625, layout.js + game.js); revert by restoring the number if scenes look floaty.
 - 2026-11-20 (dev): trial walk line raised to 6 px (headLevel 0.0859375); overlays drawn for feet row 60 will need shifting up if kept.
 - 2026-11-20 (dev): trial walk line now 4 px (headLevel 0.09375); overlays drawn for feet row 60 need shifting up 4 rows if kept.
+- 2026-11-20 (dev): taller bridge overlays + 6 stairs overlays wired (overlays.js).
