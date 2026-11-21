@@ -44,7 +44,7 @@ export function artFolder(name) {
     if ((m = HYDRA.exec(name))) return `bosses/hydras/${m[1]}`;
     if (/^anim_hydra_/.test(name)) return 'bosses/hydras';     // effects shared by every hydra
     if (BOSSES.has(name)) return `bosses/${name}`;
-    if ((m = /^anim_([a-z]+)_/.exec(name)) && BOSSES.has(m[1])) return `bosses/${m[1]}`;
+    for (const b of BOSSES) if (name.startsWith(`anim_${b}_`)) return `bosses/${b}`;     // b may hold an underscore (greater_naga)
     if (enemySprites[name]) return `enemies/${name.replace(/\d+$/, '')}`;
     if ((m = /^(?:run|ram)_(.+)$/.exec(name)) && enemySprites[m[1]]) return `enemies/${m[1].replace(/\d+$/, '')}`;
     if (name == 'oveja' || name == 'gallina') return 'enemies/polymorph';

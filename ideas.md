@@ -180,3 +180,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): stairs newel-post overlays wired to test (overlays.js); LANDSCAPE.md plan exists, question 1 answered (columns appear when needed).
 - 2026-11-20 (dev): Beach zone wired: la_playa scenes, ten naga sprites (la_naga), bosses lamia and greater_naga, couple-of-bosses support. Open: names of our own for the champion and oracle, real boss attacks, beach altar, water spells.
 - 2026-11-20 (dev): Water school added (placeholder art/sound copied from frost); art and sound notes left. Next: boss attacks for the lamia and greater naga once the author picks them.
+- 2026-11-20 (dev): beach boss attacks and sea-jump entrance chosen by the author (lamia: maelstrom, tidal wave, serpent gaze; greater naga: tide charge, fury slaps, coil crush); notes left for artist and musician; media.js now finds anim_<boss>_ files of bosses with an underscore in the name.
