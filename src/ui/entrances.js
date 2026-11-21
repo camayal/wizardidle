@@ -211,7 +211,7 @@ function pose(kind, t, k) {
             p.moundShake = u > 0.5 ? (k % 2 ? 1 : -1) * (u - 0.5) * 2 : 0;   // trembles before it breaks
         } else {
             const v = clamp01((t - 0.45) / 0.5);
-            p.dy = 34 * (1 - easeOut(v));
+            p.dy = (p.sand ? 48 : 34) * (1 - easeOut(v));      // the whole 40 px boss starts below the ground line
             p.dx = v < 1 ? Math.sin(k * 2.2) * 0.8 : 0;
             p.clip = true;
             p.mound = 1 - v;                                               // flattens as it comes out
@@ -501,8 +501,8 @@ const DIRT = ["#3e2612", "#5a3a1e", "#7a4f2a", "#9b6a3c", "#c08a52"];
 const SAND = ["#8a6a3a", "#b8914f", "#d8b56c", "#e8cc8c", "#f5e2b0"];      // the beach sand: a bigger mound, more grains thrown higher
 function drawDirt(ctx, cx, ground, a, p) {
     ctx.save();
-    const PAL = p.sand ? SAND : DIRT, big = p.sand ? 1.5 : 1;
-    const m = p.mound || 0, W = 28 * big, H = Math.round(20 * big * m);          // half-width and height in art px
+    const PAL = p.sand ? SAND : DIRT, big = p.sand ? 1.3 : 1;
+    const m = p.mound || 0, W = (p.sand ? 30 : 28), H = Math.round(20 * big * m);      // sand: as wide as the boss, taller          // half-width and height in art px
     for (let r = 0; r < H; r++) {
         const half = Math.round(W * (0.55 + 0.45 * m) * Math.sqrt(1 - Math.pow(r / Math.max(1, H), 2)));
         for (let x = -half; x < half; x++) {
@@ -515,7 +515,7 @@ function drawDirt(ctx, cx, ground, a, p) {
     }
     const v = p.clods || 0;
     if (v > 0) {
-        for (let i = 0; i < 18 * big * big; i++) {
+        for (let i = 0; i < 18 * big * 1.3; i++) {
             const side = i % 2 ? 1 : -1, reach = (10 + ((i * 29) % 13) * 2.2) * big, rise = (8 + ((i * 41) % 11) * 2) * big;
             const x = cx + side * reach * v * a, y = ground - (Math.sin(Math.PI * Math.min(1, v * 1.1)) * rise + 2) * a;
             const size = (i % 3 == 0 ? 4 : 3) * a;
