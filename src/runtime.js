@@ -53,6 +53,7 @@ export const run = {
     simulation: false,             // simulation mode (src/dev/sim.js): no sound, no spell animations
     forceOnce: undefined,          // dev tools: event number for the next event only
     forceEnemy: undefined,         // dev tools: sprite for the next normal enemy, e.g. "animalejo13"
+    forceBoss: undefined,          // dev tools: which boss of a zone comes next (combat.js)
     forceEntrance: undefined,      // dev tools: how the next enemy arrives, e.g. "portal" (ui/entrances.js)
 };
 

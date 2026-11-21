@@ -301,8 +301,8 @@ function pickerHtml() {
     const portals = Object.keys(PORTALS).map((x) => `portal:${x}`);
     const arrival = `<label>Arrival <select data-f="arrival"><option value="">its own way</option>${opts(ARRIVALS.map((x) => x == 'portal' ? 'portal' : x),
         ARRIVALS.map((x) => x == 'portal' ? 'portal (random a/b/c)' : x))}${opts(portals, portals.map((x) => x.slice(10).replace('_', ' ')))}</select></label>`;
-    const bossZones = Object.keys(zones).filter((z) => zones[z].boss && enemyTypes[zones[z].boss]);
-    const bossLabels = bossZones.map((z) => `${bossesOf(zones[z]).map((b) => enemyTypes[b].name).join(' / ')} (${zones[z].name || z})`);
+    const bossZones = Object.keys(zones).filter((z) => zones[z].boss && enemyTypes[zones[z].boss]).flatMap((z) => bossesOf(zones[z]).map((b) => `${z}|${b}`));     // one line per boss
+    const bossLabels = bossZones.map((v) => { const [z, b] = v.split('|'); return `${enemyTypes[b].name} (${zones[z].name || z})`; });
     return {
         Wizard: `
             <div class="row"><label>Level <select data-f="level">${opts(LEVELS)}</select></label>
@@ -352,8 +352,9 @@ const pickerActions = {
         walkAcross(steps, showStage, nextEvent);
     },
     boss(f) {
-        const zone = f('boss'), petrify = f('petrify');
+        const [zone, boss] = f('boss').split('|'), petrify = f('petrify');
         liveFight(() => {
+            run.forceBoss = boss;
             if (petrify) override('balance', { petrifyChance: 1 });
             return bossIn(zone);
         }, f('arrival'));

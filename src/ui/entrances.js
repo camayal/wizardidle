@@ -41,8 +41,9 @@ const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
     float: ["el_espectro", "la_esencia", "el_ojo", "infraespectro", "etymos"],
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
-        "herbus", "la_naga", "greater_naga"],
+        "herbus", "la_naga"],
     seaJump: ["lamia"],
+    sandBurst: ["greater_naga"],
     burrow: ["kkck"],
     jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
     slam: ["goro", "protromus", "bicaptop", "rojo"],
@@ -63,7 +64,7 @@ const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 11, jump: 14, slam: 26, seaJump: 30, burrow: 30, slither: 20, element: 26, toward: 16, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 11, jump: 14, slam: 26, seaJump: 20, sandBurst: 34, burrow: 30, slither: 20, element: 26, toward: 16, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
 export const ARRIVALS = Object.keys(FRAMES).filter((kind) => kind != "toward");    // toward: only a way to leave
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -201,7 +202,8 @@ function pose(kind, t, k) {
             p.sy = 0.78 + 0.22 * v; p.sx = 1.16 - 0.16 * v;
             p.splash = v;
         }
-    } else if (kind == "burrow") {                                         // a bump of dirt, then it bursts out
+    } else if (kind == "burrow" || kind == "sandBurst") {                  // a bump of dirt (sand, bigger and wilder for the greater naga), then it bursts out
+        p.sand = kind == "sandBurst";
         if (t < 0.45) {
             const u = t / 0.45;
             p.alpha = 0;
@@ -325,7 +327,7 @@ export function playExit(done) {
 // there (state.npc) while its last attack, its scene spell and the effect on the wizard play out
 // (the author: it left before its last spell was cast), then it leaves and the scene is empty.
 // Another one coming in stops it. The game waits meanwhile.
-const LEAVE = { blink: "fade", slam: "jump", seaJump: "jump", burrow: "rise", element: "toward" };
+const LEAVE = { blink: "fade", slam: "jump", seaJump: "jump", sandBurst: "rise", burrow: "rise", element: "toward" };
 const TURNS = new Set(["walk", "jump", "fly", "slither"]);                 // turn their back to go
 const LEAVE_WAIT_MS = 8000;                                                // waits for the blow 8 s at most
 export function playLeave(npc, done) {
@@ -496,27 +498,29 @@ function drawSplash(ctx, cx, ground, bw, scene, v) {
 // sprite px), darker at the base with lighter crumbs on top; then clods thrown out in arcs as the
 // creature bursts through. Fixed patterns, no randomness.
 const DIRT = ["#3e2612", "#5a3a1e", "#7a4f2a", "#9b6a3c", "#c08a52"];
+const SAND = ["#8a6a3a", "#b8914f", "#d8b56c", "#e8cc8c", "#f5e2b0"];      // the beach sand: a bigger mound, more grains thrown higher
 function drawDirt(ctx, cx, ground, a, p) {
     ctx.save();
-    const m = p.mound || 0, W = 28, H = Math.round(20 * m);          // half-width and height in art px
+    const PAL = p.sand ? SAND : DIRT, big = p.sand ? 1.5 : 1;
+    const m = p.mound || 0, W = 28 * big, H = Math.round(20 * big * m);          // half-width and height in art px
     for (let r = 0; r < H; r++) {
         const half = Math.round(W * (0.55 + 0.45 * m) * Math.sqrt(1 - Math.pow(r / Math.max(1, H), 2)));
         for (let x = -half; x < half; x++) {
             const edge = half - Math.abs(x) <= 1 || r == H - 1;
             const speck = (x * 7 + r * 13) % 11 == 0;
             const shade = edge ? 1 : speck ? 4 : r > H * 0.6 ? 3 : 2;
-            ctx.fillStyle = DIRT[shade];
+            ctx.fillStyle = PAL[shade];
             ctx.fillRect(Math.round(cx + x * a), Math.round(ground - (r + 1) * a), Math.ceil(a), Math.ceil(a));
         }
     }
     const v = p.clods || 0;
     if (v > 0) {
-        for (let i = 0; i < 18; i++) {
-            const side = i % 2 ? 1 : -1, reach = 10 + ((i * 29) % 13) * 2.2, rise = 8 + ((i * 41) % 11) * 2;
+        for (let i = 0; i < 18 * big * big; i++) {
+            const side = i % 2 ? 1 : -1, reach = (10 + ((i * 29) % 13) * 2.2) * big, rise = (8 + ((i * 41) % 11) * 2) * big;
             const x = cx + side * reach * v * a, y = ground - (Math.sin(Math.PI * Math.min(1, v * 1.1)) * rise + 2) * a;
             const size = (i % 3 == 0 ? 4 : 3) * a;
             ctx.globalAlpha = Math.max(0, 1 - v * v);
-            ctx.fillStyle = DIRT[1 + (i % 4)];
+            ctx.fillStyle = PAL[1 + (i % 4)];
             ctx.fillRect(Math.round(x - size / 2), Math.round(y - size / 2), Math.ceil(size), Math.ceil(size));
         }
     }

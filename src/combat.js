@@ -320,7 +320,9 @@ function setUpBoss() {
     fight.bossCombat = true;
     fight.bossMultiplier = 2.5;
     fight.bossGoldMultiplier = 5;
-    const boss = pickRandomItem(bossesOf(zones[state.zone.current]).join(","));     // a zone may have a couple of bosses
+    const here = bossesOf(zones[state.zone.current]);       // a zone may have a couple of bosses
+    const boss = here.includes(run.forceBoss) ? run.forceBoss : pickRandomItem(here.join(","));
+    run.forceBoss = undefined;
     fight.enemy = boss;
     stats.count(`combat.boss.${boss}`);
     stats.count(`seen.boss.${boss}`);          // the bestiary shows it from now on
