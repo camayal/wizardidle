@@ -25,6 +25,9 @@ export const spells = {
     spellPush5: {school:"Thunder",frames:12,name:"<span style='color:#FFD800'>Shock</span>"},
     spellPush6: {school:"Physical",frames:12,name:"Staff and cause hemorrhage"},
     spellPush7: {school:"Nature",frames:12,name:"<span style='color:#00AB00'>Viper strike</span>"},
+    // the Water school (the nagas' only so far): placeholders, copies of the frost art and sound until the artist and musician make the real ones
+    spellPushWater: {school:"Water",frames:12,name:"<span style='color:#00B4D8'>Water bolt</span>"},
+    spellRingWater_8: {school:"Water",frames:16,name:"<span style='color:#00B4D8'>Whirlpool</span>"},
     spellPush8: {school:"Frost",frames:12,name:"<span style='color:#1E90FF'>Ice hit</span>"},
     spellPush9: {school:"Physical",frames:12,name:"Staff"},
     spellRainBlue_24: {school:"Frost",frames:24,name:"<span style='color:#1E90FF'>Blizzard</span>"},
@@ -99,7 +102,8 @@ export const npcSpells = {
     arcane: "spellPush1,spellPush2",
     thunder: "spellPush5",
     divine: "spellChispasMulti_12",
-    // the beach nagas: poison and water (frost is the nearest water school)
-    naga_caster: "spellPush3,spellPush7,spellPoisson_8,spellPush8",
+    // the beach nagas: poison and water (Water is its own school now)
+    naga_caster: "spellPush3,spellPush7,spellPoisson_8,spellPushWater",
     range: "spellPoisson_8,spellPush3",
+    water: "spellPushWater",
 };

@@ -25,7 +25,7 @@ export const TIERS = Array.from({ length: 21 }, (_, i) => i * 10);
 const WIZARD_ANIMS = { cast: 700, walk: 1120, pray: 600, fall_sit: 600, fall_dead: 660, petrify: 800, unpetrify: 1000 };   // ms
 const POSES = ['fallen', 'dead', 'stone'];
 const MOVES = ['slash', 'thrust', 'smash', 'shoot', 'charge', 'pounce', 'slam'];
-const SCHOOLS = ['arcane', 'nature', 'fire', 'thunder', 'frost', 'divine'];
+const SCHOOLS = ['arcane', 'nature', 'fire', 'thunder', 'frost', 'water', 'divine'];
 const HYDRAS = { mother: 10, icedra: 5, hydskon: 5 };
 const HYDRA_SPELL = { mother: 'spellRainGreen_24', icedra: 'spellChispasBlue_8', hydskon: 'spellRainRed_24' };
 const DICE = 'spellMiniDados_18', DICE_MS = 18 * 80;

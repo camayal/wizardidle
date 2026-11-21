@@ -41,7 +41,8 @@ const MOVE_SOUND = {
 
 // The school of an enemy's spell, for its spark.
 const SPELL_SCHOOL = { spellPush1: "arcane", spellPush2: "arcane", spellPush3: "nature", spellPush7: "nature",
-    spellPush4: "fire", spellPush5: "thunder", spellPush8: "frost", spellChispasMulti_12: "divine", spellPoisson_8: "nature" };
+    spellPush4: "fire", spellPush5: "thunder", spellPush8: "frost", spellChispasMulti_12: "divine", spellPoisson_8: "nature",
+    spellPushWater: "water", spellRingWater_8: "water" };
 
 // Overlay strips: frame width and height in sprite pixels (school sparks are 16 x 16).
 const FX_SIZE = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8], fx_arrow: [12, 5],
