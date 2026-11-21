@@ -183,3 +183,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): beach boss attacks and sea-jump entrance chosen by the author (lamia: maelstrom, tidal wave, serpent gaze; greater naga: tide charge, fury slaps, coil crush); notes left for artist and musician; media.js now finds anim_<boss>_ files of bosses with an underscore in the name.
 - 2026-11-20 (dev): beach boss moves wired with placeholder strips and scenes (lamia charm via config.balance.charmChance, a placeholder number); entrance and sounds pending.
 - 2026-11-20 (dev): water bolt, whirlpool, spark and the naga sting art approved and wired (the sharpshooter shoots fx_sting). The delta is dropped; the beach is the only coast zone. Next: sea-jump entrance, boss move sounds.
+- 2026-11-20 (dev): lamia sea-jump entrance (entrances.js, kind seaJump) as a trial; the greater naga follows if the author likes it (move him to the seaJump list). Splash sound pending.

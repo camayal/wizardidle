@@ -41,7 +41,8 @@ const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
     float: ["el_espectro", "la_esencia", "el_ojo", "infraespectro", "etymos"],
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
-        "herbus", "la_naga", "lamia", "greater_naga"],
+        "herbus", "la_naga", "greater_naga"],
+    seaJump: ["lamia"],
     burrow: ["kkck"],
     jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
     slam: ["goro", "protromus", "bicaptop", "rojo"],
@@ -62,7 +63,7 @@ const KIND = {};
 for (const [kind, families] of Object.entries(ENTRANCE)) for (const f of families) KIND[f] = kind;
 
 const STEP_MS = 50;
-const FRAMES = { walk: 18, fly: 18, float: 18, rise: 11, jump: 14, slam: 26, burrow: 30, slither: 20, element: 26, toward: 16, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
+const FRAMES = { walk: 18, fly: 18, float: 18, rise: 11, jump: 14, slam: 26, seaJump: 30, burrow: 30, slither: 20, element: 26, toward: 16, blink: 12, fade: 20, portal: 28, bossPortal: 28, archPortal: 30 };
 export const ARRIVALS = Object.keys(FRAMES).filter((kind) => kind != "toward");    // toward: only a way to leave
 // Each portal strip and the stand-in's rings, outer to inner.
 export const PORTALS = {
@@ -188,6 +189,18 @@ function pose(kind, t, k) {
             p.dust = Math.min(2, Math.floor(v * 3));
             p.landed = v;
         }
+    } else if (kind == "seaJump") {                                        // from the sea at the top right: tiny on the horizon, an arc across the sky growing, a splash
+        const T = 0.72;
+        if (t < T) {
+            const u = t / T;
+            p.dx = 95 * (1 - u);
+            p.dy = -46 * (1 - u) - 4 * 14 * u * (1 - u);                   // the climb down plus the hump of the arc
+            p.sx = p.sy = 0.14 + 0.86 * u;                                 // far away, then near
+        } else {
+            const v = clamp01((t - T) / (1 - T));                          // lands squashed, rises back, the splash
+            p.sy = 0.78 + 0.22 * v; p.sx = 1.16 - 0.16 * v;
+            p.splash = v;
+        }
     } else if (kind == "burrow") {                                         // a bump of dirt, then it bursts out
         if (t < 0.45) {
             const u = t / 0.45;
@@ -312,7 +325,7 @@ export function playExit(done) {
 // there (state.npc) while its last attack, its scene spell and the effect on the wizard play out
 // (the author: it left before its last spell was cast), then it leaves and the scene is empty.
 // Another one coming in stops it. The game waits meanwhile.
-const LEAVE = { blink: "fade", slam: "jump", burrow: "rise", element: "toward" };
+const LEAVE = { blink: "fade", slam: "jump", seaJump: "jump", burrow: "rise", element: "toward" };
 const TURNS = new Set(["walk", "jump", "fly", "slither"]);                 // turn their back to go
 const LEAVE_WAIT_MS = 8000;                                                // waits for the blow 8 s at most
 export function playLeave(npc, done) {
@@ -423,6 +436,7 @@ function draw(npc, img, p) {
         const a = bw / img.naturalWidth, size = ELEMENT_SIZE * a;
         drawFrame(ctx, efx, p.fxFrame * ELEMENT_SIZE, 0, ELEMENT_SIZE, ELEMENT_SIZE, bx + (bw - size) / 2, by + bh - size, size, size);
     }
+    if (p.splash !== undefined) drawSplash(ctx, bx + bw / 2, by + bh, bw, scene, p.splash);
     if (p.fire && p.landed !== undefined) drawFire(ctx, bx + bw / 2, by + bh, bw, scene, p.landed);
     const fx = p.ground && p.riseFrame >= 0 && p.riseFrame < GROUND_FRAMES && imageNow(p.ground.src);
     if (fx) {                                       // the hole in front of the feet, 1 art px per sprite px
@@ -453,6 +467,28 @@ function drawFire(ctx, cx, ground, bw, scene, v) {
         const size = ember ? px : px * (v < 0.6 ? 3 : 2);
         ctx.fillRect(Math.round(x - size / 2), Math.round(y - size), size, size);
     }
+    ctx.restore();
+}
+
+// The splash at the feet when a sea creature lands (v 0 to 1): a ring of foam spreading on the
+// ground and droplets thrown up in arcs, teal to white, square pixels. Fixed pattern, no randomness.
+const SPLASH = ["#e8fbff", "#9fe6ec", "#4cc3d0", "#2a8fa8"];
+function drawSplash(ctx, cx, ground, bw, scene, v) {
+    const px = Math.max(1, Math.round(scene * 2));
+    ctx.save();
+    for (let i = 0; i < 36; i++) {
+        const side = i % 2 ? 1 : -1, spread = 0.15 + ((i * 37) % 23) / 23 * 0.6;
+        const power = 0.4 + ((i * 53) % 17) / 17 * 0.6;
+        const x = cx + side * spread * bw * (0.3 + 0.9 * v);
+        const rise = 4 * power * v * (1 - v) * bw * 0.9;                // an arc up and down
+        ctx.globalAlpha = Math.max(0, 1 - v * 0.9);
+        ctx.fillStyle = SPLASH[Math.min(SPLASH.length - 1, Math.floor((1 - power) * 2 + v * 2))];
+        const size = px * (i < 12 ? 2 : 1);
+        ctx.fillRect(Math.round(x - size / 2), Math.round(ground - size - rise), size, size);
+    }
+    ctx.globalAlpha = Math.max(0, 0.9 - v);                             // the foam ring on the ground
+    ctx.fillStyle = SPLASH[0];
+    ctx.fillRect(Math.round(cx - bw * (0.2 + 0.5 * v)), Math.round(ground - px), Math.round(bw * (0.4 + v)), px);
     ctx.restore();
 }
 

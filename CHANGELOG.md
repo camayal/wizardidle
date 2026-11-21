@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The lamia now arrives by jumping in from the sea at the top right: tiny on the horizon, an arc across the sky growing, a landing squash and a splash (all drawn by code, no sound yet). A trial; the greater naga still rises from the water until the author likes it. In the dev tests it is the `seaJump` arrival.
 - The Water school has its real art: a water bolt (heavy splat with foam), a whirlpool and a water cast spark. The naga sharpshooter now shoots a teal thorn (a new sting) instead of an arrow.
 - The beach bosses fight with their own moves now (placeholder art): the lamia casts a maelstrom, a tidal wave and a serpent gaze (the gaze may make the wizard lose his next attack), the greater naga makes a tide charge, fury slaps and a coil crush. The strips and scenes are stand-ins until the artist draws them; the sounds and the sea-jump entrance are still to come.
 - A new Water school (enemy-only for now): a Water bolt and a Whirlpool spell, a water cast spark and a Water landing sound, used by the beach nagas and the lamia instead of frost. The art and the sound are copies of the frost ones until the artist and musician make the real ones (notes left for both).
