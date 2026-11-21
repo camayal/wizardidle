@@ -73,7 +73,7 @@ The note: the scene takes most of the face, level and HP above it, one button be
 Open (asked one at a time, answers recorded here):
 
 1. Column model. DECIDED (2026-11-20): columns appear only when needed, as in the plan.
-2. Is the game live while a scroll is open beside it?
+2. Is the game live while a scroll is open beside it? DECIDED (2026-11-20): fully live and clickable, story chapters too.
 3. What switches wide mode on?
 4. Sharpness: snap the scene or fill the height?
 5. Column order.
