@@ -89,3 +89,10 @@ Idea: develop a plot around it. When the wizard kills Etymos, he is replaced in 
 
 Please turn this into a plan with options (why Etymos breaks into six, where and how often the minibosses appear, their attacks and sprites, the achievement tiers (src/data/rarity.js), how the secret bestiary section shows up); dev and artist wait for the author's OK.
 ```
+
+- Connector scenes as real scenes (dev, 2026-11-20; author asked, design open). Done in code: each connector scene is registered (connectorSceneInfo) with its connector, place in the walk and map spot. Still to design before dev builds it:
+  1. Events inside a connector scene (enemy, fight, find): chance per scene, and does it stop the walk or can it end it early?
+  2. How long a scene lasts (today a plain walk across, about 3 s a scene) and whether he can rest or stop in one.
+  3. Whose enemies: the zone he leaves, the zone he enters, or a list of the connector's own (bridge, stairs, mouth, tunnel, ladder differ?).
+  4. Fights in a mirrored (east to west) scene: wizard, spells and enemy entrance mirrored, art never (dev-notes has the ui.facing idea).
+  5. Stage entries: should each scene be a stage of a `connector` zone (legend, events, travel links), or stay outside `places`? The pathfinder reads places{} as stages, so a decision is needed on how the Travel graph and tool see them.
