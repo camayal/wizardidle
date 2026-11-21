@@ -66,6 +66,17 @@ export const bossAttacks = {
         { id: "gaze", frames: 10, scene: "petrify_gaze", sceneAt: 1, wizard: ["petrify", 7] },
         { id: "poison_strike", frames: 7, scene: "poison_dart", sceneAt: 3 },
     ],
+    // the beach couple (placeholder strips and scenes until the artist draws them)
+    lamia: [
+        { id: "maelstrom", frames: 10, scene: "maelstrom", sceneAt: 2 },
+        { id: "tidal_wave", frames: 10, scene: "tidal_wave", sceneAt: 2 },
+        { id: "serpent_gaze", frames: 10 },
+    ],
+    greater_naga: [
+        { id: "tide_charge", frames: 18, path: [0, 0, -20, -39, -59, -79, -98, -118, -118, -118, -114, -98, -79, -59, -39, -20, 0, 0] },
+        { id: "fury_slaps", frames: 12 },
+        { id: "coil_crush", frames: 11 },
+    ],
     arcangel: [
         { id: "lightning", frames: 10, scene: "lightning", sceneAt: 2 },
         { id: "golden_storm", frames: 10, scene: "golden_storm", sceneAt: 2 },
@@ -115,7 +126,7 @@ export const sceneSpells = {
     golden_rays: 18, spore_storm: 16, slime_spit: 14, curse: 22,
     fire_tornado: 18, fire_breath: 16, petrify_gaze: 18, poison_dart: 15,
     golden_storm: 16, prism_pulse: 18, colour_burst: 16, fire_fist: 14,
-    fire_peak: 14, fire_rain: 16, arcane_rain: 16, poison_rain: 16,
+    maelstrom: 16, tidal_wave: 16, fire_peak: 14, fire_rain: 16, arcane_rain: 16, poison_rain: 16,
     lightning: 14, blizzard: 16, flame_pillar: 15, meteor_shower: 20,
     earthquake: 16, divine_light: 16, eclipse: 18, sandstorm: 16,
     whirlwind: 18, healing_rain: 18, entangling_vines: 16,

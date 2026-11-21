@@ -104,6 +104,7 @@ export const config = {
         artefactChance: 0.05,      // a find is the artefact against her gaze (after his first stone)
         midasHeal: 0.15,           // of Midas's max HP, per golden-rays heal
         midasHealsPerFight: 2,
+        charmChance: 0.5,          // the lamia's serpent gaze: he skips his next attack (placeholder, like the blizzard)
         blizzardChance: 0.5,       // he skips his next attack
         earthquakeChance: 0.5,     // his next spell misses
         poisonTurns: 2,

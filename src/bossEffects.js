@@ -32,7 +32,7 @@ export function bossAttackFor(boss, spellId) {
 
 // A new fight (or the end of one): no effect carries over.
 export function resetBossEffects() {
-    Object.assign(fight, { stoneTurns: 0, skipAttack: false, missSpell: false, poisonTurns: 0, midasHeals: 0, midasPendingHeal: 0 });
+    Object.assign(fight, { stoneTurns: 0, skipAttack: false, charmed: false, missSpell: false, poisonTurns: 0, midasHeals: 0, midasPendingHeal: 0 });
 }
 
 // After a boss attack lands: its effect, if it has one. Returns true when he is turned to stone
@@ -50,6 +50,10 @@ export function applyBossEffect(attack) {
     if (fight.enemy == "midas" && attack.id == "golden_rays" && fight.midasHeals < b().midasHealsPerFight) {
         fight.midasPendingHeal = Math.round(fight.enemyHPbase * b().midasHeal);
         print(`<span style='color:DarkGoldenRod'>The golden rays spin around King Midas...</span>`);
+    }
+    if (fight.enemy == "lamia" && attack.id == "serpent_gaze" && YesOrNot(b().charmChance, 0)) {
+        fight.charmed = true;
+        stats.count("boss.effect.charm");
     }
     if (attack.scene == "blizzard" && YesOrNot(b().blizzardChance, 0)) {
         fight.skipAttack = true;
@@ -103,6 +107,11 @@ export function attackPrevented() {
     if (fight.skipAttack) {
         fight.skipAttack = false;
         print(`${wizardName()} is too cold to attack`);
+        return true;
+    }
+    if (fight.charmed) {
+        fight.charmed = false;
+        print(`${wizardName()} is lost in the lamia's gaze and forgets to attack`);
         return true;
     }
     if (fight.missSpell) {

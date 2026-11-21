@@ -27,6 +27,7 @@ export const fight = {
     fallBy: "alone",               // who got him up after the last fall: "healer", "rescuer" or "alone"
     storyDream: "",                // the next rest has a story dream: "fall" or "chapter" (docs/SLEEP.md)
     stoneTurns: 0,                 // boss effects (src/bossEffects.js): turns left as stone,
+    charmed: false,                //   the lamia's charm (he skips his attack),
     skipAttack: false,             //   the blizzard's lost attack, the quake's missed spell,
     missSpell: false,              //   poison turns left, Midas's heals and the one coming
     poisonTurns: 0,
