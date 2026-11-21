@@ -38,7 +38,6 @@ export const mouthDoors = {
     mouth_87_224: 140, mouth_87_224_under: 171,
     ladder_cueva4_mina2_cave: 150, ladder_cueva4_mina2_mine: 122,      // the ladder and the floor shaft
 };
-export const CONNECTOR_LIFT = 3;   // sprite px the wizard walks higher in a connector scene (its walk line)
 export const DOOR_STOP = 48;     // the wizard's offset is the door minus this to stand in front of it
 
 // Every connector scene as a scene of its own (the registry the map, the console and the tools read):

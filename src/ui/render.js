@@ -16,7 +16,7 @@ import { stats } from '../stats.js';
 import { spells } from '../data/spells.js';
 import { art } from '../media.js';
 import { overlays } from '../data/overlays.js';
-import { CONNECTOR_LIFT, connectorSceneInfo } from '../data/connectors.js';
+import { connectorSceneInfo } from '../data/connectors.js';
 import { markup } from './text.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -210,7 +210,7 @@ function drawWizard() {
     if (ui.petrified) return drawWizardPose("stone");     // still stone (Medusa), see ui/bossAttacks.js
     loop.stop("animPJ");        // a normal redraw ends any animation (ui/render.js, wizard animations)
     wizardAnim = "";
-    loadCanvasChar(state.player.lvl, wizardX(), wizardY());
+    loadCanvasChar(state.player.lvl, wizardX(), ui.headLevel);
 }
 
 // ------------------------------------------------------------------ wizard animations
@@ -261,7 +261,7 @@ function staffTip(img, tier) {
 // keep the glint. He never hits with the staff (only spells), so Physical has no spark.
 function castEffect(ctx, frame, img, tier, spellId) {
     const school = spellId && spells[spellId] ? spells[spellId].school : "na";
-    const unit = ui.charWidth / 32, x0 = wizardX(), y0 = wizardY();
+    const unit = ui.charWidth / 32, x0 = wizardX(), y0 = ui.headLevel;
     if (school != "na" && school != "Physical" && (frame == 3 || frame == 4)) {
         const spark = imageNow(art(`fx_spark_${school.toLowerCase()}`));
         if (!spark) return;
@@ -301,7 +301,7 @@ function playWizardAnim(name, spellId) {
         withImage("pj", art(`anim_${name}${tier}`), (img) => {
             const ctx = pixelContext(pjCanvas);
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
-            drawFrame(ctx, img, frame * 32, 0, 32, 32, wizardX(), wizardY(), ui.charWidth, ui.charHeight);
+            drawFrame(ctx, img, frame * 32, 0, 32, 32, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
             if (name == "cast") castEffect(ctx, frame, img, tier, spellId);
         });
     };
@@ -317,12 +317,12 @@ function drawWizardPose(pose) {
     withImage("pj", art(`${pose}${wizardTier()}`), (img) => {
         clearWizardCanvas();        // cleared only when the pose is ready (no blank flash)
         const ctx = pixelContext(pjCanvas);
-        ctx.drawImage(img, wizardX(), wizardY(), ui.charWidth, ui.charHeight);
+        ctx.drawImage(img, wizardX(), ui.headLevel, ui.charWidth, ui.charHeight);
         if (pose != "fallen") return;
         withImage("pjSkull", art(`muerto`), (skull) => {
             // half his size, 12 sprite px right and 10 up from his top-left (the artist's spot,
             // clear of every staff top and crown)
-            pixelContext(pjCanvas).drawImage(skull, wizardX() + ui.charWidth * 0.375, wizardY() - ui.charHeight * 0.3125,
+            pixelContext(pjCanvas).drawImage(skull, wizardX() + ui.charWidth * 0.375, ui.headLevel - ui.charHeight * 0.3125,
                 ui.charWidth / 2, ui.charHeight / 2);
         });
     });
@@ -399,11 +399,6 @@ function walkAcross(steps, changeScene, onArrive) {
     });
 }
 
-// Where his head is: in a connector scene he walks a few sprite px higher (its walk line is above the others).
-function wizardY() {
-    return ui.headLevel - (connectorSceneInfo(ui.currentBackGround) ? CONNECTOR_LIFT * ui.charHeight / 32 : 0);
-}
-
 function wizardX() {
     return ui.squareSide + (ui.wizardOffset || 0) * ui.charWidth / 32;
 }
@@ -436,7 +431,7 @@ function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
             const ctx = pixelContext(pjCanvas), x = wizardX();
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
             ctx.save();
-            if (dir < 0) { ctx.translate(x + ui.charWidth, wizardY()); ctx.scale(-1, 1); } else ctx.translate(x, wizardY());
+            if (dir < 0) { ctx.translate(x + ui.charWidth, ui.headLevel); ctx.scale(-1, 1); } else ctx.translate(x, ui.headLevel);
             drawFrame(ctx, img, frame * 32, 0, 32, 32, 0, 0, ui.charWidth, ui.charHeight);
             ctx.restore();
         });

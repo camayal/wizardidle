@@ -1,7 +1,6 @@
 # Changelog
 
 ## Unreleased
-- In connector scenes the wizard now walks 3 sprite pixels higher (CONNECTOR_LIFT in data/connectors.js), so he does not overlap the new features of their art. Other scenes are unchanged. Change the number to tune it.
 - Leaving a connector (the end of a bridge, stairs, mouth, ladder or the pier) no longer makes him walk in again from the side: after the last connector scene the real scene shows with him standing in his place and the game goes on as usual.
 - Connector scenes are scenes now, not just steps: each bridge, stairs, mouth, ladder, tunnel and pier scene is registered (data/connectors.js, connectorSceneInfo) with its connector, its place in the walk (2 of 3) and its spot on the map. While he is in one the map shows him at that connector's point (on the right map layer), the map page is titled with its name, and the console says "<name> comes to the south bridge". Fights and finds inside them, and zone-style stage entries, are not done yet.
 - Fixed: the wizard vanished in every connector walk (bridges, stairs, mouths, ladder, pier): the map's position dot looked the scene up as a map place and failed on connector scenes, stopping the walk with the scene shown and him off screen. It now just hides the dot there. Checked in a headless browser: the bridge walk and the mouth fade plus tunnel walk now run to the end.
