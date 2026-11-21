@@ -3,7 +3,7 @@
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
 import { enemySprites, enemyTypes } from './data/enemies.js';
-import { zones } from './data/zones.js';
+import { bossesOf, zones } from './data/zones.js';
 import { npcSpells, spells } from './data/spells.js';
 import { capitalize, getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, RAREMULTIPLIER, selfrevivetime } from './config.js';
@@ -320,7 +320,7 @@ function setUpBoss() {
     fight.bossCombat = true;
     fight.bossMultiplier = 2.5;
     fight.bossGoldMultiplier = 5;
-    const boss = zones[state.zone.current].boss;
+    const boss = pickRandomItem(bossesOf(zones[state.zone.current]).join(","));     // a zone may have a couple of bosses
     fight.enemy = boss;
     stats.count(`combat.boss.${boss}`);
     stats.count(`seen.boss.${boss}`);          // the bestiary shows it from now on
@@ -526,7 +526,8 @@ function enemyAttack() {
         if (Math.round(state.player.hp) <= 0 && !fight.pjDead) wizardFalls();
     };
     if (fight.bossCombat || fight.hydraCombat) {
-        fight.spellEnemy = pickRandomItem(zones[state.zone.current][fight.bossCombat ? "bossSpell" : "hidrasSpells"]);
+        const zone = zones[state.zone.current];
+        fight.spellEnemy = pickRandomItem(fight.bossCombat && zone.bossSpells?.[fight.enemy] || zone[fight.bossCombat ? "bossSpell" : "hidrasSpells"]);     // a boss may have spells of its own
         const spellId = fight.spellEnemy;
         if (fight.bossCombat && hasBossAttacks(fight.enemy)) {
             const attack = bossAttackFor(fight.enemy, spellId);

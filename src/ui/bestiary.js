@@ -9,7 +9,7 @@
 // the healer or other people).
 
 import { enemySprites, enemyTypes } from '../data/enemies.js';
-import { zones } from '../data/zones.js';
+import { bossesOf, zones } from '../data/zones.js';
 import { roundNumbertoLetter } from '../utils.js';
 import { state } from '../state.js';
 import { stats } from '../stats.js';
@@ -62,7 +62,7 @@ export function bestiaryPageHtml() {
     const total = families.reduce((sum, f) => sum + enemyTypes[f].max, 0);
     const found = families.reduce((sum, f) => sum + Array.from({ length: enemyTypes[f].max }, (_, i) => `${f}${i + 1}`).filter(seenSprite).length, 0);
     const defeated = Object.keys(state.stats).filter((k) => k.startsWith('kill.sprite.')).length;
-    const bosses = [...new Set(Object.values(zones).map((z) => z.boss))];
+    const bosses = [...new Set(Object.values(zones).flatMap(bossesOf))];
     const hydras = [...new Set(Object.values(zones).map((z) => z.hidrasName).filter(Boolean))];
     // the Bosses section shows once the first boss is met, the Secrets once the first hydra is
     const bossMet = bosses.some((b) => stats.get(`seen.boss.${b}`) || stats.get(`kill.boss.${b}`));

@@ -23,10 +23,10 @@
 
 import { DEV } from './config.js';
 import { enemySprites } from './data/enemies.js';
-import { zones } from './data/zones.js';
+import { bossesOf, zones } from './data/zones.js';
 import { bossAttacks } from './data/bossAttacks.js';
 
-const BOSSES = new Set([...Object.keys(bossAttacks), ...Object.values(zones).map((z) => z.boss).filter(Boolean)]);
+const BOSSES = new Set([...Object.keys(bossAttacks), ...Object.values(zones).flatMap(bossesOf)]);
 const ZONES = new Set(Object.keys(zones).map((z) => z.toLowerCase()));
 const HYDRA = /^(?:anim_)?(mother|icedra|hydskon)(?:\d+|_.+)$/;
 const WIZARD_ANIM = { cast: 'cast', walk: 'walk', pray: 'pray', fall_sit: 'fall', fall_dead: 'fall', petrify: 'petrify', unpetrify: 'unpetrify' };

@@ -41,7 +41,7 @@ const MOVE_SOUND = {
 
 // The school of an enemy's spell, for its spark.
 const SPELL_SCHOOL = { spellPush1: "arcane", spellPush2: "arcane", spellPush3: "nature", spellPush7: "nature",
-    spellPush4: "fire", spellPush5: "thunder", spellPush8: "frost", spellChispasMulti_12: "divine" };
+    spellPush4: "fire", spellPush5: "thunder", spellPush8: "frost", spellChispasMulti_12: "divine", spellPoisson_8: "nature" };
 
 // Overlay strips: frame width and height in sprite pixels (school sparks are 16 x 16).
 const FX_SIZE = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8], fx_arrow: [12, 5],
@@ -96,6 +96,7 @@ function frames(kind, school) {
 export function enemyMove() {
     if (fight.polymorphed) return { kind: "pounce" };          // a sheep or a chicken just charges
     const sprite = enemySprites[fight.enemyAndNumber];
+    if (sprite && sprite.type == "range") return { kind: "shoot", family: fight.enemy };      // a sharpshooter: its shot lands as its spell
     if (sprite && sprite.type != "melee" && SPELL_SCHOOL[fight.spellEnemy]) return { kind: "cast", school: SPELL_SCHOOL[fight.spellEnemy] };
     return { kind: MELEE[fight.enemy] || DEFAULT_MELEE, family: fight.enemy };
 }

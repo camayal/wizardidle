@@ -2076,3 +2076,5 @@ Author's note: hey @thinker, I am thinking about adding a large screens interfac
 Date: 2026-11-15 12:50
 Author's note: considering the layouts for other screens, we can think in one for smartwahses, maybe in the largerst part the the scene, above the lvl,  health etc. below a button that show other buttons to open the scrolls
 ```
+
+- (dev-notes, 2026-11-20, done) Wiring la_playa1-6: la_playa is its own zone (nagas, two bosses: lamia and greater naga), already decided in docs/MAPS.md (table and step 5), zone data still to do. Wired 2026-11-20.

@@ -2,7 +2,7 @@
 // stumble into (exploring, inns, shrines, statues, runes and books, loot, offerings, revival).
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
-import { zones } from './data/zones.js';
+import { places, zones } from './data/zones.js';
 import { getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, masterTime, MAXSTAGES } from './config.js';
 import { stat, state } from './state.js';
@@ -370,8 +370,9 @@ function overStatue() {
 // Never the stage he is on (the author: he walked out and back into the same scene).
 function newStage() {
     if (!run.simulation) {
-        const other = 1 + Math.floor(looksRandom() * (MAXSTAGES - 1));     // 1..4, skipping his
-        state.zone.stage = other >= state.zone.stage ? other + 1 : other;
+        // any other of the zone's stages 1..5 that exist (the Beach has no 5), skipping his
+        const own = state.zone.current, all = [1, 2, 3, 4, 5].filter((n) => places[own + n] && n != state.zone.stage);
+        state.zone.stage = all[Math.floor(looksRandom() * all.length)] ?? state.zone.stage;
     }
     showStage();
 }
@@ -382,7 +383,7 @@ function aroundCross() {
 }
 
 function studyEV() {
-     if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva"){//found statue, poblado and cueva has not statue
+     if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva" && state.zone.current != "la_playa"){//found statue; poblado, cueva and the beach have none
         if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
             print(`${wizardName()} sees something...`)
             walkToFind();

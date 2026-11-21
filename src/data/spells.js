@@ -99,4 +99,7 @@ export const npcSpells = {
     arcane: "spellPush1,spellPush2",
     thunder: "spellPush5",
     divine: "spellChispasMulti_12",
+    // the beach nagas: poison and water (frost is the nearest water school)
+    naga_caster: "spellPush3,spellPush7,spellPoisson_8,spellPush8",
+    range: "spellPoisson_8,spellPush3",
 };

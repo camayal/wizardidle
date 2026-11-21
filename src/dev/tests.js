@@ -19,7 +19,7 @@ import { saveGame, state, world } from '../state.js';
 import { fight, run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { enemySprites, enemyTypes } from '../data/enemies.js';
-import { zones } from '../data/zones.js';
+import { bossesOf, zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
 import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStage, updateHeading, walkAcross } from '../ui/render.js';
@@ -274,13 +274,13 @@ const GIFTS = {
 };
 
 // Normal enemies only (no boss or hydra), with what the filters need.
-const BOSS_NAMES = new Set(Object.values(zones).map((z) => z.boss));
+const BOSS_NAMES = new Set(Object.values(zones).flatMap(bossesOf));
 const enemyList = Object.keys(enemySprites).filter((s) => {
     const family = s.replace(/\d+$/, '');
     return /\d$/.test(s) && enemyTypes[family] && !BOSS_NAMES.has(family) && !HYDRA_NAMES[family];
 }).sort();
 const familyOf = (s) => s.replace(/\d+$/, '');
-const isCaster = (s) => enemySprites[s].type != 'melee';
+const isCaster = (s) => enemySprites[s].type != 'melee' && enemySprites[s].type != 'range';
 
 // Random picks: label -> test on a sprite.
 const ENEMY_PICKS = {
@@ -302,7 +302,7 @@ function pickerHtml() {
     const arrival = `<label>Arrival <select data-f="arrival"><option value="">its own way</option>${opts(ARRIVALS.map((x) => x == 'portal' ? 'portal' : x),
         ARRIVALS.map((x) => x == 'portal' ? 'portal (random a/b/c)' : x))}${opts(portals, portals.map((x) => x.slice(10).replace('_', ' ')))}</select></label>`;
     const bossZones = Object.keys(zones).filter((z) => zones[z].boss && enemyTypes[zones[z].boss]);
-    const bossLabels = bossZones.map((z) => `${enemyTypes[zones[z].boss].name} (${zones[z].name || z})`);
+    const bossLabels = bossZones.map((z) => `${bossesOf(zones[z]).map((b) => enemyTypes[b].name).join(' / ')} (${zones[z].name || z})`);
     return {
         Wizard: `
             <div class="row"><label>Level <select data-f="level">${opts(LEVELS)}</select></label>

@@ -41,7 +41,7 @@ const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
     float: ["el_espectro", "la_esencia", "el_ojo", "infraespectro", "etymos"],
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
-        "herbus"],
+        "herbus", "la_naga", "lamia", "greater_naga"],
     burrow: ["kkck"],
     jump: ["el_pillo", "la_pilla", "el_diabillo", "animalejo", "el_mediano", "el_elfo", "la_amazona", "cuboq"],
     slam: ["goro", "protromus", "bicaptop", "rojo"],

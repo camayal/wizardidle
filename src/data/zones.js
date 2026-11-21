@@ -19,8 +19,12 @@ export const zones = {
     el_Desierto: {legend:" ,this hot dry the bones",name:"Desert",enemies:"Animalejo,Momia,el_Cornovit,el_Orco",bossSpell:"spellChispasGreen_8,spellPoisson_8,spellPush3,spellPush7,spellRainGreen_24,spellRingGreen_8,spellSparkGreen_8,spellSpiralGreen_15",boss:"medusa",drop:"hueso",maxdestination:3,destinations:"la_Pradera,la_Mina,el_Heidan"},
     el_Heidan: {legend:"",name:"Heidan",enemies:"el_Angelicus,el_Dranei,el_Falconifen,el_Umigubi,la_Esencia",bossSpell:"spellChispasReddish_8,spellChispasYellow_8,spellPush5,spellRainSpark_24,spellRingYellow_8,spellSparkGold_8,spellSpiralYellow_15",boss:"arcangel",drop:"esencia",maxdestination:2,destinations:"el_Desierto,el_Pantano"},
     el_Duenon: {legend:" ,the smell of rotten flesh intoxicate the air",name:"Duenon",enemies:"el_Demonio,el_Diabillo,el_Ojo,la_Esencia",bossSpell:"spellChispasBlue_8,spellChispasGreen_8,spellChispasReddish_8,spellChispasRed_8,spellChispasWhite_8,spellChispasYellow_8",boss:"etymos",drop:"ectoplasma",maxdestination:2,destinations:"la_Cueva,la_Gruta"},
+    la_playa: {legend:" ,the sea breeze carries a hiss from the waves",name:"Beach",enemies:"la_Naga",boss:"lamia",bosses:"lamia,greater_naga",bossSpell:"spellPoisson_8,spellPush3,spellPush7,spellPush8,spellRingBlue_8,spellSparkGreen_8,spellPush9,spellPush6,spellPush10",bossSpells:{lamia:"spellPoisson_8,spellPush3,spellPush7,spellPush8,spellRingBlue_8,spellSparkGreen_8",greater_naga:"spellPush9,spellPush6,spellPush10"},drop:"NA",maxdestination:3,destinations:""},
     la_Mina: {legend:"",name:"Mine",enemies:"el_Enano,el_Maro,el_Ogro,el_Rojo",bossSpell:"spellPush10,spellPush6,spellPush9,spellChispasRed_8,spellPush4,spellRainRed_24,spellRingPale_8",boss:"rojo",drop:"gema",maxdestination:3,destinations:"la_Pradera,el_Pantano,el_Duenon"},
 };
+
+// The bosses of a zone (a zone may have a couple: `bosses`, a comma list; otherwise just `boss`).
+export const bossesOf = (zone) => (zone.bosses ? zone.bosses.split(",") : [zone.boss]).filter(Boolean);
 
 // Every place the wizard can stand: map coordinates for special backgrounds (altars, inns, dice houses)
 // and the five stages of each zone with their internal moves and inter-zone destinations.
@@ -46,6 +50,7 @@ export const places = {
     la_Torre_altar: {x:0.412,y:0.336},
     la_Tundra_altar: {x:0.596,y:0.52},
     las_Dunas_altar: {x:0.164,y:0.675},
+    la_playa_altar: {x:0.9,y:0.324},
     el_Bosque1: {zone:"el_Bosque",x:0.292,y:0.404,moves:"el_Bosque2,el_Bosque3",destinations:"la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5,la_Pradera1,la_Tundra1"},
     el_Bosque2: {zone:"el_Bosque",x:0.332,y:0.32,moves:"el_Bosque1",destinations:"el_Heidan1,el_Heidan2,el_Heidan3,el_Pantano4,el_Pantano5,la_Tundra1"},
     el_Bosque3: {zone:"el_Bosque",x:0.428,y:0.524,moves:"el_Bosque1,el_Bosque4",destinations:"la_Ciudad1,la_Ciudad2,la_Ciudad3,la_Ciudad4,la_Ciudad5,la_Gruta4,la_Gruta5,la_Pradera4,la_Tundra1,la_Tundra2,la_Tundra5"},
@@ -143,6 +148,11 @@ export const places = {
     la_Tundra3: {zone:"la_Tundra",x:0.62,y:0.42,moves:"la_Tundra2,la_Tundra4,la_Tundra5",destinations:"el_Bosque4,el_Bosque5,el_Castillo1,el_Castillo2,el_Castillo3,el_Castillo4,el_Castillo5"},
     la_Tundra4: {zone:"la_Tundra",x:0.596,y:0.452,moves:"la_Tundra2,la_Tundra3,la_Tundra5",destinations:"el_Bosque4,el_Bosque5,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5"},
     la_Tundra5: {zone:"la_Tundra",x:0.588,y:0.484,moves:"la_Tundra2,la_Tundra3,la_Tundra4",destinations:"el_Bosque3,el_Bosque4,el_Bosque5,el_Poblado1,el_Poblado2,el_Poblado3,el_Poblado4,el_Poblado5"},
+    la_playa1: {zone:"la_playa",x:0.928,y:0.156,moves:"",destinations:""},
+    la_playa2: {zone:"la_playa",x:0.9,y:0.324,moves:"",destinations:""},
+    la_playa3: {zone:"la_playa",x:0.936,y:0.464,moves:"",destinations:""},
+    la_playa4: {zone:"la_playa",x:0.864,y:0.468,moves:"",destinations:""},
+    la_playa6: {zone:"la_playa",x:0.76,y:0.452,moves:"",destinations:""},
     las_Dunas1: {zone:"las_Dunas",x:0.07,y:0.6,moves:"las_Dunas2,las_Dunas3,las_Dunas4",destinations:"la_Mina5"},
     las_Dunas2: {zone:"las_Dunas",x:0.2,y:0.668,moves:"las_Dunas1,las_Dunas3,las_Dunas4,las_Dunas5",destinations:"la_Mina5,el_Duenon1,la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4,la_Pradera4"},
     las_Dunas3: {zone:"las_Dunas",x:0.07,y:0.53,moves:"las_Dunas1,las_Dunas2,las_Dunas4",destinations:"la_Mina5,la_Pradera4"},
