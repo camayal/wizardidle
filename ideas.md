@@ -186,3 +186,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): lamia sea-jump entrance (entrances.js, kind seaJump) as a trial; the greater naga follows if the author likes it (move him to the seaJump list). Splash sound pending.
 - 2026-11-20 (dev): lamia jump starts in the visible sea; lamia and greater naga added to the medium boss box (render.js npcBox); the greater naga keeps the sand rise (author likes it).
 - 2026-11-20 (dev): lamia jump faster; greater naga sandBurst entrance (burrow with a sand palette, bigger); dev console lists one boss per line (run.forceBoss). Artist asked for the real beach boss powers.
+- 2026-11-20 (dev): la_playa6 renamed la_playa5 (the Beach now has scenes 1-5; the author's numbering slip). Maelstrom scene spell final art wired; tidal wave art awaits the author's verdict.
