@@ -176,3 +176,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): trial walk line now 4 px (headLevel 0.09375); overlays drawn for feet row 60 need shifting up 4 rows if kept.
 - 2026-11-20 (dev): taller bridge overlays + 6 stairs overlays wired (overlays.js).
 - 2026-11-20 (dev): south and swamp bridge overlays cut 2 top rows (rail was too tall).
+- 2026-11-20 (dev): south and swamp rails cut 2 more rows (4 total); the stairs front railings were disliked and removed from the game; artist asked for short ornaments instead.

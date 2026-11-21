@@ -302,7 +302,12 @@ export const travelOverrides = {
     "stairs_N|stairs_n_ground": "move",
     "stairs|stairs_above": "move"
 };
-export const travelPositions = {};
+export const travelPositions = {
+    "mouth_130_120": [
+        130,
+        119
+    ]
+};
 export const travelPoints = {
     "ladder_cueva4_mina2": {
         "kind": "connector",
