@@ -171,3 +171,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): connector scenes registered as scenes (connectors.js connectorSceneInfo; map dot via travelGraph.pointSpot). Events inside and stage entries wait for thinker: chance, scene length, enemy list of a connector (zone it joins? either side?), mirrored cast.
 - 2026-11-20 (dev): walkAcross ends with him standing in his place (no walk-in after the last connector scene), author's request.
 - 2026-11-20 (dev): bridge overlays wired (overlays.js, img/places/overlays); spring wall shifted 3 rows (feet row 60). Leaving inn/dice house now exits to the street at the door and walks right into the next scene (render.leavePlace).
+- 2026-11-20 (dev): TRIAL walk line +2 px everywhere (headLevel 0.109375 -> 0.1015625, layout.js + game.js); revert by restoring the number if scenes look floaty.
