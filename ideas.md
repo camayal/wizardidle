@@ -171,3 +171,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): connector scenes registered as scenes (connectors.js connectorSceneInfo; map dot via travelGraph.pointSpot). Events inside and stage entries wait for thinker: chance, scene length, enemy list of a connector (zone it joins? either side?), mirrored cast.
 - 2026-11-20 (dev): walkAcross ends with him standing in his place (no walk-in after the last connector scene), author's request.
 - 2026-11-20 (dev): connector walk line raised 3 px (render.wizardY, CONNECTOR_LIFT).
+- 2026-11-20 (dev): connector lift 3 -> 6 px (3 not visible at the author's scale).
