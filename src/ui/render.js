@@ -731,7 +731,7 @@ function wizardName() {
 // rest): [x, y, width, height].
 function npcBox(npc, squareSideIn = ui.squareSide, headLevelIn = ui.headLevel, charWidthIn = ui.charWidth, charHeightIn = ui.charHeight) {
     //medium size bosses (64x64px)
-    if (npc === "arcangel" || npc === "doria" || npc === "midas" || npc === "kkck" || npc === "herbus" || npc === "skeleton" || npc === "medusa" || npc === "rainbow" || npc === "rojo") {
+    if (npc === "arcangel" || npc === "doria" || npc === "midas" || npc === "kkck" || npc === "herbus" || npc === "skeleton" || npc === "medusa" || npc === "lamia" || npc === "greater_naga" || npc === "rainbow" || npc === "rojo") {
         return [squareSideIn * 6, headLevelIn - (ui.objectSize * 0.03515625), charWidthIn * 1.25, charHeightIn * 1.25];
     }
     //big bosses (64x64px)

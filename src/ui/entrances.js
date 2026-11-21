@@ -189,13 +189,13 @@ function pose(kind, t, k) {
             p.dust = Math.min(2, Math.floor(v * 3));
             p.landed = v;
         }
-    } else if (kind == "seaJump") {                                        // from the sea at the top right: tiny on the horizon, an arc across the sky growing, a splash
+    } else if (kind == "seaJump") {                                        // from the visible sea at the top right (the boss box is 40 px wide at x 192-232 of the 256 scene): small on the horizon, an arc across the sky growing, a splash
         const T = 0.72;
         if (t < T) {
             const u = t / T;
-            p.dx = 95 * (1 - u);
-            p.dy = -46 * (1 - u) - 4 * 14 * u * (1 - u);                   // the climb down plus the hump of the arc
-            p.sx = p.sy = 0.14 + 0.86 * u;                                 // far away, then near
+            p.dx = 22 * (1 - u);
+            p.dy = -25 * (1 - u) - 4 * 14 * u * (1 - u);                   // the climb down plus the hump of the arc
+            p.sx = p.sy = 0.25 + 0.75 * u;                                 // far away, then near
         } else {
             const v = clamp01((t - T) / (1 - T));                          // lands squashed, rises back, the splash
             p.sy = 0.78 + 0.22 * v; p.sx = 1.16 - 0.16 * v;

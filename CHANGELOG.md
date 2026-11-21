@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The lamia's sea jump now starts inside the visible sea (small, over the water at the right) instead of off the scene's edge. The lamia and the greater naga are now drawn at the medium boss size (as Medusa) instead of in a small 32 px box. The greater naga keeps rising from the sand.
 - The lamia now arrives by jumping in from the sea at the top right: tiny on the horizon, an arc across the sky growing, a landing squash and a splash (all drawn by code, no sound yet). A trial; the greater naga still rises from the water until the author likes it. In the dev tests it is the `seaJump` arrival.
 - The Water school has its real art: a water bolt (heavy splat with foam), a whirlpool and a water cast spark. The naga sharpshooter now shoots a teal thorn (a new sting) instead of an arrow.
 - The beach bosses fight with their own moves now (placeholder art): the lamia casts a maelstrom, a tidal wave and a serpent gaze (the gaze may make the wizard lose his next attack), the greater naga makes a tide charge, fury slaps and a coil crush. The strips and scenes are stand-ins until the artist draws them; the sounds and the sea-jump entrance are still to come.
