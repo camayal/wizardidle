@@ -347,8 +347,8 @@ const pickerActions = {
     gift(f) { GIFTS[f('gift')](); updateHeading(); },
     connector(f) {
         const steps = connectorTests()[Number(f('connector'))].steps;
-        loop.stop('master');
-        clearNPC();
+        resetScene();                   // the running event, walk and fight end first (also thaws the clocks)
+        run.crossing = null;
         walkAcross(steps, showStage, nextEvent);
     },
     boss(f) {
