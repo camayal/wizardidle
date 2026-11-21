@@ -19,7 +19,7 @@ import { saveGame, state, world } from '../state.js';
 import { fight, run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { enemySprites, enemyTypes } from '../data/enemies.js';
-import { bossesOf, zones } from '../data/zones.js';
+import { bossesOf, places, zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
 import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStage, updateHeading, walkAcross } from '../ui/render.js';
@@ -64,6 +64,7 @@ function xpToReach(target) {
 
 function moveTo(zone) {
     state.zone.current = zone;
+    if (!places[zone + state.zone.stage]) state.zone.stage = [1, 2, 3, 4, 5].find((n) => places[zone + n]) || 1;     // a stage the zone has (the Beach has no 5)
 }
 
 // The first sprite with a flag (rare, corrupted) whose family lives in some zone.
