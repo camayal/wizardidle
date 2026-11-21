@@ -76,5 +76,5 @@ Open (asked one at a time, answers recorded here):
 2. Is the game live while a scroll is open beside it? DECIDED (2026-11-20): fully live and clickable, story chapters too.
 3. What switches wide mode on? DECIDED (2026-11-20): the window size (wide and tall enough), on any device.
 4. Sharpness: snap the scene or fill the height? DECIDED (2026-11-20): snap to whole pixels.
-5. Column order.
+5. Column order. DECIDED (2026-11-20): game on the left, scrolls to the right.
 6. Smartwatch layout.
