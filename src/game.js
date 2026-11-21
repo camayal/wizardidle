@@ -21,7 +21,7 @@ import { settleAway, watchHidden } from './away.js';
 const version = "2.2.0"; // "-dev" until the release; v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
-ui.headLevel = ui.objectSize * 0.1015625;      // head at row 26 of 256 (was 28: the walk line raised 2 sprite px, 2026-11-20)
+ui.headLevel = ui.objectSize * 0.0859375;      // head at row 22 of 256 (was 28: the walk line raised 6 sprite px, 2026-11-20)
 ui.squareSide = ui.objectSize * 0.125;//64;
 ui.charWidth = ui.squareSide; ui.charHeight = ui.squareSide;
 ui.em = getEM();
