@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fixed: the wizard vanished in every connector walk (bridges, stairs, mouths, ladder, pier): the map's position dot looked the scene up as a map place and failed on connector scenes, stopping the walk with the scene shown and him off screen. It now just hides the dot there. Checked in a headless browser: the bridge walk and the mouth fade plus tunnel walk now run to the end.
 - The ladder between the cave and the mine is crossed like a mouth: he walks to the ladder, the scene fades and he appears at the mine's shaft (or the other way up). Developer tools: a new Connectors list in the dev panel forces any bridge, stairs, mouth, ladder or the pier walk on the spot, both directions, so they can be watched without waiting for a trip. Untested in a browser.
 - The south mine's mouth (the desert dunes) now has its tunnel scene: after fading underground he walks through enter_mine_S, and before the fade coming out. Where that scene really belongs is a guess: tell me if it sits elsewhere. Untested in a browser.
 - The pier is a place to visit: an exploring wizard near it (the Town, the Prairie bridge stages) sometimes walks out to its end, stands there a few seconds (the future fishing spot) and walks back, right to left. Chance and stay are placeholders (config.balance.pPier, PIER_STAY_MS), untested in a browser.

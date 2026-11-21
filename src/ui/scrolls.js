@@ -141,6 +141,7 @@ function localizarBocadillo(){
     el("zoneMap").innerHTML = page == mine ? `The ${zones[state.zone.current].name}` : "Map";
     if (page != mine || ui.currentBackGround.match(/_altar/) || ui.currentBackGround.match(/_estatua/)) return hide();
     const localidad = places[ui.currentBackGround];
+    if (!localidad) return hide();       // a connector scene (bridge, mouth...) is not a place on the map
     const mapWidth = el("backMapa").style.width;
     el("bocadilloMapa").style.display ="block";
     el("pjMapa").style.display ="block";
