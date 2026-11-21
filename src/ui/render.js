@@ -370,7 +370,7 @@ function walkBackThroughScene(changeScene, onArrive) {
 // `start` to `end` (offsets; by default from just outside one edge to just outside the other). With
 // fade he stops at `end` (a door) and the scene fades into the next one, where he appears at that
 // step's `start` (its opening). With pause (ms) he stands still at `end` that long first. The first step is reached by walking out of the scene he is in; at the
-// end changeScene shows the real destination and he walks in to his place from the same side.
+// end changeScene shows the real destination and he stands in his place (no walking in).
 function walkAcross(steps, changeScene, onArrive) {
     const side = (d) => d > 0 ? OFF_RIGHT : OFF_LEFT, entry = (d) => d > 0 ? OFF_LEFT : OFF_RIGHT;
     const startOf = (s) => s.start != null ? s.start : entry(s.dir);
@@ -380,10 +380,10 @@ function walkAcross(steps, changeScene, onArrive) {
         walkWizardTo(s.end != null ? s.end : side(s.dir), () => {
             const show = () => {
                 if (more) loadBackground(steps[i + 1].scene); else changeScene();
-                ui.wizardOffset = more ? startOf(steps[i + 1]) : entry(s.dir);
+                ui.wizardOffset = more ? startOf(steps[i + 1]) : 0;      // after the last scene he just stands in his place
                 if (!run.simulation) drawWizard();
             };
-            const next = () => more ? play(i + 1) : walkWizardTo(0, onArrive);
+            const next = () => more ? play(i + 1) : (onArrive && onArrive());
             const go = () => { if (s.fade) fadeScene(show, next); else { show(); next(); } };
             if (s.pause && !run.simulation && document.hasFocus()) {     // a stop at `end` (the pier's end), then on
                 loop.freezeGame();
