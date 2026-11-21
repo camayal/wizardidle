@@ -41,3 +41,4 @@ Built and committed, all untested in a browser (no node in the dev session): bri
 - Still open from the author: bridge halves shown as neighbours with no gap (done by order, no joined wide scene); exit markers drawn per connector pair; enter_mine_S placement.
 - Test the front overlays (la_mina6, la_mina7) and the new stages in a browser.
 - After that: la_playa zone data (docs/MAPS.md step 5).
+- Delta dropped (author, 2026-11-20): `el_delta` is skipped (art was poor); the coast is the beach only. Dev: when `fx_sting` arrives, the naga sharpshooter (`la_naga6`, type range) uses it in the "shoot" move in place of `fx_arrow` (src/ui/enemyMoves.js, FX_SIZE).
