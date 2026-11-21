@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- Taller bridge handrails (the stone wall now hides about 40% of him, the rope rails have taller posts and a second rope) and a front railing on the six Heidan stairs scenes, all drawn for the new walk line (feet on row 56). Untested by eye in the game.
+- Taller bridge handrails (the south and swamp rails were then cut 2 rows lower at the author's request; the stone wall now hides about 40% of him, the rope rails have taller posts and a second rope) and a front railing on the six Heidan stairs scenes, all drawn for the new walk line (feet on row 56). Untested by eye in the game.
 - Trial: the walk line is 4 sprite pixels higher in every scene (tried 2 and 6 first, at the author's request) (the wizard, enemies, finds and spells all move together; ui.headLevel 28 to 24 in layout.js and game.js). To undo, put 0.109375 back in those two lines. Feet now sit on row 56 of the art; the overlays were drawn for row 60.
 - The wizard now walks behind the bridge rails: the six bridge scenes have front overlays (a low stone wall on the spring bridge, the rope rail and posts on the south and swamp bridges). The artist drew them for feet on row 57; his feet are on row 60, so the stone wall was moved down 3 rows (the rope rails already reach the bottom). The other connectors need none.
 - Leaving an inn or a dice house in the Town or City: out through the door, a fade to the street at that door, then he walks right out of the scene and into the next, like any trip (the author's idea, taken from the connectors). Untested in a real run.
