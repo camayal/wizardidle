@@ -68,7 +68,7 @@ function ruleFrame(file, img) {
     if (/^anim_(mother|icedra|hydskon)_grow/.test(b)) return [64, h];
     if (Object.keys(bossAttacks).some((x) => b.startsWith(`anim_${x}_`))) return [104, 80];
     if (/^spell/.test(b)) return [30, 30];
-    const fx = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8], fx_arrow: [12, 5], fx_thrust: [28, 10], fx_smash: [24, 40], fx_impact: [16, 16] };
+    const fx = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8], fx_arrow: [12, 5], fx_sting: [12, 5], fx_thrust: [28, 10], fx_smash: [24, 40], fx_impact: [16, 16] };
     if (fx[b]) return fx[b];
     if (/^fx_spark_/.test(b)) return [16, 16];
     return null;

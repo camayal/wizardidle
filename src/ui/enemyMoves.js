@@ -45,7 +45,7 @@ const SPELL_SCHOOL = { spellPush1: "arcane", spellPush2: "arcane", spellPush3: "
     spellPushWater: "water", spellRingWater_8: "water" };
 
 // Overlay strips: frame width and height in sprite pixels (school sparks are 16 x 16).
-const FX_SIZE = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8], fx_arrow: [12, 5],
+const FX_SIZE = { fx_slash: [24, 32], fx_bite: [14, 14], fx_dust: [24, 8], fx_arrow: [12, 5], fx_sting: [12, 5],
     fx_thrust: [28, 10], fx_smash: [24, 40], fx_impact: [16, 16] };
 const WIZARD_DISTANCE = 160;        // sprite px from the enemy's box to the wizard's (5 squares)
 
@@ -53,11 +53,11 @@ const WIZARD_DISTANCE = 160;        // sprite px from the enemy's box to the wiz
 // feet), the overlay [strip, frame, x, y] relative to the enemy's 32 x 32 box, and a shake.
 // The blow lands on the frame marked hit (by default the one before last). The frame lists of
 // shoot, thrust, smash and charge are the artist's.
-function frames(kind, school) {
+function frames(kind, school, shot = "fx_arrow") {
     const f = (dx = 0, dy = 0, sx = 1, sy = 1, fx = null, shake = 0) => ({ dx, dy, sx, sy, fx, shake });
     if (kind == "shoot") {          // draw, release, recoil; the arrow flies 60 px every 50 ms to the wizard
         const seq = [f(), f(2, 0, 1, 1), f(3, 0, 1.02, 0.98)];      // (the author: too slow at 16 px / 100 ms, then at 36 px / 50 ms)
-        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 60) seq.push({ ...f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, ["fx_arrow", 0, x, 13]), ms: 50 });
+        for (let x = -12; x > 12 - WIZARD_DISTANCE; x -= 60) seq.push({ ...f(seq.length == 3 ? -1 : seq.length == 4 ? 1 : 0, 0, 1, 1, [shot, 0, x, 13]), ms: 50 });
         seq[seq.length - 1].hit = true;
         seq.push(f());
         return seq;
@@ -97,7 +97,7 @@ function frames(kind, school) {
 export function enemyMove() {
     if (fight.polymorphed) return { kind: "pounce" };          // a sheep or a chicken just charges
     const sprite = enemySprites[fight.enemyAndNumber];
-    if (sprite && sprite.type == "range") return { kind: "shoot", family: fight.enemy };      // a sharpshooter: its shot lands as its spell
+    if (sprite && sprite.type == "range") return { kind: "shoot", family: fight.enemy, shot: fight.enemy == "la_naga" ? "fx_sting" : "fx_arrow" };      // a sharpshooter: its shot lands as its spell
     if (sprite && sprite.type != "melee" && SPELL_SCHOOL[fight.spellEnemy]) return { kind: "cast", school: SPELL_SCHOOL[fight.spellEnemy] };
     return { kind: MELEE[fight.enemy] || DEFAULT_MELEE, family: fight.enemy };
 }
@@ -144,7 +144,7 @@ function drawFrame(npc, frame) {
 
 // How long a move lasts and when its blow lands, in ms from its first frame (for the sounds).
 export function enemyMoveTiming(move) {
-    const seq = frames(move.kind, move.school);
+    const seq = frames(move.kind, move.school, move.shot);
     const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
     const ms = (list) => list.reduce((sum, frame) => sum + (frame.ms || 100), 0);
     return { hitMs: ms(seq.slice(0, hitAt)), totalMs: ms(seq) };
@@ -157,7 +157,7 @@ export function playEnemyMove(move, onHit) {
     let hit = false;
     const land = () => { if (!hit) { hit = true; onHit(); } };
     if (run.simulation || !document.hasFocus() || !state.npc) return land();
-    const npc = state.npc, seq = frames(move.kind, move.school);
+    const npc = state.npc, seq = frames(move.kind, move.school, move.shot);
     const sound = MOVE_SOUND[move.family];
     if (sound && sound[0] == move.kind) playSoundAt(sound[1], sound[2], sound[3]);
     const marked = seq.findIndex((frame) => frame.hit), hitAt = marked >= 0 ? marked : seq.length - 2;
