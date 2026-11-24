@@ -2441,3 +2441,39 @@ Open: one big interior with every service, or several scenes inside the tent (in
 ```
 
 - Desert tent (thinker, 2026-11-24, author approved, build it): plan in docs/plans/DESERT_TENT.md. The tent keeps its one interior (el_desierto_taberna) and old scene, no new art. Each visit has one purpose, and the scene shows only what it needs: dice = the desert bone table appears and he plays; sleep = he walks in a little and sleeps; buying = he walks to the far end to the shopkeeper (only once professions ship). One tent keeper does it all (reuse today's innkeeper sprite). Purpose: sleep when he needs rest, else dice (later buying) by chance like the City and Town explore events; shares wait for playtests. This adds dice to the desert's explore event.
+
+## Quest notes, planned in docs/plans/QUESTS.md (cut 2026-11-24)
+
+```
+Date: 2026-11-20 23:29
+Author's note: send to [[wt, we need something nice, such a missions:
+- some can be assigned by wizard himself, for example pick ingridients, get more gold, something, i think we need to design some learning algoritm here, perhaps genetic algornitm to give some "inteligence"
+- some task in we can asign in the faith screen, most of them to booth the faith points
+- some given by npc in taverns, inns or merchants
+- when a secret is found, wizard is mostly focus on that, looking for something, it is why we need to keep checking pathfinder to give some movement purpose
+```
+
+```
+Date: 2026-11-21 10:23
+Author's note: quests ideas:
+- Wanted type of quests, hunt a given rare or even boss enemy (this increase the changes of finding them a little, not too much because it getting easy, but not as regular because will be boring)
+- Get special ingridients from some enemies, they can be drop anytime, so if the wizard has them in the inventory the wizard can give them , avoid to have spoilable ingredients
+- Explore some zones
+- Fishing quests
+- Crafting quests
+- Find runes, books, or statues to study them
+```
+
+```
+Date: 2026-11-21 10:26
+Author's note: More quest ideas related with faith:
+- Chances of have quest to get good amount of faith in the shrines
+- Short peregrinations, for example visit 3 shries in different zones
+- Find very hiddent shrines (such as vulcano)
+```
+
+```
+Date: 2026-11-21 10:28
+Author's note: More ideas for economy quests:
+- Deliver things from one inn to another (some of those quest need to be reduced the chances when the wizard is in almost final levels, at that moment, only killing or selfimprovement quests should be done.
+```
