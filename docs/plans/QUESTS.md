@@ -61,16 +61,13 @@ Gold, XP, faith or items, by kind: faith tasks give faith, people's jobs give go
 
 ## Open questions
 
-All eight decided 2026-11-24 (see Decisions). Still open: the question for dev below, and every number (playtests).
+All eight decided 2026-11-24 (see Decisions). Dev answered the code question (below). Still open: every number (playtests).
 
-## Question for dev
+## Dev's answer (2026-11-24)
 
-```
-Quests plan (docs/plans/QUESTS.md): can travel.js lean the next-stage pick toward a
-target stage (weight the move on the route, not force it), using the travel graph's
-route()? Is route() fast enough to call at each crossing in play, or only in dev tools?
-And is state.quest (used by the healer cabin) free to become { kind, giver, target, ... }?
-```
+- **Leaning the walk works.** Travel already picks from a list of candidate moves. On a quest, the candidates that bring him closer to the target get extra weight, so he leans toward it without being forced.
+- **Fast enough to run in play.** The travel graph is already used in play (the healer's cabin uses it). A few lookups at each crossing cost nothing. Limit: **a quest target must be a stage the travel graph knows**, so each quest names a target stage, not just a zone.
+- **`state.quest` is free to reshape.** Only the cabin reads it, and only to check whether one is set. No save migration is needed.
 
 ## Decisions
 
