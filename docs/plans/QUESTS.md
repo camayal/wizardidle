@@ -48,6 +48,8 @@ Two phases (decided 2026-11-24):
 1. **Travelling: he takes the best route.** Travel already knows the steps between two map points. If his quest is in the Tundra, he follows that route stage by stage, the shortest way there. Events on the way (fights, finds, inns) still happen; after them he carries on along the route.
 2. **Searching: he roams the target area.** Once he arrives, he stays in that zone, wandering from stage to stage, and **doesn't leave until he finds what he came for** (the wanted enemy, the shrine, the rune, the inn for a delivery). Then the quest ends, he takes the next one from his queue, and he's travelling again.
 
+**A long search:** the longer he searches, the more likely the target shows up. If it still drags on, he doesn't give up: he moves that quest down the queue and takes the next one, and comes back to it later. Only the god can cancel a quest.
+
 With an empty queue he wanders freely as today.
 
 ### The quest scroll
@@ -74,6 +76,17 @@ All eight decided 2026-11-24 (see Decisions). Dev answered the code question (be
 - **Fast enough to run in play.** The travel graph is already used in play (the healer's cabin uses it). A few lookups at each crossing cost nothing. Limit: **a quest target must be a stage the travel graph knows**, so each quest names a target stage, not just a zone.
 - **`state.quest` is free to reshape.** Only the cabin reads it, and only to check whether one is set. No save migration is needed.
 
+## Dev's answer on the queue and route (2026-11-24)
+
+The design fits travel. Four points:
+
+1. **Staying put.** Today two things push him out of a zone: restlessness (too many events in one zone) and a plain chance to change zone. **While searching, both are switched off.**
+2. **Split zones.** Roaming uses only the moves inside the zone. If a zone's stages only connect through another zone, he can't reach all of them that way. Not checked yet. Default: he may cross through the other zone on the shortest path and come back; that still counts as searching.
+3. **Following the route** takes the next stage on the path at each crossing. The travel pick needs an optional fixed target (code detail).
+4. **Zone-only targets** (a wanted enemy): the quest aims at the zone's nearest stage, then searching starts. Queue order by travel cost works as is.
+
+Events on the way are fine: travel carries on at the next explore.
+
 ## Decisions
 
 | Date | Question | Decision |
@@ -89,3 +102,5 @@ All eight decided 2026-11-24 (see Decisions). Dev answered the code question (be
 | 2026-11-24 | One quest at a time, more precisely | **He works on one quest at a time, but keeps a queue of the others.** When one ends he takes the next. A secret still goes first |
 | 2026-11-24 | How a quest moves him | **He follows the best route to the target zone** (travel's route between two map points), then **roams that zone until he finds what he came for**, never leaving early. Replaces the earlier "lean, not forced" idea |
 | 2026-11-24 | Queue order and size | **Secrets first, then the quest whose target is nearest on the map** (travel cost from where he stands). **A small cap** (count from playtests); when the queue is full he turns down new offers |
+| 2026-11-24 | A search that drags on | **The odds of finding the target rise the longer he searches.** If it drags on anyway he **moves the quest down the queue** (doesn't drop it) and takes the next one. **Only the god cancels.** Restlessness and the zone-change chance are off while searching |
+| 2026-11-24 | Split zones (dev's point 2) | Default, not asked: he may cross another zone on the shortest path to reach a cut-off stage of his target zone; it still counts as searching |
