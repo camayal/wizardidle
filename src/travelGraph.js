@@ -6,7 +6,8 @@
 //   destinations(stage), moves(stage)   the adapter: the same lists the old strings gave
 //
 // A spot is a stage name ("la_Pradera2") or a point {layer, x, y} in map pixels (the 250 px maps).
-// The graph knows nothing about scene counts: that is for the dynamic scenes later.
+// Dynamic scenes: dynamicScenes(cost) turns a walking cost into how many intermediate scenes a leg needs (the longer, the more).
+// The graph itself still knows nothing else about scenes.
 
 import { travelGraph as g } from './data/travelGraph.js';
 import { places } from './data/zones.js';
@@ -78,6 +79,11 @@ function routeIds(a, b) {
     const ids = [];
     for (let n = nodeOf(b); n >= 0; n = prev[n]) ids.unshift(n);
     return ids;
+}
+
+// How many dynamic scenes a leg of this cost needs: one for anything short, one more per config.travel.pxPerScene of cost.
+function dynamicScenes(cost) {
+    return Math.max(1, Math.ceil(cost / config.travel.pxPerScene));
 }
 
 function route(a, b) {
@@ -179,4 +185,4 @@ rebuild();
 // The direct links of a spot: [[node, cost], ...], after the manual verdicts (the dev tools draw them).
 const neighbors = (spot) => adj[nodeOf(spot)] || [];
 
-export { reachesPoint, connectorsBetween, spotX, pointSpot, neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };
+export { dynamicScenes, reachesPoint, connectorsBetween, spotX, pointSpot, neighbors, byName, rebuild, travelCost, route, routeIds, destinations, moves, overrides, pairKey, verdict, SIZE };

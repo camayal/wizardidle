@@ -56,7 +56,6 @@ Author's note: improvements for travel dev console
 - similar to art dev console, add another scene viewer called target, source will be in the top in the actual scene view, the target scene will be display in the target.
 - now conectors have actual scenes, i would like to see the scenes when the conector is selected, most conectors have 2 scenes, put them in source and target
 - if the conector has more than 2 scenes, add more scener viewers
-- be sure to have values of the lenght of the edges of the graph, we need to convert them in sort of unity, for example for xx px we need 2 or 3 dynamic scenes
 ```
 
 ```

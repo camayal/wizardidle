@@ -2193,3 +2193,5 @@ Author's note: regarding god touches, attacking directly bosses, also boost beli
 (travel console note, done) - another function called optimous path, when I select target and one and only one source, use the pathfinder algoritm to identify the path. remember this will be used in the future for the wizard to reach important destinations.
 (travel console note, done) - remove note box, instead the author notes recover technical info about everythign it is in the travel dev console so I can use the normal author notes to comunicate about the map, scenes, travel, etc.
 (travel console note, done) - edges should have outline, see green lines in a green praire is dificult
+
+(travel console note, done) - be sure to have values of the lenght of the edges of the graph, we need to convert them in sort of unity, for example for xx px we need 2 or 3 dynamic scenes

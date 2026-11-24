@@ -12,7 +12,7 @@
 
 import { travelGraph as g } from '../data/travelGraph.js';
 import { places } from '../data/zones.js';
-import { neighbors, overrides, pairKey, verdict, byName, rebuild, travelCost, routeIds, SIZE } from '../travelGraph.js';
+import { neighbors, overrides, pairKey, verdict, byName, rebuild, travelCost, routeIds, dynamicScenes, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
 import { travelPoints } from '../data/travelOverrides.js';
 import { sidePanel } from './panel.js';
@@ -122,8 +122,10 @@ function draw() {
                 ctx.strokeStyle = '#000'; ctx.lineWidth = 8; ctx.stroke();
                 ctx.strokeStyle = '#0ff'; ctx.lineWidth = 4; ctx.stroke();
             }
+            const at = (n) => ({ layer: g.nodes[n][0], x: g.nodes[n][1], y: g.nodes[n][2] });
+            const legs = ids.slice(1).map((n, k) => dynamicScenes(travelCost(at(ids[k]), at(n))));
             const stops = ids.map((n) => names[n][0] || g.nodes[n][4]).filter(Boolean);
-            pathText = `<b>Optimal path</b> ${esc(src)} to ${esc(goals[0])}: cost ${Math.round(travelCost(src, goals[0]))} (walking pixels), ${ids.length} spots: ${stops.map(esc).join(' &rarr; ')}`;
+            pathText = `<b>Optimal path</b> ${esc(src)} to ${esc(goals[0])}: cost ${Math.round(travelCost(src, goals[0]))} (walking pixels), about ${legs.reduce((t, l) => t + l, 0)} dynamic scenes (${legs.join(' + ')} per leg), ${ids.length} spots: ${stops.map(esc).join(' &rarr; ')}`;
         }
     }
     p.pathInfo.innerHTML = pathText;
@@ -340,7 +342,7 @@ export async function open(devTools) {
     };
     p.canvas.onmousemove = (e) => {
         const s = nearest(e).name;
-        p.tip.textContent = s ? `${s}${places[s] ? ` (${places[s].zone})` : ''}${src && s !== src ? (neighbors(src).find(([j]) => j === byName[s]) ? `: direct link, cost ${Math.round(neighbors(src).find(([j]) => j === byName[s])[1])}` : ': not a direct link') : ''}` : 'Click a spot for the source, shift-click one for the target.';
+        p.tip.textContent = s ? `${s}${places[s] ? ` (${places[s].zone})` : ''}${src && s !== src ? (neighbors(src).find(([j]) => j === byName[s]) ? `: direct link, cost ${Math.round(neighbors(src).find(([j]) => j === byName[s])[1])}, ${dynamicScenes(neighbors(src).find(([j]) => j === byName[s])[1])} dynamic scene(s)` : ': not a direct link') : ''}` : 'Click a spot for the source, shift-click one for the target.';
     };
     p.save.onclick = async () => {
         const positions = { ...moved };

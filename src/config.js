@@ -72,6 +72,7 @@ export const config = {
         difficultFactor: 3,        // a link set Difficult: its cost times this, at least difficultMin
         difficultMin: 100,
         difficultLimit: 150,       // a direct link dearer than this (a river crossing and more) is shown red in the dev tools
+        pxPerScene: 40,            // dynamic scenes: a leg needs one scene per this much cost, at least one (a first guess, to tune)
         searchDistance: 60,        // two spots this close (map pixels) get a direct edge
         destinationLimit: 45,      // a place this cheap away is a destination (the adapter)
         moveLimit: 45,             // a stage of the same zone this cheap away is a move
