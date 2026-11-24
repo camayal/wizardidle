@@ -117,7 +117,8 @@ const HYDRA_FADE = 5;               // steps the last frame fades over (the last
 const STRIP_ENTER = { herbus: { src: "anim_herbus_enter", frame: 64 } };
 const STRIP_ENTER_MS = 100;
 // The Rainbow's first arrival once the seven spectra are dead: they fly in and fuse into it (src/spectra.js).
-const FUSION = { src: "anim_rainbow_fusion", frame: 64, fusion: true };
+// 24 frames of 256 x 64 (the boss baked in at its own size, centred, from frame 13); 12 fps.
+const FUSION = { src: "anim_rainbow_fusion", frame: 256, high: 64, ms: 83, fusion: true };
 const OFF_RIGHT = 80;               // sprite px from its place to just past the scene's right edge
 
 export function entranceKind(npc) {
@@ -592,14 +593,14 @@ function playStripEnter(npc, done, enter = STRIP_ENTER[npc]) {
         const frames = Math.round(strip.naturalWidth / frame);
         if (state.npc != npc || k >= frames) return finish();
         const [bx, by, bw, bh] = npcBox(npc);
-        const size = frame * bw / img.naturalWidth;
+        const size = frame * bw / img.naturalWidth, tall = (enter.high || frame) * bw / img.naturalWidth;
         const ctx = pixelContext(npcCanvas);
         ctx.clearRect(0, 0, npcCanvas.width, npcCanvas.height);
-        drawFrame(ctx, strip, k * frame, 0, frame, strip.naturalHeight, bx + (bw - size) / 2, by + bh - size, size, size);
+        drawFrame(ctx, strip, k * frame, 0, frame, strip.naturalHeight, bx + (bw - size) / 2, by + bh - tall, size, tall);
         k++;
     };
     step();
-    loop.every("animNPC", step, STRIP_ENTER_MS);
+    loop.every("animNPC", step, enter.ms || STRIP_ENTER_MS);
 }
 
 // A hydra (any head count) arrives under its zone's effect: the strip is centred on the hydra's

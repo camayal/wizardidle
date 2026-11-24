@@ -62,7 +62,7 @@ Zone: Tundra, stage 3
 On the scene: rainbow (boss fight)
 Speed x1
 Date: 2026-11-21 10:07
-STATUS 2026-11-24: spectra, quest flag and prism find are in the code; fusion strip and prism icon are options in the review drop awaiting the author's pick, then dev wires them (item_prism, anim_rainbow_fusion).
+STATUS 2026-11-24: all wired (fusion B, prism B); only a browser test is left.
 Author's note: for this boss, i would like to add another special events:
 1. appear rare npcs in the following sheet C:\Users\camayal\OneDrive\Documentos\GitHub\wizardidle-old-ideas\unorganzed_sprites\dark-skelets.png
 2. these rare enemies only apper once and they are take off of the pool of enemies. 
