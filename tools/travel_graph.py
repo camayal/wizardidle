@@ -29,7 +29,7 @@ WAYPOINTS = [('bridge_spring', 'bridge', 125, 145), ('bridge_swamp', 'bridge', 1
 BRIDGES = [(x, y) for _, kind, x, y in WAYPOINTS if kind == 'bridge']
 BRIDGE_RADIUS = 7
 # Cave and mine mouths: the same spot on the ground map and on the underground map.
-ENTRANCES = [(147, 31), (27, 114), (87, 224), (229, 64), (33, 165), (218, 182), (130, 120)]
+ENTRANCES = [(147, 31), (27, 114), (87, 224), (229, 64), (33, 165), (218, 182), (130, 120), (100, 181)]
 STAIRS = (212, 205)                                      # the sacred stairs, ground -> Heidan (a guess, to confirm)
 
 
