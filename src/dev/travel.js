@@ -74,8 +74,9 @@ function autoKind(a, b) {
 }
 
 function line(ctx, a, b, color) {
-    ctx.strokeStyle = color; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(a[0] * ZOOM, a[1] * ZOOM); ctx.lineTo(b[0] * ZOOM, b[1] * ZOOM); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(a[0] * ZOOM, a[1] * ZOOM); ctx.lineTo(b[0] * ZOOM, b[1] * ZOOM);
+    ctx.strokeStyle = 'rgba(0,0,0,0.85)'; ctx.lineWidth = 4; ctx.stroke();       // dark outline: a green line stays visible on green grass
+    ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
 }
 
 function draw() {
@@ -148,8 +149,6 @@ function draw() {
 function drawLink() {
     const has = src && tgts.some((t) => t !== src), vs = has ? tgts.filter((t) => t !== src).map((t) => verdict(src, t)) : [];
     const own = isCustom(src);
-    p.note.disabled = !own; p.noteLabel.textContent = own ? `Notes for ${src}:` : 'Notes:';
-    if (document.activeElement !== p.note) p.note.value = own ? points[src].note || '' : '';
     p.srcPlace.style.fontWeight = placing === 'src' ? 'bold' : '';
     p.tgtPlace.style.fontWeight = placing === 'tgt' ? 'bold' : '';
     p.newAdd.textContent = placing === 'new' ? 'click the map...' : 'Add point';
@@ -260,7 +259,6 @@ export async function open(devTools) {
         </div>
         <div data-id="linkInfo"></div>
         <div data-id="checkInfo"></div>
-        <div class="row"><b data-id="noteLabel">Notes:</b><textarea data-id="note" rows="2" style="flex:1" placeholder="notes for the future (select a future scene or connector you added)" disabled></textarea></div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
             <span>Only the direct links of the source are drawn, as straight lines; a spot reached only through another is not a neighbour.</span>
@@ -292,7 +290,6 @@ export async function open(devTools) {
         save(); draw();
         p.tip.textContent = `${list.join(', ')}: type switched. Save verdict and reload to apply it to the graph.`;
     };
-    p.note.oninput = () => { if (isCustom(src)) { points[src].note = p.note.value.slice(0, 500); save(); } };
     p.deselect.onclick = () => { tgts = []; choose('src', ''); };
     p.check.onclick = () => { checking = !checking; p.check.textContent = checking ? 'Hide check' : 'Check connections'; draw(); };
     p.nums.onclick = () => { showNums = !showNums; p.nums.textContent = showNums ? 'Hide numbers' : 'Show numbers'; draw(); };

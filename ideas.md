@@ -198,3 +198,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): "First earned by" done; lamia attack animations were already wired. The la_Mina2 rail is in the art (la_mina2.png): for the artist, left in dev-notes.
 - 2026-11-24 (dev): faith meter stick (statsPages.js, .faithStick in index.html) and the boss-blank-before-a-move fix (ui/bossAttacks.js: canvas cleared at the first frame, not at the start) done, untested in a browser. The Texts console error is fixed (a newline inside a string, texts.js:170). The belief meter marker art and the la_Mina2 rail are in art-notes for the artist.
 - 2026-11-24 (dev): belief meter marker art B (needle on a bead, 5x11) wired in place of the stand-in stick; untested in a browser.
+- 2026-11-24 (dev): travel console edge outline + note box removed; la_mina4 option A copied in; sea-coloured boss spells are art, sent to art-notes. la_Mina2 option C waits for the author's yes.

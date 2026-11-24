@@ -64,6 +64,7 @@ Author's note: checking other details about etymos boss, i decided to keep the s
 ```
 Date: 2026-11-24 (from the author, via dev)
 la_Mina2 (img/places/la_mina/la_mina2.png): the rail road should only extend a little to the right of the scene and never reach the left edge, following the map art. Redraw the rail in the scene and drop it in the review drop.
+Artist 2026-11-24: author approved option C, review/scene_mina/la_mina2_c.png. Waiting for dev to copy it into img/; archive this note after that.
 ```
 
 
@@ -85,4 +86,9 @@ Author's note: [[wa regarding the healer hood, i was never happy with the result
 ```
 Date: 2026-11-21 10:07 (from the author, via dev)
 Rainbow boss, art part: dark spectrum enemies (sheet wizardidle-old-ideas/unorganzed_sprites/dark-skelets.png), one per colour: red, orange, yellow, green, blue, indigo, violet. Some exist already; recolour so every colour of the Rainbow boss is represented. Light-school attacks in their colour; Tundra only. Also dye the Rainbow boss's yellow cape black to match the spectrum. Dev wires events later.
+```
+
+```
+Date: 2026-11-24 (from the author, via dev)
+Lamia and greater naga: the colours of their spell powers (maelstrom, tidal_wave, tide_charge and the other strips and scene spells) should match the colour of the sea in the beach scenes. It is all art, no code: recolour and drop them in the review drop.
 ```

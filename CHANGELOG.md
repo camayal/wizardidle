@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Travel dev console: the edges have a dark outline (a green line on green grass was hard to see) and the notes box is gone.
+- La_Mina4 is redrawn as a rail junction: the branch comes toward the viewer with a switch lever.
 - The Texts dev mode loads again (a stray line break inside a string in the away poems made the whole tools script fail with "Invalid or unexpected token").
 - The belief meter's marker on the stained-glass ring is now a small gold needle on a round bead that points out from the candle and slides back and forth, so it reads as something that moves (it was a tiny diamond).
 - A boss no longer vanishes just before one of its moves (seen with the skeleton): its sprite now stays until the move's first frame is ready, instead of the scene being wiped at once and the boss coming back later.
