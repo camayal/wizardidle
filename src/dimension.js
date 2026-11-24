@@ -7,6 +7,7 @@
 
 import { DEV } from './config.js';
 import { makeReadOnly } from './state.js';
+import { stats } from './stats.js';
 import { run } from './runtime.js';
 import { el } from './ui/dom.js';
 import { print } from './ui/render.js';
@@ -53,6 +54,8 @@ export function watchDimensions() {
     if (!window.BroadcastChannel) return;
     let last = 0;
     new BroadcastChannel(CHANNEL).onmessage = (e) => {
+        if (e.data == 'opened') { stats.count('world.dimensions.opened'); stats.first('world.dimensions.firstOpened'); }     // counted every time, the console line only now and then
+        if (e.data == 'collapsed') stats.count('world.dimensions.collapsed');
         if (Date.now() - last < 20000) return;
         last = Date.now();
         if (e.data == 'opened') print('<i>Something stirs in another dimension...</i>');

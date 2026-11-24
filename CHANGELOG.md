@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The paradox is counted: every time another tab opens or collapses, the original tab adds it to the world stats (dimensions opened, collapsed, and the first time).
 - Achievements list "First earned by:" instead of "Earned by:".
 - New sounds: the bosses now have their own sound when they arrive and when they leave after beating the wizard (Etymos, Goro, Infraespectro, Midas, Herbus, Cuboq, Skeleton, Rainbow, Fenix, Medusa, Arcangel, Bicaptop's laugh), and new sounds for Doria's and Skeleton's arcane rain, Kkck's poison cloud, Arcangel's golden storm, the lamia's tidal wave and the greater naga's tide charge. Two more (healing rain, divine light) wait for a caster.
 - Saving is locked until the tab knows it is the original (no write can slip in while the lock answer is pending), and browsers without Web Locks (or a page opened from a file) use a fallback: the original tab writes a heartbeat in localStorage and any other tab seeing it fresh is a dimension.

@@ -2140,3 +2140,5 @@ Date: 2026-11-20 22:48
 Author's note: la_Mina2 rail road only should extend to the right of the scene a little bit, never reach the left (following the map art)
 ```
 (sent to the artist's inbox 2026-11-24)
+
+- stats-notes 2026-11-24: the paradox (second tab opened) is counted in the original tab: world.dimensions.opened / collapsed / firstOpened (src/dimension.js watchDimensions)
