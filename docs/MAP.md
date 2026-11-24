@@ -75,6 +75,12 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 - travel_graph.py: builds src/data/travelGraph.js from the maps and zones.js and checks it (--compare with the old strings, --paths <stage> <png> to draw the cheapest paths). serve.py: local server without caching, note saving, and the review drop at review/. land.py: lands a work branch on dev-repo in the main folder by itself (run after every commit by hooks/post-commit, with `git config core.hooksPath tools/hooks`). odds.py: achievement odds in a second from a playtest's odds-data.json (players who quit at random, counters projected, suggested tier). playtest.py: runs many simulations headless and writes docs/playtests/<date>-<name>/ (summary.md, runs.csv). cut_sounds.py: cuts the approved sounds of sound_cuts.txt into snd/. to_ogg.py: turns whole mp3/wav/flac files (or a folder) into game .ogg files, same settings; never convert sounds by hand.
 
+## Vocabulary of places
+
+- **Scene:** a static scene where things happen (a stage's background).
+- **Connector:** a special scene made of two or more scenes that the wizard can walk in reverse (bridges, stairs, mouths, ladder, pier). data/connectors.js: `connectorScenes`, `stairScenes`, `mouthDoors`.
+- **Border:** a static scene that joins two regions, no special rules other than the wizard can walk it in reverse (no battles or events inside, maybe in the future). Art in img/places/borders/border_<from>_<to>.png, drawn with the zone `left` on its left; data/connectors.js: `borderScenes`.
+
 ## How it connects
 
 - Start: main.js, then game.js loads or creates `state`; loop.js starts the master clock every `masterTime`; each tick events.js picks an event.

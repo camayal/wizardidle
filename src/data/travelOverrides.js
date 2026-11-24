@@ -4,6 +4,10 @@
 // by hand ({name: [x, y]} in map pixels); travelPoints: points added by hand ({name: {kind: future|connector, layer, x, y}}),
 // both read by tools/travel_graph.py. See docs/TRAVEL.md.
 export const travelOverrides = {
+    "border_gruta_duenon|el_Duenon1": "move",
+    "border_gruta_duenon|el_Duenon2": "move",
+    "border_gruta_duenon|la_Gruta2": "move",
+    "border_gruta_duenon|la_Gruta3": "move",
     "bridge_south|el_Poblado1": "move",
     "bridge_south|el_Poblado2": "move",
     "bridge_south|el_Poblado3": "move",
@@ -373,5 +377,11 @@ export const travelPoints = {
         "x": 34,
         "y": 166,
         "note": ""
+    },
+    "border_gruta_duenon": {
+        "kind": "connector",
+        "layer": "ground",
+        "x": 89,
+        "y": 179
     }
 };

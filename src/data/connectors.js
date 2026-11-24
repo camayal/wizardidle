@@ -10,6 +10,13 @@ export const connectorScenes = {
     bridge_swamp: ["bridge_swamp_west", "bridge_swamp_east"],
 };
 
+// Border scenes: a static scene joining two regions, no special rules but he can walk it either way. Drawn with the
+// zone on its left and the zone on its right; going the other way he walks right to left over the same art.
+// point -> { left: zone on the left, scene }.
+export const borderScenes = {
+    border_gruta_duenon: { left: "la_Gruta", scene: "border_gruta_duenon" },
+};
+
 // The ground end of each stairs (the point on the Heidan cloud, the other end, only passes the trip on):
 // its three scenes bottom to top, and the point at the top.
 export const stairScenes = {
@@ -50,6 +57,7 @@ const addScenes = (point, label, scenes) => scenes.forEach((s, i) =>
     { SCENE_INFO[s.toLowerCase()] = { point, label, n: i + 1, of: scenes.length }; });
 for (const [c, scenes] of Object.entries(connectorScenes)) addScenes(c, `the ${c.replace("bridge_", "")} bridge`, scenes);
 for (const [c, s] of Object.entries(stairScenes)) addScenes(c, "the Heidan stairs", s.scenes);
+for (const [b, d] of Object.entries(borderScenes)) addScenes(b, "the border between the Grotto and Dueñon", [d.scene]);
 addScenes("pier", "the pier", ["pier_land", "pier_end"]);
 addScenes("enter_mine_S", "the south mine tunnel", ["enter_mine_S"]);
 addScenes("ladder_cueva4_mina2", "the ladder between the cave and the mine", ["ladder_cueva4_mina2_cave", "ladder_cueva4_mina2_mine"]);

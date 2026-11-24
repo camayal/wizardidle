@@ -3,7 +3,7 @@
 
 import { places, zones } from './data/zones.js';
 import { connectorsBetween, destinations, moves, reachesPoint, spotX } from './travelGraph.js';
-import { connectorScenes, DOOR_STOP, mouthDoors, pierSteps, stairScenes } from './data/connectors.js';
+import { borderScenes, connectorScenes, DOOR_STOP, mouthDoors, pierSteps, stairScenes } from './data/connectors.js';
 import { pickRandomItem } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
@@ -43,7 +43,10 @@ function crossing(origin, target) {
     const chain = connectorsBetween(origin, target), steps = [], x = spotX(origin);
     for (let i = 0; i < chain.length; i++) {
         const c = chain[i];
-        if (connectorScenes[c]) {
+        if (borderScenes[c]) {
+            const b = borderScenes[c];
+            steps.push({ scene: b.scene, dir: places[origin].zone === b.left ? 1 : -1 });
+        } else if (connectorScenes[c]) {
             const bx = spotX(c);
             steps.push(...bridgeSteps(c, x !== undefined && bx !== undefined && x > bx ? -1 : 1));
         } else if (stairScenes[c] || Object.values(stairScenes).some(s => s.top === c)) {
@@ -65,6 +68,9 @@ function connectorTests() {
     const list = [];
     for (const c of Object.keys(connectorScenes)) {
         list.push({ label: `${c}: west to east`, steps: bridgeSteps(c, 1) }, { label: `${c}: east to west`, steps: bridgeSteps(c, -1) });
+    }
+    for (const [b, d] of Object.entries(borderScenes)) {
+        list.push({ label: `${b}: left to right`, steps: [{ scene: d.scene, dir: 1 }] }, { label: `${b}: right to left`, steps: [{ scene: d.scene, dir: -1 }] });
     }
     for (const g of Object.keys(stairScenes)) {
         list.push({ label: `${g}: up`, steps: stairSteps(g, true) }, { label: `${g}: down`, steps: stairSteps(g, false) });

@@ -52,6 +52,7 @@ export function artFolder(name) {
     if (/^spell/.test(name)) return 'effects/spells';
     if (/^scene_/.test(name)) return 'effects/scene';
     if (/^overlay_/.test(name)) return 'places/overlays';      // front layer of a scene (data/overlays.js)
+    if (/^border_/.test(name)) return 'places/borders';     // border scenes: a static scene joining two regions (data/connectors.js)
     if (/^(bridge|mouth|enter_mine|ladder|pier|stairs)_/.test(name)) return 'places/connectors';     // the connector scenes (bridges, cave and mine mouths, ladders, pier, stairs)
     if (/^fx_/.test(name)) return 'effects/fx';
     if ((m = /^([a-z]+_[a-z]+?)(\d+|_altar|_estatua|_taberna|_casadados)$/.exec(name)) && ZONES.has(m[1])) return `places/${m[1]}`;
