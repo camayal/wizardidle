@@ -254,6 +254,7 @@ export const travelOverrides = {
     "la_Mina5|mouth_27_114_under": "far",
     "la_Mina6|mouth_27_114_under": "move",
     "la_Mina7|mouth_147_31_under": "move",
+    "la_Mina7|mouth_229_64_under": "move",
     "la_Pradera10|la_Pradera13": "dest",
     "la_Pradera10|la_Pradera8": "move",
     "la_Pradera10|la_Pradera9": "move",
