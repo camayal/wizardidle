@@ -61,3 +61,12 @@ Author's note: checking other details about etymos boss, i decided to keep the s
 Date: 2026-11-21 19:45
 Author's note: Taverns need to be redesigned by [[wa, the new walk line makes the wizard walk about the tables.
 ```
+
+## Dice house: table and thrown dice (author, 2026-11-21; brief by dev 2026-11-24)
+
+The dice are only shown in the text console today. The author wants the dice in the scene: a small table beside the gambler (the NPC player in the dice house scene, 256x64 like el_poblado_casadados / la_ciudad_casadados), and when the wizard sits in, tiny dice are thrown onto it.
+- Table sprite for the two dice houses, placed between the gambler and the wizard's spot (the gambler's x is in the art; leave room for the wizard to stand opposite).
+- Dice sets, by place: red dice for the City, wooden dice for the Town, bone dice (white-yellowish) for the desert. Faces 1-6 each (the console uses 20x20 d1-d6 in img/objects; the scene ones should be tiny, about 6-8 px, readable on the table).
+- Thrown dice: a short roll frame or two (tumbling) per set, plus the resting faces.
+- The desert has no dice place yet: the tent is the inn, tavern and gambling house. A small table or mat inside the tent scene, with the bone dice, would do.
+Open for the author: other games later (shut the box, sevens) would reuse the table.
