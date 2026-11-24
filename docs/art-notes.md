@@ -28,11 +28,9 @@ Author's note: for @artist, el_Duenon7 (future scene, travel map): the sea part 
 - For artist (author, 2026-11-20): the Heidan stairs scenes (stairs_s_base/mid/top, stairs_n_base/mid/top) are fine as they are: no overlay needed there.
 - For artist (dev, 2026-11-20): the first six connector overlays (bridges) are in the game. His real feet row is 60 (head at row 28), not 57: dev moved the stone wall of the spring bridge down 3 rows (now rows 52-60); the rope rails were left as drawn. Use feet = row 60 from now on.
 
-## Water school (new, enemy-only for now)
-
-- For artist (dev, 2026-11-20): a new **Water school** exists (enemy-only for now: the beach nagas and the lamia use it). Pending art, today all copies of the frost files: `spellPushWater` (12 frames, "Water bolt", same strip format as spellPush8), `spellRingWater_8` (16 frames, "Whirlpool", like spellRingBlue_8) and `fx_spark_water` (the cast spark of water casters, like fx_spark_frost). Water is its own look, not ice: teal, foam and droplets. Later: a water version of the school's other effects (scene spells like a tidal wave) once the boss attacks are chosen.
-
 ## Beach bosses: lamia and greater naga
+
+- Status (dev, 2026-11-24): the Water spells, all six boss moves, both scene spells and both 64 px sprites are done and in the game. Only the entrance remains and it is optional: dev made it with code (the lamia's sea jump, the naga's sand burst); the author may still ask for `anim_<boss>_enter` strips.
 
 - For artist (author + dev, 2026-11-20): **the beach bosses, lamia and greater naga** (both 64 x 64, `img/bosses/<boss>/`; the greater naga is today the 32 px sprite doubled, so redraw it at 64 and hand over both final sprites). Attacks follow the usual boss format (`anim_<boss>_<attack>.png`, frames 104 x 80 with the boss resting at (36, 12); a scene spell is a 256 x 64 strip `scene_<spell>.png` starting on frame `sceneAt`). Water look: teal, foam, droplets (the new Water school; the water spells in the game are placeholders until you draw them).
   - **Lamia (magical, 3 attacks):**
