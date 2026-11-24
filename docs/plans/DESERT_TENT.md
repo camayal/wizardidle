@@ -15,7 +15,7 @@ The Desert has only one building, the tent, so the tent does all the jobs: inn, 
 
 The tent is a desert caravanserai: everything happens under one roof, and **one host runs all of it.** That fits the nomad mood and the "one NPC at a time" rule.
 
-**Proposal (to be decided below):**
+**The plan (all decided 2026-11-24):**
 
 1. **The old tent scene stays, and shows what the visit is for.** He enters the tent with one purpose, and the scene draws only what that purpose needs (decided, see Decisions):
    - **Dice:** the bone dice table is there, and he plays at it.
@@ -34,10 +34,12 @@ None new (decided): the old tent scene is fine, and the desert dice set exists. 
 
 1. ~~One interior or several scenes?~~ Decided.
 2. ~~Does he walk to a spot for each service?~~ Decided.
-3. One host for everything, or a different NPC per service?
-4. How does a visit pick its service (need first, chance, the god's touch)?
+3. ~~One host or one NPC per service?~~ Decided.
+4. ~~How does a visit pick its service?~~ Decided.
 5. ~~The shop before professions?~~ Follows from the decision: no buying visits until professions ship.
 
 ## Decisions
 
 - **2026-11-24, interior and walking:** one interior, the **old tent scene, no new art.** The scene shows things by what he came to do: to play dice, the table is there; to buy, he walks to the far end where the shopkeeper is; to sleep, he walks in a little and sleeps. No corners to walk between: that would break the walking line.
+- **2026-11-24, host:** **one tent keeper** does it all (bed, dice, shop). One sprite, a desert character the player gets to know.
+- **2026-11-24, purpose of a visit:** **need first, then chance.** He sleeps when he needs rest (as today); otherwise the visit is dice or (once professions ship) buying, by chance like the City and Town explore events. The shares wait for playtests.
