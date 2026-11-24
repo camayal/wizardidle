@@ -176,3 +176,12 @@ Relic Tethering: Equipped gear carries a passive bonus into the next timeline ba
 
 Witness Meter: Overt miracles draw heavier enemy aggro/difficulty; invisible nudges let the wizard ambush foes undetected.
 ```
+
+```
+Date: 2026-11-24
+Author's note: battle AI, for the thinker to design before dev codes it (dev's proposal is only a starting point, the author says it is more complicated than that).
+Goal: with the god's help bosses ~90% killable, rares ~95%, regular enemies 100%; the wizard never invincible so the god keeps a purpose.
+Today (src/combat.js battle()): dice only. Wizard heals 17% when hurt, polymorph 2.5%, attack 60%, else the enemy hits; spell random. Enemies and bosses pick attacks at random from a list; boss effects fire by chance.
+Dev's draft: step 1 wizard AI (heal when one more hit could drop him under ~35% HP, else attack, polymorph only on regular enemies with real HP, never count on the god); step 2 boss AI (strong or status attack when he is healthy, heal or defend when low, a bounded finishing attack when he is low: strongest normal attack, no extra damage, cooldown, not right after a heal); regular enemies simple, rares a little variety; a shared difficulty knob in config.js; tune with tools/playtest.py (check first that it simulates god touches).
+Open for the thinker and author: protective ward spell (heal-only first or ward now: needs a new spell, art and an effect); does the AI get smarter with level; do bosses read the wizard's HP at all (finishing attack) or only their own; how the kill rates are measured and what counts as 'with god help'.
+```
