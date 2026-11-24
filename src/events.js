@@ -543,7 +543,7 @@ function findRuneOrBook(){
 
 // Steps of resting: arrive (inn in some towns, otherwise camp), sleep, wake up.
 function searchInn(){
-    const placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto";
+    const placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto" || (state.zone.current == "las_Dunas" && config.balance.dunesInn == 1);
     run.multipleEventsCounter += 1;
     switch (run.multipleEventsCounter) {
         case 1: arriveToRest(placesWithInn); break;

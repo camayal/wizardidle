@@ -159,3 +159,4 @@ Date: 2026-11-22 09:47
 Author's note: i was thinking in anothe mouth that conect the cave with la_Gruta3 to give other access to them, also we need a conector for praire/dunes to the Gruta, my idea with the Gruta, parhaps a big opening
 ```
 
+- Dunas2 underground shop and inn (author approved 2026-11-24, with a soft wink to the first Zelda's cave old man): artist is drawing the room (review drop). Code is ready but OFF: config.balance.dunesInn = 0; STREET_DOORS las_dunas_taberna -> las_Dunas2 door x 243 (the stone arch), events.js searchInn counts las_Dunas when on, map pin las_Dunas_taberna. To finish: copy the approved art as img/places/las_dunas/las_dunas_taberna.png, add its inside door x to DOORS (render.js) if it has one, set dunesInn = 1, test. The shop half has no mechanism yet (vendors belong to docs/PROFESSIONS.md).

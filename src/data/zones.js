@@ -33,6 +33,7 @@ export const places = {
     el_Castillo_altar: {x:0.732,y:0.364},
     el_Desierto_altar: {x:0.832,y:0.684},
     el_Desierto_taberna: {x:0.8,y:0.7},
+    las_Dunas_taberna: {x:0.2,y:0.668},
     el_Duenon_altar: {x:0.556,y:0.816},
     el_Heidan_altar: {x:0.92,y:0.93},
     el_Pantano_altar: {x:0.64,y:0.332},

@@ -641,6 +641,7 @@ function dreamStillOff() {
 const STREET_DOORS = {
     el_poblado_taberna: ["el_Poblado4", 120], el_poblado_casadados: ["el_Poblado5", 119],
     la_ciudad_taberna: ["la_Ciudad4", 52], la_ciudad_casadados: ["la_Ciudad1", 149],
+    las_dunas_taberna: ["las_Dunas2", 243],         // the stone arch at the right edge of las_dunas2 (x about 243): the underground inn
     el_desierto_taberna: ["el_Desierto1", 180],     // the tent of el_desierto1: he stops at its door (the dark opening, x about 180) and goes in
 };
 const DOOR_PAUSE_MS = 400;
