@@ -237,10 +237,10 @@ function show(n) {
 // The scenes of a spot for the viewers: a connector's own scenes (a bridge, stairs or mouth has several), else its stage.
 const scenesOf = (n) => (isStage(n) ? [n] : connectorScenesOf(n));
 function viewers() {
-    p.views.innerHTML = [['Source', src], ['Target', tgt()]].filter(([, n]) => n).map(([role, n]) => {
+    p.views.innerHTML = [src, tgt()].filter(Boolean).map((n) => {
         const list = scenesOf(n);
-        return `<div><b>${role}: ${esc(n)}</b>${list.length ? '' : ' <span class="muted">(no scene yet)</span>'}<div style="display:flex;flex-wrap:wrap;gap:6px">${list.map((s) =>
-            `<figure style="margin:0"><img src="${art(s.toLowerCase())}" alt="${esc(s)}" style="width:256px;image-rendering:pixelated;display:block;background:#222" onerror="this.style.display='none'"><figcaption class="muted">${esc(s)}</figcaption></figure>`).join('')}</div></div>`;
+        return `<div><b>${esc(n)}</b>${list.length ? '' : ' <span class="muted">(no scene yet)</span>'}<div style="display:flex;flex-wrap:wrap;gap:6px">${list.map((s, k) =>
+            `<figure style="margin:0"><img src="${art(s.toLowerCase())}" alt="${esc(s)}" style="width:256px;image-rendering:pixelated;display:block;background:#222" onerror="this.style.display='none'"><figcaption class="muted">${k ? (k > 1 ? `Alt${k}` : 'Alt') + ' scene' : 'Scene'}: ${esc(s)}</figcaption></figure>`).join('')}</div></div>`;
     }).join('');
 }
 
