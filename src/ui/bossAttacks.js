@@ -106,7 +106,7 @@ export function bossAttackTiming(boss, id) {
     const attack = (bossAttacks[boss] || []).find((a) => a.id == id);
     if (!attack) return null;
     const sceneFrames = attack.scene ? sceneSpells[attack.scene] : 0;
-    const hitAt = attack.scene ? attack.sceneAt + Math.floor(sceneFrames / 2)
+    const hitAt = attack.hit != null ? attack.hit : attack.scene ? attack.sceneAt + Math.floor(sceneFrames / 2)
         : attack.path ? attack.path.indexOf(Math.min(...attack.path)) : Math.floor(attack.frames * 0.6);
     const total = Math.max(attack.frames, attack.scene ? attack.sceneAt + sceneFrames + DISSIPATE : 0);
     return { attack, hitMs: hitAt * 100, totalMs: total * 100 };
@@ -148,7 +148,7 @@ export function playBossAttack(boss, chosen, stone, onHit) {
     const sceneFrames = attack.scene ? sceneSpells[attack.scene] : 0;
     const total = Math.max(attack.frames, attack.scene ? attack.sceneAt + sceneFrames + DISSIPATE : 0);
     // the blow lands when the scene spell reaches the wizard, at the end of a charge, or late in the swing
-    const hitAt = attack.scene ? attack.sceneAt + Math.floor(sceneFrames / 2)
+    const hitAt = attack.hit != null ? attack.hit : attack.scene ? attack.sceneAt + Math.floor(sceneFrames / 2)
         : attack.path ? attack.path.indexOf(Math.min(...attack.path)) : Math.floor(attack.frames * 0.6);
     const [bx, by, bw] = npcBox(boss);
     const k = bw / 64;                                  // screen px per art px

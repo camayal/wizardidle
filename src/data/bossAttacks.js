@@ -74,8 +74,8 @@ export const bossAttacks = {
     ],
     greater_naga: [
         { id: "tide_charge", frames: 18, scene: "tide_charge", sceneAt: 2, path: [0, 0, -20, -39, -59, -79, -98, -118, -118, -118, -114, -98, -79, -59, -39, -20, 0, 0] },
-        { id: "fury_slaps", frames: 12 },
-        { id: "coil_crush", frames: 11 },
+        { id: "fury_slaps", frames: 12, hit: 6, path: [0, -30, -80, -118, -118, -118, -118, -118, -118, -90, -45, 0] },      // jumps to the wizard, spins like a tornado
+        { id: "coil_crush", frames: 11, hit: 6, path: [0, -30, -70, -118, -118, -118, -118, -118, -80, -40, 0] },      // approaches, flips, stretches the tail
     ],
     arcangel: [
         { id: "lightning", frames: 10, scene: "lightning", sceneAt: 2 },

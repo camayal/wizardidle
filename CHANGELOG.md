@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The beach bosses have their real art: the lamia's maelstrom, tidal wave and serpent gaze, the greater naga's tide charge (a tide carries him along with its own wave scene) and both redrawn sprites. His fury slaps and coil crush still use stand-ins: he now jumps to the wizard and the strips are being redrawn (a spin like a tornado, and a flip with a short tail stretch).
 - The Beach's last scene is now number 5 (it was 6, so the Beach had no scene 5 and a random scene number could pick a missing background). The scene file, its map spot and its travel links were renamed. The new maelstrom scene spell for the lamia is in too.
 - Beach bosses: the lamia's sea jump is faster (20 steps instead of 30) and the greater naga now bursts out of the sand: a bigger mound of beach sand that trembles, then throws far more grains much higher as he rises. In the dev tests every boss has its own line (the lamia and the greater naga are no longer one "lamia / greater naga" entry) and the chosen one is the one that comes.
 - The lamia's sea jump now starts inside the visible sea (small, over the water at the right) instead of off the scene's edge. The lamia and the greater naga are now drawn at the medium boss size (as Medusa) instead of in a small 32 px box. The greater naga keeps rising from the sand.
