@@ -33,6 +33,10 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 | 2026-11-24 | Rework: relic tethering | **No carry-over.** Each wizard starts fresh at the starting belief |
 | 2026-11-24 | Rework: belief drift | **Belief drifts down while the god is silent** (replaces "no drift"). An idle game slides toward the Atheist play, which is now a full playstyle, not a punishment. Pace to playtest |
 | 2026-11-24 | Rework: nudges | **Part of the rework; belief decides how often he follows.** The god clicks a door, gate or cave to suggest a path; Devout almost always follows, Believer usually, Doubter about half the time, Atheist rarely (and he thinks it was his idea). A refused nudge wastes its faith. Chances and cost to playtest |
+| 2026-11-24 | Rework: the face changes | **Words, colour and a Devout signature.** Prayers, console lines and the touch glow always follow the face; at Devout it picks one signature miracle: Mercy, Sanctuary; Wrath, Smite; Distant, Providence. Heal and hit for every face |
+| 2026-11-24 | Rework: art | **All new art** for every new touch (graze and weakening included) and the four candles; options on one sprite first |
+| 2026-11-24 | Rework: showing the level | **A static candle after the wizard's name**, one drawing per level, no animation; the faith scroll keeps its button for details |
+| 2026-11-24 | Rework: a god who is gone | **The AWAY.md rule:** with the game closed, world time = away / 108; no prayers or milestone faith; faith falls as AWAY.md says; belief drifts down at the idle rate per world hour; soft dead and permadeath unchanged |
 
 ---
 
@@ -50,11 +54,16 @@ The author's goal: faith stops punishing an idle player, and the believer and at
 
 **Belief in an idle game.** Belief drifts down while the god is silent, so an idle wizard slides toward the Atheist play. That's fine now, because the Atheist play is good.
 
+**A god who is gone (the game closed, even for months): the AWAY.md rule.** Two cases, never mixed:
+- **Idle** (the game open, the god silent): the rules above run on the live clock. He prays, earns milestone faith, belief drifts down.
+- **Gone** (the game closed or the page hidden): everything runs on **world time = time away / 108** ([AWAY.md](AWAY.md)), settled once on return. No fights are played, so **no prayers and no milestone faith** come in. Faith only falls (AWAY.md: ×0.98 per world hour, never below 0). **Belief drifts down at the same rate per world hour as the idle drift**, so a week away barely moves it and the cap (90 days = 20 world hours) moves it most. The face doesn't change while he is alone. Soft dead after about a month and the permadeath curve stay as AWAY.md has them; the saving touch on return is the usual free revive with its belief and faith.
+- Nothing is announced about time, as AWAY.md decided: a lower candle on return is the only trace.
+
 **The action bar by level** (replaces the price changes by level in 3.1 and 3.5):
 
 | Level | The god's touches | Wizard alone |
 |---|---|---|
-| **Devout** | Big miracles: heal, smite, shield | Weakest alone; leans on the god |
+| **Devout** | Heal, hit, and one **signature miracle** from the god's face: Mercy, *Sanctuary* (the shield); Wrath, *Smite*; Distant, *Providence* (invisible-hand luck while Devout) | Weakest alone; leans on the god |
 | **Believer** | Today's touches: heal, hit | Baseline |
 | **Doubter** | A weaker heal, subtle aid (soften the enemy) | Self-reliance bonus grows |
 | **Atheist** | **Invisible hand** only: weaken the enemy, turn a killing hit into a 1 HP graze, a healing herb on the path. Each shows his **luck excuse** in the console | Highest self-reliance bonus (+XP, +crit) |
@@ -69,11 +78,15 @@ A heal always costs **clearly less than a hit**: protecting him is the god's job
 - **Unanswered prayers:** at low HP in a boss fight he prays, with a timed window. Answered: belief jumps up. Ignored: belief drops, but he earns a lasting *Hardened Heart* bonus (+crit/XP). It grows the "prayer in despair" of 3.6.
 - **Miracle tolerance:** the same miracle again and again raises belief less each time, and help he expected that doesn't come lowers it.
 
-**The god's face.** He forms a picture of the god from how the player plays: mostly heals, a god of **mercy**; mostly hits, a god of **wrath**; mostly silence, a **distant** god. His prayers, console lines and the Devout miracles follow it.
+**The god's face.** He forms a picture of the god from how the player plays: mostly heals, a god of **mercy**; mostly hits, a god of **wrath**; mostly silence, a **distant** god. His prayers, console lines and the glow colour of the god's touches always follow it; at Devout it also picks the signature miracle (table above). Heal and hit stay for every face.
+
+**Showing the level: the candle.** The faith scroll keeps its dedicated button for the details. Also, a **static candle** sits at the end of the white space after the wizard's name, so the level reads at a glance without opening the scroll. One drawing per level, with no animation, to keep the screen calm.
+
+**Art: all new.** Every new touch gets its own animation: Sanctuary (outline, shared look with the defensive spells plan), Smite, Providence, the healing herb, the 1 HP graze and the enemy weakening; plus the four candles. The artist draws options on one sprite first, then the set.
 
 **Not in the rework:** the witness meter, tests of faith, carrying belief over to the next wizard. **Wayside shrines** go to the story: the one stone mini-shrine per game, destroyed in an episode (STORY.md).
 
-**Still open (to design before dev builds):** what the face changes exactly (miracles per face?), the art for the new touches (smite, shield, the herb, the graze), how the action bar shows the level change. **Every amount waits for the playtests (3.10):** the faith max curve, prayer and milestone faith, drift pace, self-reliance bonus, nudge chances, the heal and hit ratio.
+**Design: nothing open.** **Every amount waits for the playtests (3.10):** the faith max curve, prayer and milestone faith, drift pace, self-reliance bonus, nudge chances, the heal and hit ratio.
 
 ## 3. Proposal
 
