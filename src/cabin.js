@@ -15,8 +15,8 @@ import { byName, travelCost } from './travelGraph.js';
 const NO_CABIN = new Set(['el_Duenon', 'el_Heidan']);
 const CAVE_ZONES = new Set(['la_Cueva', 'la_Mina', 'la_Gruta']);
 const LOOK = { el_Poblado: 'town', la_Ciudad: 'city' };
-// Looks whose art exists in img/story (curanderobg_<look>.png); add one when the artist's file is wired.
-const LOOK_ART = new Set([]);
+// Looks whose art exists in img/story (curanderobg_<look>.png).
+const LOOK_ART = new Set(['wild', 'town', 'city', 'cave']);   // wild = the cabin with its trap door closed; the open-door curanderobg is kept for the final battle
 
 const onQuest = () => !!state.quest;
 const cabinAllowed = (zone) => !NO_CABIN.has(zone);

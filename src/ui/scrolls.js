@@ -141,7 +141,7 @@ function localizarBocadillo(){
     const page = MAP_PAGES[ui.scrollViews.map] ? ui.scrollViews.map : mine;
     el("backMapa").src = art(MAP_PAGES[page]);
     const hide = () => { el("bocadilloMapa").style.display ="none"; el("pjMapa").style.display ="none"; };
-    if (ui.currentBackGround == "curanderobg") return hide();
+    if (ui.currentBackGround.startsWith("curanderobg")) return hide();
     el("zoneMap").innerHTML = page == mine ? (info ? info.label[0].toUpperCase() + info.label.slice(1) : `The ${zones[state.zone.current].name}`) : "Map";
     if (page != mine || ui.currentBackGround.match(/_altar/) || ui.currentBackGround.match(/_estatua/)) return hide();
     const localidad = spot || places[ui.currentBackGround];
