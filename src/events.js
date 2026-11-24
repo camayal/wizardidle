@@ -555,7 +555,7 @@ function searchInn(){
 // Enter an inn, or find a place to camp.
 function arriveToRest(placesWithInn) {
     if (placesWithInn) {
-        enterPlace(`${state.zone.current}_taberna`);
+        enterPlace(`${state.zone.current}_taberna`, state.zone.current == "las_Dunas" ? "viejo" : undefined);     // the Dunes inn keeps the old merchant
         stats.count("inn.rests");
         if (stats.get("inn.rests") >= 250) logro.set(logro.logro_tabernero);
         stats.count(`inn.zone.${state.zone.current}`);

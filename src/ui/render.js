@@ -670,7 +670,7 @@ function goInside(bg, npc, done, fade) {
     imageNow(src);                                  // start loading it on the way
     const change = () => {
         loadBackground(bg);
-        if (npc) loadNPC(npc);
+        if (npc) { loadNPC(npc); startNpcIdle(); }
     };
     if ((ui.currentBackGround || "").toLowerCase() == bg.toLowerCase()) {
         change();
@@ -809,6 +809,21 @@ function playHydraGrow(hydra, fromHeads) {
     loop.every("animNPC", next, 90);
 }
 
+
+// Idle of a friendly NPC, done in code (no art): he breathes, the sprite stretching 3% up from
+// his feet and back, every half second, for as long as he is on the scene.
+const IDLE_NPCS = new Set(["viejo"]);
+const BREATH = 0.03, BREATH_MS = 500;
+function startNpcIdle() {
+    if (run.simulation || !IDLE_NPCS.has(state.npc)) return;
+    let out = false;
+    loop.every("idleNPC", () => {
+        if (!IDLE_NPCS.has(state.npc)) return loop.stop("idleNPC");
+        out = !out;
+        const stretch = out ? BREATH : 0;
+        loadNPC(state.npc, ui.squareSide, ui.headLevel - ui.charHeight * stretch, ui.charWidth, ui.charHeight * (1 + stretch));
+    }, BREATH_MS);
+}
 
 // Make the enemy hop for a few frames (run by the animNPC clock).
 function animateNPC() {  
