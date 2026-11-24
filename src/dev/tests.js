@@ -165,7 +165,7 @@ const scenarios = [
     },
     {
         name: 'Sleep: camping, with a dream',
-        check: 'He walks a few steps, lays the sleeping bag, the dark with the dream after a fall (a nightmare, reddish), he is back in his place and goes on.',
+        check: 'He walks a few steps, lays the sleeping bag, the dark with the dream after a fall (a nightmare, reddish), he wakes where he slept and walks on to another scene from there.',
         setup() {
             moveTo('el_Bosque');
             run.storyDream = 'fall';

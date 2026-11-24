@@ -218,19 +218,24 @@ function exploreEV() {
             nextEvent();
         });
     }else {
-        if (YesOrNot(changeZoneChance(), 0)) {
-            print(`${wizardName()} is exploring...`);
-            startEvent(changeLocality);
-        } else {
-            print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
-            pickRandomBackgroundForCurrentZone(() => {   // walks on to the next spot
-                addXP(0.5);
-                nextEvent();
-            });
-            //trigger event selecter
-        };
+        exploreOn();
     };
 };
+
+// Explore: now and then change zone, otherwise walk on to another stage of this one (from where he stands).
+function exploreOn() {
+    if (YesOrNot(changeZoneChance(), 0)) {
+        print(`${wizardName()} is exploring...`);
+        startEvent(changeLocality);
+    } else {
+        print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
+        pickRandomBackgroundForCurrentZone(() => {   // walks on to the next spot
+            addXP(0.5);
+            nextEvent();
+        });
+        //trigger event selecter
+    };
+}
 
 // Steps of the mysterious healer who revives the wizard when he has fallen.
 function reviveEV(){
@@ -601,7 +606,7 @@ function goToBed(placesWithInn) {
         spell("spellSleep_24", true);
         if (dream) print(`<i>${wizardName()} dreams: ${markup(dream.lines.join(" "), { name: wizardName() })}</i>`);
         sleepInDark(dream, null, () => {
-            if (placesWithInn) ui.wizardOffset = 0;     // camping: he wakes where he slept and walks back (wakeUp)
+            if (placesWithInn) ui.wizardOffset = 0;     // camping: he wakes where he slept and walks on from there (wakeUp)
             drawWizard();
             if (!placesWithInn) { clearNPC(); ui.bagSpot = null; }
         });
@@ -659,7 +664,7 @@ function wakeUp(placesWithInn) {
     run.restAtInn = false;
     endEvent();
     if (placesWithInn) leavePlace(showStage, nextEvent);    // out through the door
-    else walkWizardTo(0, nextEvent);                       // he woke where he slept and walks back to his place
+    else exploreOn();                                      // camping: he does not go back to his place, he walks on from where he woke
 }
 
 
