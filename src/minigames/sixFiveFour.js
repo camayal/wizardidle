@@ -10,7 +10,7 @@ import * as loop from '../loop.js';
 import { endEvent, event, nextEvent, startEvent } from '../events.js';
 import { hopEnemy, hopWizard } from '../combat.js';
 import { spell } from '../spells.js';
-import { throwDice } from '../ui/diceTable.js';
+import { clearDice, throwDice } from '../ui/diceTable.js';
 import { playSound } from '../audio.js';
 import { clearNPC, leavePlace, print, showStage, updateHeading, wizardName } from '../ui/render.js';
 import { art } from '../media.js';
@@ -19,6 +19,8 @@ import { art } from '../media.js';
 //temp dicegame
 //define dice and set 1 as default
 let dicesToRoll = {a: 1,b: 1,c: 1,d: 1,e: 1}
+const DIE_SPOT = "abcde";       // a die's key is its spot on the table (ui/diceTable.js)
+let banked = {};                // the banked dice of this turn, by spot
 let nameDicePlayer, tie, firstPlayerWins, diceRolled; // shared by the dice game functions (were implicit globals)
 let ship = false;
 let captain = false;
@@ -110,13 +112,13 @@ function rollTurn(nameDicePlayer) {
     rollMessage(nameDicePlayer);
 
     resultDice = "";
-    const thrown = [];
+    const thrown = {}, keptBefore = { ...banked };       // by spot on the table: the dice in the air and the banked ones that stay
     for (let die in dicesToRoll) {
         dicesToRoll[die] = Math.floor(Math.random() * 6 + 1);
-        thrown.push(dicesToRoll[die]);
+        thrown[DIE_SPOT.indexOf(die)] = dicesToRoll[die];
         resultDice = resultDice + diceImg(`d${dicesToRoll[die]}`);
     }
-    throwDice(nameDicePlayer != gamblingManName, thrown);       // they tumble onto the table, from the side of whoever throws
+    throwDice(nameDicePlayer != gamblingManName, thrown, keptBefore);       // they tumble onto the table, from the side of whoever throws
     if (!ship && bankDie(6)) {
         ship = true;
         currentHand = `${diceImg("d6")}:${diceImg("ship")} `;
@@ -159,6 +161,7 @@ function rollMessage(nameDicePlayer) {
 function bankDie(face) {
     for (let die in dicesToRoll) {
         if (dicesToRoll[die] == face) {
+            banked[DIE_SPOT.indexOf(die)] = face;       // it stays on the table, the others are thrown again
             delete dicesToRoll[die];
             return true;
         }
@@ -286,6 +289,8 @@ function resetSixFiveFour(){
      currentHand = "";
      symbolCurrentHand = "";
      dicesToRoll = {a: 1,b: 1,c: 1,d: 1,e: 1};
+     banked = {};
+     clearDice();
      ship = false;
      captain = false;
      crew = false;
