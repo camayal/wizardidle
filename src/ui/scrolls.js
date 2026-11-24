@@ -14,8 +14,7 @@ import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
-import { beliefLevel } from '../belief.js';
-import { questPath, godDrop, godMove, godOrder } from '../quests.js';
+import { questNamesPlace, questPath, godDrop, godMove, godOrder } from '../quests.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
@@ -144,16 +143,16 @@ function drawQuestPath(page){
         svg.style.cssText = "position:absolute; pointer-events:none; z-index:2";
         el("mapa").appendChild(svg);
     }
-    const level = beliefLevel(), path = (level == "believer" || level == "devout") && !state.player.beliefLost ? questPath() : null;   // only a believer shows the way
+    const path = questPath();
     const img = el("backMapa"), w = img.offsetWidth || parseFloat(img.style.width), h = img.offsetHeight || w;
     if (!path || !w) { svg.innerHTML = ""; return; }
     Object.assign(svg.style, { left: `${img.offsetLeft}px`, top: `${img.offsetTop}px`, width: `${w}px`, height: `${h}px` });
     svg.setAttribute("viewBox", `0 0 1 ${h / w}`);
     const on = path.filter((p) => LAYER_PAGE[p.layer] == page);
     let html = "";
-    if (on.length > 1) html += `<polyline points="${on.map((p) => `${p.x},${p.y}`).join(" ")}" fill="none" stroke="#c0392b" stroke-width="0.008" stroke-dasharray="0.012 0.014" stroke-linecap="round" stroke-linejoin="round"/>`;
+    if (DEV && on.length > 1) html +=      // the dotted way is a developer option `<polyline points="${on.map((p) => `${p.x},${p.y}`).join(" ")}" fill="none" stroke="#c0392b" stroke-width="0.008" stroke-dasharray="0.012 0.014" stroke-linecap="round" stroke-linejoin="round"/>`;
     const goal = path[path.length - 1];
-    if (LAYER_PAGE[goal.layer] == page) html += `<circle cx="${goal.x}" cy="${goal.y}" r="0.02" fill="none" stroke="#c0392b" stroke-width="0.006"/>`;
+    if (LAYER_PAGE[goal.layer] == page && questNamesPlace()) html += `<circle cx="${goal.x}" cy="${goal.y}" r="0.02" fill="none" stroke="#c0392b" stroke-width="0.006"/>`;
     svg.innerHTML = html;
 }
 

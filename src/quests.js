@@ -230,6 +230,9 @@ function complete(q) {
     finish(q, 'done');
 }
 
+// Does the quest's text name the place (everything but the prism's hunt)? Only then the map rings it for players.
+export const questNamesPlace = () => !!state.quest && state.quest.kind !== 'prism';
+
 // The way ahead for the map: points {layer, x, y} (fractions of the map) from where he stands to the nearest stage of the target zone, or null.
 export function questPath() {
     const q = state.quest, from = here();
