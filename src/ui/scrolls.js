@@ -13,8 +13,8 @@ import { detectmob, layoutPortrait } from './layout.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
-import { faithPageHtml, inventoryPageHtml, statsPageHtml } from './statsPages.js';
-import { godCancel, godOrder } from '../quests.js';
+import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
+import { godDrop, godMove, godOrder } from '../quests.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
@@ -193,10 +193,10 @@ function updateAchievements(){
 // bookmark with an icon hanging from the scroll's top edge; tapping one brings that page to the
 // front and plays the scroll sound. The open page's ribbon hangs lower and is lighter (the
 // author chose look A and the one-colour ribbons on 2026-11-18, replacing the paper strips).
-const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"], map: ["above", "ground", "underground"] };
-const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory", above: "Aboveground", ground: "Ground", underground: "Underground" };
+const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"], faith: ["faith", "quests"], map: ["above", "ground", "underground"] };
+const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory", faith: "Faith", quests: "Quests", above: "Aboveground", ground: "Ground", underground: "Underground" };
 const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
-    run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory",
+    run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory", faith: "icon_stats_stats", quests: "icon_map_ground",
     above: "icon_map_above", ground: "icon_map_ground", underground: "icon_map_underground" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
 const RIBBON_SCALE = 1.5;           // one ribbon pixel = this many pixels of the 320-wide scroll art (2 was too big, 1.5 a bit small)
@@ -305,14 +305,17 @@ function updateStats(){
 
 // Fill the faith scroll (ui/statsPages.js).
 function updateFaith(){
-    const html = faithPageHtml();
+    const quests = ui.scrollViews.faith == "quests";
+    const html = quests ? questsPageHtml() : faithPageHtml();
     if (html === ui.faithHtml) return;   // unchanged: keep the candle's animation running
     ui.faithHtml = html;
     el('innerTextScroll').innerHTML = html;
-    el("faith").style.fontSize = `${ui.em}px`;
-    el("faith").style.lineHeight = `${ui.em}px`;
-    el("titleFaith").style.fontSize = `${ui.em * 2.5}px`;
-    el("titleFaith").style.lineHeight = `${ui.em * 2.5}px`;
+    const id = quests ? "quests" : "faith", title = quests ? "titleQuests" : "titleFaith";
+    el(id).style.fontSize = `${ui.em}px`;
+    el(id).style.lineHeight = `${ui.em}px`;
+    el(title).style.fontSize = `${ui.em * 2.5}px`;
+    el(title).style.lineHeight = `${ui.em * 2.5}px`;
+    if (ui.scrollCurrentContent == "faith") placeScrollTabs("faith");
 }
 
 // The dev bar switch in Help (src/dev/tests.js listens for the event; the game never
@@ -322,7 +325,11 @@ el('innerTextScroll').addEventListener('click', (e) => {
     const questBtn = e.target.closest('.questBtn');       // the Faith scroll's quest buttons: the god's orders and "forget it" (src/quests.js)
     if (questBtn) {
         const what = questBtn.dataset.quest;
-        if (what === 'cancel') godCancel(); else if (what.startsWith('order:')) godOrder(what.slice(6));
+        const [act, arg] = what.split(':');
+        if (act === 'order') godOrder(arg);
+        else if (act === 'up') godMove(+arg, -1);
+        else if (act === 'down') godMove(+arg, 1);
+        else if (act === 'drop') godDrop(+arg);
         ui.faithHtml = '';
         updateFaith();
     }
@@ -476,7 +483,7 @@ function killClick() {
 }
 
 // How each tabbed scroll redraws its front page.
-const PAGE_RENDER = { stats: updateStats, kill: updateKill, achievements: updateAchievements, map: localizarBocadillo };
+const PAGE_RENDER = { stats: updateStats, faith: updateFaith, kill: updateKill, achievements: updateAchievements, map: localizarBocadillo };
 
 export {
     counterText,

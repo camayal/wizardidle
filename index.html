@@ -275,6 +275,11 @@
                 text-align: center;
                 display: block;
             }
+            .questOrders{ display:flex; flex-wrap:wrap; gap:0.4em; justify-content:center; margin:0.6em 0 1em; }
+            .questBtn{ font-family:inherit; font-size:1em; min-width:2.6em; min-height:2.6em; padding:0.3em 0.6em; border:2px solid #5a3d12; border-radius:0.4em; background:#e8d4a2; color:#3a2a0a; cursor:pointer; }
+            .questBtn:disabled{ opacity:0.35; } .questBtn.order{ display:flex; align-items:center; gap:0.4em; } .questBtn.order img{ height:1.6em; image-rendering:pixelated; }
+            .questRow{ display:flex; align-items:center; gap:0.4em; margin:0.5em 0; } .questText{ flex:1; }
+            .questBtn.drop{ color:#7F0000; }
             .faithLevel{ font-family: munroregular; font-size:1.25em; font-weight:bold; text-align:center; margin:0.4em 0 2.6em !important; }
             .faithLevel.devout{ color:#8a5a00; } .faithLevel.believer{ color:#5a3d12; } .faithLevel.doubter{ color:#5b5b66; } .faithLevel.atheist{ color:#3a3a3a; } .faithLevel.lost{ color:#7F0000; }
             #titleKill, #titleStats, #titleInventory{ margin-bottom: var(--ribbonGap, 0px) !important; }

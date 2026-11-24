@@ -14,7 +14,7 @@ import { countLogros, logro } from '../achievements.js';
 import { beliefLevel } from '../belief.js';
 import { config } from '../config.js';
 import { art } from '../media.js';
-import { scrollHtml as questsHtml } from '../quests.js';
+import { questsPageHtml } from '../quests.js';
 
 const n = roundNumbertoLetter;
 
@@ -149,8 +149,7 @@ function faithSection() {
         section('Your touches') +
         line('Heals', n(stats.get('god.heals'))) +
         line('Revivals', n(stats.get('god.touches'))) +
-        line('Punishments', n(stats.get('god.hits'))) +
-        questsHtml();
+        line('Punishments', n(stats.get('god.hits')));
 }
 
 function achievementsSection() {
@@ -194,6 +193,7 @@ export function inventoryPageHtml() {
 // ------------------------------------------------------------------ Faith
 
 // The Faith scroll (the prayer button): faith, the belief meter and where faith came from.
+export { questsPageHtml };
 export function faithPageHtml() {
     return "<div id='faith'><span class='titles' id='titleFaith'>Faith</span>" + faithSection() +
         `<img src='${art('faith_header_a')}' width='256' style='display:block;margin:1em auto 0;image-rendering:pixelated'/></div>`;

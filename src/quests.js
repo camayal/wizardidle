@@ -7,6 +7,7 @@
 // state.quest = { id, kind, giver, text, target: {zone, enemy?, boss?, zones?, visited?}, phase, searched, secret, reward, since }
 // kinds: wanted, explore, study, shrine, pilgrimage, hidden, delivery (ingredients and crafting wait for professions, fishing later)
 
+import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { config } from './config.js';
@@ -117,7 +118,7 @@ const targetStages = (q) => (q.target.zone ? stagesOf(q.target.zone) : []);
 function promote() {
     const list = qs().queue;
     if (!list.length) return;
-    list.sort((a, b) => urgent(a) - urgent(b) || costTo(a) - costTo(b));
+    if (!qs().manual) list.sort((a, b) => urgent(a) - urgent(b) || costTo(a) - costTo(b));   // once the god reorders, his order stands
     const q = list.shift();
     q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
     state.quest = q;
@@ -454,17 +455,66 @@ export function godCancel() {
     return true;
 }
 
-// ---- the Faith scroll's quest section ----
+// Reordering from the Faith scroll (i = 0 is the current quest, i >= 1 the queue). Moving the current quest down
+// or the first waiting one up swaps them. A move or a cancel is an order too: belief decides.
+function hear() {
+    const name = wizardName();
+    if (obeys()) { stats.count('quest.obeyed'); return true; }
+    stats.count('quest.ignored');
+    print(`<i>${name} hears, but he is not convinced</i>`);
+    return false;
+}
+function activate(q) {
+    q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
+    state.quest = q;
+}
+export function godMove(i, dir) {
+    const Q = qs(), cur = state.quest;
+    const all = cur ? [cur, ...Q.queue] : [...Q.queue];
+    const j = i + dir;
+    if (i < 0 || i >= all.length || j < 0 || j >= all.length) return false;
+    if (!hear()) return true;
+    [all[i], all[j]] = [all[j], all[i]];
+    Q.manual = true;
+    Q.queue = all.slice(1);
+    if (all[0] !== cur) {
+        if (cur) cur.phase = 'travel';
+        activate(all[0]);
+        print(`<i>${wizardName()} feels your will and turns to: ${all[0].text}</i>`);
+    }
+    return true;
+}
+export function godDrop(i) {
+    const Q = qs();
+    if (i === 0) return godCancel();
+    if (!Q.queue[i - 1]) return false;
+    if (!hear()) return true;
+    const [q] = Q.queue.splice(i - 1, 1);
+    qs().log.unshift({ text: q.text, giver: q.giver, kind: q.kind, how: 'cancelled', at: Date.now() });
+    if (Q.log.length > 10) Q.log.length = 10;
+    stats.count('quest.cancelled');
+    return true;
+}
+
+// ---- the Faith scroll's quest page (its own ribbon): fixed orders on top, then the list with big touch buttons ----
 
 const PHASE = { travel: 'on the road', search: 'searching' };
+const ORDER_ICONS = { shrine: 'icon_stats_stats', pilgrimage: 'icon_map_ground', hidden: 'icon_kill_bestiary' };
 export function scrollHtml() {
     const Q = qs(), q = state.quest, log = Q.log.slice(0, 3);
-    let h = `<br><span class='subtitles'>Quests</span><br>`;
-    h += q ? `Now: ${q.text}<br><small>(${PHASE[q.phase] || q.phase}; from ${q.giver})</small><br>` : 'No quest now<br>';
-    if (Q.queue.length) h += `Waiting: ${Q.queue.map((x) => x.text).join('; ')}<br>`;
-    if (log.length) h += `Lately: ${log.map((x) => `${x.text} (${x.how})`).join('; ')}<br>`;
-    if (q) h += `<button class='questBtn' data-quest='cancel'>Forget it</button> `;
-    h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small><br>`
-        : GOD_ORDERS.map((k) => `<button class='questBtn' data-quest='order:${k}'>${ORDER_NAMES[k]}</button>`).join(' ');
+    const all = q ? [q, ...Q.queue] : [...Q.queue];
+    let h = `<div class='questOrders'>`;
+    h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
+        : GOD_ORDERS.map((k) => `<button class='questBtn order' data-quest='order:${k}'><img src='${art(ORDER_ICONS[k])}'/>${ORDER_NAMES[k]}</button>`).join('');
+    h += `</div>`;
+    if (!all.length) h += `<p>No quest now</p>`;
+    h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
+        `<button class='questBtn mv' data-quest='up:${i}' ${i === 0 ? 'disabled' : ''}>▲</button>` +
+        `<button class='questBtn mv' data-quest='down:${i}' ${i === all.length - 1 ? 'disabled' : ''}>▼</button>` +
+        `<button class='questBtn mv drop' data-quest='drop:${i}'>✕</button></div>`).join('');
+    if (log.length) h += `<p><small>Lately: ${log.map((x) => `${x.text} (${x.how})`).join('; ')}</small></p>`;
     return h;
+}
+export function questsPageHtml() {
+    return `<div id='quests'><span class='titles' id='titleQuests'>Quests</span>${scrollHtml()}</div>`;
 }
