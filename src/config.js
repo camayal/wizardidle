@@ -87,6 +87,7 @@ export const config = {
         rEnemyXP: 16,              // enemies needed per level (roughly)
         rGold: 0.15,               // gold per HP
         sacredDamageMultiplier: 1,
+        pFightInCrossing: 0.1,     // chance a walk across a border or connector (zone change) stops for a fight (0 = never)
         pGetBoss: 0.015,           // chance a fight is against the zone boss
         pGetGuardian: 0.1,         // megabosses
         pGetStatue: 0.08,

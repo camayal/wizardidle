@@ -4,13 +4,16 @@
 import { places, zones } from './data/zones.js';
 import { connectorsBetween, destinations, moves, reachesPoint, spotX } from './travelGraph.js';
 import { borderScenes, connectorScenes, DOOR_STOP, mouthDoors, pierSteps, stairScenes } from './data/connectors.js';
-import { pickRandomItem } from './utils.js';
+import { pickRandomItem, YesOrNot } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
 import { run, ui } from './runtime.js';
-import { endEvent, event, nextEvent } from './events.js';
+import { endEvent, event, nextEvent, startEvent } from './events.js';
+import { startCrossingFight } from './combat.js';
+import * as loop from './loop.js';
+import { config } from './config.js';
 import { addXP } from './wizard.js';
-import { loadBackground, print, showStage, walkAcross, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { drawWizard, loadBackground, print, setFacing, showStage, walkAcross, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
 
@@ -60,7 +63,49 @@ function crossing(origin, target) {
             steps.push(...mouthSteps(c, chain[++i]));
         }
     }
+    if (steps.length) planFight(steps);
     return steps.length ? { steps, dir: steps[0].dir } : null;
+}
+
+// A fight on a crossing: now and then one of its scenes stops him for a normal fight of the zone he is entering.
+// Going left to right he stands in his usual place (offset 0); right to left the whole fight is mirrored
+// (render.setFacing) and he stands in the mirror image of it, offset 160, so nothing jumps. Not on stairs or ladders.
+const FIGHT_SPOT_LEFT = 0, FIGHT_SPOT_RIGHT = 160;
+function planFight(steps) {
+    if (!YesOrNot(config.balance.pFightInCrossing, 0)) return;
+    const ok = steps.filter((s) => {
+        if (/^(stairs|ladder)_/.test(s.scene)) return false;
+        const spot = s.dir > 0 ? FIGHT_SPOT_LEFT : FIGHT_SPOT_RIGHT;
+        const from = s.start != null ? s.start : s.dir > 0 ? OFF_SCENE_LEFT : OFF_SCENE_RIGHT;
+        const to = s.end != null ? s.end : s.dir > 0 ? OFF_SCENE_RIGHT : OFF_SCENE_LEFT;
+        return (spot - from) * s.dir > 0 && (to - spot) * s.dir > 0;      // the walk of this scene passes the spot
+    });
+    if (!ok.length) return;
+    const step = ok[Math.floor(Math.random() * ok.length)];
+    step.fightSpot = step.dir > 0 ? FIGHT_SPOT_LEFT : FIGHT_SPOT_RIGHT;
+    step.fight = (resume) => crossFight(step.dir, step.fightSpot, resume);
+}
+
+// He stops where he is (the travelling event waits), the fight runs as an ordinary event, and when he wins the
+// travelling event goes on. If he falls the crossing is given up and he lies in the stage he was heading to.
+function crossFight(dir, spot, resume) {
+    const saved = run.multipleEventsCounter;
+    loop.stop("event");
+    run.multipleEventsCounter = 0;
+    ui.wizardOffset = 0;
+    if (!run.simulation) drawWizard();
+    setFacing(dir > 0 ? 1 : -1);
+    stats.count("travel.crossingFights");
+    print(`${wizardName()} is stopped on the way`);
+    run.crossFightAbort = () => { setFacing(1); ui.wizardOffset = 0; showStage(); };
+    startCrossingFight(() => {
+        setFacing(1);
+        ui.wizardOffset = spot;
+        run.crossFightAbort = undefined;
+        run.multipleEventsCounter = saved;
+        startEvent(changeLocality);
+        resume();
+    });
 }
 
 // Dev tools: every connector walk as {label, steps}, to force a crossing in the game (src/dev/tests.js).

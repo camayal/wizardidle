@@ -37,6 +37,8 @@ export const fight = {
 
 // The flow of the current session.
 export const run = {
+    crossFightDone: undefined,     // a fight on a crossing is running: what to do when it is won (travel.js)
+    crossFightAbort: undefined,    // and what to do if he falls in it
     previousEvent: undefined,      // last event type, for texts like "finds another enemy"
     multipleEventsCounter: undefined,
     timeStart: undefined,          // loop.now() when play time was last counted
@@ -59,6 +61,7 @@ export const run = {
 
 // Screen layout and what's on screen.
 export const ui = {
+    facing: 1,                     // 1 as drawn, -1 while the characters are mirrored (a fight in a scene walked right to left)
     objectSize: undefined,         // main square size, depends on the window
     headLevel: undefined,
     squareSide: undefined,

@@ -140,7 +140,18 @@ function defeatEnemy() {
 
     victoryRewards(faithText);
     clearFight();
-    nextEvent();
+    if (run.crossFightDone) {                  // a fight on a crossing (travel.js): the walk goes on
+        const resume = run.crossFightDone;
+        run.crossFightDone = null;
+        resume();
+    } else nextEvent();
+}
+
+// A normal fight of the zone he is entering, in the middle of a crossing (travel.js): no boss, hydra or spectrum.
+// When it is won, `resume` goes on with the walk; if he falls, the crossing is given up (wizardFalls).
+export function startCrossingFight(resume) {
+    run.crossFightDone = resume;
+    getEnemy(true);
 }
 
 // How the fight was won: rounds, damage taken, how close it was, with or without the god.
@@ -195,6 +206,7 @@ function victoryRewards(faithText) {
 // divine touch or the self-revive.
 function wizardFalls() {
     endEvent();
+    if (run.crossFightDone) { run.crossFightDone = null; if (run.crossFightAbort) run.crossFightAbort(); }     // the crossing is given up where he fell
     // If the enemy fell in this same round, its death above already restarted the
     // event picker: stop it until the wizard is revived.
     loop.stop("master");
@@ -298,12 +310,12 @@ function enemyEV(){
 const NAMELESS = ["baba", "el_esqueleto", "animalejo", "polipoide", "momia"];
 
 // Pick the opponent for the current zone (sometimes the zone boss), draw it, name it and start the battle.
-function getEnemy() {
+function getEnemy(plain = false) {      // plain: a normal enemy only (a fight on a crossing): no boss, spectrum or hydra
     fight.bossCombat = false;
     fight.hydraCombat = false;
-    const spectrum = run.forceEnemy || run.forceBoss ? "" : pickSpectrum();     // a secret spectrum of the Tundra (src/spectra.js)
+    const spectrum = plain || run.forceEnemy || run.forceBoss ? "" : pickSpectrum();     // a secret spectrum of the Tundra (src/spectra.js)
     if (spectrum) run.forceEnemy = spectrum;
-    if (!spectrum && (run.forceBoss || YesOrNot(config.balance.pGetBoss, 0))) {
+    if (!plain && !spectrum && (run.forceBoss || YesOrNot(config.balance.pGetBoss, 0))) {
         setUpBoss();
     } else {
         setUpEnemy();

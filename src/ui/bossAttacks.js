@@ -45,7 +45,11 @@ document.addEventListener("wizardidle:layout", () => {
 });
 
 function shakeScene(px) {
-    for (const id of SHAKEN) el(id).style.transform = px ? `translateX(${px * ui.charWidth / 32}px)` : "";
+    // mirrored characters (ui.facing, a fight in a scene walked right to left) keep their mirror while the scene shakes
+    for (const id of SHAKEN) {
+        const mirrored = ui.facing < 0 && ["pjCanvas", "npcCanvas", "spellCanvas"].includes(id) ? " scaleX(-1)" : "";
+        el(id).style.transform = px ? `translateX(${px * ui.charWidth / 32}px)${mirrored}` : mirrored.trim();
+    }
     if (sceneCanvas) sceneCanvas.style.transform = px ? `translateX(${px * ui.charWidth / 32}px)` : "";
 }
 

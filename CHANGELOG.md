@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fights on the road between zones: when the wizard changes zone over a border, a bridge, a mouth or the mine tunnel, he can now be stopped in the middle of a scene for a normal fight against the zone he is entering (no bosses, hydras or spectra; about 1 crossing in 10, set by pFightInCrossing; never on stairs or ladders). Walking left to right the fight looks as usual; walking right to left the whole fight is mirrored (he faces left on the right, the enemy comes from the left, spells and the god's touch areas follow). If he wins he walks on; if he falls he wakes up in the zone he was heading to.
 - Grotto and Dueñon now have a border scene between them (black-red Dueñon ground eating the grey rock): going from one zone to the other the wizard walks across it, left to right from the Grotto and right to left from Dueñon. It is the first border scene (a static scene that joins two regions); the art is by the artist.
 - A big canyon entrance into the Grotto (map spot 64,170): from la_Pradera13 and las_Dunas5 the wizard walks through a grey rocky canyon and steps in behind the boulders at its collapsed mouth, coming out inside the Grotto at la_Gruta1 or la_Gruta2. The art is by the artist.
 - A new way between the Cave and the Grotto: a crack in the rock wall near the Cave tunnel (map spot 100,181) links la_Cueva2 with la_Gruta3. The wizard stops at the crack and slips through it, like at the other mouths. The art is by the artist.

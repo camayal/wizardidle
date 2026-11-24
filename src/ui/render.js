@@ -377,7 +377,11 @@ function walkAcross(steps, changeScene, onArrive) {
     const play = (i) => {
         const s = steps[i], more = i + 1 < steps.length;
         ui.wizardOffset = startOf(s);
-        walkWizardTo(s.end != null ? s.end : side(s.dir), () => {
+        const target = s.end != null ? s.end : side(s.dir);
+        const walkOn = (onReached) => s.fightSpot == null ? walkWizardTo(target, onReached)
+            // a fight on the way (travel.js): he walks to its spot, the fight runs, then he walks on
+            : walkWizardTo(s.fightSpot, () => s.fight(() => walkWizardTo(target, onReached)));
+        walkOn(() => {
             const show = () => {
                 if (more) loadBackground(steps[i + 1].scene); else changeScene();
                 ui.wizardOffset = more ? startOf(steps[i + 1]) : 0;      // after the last scene he just stands in his place
@@ -401,6 +405,18 @@ function walkAcross(steps, changeScene, onArrive) {
 
 function wizardX() {
     return ui.squareSide + (ui.wizardOffset || 0) * ui.charWidth / 32;
+}
+
+// Mirror the characters (the wizard, the enemy and the spells, not the scene) for a fight in a scene he
+// walks right to left: he stands on the right facing left, the enemy comes from the left. The god's touch
+// areas swap sides with them. facing is 1 (as drawn) or -1.
+function setFacing(facing) {
+    ui.facing = facing;
+    if (run.simulation) return;
+    for (const id of ["pjCanvas", "npcCanvas", "spellCanvas"]) el(id).style.transform = facing < 0 ? "scaleX(-1)" : "";
+    const pj = el("pjDivineBtn"), npc = el("npcDivineBtn"), d = npc.offsetLeft - pj.offsetLeft;
+    pj.style.transform = facing < 0 ? `translateX(${d}px)` : "";
+    npc.style.transform = facing < 0 ? `translateX(${-d}px)` : "";
 }
 
 // Walk to an offset (sprite px), playing the walk strip (mirrored when going back), then call
@@ -861,6 +877,7 @@ function print(data) {
 };
 
 export {
+    setFacing,
     forgetImages,
     replaceImage,
     wizardTier,
