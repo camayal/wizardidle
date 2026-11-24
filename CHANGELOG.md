@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Grammar sweep of the player texts: the Help scroll ("withour", "intect", "achivement", "Showed near" and more), the Desert and Dueñon legends ("this hot dry air dries the bones", "intoxicates the air"), the "adores you" and "his prayer" console lines, and the FAQ questions. The FAQ also covers travelling over bridges, borders and mouths, fights on the road, the healer's cabin, spectra and prisms, and the underground inn in the Dunes.
 - The console lines for the cave and mine mouths are in English again ("comes to the mouth from Swamp to Cave") after the mouths were renamed.
 - The wizard's walk is smoother: he used to jump a whole step ten times a second; now he glides at the same speed, every screen refresh, while the legs still change frame every tenth of a second.
 - The pier land scene now has Prairie grass instead of sand (the pier is in the Prairie); art by the artist.
