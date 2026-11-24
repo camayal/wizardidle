@@ -745,9 +745,27 @@ function leavePlace(changeScene, done) {
     }));
 }
 
+// Props that stand in the scene (the notice board, the wanted posts) are drawn on the front layer
+// (overlayCanvas, over the wizard), so he walks behind them instead of over them.
+function clearFrontProp() {
+    const c = el("overlayCanvas");
+    c.getContext("2d").clearRect(0, 0, c.width, c.height);
+}
+function drawFrontProp(npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn) {
+    const c = el("overlayCanvas");
+    withImage("front", art(`${npc}`), (img) => {
+        if (state.npc != npc) return;
+        c.width = c.offsetWidth;
+        c.height = c.offsetHeight;
+        const [x, y, w, h] = npcBox(npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn);
+        pixelContext(c).drawImage(img, x, y, w, h);
+    });
+}
+
 // Remove the enemy (or object) from the right side of the scene.
 function clearNPC() {
     npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
+    clearFrontProp();
     state.npc = "";
 }
 
@@ -802,6 +820,7 @@ function loadNPC(npc, squareSideIn=ui.squareSide, headLevelIn=ui.headLevel, char
     state.npc = npc;
     if (run.simulation) return;
     loop.stop("blink");
+    if (npc.startsWith("prop_")) return drawFrontProp(npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn);
     withImage("npc", art(`${npc}`), (img) => {
         if (state.npc != npc) return;               // cleared or replaced while it loaded
         npcCanvas.width = npcCanvas.offsetWidth;    // cleared only when the new image is ready

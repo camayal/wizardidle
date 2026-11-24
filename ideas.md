@@ -262,3 +262,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): wakeUp cleared the NPC before leavePlace; now only when camping (events.js wakeUp).
 - 2026-11-24 (dev): orderWait message full width (grid-column 1/-1), grey italic as NONE_YET.
 - 2026-11-24 (dev): HUMANS = comerciante only (viejo stays in the Dunes inn). Art asked: strangers + offer / X / check bubbles (art-notes.md). To wire after approval: stranger list in quests.js HUMANS, bubble drawn over the NPC during readBoard/offer, swapped at decideOffer.
+- 2026-11-24 (dev): prop_* NPCs drawn on overlayCanvas (render.js drawFrontProp/clearFrontProp, cleared by clearNPC). Untested in a browser.
