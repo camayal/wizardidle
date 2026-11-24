@@ -300,11 +300,6 @@ Author's note: regarding god touches, attacking directly bosses, also boost beli
 ```
 
 ```
-Date: 2026-11-22 09:41
-Author's note: one of the other big sources of sounds is https://pixabay.com/users/freesound_community-46691455/ be sure we add freesound_community to our thanks
-```
-
-```
 Date: 2026-11-22 09:44
 Author's note: beach scenes are interesting but it is weird the transitions, i think we need to be sure that during our dynamic scene implementation we do sintermeditate scenes where the walk line is beach and the rest on top is ocean, then before the next scene we need to transition with another scene to a more away from the ocean scene so the following scene has a good fit with the current fixed beach scenes
 ```

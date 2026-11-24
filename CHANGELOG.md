@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Credits: freesound_community (Pixabay) is now thanked in the Licences section.
 - Music: the richer synth is in (ADSR, per-note filters, detune, vibrato, pan, noise, glides, velocity, stereo echo) and its old commented copy is gone. New tools/midi_to_song.py turns any .mid file into a song text: one instrument per channel from its General MIDI program, a drum kit on channel 10, velocity, channel volume, pan, sustain pedal and tempo changes kept. Map spots (Volcan, Cueva, Mina, Pradera 6) and travel links updated; the playa future points were dropped.
 - The greater naga's last two moves have their real art: fury slaps (he jumps to the wizard and spins like a tornado) and coil crush (he approaches, turns round and lashes a short tail). All the beach boss moves are now final art; only their sounds are missing.
 - The beach bosses have their real art: the lamia's maelstrom, tidal wave and serpent gaze, the greater naga's tide charge (a tide carries him along with its own wave scene) and both redrawn sprites. His fury slaps and coil crush still use stand-ins: he now jumps to the wizard and the strips are being redrawn (a spin like a tornado, and a flip with a short tail stretch).

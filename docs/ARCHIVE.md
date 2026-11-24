@@ -2086,3 +2086,7 @@ Author's note: considering the layouts for other screens, we can think in one fo
 
 - For artist (dev, 2026-11-20): a new **Water school** exists (enemy-only for now: the beach nagas and the lamia use it). Pending art, today all copies of the frost files: `spellPushWater` (12 frames, "Water bolt", same strip format as spellPush8), `spellRingWater_8` (16 frames, "Whirlpool", like spellRingBlue_8) and `fx_spark_water` (the cast spark of water casters, like fx_spark_frost). Water is its own look, not ice: teal, foam and droplets. Later: a water version of the school's other effects (scene spells like a tidal wave) once the boss attacks are chosen.
 
+```
+Date: 2026-11-22 09:41
+Author's note: one of the other big sources of sounds is https://pixabay.com/users/freesound_community-46691455/ be sure we add freesound_community to our thanks
+```
