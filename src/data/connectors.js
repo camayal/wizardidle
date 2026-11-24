@@ -10,6 +10,11 @@ export const connectorScenes = {
     bridge_swamp: ["bridge_swamp_west", "bridge_swamp_east"],
 };
 
+// Bridges whose art has a zone on its left that the map does not (the swamp bridge is drawn Prairie to the
+// left, Swamp to the right, though the Prairie lies east of the Swamp on the map): going from that zone he
+// walks left to right, from the other one right to left. Other bridges follow the map (the side he stands on).
+export const bridgeLeftZone = { bridge_swamp: "la_Pradera" };
+
 // Border scenes: a static scene joining two regions, no special rules but he can walk it either way. Drawn with the
 // zone on its left and the zone on its right; going the other way he walks right to left over the same art.
 // point -> { left: zone on the left, scene }.

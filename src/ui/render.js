@@ -384,10 +384,10 @@ function walkAcross(steps, changeScene, onArrive) {
         walkOn(() => {
             const show = () => {
                 if (more) loadBackground(steps[i + 1].scene); else changeScene();
-                ui.wizardOffset = more ? startOf(steps[i + 1]) : 0;      // after the last scene he just stands in his place
+                ui.wizardOffset = more ? startOf(steps[i + 1]) : entry(s.dir);      // after the last scene he comes into the real one from the edge he was heading to
                 if (!run.simulation) drawWizard();
             };
-            const next = () => more ? play(i + 1) : (onArrive && onArrive());
+            const next = () => more ? play(i + 1) : walkWizardTo(0, onArrive);      // and walks in to his place
             const go = () => { if (s.fade) fadeScene(show, next); else { show(); next(); } };
             if (s.pause && !run.simulation && document.hasFocus()) {     // a stop at `end` (the pier's end), then on
                 loop.freezeGame();

@@ -3,7 +3,7 @@
 
 import { places, zones } from './data/zones.js';
 import { connectorsBetween, destinations, moves, reachesPoint, spotX } from './travelGraph.js';
-import { borderScenes, connectorScenes, DOOR_STOP, mouthDoors, pierSteps, stairScenes } from './data/connectors.js';
+import { borderScenes, bridgeLeftZone, connectorScenes, DOOR_STOP, mouthDoors, pierSteps, stairScenes } from './data/connectors.js';
 import { pickRandomItem, YesOrNot } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
@@ -51,7 +51,9 @@ function crossing(origin, target) {
             steps.push({ scene: b.scene, dir: places[origin].zone === b.left ? 1 : -1 });
         } else if (connectorScenes[c]) {
             const bx = spotX(c);
-            steps.push(...bridgeSteps(c, x !== undefined && bx !== undefined && x > bx ? -1 : 1));
+            const east = bridgeLeftZone[c] ? places[origin].zone === bridgeLeftZone[c]      // art with a known zone on its left
+                : !(x !== undefined && bx !== undefined && x > bx);
+            steps.push(...bridgeSteps(c, east ? 1 : -1));
         } else if (stairScenes[c] || Object.values(stairScenes).some(s => s.top === c)) {
             const ground = stairScenes[c] ? c : Object.keys(stairScenes).find(k => stairScenes[k].top === c);
             if (c !== ground || !chain.includes(stairScenes[c].top)) continue;   // the top point is handled with its ground point
