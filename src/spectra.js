@@ -27,9 +27,10 @@ export function pickSpectrum() {
     return `spectrum_${left[Math.floor(Math.random() * left.length)]}`;
 }
 
-// He meets one: the quest for the prism is given the first time.
+// He meets one: the second time (so it is a pattern, not chance) a whisper gives the quest for the prism.
 export function spectrumSeen() {
-    if (sp().quest) return false;
+    sp().met = (sp().met || 0) + 1;
+    if (sp().quest || sp().met < 2) return false;
     sp().quest = true;
     stats.first("spectra.quest");
     return true;
