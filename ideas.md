@@ -252,3 +252,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): board/post props appear on arrival (events.js exploreEV, READ_SPOT=122 untested position); offer rates cut (inn .3>.12, board .08>.03, post .05>.02, human .01>.004, wish .04>.02). Artist started on the quest stone plates.
 - 2026-11-24 (dev): travel phase picks explore with config.quests.pTravelExplore (0.75) in quests.eventPick; search phase unchanged.
 - 2026-11-24 (dev): seek quests (his own wish) only target inns; board/post only by chance in exploreEV. Artist options for the stone plates await the author's pick (review/quests/stone, A/B/C).
+- 2026-11-24 (dev): stone art wired (img/ui/faith/order_plate_*, btn_up/down/x_*; CSS vars --n/--p/--d set inline by STATES in quests.js; click handler now matches [data-quest]). Old icon_order_ring removed. Untested in a browser; plate text size .7em and symbol offsets are guesses.

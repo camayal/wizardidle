@@ -348,7 +348,7 @@ function updateFaith(){
 el('innerTextScroll').addEventListener('click', (e) => {
     if (e.target.closest('.devToggle')) document.dispatchEvent(new Event('wizardidle:toggleDevBar'));
     if (e.target.closest('.questLogToggle')) { ui.questLogOpen = !ui.questLogOpen; ui.faithHtml = ''; updateFaith(); }
-    const questBtn = e.target.closest('.questBtn');       // the Faith scroll's quest buttons: the god's orders and "forget it" (src/quests.js)
+    const questBtn = e.target.closest('[data-quest]');       // the Faith scroll's quest buttons: the god's orders and "forget it" (src/quests.js)
     if (questBtn) {
         const what = questBtn.dataset.quest;
         const [act, arg] = what.split(':');

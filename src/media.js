@@ -62,7 +62,7 @@ export function artFolder(name) {
     if (OBJECTS.test(name)) return 'objects';
     if (/^(logro_|no_logro$)/.test(name)) return 'ui/achievements';
     if (/^tomb_/.test(name)) return 'ui/cemetery';
-    if (/^(anim_)?faith_|^anim_faith_|^icon_order_/.test(name)) return 'ui/faith';   // the faith scroll's meter, candle, border
+    if (/^(anim_)?faith_|^anim_faith_|^icon_order_|^order_plate_|^btn_(up|down|x)_/.test(name)) return 'ui/faith';   // the faith scroll's meter, candle, border
     if (/^(ribbon_(rest|selected)|icon_(stats|kill|achievements|map|faith)_[a-z]+)$/.test(name)) return 'ui/ribbon';   // the scroll bookmarks
     if (UI.test(name)) return 'ui';
     return '';

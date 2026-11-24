@@ -553,20 +553,22 @@ export function godDrop(i) {
 // each delivery carries one of three parcels (kept by its id, so it never changes on redraw)
 const parcelOf = (q) => `item_parcel_${'abc'[q.id % 3]}`;
 const PHASE = { travel: 'on the road', search: 'searching' };
-const ORDER_ICONS = { shrine: 'icon_order_shrine_mid', pilgrimage: 'icon_order_pilgrim_mid', hidden: 'icon_order_hidden_mid' };   // drawn over icon_order_ring
-const orderIcon = (k) => `<span class='orderIcon'><img src='${art('icon_order_ring')}'/><img src='${art(ORDER_ICONS[k])}'/></span>`;
+const ORDER_ICONS = { shrine: 'icon_order_shrine_mid', pilgrimage: 'icon_order_pilgrim_mid', hidden: 'icon_order_hidden_mid' };   // drawn in the socket of order_plate_*
+const STATES = (stem) => `style="--n:url(${art(stem + '_normal')});--p:url(${art(stem + '_pressed')});--d:url(${art(stem + '_disabled')})"`;
+const orderIcon = (k) => `<img class='orderIcon' src='${art(ORDER_ICONS[k])}'/>`;      // sits in the plate's socket
+const mvBtn = (act, i, stem, off, cls = '') => `<button class='stoneBtn ${cls}' ${STATES(stem)} data-quest='${act}:${i}' ${off ? 'disabled' : ''}></button>`;
 export function scrollHtml() {
     const Q = qs(), q = state.quest;
     const all = q ? [q, ...Q.queue] : [...Q.queue];
     let h = `<br><span class='subtitles'>Divine orders</span><br><div class='questOrders'>`;
     h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
-        : GOD_ORDERS.map((k) => `<button class='orderBtn' data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
+        : GOD_ORDERS.map((k) => `<button class='orderBtn' ${STATES('order_plate')} data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
     h += `</div><br><span class='subtitles'>Errands</span><br>`;
     if (!all.length) h += `<p>No quest now</p>`;
     h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
-        `<button class='questBtn mv' data-quest='up:${i}' ${i === 0 ? 'disabled' : ''}>▲</button>` +
-        `<button class='questBtn mv' data-quest='down:${i}' ${i === all.length - 1 ? 'disabled' : ''}>▼</button>` +
-        `<button class='questBtn mv drop' data-quest='drop:${i}'>✕</button></div>`).join('');
+        mvBtn('up', i, 'btn_up', i === 0) +
+        mvBtn('down', i, 'btn_down', i === all.length - 1) +
+        mvBtn('drop', i, 'btn_x', false) + `</div>`).join('');
     if (Q.log.length) {   // the history is folded like the Help sections; the page redraws, so the open state lives in ui
         const open = ui.questLogOpen;
         h += `<div class='faq questLogToggle${open ? ' active' : ''}'>Past quests (${Q.log.length})</div>` +

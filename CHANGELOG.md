@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Quests page has its stone art: the three divine orders are cobblestone plates (symbol in the socket, name below) and every errand has stone up, down and X buttons, each with a pressed and a greyed-out look. Art by the artist.
 - When the wizard sets out to look for work he only goes to inns now; hunting for a notice board or a wanted post on purpose is gone (he still comes across them by chance on his way).
 - On the way to a quest's target the wizard keeps to his road: three events in four are plain exploring, so a fight, a prayer, a rest or a find no longer pulls him aside as often (the other event types still happen now and then).
 - A notice board or wanted post is now already standing in the scene when the wizard walks into it (like a rune or a book, but in plain view); he walks up to it and reads it. He can still turn the job down. Quests also come much less often: inn jobs, the board, the posts, strangers on the road and his own wishes are all rarer. On the Quests page the "Past quests" line is centred and red like the other subtitles.
