@@ -726,6 +726,7 @@ function leavePlace(changeScene, done) {
     const key = (ui.currentBackGround || "").toLowerCase(), door = DOORS[key], street = STREET_DOORS[key];
     if (door == null) return walkThroughScene(changeScene, done);
     walkWizardTo(door - 48, () => fadeScene(() => {
+        clearNPC();                                      // whoever stayed inside (the gambler) goes only when the scene fades
         if (street && !run.simulation) {
             loadBackground(street[0]);
             ui.wizardOffset = street[1] - 48;           // at the door in the street

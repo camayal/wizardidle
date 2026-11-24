@@ -12,7 +12,7 @@ import { hopEnemy, hopWizard } from '../combat.js';
 import { spell } from '../spells.js';
 import { clearDice, throwDice } from '../ui/diceTable.js';
 import { playSound } from '../audio.js';
-import { clearNPC, leavePlace, print, showStage, updateHeading, wizardName } from '../ui/render.js';
+import { leavePlace, print, showStage, updateHeading, wizardName } from '../ui/render.js';
 import { art } from '../media.js';
 
 //TODO add idx for all this part and achievements
@@ -275,8 +275,7 @@ function finalScoreSixFiveFour(nameDicePlayer){
                 break;
             }
             print(`${wizardName()} exits the gaming house`);
-            clearNPC();
-            run.restAtInn = false;
+            run.restAtInn = false;      // the gambler stays in his place while the wizard walks out (leavePlace clears him as the scene fades)
             endEvent();
             leavePlace(showStage, nextEvent);       // out through the dice house's door
     }
