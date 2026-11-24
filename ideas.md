@@ -54,6 +54,9 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-24: First border scene
+- border_gruta_duenon wired: a border is a static scene joining two regions, walkable both ways, no events yet (vocabulary in docs/MAP.md). `borderScenes` in data/connectors.js, `crossing` in travel.js picks the direction by the zone on its left; art in img/places/borders (media.js rule border_). Point linked to la_Gruta2/3 and el_Duenon1/2 by hand edits of travelOverrides, graph regenerated. Not tested in a browser. Idea: when more borders arrive, mirrored art or enemies inside could be a design call.
+
 ### 2026-11-20: Scene art wired, front overlays
 - The artist's review queue is done: two files replace game art (la_pradera2, ground map stone bridge), the rest is copied into img/places/future, connectors and overlays with media.js rules. A front layer (overlayCanvas, src/data/overlays.js) draws over the wizard for mina_cueva1 and mina_cueva_2; untested in a browser (no way to run it here). Later the same day: the future scenes became numbered stages in zones.js and the game travels by the author's manual links only (src/travelGraph.js moves/destinations, old strings as the fallback). Open: la_playa1-6 need a zone (enemies, boss) before they can be stages; connector halves (bridges, mouths, stairs) are art in img/places/connectors, not yet shown on a trip; floor shaft in ladder mine side vs the walk line.
 
