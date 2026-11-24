@@ -18,6 +18,8 @@ import { travelPoints } from '../data/travelOverrides.js';
 import { sidePanel } from './panel.js';
 import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
+import { art } from '../media.js';
+import { connectorScenesOf } from '../data/connectors.js';
 
 const MAPS = { above: 'img/ui/mapaboveground.png', ground: 'img/ui/mapa.png', under: 'img/ui/mapaunderground.png' };
 const ZOOM = 2, COLORS = { move: '#2fd02f', dest: '#f2d21c', far: '#e03030' }, FUTURE = '#f0f';
@@ -232,6 +234,16 @@ function show(n) {
     try { loadBackground(n); } catch (e) { /* no background for this stage */ }
 }
 
+// The scenes of a spot for the viewers: a connector's own scenes (a bridge, stairs or mouth has several), else its stage.
+const scenesOf = (n) => (isStage(n) ? [n] : connectorScenesOf(n));
+function viewers() {
+    p.views.innerHTML = [['Source', src], ['Target', tgt()]].filter(([, n]) => n).map(([role, n]) => {
+        const list = scenesOf(n);
+        return `<div><b>${role}: ${esc(n)}</b>${list.length ? '' : ' <span class="muted">(no scene yet)</span>'}<div style="display:flex;flex-wrap:wrap;gap:6px">${list.map((s) =>
+            `<figure style="margin:0"><img src="${art(s.toLowerCase())}" alt="${esc(s)}" style="width:256px;image-rendering:pixelated;display:block;background:#222" onerror="this.style.display='none'"><figcaption class="muted">${esc(s)}</figcaption></figure>`).join('')}</div></div>`;
+    }).join('');
+}
+
 function setLayer(l) {
     layer = l;
     p.layers.querySelectorAll('button').forEach((b) => { b.style.fontWeight = b.dataset.l == l ? 'bold' : ''; });
@@ -243,7 +255,7 @@ function choose(role, n) {
     if (role === 'src') { if (n !== src) tgts = []; src = n; }       // a new source starts with no targets
     else if (role === 'tgt') tgts = n ? [n] : [];                   // the list: one target
     else if (n) tgts = tgts.includes(n) ? tgts.filter((t) => t !== n) : [...tgts, n];       // shift-click: add or drop a target
-    p.srcSel.value = src; p.tgtSel.value = tgt();
+    p.srcSel.value = src; p.tgtSel.value = tgt(); viewers();
     placing = '';
     if (n) { show(n); setLayer(layerOf(n)); } else draw();
 }
@@ -278,6 +290,7 @@ export async function open(devTools) {
                 <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button><button data-id="check" title="ring every spot that no chain of links joins to the main map">Check connections</button>
                 <button data-id="path" title="pick a source and exactly one target: draws the cheapest path the wizard would walk">Optimal path</button></div>
         </div>
+        <div data-id="views" style="display:flex;flex-direction:column;gap:6px;margin:6px 0"></div>
         <div data-id="linkInfo"></div>
         <div data-id="checkInfo"></div>
         <div data-id="pathInfo"></div>

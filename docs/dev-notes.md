@@ -37,7 +37,6 @@ Built and committed, all untested in a browser (no node in the dev session): bri
 - Fights inside connector scenes: not done. When a fight happens in a mirrored (east to west) scene, mirror the wizard cast, spells, scene spells, enemy entrance and attacks only (never the art); a flag like ui.facing read by those. Start small, extend if it looks good. Open: do enemies appear in connector scenes at all, and how long a scene lasts.
 - Jumps and teleports: later (jump the shaft; about level 100 short teleports to hop obstacles and reach other scenes). Floor shaft of the ladder mine side may sit on the walk line.
 - Still open from the author: bridge halves shown as neighbours with no gap (done by order, no joined wide scene); exit markers drawn per connector pair; enter_mine_S placement.
-- Test the front overlays (la_mina6, la_mina7) and the new stages in a browser.
 - After that: la_playa zone data (docs/plans/MAPS.md step 5).
 
 ```
@@ -48,14 +47,6 @@ On the scene: lamia (boss fight)
 Speed x1
 Date: 2026-11-20 22:41
 Author's note: spell powers of both bosses should match the color of the sea
-```
-
-```
-Date: 2026-11-20 23:02
-Author's note: improvements for travel dev console 
-- similar to art dev console, add another scene viewer called target, source will be in the top in the actual scene view, the target scene will be display in the target.
-- now conectors have actual scenes, i would like to see the scenes when the conector is selected, most conectors have 2 scenes, put them in source and target
-- if the conector has more than 2 scenes, add more scener viewers
 ```
 
 ```

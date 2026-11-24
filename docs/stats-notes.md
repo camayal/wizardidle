@@ -4,3 +4,5 @@ Clerk's permanent inbox: every feature, joke or event that could be counted goes
 
 - 2026-11-24 | camping: wizard wakes where he slept and walks back | nights camped | -
 - 2026-11-24 | boss arrive/leave sounds heard | nothing to count | skip
+2026-11-24 | a direct hit of the god on a boss raises the wizard's belief | boss hits that raised belief | -
+2026-11-24 | desert inn: the wizard walks to the tent door in the first desert scene and goes in to rest | rests at the desert tent | -

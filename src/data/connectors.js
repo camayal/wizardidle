@@ -55,4 +55,9 @@ for (const m of Object.keys(mouthDoors).filter((k) => k.startsWith("mouth_") && 
     addScenes(m, `the mouth at ${m.replace("mouth_", "").replace("_", ",")}`, [m]);
     addScenes(`${m}_under`, `the mouth at ${m.replace("mouth_", "").replace("_", ",")}, inside`, [`${m}_under`]);
 }
+// The scenes of a connector point, in trip order (a mouth point has its twin inside as the second one).
+export const connectorScenesOf = (point) => {
+    const own = Object.entries(SCENE_INFO).filter(([, v]) => v.point === point).sort((a, b) => a[1].n - b[1].n).map(([k]) => k);
+    return own.length && !own[0].endsWith("_under") && SCENE_INFO[`${own[0]}_under`] ? [...own, `${own[0]}_under`] : own;
+};
 export const connectorSceneInfo = (scene) => SCENE_INFO[String(scene).toLowerCase()];

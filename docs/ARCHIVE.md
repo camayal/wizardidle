@@ -2227,3 +2227,11 @@ Date: 2026-11-21 10:07 (from the author, via dev)
 Rainbow boss, art part: dark spectrum enemies (sheet wizardidle-old-ideas/unorganzed_sprites/dark-skelets.png), one per colour: red, orange, yellow, green, blue, indigo, violet. Some exist already; recolour so every colour of the Rainbow boss is represented. Light-school attacks in their colour; Tundra only. Also dye the Rainbow boss's yellow cape black to match the spectrum. Dev wires events later.
 ```
 (done: sea colours, healer hood C, Rainbow cape C and the seven spectrum sprites copied in 2026-11-24)
+```
+Date: 2026-11-20 23:02
+Author's note: improvements for travel dev console 
+- similar to art dev console, add another scene viewer called target, source will be in the top in the actual scene view, the target scene will be display in the target.
+- now conectors have actual scenes, i would like to see the scenes when the conector is selected, most conectors have 2 scenes, put them in source and target
+- if the conector has more than 2 scenes, add more scener viewers
+```
+
