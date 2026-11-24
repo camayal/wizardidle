@@ -103,6 +103,7 @@ Code asks by plain name; only src/media.js knows folders. A name that fits no ru
 - Playtests: `python tools/playtest.py` (see its help) or open index.html with `?sim=1`.
 
 ## docs/
+
 - Top level (inboxes and index): ROADMAP.md: stages ahead. ARCHIVE.md: finished items, append-only, never read. dev-notes.md: the one notes file for the author (bugs, improvements, talk with dev). art-notes.md, sound-notes.md (saved from the dev tools box), thinker-notes.md (design notes moved there): role inboxes. MAP.md: this file.
 - STORY.md: the story script, every chapter scroll and console beat (stays here: the texts mode fetches it). Its review page is in artefacts_tests/ (README there); after changing STORY.md run `python artefacts_tests/build_story_scrolls.py`.
 - SOUNDS.md: sounds pending (approved, to cut, to choose) (stays here: the musician role and the sounds mode use it). TRAVEL.md: plan to replace the hand-typed destinations with a graph computed from map coordinates (soft costs, bridges, built for the dynamic scenes) (stays here: travel code comments and tools point at it).
