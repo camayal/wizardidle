@@ -87,11 +87,9 @@ const MAKERS = {
         const z = pickRandomItem(INN_ZONES.filter((x) => x !== state.zone.current && hasStages(x)).join(','));
         return z ? base('delivery', giver, `Deliver a parcel to the inn of the ${zoneName(z)}`, { zone: z }, 'gold') : null;
     },
-    // Looking for work: go to a place that gives quests (an inn, the board, a post) and ask there.
+    // Looking for work: he only goes to the inns to ask (the board and the posts he finds by chance on his way, never on purpose).
     seek(giver) {
-        const spots = [...INN_ZONES.filter(hasStages).map((z) => ({ z, g: 'inn', t: `Look for work at the inn of the ${zoneName(z)}` })),
-            ...BOARD_ZONES.filter(hasStages).map((z) => ({ z, g: 'board', t: `Read the board of the ${zoneName(z)}` })),
-            ...POST_ZONES().map((z) => ({ z, g: 'post', t: `Look for a wanted post in the ${zoneName(z)}` }))];
+        const spots = INN_ZONES.filter(hasStages).map((z) => ({ z, g: 'inn', t: `Look for work at the inn of the ${zoneName(z)}` }));
         const s = spots[Math.floor(Math.random() * spots.length)];
         return s ? base('seek', giver, s.t, { zone: s.z, giver: s.g }, 'xp') : null;
     },
