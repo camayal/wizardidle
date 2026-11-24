@@ -80,7 +80,7 @@ export const config = {
     },
     // Fixed rules of the world.
     balance: {
-        dunesInn: 0,               // 1 = the underground inn of las_Dunas2 exists (turn on once its art is in img/places/las_dunas/las_dunas_taberna.png)
+        dunesInn: 1,               // 1 = the underground inn of las_Dunas2 exists (turn on once its art is in img/places/las_dunas/las_dunas_taberna.png)
         rXP: 1.1,                  // XP curve exponent
         factorHP: 8,               // XP/HP scale factor
         rHP: 1.6483,               // HP per XP of the next level
