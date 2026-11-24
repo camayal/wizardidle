@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- La_Mina2: the rail is now a short track that starts past the doorway and ends at a buffer stop (it used to run across the whole scene).
 - Travel dev console: the edges have a dark outline (a green line on green grass was hard to see) and the notes box is gone.
 - La_Mina4 is redrawn as a rail junction: the branch comes toward the viewer with a switch lever.
 - The Texts dev mode loads again (a stray line break inside a string in the away poems made the whole tools script fail with "Invalid or unexpected token").
