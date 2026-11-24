@@ -226,3 +226,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): crossFight waits for run.spellUntil (set in spells.js for every spell) before un-mirroring, so the last spell frames stay mirrored. Untested in a browser.
 - 2026-11-24 (dev): dev connector walks pick From/To by themselves (travel.js stagesFor: first stage pair whose crossingSteps equals the walk; crossing() split into crossingSteps + planFight). Untested in a browser.
 - 2026-11-24 (dev): pier_land.png replaced by the artist's grass version (pier is in the Prairie); pier_end had no sand.
+- 2026-11-24 (dev): walkWizardTo moves by requestAnimationFrame (same 11 px per 100 ms), frame still every 100 ms; the 100 ms clock is a fallback for background tabs. Untested in a browser. If still clippy, the 4-frame walk strip is the next suspect (artist: more frames), the loop's 50 ms tick is not involved now.

@@ -421,6 +421,7 @@ function setFacing(facing) {
 
 // Walk to an offset (sprite px), playing the walk strip (mirrored when going back), then call
 // onArrive. Without drawing (simulation, page in the background) he is simply there.
+let walkToken = 0;
 function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
     let froze = false;
     const arrive = () => {
@@ -442,7 +443,7 @@ function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
     // starts walking; the first frame is drawn at once, where he stands)
     if (pjCanvas.width != pjCanvas.offsetWidth) clearWizardCanvas();
     const drawStep = () => {
-        const frame = step++ % 4;
+        const frame = step % 4;
         withImage("pj", art(`anim_walk${tier}`), (img) => {
             const ctx = pixelContext(pjCanvas), x = wizardX();
             ctx.clearRect(0, 0, pjCanvas.width, pjCanvas.height);
@@ -453,11 +454,25 @@ function walkWizardTo(target, onArrive, stepPx = WALK_STEP) {
         });
     };
     drawStep();
-    loop.every("walkPJ", () => {
-        ui.wizardOffset = (ui.wizardOffset || 0) + dir * stepPx;
+    // He moves every screen refresh (stepPx per 100 ms, the same speed as before, but smooth: it used to jump a
+    // whole step every 100 ms); the walk strip still changes frame every 100 ms. If the page is not painting
+    // (a background tab) the clock below moves him instead, so the walk still ends.
+    let last = performance.now();
+    const me = ++walkToken;
+    const move = (t, again) => {
+        if (me !== walkToken || !loop.isRunning("walkPJ")) return;     // the walk was cancelled or another one began
+        const dt = Math.min(Math.max(t - last, 0), 100);
+        last = t;
+        ui.wizardOffset = (ui.wizardOffset || 0) + dir * stepPx * dt / 100 * loop.getSpeed();
         if ((target - ui.wizardOffset) * dir <= 0) return arrive();
         drawStep();
+        if (again) requestAnimationFrame((n) => move(n, true));
+    };
+    loop.every("walkPJ", () => {
+        step++;
+        if (performance.now() - last > 250) move(performance.now(), false);
     }, 100);
+    requestAnimationFrame((t) => move(t, true));
 }
 
 // A small twinkle on the ground where something can be found (scene x in sprite px), until
