@@ -65,3 +65,8 @@ Author's note: checking other details about etymos boss, i decided to keep the s
 Date: 2026-11-24 (from the author, via dev)
 la_Mina2 (img/places/la_mina/la_mina2.png): the rail road should only extend a little to the right of the scene and never reach the left edge, following the map art. Redraw the rail in the scene and drop it in the review drop.
 ```
+
+```
+Date: 2026-11-24 (from the author, via dev)
+Belief meter marker (statsPages.js beliefMeter, img/ui/faith/faith_meter_marker.png, now 5x5 px, a simple diamond): hard to read. Draw something more visible that says it can move, e.g. a little stick or needle (about 3 x 10 px, pointing out from the candle along the ring). Dev placed a plain cream stick as a stand-in with a slide animation (.faithStick in index.html); the final art replaces it. The candle stays as it is. Drop it in the review drop.
+```
