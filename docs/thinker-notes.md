@@ -87,7 +87,6 @@ Please turn this into a plan with options (why Etymos breaks into six, where and
   4. Fights in a mirrored (east to west) scene: wizard, spells and enemy entrance mirrored, art never (dev-notes has the ui.facing idea).
   5. Stage entries: should each scene be a stage of a `connector` zone (legend, events, travel links), or stay outside `places`? The pathfinder reads places{} as stages, so a decision is needed on how the Travel graph and tool see them.
 
-
 ## From the author's notes, moved from dev-notes (2026-11-24)
 
 ```
@@ -101,43 +100,9 @@ Author's note: idea for the end if the player god is dead. it is an  desintegrat
 ```
 
 ```
-Date: 2026-11-20 23:29
-Author's note: send to [[wt, we need something nice, such a missions:
-- some can be assigned by wizard himself, for example pick ingridients, get more gold, something, i think we need to design some learning algoritm here, perhaps genetic algornitm to give some "inteligence"
-- some task in we can asign in the faith screen, most of them to booth the faith points
-- some given by npc in taverns, inns or merchants
-- when a secret is found, wizard is mostly focus on that, looking for something, it is why we need to keep checking pathfinder to give some movement purpose
-```
-
-```
 Date: 2026-11-21 10:14
 Author's note: big dramatic change, only reserverd for v.3.0.0 send to [[wt.
 double the size of the scene screen, no animations, no sice of things, just souble to finish the tip part  to allow to finish the scenes, for example to of the trees, entire buildings, big mountans, tower, and the most important add sky details, like moons and suns cycles
-```
-
-```
-Date: 2026-11-21 10:23
-Author's note: quests ideas:
-- Wanted type of quests, hunt a given rare or even boss enemy (this increase the changes of finding them a little, not too much because it getting easy, but not as regular because will be boring)
-- Get special ingridients from some enemies, they can be drop anytime, so if the wizard has them in the inventory the wizard can give them , avoid to have spoilable ingredients
-- Explore some zones
-- Fishing quests
-- Crafting quests
-- Find runes, books, or statues to study them
-```
-
-```
-Date: 2026-11-21 10:26
-Author's note: More quest ideas related with faith:
-- Chances of have quest to get good amount of faith in the shrines
-- Short peregrinations, for example visit 3 shries in different zones
-- Find very hiddent shrines (such as vulcano)
-```
-
-```
-Date: 2026-11-21 10:28
-Author's note: More ideas for economy quests:
-- Deliver things from one inn to another (some of those quest need to be reduced the chances when the wizard is in almost final levels, at that moment, only killing or selfimprovement quests should be done.
 ```
 
 ```
