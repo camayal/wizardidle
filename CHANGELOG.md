@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- A direct hit of the god on a boss now also raises the wizard's belief (more than a plain touch), and a healing touch costs half the faith of an attack of the same size.
+- Travel dev console: the buttons moved under the map, the panel and the map are wider, and a new Optimal path button draws the cheapest path between the source and one target, with its cost and stops.
 - La_Mina2: the rail is now a short track that starts past the doorway and ends at a buffer stop (it used to run across the whole scene).
 - Travel dev console: the edges have a dark outline (a green line on green grass was hard to see) and the notes box is gone.
 - La_Mina4 is redrawn as a rail junction: the branch comes toward the viewer with a switch lever.

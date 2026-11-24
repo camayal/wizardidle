@@ -56,11 +56,7 @@ Author's note: improvements for travel dev console
 - similar to art dev console, add another scene viewer called target, source will be in the top in the actual scene view, the target scene will be display in the target.
 - now conectors have actual scenes, i would like to see the scenes when the conector is selected, most conectors have 2 scenes, put them in source and target
 - if the conector has more than 2 scenes, add more scener viewers
-- move all the buttons from the left of the map to the button of the map and expand the map  and the console a little more, to try to utilize the max space of the screen, i need to see that map large
-- another function called optimous path, when I select target and one and only one source, use the pathfinder algoritm to identify the path. remember this will be used in the future for the wizard to reach important destinations.
 - be sure to have values of the lenght of the edges of the graph, we need to convert them in sort of unity, for example for xx px we need 2 or 3 dynamic scenes
-- remove note box, instead the author notes recover technical info about everythign it is in the travel dev console so I can use the normal author notes to comunicate about the map, scenes, travel, etc.
-- edges should have outline, see green lines in a green praire is dificult
 ```
 
 ```
@@ -168,16 +164,6 @@ Author's note: [waits for art: el_desierto_tienda asked from the artist in docs/
 ```
 Date: 2026-11-22 09:29
 Author's note: i am thinking that reviving the wizard by touching him is actually penalizing him by removing him from his track (cabin will leave the wizard in many places. we need to be sure to dev soemthing that mke him to be relased close on in the region he was when hi is doing a quest
-```
-
-```
-Game test
-Wizard: level 25, HP 371 / 454, gold 3796, faith 5513
-Zone: Duenon, stage 3
-On the scene: nothing
-Speed x10
-Date: 2026-11-22 09:37
-Author's note: regarding god touches, attacking directly bosses, also boost belief (healing in normal and rare enemies, still)
 ```
 
 ```

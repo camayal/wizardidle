@@ -70,10 +70,10 @@ function healByTouch() {
     if (Math.round(state.player.hp) + Math.round(healHit) > Math.round(state.player.hpBase)) {
         healHit = Math.round(state.player.hpBase) - Math.round(state.player.hp);
     }
-    let faithLost = touchCost(healHit * getRandomInt(1, 3));
+    let faithLost = touchCost(healHit * getRandomInt(1, 3)) * config.belief.healCostFactor;
     if (Math.round(state.player.faith) - Math.round(faithLost) < 0) {
         faithLost = state.player.faith;
-        healHit = faithLost / getRandomInt(1, 3);
+        healHit = faithLost / config.belief.healCostFactor / getRandomInt(1, 3);
     }
     if ((Math.round(state.player.hp) < Math.round(state.player.hpBase)) && (Math.round(state.player.faith) > 0)) {
         stats.count("god.heals");
@@ -84,7 +84,7 @@ function healByTouch() {
         if (state.player.hp + healHit > state.player.hpBase) {
             healHit = state.player.hpBase - state.player.hp;
             state.player.hp = state.player.hpBase;
-            faithLost = touchCost(healHit * getRandomInt(1, 3));
+            faithLost = touchCost(healHit * getRandomInt(1, 3)) * config.belief.healCostFactor;
         } else {
             state.player.hp = state.player.hp + (healHit);
         }
@@ -124,6 +124,7 @@ function npcBtn(){
             }
             fight.enemyHP = Math.max(0, Math.round(fight.enemyHP) - (Math.round(divineHit)));
             beliefMoment(moment);
+            if (fight.bossCombat) beliefMoment("bossHit");     // hitting a boss directly raises belief more
             fight.godHelped = true;
             if (fight.enemyHP <= 0) beliefMoment("finalBlow");      // it falls at the fight's next step
             

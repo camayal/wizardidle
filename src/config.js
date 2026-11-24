@@ -22,6 +22,7 @@ export const config = {
             critic: 3,                         // the god's touch lands a critic (the divine powers)
             superCritic: 6,
             touch: 0.5,                        // a normal heal or hit touch
+            bossHit: 1.5,                      // a direct hit on a boss (extra to the touch itself; a first number to tune)
             revive: 2,
             prayer: 1,                         // entering a shrine
             skippedShrine: -1,
@@ -40,6 +41,7 @@ export const config = {
         superCriticChance: 0.1,                // 1 in 10 of the god's critics (the author)
         superCriticMultiplier: 16,             // against x8 for a critic
         devoutTouchCost: 0.75, doubterTouchCost: 2,
+        healCostFactor: 0.5,                   // a healing touch costs this share of the faith an attack of the same size would (a first number to tune)
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
     // Time away (docs/plans/AWAY.md, first estimates, to playtest): away time / worldDivisor = world time.

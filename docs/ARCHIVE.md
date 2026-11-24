@@ -2179,3 +2179,17 @@ la_Mina2 (img/places/la_mina/la_mina2.png): the rail road should only extend a l
 Artist 2026-11-24: author approved option C, review/scene_mina/la_mina2_c.png. Waiting for dev to copy it into img/; archive this note after that.
 ```
 (done: la_mina2 option C copied in)
+
+```
+Game test
+Wizard: level 25, HP 371 / 454, gold 3796, faith 5513
+Zone: Duenon, stage 3
+On the scene: nothing
+Speed x10
+Date: 2026-11-22 09:37
+Author's note: regarding god touches, attacking directly bosses, also boost belief (healing in normal and rare enemies, still)
+```
+(travel console note, done) - move all the buttons from the left of the map to the button of the map and expand the map  and the console a little more, to try to utilize the max space of the screen, i need to see that map large
+(travel console note, done) - another function called optimous path, when I select target and one and only one source, use the pathfinder algoritm to identify the path. remember this will be used in the future for the wizard to reach important destinations.
+(travel console note, done) - remove note box, instead the author notes recover technical info about everythign it is in the travel dev console so I can use the normal author notes to comunicate about the map, scenes, travel, etc.
+(travel console note, done) - edges should have outline, see green lines in a green praire is dificult

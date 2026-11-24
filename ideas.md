@@ -200,3 +200,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): belief meter marker art B (needle on a bead, 5x11) wired in place of the stand-in stick; untested in a browser.
 - 2026-11-24 (dev): travel console edge outline + note box removed; la_mina4 option A copied in; sea-coloured boss spells are art, sent to art-notes. la_Mina2 option C waits for the author's yes.
 - 2026-11-24 (dev): la_mina2 option C copied in; rail note archived.
+- 2026-11-24 (dev): boss hits raise belief (config.belief.weights.bossHit 1.5), heal touch costs x0.5 (config.belief.healCostFactor), travel console layout + Optimal path done; all untested in a browser, numbers are first guesses. Left in the travel note: source/target scene viewers, edge length as dynamic scenes.

@@ -81,7 +81,7 @@ function place(panel) {
     const free = side == 'left' ? box.left : innerWidth - box.right;
     const s = panel.root.style;
     if (free >= MIN_SIDE) {
-        const width = Math.min(free - 2 * GAP, 520);
+        const width = Math.min(free - 2 * GAP, panel.maxWidth || 520);
         Object.assign(s, { top: `${GAP}px`, bottom: `${GAP}px`, maxHeight: '', width: `${width}px`,
             left: side == 'left' ? `${box.left - GAP - width}px` : `${box.right + GAP}px`, right: '' });
     } else {            // no room beside the game: float over it, at its side

@@ -12,7 +12,7 @@
 
 import { travelGraph as g } from '../data/travelGraph.js';
 import { places } from '../data/zones.js';
-import { neighbors, overrides, pairKey, verdict, byName, rebuild, SIZE } from '../travelGraph.js';
+import { neighbors, overrides, pairKey, verdict, byName, rebuild, travelCost, routeIds, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
 import { travelPoints } from '../data/travelOverrides.js';
 import { sidePanel } from './panel.js';
@@ -29,7 +29,7 @@ const names = g.nodes.map((n, i) => { const at = stages.filter((s) => g.anchors[
 const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth moves with its underground twin
 const CUSTOM = ['future', 'connector'];         // kinds of the points added by hand
 const touched = new Set();                      // links given a verdict since this page was opened
-let checking = false;
+let checking = false, showPath = false;
 let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = {}, points = {}, newPoint = null;
 g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2], note: (travelPoints[n[4]] || {}).note || '' }; });
 // The spots not joined to the biggest group of linked spots (impossible links do not count): [node, ...].
@@ -107,6 +107,26 @@ function draw() {
         ctx.globalAlpha = 1;
         ctx.setLineDash([]);
     }
+    const goals = tgts.filter((t) => t !== src);
+    let pathText = '';
+    if (showPath) {
+        if (!src || goals.length !== 1) pathText = 'Optimal path: pick a source and exactly one target.';
+        else if (!Number.isFinite(travelCost(src, goals[0]))) pathText = `<b>${esc(src)}</b> to <b>${esc(goals[0])}</b>: no path.`;
+        else {
+            const ids = routeIds(src, goals[0]);
+            ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+            for (let k = 1; k < ids.length; k++) {
+                if (g.nodes[ids[k]][0] !== layer || g.nodes[ids[k - 1]][0] !== layer) continue;
+                const a = pos(ids[k - 1]), b = pos(ids[k]);
+                ctx.beginPath(); ctx.moveTo(a[0] * ZOOM, a[1] * ZOOM); ctx.lineTo(b[0] * ZOOM, b[1] * ZOOM);
+                ctx.strokeStyle = '#000'; ctx.lineWidth = 8; ctx.stroke();
+                ctx.strokeStyle = '#0ff'; ctx.lineWidth = 4; ctx.stroke();
+            }
+            const stops = ids.map((n) => names[n][0] || g.nodes[n][4]).filter(Boolean);
+            pathText = `<b>Optimal path</b> ${esc(src)} to ${esc(goals[0])}: cost ${Math.round(travelCost(src, goals[0]))} (walking pixels), ${ids.length} spots: ${stops.map(esc).join(' &rarr; ')}`;
+        }
+    }
+    p.pathInfo.innerHTML = pathText;
     g.nodes.forEach(([l], i) => {
         if (l !== layer) return;
         const kind = kindOf(i);
@@ -234,31 +254,31 @@ export async function open(devTools) {
     tools.setSpeed(1);
     tools.resetScene();             // the game waits while the mode is open: the scene stays as picked
     side = sidePanel('right', 'Travel: curate the links', () => close());
+    side.maxWidth = 900;
     side.body.innerHTML = `
         <div class="row"><b>Source:</b><select data-id="srcSel">${options()}</select><button data-id="srcPlace">change coord</button></div>
         <div class="row"><b>Target:</b><select data-id="tgtSel">${options()}</select><button data-id="tgtPlace">change coord</button></div>
         <div class="row"><b>New point:</b><select data-id="newKind"><option value="future">future scene</option><option value="connector">connector (bridge, stairs...)</option></select>
             <input data-id="newName" placeholder="name (letters, digits, _)" size="18"><button data-id="newAdd">Add point</button></div>
         <div data-id="summary" class="muted"></div>
-        <div style="display:flex;gap:6px;align-items:flex-start">
-            <div style="display:flex;flex-direction:column;gap:4px">
-            <div data-id="layers" style="display:flex;flex-direction:column;gap:4px">${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
-            <h4 style="margin:12px 0 0">Tools</h4>
-            <div data-id="weights" style="display:flex;flex-direction:column;gap:4px"><b>Weight</b>
+        <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="width:100%;min-width:0;image-rendering:pixelated;cursor:crosshair;display:block"></canvas>
+        <div style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:flex-start;margin:6px 0">
+            <div data-id="layers" style="display:flex;gap:4px;align-items:center"><b>Map</b>${Object.keys(MAPS).map((l) => `<button data-l="${l}">${l}</button>`).join('')}</div>
+            <div data-id="weights" style="display:flex;gap:4px;align-items:center"><b>Weight</b>
                 <button data-v="move" style="background:${COLORS.move}">Accessible</button>
                 <button data-v="dest" style="background:${COLORS.dest}">Difficult</button>
                 <button data-v="far" style="background:${COLORS.far};color:#fff">Impossible</button>
                 <button data-v="">Auto</button></div>
-            <div style="display:flex;flex-direction:column;gap:4px"><b>Points</b>
+            <div style="display:flex;gap:4px;align-items:center"><b>Points</b>
                 <button data-id="align" title="move the target(s) onto the source, e.g. the two ends of a connector">Align to source</button>
                 <button data-id="swap" title="future scene becomes a connector and the other way round (source and targets)">Future &harr; connector</button></div>
-            <div style="display:flex;flex-direction:column;gap:4px"><b>View</b>
-                <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button><button data-id="check" title="ring every spot that no chain of links joins to the main map">Check connections</button></div>
-            </div>
-            <canvas data-id="canvas" width="${SIZE * ZOOM}" height="${SIZE * ZOOM}" style="flex:1;min-width:0;image-rendering:pixelated;cursor:crosshair"></canvas>
+            <div style="display:flex;gap:4px;align-items:center"><b>View</b>
+                <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button><button data-id="check" title="ring every spot that no chain of links joins to the main map">Check connections</button>
+                <button data-id="path" title="pick a source and exactly one target: draws the cheapest path the wizard would walk">Optimal path</button></div>
         </div>
         <div data-id="linkInfo"></div>
         <div data-id="checkInfo"></div>
+        <div data-id="pathInfo"></div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
             <span>Only the direct links of the source are drawn, as straight lines; a spot reached only through another is not a neighbour.</span>
@@ -290,6 +310,7 @@ export async function open(devTools) {
         save(); draw();
         p.tip.textContent = `${list.join(', ')}: type switched. Save verdict and reload to apply it to the graph.`;
     };
+    p.path.onclick = () => { showPath = !showPath; p.path.textContent = showPath ? 'Hide path' : 'Optimal path'; draw(); };
     p.deselect.onclick = () => { tgts = []; choose('src', ''); };
     p.check.onclick = () => { checking = !checking; p.check.textContent = checking ? 'Hide check' : 'Check connections'; draw(); };
     p.nums.onclick = () => { showNums = !showNums; p.nums.textContent = showNums ? 'Hide numbers' : 'Show numbers'; draw(); };
