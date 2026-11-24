@@ -2,7 +2,7 @@
 // that saves; any other tab is "another dimension": a throwaway copy that never writes the save
 // (src/state.js makeReadOnly) and falls apart with a paradox: glitches on the console text, the stats, the
 // scene and sprites and the buttons (never the page's own colours) that grow for 30 s to 2 min and end in a collapsed, unusable tab.
-// A red banner on top says the dimension is unstable. The original only gets a line in its console. Nothing here touches the game's state, only the page.
+// The console says the dimension is unstable. The original only gets a line in its console. Nothing here touches the game's state, only the page.
 // Slow changes only (no flashing). In DEV it is off unless the address has ?dimension=1.
 
 import { DEV } from './config.js';
@@ -44,8 +44,6 @@ const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const GLYPHS = '#%&@?!/\\<>~^*0123456789';
 const LINES = ['the god sees himself', 'TIME LOOP', 'who is watching whom', 'two wizards, one name', 'the world forgets this place',
     'ERROR: dimension 2', 'you were never here', 'the stars fall upward', 'nothing is saved'];
-const WARNING = ['UNSTABLE DIMENSION: a copy of the world. Nothing here is saved and it will collapse soon.',
-    'UNSTABLE DIMENSION: reality is breaking apart here.', 'UNSTABLE DIMENSION: COLLAPSE IMMINENT'];
 const COLORS = ['#f0f', '#0ff', '#f80', '#8f0', '#f33', '#aaf'];
 
 // Starts the paradox in this (secondary) tab.
@@ -59,11 +57,6 @@ export function startParadox() {
     style.textContent = '#main canvas,#main img{transition:transform 1.5s,filter 1.5s,opacity 1.5s}';
     document.head.append(style);
     print('<b>A new dimension has opened. It is unstable and will collapse.</b>');
-    const banner = document.createElement('div');       // always on top, never glitched: the player must know
-    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99998;background:#400;color:#fff;border-bottom:2px solid #f44;' +
-        'font:bold 1.1em monospace;text-align:center;padding:0.5em;pointer-events:none';
-    banner.textContent = WARNING[0];
-    document.body.append(banner);
 
     const buttons = ['btn1', 'btn2', 'btn3', 'btn4', 'btn5', 'btn6'].sort(() => Math.random() - 0.5);
     const canvases = ['esceneCanvas', 'pjCanvas', 'npcCanvas', 'spellCanvas'].map(el);
@@ -117,7 +110,6 @@ export function startParadox() {
             const c = pick(canvases);
             if (c) c.style.transform = 'skewX(' + rnd(-8, 8).toFixed(1) + 'deg) scaleY(' + (Math.random() < 0.3 ? -1 : 1) + ')';
         }
-        banner.textContent = p < 0.5 ? WARNING[0] : p < 0.85 ? WARNING[1] : WARNING[2];
     }, TICK_MS);
 }
 
