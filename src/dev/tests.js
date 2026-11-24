@@ -22,11 +22,11 @@ import { enemySprites, enemyTypes } from '../data/enemies.js';
 import { bossesOf, places, zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, showStage, updateHeading, walkAcross } from '../ui/render.js';
+import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, print, showStage, updateHeading, walkAcross } from '../ui/render.js';
 import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
-import { connectorTests } from '../travel.js';
+import { connectorTests, withFight } from '../travel.js';
 import { SPECTRA, SPECTRA_ZONE } from '../spectra.js';
 import { cabinSpot } from '../cabin.js';
 import { scrollOpen } from '../ui/scrolls.js';
@@ -327,8 +327,8 @@ function pickerHtml() {
                 <label>Heads <select data-f="heads"></select></label><button data-do="hydra">Fight</button></div>`,
         Connectors: `
             <div class="row"><select data-f="connector">${connectorTests().map((t, i) => `<option value="${i}">${t.label}</option>`).join('')}</select>
-                <button data-do="connector">Walk it</button></div>
-            <div class="note">Plays a connector's scenes on the spot, from the scene he is in; he ends in the scene he started in.</div>`,
+                <button data-do="connector">Walk it</button> <button data-do="connectorFight">Walk it with a fight</button></div>
+            <div class="note">Plays a connector's scenes on the spot, from the scene he is in; he ends in the scene he started in. With a fight: he is stopped in the first scene that can have one (a normal enemy of this zone; mirrored when the walk goes right to left), then walks on if he wins.</div>`,
         Spectra: `
             <div class="row"><select data-f="spectrum">${opts(SPECTRA.map((c) => `spectrum_${c}`), SPECTRA)}</select>
                 <button data-do="spectrum">Fight it</button></div>
@@ -361,6 +361,13 @@ const pickerActions = {
     connector(f) {
         const steps = connectorTests()[Number(f('connector'))].steps;
         resetScene();                   // the running event, walk and fight end first (also thaws the clocks)
+        run.crossing = null;
+        walkAcross(steps, showStage, nextEvent);
+    },
+    connectorFight(f) {
+        const steps = withFight(connectorTests()[Number(f('connector'))].steps);
+        if (!steps) { print('That walk has no scene that can have a fight (stairs and ladders cannot).'); return; }
+        resetScene();
         run.crossing = null;
         walkAcross(steps, showStage, nextEvent);
     },
