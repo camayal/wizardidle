@@ -2364,3 +2364,5 @@ Author's note: beach scenes are interesting but it is weird the transitions, i t
 Date: 2026-11-22 09:29
 Author's note: i am thinking that reviving the wizard by touching him is actually penalizing him by removing him from his track (cabin will leave the wizard in many places. we need to be sure to dev soemthing that mke him to be relased close on in the region he was when hi is doing a quest
 ```
+
+- ladder_cueva4_mina2 mine side: floor shaft x 101-143, y 47-62 may sit on the walk line; revisit walkable path later (artist, 2026-11-20). (done per the author 2026-11-24: both ladder sides exist)

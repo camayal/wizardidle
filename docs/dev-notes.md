@@ -15,8 +15,6 @@ earlier one.
 
 - Rainbow and the seven spectra (2026-11-24): all wired; only a browser test is left (author).
 
-- ladder_cueva4_mina2 mine side: floor shaft x 101-143, y 47-62 may sit on the walk line; revisit walkable path later (artist, 2026-11-20).
-
 ## Next for dev: connectors as scenes (2026-11-20, updated)
 Built and committed, all untested in a browser (no node in the dev session): bridges, stairs, cave and mine mouths, the ladder, enter_mine_S (a guess: the tunnel behind mouth_33_165's underground side), and the pier (dead end, 3 s stop, back left). Code: src/data/connectors.js (scenes, mouth and ladder opening x read off the art, pier steps), travel.js (crossing, connectorTests, visitPier), render.walkAcross (steps: dir, start, end, fade, pause), travelGraph.connectorsBetween / reachesPoint. Connectors play only on trips that change zone (City, Town, Castle sub maps will fix the shared gate points later). Dev panel > Connectors forces any walk (ends the running event first).
 - 2026-11-20: the walk stopping on connector scenes (wizard gone) is fixed (map dot lookup threw); bridge and mouth walks verified in headless Edge (a temp page importing render.js, hasFocus forced true). The author can only test in the dev panel, so check the rest there.
