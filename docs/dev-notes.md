@@ -44,4 +44,3 @@ Author's note: i was thinking in anothe mouth that conect the cave with la_Gruta
 ```
 - Dunas2 underground inn is in the game (2026-11-24, untested in a browser; the shop half still waits for the professions vendors, docs/PROFESSIONS.md).
 - Healer cabin on a quest (2026-11-24): done in code and the four looks are wired (src/cabin.js); untested in a browser. Waiting: the quest system must set state.quest. The open-door curanderobg.png is kept for the final battle.
-- BUG to reproduce (author, 2026-11-24 11:21): level 50 wizard at HP 0 in the Castle, stage 4 (boss fight, nothing on the scene), could not be resurrected; the Tower too. The code has no zone check on the god's touch (divine.js pjBtn needs fight.pjDead true, and run.disablePjBtn false); nothing found by reading. Check in a browser: is fight.pjDead true, is run.disablePjBtn stuck true, any console error. The Castle and the Tower are now also cabin-free zones for quests (src/cabin.js).

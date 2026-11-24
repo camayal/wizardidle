@@ -2373,3 +2373,4 @@ On a quest the wizard's revive puts the cabin near where he fell, so the cabin n
 2. **City:** a cabin with the City's walls style (stone), for la_Ciudad.
 3. **Cave:** a healer's cave version, for the Cave, the Mine and the Grotto.
 Name the files curanderobg_town, curanderobg_city, curanderobg_cave (img/story). The wild cabin stays for every other zone. Dueñon and Heidan never have a cabin.
+- BUG to reproduce (author, 2026-11-24 11:21): level 50 wizard at HP 0 in the Castle, stage 4 (boss fight, nothing on the scene), could not be resurrected; the Tower too. The code has no zone check on the god's touch (divine.js pjBtn needs fight.pjDead true, and run.disablePjBtn false); nothing found by reading. Check in a browser: is fight.pjDead true, is run.disablePjBtn stuck true, any console error. The Castle and the Tower are now also cabin-free zones for quests (src/cabin.js).
