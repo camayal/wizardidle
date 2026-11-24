@@ -49,6 +49,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 ## src/ui/ (drawing and menus)
 
+- diceTable.js: the dice house table and its five dice on propsCanvas (img/places/dice/); the wizard throws from the left, the gambler mirrored.
 - render.js: heading (HP, XP, gold, faith), console, backgrounds, wizard and enemy drawing and idle animation.
 - layout.js: sizes everything from the window, portrait or landscape.
 - menu.js: toolbar buttons. scrolls.js: parchment scroll pages (stats, achievements, help, kill, map). statsPages.js: the Stats page the Inventory page (the stats scroll's second tab) and the Faith scroll (the prayer button, btn4). bestiary.js: kill scroll's bestiary page. cemetery.js: kill scroll's cemetery page (a tomb per dead wizard, name and age carved in the tomb font, a parchment note on tap; erased = cracked tomb).

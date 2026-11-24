@@ -24,19 +24,7 @@ Built and committed, all untested in a browser (no node in the dev session): bri
 - Jumps and teleports: later (jump the shaft; about level 100 short teleports to hop obstacles and reach other scenes). Floor shaft of the ladder mine side may sit on the walk line.
 - Still open from the author: bridge halves shown as neighbours with no gap (done by order, no joined wide scene); exit markers drawn per connector pair; enter_mine_S placement.
 
-```
-Date: 2026-11-21 19:42
-Author's note: dice house should be a specific location so we need to screate scene in the city and in the town for them. we can also play dice in the desert inside the tent (tent is inn, tavern, gambling house)
-
-one intersting thing we can do is red dice are for the city, wooden dice are for the town, and some make of bone (white yellowish) for the desert.  
-
-perhaps we could create another game, such as shut the box,  sevens,
-```
-
-```
-Date: 2026-11-21 19:44
-Author's note: regarding the dice house. the current version shows the dice as decoration, perhaps put a table next to the npc player, then the wizard approach and tiny dice are trwow there, i think this wil e a little more fit in the actual game play
-```
+- Dice house (2026-11-24): the iso round table with five tiny dice is wired in the City and Town houses (src/ui/diceTable.js; the wizard walks to the table and away; the throw is mirrored for the gambler); untested in a browser. Still open from the author's 11-21 notes: the desert tent's table (art is ready, style `desierto`: add the tent to DICE_HOUSES when its scene exists) and other games (shut the box, sevens).
 
 ```
 Date: 2026-11-22 09:47

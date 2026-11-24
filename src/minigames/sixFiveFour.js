@@ -10,6 +10,7 @@ import * as loop from '../loop.js';
 import { endEvent, event, nextEvent, startEvent } from '../events.js';
 import { hopEnemy, hopWizard } from '../combat.js';
 import { spell } from '../spells.js';
+import { throwDice } from '../ui/diceTable.js';
 import { playSound } from '../audio.js';
 import { clearNPC, leavePlace, print, showStage, updateHeading, wizardName } from '../ui/render.js';
 import { art } from '../media.js';
@@ -105,15 +106,17 @@ function rollTurn(nameDicePlayer) {
     } else {
         hopWizard();
     }
-    spell("spellMiniDados_18", true, false, true);
     playSound("dice");
     rollMessage(nameDicePlayer);
 
     resultDice = "";
+    const thrown = [];
     for (let die in dicesToRoll) {
         dicesToRoll[die] = Math.floor(Math.random() * 6 + 1);
+        thrown.push(dicesToRoll[die]);
         resultDice = resultDice + diceImg(`d${dicesToRoll[die]}`);
     }
+    throwDice(nameDicePlayer != gamblingManName, thrown);       // they tumble onto the table, from the side of whoever throws
     if (!ship && bankDie(6)) {
         ship = true;
         currentHand = `${diceImg("d6")}:${diceImg("ship")} `;

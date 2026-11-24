@@ -18,6 +18,7 @@ import { art } from '../media.js';
 import { overlays } from '../data/overlays.js';
 import { connectorSceneInfo } from '../data/connectors.js';
 import { markup } from './text.js';
+import { DICE_HOUSES, WIZARD_AT_TABLE, showDiceTable } from './diceTable.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -96,6 +97,7 @@ function loadBackground(back) {
         const front = el("overlayCanvas").style, name = back.toLowerCase();
         front.background = overlays.has(name) ? `url('${art(`overlay_${name}`)}') no-repeat` : "none";
         front.backgroundSize = "contain";
+        showDiceTable(back);                    // the table of a dice house (cleared in any other scene)
     });
     //change bocadillo location
     localizarBocadillo();
@@ -713,7 +715,7 @@ function goInside(bg, npc, done, fade) {
         change();
         if (door != null) ui.wizardOffset = door - 48;
         if (!run.simulation) drawWizard();
-    }, () => (door != null ? walkWizardTo(0, done) : done && done()), () => imageNow(src) != null);
+    }, () => (door != null ? walkWizardTo(DICE_HOUSES[bg.toLowerCase()] ? WIZARD_AT_TABLE : 0, done) : done && done()), () => imageNow(src) != null);
 }
 
 // He leaves the place: out through its door and a fade to the street at that door (where the street is

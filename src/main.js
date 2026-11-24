@@ -4,6 +4,7 @@
 
 import { initialName, setName } from './game.js';
 import { responsiveLayout } from './ui/layout.js';
+import { repaintDiceTable } from './ui/diceTable.js';
 import { archBtn, faithBtn, statsBtn, killBtn, mapBtn, helpBtn, btnCloseEvent } from './ui/menu.js';
 import { pjBtn, centerBtn, npcBtn } from './divine.js';
 import { el } from './ui/dom.js';
@@ -31,7 +32,7 @@ for (const [id, handler] of Object.entries(clickHandlers)) {
     el(id).onclick = () => handler();
 }
 
-window.addEventListener('resize', () => responsiveLayout());
+window.addEventListener('resize', () => { responsiveLayout(); repaintDiceTable(); });
 window.addEventListener('load', () => responsiveLayout());
 
 // Offline mode (service-worker.js). Registered after load so storing ~6 MB of art and

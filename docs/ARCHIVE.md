@@ -2378,3 +2378,18 @@ Name the files curanderobg_town, curanderobg_city, curanderobg_cave (img/story).
 
 - Swamp bridge direction (author unsure): `bridgeLeftZone` in src/data/connectors.js says bridge_swamp has la_Pradera on its left (map has the Prairie east of the Swamp, art reads Prairie left). Check the dev panel's bridge_swamp walks; if wrong, change or remove the line. Other bridges may have the same art-versus-map mismatch: ask which.
 - Clerk prompt not done: rename scenes that are really borders to border_<from>_<to> in notes and lists (mouths are already renamed).
+
+```
+Date: 2026-11-21 19:42
+Author's note: dice house should be a specific location so we need to screate scene in the city and in the town for them. we can also play dice in the desert inside the tent (tent is inn, tavern, gambling house)
+
+one intersting thing we can do is red dice are for the city, wooden dice are for the town, and some make of bone (white yellowish) for the desert.  
+
+perhaps we could create another game, such as shut the box,  sevens,
+```
+
+```
+Date: 2026-11-21 19:44
+Author's note: regarding the dice house. the current version shows the dice as decoration, perhaps put a table next to the npc player, then the wizard approach and tiny dice are trwow there, i think this wil e a little more fit in the actual game play
+```
+
