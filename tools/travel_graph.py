@@ -29,7 +29,10 @@ WAYPOINTS = [('bridge_spring', 'bridge', 125, 145), ('bridge_swamp', 'bridge', 1
 BRIDGES = [(x, y) for _, kind, x, y in WAYPOINTS if kind == 'bridge']
 BRIDGE_RADIUS = 7
 # Cave and mine mouths: the same spot on the ground map and on the underground map.
-ENTRANCES = [(147, 31), (27, 114), (87, 224), (229, 64), (33, 165), (218, 182), (130, 120), (100, 181), (64, 170)]
+# mouth_<outside zone>_<inside zone>: where it comes from and where it goes
+ENTRANCES = [('mouth_pantano_cueva', 147, 31), ('mouth_pradera_cueva', 27, 114), ('mouth_duenon_cueva', 87, 224), ('mouth_playa_mina', 229, 64),
+             ('mouth_dunas_mina', 33, 165), ('mouth_desierto_mina', 218, 182), ('mouth_tundra_volcan', 130, 120),
+             ('mouth_gruta_cueva', 100, 181), ('mouth_pradera_gruta', 64, 170)]
 STAIRS = (212, 205)                                      # the sacred stairs, ground -> Heidan (a guess, to confirm)
 
 
@@ -131,7 +134,7 @@ def build():
     at = lambda name, x, y: tuple(moved.get(name, (x, y)))
     waypoints = [(n, k) + at(n, x, y) for n, k, x, y in WAYPOINTS]
     BRIDGES = [(x, y) for _, k, x, y in waypoints if k == 'bridge']
-    mouths = [(f'mouth_{x}_{y}',) + at(f'mouth_{x}_{y}', x, y) for x, y in ENTRANCES]
+    mouths = [(n,) + at(n, x, y) for n, x, y in ENTRANCES]
     stairs = at('stairs', *STAIRS)
     terr = {l: terrain_map(l) for l in LAYERS}
     nodes, index, warns = [], {}, []

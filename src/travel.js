@@ -28,8 +28,8 @@ const doorSteps = (a, b) => [
 const MINE_TUNNEL = { scene: "enter_mine_S", dir: 1 };
 function mouthSteps(a, b) {
     const steps = doorSteps(a, b);
-    if (b === "mouth_33_165_under") steps.push(MINE_TUNNEL);
-    if (a === "mouth_33_165_under") steps.unshift(MINE_TUNNEL);
+    if (b === "mouth_dunas_mina_under") steps.push(MINE_TUNNEL);
+    if (a === "mouth_dunas_mina_under") steps.unshift(MINE_TUNNEL);
     return steps;
 }
 const LADDER = "ladder_cueva4_mina2", LADDER_CAVE = "ladder_cueva4_mina2_cave", LADDER_MINE = "ladder_cueva4_mina2_mine";

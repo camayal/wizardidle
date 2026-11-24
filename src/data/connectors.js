@@ -36,15 +36,15 @@ export const pierSteps = [
 
 // Centre of each mouth's opening in its scene, in scene pixels (read off the art, a 256 x 64 scene).
 export const mouthDoors = {
-    mouth_130_120: 150, mouth_130_120_under: 169,
-    mouth_147_31: 157, mouth_147_31_under: 171,
-    mouth_218_182: 138, mouth_218_182_under: 166,
-    mouth_229_64: 171, mouth_229_64_under: 166,
-    mouth_27_114: 165, mouth_27_114_under: 171,
-    mouth_33_165: 152, mouth_33_165_under: 166,
-    mouth_64_170: 170, mouth_64_170_under: 170,      // the big canyon entrance into the Grotto (a front overlay each: he steps in behind the boulders)
-    mouth_87_224: 140, mouth_87_224_under: 171,
-    mouth_100_181: 160, mouth_100_181_under: 160,      // Grotto side (ground map, la_Gruta3) and Cave side (underground map, la_Cueva2): the crack
+    mouth_tundra_volcan: 150, mouth_tundra_volcan_under: 169,
+    mouth_pantano_cueva: 157, mouth_pantano_cueva_under: 171,
+    mouth_desierto_mina: 138, mouth_desierto_mina_under: 166,
+    mouth_playa_mina: 171, mouth_playa_mina_under: 166,
+    mouth_pradera_cueva: 165, mouth_pradera_cueva_under: 171,
+    mouth_dunas_mina: 152, mouth_dunas_mina_under: 166,
+    mouth_pradera_gruta: 170, mouth_pradera_gruta_under: 170,      // the big canyon entrance into the Grotto (a front overlay each: he steps in behind the boulders)
+    mouth_duenon_cueva: 140, mouth_duenon_cueva_under: 171,
+    mouth_gruta_cueva: 160, mouth_gruta_cueva_under: 160,      // Grotto side (ground map, la_Gruta3) and Cave side (underground map, la_Cueva2): the crack
     ladder_cueva4_mina2_cave: 150, ladder_cueva4_mina2_mine: 122,      // the ladder and the floor shaft
 };
 export const DOOR_STOP = 48;     // the wizard's offset is the door minus this to stand in front of it
@@ -62,8 +62,8 @@ addScenes("pier", "the pier", ["pier_land", "pier_end"]);
 addScenes("enter_mine_S", "the south mine tunnel", ["enter_mine_S"]);
 addScenes("ladder_cueva4_mina2", "the ladder between the cave and the mine", ["ladder_cueva4_mina2_cave", "ladder_cueva4_mina2_mine"]);
 for (const m of Object.keys(mouthDoors).filter((k) => k.startsWith("mouth_") && !k.endsWith("_under"))) {
-    addScenes(m, `the mouth at ${m.replace("mouth_", "").replace("_", ",")}`, [m]);
-    addScenes(`${m}_under`, `the mouth at ${m.replace("mouth_", "").replace("_", ",")}, inside`, [`${m}_under`]);
+    addScenes(m, `the mouth from ${m.replace("mouth_", "").replace("_", " to ")}`, [m]);
+    addScenes(`${m}_under`, `the mouth from ${m.replace("mouth_", "").replace("_", " to ")}, inside`, [`${m}_under`]);
 }
 // The scenes of a connector point, in trip order (a mouth point has its twin inside as the second one).
 export const connectorScenesOf = (point) => {
