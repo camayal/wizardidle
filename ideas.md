@@ -188,3 +188,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-20 (dev): lamia jump faster; greater naga sandBurst entrance (burrow with a sand palette, bigger); dev console lists one boss per line (run.forceBoss). Artist asked for the real beach boss powers.
 - 2026-11-20 (dev): la_playa6 renamed la_playa5 (the Beach now has scenes 1-5; the author's numbering slip). Maelstrom scene spell final art wired; tidal wave art awaits the author's verdict.
 - 2026-11-20 (dev): lamia strips, naga tide charge (strip + scene) and both 64 px sprites wired; fury slaps and coil crush get a path (he moves to the wizard) and an optional attack.hit frame; their strips are being redone by the artist.
+- 2026-11-24 (dev): greater naga fury slaps and coil crush final art wired; the beach bosses' art is complete (sounds pending). Docs reorganized into docs/plans by the clerk; dev-notes/sound-notes/ideas tidy postponed by the author.
