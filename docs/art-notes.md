@@ -43,3 +43,12 @@ Author's note: for @artist, el_Duenon7 (future scene, travel map): the sea part 
   - **Entrance (special, both bosses):** they **jump in from the sea at the top right of the scene**. They start small (far away, about 8 to 12 px tall, as if on the horizon), arc across the sky growing, and land on their place with a splash; the last frame is the boss resting at its normal place so the swap to the sprite is seamless. One strip per boss, `anim_lamia_enter.png` and `anim_greater_naga_enter.png`, **scene-wide frames of 256 x 64** (the whole scene, drawn over it; transparent except the boss, the splash at the sea and the splash on landing), 100 ms a frame, about 20 frames. The sea is the top-right corner of the beach scenes (la_playa2 to 6 have sea at the right; check the scene you draw against). The art must not depend on one scene's sea: keep the start high and to the right, off the walk line. Dev wires it (a new entrance kind) once the strips are in the review drop.
   - Leaving the scene after the fight needs nothing new (bosses do not leave).
 
+
+```
+Date: 2026-11-22 13:53
+Author's note: checking other details about etymos boss, i decided to keep the scences (la_escencia) without altearteion, here are some intereting ideas for the animation and destruction of etymos, check pleas in unorganzied_sprites/etymos the new files i put there.
+- elemental boss sprite atlas can be a nice minibosses sprites,   think second row is my favorited, they shows etymos broken rather thatn full.
+- idea of etymos destruction is the concept step by step, creating an animation for that would be nice
+- This is a nice text idea for console, achivement, or other that fit: "The boss was never one being. It was a prison containing six elemental fragments. Defeating it releases them back into the world."
+- I know in the atlas there are two purpules and two green, for this purpos, only arcane and toxic or poison, ignore the plant green like nature.
+```

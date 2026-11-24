@@ -14,15 +14,15 @@ Smaller ideas: achievements, UI, town and tavern, v1 leftovers, pace. Read only 
   - **Rings** (`anilos.png`) → Enchanting (see Professions).
   - **Playing cards numbered 1–6**, in the town sheet `BASE/townactions.gif` → **a card game against tavern NPCs** (confirmed by the author). That's what the empty `cardCombat()` stub was for. Taverns already exist (`la_ciudad_taberna`, `el_poblado_taberna`, `el_desierto_taberna` backgrounds; `innEV()` and the `taberna` counters), so the game would sit next to the dice game (played at the dice house, `casadados`). It would need its own stats (games, wins / losses, gold won / lost, opponents) and could share the gambling achievements (*jugón*).
   - **Town sheet** (`townactions.gif`, D.E. Gervais): a *Rumors* scroll (quests or hints), keys, a map, potions, books, a coin bag, food, a crown, NPC portraits → quests, rumours, shops.
-  - **Shop fronts** (`BASE/dg_town932.gif`): weapons, armour, potions, magic, books, tavern, bank, temple, stables, guild signs → shops and guilds in the City or Village. Commerce from the old help, profession trainers.
-  - **Townsfolk** (`BASE/dg_people32.gif`, 12 characters) and a **speech bubble with text** (`bocadillo con letras.png`) → NPCs who talk: quest givers, merchants, rumours.
+  - **Shop fronts** (`BASE/dg_town932.gif`): ~~weapons, armour,~~ potions, magic, books, tavern, bank, temple, stables, guild signs → shops and guilds in the City or Village. Commerce from the old help, profession trainers.
+  - **Townsfolk** (`BASE/dg_people32.gif`, 12 characters) and a **speech bubble with text** (`bocadillo con letras.png`) → NPCs who talk: quest givers, merchants, rumours. We can find them anywere, they are humans so they are not hostile with other humans.
   - **Interior tiles** (`BASE/L2_*`: bar, beds, kegs, tables, cabinet, columns, doors, a prison mat) → indoor scenes: the inn, the healer's hut, or a prison (the Chapter VIII lynching?).
   - **Boss crowns** (`boss icons/`: plain, silver, gold, red; `bossCoronas.pdn`) → boss ranks. *Today* bosses, hydras and guardians all show the same `boss.png`. Could mark boss / guardian / hydra / megaboss, or how many times a boss has been beaten.
   - **`logro_level100` icon** → a level-100 achievement that doesn't exist (only 2, 140 and 200 do). Level 100 is when the wizard takes control of the sacred staff in the story.
   - **New Meadow backgrounds** (`Bkg/news/la_pradera32.png`, a crowd at the edge; `la_pradera4b.png`, a rock or hut) → scene variants or story scenes.
   - Not features: `iconSiluete.png` (the "IDLE" logo), `ForGooglePlay.png` (store art).
 
-- **Pixel-art UI: tiles for the bars and panels** (2026-11-10): the interface mixes two styles. The buttons, the heart HP icon (`heartMeter()`), the scroll and the frame are pixel-art images, but the **XP bar is a plain HTML `<meter>`** (`#XPprogressBar` in `index.html`, updated in `updateHeading()`), styled by the browser. Idea: draw a small set of pixel-art tiles (left cap, repeating middle, right cap, fill, maybe a sparkle when levelling up) and build the XP bar from them, then reuse the same kit for anything else still drawn in plain HTML, so the whole UI shares one hand-made look. Existing pieces to match: `img/emptyLongBtn.png`, `img/frame.png`, the scroll backgrounds, and the `Btn` / `Empty` / `regilla` / `tile000` source files in `wizardidle-old-ideas/layers/`.
+- ~~**Pixel-art UI: tiles for the bars and panels** (2026-11-10): the interface mixes two styles. The buttons, the heart HP icon (`heartMeter()`), the scroll and the frame are pixel-art images, but the **XP bar is a plain HTML `<meter>`** (`#XPprogressBar` in `index.html`, updated in `updateHeading()`), styled by the browser. Idea: draw a small set of pixel-art tiles (left cap, repeating middle, right cap, fill, maybe a sparkle when levelling up) and build the XP bar from them, then reuse the same kit for anything else still drawn in plain HTML, so the whole UI shares one hand-made look. Existing pieces to match: `img/emptyLongBtn.png`, `img/frame.png`, the scroll backgrounds, and the `Btn` / `Empty` / `regilla` / `tile000` source files in `wizardidle-old-ideas/layers/`.~~
 
 - **Ideas found in the v1 code comments** (2026-11-11, from commented-out code removed in stage 1; the original lines are in tag `v1.0.0`):
   - *Robbery* ("robbed!", "rest: chance to be robbed", and in Spanish "a rogue robs him and escapes, gold drops"): a thief steals part of the wizard's gold, at random or while he rests.
@@ -32,10 +32,10 @@ Smaller ideas: achievements, UI, town and tavern, v1 leftovers, pace. Read only 
   - *"Hey guy look at me" achievement*: when `el_mediano14` appears (the shortie who shouts "HEY GUY LOOK AT ME!"). Original flavour line: "The world is losing its values, the un-polite enemies do not see the opponent in the face".
   - *Dice game stats and achievements* ("TODO add idx for all this part and achievements" in the dice game). Fits the planned *jugón* / *dados cargados* / *full carga* achievements.
   - *See-through ghosts*: enemies marked `translucid` in `src/data/enemies.js` (slime, spectre, ether) and the ghost-like bosses (cuboq, etymos, infraespectro) were meant to be drawn semi-transparent (opacity 0.7–0.8).
-  - *Locked achievements on the achievements page*: show not-yet-earned ones with a placeholder image (`img/no_logro.png` exists) instead of hiding them.
+  - *Locked achievements on the achievements page*: show not-yet-earned ones with a placeholder image (`img/no_logro.png` exists) instead of hiding them. Not sure, (nov 11, 2026) i think just put how many achievemenst has completed from how many they are in the game.
   - *Only one game tab*: detect the game open in two tabs and warn ("Wizardidle is running in another tab!").
   - *Android back button*: keep it from closing the app when installed.
-  - *Fade transitions* between the clouds, the name screen and the game.
+  - *Fade transitions* ~~between the clouds~~, the name screen and the game.
 
 ## Already built (from the old notes)
 
@@ -43,7 +43,8 @@ Checked against the code on 2026-11-10, so these don't get re-proposed: the heal
 
 ## Open questions
 
-- Pixel-art UI: which elements get tiles first (XP bar, then faith or HP bars, scroll frames, console)? Should the XP bar animate (filling, a level-up flash)?
-- Card game: what are the rules (how the 1–6 cards are played, betting, how the wizard decides), and who are the tavern NPCs he plays? Unused sprites: were the boss crowns for boss ranks, or something else (achievement tiers)? Which town ideas (shops, rumours, talking NPCs, interiors) are still worth keeping?
+- ~~Pixel-art UI: which elements get tiles first (XP bar, then faith or HP bars, scroll frames, console)? Should the XP bar animate (filling, a level-up flash)?~~
+- Card game: what are the rules (how the 1–6 cards are played, betting, how the wizard decides), and who are the tavern NPCs he plays? U
+- Unused sprites: were the boss crowns for boss ranks, or something else (achievement tiers)? Which town ideas (shops, rumours, talking NPCs, interiors) are still worth keeping?
 - Stats: should everything show on the stats scroll, or only some, with the rest hidden and used for achievements and quests? Per wizard, per world, or both? And what was `cardCombat()` meant to be?
 - Levelling pace: keep the flat ~16 kills per level the game has always had, or move toward the spreadsheet's 16 × level (much slower late game)? Or something in between? And should gold go back to 0.25 per HP?
