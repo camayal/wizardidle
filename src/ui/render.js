@@ -469,7 +469,7 @@ function showBlink(spotX) {
 // a simulation nothing is drawn and everything happens at once, in the same order.
 
 // Doors in the place backgrounds: scene x of the door's middle, in sprite px.
-const DOORS = { el_poblado_casadados: 16, la_ciudad_casadados: 16, el_poblado_taberna: 40, la_ciudad_taberna: 52 };
+const DOORS = { el_poblado_casadados: 16, la_ciudad_casadados: 16, el_poblado_taberna: 40, la_ciudad_taberna: 52, las_dunas_taberna: 22 };
 
 let fadeCanvas;
 function fadeLayer() {
