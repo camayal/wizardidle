@@ -120,11 +120,11 @@ function beliefMeter() {
         const cls = Date.now() < flare.until ? ` flare-${flare.dir}` : '';
         inner += `<div class='faithLit${cls}' style='position:absolute;left:0;top:0;width:96px;height:64px;background:${f('faith_meter_glass_lit')};-webkit-mask-image:${mask};mask-image:${mask}'></div>`;
         const a = Math.PI * (1 - t);
-        const mx = METER_CENTRE.x + METER_CENTRE.r * Math.cos(a) - 2.5, my = METER_CENTRE.y - METER_CENTRE.r * Math.sin(a) - 2.5;
-        // a little stick on the stone ring, pointing out from the candle and sliding along its line, so it reads as something that moves
+        const mx = METER_CENTRE.x + METER_CENTRE.r * Math.cos(a), my = METER_CENTRE.y - METER_CENTRE.r * Math.sin(a);
+        // a little needle on the stone ring, pointing out from the candle and sliding along its line, so it reads as something that moves
         const turn = (90 - 180 * t).toFixed(1);       // 0 deg = straight up (the ring's middle), -90 left end, +90 right end
-        inner += layer(`left:${(mx + 1).toFixed(1)}px;top:${(my - 2.5).toFixed(1)}px;width:3px;height:10px;transform:rotate(${(-turn).toFixed(1)}deg)`)
-            .replace("></div>", "><div class='faithStick'></div></div>");
+        inner += layer(`left:${(mx - 2.5).toFixed(1)}px;top:${(my - 5.5).toFixed(1)}px;width:5px;height:11px;transform:rotate(${(-turn).toFixed(1)}deg)`)
+            .replace("></div>", `><div class='faithStick' style='background-image:${f('faith_meter_marker')}'></div></div>`);
     }
     inner += `<div class='${lost ? '' : 'faithCandle'}' style='position:absolute;left:28px;top:20px;width:40px;height:40px;background:${f(lost ? 'anim_faith_candle_lost' : 'anim_faith_candle_' + beliefLevel())}'></div>`;
     // big: about 75% of the page width, in whole pixel steps so the art stays crisp (at least 2x)

@@ -2165,3 +2165,9 @@ Date: 2026-11-20 23:32
 Author's note: texts dev console is failing sais invelid or unexpected token
 ```
 (fixed 2026-11-24: a real newline inside a string in src/dev/texts.js line 170)
+
+```
+Date: 2026-11-24 (from the author, via dev)
+Belief meter marker (statsPages.js beliefMeter, img/ui/faith/faith_meter_marker.png, now 5x5 px, a simple diamond): hard to read. Draw something more visible that says it can move, e.g. a little stick or needle (about 3 x 10 px, pointing out from the candle along the ring). Dev placed a plain cream stick as a stand-in with a slide animation (.faithStick in index.html); the final art replaces it. The candle stays as it is. Drop it in the review drop.
+```
+(done: marker B wired)
