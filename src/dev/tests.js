@@ -175,9 +175,20 @@ const scenarios = [
     },
     {
         name: 'Dice house 6-5-4 (City)',
-        check: 'Enters the gaming house; the 6-5-4 game plays and ends, gold changes.',
+        check: 'Enters the gaming house and walks to the red table; the 6-5-4 game plays (dice thrown from the left by him, from the right by the gambler, banked dice stay) and ends, he walks out, gold changes.',
         setup() {
             moveTo('la_Ciudad');
+            override('balance', { pDados: 1 });
+            override('baseStats', { pBotin: 0 });
+            state.player.gold = Math.max(state.player.gold, 1000);
+            return { event: EVENT.explore };
+        },
+    },
+    {
+        name: 'Dice house 6-5-4 (Town)',
+        check: 'Same as the City one with the wooden table and wooden dice.',
+        setup() {
+            moveTo('el_Poblado');
             override('balance', { pDados: 1 });
             override('baseStats', { pBotin: 0 });
             state.player.gold = Math.max(state.player.gold, 1000);
