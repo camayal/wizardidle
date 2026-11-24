@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Entering and leaving the desert tent: he stops at the tent door and the scene fades into the tent (and back to the desert on leaving), instead of walking off to the right and appearing inside.
 - The desert tent now hosts dice: when he explores the Desert he can walk into the tent, where the bone table (with bone dice) appears on the old scene, play 6-5-4 and walk out; a night's sleep in the tent shows no table. The gambler also stays in place until the scene fades when he leaves any dice house.
 - The gambler no longer vanishes the moment the wizard decides to leave the dice house: he stays at his place while the wizard walks to the door, and disappears only when the scene fades to the street.
 - The dice tables are lower (about waist height on the wizard), and the beer table in the City and Town dice houses moved left to make room for them.

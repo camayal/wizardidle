@@ -710,12 +710,12 @@ function goInside(bg, npc, done, fade) {
         if (done) done();
         return;
     }
-    if (door == null && !fade) return walkThroughScene(change, () => hasDiceTable(bg) ? walkWizardTo(WIZARD_AT_TABLE, done) : done && done());     // (the desert tent: no door inside, he walks on to the table)
-    fadeScene(() => {
+    if (door == null && !fade && !STREET_DOORS[bg.toLowerCase()]) return walkThroughScene(change, done);
+    fadeScene(() => {       // (the desert tent has a street door but no door inside: he fades in at his place)
         change();
-        if (door != null) ui.wizardOffset = door - 48;
+        ui.wizardOffset = door != null ? door - 48 : 0;
         if (!run.simulation) drawWizard();
-    }, () => (door != null ? walkWizardTo(hasDiceTable(bg) ? WIZARD_AT_TABLE : 0, done) : done && done()), () => imageNow(src) != null);
+    }, () => (door != null || hasDiceTable(bg) ? walkWizardTo(hasDiceTable(bg) ? WIZARD_AT_TABLE : 0, done) : done && done()), () => imageNow(src) != null);
 }
 
 // He leaves the place: out through its door and a fade to the street at that door (where the street is
@@ -724,8 +724,8 @@ function goInside(bg, npc, done, fade) {
 // there is no door at all, he walks out of the scene to the right and in again.
 function leavePlace(changeScene, done) {
     const key = (ui.currentBackGround || "").toLowerCase(), door = DOORS[key], street = STREET_DOORS[key];
-    if (door == null) return walkThroughScene(() => { clearNPC(); changeScene(); }, done);
-    walkWizardTo(door - 48, () => fadeScene(() => {
+    if (door == null && !street) return walkThroughScene(() => { clearNPC(); changeScene(); }, done);
+    (door == null ? (go) => go() : (go) => walkWizardTo(door - 48, go))(() => fadeScene(() => {       // (no door inside, as in the desert tent: he fades out where he stands)
         clearNPC();                                      // whoever stayed inside (the gambler) goes only when the scene fades
         if (street && !run.simulation) {
             loadBackground(street[0]);
