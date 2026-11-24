@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- One world, one tab: only the first tab opened saves (a browser lock); any other tab is a throwaway "dimension" that never touches the save, is muted, and falls apart in 30 s to 2 min (garbled console with odd sizes, colours and gradients, scrambled numbers, other backgrounds, flipped and tinted sprites, buttons vanishing, then a collapsed screen). The original tab only gets a console line. Off in the dev build unless the address has ?dimension=1.
+- One world, one tab: only the first tab opened saves (a browser lock); any other tab is a throwaway "dimension" that never touches the save, is muted, and falls apart in 30 s to 2 min (garbled console text with odd sizes, colours and gradients, scrambled numbers, flipped, tilted and tinted scene and sprites, buttons vanishing, then a collapsed screen; the page's own colours stay untouched, and a red banner says the dimension is unstable). The original tab only gets a console line. Off in the dev build unless the address has ?dimension=1.
 - Camping: after the night in the sleeping bag the wizard wakes where he slept and walks back to his place before the journey goes on (he used to jump back at once).
 - Credits: freesound_community (Pixabay) is now thanked in the Licences section.
 - Music: the richer synth is in (ADSR, per-note filters, detune, vibrato, pan, noise, glides, velocity, stereo echo) and its old commented copy is gone. New tools/midi_to_song.py turns any .mid file into a song text: one instrument per channel from its General MIDI program, a drum kit on channel 10, velocity, channel volume, pan, sustain pedal and tempo changes kept. Map spots (Volcan, Cueva, Mina, Pradera 6) and travel links updated; the playa future points were dropped.

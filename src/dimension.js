@@ -1,8 +1,8 @@
 // Wizard Idle v2 - one world, one tab. Only the first tab opened is the original and the only one
 // that saves; any other tab is "another dimension": a throwaway copy that never writes the save
-// (src/state.js makeReadOnly) and falls apart with a paradox: glitches on the console, the stats, the
-// sprites and the buttons that grow for 30 s to 2 min and end in a collapsed, unusable tab.
-// The original only gets a line in its console. Nothing here touches the game's state, only the page.
+// (src/state.js makeReadOnly) and falls apart with a paradox: glitches on the console text, the stats, the
+// scene and sprites and the buttons (never the page's own colours) that grow for 30 s to 2 min and end in a collapsed, unusable tab.
+// A red banner on top says the dimension is unstable. The original only gets a line in its console. Nothing here touches the game's state, only the page.
 // Slow changes only (no flashing). In DEV it is off unless the address has ?dimension=1.
 
 import { DEV } from './config.js';
@@ -44,8 +44,8 @@ const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const GLYPHS = '#%&@?!/\\<>~^*0123456789';
 const LINES = ['the god sees himself', 'TIME LOOP', 'who is watching whom', 'two wizards, one name', 'the world forgets this place',
     'ERROR: dimension 2', 'you were never here', 'the stars fall upward', 'nothing is saved'];
-const BACKGROUNDS = ['linear-gradient(135deg,#200,#a0a)', 'linear-gradient(#012,#0a6)', 'radial-gradient(#fa0,#300)',
-    'linear-gradient(90deg,#000,#07a,#000)', 'repeating-linear-gradient(45deg,#111,#111 12px,#322 12px,#322 24px)'];
+const WARNING = ['UNSTABLE DIMENSION: a copy of the world. Nothing here is saved and it will collapse soon.',
+    'UNSTABLE DIMENSION: reality is breaking apart here.', 'UNSTABLE DIMENSION: COLLAPSE IMMINENT'];
 const COLORS = ['#f0f', '#0ff', '#f80', '#8f0', '#f33', '#aaf'];
 
 // Starts the paradox in this (secondary) tab.
@@ -56,9 +56,14 @@ export function startParadox() {
     if (channel) channel.postMessage('opened');
     const born = Date.now(), life = rnd(MIN_MS, MAX_MS);
     const style = document.createElement('style');
-    style.textContent = '#main canvas,#main img,#console,#info,#backConsole{transition:transform 1.5s,filter 1.5s,opacity 1.5s}';
+    style.textContent = '#main canvas,#main img{transition:transform 1.5s,filter 1.5s,opacity 1.5s}';
     document.head.append(style);
-    print('<i>A new dimension has opened.</i>');
+    print('<b>A new dimension has opened. It is unstable and will collapse.</b>');
+    const banner = document.createElement('div');       // always on top, never glitched: the player must know
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99998;background:#400;color:#fff;border-bottom:2px solid #f44;' +
+        'font:bold 1.1em monospace;text-align:center;padding:0.5em;pointer-events:none';
+    banner.textContent = WARNING[0];
+    document.body.append(banner);
 
     const buttons = ['btn1', 'btn2', 'btn3', 'btn4', 'btn5', 'btn6'].sort(() => Math.random() - 0.5);
     const canvases = ['esceneCanvas', 'pjCanvas', 'npcCanvas', 'spellCanvas'].map(el);
@@ -98,10 +103,6 @@ export function startParadox() {
         if (p > 0.2 && Math.random() < chance) {                       // the numbers and the name
             for (const id of ['hp', 'gold', 'fe', 'lvl', 'pjName']) if (el(id) && Math.random() < 0.4) textNodes(el(id)).forEach((n) => garble(n, p * 0.5));
         }
-        if (p > 0.25 && Math.random() < chance * 0.6) {                // the backgrounds
-            const target = pick([document.body, el('main'), el('console')].filter(Boolean));
-            target.style.background = pick(BACKGROUNDS);
-        }
         if (p > 0.35 && Math.random() < chance) {                      // the sprites and the scene
             const c = pick(canvases);
             if (c) {
@@ -112,10 +113,11 @@ export function startParadox() {
         }
         const gone = Math.floor(Math.max(0, p - 0.5) / 0.5 * buttons.length);   // the buttons go one by one
         buttons.slice(0, gone).forEach((id) => { const b = el(id); if (b) { b.style.opacity = 0; b.style.pointerEvents = 'none'; } });
-        if (p > 0.75 && Math.random() < chance * 0.5) {                // the page itself
-            const target = pick([el('info'), el('backConsole'), el('console')].filter(Boolean));
-            target.style.transform = 'skewX(' + rnd(-8, 8).toFixed(1) + 'deg) scaleY(' + (Math.random() < 0.3 ? -1 : 1) + ')';
+        if (p > 0.75 && Math.random() < chance * 0.5) {                // the scene itself
+            const c = pick(canvases);
+            if (c) c.style.transform = 'skewX(' + rnd(-8, 8).toFixed(1) + 'deg) scaleY(' + (Math.random() < 0.3 ? -1 : 1) + ')';
         }
+        banner.textContent = p < 0.5 ? WARNING[0] : p < 0.85 ? WARNING[1] : WARNING[2];
     }, TICK_MS);
 }
 
@@ -126,7 +128,7 @@ function collapse(channel) {
     const veil = document.createElement('div');
     veil.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#000;color:#999;display:flex;align-items:center;justify-content:center;' +
         'font:1.4em monospace;text-align:center;opacity:0;transition:opacity 3s;padding:2em';
-    veil.textContent = 'This dimension collapsed. Close the tab.';
+    veil.textContent = 'This unstable dimension collapsed. The real world is safe in the other tab. Close this one.';
     document.body.append(veil);
     requestAnimationFrame(() => { veil.style.opacity = 1; });
 }
