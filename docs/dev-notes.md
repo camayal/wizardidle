@@ -6,9 +6,9 @@ earlier one.
 
 ## Open items from the old play-test list (2026-11-18)
 
-[] Border scenes (end of one zone, start of the next): the author wants the list of missing ones first; artist reviews map, coords and scenes (2026-11-24). Planned in docs/plans/MAPS.md.
+[] SKIP UNTIL 2026-11-26 (author): Border scenes (end of one zone, start of the next): the author wants the list of missing ones first; artist reviews map, coords and scenes (2026-11-24). Planned in docs/plans/MAPS.md.
 
-- Own music (2026-11-18): built as code, no WAVs: Music mode in the dev console (src/dev/music.js, src/synth.js, songs/). Still open for the author: where songs play in the game, stingers only, loops, or both (musician suggests stingers first). The musician can drop songs as <name>.song.txt in the review drop.
+- SKIP UNTIL 2026-11-26 (author): Own music (2026-11-18): built as code, no WAVs: Music mode in the dev console (src/dev/music.js, src/synth.js, songs/). Still open for the author: where songs play in the game, stingers only, loops, or both (musician suggests stingers first). The musician can drop songs as <name>.song.txt in the review drop.
 
 
 - Travel graph (corrected 2026-11-24): the game DOES use it. travel.js picks moves()/destinations() from travelGraph.js, which reads the author's manual links (data/travelOverrides.js, set in Modes > Travel) and falls back to the typed strings of zones.js for a stage with no link; connector walks use connectorsBetween/reachesPoint. The generated graph (manualLinksOnly = 1: blank) only serves travelCost/route in the dev tools. Checked 2026-11-24: ladder_cueva4_mina2 is linked (la_Cueva2 and la_Mina2 move, la_Cueva4 far); the future_* points are no longer separate points, they are the stages el_Volcan6 (80,132) and la_Cueva6 (60,44), linked like any stage. The (130,120) volcano mouth must not link to the lava chamber (only through la_Mina2).
