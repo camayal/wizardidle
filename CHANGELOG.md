@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Road strangers have their own faces now: a merchant, a farmer, a hunter, a pilgrim, a young woman, an old woman and a traveller, one at random each time. While a stranger offers a job a speech bubble with lines of text floats over his head; when the wizard answers it turns into a green check (he takes it) or a red X (he turns it down) for a moment before the stranger leaves. Art by the artist.
 - The notice board and the wanted posts are drawn in front of the wizard (on the front layer), so when he walks past one he seems to pass behind it instead of over it.
 - After the god gives a divine order, the Quests page shows a message across the whole scroll in grey italics, like the "No achievements yet" text, instead of the small line.
 - The old merchant of the underground inn (the Dunes) no longer vanishes when the wizard wakes up: he stays in the scene until the wizard has walked out and the scene fades.

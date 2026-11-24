@@ -762,6 +762,20 @@ function drawFrontProp(npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn
     });
 }
 
+// The speech bubble of a stranger who gives a quest (img/story/bubble_quest, _yes, _no: 26x20, tail at the
+// bottom-left), above-left of his head, on the front layer; clearNPC takes it away with him.
+function showBubble(kind) {
+    if (run.simulation) return;
+    const c = el("overlayCanvas"), unit = ui.charWidth / 32;
+    withImage("bubble", art(`bubble_${kind}`), (img) => {
+        if (!state.npc) return;
+        c.width = c.offsetWidth;
+        c.height = c.offsetHeight;
+        const [x, y] = npcBox(state.npc);
+        pixelContext(c).drawImage(img, x - 14 * unit, Math.max(0, y - 14 * unit), 26 * unit, 20 * unit);
+    });
+}
+
 // Remove the enemy (or object) from the right side of the scene.
 function clearNPC() {
     npcCanvas.getContext("2d").clearRect(0, 0, npcCanvas.width, npcCanvas.height);
@@ -944,6 +958,7 @@ export {
     withImage,
     whenSceneReady,
     clearNPC,
+    showBubble,
     drawWizard,
     showStage,
     wizardName,

@@ -2487,3 +2487,10 @@ Author's note: More ideas for economy quests:
 - The three divine orders (shrine, pilgrimage, hidden shrine) now sit in a 3-column grid (room for more orders later). Each button should be ONE stone-themed plate holding the icon on top and a two-line text below, not a stone just around the icon. Needs a plate sprite (normal, pressed, disabled) sized for about 3 per row of the scroll; the text is drawn by the game on top.
 - Same stone theme for the small buttons of each errand row: up, down and X (forget it), each with normal, pressed and disabled looks. They now are plain brown boxes with text arrows.
 - The old icon_order_ring can go once the plate exists.
+
+## Quest strangers and speech bubbles (author, 2026-11-24)
+- The old man (viejo) belongs to the underground inn of the Dunes only; he is no longer a stranger on the road.
+- Several random strangers who stop the wizard on the road with a job (merchant, traveller, farmer, pilgrim, and so on; mixed ages, outfits and looks). Start from the random people sprites in wizardidle-old-ideas/unorganzed_sprites/Sprites/ and adapt them to the game's style and the 32x32 NPC size (feet on the walk line, facing the wizard). At least six, named stranger_a... or by look.
+- Speech bubble over a stranger while he gives a quest: the "bocadillo con letras" in the same old folder (a bubble with lines of text) is the model. One bubble file for "offering a quest".
+- Two answer bubbles in the same style: one with an X (the wizard turns the job down) and one with a check mark (he takes it). They replace the offering bubble when he answers.
+- Dev wires them after the author approves, as usual.

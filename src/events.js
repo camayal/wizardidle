@@ -16,7 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showBubble, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { playExit } from './ui/entrances.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
@@ -255,10 +255,20 @@ function readBoard() {
     switch (run.multipleEventsCounter) {
     case 1:
         if (!quests.beginOffer(run.questMeet)) { print(`${wizardName()} finds nothing for him there`); if (run.questMeet !== 'inn') clearNPC(); endEvent(); nextEvent(); }
+        else if (run.questMeet === 'human') showBubble('quest');       // the stranger's bubble: he offers a job
         break;
-    case 3:
-        quests.decideOffer();
+    case 3: {
+        const took = quests.decideOffer();
+        if (run.questMeet === 'human') { showBubble(took ? 'yes' : 'no'); break; }     // the answer stays one beat over the stranger
         if (run.questMeet !== 'inn') clearNPC();
+        run.previousEvent = "board";
+        addXP(0.25);
+        endEvent();
+        nextEvent();
+        break;
+    }
+    case 4:
+        clearNPC();
         run.previousEvent = "board";
         addXP(0.25);
         endEvent();
