@@ -563,7 +563,7 @@ export function scrollHtml() {
     const Q = qs(), q = state.quest;
     const all = q ? [q, ...Q.queue] : [...Q.queue];
     let h = `<br><span class='subtitles'>Divine orders</span><br><div class='questOrders'>`;
-    h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
+    h += Q.orderWait > 0 ? `<div style="grid-column:1/-1;text-align:center;font-style:italic;color:#7a6a58;margin:1em 0">Your will has been heard. The wizard is following your order; the heavens need a while before the next one can be given.</div>`
         : GOD_ORDERS.map((k) => `<button class='orderBtn' ${STATES('order_plate')} data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
     h += `</div><br><span class='subtitles'>Errands</span><br>`;
     if (!all.length) h += `<p>No quest now</p>`;
