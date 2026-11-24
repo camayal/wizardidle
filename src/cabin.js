@@ -2,7 +2,7 @@
 //
 // Not on a quest: a random wild zone and stage, as always. On a quest (state.quest, set by the future
 // quest system): the cabin is as near as possible to the stage where he fell, so he is not taken far
-// from his path. Dueñon and Heidan never have a cabin; a quest there puts him at the stage of an allowed
+// from his path. Dueñon, Heidan, the Castle and the Tower never have a cabin; a quest there puts him at the stage of an allowed
 // zone with the cheapest walk from where he fell (the travel graph, docs/TRAVEL.md).
 // The cabin has four looks: wild (default), Town, City and cave (cave, mine, grotto).
 
@@ -12,7 +12,7 @@ import { MAXSTAGES } from './config.js';
 import { pickRandomItem } from './utils.js';
 import { byName, travelCost } from './travelGraph.js';
 
-const NO_CABIN = new Set(['el_Duenon', 'el_Heidan']);
+const NO_CABIN = new Set(['el_Duenon', 'el_Heidan', 'el_Castillo', 'la_Torre']);
 const CAVE_ZONES = new Set(['la_Cueva', 'la_Mina', 'la_Gruta']);
 const LOOK = { el_Poblado: 'town', la_Ciudad: 'city' };
 // Looks whose art exists in img/story (curanderobg_<look>.png).
