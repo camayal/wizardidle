@@ -246,6 +246,8 @@ function placeAlts() {
     const scene = el('esceneCanvas').getBoundingClientRect(), back = el('backConsole').getBoundingClientRect();
     if (!scene.width) return;
     const room = back.height ? back : { left: scene.left, top: scene.bottom + 8, width: scene.width, height: innerHeight - scene.bottom - 16 };
+    alts.dataset.w = Math.round(scene.width);
+    for (const b of alts.children) b.style.width = `${alts.dataset.w}px`;
     Object.assign(alts.style, { left: `${Math.round(room.left)}px`, top: `${Math.round(room.top)}px`, width: `${Math.round(room.width)}px`, maxHeight: `${Math.round(room.height)}px` });
 }
 function viewers() {
@@ -256,7 +258,7 @@ function viewers() {
         alts.timer = setInterval(placeAlts, 1000);
     }
     const first = scenesOf(src), list = [...first.slice(1), ...scenesOf(tgt())];
-    const n = Math.max(2, list.length), w = n > 2 ? 'calc(33% - 4px)' : 'calc(50% - 4px)';
+    const n = Math.max(2, list.length), w = `${alts.dataset.w || 256}px`;
     alts.innerHTML = Array.from({ length: n }, (_, k) => {
         const s = list[k], label = `${k ? `Alt${k + 1}` : 'Alt'} scene`;
         return `<div style="width:${w};background:#1b1612;border:1px solid #2a5fa8;border-radius:3px;font:12px sans-serif;color:#cfe0ff;box-sizing:border-box;padding:2px">
