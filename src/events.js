@@ -177,6 +177,9 @@ function changeZoneChance() {
     return Math.min(1, (stat("pChangeZone") + extra) * b.allowChangeZone);
 }
 
+// The gambler's look in each dice house (img/story): the City keeps the original, the Town and the desert tent have their own.
+const GAMBLER = { la_Ciudad: "jugon", el_Poblado: "jugon_poblado", el_Desierto: "jugon_desierto" };
+
 // Explore: maybe loot, maybe a dice house in town, maybe change zone, otherwise walk on.
 // A restless wizard (see restless) goes straight to another zone.
 function exploreEV() {
@@ -205,7 +208,7 @@ function exploreEV() {
             print(`${wizardName()} ${textDice}`);
             // the Desert has no dice house: the tent plays host, with the bone table put in for the visit (docs/plans/DESERT_TENT.md)
             run.tentDice = state.zone.current == "el_Desierto";
-            enterPlace(run.tentDice ? "el_Desierto_taberna" : `${state.zone.current}_casadados`, "jugon");
+            enterPlace(run.tentDice ? "el_Desierto_taberna" : `${state.zone.current}_casadados`, GAMBLER[state.zone.current]);
             run.previousEvent = "sixfivefour"
             startEvent(sixfivefour);       
         }else{
