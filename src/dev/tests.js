@@ -387,7 +387,7 @@ const pickerActions = {
         devPrint('prism in the pack');
     },
     spectraReset() {
-        state.spectra = { killed: [], quest: false, prism: false, fused: false };
+        state.spectra = { killed: [], met: 0, quest: false, prism: false, fused: false };
         state.artefacts = state.artefacts.filter((a) => a.name != 'prism');
         devPrint('spectra reset');
     },

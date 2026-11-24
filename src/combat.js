@@ -321,7 +321,7 @@ function getEnemy() {
     print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
     if (fight.spectrumQuest) {
         fight.spectrumQuest = false;
-        print(`<i>A colour of the Rainbow, alone in the Tundra... a prism could gather them. Find the prism</i>`);
+        print(`<i>A whisper from beyond, not his own: "Two colours, now. They wander lost, child. A prism would gather them... seek it."</i>`);
     }
     playEntrance();         // it arrives its own way (the game waits, ui/entrances.js)
     startEvent(battle);

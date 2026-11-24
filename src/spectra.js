@@ -1,7 +1,7 @@
 // Wizard Idle v2 - the seven secret spectra of the Tundra (the author's note, 2026-11-21). One for each colour
 // of the Rainbow boss: each is a rare that appears only once and then leaves the pool for good. They come
 // where an enemy or boss event would (la_Tundra only), a little more often with the prism in his pack. The
-// prism is found only after the quest is given (the first spectrum he meets gives it). When all seven are
+// prism is found only after the quest is given (the second spectrum he meets gives it, in a whisper). When all seven are
 // dead the Rainbow's next arrival is the fusion of the spectra into it (the artist's strip, entrances.js),
 // and from then on it steps out of its portal as before.
 
