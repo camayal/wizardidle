@@ -87,6 +87,21 @@ The design fits travel. Four points:
 
 Events on the way are fine: travel carries on at the next explore.
 
+## Built (dev, 2026-11-24)
+
+Built on dev-repo, untested in a browser (a headless sim loads). All numbers are placeholders in the config.
+
+- Queue (cap 3; secrets first, then nearest), the route step by step, searching with rising find odds, a long search moves the quest down the queue, only the god cancels.
+- Kinds: wanted, explore, study, shrine, pilgrimage, hidden shrine, delivery, plus **seek** (dev's addition: go and ask for work).
+- His own wishes: needs plus personality (greedy, pious, curious).
+- Givers: inn hosts, plus three of dev's additions: **a notice board in the City, wanted posts in 8 regions, rare strangers in safe zones** (merchant or old man sprite). Board and posts are console text only.
+- Offers: the god touches to suggest, belief decides whether he obeys; with no touch he judges by his needs.
+- Faith scroll: a Quests section, the "Forget it" button, three god orders (shrine, pilgrimage, hidden shrine).
+
+**Measured (sim, 3 seeds):** reaching level 60 takes about 22 h of play with quests, about 15 h before.
+
+**Not built yet:** small jobs fading near the last levels (targets ignore his level), the cemetery note for an unfinished quest, secrets starting quests, the parcel item, the quest icon, art for the board, posts and strangers.
+
 ## Decisions
 
 | Date | Question | Decision |
