@@ -678,7 +678,7 @@ function doOffering(){
     } else {
         switch (studyPhase()) {
             case 1:
-                print(wizardName() + pickRandomItem(" adore you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor"));
+                print(wizardName() + pickRandomItem(" adores you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor"));
                 break;
             case 2: pray(); break;
             case 5:
@@ -714,7 +714,7 @@ function pray() {
     run.feGanada *= state.player.faithMultiplier;
     state.player.faith = state.player.faith + run.feGanada;
     stats.add("faith.gain.prayer", Math.round(run.feGanada));
-    const textPray = pickRandomItem(" concentrates on his pray,  asks for his greatness, tries to please you, begs for your help");
+    const textPray = pickRandomItem(" concentrates on his prayer,  asks for his greatness, tries to please you, begs for your help");
     print(wizardName() + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
 }
 
