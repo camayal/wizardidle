@@ -2211,3 +2211,19 @@ Date: 2026-11-20 23:31
 Author's note: send to [[wa in la_Pradera9 the far away tower should be in a kinda hill, same the trees on the left, so in the horizon we can do a kinda elevation and only the base of the tower is visible
 ```
 (done: la_pradera9 option B copied in; desert inn now stops at the tent of el_desierto1)
+
+```
+Date: 2026-11-24 (from the author, via dev)
+Lamia and greater naga: the colours of their spell powers (maelstrom, tidal_wave, tide_charge and the other strips and scene spells) should match the colour of the sea in the beach scenes. It is all art, no code: recolour and drop them in the review drop.
+```
+
+```
+Date: 2026-11-23 18:34
+Author's note: [[wa regarding the healer hood, i was never happy with the result.  you can see the following sketch: healer_hooded_better.webm please draw something likes this for reeview, when you have my approval we need to update all animimations (pass them to approval)
+```
+
+```
+Date: 2026-11-21 10:07 (from the author, via dev)
+Rainbow boss, art part: dark spectrum enemies (sheet wizardidle-old-ideas/unorganzed_sprites/dark-skelets.png), one per colour: red, orange, yellow, green, blue, indigo, violet. Some exist already; recolour so every colour of the Rainbow boss is represented. Light-school attacks in their colour; Tundra only. Also dye the Rainbow boss's yellow cape black to match the spectrum. Dev wires events later.
+```
+(done: sea colours, healer hood C, Rainbow cape C and the seven spectrum sprites copied in 2026-11-24)

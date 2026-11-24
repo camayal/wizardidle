@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Art: the lamia's and greater naga's spells now match the colour of the sea; the Rainbow boss has a black cape (and his two attacks follow); the healer's hood is redrawn (face showing inside the hood, new unhooding animation); the Town tavern's tables are moved back so the wizard no longer walks over them. Seven dark spectrum sprites (red to violet) are ready in img/enemies/spectrum for the Rainbow event, not in the game yet.
 - Desert inn: when the wizard goes to rest, he now walks to the tent in the first desert scene, stops at its door and goes in, instead of jumping into the inn from any desert scene.
 - La_Pradera9: the far tower now stands on a hill, with the trees on the left on their own hill.
 - A direct hit of the god on a boss now also raises the wizard's belief (more than a plain touch), and a healing touch costs half the faith of an attack of the same size.

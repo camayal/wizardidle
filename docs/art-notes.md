@@ -61,18 +61,3 @@ Author's note: checking other details about etymos boss, i decided to keep the s
 Date: 2026-11-21 19:45
 Author's note: Taverns need to be redesigned by [[wa, the new walk line makes the wizard walk about the tables.
 ```
-
-```
-Date: 2026-11-23 18:34
-Author's note: [[wa regarding the healer hood, i was never happy with the result.  you can see the following sketch: healer_hooded_better.webm please draw something likes this for reeview, when you have my approval we need to update all animimations (pass them to approval)
-```
-
-```
-Date: 2026-11-21 10:07 (from the author, via dev)
-Rainbow boss, art part: dark spectrum enemies (sheet wizardidle-old-ideas/unorganzed_sprites/dark-skelets.png), one per colour: red, orange, yellow, green, blue, indigo, violet. Some exist already; recolour so every colour of the Rainbow boss is represented. Light-school attacks in their colour; Tundra only. Also dye the Rainbow boss's yellow cape black to match the spectrum. Dev wires events later.
-```
-
-```
-Date: 2026-11-24 (from the author, via dev)
-Lamia and greater naga: the colours of their spell powers (maelstrom, tidal_wave, tide_charge and the other strips and scene spells) should match the colour of the sea in the beach scenes. It is all art, no code: recolour and drop them in the review drop.
-```
