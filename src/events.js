@@ -193,7 +193,7 @@ function exploreEV() {
         print(`${wizardName()} is searching...`);
         startEvent(getBotin);
     //go to dice house, use the same probability
-    } else if (YesOrNot(config.balance.pDados, 0) && (state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado")){
+    } else if (YesOrNot(config.balance.pDados, 0) && (state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto")){
         //check if gold is more than 0
         if(state.player.gold > 0){
             //call the game function
@@ -203,7 +203,9 @@ function exploreEV() {
                 textDice = pickRandomItem("finds a gaming house and enters,wants to play 6-5-4,wants to gamble");
             }
             print(`${wizardName()} ${textDice}`);
-            enterPlace(`${state.zone.current}_casadados`, "jugon");
+            // the Desert has no dice house: the tent plays host, with the bone table put in for the visit (docs/plans/DESERT_TENT.md)
+            run.tentDice = state.zone.current == "el_Desierto";
+            enterPlace(run.tentDice ? "el_Desierto_taberna" : `${state.zone.current}_casadados`, "jugon");
             run.previousEvent = "sixfivefour"
             startEvent(sixfivefour);       
         }else{
@@ -572,6 +574,7 @@ function searchInn(){
 
 // Enter an inn, or find a place to camp.
 function arriveToRest(placesWithInn) {
+    run.tentDice = false;       // a night in the tent has no dice table
     if (placesWithInn) {
         enterPlace(`${state.zone.current}_taberna`, state.zone.current == "las_Dunas" ? "viejo" : undefined);     // the Dunes inn keeps the old merchant
         stats.count("inn.rests");

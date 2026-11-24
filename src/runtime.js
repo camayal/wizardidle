@@ -49,6 +49,7 @@ export const run = {
     objectToStudy: undefined,      // rune or book (or "artefact")
     artefactName: undefined,       // the artefact against Medusa's gaze he just found
     restAtInn: undefined,
+    tentDice: false,               // a dice visit to the desert tent: its bone table is on the scene (ui/diceTable.js)
     afterChapterExe: undefined,
     disablePjBtn: undefined,       // divine buttons temporarily blocked
     disableCenterBtn: undefined,

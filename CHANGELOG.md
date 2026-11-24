@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The desert tent now hosts dice: when he explores the Desert he can walk into the tent, where the bone table (with bone dice) appears on the old scene, play 6-5-4 and walk out; a night's sleep in the tent shows no table. The gambler also stays in place until the scene fades when he leaves any dice house.
 - The gambler no longer vanishes the moment the wizard decides to leave the dice house: he stays at his place while the wizard walks to the door, and disappears only when the scene fades to the street.
 - The dice tables are lower (about waist height on the wizard), and the beer table in the City and Town dice houses moved left to make room for them.
 - The dice houses have a table: in the City (red lacquer), and the Town (wood) a round, slightly isometric table with a black top stands by the gambler. The wizard walks up to it to play and walks away when done, and tiny dice are thrown onto it each roll (from the left when the wizard throws, from the right when the gambler does) and show the numbers that came up. Banked dice (ship, captain, crew) stay on the table and only the others are thrown again. Art by the artist; the desert version is drawn and waits for its tent.

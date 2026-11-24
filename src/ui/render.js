@@ -18,7 +18,7 @@ import { art } from '../media.js';
 import { overlays } from '../data/overlays.js';
 import { connectorSceneInfo } from '../data/connectors.js';
 import { markup } from './text.js';
-import { DICE_HOUSES, WIZARD_AT_TABLE, showDiceTable } from './diceTable.js';
+import { WIZARD_AT_TABLE, hasDiceTable, showDiceTable } from './diceTable.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ██████╗ ███████╗███████╗██╗███╗   ██╗██╗████████╗██╗ ██████╗ ███╗   ██╗███████╗//
@@ -710,12 +710,12 @@ function goInside(bg, npc, done, fade) {
         if (done) done();
         return;
     }
-    if (door == null && !fade) return walkThroughScene(change, done);
+    if (door == null && !fade) return walkThroughScene(change, () => hasDiceTable(bg) ? walkWizardTo(WIZARD_AT_TABLE, done) : done && done());     // (the desert tent: no door inside, he walks on to the table)
     fadeScene(() => {
         change();
         if (door != null) ui.wizardOffset = door - 48;
         if (!run.simulation) drawWizard();
-    }, () => (door != null ? walkWizardTo(DICE_HOUSES[bg.toLowerCase()] ? WIZARD_AT_TABLE : 0, done) : done && done()), () => imageNow(src) != null);
+    }, () => (door != null ? walkWizardTo(hasDiceTable(bg) ? WIZARD_AT_TABLE : 0, done) : done && done()), () => imageNow(src) != null);
 }
 
 // He leaves the place: out through its door and a fade to the street at that door (where the street is
@@ -724,7 +724,7 @@ function goInside(bg, npc, done, fade) {
 // there is no door at all, he walks out of the scene to the right and in again.
 function leavePlace(changeScene, done) {
     const key = (ui.currentBackGround || "").toLowerCase(), door = DOORS[key], street = STREET_DOORS[key];
-    if (door == null) return walkThroughScene(changeScene, done);
+    if (door == null) return walkThroughScene(() => { clearNPC(); changeScene(); }, done);
     walkWizardTo(door - 48, () => fadeScene(() => {
         clearNPC();                                      // whoever stayed inside (the gambler) goes only when the scene fades
         if (street && !run.simulation) {

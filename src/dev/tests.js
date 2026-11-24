@@ -196,6 +196,17 @@ const scenarios = [
         },
     },
     {
+        name: 'Dice in the desert tent',
+        check: 'Walks to the tent door, goes in, the bone table is on the scene, he walks to it and plays (the gambler stands at the right, by the counter); on leaving the table is gone and so is the gambler. A night in the tent shows no table.',
+        setup() {
+            moveTo('el_Desierto');
+            override('balance', { pDados: 1 });
+            override('baseStats', { pBotin: 0 });
+            state.player.gold = Math.max(state.player.gold, 1000);
+            return { event: EVENT.explore };
+        },
+    },
+    {
         name: 'Level 210 fight',
         check: 'The fight works and the wizard sprite shows (v1 crashed attacking at level 210+).',
         setup() { setLevel(210); return { event: normalEnemy() }; },

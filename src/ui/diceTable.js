@@ -10,6 +10,13 @@ import { run, ui } from '../runtime.js';
 // Dice house backgrounds and the style of their table (red lacquer, wood, bone). The desert tent joins when it exists.
 export const DICE_HOUSES = { la_ciudad_casadados: "ciudad", el_poblado_casadados: "poblado" };
 
+// The desert tent is also its inn: the bone table is put there only for a visit to play dice (run.tentDice, set by
+// the explore event and cleared when he leaves), never for a night's sleep (docs/plans/DESERT_TENT.md).
+const TENT_DICE = { el_desierto_taberna: "desierto" };
+const styleOf = (bg) => DICE_HOUSES[(bg || "").toLowerCase()] || (run.tentDice ? TENT_DICE[(bg || "").toLowerCase()] : null) || null;
+// Is there a dice table in this background right now?
+export const hasDiceTable = (bg) => !!styleOf(bg);
+
 const TABLE = { x: 148, y: 36, w: 34 };
 export const WIZARD_AT_TABLE = 80;                  // wizardOffset that puts him just left of the table
 const SPOTS = [[8, 2], [15, 2], [22, 2], [11, 6], [19, 6]];     // where the five dice rest, from the table's top-left: back row, then front row
@@ -52,7 +59,7 @@ function paint(frame = -1, mirror = false) {
 
 // A background was loaded: show the table when it is a dice house, nothing otherwise.
 export function showDiceTable(bg) {
-    style = DICE_HOUSES[(bg || "").toLowerCase()] || null;
+    style = styleOf(bg);
     faces = {};
     flying = [];
     seq++;

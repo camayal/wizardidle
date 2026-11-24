@@ -275,6 +275,7 @@ function finalScoreSixFiveFour(nameDicePlayer){
                 break;
             }
             print(`${wizardName()} exits the gaming house`);
+            run.tentDice = false;
             run.restAtInn = false;      // the gambler stays in his place while the wizard walks out (leavePlace clears him as the scene fades)
             endEvent();
             leavePlace(showStage, nextEvent);       // out through the dice house's door
