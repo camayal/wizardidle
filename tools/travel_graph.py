@@ -30,9 +30,9 @@ BRIDGES = [(x, y) for _, kind, x, y in WAYPOINTS if kind == 'bridge']
 BRIDGE_RADIUS = 7
 # Cave and mine mouths: the same spot on the ground map and on the underground map.
 # mouth_<outside zone>_<inside zone>: where it comes from and where it goes
-ENTRANCES = [('mouth_pantano_cueva', 147, 31), ('mouth_pradera_cueva', 27, 114), ('mouth_duenon_cueva', 87, 224), ('mouth_playa_mina', 229, 64),
+ENTRANCES = [('mouth_pantano_cueva', 147, 31), ('mouth_pradera_cueva', 27, 114), ('mouth_duenon_cueva', 87, 224), ('mouth_playa-pradera_mina', 229, 64),
              ('mouth_dunas_mina', 33, 165), ('mouth_desierto_mina', 218, 182), ('mouth_tundra_volcan', 130, 120),
-             ('mouth_gruta_cueva', 100, 181), ('mouth_pradera_gruta', 64, 170)]
+             ('mouth_gruta_cueva', 100, 181), ('mouth_dunas-pradera_gruta', 64, 170)]
 STAIRS = (212, 205)                                      # the sacred stairs, ground -> Heidan (a guess, to confirm)
 
 
