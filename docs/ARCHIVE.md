@@ -2366,3 +2366,10 @@ Author's note: i am thinking that reviving the wizard by touching him is actuall
 ```
 
 - ladder_cueva4_mina2 mine side: floor shaft x 101-143, y 47-62 may sit on the walk line; revisit walkable path later (artist, 2026-11-20). (done per the author 2026-11-24: both ladder sides exist)
+## Healer's cabin: three new looks (author, 2026-11-24; brief by dev)
+
+On a quest the wizard's revive puts the cabin near where he fell, so the cabin now exists in more places than the wild. Today there is one background (img/story/curanderobg.png, the magical cabin with the hooded healer). We need three more, same size and same spot for the healer and the wizard, same magic:
+1. **Town:** the cabin in the Town's style (adobe, huts), for el_Poblado.
+2. **City:** a cabin with the City's walls style (stone), for la_Ciudad.
+3. **Cave:** a healer's cave version, for the Cave, the Mine and the Grotto.
+Name the files curanderobg_town, curanderobg_city, curanderobg_cave (img/story). The wild cabin stays for every other zone. Dueñon and Heidan never have a cabin.
