@@ -292,6 +292,7 @@ export function eventPick() {
         if (q.kind === 'explore') { complete(q); return 0; }
         print(`<i>${wizardName()} has reached the ${zoneName(q.target.zone)} and looks around: ${q.text}</i>`);
     }
+    if (q.phase === 'travel') return YesOrNot(config.quests.pTravelExplore, 0) ? 2 : 0;     // on the road he mostly keeps walking (2 = explore)
     if (q.phase !== 'search') return 0;
     q.searched++;
     const c = config.quests;
