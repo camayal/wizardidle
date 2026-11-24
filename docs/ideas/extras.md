@@ -28,7 +28,7 @@ Smaller ideas: achievements, UI, town and tavern, v1 leftovers, pace. Read only 
   - *Robbery* ("robbed!", "rest: chance to be robbed", and in Spanish "a rogue robs him and escapes, gold drops"): a thief steals part of the wizard's gold, at random or while he rests.
   - *Fight at the inn when he can't pay* ("add event of fight if have not gold"): today the inn just turns him away or lets him sleep; a brawl could be the price.
   - *Quests*: "quest? check the scrolls" with a link to a fantasy tile set used as reference. Ties into the stats and NPC ideas above.
-  - *Quest: the prism* (2026-11-24, built as a flag in state.spectra, no quest scroll yet): the first Tundra spectrum he meets gives it; the prism artefact turns up in finds only after that. When a quest scroll exists, list it there.
+  - *Quest: the prism* (DONE 2026-11-24, author approved: the quest is given when the wizard meets the first Tundra spectrum; the prism artefact turns up in finds only after that). Built as a flag in state.spectra, no quest scroll yet: when one exists, list it there.
   - *Achievements for every boss and for each hydra* ("todo logro de todos los boss", "todo logro de cada hidra").
   - *"Hey guy look at me" achievement*: when `el_mediano14` appears (the shortie who shouts "HEY GUY LOOK AT ME!"). Original flavour line: "The world is losing its values, the un-polite enemies do not see the opponent in the face".
   - *Dice game stats and achievements* ("TODO add idx for all this part and achievements" in the dice game). Fits the planned *jugón* / *dados cargados* / *full carga* achievements.
