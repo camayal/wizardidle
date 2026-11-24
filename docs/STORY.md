@@ -574,3 +574,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 - **Art for the story:** the god's own shrine (II), its destruction animation and its broken state (X); a hooded stranger sprite distinct from the ordinary hooded figures (II onward); the wizard lying injured (falls).
 - **Dropped from 2018:** drinking Midas's essence so the god can't revive him (the falls model replaces it); Midas becoming the Tower's boss.
 - **Scroll format:** title in `.titles`, the subtitle under it, short `<br><br>` paragraphs; the last line can use `.subtitles` (dark red, bold).
+
+## Story ideas (to place in a chapter)
+
+- **Wayside shrines** (the author, 2026-11-24, from the faith rework): the game already has one stone mini-shrine per game, destroyed in an episode. Idea: let a Devout wizard build it, and let a later wizard of the same world find what is left of it ("a shrine raised by Merlin, lvl 87"). Which chapter, who destroys it and why: to decide.
