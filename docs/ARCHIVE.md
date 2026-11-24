@@ -2378,3 +2378,43 @@ Name the files curanderobg_town, curanderobg_city, curanderobg_cave (img/story).
 
 - Swamp bridge direction (author unsure): `bridgeLeftZone` in src/data/connectors.js says bridge_swamp has la_Pradera on its left (map has the Prairie east of the Swamp, art reads Prairie left). Check the dev panel's bridge_swamp walks; if wrong, change or remove the line. Other bridges may have the same art-versus-map mismatch: ask which.
 - Clerk prompt not done: rename scenes that are really borders to border_<from>_<to> in notes and lists (mouths are already renamed).
+
+## Thinker notes: faith rework (cut 2026-11-24, now in plans/FAITH.md 2b)
+
+- Idea (author, 2026-11-19): nudging from the god. Clicking a door, gate, cave entrance and the like raises the chance that the wizard takes that path next. The wizard can reject the suggestion and carry on his own way, and then the faith spent is wasted. Design questions for thinker first: faith cost, how much the odds rise, how often he refuses (belief level?), and what the player sees (console line, door glow).
+```
+Date: 2026-11-20 23:18
+Author's note: faith is being a problem with inactive games, the faith falls quick and it is almost not oportunity in getting more. sent [[wt how to improve the believer and faith system
+```
+
+```
+Date: 2026-11-22 09:30
+Author's note: idea for [[wt healing him will cost less than attacking enemis
+```
+
+```
+Date: 2026-11-23 14:30
+Author's note: add some detailss for [[wt about faith. we need to include whispers when the character is atheist. also think about ways that both types of games enjoiable (believer vs atheist). regarding action, the player power should be linked directly with the belief level, faith should be less punitive, perhas change the scale from 0 to xxx rather than go negative. we need to think about it
+```
+
+```
+Date: 2026-11-23 19:07
+Author's note: for [[wt some ideas for faith think:
+
+Design Spec: 4-Tier Belief & Silent Guardian Mechanics1. Core Premise & EconomyNarrative Framing: The player is a solitary deity worshipped by a single subject (the wizard). Even when the wizard stops believing, the player continues trying to protect and win back their only subject.Faith (0 → +Max): Strictly positive spendable resource (divine mana). Never goes negative to prevent soft-locks.Belief (4-Tier Relationship State): Devout $\leftrightarrow$ Believer $\leftrightarrow$ Doubter $\leftrightarrow$ Atheist.Extremes (Devout & Atheist): Distinct, equally viable playstyles (Active Shepherd vs. Silent Guardian). Neither extreme is punitive.Bridges (Believer & Doubter): Transitional momentum states separating the two extremes.2. Tier Breakdown & Action Bar MorphingRather than locking out player agency as Belief drops, the player's action bar morphs from Overt Miracles (direct wizard buffs) into Invisible Hand Nudges (environmental/enemy manipulation that the wizard perceives as luck or skill).Belief TierRoleCombat & Survival ActionsDecision & Path GuidanceWizard Stat Scaling1. DevoutActive Extreme (Shepherd)Overt Miracles: Direct Heal, Resurrect, Smite, Divine Shield.Divine Command: 100% obedience on paths and professions.Low solo stats; high multiplier from divine buffs and shrines.2. BelieverUpper BridgeStandard Miracles: Heal, Smite, Bless Drop, Whisper.Persuade: ~80% chance wizard follows suggested path/profession.Balanced baseline stats; responsive to active intervention.3. DoubterLower BridgeSubtle Aid: Weak Heal, soften enemy armor, Whisper (primary pull back toward Believer).Nudge: ~50% coin-flip whether wizard listens or acts independently.Rising Self-Reliance (+XP%, +Crit%); miracle potency scales down.4. AtheistIdle Extreme (Silent Guardian)Invisible Hand: Reduce enemy resistance/armor, turn lethal hits into 1-HP "grazes," spawn hidden healing herbs.Stray Omen: Low-cost, ~80–85% ignored; wizard relies on stubborn instinct.Peak Self-Reliance (+XP%, +Crit%); immune to direct heals/commands.3. Key System LoopsDual Faith Generation (0 → +Max):Active Loop (Devout / Believer): Clutch heals (below 25% HP), shrine visits, and fulfilled Divine Commands generate Faith.Passive Loop (Doubter / Atheist): Surviving fights rigged by Invisible Hand nudges, unassisted boss kills, and chapter milestones generate latent Faith—ensuring idle players return to a full Faith pool.Universal Steering via Whispers:Low/zero-cost action with a short cooldown available across all tiers.Increments Belief upward (Atheist → Doubter → Believer → Devout), allowing an active player to slowly win back an Atheist wizard through persistent subtle signs.Stat Handoff Curve:Miracle potency scales inversely with wizard Self-Reliance (+XP% and +Crit%) across the four tiers so progression remains smooth during transitions without a "weak middle" valley.4. Implementation Checklist for Engineering[ ] Migrate faith state variable from signed integer (-/+) to clamped unsigned range (0 to maxFaith).[ ] Implement 4-state belief enum/thresholds (DEVOUT, BELIEVER, DOUBTER, ATHEIST) with idle-time decay and miracle/whisper increment hooks.[ ] Build action-bar swapping logic so ATHEIST and DOUBTER replace direct targeted miracles with environmental/enemy modifiers (e.g., enemy.resistance debuffs, lethal-hit survival clamping).[ ] Add probabilistic compliance rolls to path/profession guidance (100% $\rightarrow$ 80% $\rightarrow$ 50% $\rightarrow$ 15%).[ ] Wire passive Faith generation triggers to unassisted kills, rigged-fight survivals, and story chapter transitions.
+```
+
+```
+Date: 2026-11-23 19:17
+Author's note: [[wc other faith potential ideas:
+Attribution Log: Show the wizard's "luck/skill" excuse in the text log when you use an invisible Atheist nudge (e.g., "It looks like the {enemy] blade snapped on its own").
+
+Unanswered Prayers: Low-HP in bosses battles trigger a timed prayer prompt—answering spikes Belief upward; ignoring drops Belief and adds a permanent +Crit/XP ("Hardened Heart") buff.
+
+Miracle Tolerance: Spamming the same miracle gives diminishing Belief returns; decaying Belief based on unmet expectations replaces flat real-time timers.
+
+Relic Tethering: Equipped gear carries a passive bonus into the next timeline based on the previous run's ending Belief (+Faith/Whisper for Devout, +Crit/XP for Atheist).
+
+Witness Meter: Overt miracles draw heavier enemy aggro/difficulty; invisible nudges let the wizard ambush foes undetected.
+```
+

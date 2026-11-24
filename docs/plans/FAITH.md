@@ -22,12 +22,58 @@ A plan to rebalance faith: how the wizard gains and loses it, what the god (the 
 | 2026-11-13 | Belief vs faith (from the author's playtest notes) | **Two meters.** Faith stays the currency the god spends. **Belief is its own bounded meter** (e.g. −100 to +100), moved by **moments**, not by spending: a heal at a critical moment or the final blow on an enemy counts a lot, normal heals and hits only a little, leaving him to revive alone drops it a lot. The four levels read from belief. The story can lock it at "lost", shown as a symbol rather than −∞. To be detailed in this plan (weights, bounds, what counts as critical) before it is built |
 | 2026-11-13 | A way back from atheism | **Passing by a shrine** (Doubter or Atheist) +0.5; **a close call** (survives a fight below 10% HP with no help) +1; **getting up alone** −10 only while a Believer or Devout, −1 once a Doubter or Atheist. The god's super-critic: **1 in 10 of his critics, ×16** |
 | 2026-11-13 | Belief meter details | **−100 to +100, start +20; Devout from +60, Doubter below 0, Atheist below −60, 10-point margin.** Critical moments: saved from the killing blow (+8), heal at very low HP (+5), the god's final blow (+5), the god's critic (+3) and super-critic (+6); small ones +0.5; left to get up without the god −10. The god's touch may now kill. Details in 3.1 |
+| 2026-11-24 | Rework: faith scale | **Faith runs from 0 to a max, never negative.** The max grows with level or chapter (shape to playtest); losses stop at 0. Faith is something to spend, never a debt |
+| 2026-11-24 | Rework: idle faith | **All three:** (1) **his own prayers**: he prays when he camps, rests or levels up (Devout and Believer more, Doubter less, Atheist never); (2) **milestones**: a boss kill, a new chapter, a new zone or a close call adds faith with no god touch; (3) **softer drains**: skipping a shrine and getting up alone cost less or nothing. Amounts to playtest |
+| 2026-11-24 | Rework: atheist play (the Silent Guardian) | **All three:** (1) **invisible hand**: for an Atheist the touches act on the world, not on him (weaken the enemy, turn a killing hit into a 1 HP graze, a healing herb on the path); he never knows; (2) **self-reliance bonus**: the lower his belief, the more XP and crit he earns alone, while miracles weaken, so there is no weak middle; (3) **luck excuses**: each invisible touch shows his own explanation in the console (*"the goblin's blade snapped on its own"*). Replaces "refuses every touch" |
+| 2026-11-24 | Rework: the god's power and belief | **The action bar changes with the level.** Devout: big miracles (heal, smite, shield); Believer: today's touches; Doubter: a weaker heal and subtle aid; Atheist: the invisible hand only. Strength and price do not scale on top (replaces Devout −25% / Doubter ×2) |
+| 2026-11-24 | Rework: whispers | **Heard less as he doubts, and they carry hints.** A Believer always hears a whisper, a Doubter sometimes, an Atheist rarely, and then he takes it for his own thought (*"a thought he can't shake"*). Whispers bring quests, secrets and warnings (like the Tundra prism quest). **Not** a belief-raising tool: whispers don't move belief by themselves |
+| 2026-11-24 | Rework: touch prices | **A heal costs clearly less than a hit.** Protecting him is the god's main job; hitting is the luxury. Ratio to playtest |
+| 2026-11-24 | Rework: extra ideas | **In:** (1) **unanswered prayers**: at low HP in a boss fight he prays in a timed window; answered, belief jumps; ignored, belief drops but he gains a lasting *Hardened Heart* bonus (+crit/XP); grows the "prayer in despair" of 3.6; (2) **miracle tolerance**: the same miracle repeated raises belief less each time, and belief falls when expected help doesn't come. **Out:** the witness meter. The author asked for three more ideas to weigh |
+| 2026-11-24 | Rework: new ideas | **In: the god's face.** He builds a picture of the god from how the player plays: mostly heals, a god of mercy; mostly hits, a god of wrath; silence, a distant god. His prayers, console lines and the Devout miracles follow it. **Wayside shrines: a story idea, not a system.** The game already has one stone mini-shrine, only one per game, and it is destroyed in an episode; tie the wayside shrine idea to that in [STORY.md](../STORY.md) (later wizards finding what a past wizard built). **Out:** tests of faith |
+| 2026-11-24 | Rework: relic tethering | **No carry-over.** Each wizard starts fresh at the starting belief |
+| 2026-11-24 | Rework: belief drift | **Belief drifts down while the god is silent** (replaces "no drift"). An idle game slides toward the Atheist play, which is now a full playstyle, not a punishment. Pace to playtest |
+| 2026-11-24 | Rework: nudges | **Part of the rework; belief decides how often he follows.** The god clicks a door, gate or cave to suggest a path; Devout almost always follows, Believer usually, Doubter about half the time, Atheist rarely (and he thinks it was his idea). A refused nudge wastes its faith. Chances and cost to playtest |
 
 ---
 
 ## Status (2026-11-19)
 
 **Built:** the belief meter and its four levels, touch cost and shrine chance by level (`src/belief.js`), the god's super-critic. **Not built:** `faithChange()` and stats per source, the free revive and rescuers (the self-revive in `src/combat.js` still costs faith), offering caps, the price list, winning back an atheist, the Last Escape scroll. Sections 1 and 2 (faith before the meter, what was off) are in the archive.
+
+## 2b. Rework (decided 2026-11-24)
+
+The author's goal: faith stops punishing an idle player, and the believer and atheist games are **two equally good ways to play**: the *Shepherd* (Devout, big visible miracles) and the *Silent Guardian* (Atheist, the god helps unseen). This section **overrides** section 3 wherever they disagree; section 3 stays for what it doesn't touch (belief meter and moments, revive, rescuers, the Last Escape, story locks).
+
+**Two meters, as before.** Belief (−100 to +100, four levels) is how much he believes. Faith is what the god spends, now **0 to a max** that grows with level or chapter. Never negative.
+
+**Faith in an idle game.** He prays on his own when he camps, rests or levels up (Devout and Believer more, Doubter less, Atheist never). Milestones give faith with no touch: a boss kill, a new chapter, a new zone, a close call. Skipping a shrine and getting up alone cost less or nothing.
+
+**Belief in an idle game.** Belief drifts down while the god is silent, so an idle wizard slides toward the Atheist play. That's fine now, because the Atheist play is good.
+
+**The action bar by level** (replaces the price changes by level in 3.1 and 3.5):
+
+| Level | The god's touches | Wizard alone |
+|---|---|---|
+| **Devout** | Big miracles: heal, smite, shield | Weakest alone; leans on the god |
+| **Believer** | Today's touches: heal, hit | Baseline |
+| **Doubter** | A weaker heal, subtle aid (soften the enemy) | Self-reliance bonus grows |
+| **Atheist** | **Invisible hand** only: weaken the enemy, turn a killing hit into a 1 HP graze, a healing herb on the path. Each shows his **luck excuse** in the console | Highest self-reliance bonus (+XP, +crit) |
+
+A heal always costs **clearly less than a hit**: protecting him is the god's job, hitting is the luxury.
+
+**Whispers.** The god's voice carries quests, secrets and warnings. A Believer always hears it, a Doubter sometimes, an Atheist rarely, and then as his own thought. Whispers don't move belief.
+
+**Nudges.** Clicking a door, gate or cave suggests a path. How often he follows depends on the level (Devout almost always, Atheist rarely). A refused nudge wastes its faith.
+
+**Moments that shape belief, new:**
+- **Unanswered prayers:** at low HP in a boss fight he prays, with a timed window. Answered: belief jumps up. Ignored: belief drops, but he earns a lasting *Hardened Heart* bonus (+crit/XP). It grows the "prayer in despair" of 3.6.
+- **Miracle tolerance:** the same miracle again and again raises belief less each time, and help he expected that doesn't come lowers it.
+
+**The god's face.** He forms a picture of the god from how the player plays: mostly heals, a god of **mercy**; mostly hits, a god of **wrath**; mostly silence, a **distant** god. His prayers, console lines and the Devout miracles follow it.
+
+**Not in the rework:** the witness meter, tests of faith, carrying belief over to the next wizard. **Wayside shrines** go to the story: the one stone mini-shrine per game, destroyed in an episode (STORY.md).
+
+**Still open (to design before dev builds):** what the face changes exactly (miracles per face?), the art for the new touches (smite, shield, the herb, the graze), how the action bar shows the level change. **Every amount waits for the playtests (3.10):** the faith max curve, prayer and milestone faith, drift pace, self-reliance bonus, nudge chances, the heal and hit ratio.
 
 ## 3. Proposal
 
