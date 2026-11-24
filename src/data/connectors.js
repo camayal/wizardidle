@@ -1,4 +1,5 @@
 // Wizard Idle - connector points that are crossed as scenes on a trip (img/places/connectors/).
+import { zones } from './zones.js';
 // Bridge scenes are listed in the order they were drawn, west to east: going east to west the wizard sees
 // them the other way round, walking right to left. Stairs rise to the right as drawn, so going up he walks
 // right (base, mid, top) and going down he walks left (top, mid, base). A cave or mine mouth keeps the
@@ -66,9 +67,12 @@ for (const [b, d] of Object.entries(borderScenes)) addScenes(b, "the border betw
 addScenes("pier", "the pier", ["pier_land", "pier_end"]);
 addScenes("enter_mine_S", "the south mine tunnel", ["enter_mine_S"]);
 addScenes("ladder_cueva4_mina2", "the ladder between the cave and the mine", ["ladder_cueva4_mina2_cave", "ladder_cueva4_mina2_mine"]);
+// A mouth's name is mouth_<outside zone(s)>_<inside zone> in the Spanish short names (pantano, cueva...): the label says them in English.
+const zoneEnglish = (short) => { const k = Object.keys(zones).find((z) => z.toLowerCase().replace(/^(el|la|las)_/, "") === short); return k ? zones[k].name : short; };
+const mouthLabel = (m) => { const [out, inside] = m.replace("mouth_", "").split("_"); return `the mouth from ${out.split("-").map(zoneEnglish).join(" / ")} to ${zoneEnglish(inside)}`; };
 for (const m of Object.keys(mouthDoors).filter((k) => k.startsWith("mouth_") && !k.endsWith("_under"))) {
-    addScenes(m, `the mouth from ${m.replace("mouth_", "").replace("_", " to ").replace("-", " / ")}`, [m]);
-    addScenes(`${m}_under`, `the mouth from ${m.replace("mouth_", "").replace("_", " to ").replace("-", " / ")}, inside`, [`${m}_under`]);
+    addScenes(m, mouthLabel(m), [m]);
+    addScenes(`${m}_under`, `${mouthLabel(m)}, inside`, [`${m}_under`]);
 }
 // The scenes of a connector point, in trip order (a mouth point has its twin inside as the second one).
 export const connectorScenesOf = (point) => {
