@@ -167,8 +167,7 @@ async function loadItems() {
     items.dream.push(...poems.map((x) => ({
         kind: 'dream', id: `dream:poem-${x.id}`, group: POOL_NAMES.poem, pool: 'poem', belief: false,
         label: x.title, where: `src/data/awayTexts.js, poems, ${x.id} (first line is the title, then one line per line; {zone} too)`,
-        text: [`<b>${x.title}</b>`, ...x.lines].join('
-'),
+        text: [`<b>${x.title}</b>`, ...x.lines].join('\n'),
     })));
     const code = [];
     for (const file of CODE_FILES) code.push(...parseCode(file, await fetchText(`src/${file}`)).map((x) => ({ ...x, group: `Game phrases: ${file}` })));

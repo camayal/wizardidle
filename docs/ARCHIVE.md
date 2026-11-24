@@ -2159,3 +2159,9 @@ Author's note: Before some scene, this boss disappears and appears
 ```
 
 (done 2026-11-24, untested in a browser: faith meter stick; boss no longer blanks before a move)
+
+```
+Date: 2026-11-20 23:32
+Author's note: texts dev console is failing sais invelid or unexpected token
+```
+(fixed 2026-11-24: a real newline inside a string in src/dev/texts.js line 170)

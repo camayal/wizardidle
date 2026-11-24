@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Texts dev mode loads again (a stray line break inside a string in the away poems made the whole tools script fail with "Invalid or unexpected token").
 - The belief meter's marker on the stained-glass ring is now a small light stick that points out from the candle and slides back and forth, so it reads as something that moves (it was a tiny diamond).
 - A boss no longer vanishes just before one of its moves (seen with the skeleton): its sprite now stays until the move's first frame is ready, instead of the scene being wiped at once and the boss coming back later.
 - The paradox is counted: every time another tab opens or collapses, the original tab adds it to the world stats (dimensions opened, collapsed, and the first time).

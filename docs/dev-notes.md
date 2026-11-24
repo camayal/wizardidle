@@ -121,11 +121,6 @@ Author's note: send to [[wa in la_Pradera9 the far away tower should be in a kin
 ```
 
 ```
-Date: 2026-11-20 23:32
-Author's note: texts dev console is failing sais invelid or unexpected token
-```
-
-```
 Game test
 Wizard: level 13, HP 22 / 221, gold 1537, faith -862
 Zone: Tundra, stage 3
