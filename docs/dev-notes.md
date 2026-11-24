@@ -50,6 +50,5 @@ Author's note: i was thinking in anothe mouth that conect the cave with la_Gruta
 
 ## Next session (dev), 2026-11-24
 - Swamp bridge direction (author unsure): `bridgeLeftZone` in src/data/connectors.js says bridge_swamp has la_Pradera on its left (map has the Prairie east of the Swamp, art reads Prairie left). Check the dev panel's bridge_swamp walks; if wrong, change or remove the line. Other bridges may have the same art-versus-map mismatch: ask which.
-- Remove pier battles (author's request): make sure no fight can happen on the pier walk. Today fights come only from travel.js planFight on zone-changing crossings (the pier visit does not use it), so first find out where the author saw a battle on the pier, then cut it.
 - Keep testing crossing fights with Dev panel > Connectors > "Walk it with a fight" (mirrored when the walk goes right to left); not seen in a browser yet.
 - Clerk prompt not done: rename scenes that are really borders to border_<from>_<to> in notes and lists (mouths are already renamed).

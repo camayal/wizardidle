@@ -71,13 +71,13 @@ function crossing(origin, target) {
 
 // A fight on a crossing: now and then one of its scenes stops him for a normal fight of the zone he is entering.
 // Going left to right he stands in his usual place (offset 0); right to left the whole fight is mirrored
-// (render.setFacing) and he stands in the mirror image of it, offset 160, so nothing jumps. Not on stairs or ladders.
+// (render.setFacing) and he stands in the mirror image of it, offset 160, so nothing jumps. Not on stairs, ladders or the pier.
 const FIGHT_SPOT_LEFT = 0, FIGHT_SPOT_RIGHT = 160;
 // force: the dev tools ask for the fight (and the walk is not a changeLocality event).
 function planFight(steps, force = false) {
     if (!force && !YesOrNot(config.balance.pFightInCrossing, 0)) return;
     const ok = steps.filter((s) => {
-        if (/^(stairs|ladder)_/.test(s.scene)) return false;
+        if (/^(stairs|ladder|pier)_/.test(s.scene)) return false;     // no fights on stairs, ladders or the pier
         const spot = s.dir > 0 ? FIGHT_SPOT_LEFT : FIGHT_SPOT_RIGHT;
         const from = s.start != null ? s.start : s.dir > 0 ? OFF_SCENE_LEFT : OFF_SCENE_RIGHT;
         const to = s.end != null ? s.end : s.dir > 0 ? OFF_SCENE_RIGHT : OFF_SCENE_LEFT;
