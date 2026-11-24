@@ -46,7 +46,7 @@ function realKill(){
         kills: stats.get("kill.enemies") + stats.get("kill.rare"),
         falls: stats.get("death.falls"),
         achievements: { ...state.achievements },
-        // erased: true is set only for the loser of the final battle (docs/ERASURE.md): he lies
+        // erased: true is set only for the loser of the final battle (docs/plans/ERASURE.md): he lies
         // under a cracked tomb with his name turned and crossed out (src/ui/cemetery.js)
     });
     loop.stopAll(); // every clock, including any v1 would have leaked

@@ -103,7 +103,7 @@ function npcBtn(){
         if (isAtheist()) return refuseTouch();
         //hurt npc
         interruptMidasHeal();
-        // the god's touch may kill now (docs/FAITH.md 3.1: the final blow; v1 always left it 1 HP)
+        // the god's touch may kill now (docs/plans/FAITH.md 3.1: the final blow; v1 always left it 1 HP)
         let divineHit = getRandomInt(state.player.attack * 1.5, state.player.attack * 3);
         let faithLost =  touchCost(divineHit * getRandomInt(1,3))
         if ( Math.round(state.player.faith) - Math.round(faithLost) < 0) {//avoid extra attack and reduce the god attack to the amount of faith
@@ -136,7 +136,7 @@ function npcBtn(){
         }
     }
 
-// An Atheist refuses the god's heal and hit (docs/FAITH.md 3.1); nothing is spent.
+// An Atheist refuses the god's heal and hit (docs/plans/FAITH.md 3.1); nothing is spent.
 function refuseTouch() {
     print(`${wizardName()} ${pickRandomItem("shrugs off a touch he doesn't believe in,refuses the help of a god he doesn't believe in,ignores a strange warmth")}`);
     stats.count("belief.touchesRefused");

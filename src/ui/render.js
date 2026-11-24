@@ -524,7 +524,7 @@ function fadeScene(change, done, ready) {
     }, FADE_STEP_MS);
 }
 
-// Sleep (docs/SLEEP.md): the scene fades to dark and stays dark a moment; a dream's lines
+// Sleep (docs/plans/SLEEP.md): the scene fades to dark and stays dark a moment; a dream's lines
 // (1-3) appear softly over the dark one after the other, then it fades back. atDark runs once
 // it is fully dark (to change the scene unseen), done after.
 // The lines are HTML over the dark (2026-11-17, the author: bold, italics, colours, sizes and
@@ -589,7 +589,7 @@ function sleepInDark(dream, done, atDark) {
     }, FADE_STEP_MS);
 }
 
-// The poem for a wizard who died for good while the god was away (docs/AWAY.md): the scene
+// The poem for a wizard who died for good while the god was away (docs/plans/AWAY.md): the scene
 // fades to dark, the title and the lines appear one after the other, slowly, and it stays dark;
 // done() runs after the last line has had its time (the name screen follows).
 const POEM_LINE_MS = 2600, POEM_END_MS = 4500;

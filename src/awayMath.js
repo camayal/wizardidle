@@ -1,4 +1,4 @@
-// Wizard Idle v2 - time away: the numbers (docs/AWAY.md). Pure functions, nothing is read or
+// Wizard Idle v2 - time away: the numbers (docs/plans/AWAY.md). Pure functions, nothing is read or
 // changed here, so the simulation and node can check them. Every value is in config.away.
 
 import { config } from './config.js';

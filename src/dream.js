@@ -1,4 +1,4 @@
-// Wizard Idle v2 - which dream he has tonight, and what it does to his belief (docs/SLEEP.md,
+// Wizard Idle v2 - which dream he has tonight, and what it does to his belief (docs/plans/SLEEP.md,
 // Belief dreams). The choice and the belief effect run on every rest, drawn or not (simulation,
 // page in the background), with the game's real RNG; only the visuals are looks-only.
 //

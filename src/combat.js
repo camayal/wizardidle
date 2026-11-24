@@ -204,7 +204,7 @@ function wizardFalls() {
     stats.first("first.fall");
     playSound(`hurt${getRandomInt(1, 6)}`);
     fight.pjDead = true;
-    run.storyDream = "fall";        // the next rest dreams of it (docs/SLEEP.md)
+    run.storyDream = "fall";        // the next rest dreams of it (docs/plans/SLEEP.md)
     playWizardAnim("fall_sit");     // he sinks down; then the fallen pose with the skull above
     let lootedText = "";
     // v1 crashed here ("acá hay un BUG") when the enemy had fallen in the same round:

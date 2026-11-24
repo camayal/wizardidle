@@ -1,4 +1,4 @@
-// Wizard Idle v2 - time away (docs/AWAY.md). The save stores when the god last watched
+// Wizard Idle v2 - time away (docs/plans/AWAY.md). The save stores when the god last watched
 // (state.meta.lastSeen); on load, away time / 108 is "world time" and changes the wizard a
 // little: faith falls, gold drifts, a level or two (never up to the next chapter), and after
 // about a month he has fallen (soft dead); after more, he may die for good. The numbers are
@@ -76,7 +76,7 @@ export function settleAway(rand = Math.random) {
             stats.count("away.softDead");
         }
         print(awayText("softDead", slots()));
-        // no self revive, not even after a reload: only the god's touch lifts him (docs/AWAY.md)
+        // no self revive, not even after a reload: only the god's touch lifts him (docs/plans/AWAY.md)
         return "soft";
     }
     return hours ? "drift" : "none";

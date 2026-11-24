@@ -1,4 +1,4 @@
-// Wizard Idle v2 - dreams and nightmares while he sleeps (docs/SLEEP.md, text in docs/ideas/dreams.md).
+// Wizard Idle v2 - dreams and nightmares while he sleeps (docs/plans/SLEEP.md, text in docs/ideas/dreams.md).
 // Each dream is 1-3 short lines shown over the dark scene and kept in the console. `belief: true`
 // marks a belief dream (it moves belief by his level's weight, config.belief.weights.dream*).
 // Pools: light (Devout, Believer), call (Doubter, Atheist), night (nightmares), fallHealer,

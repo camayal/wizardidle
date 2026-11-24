@@ -1,4 +1,4 @@
-// Wizard Idle v2 - what some boss attacks do besides their damage (docs/SCENE_SPELLS.md,
+// Wizard Idle v2 - what some boss attacks do besides their damage (docs/plans/SCENE_SPELLS.md,
 // "Boss effects", decided by the author on 2026-11-13). The numbers are starting values in
 // config.balance, to tune with playtests. Game logic only: the looks are in ui/bossAttacks.js.
 //

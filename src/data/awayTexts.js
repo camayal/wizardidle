@@ -1,5 +1,5 @@
-// Wizard Idle v2 - texts for the time away (docs/AWAY.md). Placeholder wording until the
-// thinker's final texts land in AWAY.md. {name} is the wizard's name.
+// Wizard Idle v2 - texts for the time away (docs/plans/AWAY.md). Placeholder wording until the
+// thinker's final texts land in plans/AWAY.md. {name} is the wizard's name.
 
 export const awayTexts = {
     // console line when he is found fallen after about a month away (he can still be revived)
@@ -7,7 +7,7 @@ export const awayTexts = {
 };
 
 // The poems for an absence permadeath, a shuffle bag per world (they never repeat until all
-// have been read). The thinker's eight final poems (docs/AWAY.md, Final poems). title: the first line, bigger; lines: one per line, HTML; {name} and {zone}.
+// have been read). The thinker's eight final poems (docs/plans/AWAY.md, Final poems). title: the first line, bigger; lines: one per line, HTML; {name} and {zone}.
 export const poems = [
     { id: "a", title: "No one came", lines: [
         "You looked away, and the world went on without you.",

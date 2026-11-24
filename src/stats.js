@@ -12,7 +12,7 @@
 // wizard: the player's lifetime, read by achievements) in world.stats. Names starting with
 // "world." are only per world; streaks (PER_WIZARD) are only per wizard. Each write is one
 // object property, so counting costs nothing worth measuring; add stats freely
-// (docs/DECISIONS.md: stats for most aspects of the game).
+// (docs/plans/DECISIONS.md: stats for most aspects of the game).
 // A record or a first is { value, lvl, age, date, playTimeMs }.
 // v1 and 2.x up to 2.1 had only counters (state.counters, v1: idx_*); they were renamed
 // to this scheme without a migration (dev phase, old saves don't matter).

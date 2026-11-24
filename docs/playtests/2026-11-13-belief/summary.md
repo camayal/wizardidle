@@ -27,9 +27,9 @@ Each cell: median (min–max) over the seeds. Hours are play time in the game.
 
 ## Notes (dev)
 
-Compared with 2026-11-13-boss-effects, after the belief meter (docs/FAITH.md 3.1, starting weights):
+Compared with 2026-11-13-boss-effects, after the belief meter (docs/plans/FAITH.md 3.1, starting weights):
 
 - **Active god:** no real change in pace (16.1 h against 16.2 h to level 200); faith a little higher (9.0M against 7.7M). His touches keep him a believer or devout.
 - **Idle god:** each fall he gets up from alone is -10, so from +20 he is an **Atheist after about 9 falls** (early, before level 25) and stays one: he never enters a shrine again, so his faith goes **deeply negative** (-1.5M against +7.1M) and nothing brings it back. Pace a little slower (43.3 h against 41 h).
-- For the author and the planner: an idle player's wizard is an atheist for nearly the whole game with these weights. That may be the intended road to the atheist ending, or the -10 may be too strong; the "winning back" actions (FAITH.md 3.6) and the rescuers aren't built yet.
+- For the author and the planner: an idle player's wizard is an atheist for nearly the whole game with these weights. That may be the intended road to the atheist ending, or the -10 may be too strong; the "winning back" actions (plans/FAITH.md 3.6) and the rescuers aren't built yet.
 

@@ -249,7 +249,7 @@ function openHistory(){
     const reached = chapter[`lvl${state.player.lvl}`];
     // run the chapter's event
     run.afterChapterExe = true;//activate post chapter event
-    run.storyDream = "chapter";     // the next rest dreams of it (docs/SLEEP.md)
+    run.storyDream = "chapter";     // the next rest dreams of it (docs/plans/SLEEP.md)
     reached.event()
 
     // queue the scroll if the chapter has text; the game waits from now on (no event starts behind it)

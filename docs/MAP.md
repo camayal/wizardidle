@@ -30,7 +30,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - data/overlays.js: the scenes that have a front layer (img/places/overlays/overlay_<scene>.png, drawn on overlayCanvas over the wizard and sprites).
 - dev/travel.js: dev mode (Modes > Travel): the map of a layer with the cheapest paths from a clicked scene (green move, yellow destination, red too far).  Shift-click a second scene to set a manual verdict for the pair (saved in data/travelOverrides.js, applied by travelGraph.js).
 - achievements.js: unlocking and listing achievements.
-- away.js: time away (docs/AWAY.md): settles away time / 108 on load (faith, gold, levels, soft dead, permadeath and the poem) and reloads a long-hidden page. awayMath.js: its formulas; data/awayTexts.js: its texts; numbers in config.away.
+- away.js: time away (docs/plans/AWAY.md): settles away time / 108 on load (faith, gold, levels, soft dead, permadeath and the poem) and reloads a long-hidden page. awayMath.js: its formulas; data/awayTexts.js: its texts; numbers in config.away.
 - stats.js: counters, totals and records (`stats.count/add/max/min`), play time. Read by achievements and stats pages.
 - audio.js: `playSound(name)`, volume 0.3 for every game sound.
 - media.js: `art(name)` and `snd(name)` give file paths (see Media).
@@ -42,7 +42,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - zones.js: zones, stages, their enemies, boss, destinations.
 - spells.js: spell sprite sheets (name_frames), school, display name.
 - bossAttacks.js: each boss's attacks, frame counts, scene spell and its start frame.
-- achievements.js: achievement list. dreams.js: the dream pool (docs/SLEEP.md). src/dream.js picks tonight's dream (shuffle bags) and applies its belief effect.
+- achievements.js: achievement list. dreams.js: the dream pool (docs/plans/SLEEP.md). src/dream.js picks tonight's dream (shuffle bags) and applies its belief effect.
 
 ## src/ui/ (drawing and menus)
 
@@ -78,7 +78,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - Everything the player sees is derived from `state` (saved) plus `fight/run/ui` (not saved); a fight is lost on reload. Saving happens through `saveGame`.
 - Combat: an enemy event calls combat.js; each round the wizard casts (spells.js, wizard.js), the enemy answers (ui/enemyMoves.js, or ui/bossAttacks.js plus bossEffects.js for bosses). Kills feed wizard.js (XP, gold) and stats.js.
 - Scenes: travel.js picks the zone, stage and background; render.js draws it; entrances.js brings enemies in.
-- God and story: divine.js (touches) and belief.js (belief) change faith, HP and enemies; story.js unlocks chapters by level. Plans: docs/FAITH.md, docs/ERASURE.md.
+- God and story: divine.js (touches) and belief.js (belief) change faith, HP and enemies; story.js unlocks chapters by level. Plans: docs/plans/FAITH.md, docs/plans/ERASURE.md.
 - Every count goes through stats.js, so achievements and stats pages read one source.
 
 ## Media
@@ -103,13 +103,9 @@ Code asks by plain name; only src/media.js knows folders. A name that fits no ru
 - Playtests: `python tools/playtest.py` (see its help) or open index.html with `?sim=1`.
 
 ## docs/
-
-- ROADMAP.md: stages ahead. ARCHIVE.md: finished items, append-only, never read. DECISIONS.md: settled choices and why, append-only, not read in normal work.
-- ideas/: idea text by topic (story.md, world.md, creatures.md, extras.md); ideas.md lists them one line each. Open only the topic you work on.
-- dev-notes.md: the one notes file for the author (bugs, improvements, talk with dev). Role inboxes: art-notes.md, sound-notes.md (saved from the dev tools box), thinker-notes.md (design notes moved there).
-- STATS.md: stats and playtest tools plan. FAITH.md: belief, faith, revive plan. PROFESSIONS.md: reagents, recipes, vendors plan.
-- SCENES.md: composing scenes from parts. TRAVEL.md: plan to replace the hand-typed destinations with a graph computed from map coordinates (soft costs, bridges, built for the dynamic scenes). MAPS.md: map revamp plan (ground and aboveground maps, the coast, creek, bridges, border scenes). SCENE_SPELLS.md: full-scene spell animations and boss effects.
-- STORY.md: the story script, every chapter scroll and console beat. Its review page is in artefacts_tests/ (README there); after changing STORY.md run `python artefacts_tests/build_story_scrolls.py`.
-- SLEEP.md: sleep, dreams, nightmares. ERASURE.md: what follows the god's final win and erasure.
-- LANDSCAPE.md: big-screen landscape plan (scrolls in columns beside the game, sharp scene snap).
-- SOUNDS.md: sounds pending (approved, to cut, to choose). playtests/: results of simulation runs.
+- Top level (inboxes and index): ROADMAP.md: stages ahead. ARCHIVE.md: finished items, append-only, never read. dev-notes.md: the one notes file for the author (bugs, improvements, talk with dev). art-notes.md, sound-notes.md (saved from the dev tools box), thinker-notes.md (design notes moved there): role inboxes. MAP.md: this file.
+- STORY.md: the story script, every chapter scroll and console beat (stays here: the texts mode fetches it). Its review page is in artefacts_tests/ (README there); after changing STORY.md run `python artefacts_tests/build_story_scrolls.py`.
+- SOUNDS.md: sounds pending (approved, to cut, to choose) (stays here: the musician role and the sounds mode use it). TRAVEL.md: plan to replace the hand-typed destinations with a graph computed from map coordinates (soft costs, bridges, built for the dynamic scenes) (stays here: travel code comments and tools point at it).
+- plans/: feature plans and their decisions. AWAY.md (time away), DECISIONS.md (settled choices and why, append-only, not read in normal work), ERASURE.md (what follows the god's final win and erasure), FAITH.md (belief, faith, revive plan), LANDSCAPE.md (big-screen landscape: scrolls in columns beside the game, sharp scene snap), MAPS.md (map revamp: ground and aboveground maps, the coast, creek, bridges, border scenes), PROFESSIONS.md (reagents, recipes, vendors), SCENES.md (composing scenes from parts), SCENE_SPELLS.md (full-scene spell animations and boss effects), SLEEP.md (sleep, dreams, nightmares), STATS.md (stats and playtest tools).
+- ideas/: idea text by topic (story.md, world.md, creatures.md, extras.md, dreams.md); ideas.md (root) lists them one line each. Open only the topic you work on.
+- data/ (generated results): playtests/ (results of simulation runs, written by tools/playtest.py) and travel-captures/ (map snapshots from the travel mode, written by tools/serve.py). Both stay at docs/playtests/ and docs/travel-captures/ because the tools write there.

@@ -1,8 +1,8 @@
 # Dream pool
 
-The text of every dream and nightmare, waiting to replace the stand-in lines in the game. The rules (when a dream comes, which dreams raise belief, how they avoid repeating) are in [docs/SLEEP.md](../SLEEP.md), *Belief dreams*. Read only when working on dreams.
+The text of every dream and nightmare, waiting to replace the stand-in lines in the game. The rules (when a dream comes, which dreams raise belief, how they avoid repeating) are in [docs/plans/SLEEP.md](../SLEEP.md), *Belief dreams*. Read only when working on dreams.
 
-Each dream is 1–3 short lines shown over the dark scene (one line per `/` below, kept in the console). The wizard is "he"; "you" would be the god, the player. **★ = belief dream:** it raises belief by the weight for his level; **nightmares** can lower it a little ("seeds of doubt", SLEEP.md). Ids are stable so the shuffle bags can save them.
+Each dream is 1–3 short lines shown over the dark scene (one line per `/` below, kept in the console). The wizard is "he"; "you" would be the god, the player. **★ = belief dream:** it raises belief by the weight for his level; **nightmares** can lower it a little ("seeds of doubt", plans/SLEEP.md). Ids are stable so the shuffle bags can save them.
 
 **Rules for anyone adding a dream:** no two dreams share an opening word pair or a main image; the hooded healer is never linked to the god (no hands, hymns, faces, or the healer and a god in the same dream); no prophecy lines quoted, no crown; dreams that name the healer play only after the healer has carried him at least once.
 
@@ -25,7 +25,7 @@ Each dream is 1–3 short lines shown over the dark scene (one line per `/` belo
 
 ## Callings (Doubter and Atheist) — 12, all ★
 
-Quiet: the god never commands here. Different from the god's dream touch (FAITH.md 3.6), which sends him into the next shrine.
+Quiet: the god never commands here. Different from the god's dream touch (plans/FAITH.md 3.6), which sends him into the next shrine.
 
 | Id | ★ | Dream |
 |---|---|---|
@@ -44,7 +44,7 @@ Quiet: the god never commands here. Different from the god's dream touch (FAITH.
 
 ## Nightmares — 16, seeds of doubt
 
-Each costs −1 belief while he is a Believer or Devout, never taking him below the Believer line (0); no effect on a Doubter or Atheist (SLEEP.md).
+Each costs −1 belief while he is a Believer or Devout, never taking him below the Believer line (0); no effect on a Doubter or Atheist (plans/SLEEP.md).
 
 | Id | Dream |
 |---|---|
@@ -67,7 +67,7 @@ Each costs −1 belief while he is a Believer or Devout, never taking him below 
 
 ## Fall dreams — 6, by who got him up, pure story
 
-The first rest after a fall. The bag is per kind of rescue (FAITH.md: the god's touch sends the healer; otherwise a rescuer, or nobody).
+The first rest after a fall. The bag is per kind of rescue (plans/FAITH.md: the god's touch sends the healer; otherwise a rescuer, or nobody).
 
 | Id | Got him up | Dream |
 |---|---|---|
@@ -95,7 +95,7 @@ The first rest after any chapter opens, from their own shuffle bag. A chapter tu
 
 ## Echo dreams — 3, only after an erasure, pure story
 
-Join the random pool only when `world.erasures` is not empty (SLEEP.md, ERASURE.md).
+Join the random pool only when `world.erasures` is not empty (plans/SLEEP.md, plans/ERASURE.md).
 
 | Id | Dream |
 |---|---|

@@ -8,7 +8,7 @@
 export const config = {
     // "Feel the divine touch": revivals, heals and hits by the god, added up (a first number to tune).
     touchedAchievement: 100,
-    // Belief (docs/FAITH.md 3.1, the author's starting values, to playtest): its own meter,
+    // Belief (docs/plans/FAITH.md 3.1, the author's starting values, to playtest): its own meter,
     // moved by moments; the level lines, the margin on the way up, and what each level changes.
     belief: {
         start: 20, min: -100, max: 100,
@@ -29,7 +29,7 @@ export const config = {
             closeCall: 1,                      // he wins a fight below 10% HP with no help from the god
             roseAlone: -10,                    // he got up without the god, as a Believer or Devout
             roseAloneDoubting: -1,             //   ... as a Doubter or Atheist
-            dreamDevout: 1,                    // a belief dream (docs/SLEEP.md), by his level when he dreams it
+            dreamDevout: 1,                    // a belief dream (docs/plans/SLEEP.md), by his level when he dreams it
             dreamBeliever: 1,
             dreamDoubter: 2,
             dreamAtheist: 3,                   //   (none while belief is lost)
@@ -42,7 +42,7 @@ export const config = {
         devoutTouchCost: 0.75, doubterTouchCost: 2,
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
-    // Time away (docs/AWAY.md, first estimates, to playtest): away time / worldDivisor = world time.
+    // Time away (docs/plans/AWAY.md, first estimates, to playtest): away time / worldDivisor = world time.
     away: {
         worldDivisor: 108,         // 1 month away is about 6.7 world hours
         minSeconds: 300,           // shorter than this changes nothing (a reload, a quick look elsewhere)
@@ -86,7 +86,7 @@ export const config = {
         pGetBoss: 0.015,           // chance a fight is against the zone boss
         pGetGuardian: 0.1,         // megabosses
         pGetStatue: 0.08,
-        dreamChance: 0.05,         // a rest has a random dream or nightmare (docs/SLEEP.md); was 0.15, too frequent
+        dreamChance: 0.05,         // a rest has a random dream or nightmare (docs/plans/SLEEP.md); was 0.15, too frequent
         dreamBelieverNightmare: 0.25,  // share of dream nights that are nightmares for a Believer or Devout
         dreamDoubterNightmare: 0.75,   //   ... for a Doubter or Atheist
         echoDreamChance: 0.25,         // after an erasure, share of random dreams taken from the echo pool
@@ -98,7 +98,7 @@ export const config = {
         zoneStayMax: 40,           //   and after this many the next event takes him to another zone
         pPier: 0.08,               // placeholder, chance an exploring wizard near the pier walks out on it (not playtested)
         pDadosAgain: 0.35,         // after a dice game, chance he stays for another round (gold left)
-        // boss effects (docs/SCENE_SPELLS.md; starting values, to playtest)
+        // boss effects (docs/plans/SCENE_SPELLS.md; starting values, to playtest)
         petrifyChance: 0.25,       // Medusa's gaze turns him to stone
         petrifyTurns: 2,
         artefactChance: 0.05,      // a find is the artefact against her gaze (after his first stone)

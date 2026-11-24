@@ -3,14 +3,14 @@
 The index of Wizard Idle v2: where the project stands, one line per idea, and the latest journal. Each idea's text lives in its plan or topic file: open only the one you are working on.
 
 - Release notes → [CHANGELOG.md](CHANGELOG.md) · the route ahead → [docs/ROADMAP.md](docs/ROADMAP.md) · file map and rules → [docs/MAP.md](docs/MAP.md)
-- Settled choices and why → [docs/DECISIONS.md](docs/DECISIONS.md) (add rows at the end; no need to read it)
+- Settled choices and why → [docs/plans/DECISIONS.md](docs/plans/DECISIONS.md) (add rows at the end; no need to read it)
 - Finished things go to [docs/ARCHIVE.md](docs/ARCHIVE.md) with `cat >>`; never read it.
 - The author's old notes and art sources (2014–2018) live outside the repo, in the sibling folder `wizardidle-old-ideas/`.
 
 ## Where we are
 
 - **Branch:** `dev-repo` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.2.0 live since 2026-11-18 (animations, arrivals, boss attacks, belief, bestiary, cemetery, XP bar; 2.1.0 on 2026-11-12: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the faith stats and playtests ([FAITH.md](docs/FAITH.md)); then the story with the faith rebalance.
+- **Released:** 2.2.0 live since 2026-11-18 (animations, arrivals, boss attacks, belief, bestiary, cemetery, XP bar; 2.1.0 on 2026-11-12: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the faith stats and playtests ([FAITH.md](docs/plans/FAITH.md)); then the story with the faith rebalance.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.2.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Inboxes (notes from the dev tools, one per role)
@@ -22,14 +22,14 @@ The index of Wizard Idle v2: where the project stands, one line per idea, and th
 New idea: one line here, its text in the matching file. Nothing here is a commitment.
 
 **With a plan**
-- Map revamp: ground and aboveground maps, delta and beach with nagas, bridges, border scenes → [docs/MAPS.md](docs/MAPS.md)
-- Faith rebalance, belief levels, rescuers → [docs/FAITH.md](docs/FAITH.md)
-- Professions: reagents, items, vendors → [docs/PROFESSIONS.md](docs/PROFESSIONS.md)
-- Stats for almost everything, playtest tools → [docs/STATS.md](docs/STATS.md)
-- Souls of erased wizards in the final battle → [docs/ERASURE.md](docs/ERASURE.md)
-- Scene spells for bosses and the wizard → [docs/SCENE_SPELLS.md](docs/SCENE_SPELLS.md)
-- Soft sleep, dreams and nightmares → [docs/SLEEP.md](docs/SLEEP.md)
-- Dynamic scenes, map of places, exits → [docs/SCENES.md](docs/SCENES.md)
+- Map revamp: ground and aboveground maps, delta and beach with nagas, bridges, border scenes → [docs/plans/MAPS.md](docs/plans/MAPS.md)
+- Faith rebalance, belief levels, rescuers → [docs/plans/FAITH.md](docs/plans/FAITH.md)
+- Professions: reagents, items, vendors → [docs/plans/PROFESSIONS.md](docs/plans/PROFESSIONS.md)
+- Stats for almost everything, playtest tools → [docs/plans/STATS.md](docs/plans/STATS.md)
+- Souls of erased wizards in the final battle → [docs/plans/ERASURE.md](docs/plans/ERASURE.md)
+- Scene spells for bosses and the wizard → [docs/plans/SCENE_SPELLS.md](docs/plans/SCENE_SPELLS.md)
+- Soft sleep, dreams and nightmares → [docs/plans/SLEEP.md](docs/plans/SLEEP.md)
+- Dynamic scenes, map of places, exits → [docs/plans/SCENES.md](docs/plans/SCENES.md)
 - The story script, every scroll → [docs/STORY.md](docs/STORY.md) (review page in `artefacts_tests/`)
 
 **Story** → [docs/ideas/story.md](docs/ideas/story.md)
@@ -58,7 +58,7 @@ Newest first; keep the last three, cut older ones to the archive.
 - The artist's review queue is done: two files replace game art (la_pradera2, ground map stone bridge), the rest is copied into img/places/future, connectors and overlays with media.js rules. A front layer (overlayCanvas, src/data/overlays.js) draws over the wizard for mina_cueva1 and mina_cueva_2; untested in a browser (no way to run it here). Later the same day: the future scenes became numbered stages in zones.js and the game travels by the author's manual links only (src/travelGraph.js moves/destinations, old strings as the fallback). Open: la_playa1-6 need a zone (enemies, boss) before they can be stages; connector halves (bridges, mouths, stairs) are art in img/places/connectors, not yet shown on a trip; floor shaft in ladder mine side vs the walk line.
 
 ### 2026-11-17: Bestiary headings, the enemy leaves, boss entrances
-- Stats for most of the game (the author's decision, docs/DECISIONS.md): every stat now also counts per world, so achievements (the player's, decided today) outlive permadeath. New counters for wins, damage, falls by enemy, zone and level, time away (soft dead, permadeath, saved by the touch), the dice house, dreams seen, chapters, the kill button and the cemetery; the list is in docs/STATS.md. Achievement ideas wait in the thinker's inbox. A 4-run simulation to level 40 ran clean.
+- Stats for most of the game (the author's decision, docs/plans/DECISIONS.md): every stat now also counts per world, so achievements (the player's, decided today) outlive permadeath. New counters for wins, damage, falls by enemy, zone and level, time away (soft dead, permadeath, saved by the touch), the dice house, dreams seen, chapters, the kill button and the cemetery; the list is in docs/plans/STATS.md. Achievement ideas wait in the thinker's inbox. A 4-run simulation to level 40 ran clean.
 - The elementals arrive by their element (the author's dev note): a new "element" arrival in src/ui/entrances.js under the artist's strips, the author's picks (img/effects/fx/fx_elemental_<fire|thunder|frost>_enter: fire A flame pillar, thunder A single strike, frost B crystal crown; 10 frames of 48 x 48, body from the reveal frame). A first version drawn by code was dropped (frost not nice enough). They leave by fading out while drifting towards the wizard (the author). The entrance plays its school's sound (Fire, Thunder, Frost, like the spells). Checked frame by frame in a headless browser.
 - The bestiary's Bosses heading waits for the first boss met, Secrets for the first hydra.
 - When the wizard falls the enemy leaves its own way in, backwards (playLeave in src/ui/entrances.js), instead of vanishing at once. Ten bosses that walked in now arrive by what they are: two new kinds, slam (a heavy leap, squash and shake) and slither. The dev tools' Enemy: arrival has "arrive" and "leave" for every sprite. A 2-seed simulation to level 40 (185 falls) ran clean; the look still needs the author's eye.
@@ -73,7 +73,7 @@ Newest first; keep the last three, cut older ones to the archive.
 - "It is a wizard after all, only spells": the three Physical staff hits left his spell tiers (tier 0 keeps five spells, tier 1 two); bosses keep them in their bossSpell lists, and the staff still breaks pots and crates. The cast animation's staff slash went with them. A 2-seed simulation to level 40 ran clean.
 
 ### 2026-11-17: Time away, numbers and code
-- Built docs/AWAY.md: lastSeen in the save, settlement on load (src/away.js, formulas in src/awayMath.js, numbers in config.away, texts in src/data/awayTexts.js as placeholders: soft-dead line candidate 1, poem draft A). Estimates table added to AWAY.md. Left for later: the hidden-page slow motion and the slowed sound (thinker advises only a sound fade cue; not built, needs the audio module to track the music); reloading a soft-dead wizard still gives the old weak self-revive (the "left again without touching" answer is pending); the protected-chapter rule (no absence death there) is not applied yet; the poem is on a scroll, not over the dark scene as the thinker briefed.
+- Built docs/plans/AWAY.md: lastSeen in the save, settlement on load (src/away.js, formulas in src/awayMath.js, numbers in config.away, texts in src/data/awayTexts.js as placeholders: soft-dead line candidate 1, poem draft A). Estimates table added to AWAY.md. Left for later: the hidden-page slow motion and the slowed sound (thinker advises only a sound fade cue; not built, needs the audio module to track the music); reloading a soft-dead wizard still gives the old weak self-revive (the "left again without touching" answer is pending); the protected-chapter rule (no absence death there) is not applied yet; the poem is on a scroll, not over the dark scene as the thinker briefed.
 - Wired the artist's ground effects (fx_ground_a-c, fx_ground_boss_a-c in img/effects/fx; the d pair was dropped as not nice enough) into the "rise" entrance and leave (src/ui/entrances.js): a random one of three per arrival, 1 art px per sprite px, ground row on the feet, sprite raised by the effect's own frames (a/b show at frame 3, up at 7; c at 1 and 5). Boss set is picked by sprite width, so Herbus and kkck leaving use it; kkck still arrives with his own dirt mound. Hydra leave strips (anim_hydra_<effect>_leave) wired in leaveHydra: the hydra sinks behind the ground line, hidden by frame 9. Not seen in a live browser by me; only a headless run to level 20 for load errors.
 - 2026-11-18 (dev): time away finished: soft dead is saved (state.meta.softDead, awayHours) so a reload or a quick second visit keeps him down and the hours add up; protected chapters (config.away.protectedLevels) never fall or die from absence. The slowed return sound is not wired: it needs the musician's file and a rule in media.js.
 - 2026-11-18 (dev): removed the dev panel's freeze on a hidden page (src/dev/tests.js); dev sessions run on like the live game.
@@ -117,8 +117,8 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): toolbar dead at start fixed: disableMainButtons no longer overwrites saved handlers on a second call; enable only restores saved ones.
 - 2026-11-19 (dev): docs cleanup: SCROLLS.md archived whole (pilot done, no spread to other scrolls); STATS, AWAY and ROADMAP trimmed to what is still open; finished parts in docs/ARCHIVE.md.
 - 2026-11-19 (dev): docs cleanup 2: SCENE_SPELLS boss effects and FAITH sections 1-2 archived; FAITH has a status paragraph. SCENES.md is untouched: no scene engine exists yet.
-- 2026-11-19 (dev): step 1 of docs/MAPS.md done: the sea strip at the left edge of las_dunas1..5 is painted out (the artist's files, approved by the author). New bug noted in dev-notes: the tab never restarts after inactivity (empty console), needs a repro.
-- 2026-11-19 (dev): installed the approved maps (img/ui/mapa.png = mapa_b4, img/ui/mapaboveground.png = mapaboveground_b); mapLayerFor in src/ui/scrolls.js picks the map (el_Heidan aboveground), used by the map button and the marker. Heidan map x/y kept as they were (they sit on the new clouds). Not run in a browser yet. Left in docs/MAPS.md: the beach zone la_playa, the portals as the wizard's path, bridge and border scenes, the walkable Dunes shore.
+- 2026-11-19 (dev): step 1 of docs/plans/MAPS.md done: the sea strip at the left edge of las_dunas1..5 is painted out (the artist's files, approved by the author). New bug noted in dev-notes: the tab never restarts after inactivity (empty console), needs a repro.
+- 2026-11-19 (dev): installed the approved maps (img/ui/mapa.png = mapa_b4, img/ui/mapaboveground.png = mapaboveground_b); mapLayerFor in src/ui/scrolls.js picks the map (el_Heidan aboveground), used by the map button and the marker. Heidan map x/y kept as they were (they sit on the new clouds). Not run in a browser yet. Left in docs/plans/MAPS.md: the beach zone la_playa, the portals as the wizard's path, bridge and border scenes, the walkable Dunes shore.
 - 2026-11-19 (dev): map scroll ribbons built (MAP_PAGES in src/ui/scrolls.js, ui.scrollViews.map); Heidan spots moved onto the aboveground map (3 = NE portal, 4 = SE stairs, 5 = SE portal, altar = ruby pedestal). Not run in a browser. Ground map spots still to re-check against the new art.
 - 2026-11-19 (dev): ground map spots checked on the new mapa.png; only the Dunes (and la_Mina5) sat in the sea and were moved to the beach sand. Others fine.
 - 2026-11-19 (dev): fixed the game not starting: the map ribbons commit had deleted disableMainButtons, enableMainButtons and updateAchievements from src/ui/scrolls.js (restored).
@@ -128,9 +128,9 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-19 (dev): freeze after hibernation: the save beat in src/state.js now reloads when it wakes late (>= away.minSeconds) without a visibility event. Root cause of the empty clock list (all clocks gone, nothing queued) not found; if it still freezes, check the browser console for the [away] warning and red errors. Added loop.loopInfo().
 - 2026-11-19 (dev): the freeze after a long inactive tab also happens on main on the author's phone (so not only laptop hibernation). The late-wake reload (1a2e2f9) is on dev-repo only; verify on the phone once released. Root cause (all clocks gone) still open.
 - 2026-11-19 (dev): freeze root cause found: src/game.js start() only called nextEvent when settleAway returned "none", so "drift" (away 5+ min, not fallen) never started the master clock. Fixed; also an events.js watchdog (startWatchdog, loop.idle) restarts the picker after 20 s with no clock, unless fallen/paused.
-- 2026-11-19 (dev): installed the approved ground map with the reworked Prairie bridge (artist option C4: volcano spring joins the river in a Y, S-curved river, Prairie extended into the south gulf) as img/ui/mapa.png. The Prairie bridge is now near map pixel (125,145) and the river runs a bit further south: map spots by the old channel and on the south Prairie coast still to re-check (docs/MAPS.md question B open).
+- 2026-11-19 (dev): installed the approved ground map with the reworked Prairie bridge (artist option C4: volcano spring joins the river in a Y, S-curved river, Prairie extended into the south gulf) as img/ui/mapa.png. The Prairie bridge is now near map pixel (125,145) and the river runs a bit further south: map spots by the old channel and on the south Prairie coast still to re-check (docs/plans/MAPS.md question B open).
 - 2026-11-19 (dev): checked every existing map spot (stage x,y in src/data/zones.js) against the new ground map C4: all on land, none moved. Spots for the future scenes, from the artist, as x,y fractions of the 250 px map: Prairie bridge 0.5,0.58 (125,145); Swamp bridge 0.724,0.2 (181,50); beach la_playa about 0.916,0.32 (229,80), author still to choose between the north-east beach and the south-west palm sand. No place data exists for these yet, so nothing to wire until the scenes are built.
-- 2026-11-19 (dev): author decided: la_playa = north-east beach; the south-west palm sand is a second beach, only next to the lake and only reachable from the surrounding zones (recorded in docs/MAPS.md). Needs its own zone/destinations design later.
+- 2026-11-19 (dev): author decided: la_playa = north-east beach; the south-west palm sand is a second beach, only next to the lake and only reachable from the surrounding zones (recorded in docs/plans/MAPS.md). Needs its own zone/destinations design later.
 - 2026-11-19 (dev): installed the approved aboveground map rework (artist option C2: puffy cloud edges, 14 decorative clouds) as img/ui/mapaboveground.png. Portals and stair arrivals unchanged, so the Heidan spots stay valid.
 - 2026-11-19 (dev): author corrected: the south-west palm sand is the Dunes (las_Dunas), not a separate beach zone. MAPS.md updated.
 - 2026-11-19 (dev): installed the underground map rework (artist option G2, warm brown rock) as img/ui/mapaunderground.png as a base to keep working on. Author wants the ground-map cave and mine entrances to match it exactly (with the artist).

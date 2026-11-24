@@ -1,6 +1,6 @@
 # Playtest: belief-way-back (2026-11-13)
 
-After the author's way back from atheism (FAITH.md 3.1, 2026-11-13): passing a shrine as a Doubter or Atheist +0.5, a close call (a fight won below 10% HP with no help) +1, getting up alone -10 only as a Believer or Devout and -1 as a Doubter or Atheist, the god's super-critic 1 in 10 of his critics at x16. To compare with 2026-11-13-belief.
+After the author's way back from atheism (plans/FAITH.md 3.1, 2026-11-13): passing a shrine as a Doubter or Atheist +0.5, a close call (a fight won below 10% HP with no help) +1, getting up alone -10 only as a Believer or Devout and -1 as a Doubter or Atheist, the god's super-critic 1 in 10 of his critics at x16. To compare with 2026-11-13-belief.
 
 10 seeds per setting (1–10), to level 200, with `tools/playtest.py` (simulation mode, `src/dev/sim.js`).
 

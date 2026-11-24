@@ -116,7 +116,7 @@ function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize
   }
 
 
-// Which map picture shows a zone (docs/MAPS.md): el_Heidan is aboveground, the mine, the cave and
+// Which map picture shows a zone (docs/plans/MAPS.md): el_Heidan is aboveground, the mine, the cave and
 // the volcano are underground, everything else is ground.
 function mapLayerFor(zone){
     if (zone == "el_Heidan") return "mapaboveground";

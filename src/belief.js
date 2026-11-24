@@ -1,4 +1,4 @@
-// Wizard Idle v2 - belief: how much the wizard believes in his god (docs/FAITH.md 3.1, decided
+// Wizard Idle v2 - belief: how much the wizard believes in his god (docs/plans/FAITH.md 3.1, decided
 // by the author on 2026-11-13). Faith stays the currency the god spends; belief is its own
 // meter, -100 to +100, moved by moments (a heal that saves him, the god's final blow...), never
 // by spending, and it doesn't drift on its own. The four levels read from it. The numbers are

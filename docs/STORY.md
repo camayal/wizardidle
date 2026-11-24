@@ -1,6 +1,6 @@
 # The story: script per chapter
 
-Stage 3 of the roadmap. This is the text for every chapter scroll, the console lines between chapters, the deaths and the two endings, revised from the author's 2018 arc (`wizardidle-old-ideas/historiaperlevel.txt`, summarised in [ideas.md](../ideas.md)). It is a script, not code: `src/story.js` still holds only the Prologue, I and II. The final battle's mechanics (souls of erased wizards, the rewind) are planned in [ERASURE.md](ERASURE.md); faith, rescuers and true death in [FAITH.md](FAITH.md).
+Stage 3 of the roadmap. This is the text for every chapter scroll, the console lines between chapters, the deaths and the two endings, revised from the author's 2018 arc (`wizardidle-old-ideas/historiaperlevel.txt`, summarised in [ideas.md](../ideas.md)). It is a script, not code: `src/story.js` still holds only the Prologue, I and II. The final battle's mechanics (souls of erased wizards, the rewind) are planned in [plans/ERASURE.md](plans/ERASURE.md); faith, rescuers and true death in [plans/FAITH.md](plans/FAITH.md).
 
 ## Decisions
 
@@ -21,8 +21,8 @@ Decided by the author on 2026-11-12, one question at a time.
 | The afterlife gods | **They court him:** they planted the staff, and after the lynching they whisper, "We would never have watched." |
 | The staff | **One staff that changes**, made by the dead: cracked (60), seems sacred (90), shows its makers in the lava (130), carried off by the seer (149), reforged at 200 under its true name, `{staffName}`: a random name made in the first game and kept in every loop. |
 | Prophecy reveal | **In pieces:** III, the red rune (128), Midas at VII; the seer gives the last line at XI. |
-| Deaths in play | **Falls, not deaths:** he lies injured, almost dead (a new sprite on the ground, still to find or draw). Your touch sends the hooded healer; otherwise a rescuer (FAITH.md). Rarely nobody comes: a **true death**, and his soul waits in purgatory until the end of days. |
-| True death rule | **Always possible while you can click to revive him.** Where the story takes that click away, the story protects him: the corrupt staff (VI), the scripted escape (VIII), the Last Escape scroll (X, FAITH.md), the reforged staff (XI until the final battle). |
+| Deaths in play | **Falls, not deaths:** he lies injured, almost dead (a new sprite on the ground, still to find or draw). Your touch sends the hooded healer; otherwise a rescuer (plans/FAITH.md). Rarely nobody comes: a **true death**, and his soul waits in purgatory until the end of days. |
+| True death rule | **Always possible while you can click to revive him.** Where the story takes that click away, the story protects him: the corrupt staff (VI), the scripted escape (VIII), the Last Escape scroll (X, plans/FAITH.md), the reforged staff (XI until the final battle). |
 | V vs IX | **V is a moral shock** (guilt for the harm he did). **IX is depression and questions:** why didn't you protect me? X answers it. |
 | The seer | **Guards the staff in Heidan** and gives it up at XI. **She sees the loops:** in echo games she counts your rewinds. |
 | The Tower at 139 | **The corrupt staff drags him there**, hungry for a king. |
@@ -31,7 +31,7 @@ Decided by the author on 2026-11-12, one question at a time.
 | Ending: you win | **You unmake his soul.** The game ends, a museum, then a new wizard: for a god time is nothing, so a new game is you going back in time. The cemetery shows his name **reversed and struck through**. |
 | Ending: he wins | **He becomes the Omni and engulfs the universe** to make a new one. The save becomes a **black museum, blocked forever**: chapter scrolls, snapshots of each chapter's moment, stats, map. |
 | Echoes | **Small echoes, only after an erasure:** a different Prologue and a few déjà vu lines. Never after a true death or the kill button. |
-| Final battle | The souls of erased wizards help him, **one by one** (ERASURE.md); the museum's final snapshot shows them. |
+| Final battle | The souls of erased wizards help him, **one by one** (plans/ERASURE.md); the museum's final snapshot shows them. |
 | Length | **Short scrolls + console beats.** |
 | Variable phrases | **Each scroll changes a little with the moment:** one phrase by the wizard's belief level, one by the place he is in, and one déjà vu line in echo games (see *How the variables work*). |
 
@@ -87,8 +87,8 @@ Each scroll has a fixed text with at most three slots, filled when the scroll op
 | `{shrineZone}` | the zone where he found your shrine in Chapter II (saved then, `state.story.shrineZone`) | |
 | `{staffName}` | the staff's true name: a random name made once, in the first game of the world, and kept in every loop (`world.staffName`) | |
 | **⟨place⟩** | the current zone's **scenery** (a new field in `src/data/zones.js`) | 6, below |
-| **⟨faith⟩** | the **belief level** at that moment (FAITH.md 3.1) | Devout · Believer · Doubter · Atheist |
-| **⟨echo⟩** | `world.erasures.length > 0` (ERASURE.md) | *normal* · *echo*; `{loop}` = `world.loop` |
+| **⟨faith⟩** | the **belief level** at that moment (plans/FAITH.md 3.1) | Devout · Believer · Doubter · Atheist |
+| **⟨echo⟩** | `world.erasures.length > 0` (plans/ERASURE.md) | *normal* · *echo*; `{loop}` = `world.loop` |
 
 A slot whose variant is "—" prints nothing. Faith slots are left out where the story locks faith (VII, X, XI); place slots where the place is fixed (VI Volcano, VII Tower, XI Heidan).
 
@@ -428,7 +428,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 **Console, lvl 170:** The healer hums a hymn while he works. · It's one of yours. {name} never taught it to him.
 
 ### Chapter X: Disobedience (lvl 190)
-*Event: faith locked at Atheist (FAITH.md 3.8): refuses all help, no altars, more bosses. He carries the Last Escape scroll (FAITH.md 3.7): at 0 HP it tears him away and heals him, and each use burns it a little. Faith is locked: echo slot only.*
+*Event: faith locked at Atheist (plans/FAITH.md 3.8): refuses all help, no altars, more bosses. He carries the Last Escape scroll (plans/FAITH.md 3.7): at 0 HP it tears him away and heals him, and each use burns it a little. Faith is locked: echo slot only.*
 
 > He knew those hands.
 >
@@ -483,13 +483,13 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 |---|---|
 | He falls (any time) | {name} falls, broken, somewhere in the {zone}. |
 | Your touch | A hooded healer lifts him and carries him away. *(then the cabin event, as today)* |
-| A rescuer comes | One line per rescuer, in FAITH.md (caravan, shaman, gravedigger, ghost, potion, alone). |
+| A rescuer comes | One line per rescuer, in plans/FAITH.md (caravan, shaman, gravedigger, ghost, potion, alone). |
 | He falls in VI | The staff drags {name} up before he touches the ground. |
 | He falls in X | The Last Escape scroll (see Chapter X). |
 | He falls in XI | {staffName} drags {name} up, burning. · He does not thank it. |
 
 ### True death (rare: nobody comes)
-*Only where you could have revived him: never in VI, VIII, X or XI (see the true death rule). Skull sprite, cemetery record with the cause, back to the name screen (FAITH.md). A regular cemetery death, not an erasure: no echo slot.*
+*Only where you could have revived him: never in VI, VIII, X or XI (see the true death rule). Skull sprite, cemetery record with the cause, back to the name screen (plans/FAITH.md). A regular cemetery death, not an erasure: no echo slot.*
 
 > No one came.
 >
@@ -512,7 +512,7 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 ## The final battle (console)
 
 - **The healer appears:** A hooded healer blocks the road. · "You don't have to do this," says a voice {name} knows.
-- **A soul enters** (one by one, one per erasure, up to 5; ERASURE.md): The air cracks. A translucent wizard steps beside {name}. · {reversedName}. You erased him once. · He remembers.
+- **A soul enters** (one by one, one per erasure, up to 5; plans/ERASURE.md): The air cracks. A translucent wizard steps beside {name}. · {reversedName}. You erased him once. · He remembers.
 - **The healer falls (the reveal):** The healer's hood catches fire. · White-gold flame climbs his cape and burns it away. · When the light fades, your face looks back at {name}. · Golden rays break behind you. Your wings open.
 - **Phase 2, the wings burn:** Your wings catch fire. Light drips from them like smoke.
 - **Phase 3, no wings:** The last of your wings falls away in ash. · Only you are left, and him.
@@ -559,10 +559,10 @@ A slot whose variant is "—" prints nothing. Faith slots are left out where the
 ## Notes for the code (stage 3)
 
 - ~~**Fix the chapter keys**~~ (done 2026-11-17: IX `lvl160`, X `lvl190`, `lvl199`, XI `lvl200`).
-- **Scroll slots:** each chapter's `text` becomes a template with `⟨place⟩`, `⟨faith⟩` and `⟨echo⟩` keys and a small table of variants, filled by one function when the scroll opens (`{name}`, `{zone}`, `{loop}` too). Zones get a `scenery` field (open, wild, cold, hot, deep, walls); faith uses the belief level from FAITH.md 3.1.
+- **Scroll slots:** each chapter's `text` becomes a template with `⟨place⟩`, `⟨faith⟩` and `⟨echo⟩` keys and a small table of variants, filled by one function when the scroll opens (`{name}`, `{zone}`, `{loop}` too). Zones get a `scenery` field (open, wild, cold, hot, deep, walls); faith uses the belief level from plans/FAITH.md 3.1.
 - **Snapshot the filled text:** the museum shows each scroll as it was read, so store the filled text (not the template) with the chapter's snapshot.
 - **Console beats** (40, 60, 70, 80, 100, 120, 128, 129, 139, 150–159, 170, 190, 199) go in a separate `beats` table keyed by level, so chapters stay readable.
-- **Echo slots** read `world.erasures.length > 0` and `world.loop` (ERASURE.md). Never triggered by a true death or the kill button.
+- **Echo slots** read `world.erasures.length > 0` and `world.loop` (plans/ERASURE.md). Never triggered by a true death or the kill button.
 - **Falls:** the skull (`muerto.png`, found by name through `src/media.js`) is kept for a true death; a fall needs a new sprite of the wizard lying injured.
 - **Snapshots for the museums:** at each chapter save a small record (zone, background, NPC, level, key stats, the filled scroll text), not an image, so the save stays small. The final battle's snapshot includes the souls.
 - **Two epilogues:** `specialEnd` becomes `endGodWins` (museum, then a new wizard) and `endOmni` (black museum, the app blocked forever).

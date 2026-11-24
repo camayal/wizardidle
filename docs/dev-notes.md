@@ -7,10 +7,10 @@ earlier one.
 ## Open items from the old play-test list (2026-11-18)
 
 [~] some new enemy attacks need some sounds (the first table is wired 2026-11-18 and waits for your ears; left: the second table's boss/hydra moves, whose files are not cut yet, and the moves still to choose; docs/SOUNDS.md)
-[] create scenes that are the end of one ad the beginon of the otherone. (planned: docs/MAPS.md, border scenes)
+[] create scenes that are the end of one ad the beginon of the otherone. (planned: docs/plans/MAPS.md, border scenes)
 
 - Own music (2026-11-18): built as code, no WAVs: Music mode in the dev console (src/dev/music.js, src/synth.js, songs/). Still open for the author: where songs play in the game, stingers only, loops, or both (musician suggests stingers first). The musician can drop songs as <name>.song.txt in the review drop.
-- Map revamp, Prairie creek, bridges: planned in docs/MAPS.md (map ribbons built; ground map spots still to re-check against the new art).
+- Map revamp, Prairie creek, bridges: planned in docs/plans/MAPS.md (map ribbons built; ground map spots still to re-check against the new art).
 
 - Achievements (2026-11-18): libros, runas, tabernero, tocado and the eagle are now wired (tocado = 100 god touches in config.touchedAchievement). Still to do: re-run a playtest and tools/odds.py to confirm the tiers; capricorreturns and namesake are only rare by design.
 
@@ -40,7 +40,7 @@ Built and committed, all untested in a browser (no node in the dev session): bri
 - Jumps and teleports: later (jump the shaft; about level 100 short teleports to hop obstacles and reach other scenes). Floor shaft of the ladder mine side may sit on the walk line.
 - Still open from the author: bridge halves shown as neighbours with no gap (done by order, no joined wide scene); exit markers drawn per connector pair; enter_mine_S placement.
 - Test the front overlays (la_mina6, la_mina7) and the new stages in a browser.
-- After that: la_playa zone data (docs/MAPS.md step 5).
+- After that: la_playa zone data (docs/plans/MAPS.md step 5).
 
 ```
 Game test

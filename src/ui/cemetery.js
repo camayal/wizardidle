@@ -4,7 +4,7 @@
 // The author chose the artist's five tombs (A-E) on 2026-11-17: each wizard gets one of them,
 // always the same one (picked from his name and birth), with his name and age carved by code
 // in the artist's 3 x 5 pixel font (img/ui/cemetery/tomb_font.png), so one font fits every
-// tomb. A wizard who suffered the ERASURE (lost the final battle, docs/ERASURE.md; his record
+// tomb. A wizard who suffered the ERASURE (lost the final battle, docs/plans/ERASURE.md; his record
 // says erased) lies under the cracked version, his name upside down and crossed out. Tapping a
 // tomb opens a small parchment note beside it with the rest of his story; tapping it, or
 // another tomb, closes it.
