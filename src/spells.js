@@ -70,6 +70,7 @@ function spell(img, pj, critic = 0, center = 0, at = null, silent = false){
     let lastFrameAt = -Infinity;
     // when the effect on the wizard is over (a frame per screen refresh, about 17 ms): the enemy
     // that felled him waits for it before it leaves (ui/entrances.js playLeave)
+    run.spellUntil = Math.max(run.spellUntil || 0, performance.now() + totalFrames * Math.max(frameMs, 17) + 50);   // any spell: a fight on a crossing waits for it before it un-mirrors the scene (travel.js)
     if (pj) run.wizardSpellUntil = Math.max(run.wizardSpellUntil || 0, performance.now() + totalFrames * Math.max(frameMs, 17) + 100);
     withImage(`spell${center ? "Center" : pj ? "Wizard" : "Enemy"}`, art(`${img}`), (image) => { myImage = image; animate(); });
 

@@ -109,12 +109,17 @@ function crossFight(dir, spot, resume, resumeEvent = true) {
     print(`${wizardName()} is stopped on the way`);
     run.crossFightAbort = () => { setFacing(1); ui.wizardOffset = 0; showStage(); };
     startCrossingFight(() => {
-        setFacing(1);
-        ui.wizardOffset = spot;
-        run.crossFightAbort = undefined;
-        run.multipleEventsCounter = saved;
-        if (resumeEvent) startEvent(changeLocality);      // (a dev walk has no travelling event to wake)
-        resume();
+        const goOn = () => {
+            setFacing(1);
+            ui.wizardOffset = spot;
+            run.crossFightAbort = undefined;
+            run.multipleEventsCounter = saved;
+            if (resumeEvent) startEvent(changeLocality);      // (a dev walk has no travelling event to wake)
+            resume();
+        };
+        // the last spell frames still play on the mirrored canvas: wait for them before un-mirroring
+        const wait = (run.spellUntil || 0) - performance.now();
+        if (wait > 0) setTimeout(goOn, wait); else goOn();
     });
 }
 
