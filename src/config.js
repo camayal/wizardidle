@@ -106,6 +106,9 @@ export const config = {
         petrifyChance: 0.25,       // Medusa's gaze turns him to stone
         petrifyTurns: 2,
         artefactChance: 0.05,      // a find is the artefact against her gaze (after his first stone)
+        pSpectrum: 0.04,           // placeholder, chance a Tundra fight is a secret spectrum (not playtested)
+        prismSpectrumBoost: 3,     //   times this with the prism in his pack
+        prismChance: 0.05,         // placeholder, chance a find is the prism once the spectra quest is given
         midasHeal: 0.15,           // of Midas's max HP, per golden-rays heal
         midasHealsPerFight: 2,
         charmChance: 0.5,          // the lamia's serpent gaze: he skips his next attack (placeholder, like the blizzard)

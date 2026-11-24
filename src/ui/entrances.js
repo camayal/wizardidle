@@ -35,11 +35,12 @@ import { art } from '../media.js';
 import { playSound } from '../audio.js';
 import { enemySprites } from '../data/enemies.js';
 import { zones } from '../data/zones.js';
+import { fusionDone, fusionPending } from '../spectra.js';
 
 // Families by how they arrive (walk is the default).
 const ENTRANCE = {
     fly: ["el_angelicus", "el_demonio", "el_dragus", "arcangel", "fenix"],
-    float: ["el_espectro", "la_esencia", "el_ojo", "infraespectro", "etymos"],
+    float: ["el_espectro", "spectrum", "la_esencia", "el_ojo", "infraespectro", "etymos"],
     rise: ["baba", "polipoide", "el_ent", "el_umigubi", "momia", "el_esqueleto", "mother", "hydskon", "icedra",
         "herbus", "la_naga"],
     seaJump: ["lamia"],
@@ -115,6 +116,8 @@ const HYDRA_FADE = 5;               // steps the last frame fades over (the last
 // Herbus grows out of braided vines; the last frame is his sprite, so the swap is seamless.
 const STRIP_ENTER = { herbus: { src: "anim_herbus_enter", frame: 64 } };
 const STRIP_ENTER_MS = 100;
+// The Rainbow's first arrival once the seven spectra are dead: they fly in and fuse into it (src/spectra.js).
+const FUSION = { src: "anim_rainbow_fusion", frame: 64, fusion: true };
 const OFF_RIGHT = 80;               // sprite px from its place to just past the scene's right edge
 
 export function entranceKind(npc) {
@@ -270,7 +273,8 @@ export function playEntrance(done) {
     const hydra = /^(mother|hydskon|icedra)\d+$/.exec(npc);
     if (hydra) return playHydraEnter(npc, hydra[1], done);
     arrivalSound(npc, "arrive");
-    if (STRIP_ENTER[npc] && !run.forceEntrance) return playStripEnter(npc, done);
+    const enter = npc == "rainbow" && fusionPending() ? FUSION : STRIP_ENTER[npc];
+    if (enter && !run.forceEntrance) return playStripEnter(npc, done, enter);
     const { kind, portal } = arrivalKind(npc), total = FRAMES[kind];
     cancelNPCDraw();                                // the sprite must not pop up in its place mid-arrival
     imageNow(art(`${npc}`));
@@ -562,8 +566,8 @@ function drawPortal(ctx, cx, cy, rx, ry, scene, colors, spin) {
 
 // A boss with its own entrance strip (STRIP_ENTER): the frames are drawn in its place, feet on the
 // ground line, then its sprite takes over. If the strip doesn't load, it rises out of the ground.
-function playStripEnter(npc, done) {
-    const { src, frame } = STRIP_ENTER[npc], file = art(src);
+function playStripEnter(npc, done, enter = STRIP_ENTER[npc]) {
+    const { src, frame } = enter, file = art(src);
     cancelNPCDraw();
     imageNow(file);
     imageNow(art(npc));
@@ -574,6 +578,7 @@ function playStripEnter(npc, done) {
     const finish = () => {
         loop.stop("animNPC");
         loop.thawGame();
+        if (enter.fusion) fusionDone();
         if (state.npc == npc) loadNPC(npc);
         if (done) done();
     };

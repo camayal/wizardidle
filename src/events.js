@@ -21,6 +21,7 @@ import { counterText } from './ui/scrolls.js';
 import { playExit } from './ui/entrances.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
+import { prismFound } from './spectra.js';
 import { pickDream } from './dream.js';
 import { markup } from './ui/text.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
@@ -484,6 +485,15 @@ function findRuneOrBook(){
             state.artefacts.push({ sprite, name });
             loadNPC(sprite);
             print(`${wizardName()} finds a ${name}! Medusa's gaze will never turn him to stone again`);
+            run.multipleEventsCounter = 4;
+            break;
+        }
+        if (prismFound()) {         // the spectra quest's artefact (src/spectra.js): it multiplies the Tundra's spectra
+            run.objectToStudy = "artefact";
+            run.artefactName = "prism";
+            state.artefacts.push({ sprite: "item_prism", name: "prism" });
+            loadNPC("item_prism");
+            print(`${wizardName()} finds a prism! The colours of the Tundra will answer to it`);
             run.multipleEventsCounter = 4;
             break;
         }

@@ -5,6 +5,7 @@
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { bossesOf, zones } from './data/zones.js';
 import { npcSpells, spells } from './data/spells.js';
+import { isSpectrum, pickSpectrum, spectrumKilled, spectrumSeen } from './spectra.js';
 import { capitalize, getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, RAREMULTIPLIER, selfrevivetime } from './config.js';
 import { stat, state, world } from './state.js';
@@ -100,6 +101,9 @@ function defeatEnemy() {
         delete state.hydraHeads[fight.hydra];
         delete state.hydraHealth[fight.hydra];
     } else if (enemySprites[fight.enemyAndNumber].rare) {
+        if (isSpectrum(fight.enemyAndNumber) && spectrumKilled(fight.enemyAndNumber)) {
+            print(`<i>The last colour falls. Above the Tundra the Rainbow stirs, calling its colours back</i>`);
+        }
         stats.count("kill.rare", 1, { world: true });
         stats.count(`kill.sprite.${fight.enemyAndNumber}`);
         stats.first("first.rareKill");
@@ -292,7 +296,9 @@ const NAMELESS = ["baba", "el_esqueleto", "animalejo", "polipoide", "momia"];
 function getEnemy() {
     fight.bossCombat = false;
     fight.hydraCombat = false;
-    if (YesOrNot(config.balance.pGetBoss, 0)) {
+    const spectrum = run.forceEnemy || run.forceBoss ? "" : pickSpectrum();     // a secret spectrum of the Tundra (src/spectra.js)
+    if (spectrum) run.forceEnemy = spectrum;
+    if (!spectrum && YesOrNot(config.balance.pGetBoss, 0)) {
         setUpBoss();
     } else {
         setUpEnemy();
@@ -308,6 +314,10 @@ function getEnemy() {
         run.previousEvent = "enemy";
     }
     print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
+    if (fight.spectrumQuest) {
+        fight.spectrumQuest = false;
+        print(`<i>A colour of the Rainbow, alone in the Tundra... a prism could gather them. Find the prism</i>`);
+    }
     playEntrance();         // it arrives its own way (the game waits, ui/entrances.js)
     startEvent(battle);
 }
@@ -337,6 +347,7 @@ function setUpBoss() {
 function setUpEnemy() {
     const forced = run.forceEnemy;    // dev tools can ask for one sprite (src/dev/tests.js)
     run.forceEnemy = undefined;
+    if (isSpectrum(forced)) return setUpSpectrum(forced);
     fight.enemy = forced ? forced.replace(/\d+$/, "") : pickRandomItem(zones[state.zone.current].enemies).toLowerCase();
     stats.count(`combat.enemy.${fight.enemy}`);
     const number = forced ? Number(forced.match(/\d+$/)[0]) : Math.floor((Math.random() * enemyTypes[fight.enemy].max) + 1);
@@ -352,9 +363,26 @@ function setUpEnemy() {
     fight.enemyName = enemyDisplayName(enemySprites[fight.enemyAndNumber]);
 }
 
+// One of the seven secret spectra: a rare of the colour's school, named by its colour only.
+function setUpSpectrum(sprite) {
+    fight.enemy = "spectrum";
+    stats.count("combat.enemy.spectrum");
+    fight.enemyAndNumber = sprite;
+    fight.spellEnemy = pickRandomItem(npcSpells[enemySprites[sprite].type]);
+    stats.count("combat.rareEncounters");
+    stats.count(`seen.sprite.${sprite}`);
+    loadNPC(sprite);
+    fight.enemyHP = (getRandomInt(state.player.enemyHpRange * 0.75, state.player.enemyHpRange * 1.25));
+    fight.enemyHPbase = Math.round(fight.enemyHP);
+    updateHeartNPC();
+    fight.enemyName = enemyDisplayName(enemySprites[sprite]);
+    if (spectrumSeen()) fight.spectrumQuest = true;      // told after the arrival line, in getEnemy
+}
+
 // "A slime", "The Capricor", or a random name plus the sprite's own name; rare ones are marked.
 function enemyDisplayName(sprite) {
     const raretext = (sprite.rare ? " <b><small>(RARE)</small></b> " : "");
+    if (fight.enemy == "spectrum") return `${capitalize(sprite.altName)}${raretext}`;       // just the colour it stands for
     if (NAMELESS.includes(fight.enemy)) return `A ${sprite.altName}${raretext}`;
     if (fight.enemy == "el_capricor") return `The ${capitalize(enemyTypes[fight.enemy].name)}${raretext}`;
     if (sprite.altName) return `<i>${randomName()}</i> the ${capitalize(sprite.altName)}${raretext}`;
