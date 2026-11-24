@@ -189,7 +189,8 @@ function exploreEV() {
     const giver = quests.giverHere();       // a board or a wanted post stands here and he reads it (src/quests.js)
     if (giver) {
         run.questMeet = giver;
-        print(`${wizardName()} ${giver === 'board' ? 'stops at the notice board' : 'stops at a wanted post'}`);
+        print(`${wizardName()} ${giver === 'board' ? 'stops at the notice board' : giver === 'post' ? 'stops at a wanted post' : 'is stopped by a stranger on the road'}`);
+        if (giver === 'human') loadNPC(pickRandomItem(quests.HUMANS));      // a merchant or an old man stands in the scene
         startEvent(readBoard);
         return;
     }
@@ -242,10 +243,11 @@ function readBoard() {
     run.multipleEventsCounter += 1;
     switch (run.multipleEventsCounter) {
     case 1:
-        if (!quests.beginOffer(run.questMeet)) { print(`${wizardName()} finds nothing for him there`); endEvent(); nextEvent(); }
+        if (!quests.beginOffer(run.questMeet)) { print(`${wizardName()} finds nothing for him there`); if (run.questMeet === 'human') clearNPC(); endEvent(); nextEvent(); }
         break;
     case 3:
         quests.decideOffer();
+        if (run.questMeet === 'human') clearNPC();
         run.previousEvent = "board";
         addXP(0.25);
         endEvent();

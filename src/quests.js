@@ -34,6 +34,9 @@ export const HIDDEN_SHRINE_ZONE = 'el_Volcan';
 // Who gives quests (placeholders: where the boards and posts stand is the author's to say; art for both is still to ask the artist):
 // inns, the board of the City, and wanted posts on the roads of these regions (each gives a wanted quest of its own region).
 export const BOARD_ZONES = ['la_Ciudad'];
+// Random humans met on the road in the safe areas (very rare): a merchant or an old man with a job (sprites from img/story).
+export const SAFE_ZONES = ['la_Ciudad', 'el_Poblado', 'la_Pradera', 'el_Bosque', 'el_Desierto', 'las_Dunas'];
+export const HUMANS = 'comerciante,viejo';
 export const POST_ZONES = () => ['la_Pradera', 'el_Bosque', 'la_Gruta', 'la_Mina', 'el_Pantano', 'las_Dunas', 'la_Cueva', 'la_Tundra'].filter(hasStages);
 
 // The rare sprites that live in a zone (families of its enemy list).
@@ -343,9 +346,10 @@ export function giverHere() {
     const z = state.zone.current, forced = run.questGiver;
     run.questGiver = '';
     const g = BOARD_ZONES.includes(z) ? 'board' : POST_ZONES().includes(z) ? 'post' : '';
-    if (!g) return '';
-    if (forced === g) return g;
-    return canTake() && YesOrNot(g === 'board' ? config.quests.pBoard : config.quests.pPost, 0) ? g : '';
+    if (g && forced === g) return g;
+    if (!canTake()) return '';
+    if (g && YesOrNot(g === 'board' ? config.quests.pBoard : config.quests.pPost, 0)) return g;
+    return SAFE_ZONES.includes(z) && YesOrNot(config.quests.pHuman, 0) ? 'human' : '';
 }
 
 // A giver offers a job: the offer waits for the wizard's answer (decideOffer) while the god may suggest one (suggest).
@@ -354,12 +358,13 @@ export function beginOffer(giver) {
     const z = state.zone.current, cur = state.quest;
     if (cur && cur.kind === 'seek' && cur.target.zone === z && cur.target.giver === giver) complete(cur);     // he came to ask for work: that errand is done
     if (!canTake()) { run.questOffer = null; return false; }
-    const kind = giver === 'post' ? 'wanted' : pickRandomItem(giver === 'board' ? 'wanted,delivery,explore,study,shrine' : 'wanted,delivery,explore,study');
+    const kind = giver === 'post' ? 'wanted' : pickRandomItem(giver === 'inn' ? 'wanted,delivery,explore,study' : 'wanted,delivery,explore,study,shrine');
     const q = makeQuest(kind, giver, giver === 'post' ? z : undefined);
     if (!q) { run.questOffer = null; return false; }
     run.questOffer = { q, giver, hint: '' };
     const name = wizardName();
     print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}: ${q.text}</i>`
+        : giver === 'human' ? `<i>The stranger has a job for ${name}: ${q.text}</i>`
         : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}: ${q.text}</i>`);
     stats.count(`quest.offers.${giver}`);
     return true;
