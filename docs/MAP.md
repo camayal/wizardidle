@@ -10,7 +10,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 ## src/ (core)
 
-- synth.js: the game's own music: parses song text files (songs/<name>.txt, format in its header) and plays them live with Web Audio, no sound files. Not played anywhere in the game yet.
+- synth.js: the game's own music: parses song text files (songs/<name>.txt, format in its header) and plays them live with Web Audio, no sound files. Not played anywhere in the game yet. tools/midi_to_song.py makes song files from .mid files.
 - main.js: entry point. Connects the page buttons to the game; with `?sim=1` loads src/dev/sim.js, otherwise loads the dev panel when DEV is on.
 - config.js: all balance numbers (`config`), the DEV switch (the deploy turns it off), `masterTime` (tick length) and other constants.
 - state.js: `state` (the current wizard) and `world` (cemetery, outlives wizards); `saveGame`, `deleteSave`, `freshStart`. Plain JSON in localStorage, keys `wizardidle2:save` and `wizardidle2:world`.
