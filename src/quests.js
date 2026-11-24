@@ -562,10 +562,10 @@ const mvBtn = (act, i, stem, off, cls = '') => `<button class='stoneBtn ${cls}' 
 export function scrollHtml() {
     const Q = qs(), q = state.quest;
     const all = q ? [q, ...Q.queue] : [...Q.queue];
-    let h = `<span class='subtitles questHead'>Divine orders</span><div class='questOrders'>`;
+    let h = `<br><span class='subtitles'>Divine orders</span><br><div class='questOrders'>`;
     h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
         : GOD_ORDERS.map((k) => `<button class='orderBtn' ${STATES('order_plate')} data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
-    h += `</div><span class='subtitles questHead'>Errands</span>`;
+    h += `</div><br><span class='subtitles'>Errands</span><br>`;
     if (!all.length) h += `<p>No quest now</p>`;
     h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
         mvBtn('up', i, 'btn_up', i === 0) +
