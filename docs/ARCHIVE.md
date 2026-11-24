@@ -2134,3 +2134,9 @@ Author's note: we need to wire specieal animations created for the lamia boss at
 ```
 
 (lamia animations were already wired; achievements now say "First earned by:")
+
+```
+Date: 2026-11-20 22:48
+Author's note: la_Mina2 rail road only should extend to the right of the scene a little bit, never reach the left (following the map art)
+```
+(sent to the artist's inbox 2026-11-24)

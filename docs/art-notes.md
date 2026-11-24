@@ -60,3 +60,8 @@ Author's note: checking other details about etymos boss, i decided to keep the s
 - This is a nice text idea for console, achivement, or other that fit: "The boss was never one being. It was a prison containing six elemental fragments. Defeating it releases them back into the world."
 - I know in the atlas there are two purpules and two green, for this purpos, only arcane and toxic or poison, ignore the plant green like nature.
 ```
+
+```
+Date: 2026-11-24 (from the author, via dev)
+la_Mina2 (img/places/la_mina/la_mina2.png): the rail road should only extend a little to the right of the scene and never reach the left edge, following the map art. Redraw the rail in the scene and drop it in the review drop.
+```

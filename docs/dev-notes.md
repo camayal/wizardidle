@@ -53,11 +53,6 @@ Author's note: spell powers of both bosses should match the color of the sea
 ```
 
 ```
-Date: 2026-11-20 22:48
-Author's note: la_Mina2 rail road only should extend to the right of the scene a little bit, never reach the left (following the map art)
-```
-
-```
 Date: 2026-11-20 23:02
 Author's note: improvements for travel dev console 
 - similar to art dev console, add another scene viewer called target, source will be in the top in the actual scene view, the target scene will be display in the target.
