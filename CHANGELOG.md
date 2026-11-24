@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Dev panel > Connectors: new From and To pickers. A connector walk can start in any stage and really arrives in the chosen one (zone, stage and background), instead of always going back to where he started; during the walk the game already counts him in the To zone, so a crossing fight is against that zone's enemies.
 - The pier never has a fight: even if a crossing fight is planned on a walk that includes pier scenes (or the dev panel forces one), the pier scenes are skipped, like stairs and ladders.
 - Crossing a bridge, border or mouth: when the last scene ends, the wizard now walks into the real scene from the edge instead of appearing in it. The swamp bridge is walked the right way round (Prairie on the left, Swamp on the right), so going from the Swamp to the Prairie no longer looks like the way back.
 - Fights on the road between zones: when the wizard changes zone over a border, a bridge, a mouth or the mine tunnel, he can now be stopped in the middle of a scene for a normal fight against the zone he is entering (no bosses, hydras or spectra; about 1 crossing in 10, set by pFightInCrossing; never on stairs or ladders). Walking left to right the fight looks as usual; walking right to left the whole fight is mirrored (he faces left on the right, the enemy comes from the left, spells and the god's touch areas follow). If he wins he walks on; if he falls he wakes up in the zone he was heading to.

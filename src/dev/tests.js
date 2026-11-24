@@ -328,7 +328,9 @@ function pickerHtml() {
         Connectors: `
             <div class="row"><select data-f="connector">${connectorTests().map((t, i) => `<option value="${i}">${t.label}</option>`).join('')}</select>
                 <button data-do="connector">Walk it</button> <button data-do="connectorFight">Walk it with a fight</button></div>
-            <div class="note">Plays a connector's scenes on the spot, from the scene he is in; he ends in the scene he started in. With a fight: he is stopped in the first scene that can have one (a normal enemy of this zone; mirrored when the walk goes right to left), then walks on if he wins.</div>`,
+            <div class="row"><label>From <select data-f="cFrom"><option value="">where he is</option>${Object.keys(places).map((k) => `<option>${k}</option>`).join('')}</select></label>
+                <label>To <select data-f="cTo"><option value="">where he started</option>${Object.keys(places).map((k) => `<option>${k}</option>`).join('')}</select></label></div>
+            <div class="note">Plays a connector's scenes. From: he is put in that stage first (empty: the scene he is in). To: he really arrives in that stage when the walk ends (zone, stage and background; empty: back in the stage he started in). While he walks, the game already counts him in the To zone, as in a real crossing, so a fight is against its enemies. With a fight: he is stopped in the first scene that can have one (mirrored when the walk goes right to left), then walks on if he wins.</div>`,
         Spectra: `
             <div class="row"><select data-f="spectrum">${opts(SPECTRA.map((c) => `spectrum_${c}`), SPECTRA)}</select>
                 <button data-do="spectrum">Fight it</button></div>
@@ -345,6 +347,17 @@ function pickerHtml() {
     };
 }
 
+// A connector walk from the From stage to the To stage (the pickers; empty = where he is / where he started).
+function devWalk(f, steps) {
+    const stageOf = (k) => ({ zone: k.match(/\D+/)[0], stage: Number(k.match(/\d+$/)[0]) });
+    resetScene();                   // the running event, walk and fight end first (also thaws the clocks)
+    run.crossing = null;
+    if (f('cFrom')) { Object.assign(state.zone, stageOf(f('cFrom'))); showStage(); }
+    const back = { current: state.zone.current, stage: state.zone.stage };
+    if (f('cTo')) { const t = stageOf(f('cTo')); state.zone.current = t.zone; state.zone.stage = t.stage; }
+    walkAcross(steps, () => { if (!f('cTo')) Object.assign(state.zone, back); showStage(); }, nextEvent);
+}
+
 // The pickers' buttons: f gives a list's value in the same section.
 const pickerActions = {
     setLevel(f) { setLevel(Number(f('level'))); afterWizardChange(); },
@@ -358,18 +371,11 @@ const pickerActions = {
         else drawWizard();
     },
     gift(f) { GIFTS[f('gift')](); updateHeading(); },
-    connector(f) {
-        const steps = connectorTests()[Number(f('connector'))].steps;
-        resetScene();                   // the running event, walk and fight end first (also thaws the clocks)
-        run.crossing = null;
-        walkAcross(steps, showStage, nextEvent);
-    },
+    connector(f) { devWalk(f, connectorTests()[Number(f('connector'))].steps); },
     connectorFight(f) {
         const steps = withFight(connectorTests()[Number(f('connector'))].steps);
-        if (!steps) { print('That walk has no scene that can have a fight (stairs and ladders cannot).'); return; }
-        resetScene();
-        run.crossing = null;
-        walkAcross(steps, showStage, nextEvent);
+        if (!steps) { print('That walk has no scene that can have a fight (stairs, ladders and the pier cannot).'); return; }
+        devWalk(f, steps);
     },
     boss(f) {
         const [zone, boss] = f('boss').split('|'), petrify = f('petrify');
