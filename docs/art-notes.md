@@ -80,3 +80,8 @@ Date: 2026-11-24 11:25
 ```
 The scene needs to be modified: the firepit sits on the walkable line, so the wizard walks through it. Move or redraw it off the common walk line (as an overlay if it must stand in front, per the connector rule that obstacles go off the walk line or become overlays).
 
+
+## Quest scroll: stone buttons for the orders and the list (author, 2026-11-24)
+- The three divine orders (shrine, pilgrimage, hidden shrine) now sit in a 3-column grid (room for more orders later). Each button should be ONE stone-themed plate holding the icon on top and a two-line text below, not a stone just around the icon. Needs a plate sprite (normal, pressed, disabled) sized for about 3 per row of the scroll; the text is drawn by the game on top.
+- Same stone theme for the small buttons of each errand row: up, down and X (forget it), each with normal, pressed and disabled looks. They now are plain brown boxes with text arrows.
+- The old icon_order_ring can go once the plate exists.

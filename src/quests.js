@@ -559,10 +559,10 @@ const orderIcon = (k) => `<span class='orderIcon'><img src='${art('icon_order_ri
 export function scrollHtml() {
     const Q = qs(), q = state.quest;
     const all = q ? [q, ...Q.queue] : [...Q.queue];
-    let h = `<div class='questOrders'>`;
+    let h = `<br><span class='subtitles'>Divine orders</span><br><div class='questOrders'>`;
     h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
-        : GOD_ORDERS.map((k) => `<button class='questBtn order' data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}${ORDER_NAMES[k]}</button>`).join('');
-    h += `</div>`;
+        : GOD_ORDERS.map((k) => `<button class='orderBtn' data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
+    h += `</div><br><span class='subtitles'>Errands</span><br>`;
     if (!all.length) h += `<p>No quest now</p>`;
     h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
         `<button class='questBtn mv' data-quest='up:${i}' ${i === 0 ? 'disabled' : ''}>▲</button>` +
@@ -576,5 +576,5 @@ export function scrollHtml() {
     return h;
 }
 export function questsPageHtml() {
-    return `<div id='quests'><span class='titles' id='titleQuests'>Quests</span>${scrollHtml()}</div>`;
+    return `<div id='quests'><span class='titles' id='titleQuests'>Quests</span><br>${scrollHtml()}</div>`;
 }

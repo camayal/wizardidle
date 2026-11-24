@@ -275,7 +275,9 @@
                 text-align: center;
                 display: block;
             }
-            .questOrders{ display:flex; flex-wrap:wrap; gap:0.4em; justify-content:center; margin:0.6em 0 1em; }
+            .questOrders{ display:grid; grid-template-columns:repeat(3, 1fr); gap:0.4em; margin:0.4em 0 0.6em; }
+            .orderBtn{ font-family:inherit; font-size:0.85em; line-height:1.1em; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:0.2em; height:5.4em; padding:0.3em; border:2px solid #5a3d12; border-radius:0.4em; background:#e8d4a2; color:#3a2a0a; cursor:pointer; text-align:center; }
+            .orderBtn:disabled{ opacity:0.35; } .orderBtn span:last-child{ display:block; overflow:hidden; max-height:2.2em; }
             .questBtn{ font-family:inherit; font-size:1em; min-width:2.6em; min-height:2.6em; padding:0.3em 0.6em; border:2px solid #5a3d12; border-radius:0.4em; background:#e8d4a2; color:#3a2a0a; cursor:pointer; }
             .questBtn:disabled{ opacity:0.35; } .questBtn.order{ display:flex; align-items:center; gap:0.4em; } .orderIcon{ position:relative; display:inline-block; width:1.8em; height:1.8em; } .orderIcon img{ position:absolute; left:0; top:0; width:100%; height:100%; image-rendering:pixelated; } .questText .parcel{ height:2em; float:left; margin-right:0.4em; image-rendering:pixelated; }
             .questRow{ display:flex; align-items:center; gap:0.4em; margin:0.5em 0; } .questText{ flex:1; }
