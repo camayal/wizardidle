@@ -254,3 +254,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): seek quests (his own wish) only target inns; board/post only by chance in exploreEV. Artist options for the stone plates await the author's pick (review/quests/stone, A/B/C).
 - 2026-11-24 (dev): stone art wired (img/ui/faith/order_plate_*, btn_up/down/x_*; CSS vars --n/--p/--d set inline by STATES in quests.js; click handler now matches [data-quest]). Old icon_order_ring removed. Untested in a browser; plate text size .7em and symbol offsets are guesses.
 - 2026-11-24 (dev): order plate text was pushed out of the plate by a % padding (relative to width); now absolutely placed at 52% from top, white with a shadow.
+- 2026-11-24 (dev): Past quests heading is now a plain .subtitles span (+ .questLogToggle for the click), same as the other subtitles.

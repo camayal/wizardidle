@@ -571,7 +571,7 @@ export function scrollHtml() {
         mvBtn('drop', i, 'btn_x', false) + `</div>`).join('');
     if (Q.log.length) {   // the history is folded like the Help sections; the page redraws, so the open state lives in ui
         const open = ui.questLogOpen;
-        h += `<div class='faq questLogToggle${open ? ' active' : ''}'>Past quests (${Q.log.length})</div>` +
+        h += `<br><span class='subtitles questLogToggle'>Past quests (${Q.log.length})</span><br>` +
             `<div class='a' style='max-height:${open ? 'none' : '0'}'>${Q.log.map((x) => `${x.text} <small>(${x.how})</small>`).join('<br>')}</div>`;
     }
     return h;
