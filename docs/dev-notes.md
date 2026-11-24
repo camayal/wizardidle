@@ -50,3 +50,5 @@ Author's note: i was thinking in anothe mouth that conect the cave with la_Gruta
 
 ## Next session (dev), 2026-11-24
 - Keep testing crossing fights with Dev panel > Connectors > "Walk it with a fight" (mirrored when the walk goes right to left); not seen in a browser yet.
+
+- Faith (thinker, 2026-11-24): the faith and belief design is now in docs/plans/for_implementation_faith.md; everything usable from docs/plans/FAITH.md is copied into it. Please archive FAITH.md (append it to docs/ARCHIVE.md, delete it, and point links to the new file). Don't build from it yet: the author decides when.
