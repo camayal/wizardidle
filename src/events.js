@@ -22,6 +22,7 @@ import { playExit } from './ui/entrances.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
 import { artefactFound } from './bossEffects.js';
 import { prismFound } from './spectra.js';
+import { cabinSpot } from './cabin.js';
 import { pickDream } from './dream.js';
 import { markup } from './ui/text.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
@@ -251,9 +252,11 @@ function reviveEV(){
             updateHeading();
             break;
         case 4:
-        const randomLocality = pickRandomItem("el_Bosque,la_Pradera,el_Poblado,las_Dunas,el_Desierto,el_Pantano")
+        const cabin = run.cabin || cabinSpot();       // chosen when he was taken in; near his path on a quest (src/cabin.js)
+        run.cabin = null;
+        const randomLocality = cabin.zone;
         state.zone.current = randomLocality;
-        state.zone.stage = Math.floor((Math.random() * MAXSTAGES) + 1);
+        state.zone.stage = cabin.stage;
         state.zone.stay = 0;
         stats.count("explore.zoneChanges");
         stats.count(`explore.zone.${randomLocality}`);

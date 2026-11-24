@@ -66,6 +66,7 @@ function newState() {
         artefacts: [],                // what he carries: { sprite, name } of each artefact found (the inventory page)
         petrifyImmune: false,         // he found the artefact against her gaze
         spectra: { killed: [], met: 0, quest: false, prism: false, fused: false },   // the seven secret spectra of the Tundra (src/spectra.js)
+        quest: null,                  // the quest he is on (the quest system comes later): { name }; the healer's cabin stays near his path (src/cabin.js)
         travelFavor: false,           // planned in v1 (map travel once god loves the wizard), never unlocked
         hydraHeads: {},               // hydra name -> current number of heads
         hydraHealth: {},              // hydra name -> share of its HP left after a fight it survived

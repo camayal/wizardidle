@@ -2359,3 +2359,8 @@ Date: 2026-11-22 09:44
 Author's note: beach scenes are interesting but it is weird the transitions, i think we need to be sure that during our dynamic scene implementation we do sintermeditate scenes where the walk line is beach and the rest on top is ocean, then before the next scene we need to transition with another scene to a more away from the ocean scene so the following scene has a good fit with the current fixed beach scenes
 ```
 
+
+```
+Date: 2026-11-22 09:29
+Author's note: i am thinking that reviving the wizard by touching him is actually penalizing him by removing him from his track (cabin will leave the wizard in many places. we need to be sure to dev soemthing that mke him to be relased close on in the region he was when hi is doing a quest
+```

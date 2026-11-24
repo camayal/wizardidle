@@ -70,3 +70,11 @@ The dice are only shown in the text console today. The author wants the dice in 
 - Thrown dice: a short roll frame or two (tumbling) per set, plus the resting faces.
 - The desert has no dice place yet: the tent is the inn, tavern and gambling house. A small table or mat inside the tent scene, with the bone dice, would do.
 Open for the author: other games later (shut the box, sevens) would reuse the table.
+
+## Healer's cabin: three new looks (author, 2026-11-24; brief by dev)
+
+On a quest the wizard's revive puts the cabin near where he fell, so the cabin now exists in more places than the wild. Today there is one background (img/story/curanderobg.png, the magical cabin with the hooded healer). We need three more, same size and same spot for the healer and the wizard, same magic:
+1. **Town:** the cabin in the Town's style (adobe, huts), for el_Poblado.
+2. **City:** a cabin with the City's walls style (stone), for la_Ciudad.
+3. **Cave:** a healer's cave version, for the Cave, the Mine and the Grotto.
+Name the files curanderobg_town, curanderobg_city, curanderobg_cave (img/story). The wild cabin stays for every other zone. Dueñon and Heidan never have a cabin.

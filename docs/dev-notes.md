@@ -41,12 +41,8 @@ Author's note: regarding the dice house. the current version shows the dice as d
 ```
 
 ```
-Date: 2026-11-22 09:29
-Author's note: i am thinking that reviving the wizard by touching him is actually penalizing him by removing him from his track (cabin will leave the wizard in many places. we need to be sure to dev soemthing that mke him to be relased close on in the region he was when hi is doing a quest
-```
-
-```
 Date: 2026-11-22 09:47
 Author's note: i was thinking in anothe mouth that conect the cave with la_Gruta3 to give other access to them, also we need a conector for praire/dunes to the Gruta, my idea with the Gruta, parhaps a big opening
 ```
 - Dunas2 underground inn is in the game (2026-11-24, untested in a browser; the shop half still waits for the professions vendors, docs/PROFESSIONS.md).
+- Healer cabin on a quest (2026-11-24): done in code (src/cabin.js, state.quest, dev actions 'Quest on / off' and 'Cabin: where would it stand now?'), untested in a browser. Waiting: the quest system must set state.quest; the artist makes curanderobg_town, _city, _cave (docs/art-notes.md), then add the look to LOOK_ART in src/cabin.js.

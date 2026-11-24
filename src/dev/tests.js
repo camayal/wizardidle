@@ -28,6 +28,7 @@ import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
 import { connectorTests } from '../travel.js';
 import { SPECTRA, SPECTRA_ZONE } from '../spectra.js';
+import { cabinSpot } from '../cabin.js';
 import { scrollOpen } from '../ui/scrolls.js';
 import { sidePanel } from './panel.js';
 import { buildNotesBox, setNoteSource } from './notes.js';
@@ -225,6 +226,8 @@ const actions = [
     { group: 'Modes', name: 'Music', run() { openMode('music'); } },
     { group: 'Modes', name: 'Texts', run() { openMode('texts'); } },
 
+    { group: 'Game', name: 'Quest on / off (healer cabin stays near)', run() { state.quest = state.quest ? null : { name: 'dev' }; devPrint(state.quest ? 'on a quest: the next cabin stands near where he falls' : 'no quest: the cabin is random'); } },
+    { group: 'Game', name: 'Cabin: where would it stand now?', run() { const c = cabinSpot(); devPrint(`cabin: ${c.zone}${c.stage}, background ${c.bg}`); } },
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { group: 'Game', name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },
     { group: 'Game', name: 'Crisp pixels on / off', run() {

@@ -21,6 +21,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 - events.js: what happens on each master tick: the event picker and every event (explore, inn, shrine, statue, rune, book, loot, offering, revival).
 - combat.js: choosing the enemy (normal, boss, hydra), each round, attacks, heals, polymorph, enemy names.
 - spectra.js: the seven secret spectra of the Tundra (rare, once each), the prism quest flag (`state.spectra`) and the Rainbow's fusion entrance trigger.
+- cabin.js: where the healer's cabin stands after a revive by touch (near the stage he fell at while `state.quest` is set; never in Dueñon or Heidan) and which look it has.
 - bossEffects.js: extra effects of boss attacks (Medusa's stone gaze, Midas heal, blizzard skip).
 - spells.js: spell sprite animation on the spell canvas and which spell is cast.
 - wizard.js: levelling, XP, gold, faith from gold, trainable skills.

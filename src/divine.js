@@ -13,6 +13,7 @@ import { logro } from './achievements.js';
 import { enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { interruptMidasHeal } from './bossEffects.js';
 import { config } from './config.js';
+import { cabinSpot } from './cabin.js';
 import { beliefMoment, isAtheist, touchCost } from './belief.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
@@ -51,7 +52,7 @@ function reviveByTouch() {
     state.player.hp = state.player.hpBase;
     fight.pjDead = false;
     beliefMoment("revive");
-    const toCabin = () => enterPlace("curanderobg", "healer_hooded", () => startEvent(reviveEV), true);   // he wakes up there, with the hooded healer (the god in disguise; art by the artist)
+    const toCabin = () => enterPlace((run.cabin = cabinSpot()).bg, "healer_hooded", () => startEvent(reviveEV), true);   // he wakes up there, with the hooded healer (the god in disguise; art by the artist)
     if (run.simulation || !document.hasFocus()) return toCabin();
     loop.freezeGame();                          // nothing moves on while the rings play
     loop.every("reviveRings", () => {
