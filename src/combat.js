@@ -103,6 +103,9 @@ function defeatEnemy() {
     } else if (enemySprites[fight.enemyAndNumber].rare) {
         if (isSpectrum(fight.enemyAndNumber) && spectrumKilled(fight.enemyAndNumber)) {
             print(`<i>The last colour falls. Above the Tundra the Rainbow stirs, calling its colours back</i>`);
+            logro.set(logro.logro_spectra);
+            run.forceOnce = 1;              // the next event is the Rainbow itself, arriving by the fusion (ui/entrances.js)
+            run.forceBoss = "rainbow";
         }
         stats.count("kill.rare", 1, { world: true });
         stats.count(`kill.sprite.${fight.enemyAndNumber}`);
@@ -272,7 +275,9 @@ function clearFight() {
 
 // Start a fight: a hydra (where the hydra mystery is solved), otherwise a normal enemy or a boss.
 function enemyEV(){
-    if ((YesOrNot(config.balance.pGetGuardian,0)) && (state.player.lvl > 190)){//get guardian
+    if (run.forceBoss) {//a boss is asked for (the Rainbow after the last spectrum, the dev tools)
+        getEnemy();
+    }else if ((YesOrNot(config.balance.pGetGuardian,0)) && (state.player.lvl > 190)){//get guardian
         // guardians in all the places: never written in v1, where this branch did nothing and
         // the game stopped until a reload. Until the story adds them, a normal fight.
         getEnemy();
@@ -298,7 +303,7 @@ function getEnemy() {
     fight.hydraCombat = false;
     const spectrum = run.forceEnemy || run.forceBoss ? "" : pickSpectrum();     // a secret spectrum of the Tundra (src/spectra.js)
     if (spectrum) run.forceEnemy = spectrum;
-    if (!spectrum && YesOrNot(config.balance.pGetBoss, 0)) {
+    if (!spectrum && (run.forceBoss || YesOrNot(config.balance.pGetBoss, 0))) {
         setUpBoss();
     } else {
         setUpEnemy();

@@ -22,7 +22,7 @@ const rarityOf = {
     logro_tocado: "rare", logro_vistoaguilaencueva: "rare",
     logro_pots: "epic", logro_botines: "epic",
     logro_tabernero: "legendary", logro_capricorreturns: "legendary",
-    logro_libros: "mythic",
+    logro_libros: "mythic", logro_spectra: "legendary",
     logro_namesake: "divine",
 };
 

@@ -36,6 +36,7 @@ export const achievements = {
     logro_vistoaguilaencueva: {name:"logro_vistoaguilaencueva", title:"Why this animal is here?", description:"Found a eagle in the cave"},
     logro_killedbysheep: {name:"logro_killedbysheep", title:"Shaaaaame on you", description:"Killed by a powerful sheep"},//ok
     logro_killedbychicken: {name:"logro_killedbychicken", title:"The last cluck-cluck", description:"Badly defeated by a demonic chicken"},//ok
+    logro_spectra: {name:"logro_spectra", title:"All the colours", description:"Defeat the seven secret spectra of the Tundra"},
     logro_namesake: {name:"logro_namesake", title:"Tocayo", description:"Find a namesake, something almost impossible in these lands"},//ok -i
     logro_hategod:  {name:"logro_hategod", title:"Atheist!", description:"Found a new way to live the life, pure and real hate for god, reach -10K of faith"},//ok -i
     // planned: when the god loves the wizard, unlock state.travelFavor (map travel)

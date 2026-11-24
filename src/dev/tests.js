@@ -27,6 +27,7 @@ import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
 import { connectorTests } from '../travel.js';
+import { SPECTRA, SPECTRA_ZONE } from '../spectra.js';
 import { scrollOpen } from '../ui/scrolls.js';
 import { sidePanel } from './panel.js';
 import { buildNotesBox, setNoteSource } from './notes.js';
@@ -325,6 +326,14 @@ function pickerHtml() {
             <div class="row"><select data-f="connector">${connectorTests().map((t, i) => `<option value="${i}">${t.label}</option>`).join('')}</select>
                 <button data-do="connector">Walk it</button></div>
             <div class="note">Plays a connector's scenes on the spot, from the scene he is in; he ends in the scene he started in.</div>`,
+        Spectra: `
+            <div class="row"><select data-f="spectrum">${opts(SPECTRA.map((c) => `spectrum_${c}`), SPECTRA)}</select>
+                <button data-do="spectrum">Fight it</button></div>
+            <div class="row"><button data-do="spectraAllButOne">Kill 6 (leave the last)</button>
+                <button data-do="spectraFusion">All dead: Rainbow + fusion now</button></div>
+            <div class="row"><button data-do="spectraQuest">Give the quest</button><button data-do="spectraPrism">Give the prism</button>
+                <button data-do="spectraReset">Reset spectra</button></div>
+            <div class="note">The last one killed in the Tundra gives the achievement and brings the Rainbow with the fusion at once. Reset puts the seven back, takes the quest and the prism away and re-arms the fusion. The prism also multiplies how often they appear.</div>`,
         Enemies: `
             <div class="row"><select data-f="pick">${opts(Object.keys(ENEMY_PICKS))}<option value="exact">exact sprite (below)</option></select></div>
             <div class="row"><input type="text" data-f="sprite" list="devEnemyList" spellcheck="false" placeholder="sprite, e.g. el_hechicero10">
@@ -359,6 +368,28 @@ const pickerActions = {
             if (petrify) override('balance', { petrifyChance: 1 });
             return bossIn(zone);
         }, f('arrival'));
+    },
+    spectrum(f) { liveFight(() => { moveTo(SPECTRA_ZONE); return { event: normalEnemy(), enemy: f('spectrum') }; }, ''); },
+    spectraAllButOne() {
+        state.spectra.killed = SPECTRA.slice(0, 6);
+        state.spectra.fused = false;
+        devPrint('six spectra dead: the next one (violet) is the last, in the Tundra');
+    },
+    spectraFusion() {
+        state.spectra.killed = SPECTRA.slice();
+        state.spectra.fused = false;
+        liveFight(() => { run.forceBoss = 'rainbow'; return bossIn(SPECTRA_ZONE); }, '');
+    },
+    spectraQuest() { state.spectra.quest = true; devPrint('spectra quest given: the prism can turn up in finds'); },
+    spectraPrism() {
+        state.spectra.quest = state.spectra.prism = true;
+        if (!state.artefacts.some((a) => a.name == 'prism')) state.artefacts.push({ sprite: 'item_prism', name: 'prism' });
+        devPrint('prism in the pack');
+    },
+    spectraReset() {
+        state.spectra = { killed: [], quest: false, prism: false, fused: false };
+        state.artefacts = state.artefacts.filter((a) => a.name != 'prism');
+        devPrint('spectra reset');
     },
     hydra(f) { const h = f('hydra'); liveFight(() => hydraIn(HYDRA_ZONE[h], h, Number(f('heads')))); },
     enemy(f) {
