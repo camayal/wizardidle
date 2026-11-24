@@ -119,3 +119,9 @@ Built on dev-repo, untested in a browser (a headless sim loads). All numbers are
 | 2026-11-24 | Queue order and size | **Secrets first, then the quest whose target is nearest on the map** (travel cost from where he stands). **A small cap** (count from playtests); when the queue is full he turns down new offers |
 | 2026-11-24 | A search that drags on | **The odds of finding the target rise the longer he searches.** If it drags on anyway he **moves the quest down the queue** (doesn't drop it) and takes the next one. **Only the god cancels.** Restlessness and the zone-change chance are off while searching |
 | 2026-11-24 | Split zones (dev's point 2) | Default, not asked: he may cross another zone on the shortest path to reach a cut-off stage of his target zone; it still counts as searching |
+| 2026-11-24 | Dev's extras (board, wanted posts, strangers, "seek") | **Keep all four.** Board and posts get art (below) |
+| 2026-11-24 | Quests slow the climb (sim: 22 h to level 60, was 15 h) | **Accept it for now.** If it needs fixing, raise the XP per event; decide after playtests |
+| 2026-11-24 | Targets and his level | **Any zone can be a target: the world is open, there are no "late zones".** At some story moments his movement is limited; quests must respect those limits. The small jobs still fade near the last levels (decided earlier) |
+| 2026-11-24 | Atheists and shrines | **No shrine quests for an atheist:** he doesn't get or take shrine, pilgrimage or hidden-shrine quests, and the god's faith orders are greyed out for him |
+| 2026-11-24 | Reward sizes | Wait for playtests (no numbers without data) |
+| 2026-11-24 | What to build next | **Secrets start quests** (spectrum, rune, hidden shrine; they jump the queue), and **art**: the quest icon, the parcel, the notice board and the wanted post. Cemetery note and late fading come after |
