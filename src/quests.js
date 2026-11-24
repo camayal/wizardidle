@@ -304,12 +304,14 @@ export function eventPick() {
         promote();
         return 0;
     }
+    if (q.cool > 0) { q.cool--; return 0; }          // just met the target: a breather, so it does not turn up again and again
     if (!YesOrNot(Math.min(c.findMax, c.findBase + c.findStep * q.searched), 0)) return 0;
     return turnUp(q);
 }
 
 // The target turns up: the next event is made for it.
 function turnUp(q) {
+    q.cool = config.quests.turnUpCooldown; q.searched = 0;       // the odds start over after each meeting (he may have lost the fight)
     if (q.kind === 'wanted') {
         if (!YesOrNot(config.quests.pWantedBoost, 0)) return 0;
         if (q.target.boss) run.forceBoss = q.target.boss; else run.forceEnemy = q.target.enemy;
@@ -480,7 +482,7 @@ export function meetNow(giver, after = 4000) {
 // ---- the god's orders and cancel (the Faith scroll): obeyed by belief ----
 
 export const GOD_ORDERS = ['shrine', 'pilgrimage', 'hidden'];
-export const ORDER_NAMES = { shrine: 'Pray at a shrine', pilgrimage: 'A pilgrimage', hidden: 'Find the hidden shrine' };
+export const ORDER_NAMES = { shrine: 'Pray at<br>a shrine', pilgrimage: 'A<br>pilgrimage', hidden: 'Find the<br>hidden shrine' };
 
 export function godOrder(kind) {
     const Q = qs(), name = wizardName();

@@ -256,3 +256,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): order plate text was pushed out of the plate by a % padding (relative to width); now absolutely placed at 52% from top, white with a shadow.
 - 2026-11-24 (dev): Past quests heading is now a plain .subtitles span (+ .questLogToggle for the click), same as the other subtitles.
 - 2026-11-24 (dev): order plate text 0.7em -> 0.95em.
+- 2026-11-24 (dev): turnUp sets q.cool (config.quests.turnUpCooldown 8) and resets q.searched; eventPick skips the roll while q.cool>0. Cause of the repeats: searched kept growing so the find chance sat at findMax 0.6 per event.

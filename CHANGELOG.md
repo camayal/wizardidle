@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- A wanted boss no longer shows up again and again: after the target turns up the search starts over with the low odds and he gets a breather of eight events first (before, the odds kept climbing, so after losing to the boss he met it again at once). The divine order names now break into two lines on their plates.
 - The Quests page has its stone art: the three divine orders are cobblestone plates (symbol in the socket, name below) and every errand has stone up, down and X buttons, each with a pressed and a greyed-out look. Art by the artist.
 - When the wizard sets out to look for work he only goes to inns now; hunting for a notice board or a wanted post on purpose is gone (he still comes across them by chance on his way).
 - On the way to a quest's target the wizard keeps to his road: three events in four are plain exploring, so a fight, a prayer, a rest or a find no longer pulls him aside as often (the other event types still happen now and then).

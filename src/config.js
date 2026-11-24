@@ -101,6 +101,7 @@ export const config = {
         pHuman: 0.004,             // chance an explore event in a safe area meets a stranger with a job (very rare)
         pPost: 0.02,               // chance an explore event in a region with a post reads it
         pTravelExplore: 0.75,      // on the way to a quest's target, chance each event is just exploring (walking on) instead of a random event
+        turnUpCooldown: 8,         // events after the target turned up (a wanted enemy, a boss) before it can turn up again
         orderWait: 15,             // events before the god can give another order from the Faith scroll
     },
     // Fixed rules of the world.
