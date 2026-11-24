@@ -269,7 +269,7 @@ Author's note: Taverns need to be redesigned by [[wa, the new walk line makes th
 
 ```
 Date: 2026-11-22 09:27
-Author's note: important, in the desert make the way wizard enter to the inn is first showing the tent, now he just move from any scene in the desert to the actual inn
+Author's note: [waits for art: el_desierto_tienda asked from the artist in docs/art-notes.md, 2026-11-24] important, in the desert make the way wizard enter to the inn is first showing the tent, now he just move from any scene in the desert to the actual inn
 ```
 
 ```
@@ -280,13 +280,6 @@ Author's note: i am thinking that reviving the wizard by touching him is actuall
 ```
 Date: 2026-11-22 09:30
 Author's note: idea for [[wt healing him will cost less than attacking enemis
-```
-
-```
-Date: 2026-11-22 09:33
-Author's note: when rest in sleeping bag next scene the wizard should start in the same position he slept and walt away the scene to continue
-
-also sleep twice in a row shoudl happen
 ```
 
 ```

@@ -21,6 +21,11 @@ Date: 2026-11-20
 Author's note: for @artist, el_Duenon7 (future scene, travel map): the sea part should be a waterfall, and the water must be rancid (sickly green-brown, foul). The idea of Duenon is that it is sinking into the underworld: a mega-corruption. In the future the author wants this shown on the whole map (Duenon slowly sinking, corrupted water falling away), so keep el_Duenon7 as the first piece of that look. Redo el_Duenon7 with this and drop it in the review as before.
 ```
 
+```
+Date: 2026-11-24
+Dev's request for @artist, from the author's 11-22 note: the desert inn is a tent (inn, tavern, gambling house). Draw a 256x64 desert scene with the tent's entrance seen from outside, el_desierto_tienda, next to the other Desierto scenes (tent door near the middle of the walk line, as la_Poblado4 has its tavern door). Dev will make the wizard walk to it and go in, instead of jumping from any desert scene into the inn.
+```
+
 ## Connector overlays (bridges, stairs, mines)
 
 - For artist (dev, 2026-11-20): the walk line is the same in every scene of the game, connector scenes included (the wizard is not lifted there; the idea of raising him 3-6 px was dropped). Anything he should walk behind in a connector scene (bridge handrails and posts, stair rails, mouth or mine timbers, pier posts, the ladder) is drawn as a front overlay instead: a 256x64 transparent PNG named overlay_<scene>.png (for example overlay_bridge_south_west.png), only the parts that cover him, everything else clear; it is drawn over the wizard and every sprite (like la_mina6 and la_mina7). Put them in the review drop; dev lists them in src/data/overlays.js. Check each connector scene first for what overlaps his row (feet rows are the walk line; dev-notes has the range question) and draw an overlay only where it is needed. Bridge halves (_west and _east) line up as neighbours, so their overlays must too.

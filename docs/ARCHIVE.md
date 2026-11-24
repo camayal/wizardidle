@@ -2090,3 +2090,11 @@ Author's note: considering the layouts for other screens, we can think in one fo
 Date: 2026-11-22 09:41
 Author's note: one of the other big sources of sounds is https://pixabay.com/users/freesound_community-46691455/ be sure we add freesound_community to our thanks
 ```
+
+```
+Date: 2026-11-22 09:33
+Author's note: when rest in sleeping bag next scene the wizard should start in the same position he slept and walt away the scene to continue
+
+also sleep twice in a row shoudl happen
+```
+(done 2026-11-24: he wakes where he slept and walks back; sleeping twice in a row was already possible)

@@ -588,7 +588,7 @@ function goToBed(placesWithInn) {
         spell("spellSleep_24", true);
         if (dream) print(`<i>${wizardName()} dreams: ${markup(dream.lines.join(" "), { name: wizardName() })}</i>`);
         sleepInDark(dream, null, () => {
-            ui.wizardOffset = 0;
+            if (placesWithInn) ui.wizardOffset = 0;     // camping: he wakes where he slept and walks back (wakeUp)
             drawWizard();
             if (!placesWithInn) { clearNPC(); ui.bagSpot = null; }
         });
@@ -646,7 +646,7 @@ function wakeUp(placesWithInn) {
     run.restAtInn = false;
     endEvent();
     if (placesWithInn) leavePlace(showStage, nextEvent);    // out through the door
-    else nextEvent();                                      // he woke up in his place
+    else walkWizardTo(0, nextEvent);                       // he woke where he slept and walks back to his place
 }
 
 

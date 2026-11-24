@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Camping: after the night in the sleeping bag the wizard wakes where he slept and walks back to his place before the journey goes on (he used to jump back at once).
 - Credits: freesound_community (Pixabay) is now thanked in the Licences section.
 - Music: the richer synth is in (ADSR, per-note filters, detune, vibrato, pan, noise, glides, velocity, stereo echo) and its old commented copy is gone. New tools/midi_to_song.py turns any .mid file into a song text: one instrument per channel from its General MIDI program, a drum kit on channel 10, velocity, channel volume, pan, sustain pedal and tempo changes kept. Map spots (Volcan, Cueva, Mina, Pradera 6) and travel links updated; the playa future points were dropped.
 - The greater naga's last two moves have their real art: fury slaps (he jumps to the wizard and spins like a tornado) and coil crush (he approaches, turns round and lashes a short tail). All the beach boss moves are now final art; only their sounds are missing.
