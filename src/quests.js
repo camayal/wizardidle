@@ -37,7 +37,7 @@ export const HIDDEN_SHRINE_ZONE = 'el_Volcan';
 export const BOARD_ZONES = ['la_Ciudad'];
 // Random humans met on the road in the safe areas (very rare): a merchant or an old man with a job (sprites from img/story).
 export const SAFE_ZONES = ['la_Ciudad', 'el_Poblado', 'la_Pradera', 'el_Bosque', 'el_Desierto', 'las_Dunas'];
-export const HUMANS = 'comerciante,viejo';
+export const HUMANS = 'comerciante';     // the old man (viejo) stays in the Dunes inn only; more strangers wait for the artist (docs/art-notes.md)
 export const POST_ZONES = () => ['la_Pradera', 'el_Bosque', 'la_Gruta', 'la_Mina', 'el_Pantano', 'las_Dunas', 'la_Cueva', 'la_Tundra'].filter(hasStages);
 
 // The rare sprites that live in a zone (families of its enemy list).

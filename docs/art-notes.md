@@ -79,3 +79,10 @@ Zone: Swamp, stage 4 (el_Pantano4), runa5 boss fight scene
 Date: 2026-11-24 11:25
 ```
 The scene needs to be modified: the firepit sits on the walkable line, so the wizard walks through it. Move or redraw it off the common walk line (as an overlay if it must stand in front, per the connector rule that obstacles go off the walk line or become overlays).
+
+## Quest strangers and speech bubbles (author, 2026-11-24)
+- The old man (viejo) belongs to the underground inn of the Dunes only; he is no longer a stranger on the road.
+- Several random strangers who stop the wizard on the road with a job (merchant, traveller, farmer, pilgrim, and so on; mixed ages, outfits and looks). Start from the random people sprites in wizardidle-old-ideas/unorganzed_sprites/Sprites/ and adapt them to the game's style and the 32x32 NPC size (feet on the walk line, facing the wizard). At least six, named stranger_a... or by look.
+- Speech bubble over a stranger while he gives a quest: the "bocadillo con letras" in the same old folder (a bubble with lines of text) is the model. One bubble file for "offering a quest".
+- Two answer bubbles in the same style: one with an X (the wizard turns the job down) and one with a check mark (he takes it). They replace the offering bubble when he answers.
+- Dev wires them after the author approves, as usual.
