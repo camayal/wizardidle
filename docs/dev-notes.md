@@ -102,11 +102,6 @@ Author's note: whe tinted glass is not easy to read, perhalps a little stick tha
 ```
 
 ```
-Date: 2026-11-20 23:20
-Author's note: in all wizard achievements, put instead of Earned by, First earned by:
-```
-
-```
 Date: 2026-11-20 23:21
 Author's note: work on the etmos boss split
 ```
@@ -236,16 +231,6 @@ Date: 2026-11-21 11:10
 Author's note: for Etymos boss idea, i will need to remove some regular enemies, now ccalled la_esencia, not all numbers are the ones we need to remove from the normal la_esencia pool, only the ones that are very symilar to the etymos
 
 reminder, when etymos is destroyed for first time, this boss will be out of the game then it is repaced for all the other mini bosses, they are more like a Rare type of strengh rather than boss level of strengh
-```
-
-```
-Game test
-Wizard: level 17, HP 183 / 297, gold 2571, faith 2714
-Zone: Beach, stage 5
-On the scene: lamia (boss fight)
-Speed x1
-Date: 2026-11-21 11:13
-Author's note: we need to wire specieal animations created for the lamia boss attacks
 ```
 
 ```

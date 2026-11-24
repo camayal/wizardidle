@@ -2115,3 +2115,22 @@ Author's note: [[wd we need to avoid the game bein gopen in two windoes, we can 
 - Scene spell healing rain - scene_healing_rain.ogg
 - Scene spell divine light - scene_divine_light.ogg
 - Arrival (enemy arrive and leave, 12 enemies: etymos, goro, infraespectro, bicaptop, midas, herbus, cuboq, skeleton, rainbow, fenix, medusa, arcangel) - arrival_<enemy>_arrive.ogg / arrival_<enemy>_leave.ogg; bicaptop arrive keeps snd/creatures/stone_break.ogg
+
+
+## Dev notes handled 2026-11-24
+```
+Date: 2026-11-20 23:20
+Author's note: in all wizard achievements, put instead of Earned by, First earned by:
+```
+
+```
+Game test
+Wizard: level 17, HP 183 / 297, gold 2571, faith 2714
+Zone: Beach, stage 5
+On the scene: lamia (boss fight)
+Speed x1
+Date: 2026-11-21 11:13
+Author's note: we need to wire specieal animations created for the lamia boss attacks
+```
+
+(lamia animations were already wired; achievements now say "First earned by:")

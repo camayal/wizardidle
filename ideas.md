@@ -195,3 +195,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): second-tab paradox built (src/dimension.js, read-only mode in state.js); untested in a browser (no node). Test: open two tabs of the game with ?dimension=1. Idea: more glitch kinds later (rain of letters, scene tearing).
 - 2026-11-24 (dev): second-tab guard closed: read-only until claimed (state.js allowSaving), localStorage heartbeat fallback without Web Locks. Untested in a browser.
 - 2026-11-24 (dev): the 29 approved sfx are wired (snd/creatures; attackSounds; arrivalSound in entrances.js). Untested in a browser. Open: healing_rain and divine_light sounds have no caster; Medusa poison strike, whirlwind, eclipse still unchosen.
+- 2026-11-24 (dev): "First earned by" done; lamia attack animations were already wired. The la_Mina2 rail is in the art (la_mina2.png): for the artist, left in dev-notes.

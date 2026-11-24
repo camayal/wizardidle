@@ -70,7 +70,7 @@ function sealImg(text){
 
 function achievementRow(text, time, by){
     if (!logro[text]) return "";
-    const earned = by ? `<br><small style="color:#7a6a58">Earned by: ${by}</small>` : "";
+    const earned = by ? `<br><small style="color:#7a6a58">First earned by: ${by}</small>` : "";
     return `<div class="divTableRow achRow"><div class="divTableCell"><span class="achIcon seal-${rarityOf[text] || "common"}">${layer("logro_frame", false)}${layer(logro[text].name, true)}${sealImg(text)}</span></div><div class="divTableCell"><strong>${logro[text].title}</strong> ${rarityTag(text)}<br>${logro[text].description}${wonText(time)}${earned}</div></div>`;
 }
 
