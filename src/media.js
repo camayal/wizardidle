@@ -45,6 +45,7 @@ export function artFolder(name) {
     if (/^anim_hydra_/.test(name)) return 'bosses/hydras';     // effects shared by every hydra
     if (BOSSES.has(name)) return `bosses/${name}`;
     for (const b of BOSSES) if (name.startsWith(`anim_${b}_`)) return `bosses/${b}`;     // b may hold an underscore (greater_naga)
+    if (/^spectrum_/.test(name)) return 'enemies/spectrum';       // the seven spectra: img/enemies/spectrum/spectrum_<colour>.png
     if (enemySprites[name]) return `enemies/${name.replace(/\d+$/, '')}`;
     if ((m = /^(?:run|ram)_(.+)$/.exec(name)) && enemySprites[m[1]]) return `enemies/${m[1].replace(/\d+$/, '')}`;
     if (name == 'oveja' || name == 'gallina') return 'enemies/polymorph';
