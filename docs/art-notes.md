@@ -70,3 +70,12 @@ The dice are only shown in the text console today. The author wants the dice in 
 - Thrown dice: a short roll frame or two (tumbling) per set, plus the resting faces.
 - The desert has no dice place yet: the tent is the inn, tavern and gambling house. A small table or mat inside the tent scene, with the bone dice, would do.
 Open for the author: other games later (shut the box, sevens) would reuse the table.
+
+## Swamp stage 4: the firepit is on the walk line (author, 2026-11-24 11:25)
+
+```
+Game test
+Zone: Swamp, stage 4 (el_Pantano4), runa5 boss fight scene
+Date: 2026-11-24 11:25
+```
+The scene needs to be modified: the firepit sits on the walkable line, so the wizard walks through it. Move or redraw it off the common walk line (as an overlay if it must stand in front, per the connector rule that obstacles go off the walk line or become overlays).
