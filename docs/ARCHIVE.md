@@ -2235,3 +2235,7 @@ Author's note: improvements for travel dev console
 - if the conector has more than 2 scenes, add more scener viewers
 ```
 
+
+[~] some new enemy attacks need some sounds (the first table is wired 2026-11-18 and waits for your ears; left: the second table's boss/hydra moves, whose files are not cut yet, and the moves still to choose; docs/SOUNDS.md)
+- Achievements (2026-11-18): libros, runas, tabernero, tocado and the eagle are now wired (tocado = 100 god touches in config.touchedAchievement). Still to do: re-run a playtest and tools/odds.py to confirm the tiers; capricorreturns and namesake are only rare by design.
+- Travel graph, for later (author, 2026-11-19): the graph starts blank on purpose (config.travel.manualLinksOnly = 1: tools/travel_graph.py makes no links, every link is set by hand in the Travel mode; 0 brings the computed ones back; the old curated verdicts are in commit 18743d0). The game still does not use the graph (travel.js). The new underground points future_cave_NW (60,44), future_chamber (80,132) and the connector ladder_cueva4_mina2 (112,162) have no links yet and wait for the author's scenes and links. The (130,120) volcano mouth must not link to the lava chamber: the chamber is entered only through la_Mina2.

@@ -6,15 +6,13 @@ earlier one.
 
 ## Open items from the old play-test list (2026-11-18)
 
-[~] some new enemy attacks need some sounds (the first table is wired 2026-11-18 and waits for your ears; left: the second table's boss/hydra moves, whose files are not cut yet, and the moves still to choose; docs/SOUNDS.md)
-[] create scenes that are the end of one ad the beginon of the otherone. (planned: docs/plans/MAPS.md, border scenes)
+[] Border scenes (end of one zone, start of the next): the author wants the list of missing ones first; artist reviews map, coords and scenes (2026-11-24). Planned in docs/plans/MAPS.md.
 
 - Own music (2026-11-18): built as code, no WAVs: Music mode in the dev console (src/dev/music.js, src/synth.js, songs/). Still open for the author: where songs play in the game, stingers only, loops, or both (musician suggests stingers first). The musician can drop songs as <name>.song.txt in the review drop.
 - Map revamp, Prairie creek, bridges: planned in docs/plans/MAPS.md (map ribbons built; ground map spots still to re-check against the new art).
 
-- Achievements (2026-11-18): libros, runas, tabernero, tocado and the eagle are now wired (tocado = 100 god touches in config.touchedAchievement). Still to do: re-run a playtest and tools/odds.py to confirm the tiers; capricorreturns and namesake are only rare by design.
 
-- Travel graph, for later (author, 2026-11-19): the graph starts blank on purpose (config.travel.manualLinksOnly = 1: tools/travel_graph.py makes no links, every link is set by hand in the Travel mode; 0 brings the computed ones back; the old curated verdicts are in commit 18743d0). The game still does not use the graph (travel.js). The new underground points future_cave_NW (60,44), future_chamber (80,132) and the connector ladder_cueva4_mina2 (112,162) have no links yet and wait for the author's scenes and links. The (130,120) volcano mouth must not link to the lava chamber: the chamber is entered only through la_Mina2.
+- Travel graph (corrected 2026-11-24): the game DOES use it. travel.js picks moves()/destinations() from travelGraph.js, which reads the author's manual links (data/travelOverrides.js, set in Modes > Travel) and falls back to the typed strings of zones.js for a stage with no link; connector walks use connectorsBetween/reachesPoint. The generated graph (manualLinksOnly = 1: blank) only serves travelCost/route in the dev tools. Still unlinked, waiting for the author: future_cave_NW (60,44), future_chamber (80,132), ladder_cueva4_mina2 (112,162). The (130,120) volcano mouth must not link to the lava chamber (only through la_Mina2).
 
 - Future and connector scenes, open questions (2026-11-20): the artist drew 27 future scenes (review drop `scene_future/`, one file per travel point; future_chamber, both Heidan ones, la_Pradera_lago and pantano_fueracastle approved by the author) and 31 connector scenes (`scene_connectors/`: bridge_spring/south/swamp _west/_east, pier_land/_end, stairs_s/n _base/_mid/_top, mouth_<x>_<y> and _under, enter_mine_S, ladder_cueva4_mina2 _cave/_mine). None is wired into the game (no zone/scene entry yet; index.txt lines have replaces `-`). Questions to settle with the author, one at a time:
   1. Walk line: the artist drew surfaces on rows 34-60, bottom strip from row 42 clear, without knowing the real feet row range. Dev to give the real range and the artist to adjust if scenes block it.
