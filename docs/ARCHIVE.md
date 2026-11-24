@@ -2104,3 +2104,14 @@ Date: 2026-11-23 19:19
 Author's note: [[wd we need to avoid the game bein gopen in two windoes, we can create a paradox, i open the same game in two tabls both of them run  in parallel differenlty, it can be either that or just for fun, put in the console that a new dimension has been open, and the paradox will grow with time. Explore the technical repercusions of having different opengames? which is the one saved? ae those shared data?
 ```
 (done 2026-11-24: src/dimension.js, the author chose the read-only, collapsing second tab)
+
+## 2026-11-22 from docs/sound-notes.md: 32 approved sound tests (cut files in wizardidle-review/sfx_2026-11-22/, recorded in SOUNDS.md)
+- Doria arcane rain (boss) - boss_doria_arcane_rain.ogg
+- Skeleton arcane rain (boss) - boss_skeleton_arcane_rain.ogg
+- Arcangel golden storm (boss) - boss_arcangel_golden_storm.ogg
+- Kkck poison cloud (boss) - boss_kkck_poison_cloud.ogg
+- Lamia tidal wave (boss) - boss_lamia_tidal_wave.ogg
+- Greater naga tide charge (boss) - boss_greater_naga_tide_charge.ogg
+- Scene spell healing rain - scene_healing_rain.ogg
+- Scene spell divine light - scene_divine_light.ogg
+- Arrival (enemy arrive and leave, 12 enemies: etymos, goro, infraespectro, bicaptop, midas, herbus, cuboq, skeleton, rainbow, fenix, medusa, arcangel) - arrival_<enemy>_arrive.ogg / arrival_<enemy>_leave.ogg; bicaptop arrive keeps snd/creatures/stone_break.ogg

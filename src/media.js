@@ -73,7 +73,9 @@ const SOUND_FOLDERS = {
         'bite', 'wind_gust', 'swing_slash', 'swing_thrust', 'curse', 'sonic_boom', 'rune_circle', 'squelch',
         'midas_orbs', 'midas_rays', 'midas_touch', 'rojo_slam', 'rojo_punch', 'rojo_fire_rain', 'cuboq_spit', 'skeleton_slash',
         'skeleton_curse', 'ice_spikes', 'blizzard', 'fire_breath', 'wing_flap', 'flame_pillar', 'earth_spikes', 'goro_flurry',
-        'goro_charge', 'arcane_flare', 'phase', 'vines', 'spores', 'lightning', 'colour_burst', 'prism_pulse', 'golem_slam'],
+        'goro_charge', 'arcane_flare', 'phase', 'vines', 'spores', 'lightning', 'colour_burst', 'prism_pulse', 'golem_slam',
+        'doria_arcane_rain', 'skeleton_arcane_rain', 'arcangel_golden_storm', 'kkck_poison_cloud', 'lamia_tidal_wave', 'greater_naga_tide_charge',
+        'scene_healing_rain', 'scene_divine_light'],
     places: ['altar', 'dice', 'coins', 'breakPot', 'breakWood'],
     ui: ['achivement', 'lvlup', 'statUp', 'unlock', 'scroll', 'start'],
 };
@@ -82,6 +84,7 @@ for (const [folder, names] of Object.entries(SOUND_FOLDERS)) for (const n of nam
 
 // The folder of a sound (without snd/), or '' when no rule knows the name.
 export function sndFolder(name) {
+    if (/^arrival_[a-z]+_(arrive|leave)$/.test(name)) return 'creatures';     // how a boss comes and goes (entrances.js)
     return SOUND_FOLDER[name] || '';
 }
 

@@ -95,17 +95,59 @@ should try each.
 - Rojo's fire rain is cut from the Fenix fire breath's file (0 to 2.4 s of 2.9 s): they may sound alike.
 - Licence as above: the Pixabay names (dragon-studio and others).
 
+## Approved and wired (2026-11-22)
+
+Cut files in the review drop: `wizardidle-review/sfx_2026-11-22/` (ogg, mono, volume, speed and
+fades as the sound bench set them). Wired 2026-11-24: in `snd/creatures/` (boss_ prefix dropped), moves in `attackSounds`, arrive/leave in `ui/entrances.js`; the two scene spell sounds wait for a caster.
+
+| Move | Review file | Source (picked folder) |
+|---|---|---|
+| Doria arcane rain | `boss_doria_arcane_rain.ogg` | dragon-studio elemental spell impact 393917 |
+| Skeleton arcane rain | `boss_skeleton_arcane_rain.ogg` | same, 0.657 to 2.149 s, slowed to 0.6x |
+| Arcangel golden storm | `boss_arcangel_golden_storm.ogg` | dragon-studio spell impact electric 448567 |
+| Kkck poison cloud | `boss_kkck_poison_cloud.ogg` | freesound massive fart 38621 (whole) |
+| Lamia tidal wave | `boss_lamia_tidal_wave.ogg` | dragon-studio spell impact water 478377 |
+| Greater naga tide charge | `boss_greater_naga_tide_charge.ogg` | same file, 0 to 3.678 s, 1.9x |
+| Scene spell: healing rain | `scene_healing_rain.ogg` | dragon-studio spell impact ice 448564 |
+| Scene spell: divine light | `scene_divine_light.ogg` | dragon-studio ghostly tone 499659 |
+| Arrival: etymos (arrive) | `arrival_etymos_arrive.ogg` | dragon-studio creepy sound effect 570459 |
+| Arrival: goro (arrive) | `arrival_goro_arrive.ogg` | dragon-studio beast growl 494304 (whole) |
+| Arrival: infraespectro (arrive) | `arrival_infraespectro_arrive.ogg` | dragon-studio creepy whisper 472369 |
+| Arrival: infraespectro (leave, the wizard fell) | `arrival_infraespectro_leave.ogg` | same file |
+| Arrival: bicaptop (arrive) | none: keeps `snd/creatures/stone_break.ogg` (in the game) | |
+| Arrival: bicaptop (leave) | `arrival_bicaptop_leave.ogg` | dragon-studio evil laughter 494314 |
+| Arrival: midas (arrive) | `arrival_midas_arrive.ogg` | dragon-studio elemental magic impact 393917 |
+| Arrival: midas (leave) | `arrival_midas_leave.ogg` | same file, 0 to 5 s, 2.05x |
+| Arrival: herbus (arrive) | `arrival_herbus_arrive.ogg` | universfield wet squelch 276679 (volume 0.54) |
+| Arrival: herbus (leave) | `arrival_herbus_leave.ogg` | dragon-studio velvet whoosh 570450 (whole) |
+| Arrival: cuboq (arrive) | `arrival_cuboq_arrive.ogg` | universfield wet squelch 276679 |
+| Arrival: cuboq (leave) | `arrival_cuboq_leave.ogg` | yodguard bouncy jelly 387893 |
+| Arrival: skeleton (arrive) | `arrival_skeleton_arrive.ogg` | dragon-studio spell impact electric 448567 |
+| Arrival: skeleton (leave) | `arrival_skeleton_leave.ogg` | same file, 0 to 3.361 s, 2.15x |
+| Arrival: rainbow (arrive) | `arrival_rainbow_arrive.ogg` | dragon-studio epic spell impact 478364 |
+| Arrival: rainbow (leave) | `arrival_rainbow_leave.ogg` | same file, 0.5x |
+| Arrival: fenix (arrive) | `arrival_fenix_arrive.ogg` | dragon-studio spell impact flame 448566 |
+| Arrival: fenix (leave) | `arrival_fenix_leave.ogg` | same file, 2.541 to 3.861 s |
+| Arrival: medusa (arrive) | `arrival_medusa_arrive.ogg` | dragon-studio sand transition 451861 |
+| Arrival: medusa (leave) | `arrival_medusa_leave.ogg` | same file, 0.551 to 1.425 s |
+| Arrival: arcangel (arrive) | `arrival_arcangel_arrive.ogg` | dragon-studio heavenly choir 515273 |
+| Arrival: arcangel (leave) | `arrival_arcangel_leave.ogg` | dragon-studio thunder 631461 |
+
+Strike in `src/dev/soundNeeds.js` (the ids the notes carry): `DOR.arcane_rain`, `SKE.arcane_rain`,
+`ARC.golden_storm`, `KKC.poison_cloud`, `SCN.healing_rain`, `SCN.divine_light`. The arrivals and
+the lamia and naga moves are free-choice tests with no id in the note: dev matches them by scene.
+
 ## Still to choose
 
 One by one, in the game's dev mode for sounds (its list is `src/dev/soundNeeds.js`).
 
 | Who | Moves |
 |---|---|
-| Doria | arcane rain |
-| Kkck | poison cloud |
-| Skeleton | arcane rain |
+| ~~Doria~~ | ~~arcane rain~~ (approved 2026-11-22) |
+| ~~Kkck~~ | ~~poison cloud~~ (approved 2026-11-22) |
+| ~~Skeleton~~ | ~~arcane rain~~ (approved 2026-11-22) |
 | Medusa | poison strike |
-| Arcangel | golden storm |
+| ~~Arcangel~~ | ~~golden storm~~ (approved 2026-11-22) |
 | Hydras | strike (Swamp, ice, Dunes), frost breath, a head grows (ice, Dunes). On hold: the author wants new sounds for the hydras (the entrances have theirs since 2026-11-17) |
-| Scene spells no boss casts yet | whirlwind, eclipse, divine light, healing rain |
+| Scene spells no boss casts yet | whirlwind, eclipse, ~~divine light~~ (approved 2026-11-22), ~~healing rain~~ (approved 2026-11-22) |
 | Dice game | the roll: `snd/places/dice.ogg` is 2.07 s and the dice animation now lasts 1.44 s (18 frames of 80 ms), with a new roll possible every 1.5 s. Wanted: about 1.2 to 1.4 s, the clatter early and the dice settled by the end (the author's playtest note, 2026-11-14) |

@@ -255,11 +255,21 @@ function pose(kind, t, k) {
 }
 
 // The enemy now on the scene arrives; done runs when it stands in its place.
+// The bosses with their own arrive / leave sound (approved 2026-11-22, snd/creatures/arrival_<boss>_<arrive|leave>.ogg;
+// bicaptop arrives with no sound of its own, etymos and the others leave in silence).
+const ARRIVAL_SOUND = new Set(["etymos_arrive", "goro_arrive", "infraespectro_arrive", "infraespectro_leave", "bicaptop_leave",
+    "midas_arrive", "midas_leave", "herbus_arrive", "herbus_leave", "cuboq_arrive", "cuboq_leave", "skeleton_arrive", "skeleton_leave",
+    "rainbow_arrive", "rainbow_leave", "fenix_arrive", "fenix_leave", "medusa_arrive", "medusa_leave", "arcangel_arrive", "arcangel_leave"]);
+function arrivalSound(npc, way) {
+    if (ARRIVAL_SOUND.has(`${npc}_${way}`)) playSound(`arrival_${npc}_${way}`);
+}
+
 export function playEntrance(done) {
     const npc = state.npc;
     if (run.simulation || !document.hasFocus() || !npc) return done && done();
     const hydra = /^(mother|hydskon|icedra)\d+$/.exec(npc);
     if (hydra) return playHydraEnter(npc, hydra[1], done);
+    arrivalSound(npc, "arrive");
     if (STRIP_ENTER[npc] && !run.forceEntrance) return playStripEnter(npc, done);
     const { kind, portal } = arrivalKind(npc), total = FRAMES[kind];
     cancelNPCDraw();                                // the sprite must not pop up in its place mid-arrival
@@ -349,6 +359,7 @@ export function playLeave(npc, done) {
 }
 
 function leave(npc, gone, done) {
+    arrivalSound(npc, "leave");
     const hydra = /^(mother|hydskon|icedra)\d+$/.exec(npc);
     if (hydra) return leaveHydra(npc, hydra[1], gone, done);
     // the portal bosses go back through their portal: it opens, they shrink (or fade, King Skeleton)

@@ -111,7 +111,10 @@ export const attackSounds = {
     "goro.flurry": [["goro_flurry", 0]], "goro.slam": [["thud", 0]], "goro.charge": [["goro_charge", 0]],
     "infraespectro.arcane_flare": [["arcane_flare", 0]], "infraespectro.phase": [["phase", 0]],
     "herbus.vines": [["vines", 0]], "herbus.spores": [["spores", -360]],
-    "arcangel.lightning": [["lightning", 0]],
+    "arcangel.lightning": [["lightning", 0]], "arcangel.golden_storm": [["arcangel_golden_storm", 0]],
+    "doria.arcane_rain": [["doria_arcane_rain", 0]], "skeleton.arcane_rain": [["skeleton_arcane_rain", 0]],
+    "kkck.poison_cloud": [["kkck_poison_cloud", 0]],
+    "lamia.tidal_wave": [["lamia_tidal_wave", 0]], "greater_naga.tide_charge": [["greater_naga_tide_charge", 0]],
     "etymos.orb_pulse": [["prism_pulse", 0]], "etymos.colour_burst": [["colour_burst", 250]],
 };
 

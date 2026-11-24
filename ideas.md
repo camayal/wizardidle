@@ -194,3 +194,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): camping wake-up walk done. Desert tent entrance needs a new scene (el_Desierto tent exterior): asked from the artist in art-notes; wire it in STREET_DOORS/DOORS of render.js when it arrives.
 - 2026-11-24 (dev): second-tab paradox built (src/dimension.js, read-only mode in state.js); untested in a browser (no node). Test: open two tabs of the game with ?dimension=1. Idea: more glitch kinds later (rain of letters, scene tearing).
 - 2026-11-24 (dev): second-tab guard closed: read-only until claimed (state.js allowSaving), localStorage heartbeat fallback without Web Locks. Untested in a browser.
+- 2026-11-24 (dev): the 29 approved sfx are wired (snd/creatures; attackSounds; arrivalSound in entrances.js). Untested in a browser. Open: healing_rain and divine_light sounds have no caster; Medusa poison strike, whirlwind, eclipse still unchosen.

@@ -9,15 +9,11 @@
 
 export const soundNeeds = [
 
-    { id: 'DOR.arcane_rain', who: 'Doria', move: 'arcane rain', scene: { kind: 'boss', target: 'doria', variant: 'arcane_rain' } },
 
-    { id: 'KKC.poison_cloud', who: 'Kkck', move: 'poison cloud', scene: { kind: 'boss', target: 'kkck', variant: 'poison_cloud' } },
 
-    { id: 'SKE.arcane_rain', who: 'Skeleton', move: 'arcane rain', scene: { kind: 'boss', target: 'skeleton', variant: 'arcane_rain' } },
 
     { id: 'MED.poison_strike', who: 'Medusa', move: 'poison strike', scene: { kind: 'boss', target: 'medusa', variant: 'poison_strike' } },
 
-    { id: 'ARC.golden_storm', who: 'Arcangel', move: 'golden storm', scene: { kind: 'boss', target: 'arcangel', variant: 'golden_storm' } },
 
 
 
@@ -29,8 +25,6 @@ export const soundNeeds = [
 
     { id: 'SCN.whirlwind', who: 'Scene spells no boss casts yet', move: 'whirlwind', scene: { kind: 'scene', target: 'whirlwind' } },
     { id: 'SCN.eclipse', who: 'Scene spells no boss casts yet', move: 'eclipse', scene: { kind: 'scene', target: 'eclipse' } },
-    { id: 'SCN.divine_light', who: 'Scene spells no boss casts yet', move: 'divine light', scene: { kind: 'scene', target: 'divine_light' } },
-    { id: 'SCN.healing_rain', who: 'Scene spells no boss casts yet', move: 'healing rain', scene: { kind: 'scene', target: 'healing_rain' } },
 
     { id: 'DICE.roll', who: 'Dice game', move: 'the roll (about 1.2 to 1.4 s, clatter early, settled by the end)', scene: { kind: 'dice', target: 'dice' } },
 ];
