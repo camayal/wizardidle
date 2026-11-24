@@ -14,7 +14,7 @@ import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
-import { godDrop, godMove, godOrder } from '../quests.js';
+import { questPath, godDrop, godMove, godOrder } from '../quests.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
@@ -133,6 +133,29 @@ function mapPageFor(zone){
     return Object.keys(MAP_PAGES).find((page) => MAP_PAGES[page] == mapLayerFor(zone));
 }
 
+// The quest's way ahead on the open map page: a dotted line along the route (only the part on this layer) and a ring on the goal.
+const LAYER_PAGE = { ground: "ground", under: "underground", above: "above" };
+function drawQuestPath(page){
+    let svg = el("questPath");
+    if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "questPath";
+        svg.style.cssText = "position:absolute; pointer-events:none; z-index:2";
+        el("mapa").appendChild(svg);
+    }
+    const path = questPath();
+    const img = el("backMapa"), w = img.offsetWidth || parseFloat(img.style.width), h = img.offsetHeight || w;
+    if (!path || !w) { svg.innerHTML = ""; return; }
+    Object.assign(svg.style, { left: `${img.offsetLeft}px`, top: `${img.offsetTop}px`, width: `${w}px`, height: `${h}px` });
+    svg.setAttribute("viewBox", `0 0 1 ${h / w}`);
+    const on = path.filter((p) => LAYER_PAGE[p.layer] == page);
+    let html = "";
+    if (on.length > 1) html += `<polyline points="${on.map((p) => `${p.x},${p.y}`).join(" ")}" fill="none" stroke="#c0392b" stroke-width="0.008" stroke-dasharray="0.012 0.014" stroke-linecap="round" stroke-linejoin="round"/>`;
+    const goal = path[path.length - 1];
+    if (LAYER_PAGE[goal.layer] == page) html += `<circle cx="${goal.x}" cy="${goal.y}" r="0.02" fill="none" stroke="#c0392b" stroke-width="0.006"/>`;
+    svg.innerHTML = html;
+}
+
 // Draw the map page that is open (the wizard's own layer when the scroll opens, or the ribbon the
 // player tapped) and put the marker (speech bubble) on the wizard's current stage, only on his layer.
 function localizarBocadillo(){
@@ -141,6 +164,7 @@ function localizarBocadillo(){
     const mine = spot ? ({ ground: "ground", under: "underground", above: "above" })[spot.layer] : mapPageFor(state.zone.current);
     const page = MAP_PAGES[ui.scrollViews.map] ? ui.scrollViews.map : mine;
     el("backMapa").src = art(MAP_PAGES[page]);
+    drawQuestPath(page);
     const hide = () => { el("bocadilloMapa").style.display ="none"; el("pjMapa").style.display ="none"; };
     if (ui.currentBackGround.startsWith("curanderobg")) return hide();
     el("zoneMap").innerHTML = page == mine ? (info ? info.label[0].toUpperCase() + info.label.slice(1) : `The ${zones[state.zone.current].name}`) : "Map";

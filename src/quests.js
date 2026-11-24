@@ -15,7 +15,7 @@ import { state } from './state.js';
 import { stats } from './stats.js';
 import { run } from './runtime.js';
 import { pickRandomItem, YesOrNot } from './utils.js';
-import { byName, destinations, moves, travelCost } from './travelGraph.js';
+import { byName, destinations, moves, route, travelCost, SIZE } from './travelGraph.js';
 import { addXP, calculateFe } from './wizard.js';
 import { print, updateHeading, wizardName } from './ui/render.js';
 import { beliefLevel } from './belief.js';
@@ -190,6 +190,16 @@ function complete(q) {
     const got = reward(q);
     print(`<i>${wizardName()} has finished his quest (${q.text}): ${got}</i>`);
     finish(q, 'done');
+}
+
+// The way ahead for the map: points {layer, x, y} (fractions of the map) from where he stands to the nearest stage of the target zone, or null.
+export function questPath() {
+    const q = state.quest, from = here();
+    if (!q || byName[from] === undefined) return null;
+    let best = null, bestCost = Infinity;
+    for (const t of targetStages(q)) { const c = travelCost(from, t); if (c < bestCost) { best = t; bestCost = c; } }
+    if (!best) return null;
+    return route(from, best).map((p) => ({ layer: p.layer, x: p.x / SIZE, y: p.y / SIZE }));
 }
 
 // ---- moving: travelling and searching (travel.js asks) ----
