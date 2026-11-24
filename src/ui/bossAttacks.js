@@ -152,9 +152,7 @@ export function playBossAttack(boss, chosen, stone, onHit) {
         : attack.path ? attack.path.indexOf(Math.min(...attack.path)) : Math.floor(attack.frames * 0.6);
     const [bx, by, bw] = npcBox(boss);
     const k = bw / 64;                                  // screen px per art px
-    npcCanvas.width = npcCanvas.offsetWidth;
-    npcCanvas.height = npcCanvas.offsetHeight;
-    let i = 0;
+    let i = 0, sized = false;
     const next = () => {
         if (i >= total || state.npc != boss) {           // done, or the boss is gone
             loop.stop("animNPC");
@@ -164,6 +162,7 @@ export function playBossAttack(boss, chosen, stone, onHit) {
         }
         const img = imageNow(strip);
         if (img) {
+            if (!sized) { npcCanvas.width = npcCanvas.offsetWidth; npcCanvas.height = npcCanvas.offsetHeight; sized = true; }     // cleared only when the first frame is ready: the boss stays visible while a sound leads the move or the strip loads
             const f = i < attack.frames ? i : 0;
             const dx = attack.path && i < attack.frames ? attack.path[f] * ui.charWidth / 32 : 0;
             const ctx = pixelContext(npcCanvas);

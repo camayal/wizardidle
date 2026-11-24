@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- The belief meter's marker on the stained-glass ring is now a small light stick that points out from the candle and slides back and forth, so it reads as something that moves (it was a tiny diamond).
+- A boss no longer vanishes just before one of its moves (seen with the skeleton): its sprite now stays until the move's first frame is ready, instead of the scene being wiped at once and the boss coming back later.
 - The paradox is counted: every time another tab opens or collapses, the original tab adds it to the world stats (dimensions opened, collapsed, and the first time).
 - Achievements list "First earned by:" instead of "Earned by:".
 - New sounds: the bosses now have their own sound when they arrive and when they leave after beating the wizard (Etymos, Goro, Infraespectro, Midas, Herbus, Cuboq, Skeleton, Rainbow, Fenix, Medusa, Arcangel, Bicaptop's laugh), and new sounds for Doria's and Skeleton's arcane rain, Kkck's poison cloud, Arcangel's golden storm, the lamia's tidal wave and the greater naga's tide charge. Two more (healing rain, divine light) wait for a caster.

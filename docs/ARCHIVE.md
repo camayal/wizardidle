@@ -2142,3 +2142,20 @@ Author's note: la_Mina2 rail road only should extend to the right of the scene a
 (sent to the artist's inbox 2026-11-24)
 
 - stats-notes 2026-11-24: the paradox (second tab opened) is counted in the original tab: world.dimensions.opened / collapsed / firstOpened (src/dimension.js watchDimensions)
+
+```
+Date: 2026-11-20 23:19
+Author's note: whe tinted glass is not easy to read, perhalps a little stick that move and inciate that it can move, replace the simple diamant for something more visible. candel stil is nice touch.
+```
+
+```
+Game test
+Wizard: level 13, HP 147 / 221, gold 1621, faith -862
+Zone: Dunes, stage 3
+On the scene: skeleton (boss fight)
+Speed x1
+Date: 2026-11-21 09:56
+Author's note: Before some scene, this boss disappears and appears
+```
+
+(done 2026-11-24, untested in a browser: faith meter stick; boss no longer blanks before a move)

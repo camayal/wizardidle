@@ -92,11 +92,6 @@ Author's note: faith is being a problem with inactive games, the faith falls qui
 ```
 
 ```
-Date: 2026-11-20 23:19
-Author's note: whe tinted glass is not easy to read, perhalps a little stick that move and inciate that it can move, replace the simple diamant for something more visible. candel stil is nice touch.
-```
-
-```
 Date: 2026-11-20 23:21
 Author's note: work on the etmos boss split
 ```
@@ -128,16 +123,6 @@ Author's note: send to [[wa in la_Pradera9 the far away tower should be in a kin
 ```
 Date: 2026-11-20 23:32
 Author's note: texts dev console is failing sais invelid or unexpected token
-```
-
-```
-Game test
-Wizard: level 13, HP 147 / 221, gold 1621, faith -862
-Zone: Dunes, stage 3
-On the scene: skeleton (boss fight)
-Speed x1
-Date: 2026-11-21 09:56
-Author's note: Before some scene, this boss disappears and appears
 ```
 
 ```
