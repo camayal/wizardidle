@@ -125,3 +125,4 @@ Built on dev-repo, untested in a browser (a headless sim loads). All numbers are
 | 2026-11-24 | Atheists and shrines | **No shrine quests for an atheist:** he doesn't get or take shrine, pilgrimage or hidden-shrine quests, and the god's faith orders are greyed out for him |
 | 2026-11-24 | Reward sizes | Wait for playtests (no numbers without data) |
 | 2026-11-24 | What to build next | **Secrets start quests** (spectrum, rune, hidden shrine; they jump the queue), and **art**: the quest icon, the parcel, the notice board and the wanted post. Cemetery note and late fading come after |
+| 2026-11-24 | Who sees the quest path on the map (dotted line and ring) | **It depends on belief:** a devout or believing wizard shares his path with the god, so the line and ring show; a doubter or atheist keeps it to himself, so they're hidden. Applies to every quest kind, the hidden shrine included |
