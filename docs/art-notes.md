@@ -66,3 +66,23 @@ Date: 2026-11-24 (from the author, via dev)
 la_Mina2 (img/places/la_mina/la_mina2.png): the rail road should only extend a little to the right of the scene and never reach the left edge, following the map art. Redraw the rail in the scene and drop it in the review drop.
 ```
 
+
+```
+Date: 2026-11-20 23:31
+Author's note: send to [[wa in la_Pradera9 the far away tower should be in a kinda hill, same the trees on the left, so in the horizon we can do a kinda elevation and only the base of the tower is visible
+```
+
+```
+Date: 2026-11-21 19:45
+Author's note: Taverns need to be redesigned by [[wa, the new walk line makes the wizard walk about the tables.
+```
+
+```
+Date: 2026-11-23 18:34
+Author's note: [[wa regarding the healer hood, i was never happy with the result.  you can see the following sketch: healer_hooded_better.webm please draw something likes this for reeview, when you have my approval we need to update all animimations (pass them to approval)
+```
+
+```
+Date: 2026-11-21 10:07 (from the author, via dev)
+Rainbow boss, art part: dark spectrum enemies (sheet wizardidle-old-ideas/unorganzed_sprites/dark-skelets.png), one per colour: red, orange, yellow, green, blue, indigo, violet. Some exist already; recolour so every colour of the Rainbow boss is represented. Light-school attacks in their colour; Tundra only. Also dye the Rainbow boss's yellow cape black to match the spectrum. Dev wires events later.
+```
