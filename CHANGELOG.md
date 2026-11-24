@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Dunes inn sign no longer stands where the enemy fights: in the second Dunes scene it moved from beside the cave entrance to the left of the enemy spot.
 - After camping in the sleeping bag the wizard no longer walks back to his usual spot: he wakes where he slept and goes straight on exploring (walks to another scene, or changes zone) from there. The inn is unchanged.
 - Grammar sweep of the player texts: the Help scroll ("withour", "intect", "achivement", "Showed near" and more), the Desert and Dueñon legends ("this hot dry air dries the bones", "intoxicates the air"), the "adores you" and "his prayer" console lines, and the FAQ questions. The FAQ also covers travelling over bridges, borders and mouths, fights on the road, the healer's cabin, spectra and prisms, and the underground inn in the Dunes.
 - The console lines for the cave and mine mouths are in English again ("comes to the mouth from Swamp to Cave") after the mouths were renamed.
