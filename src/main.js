@@ -9,6 +9,7 @@ import { pjBtn, centerBtn, npcBtn } from './divine.js';
 import { el } from './ui/dom.js';
 import { DEV } from './config.js';
 import { claimWorld, startParadox, watchDimensions } from './dimension.js';
+import { allowSaving } from './state.js';
 
 // Handlers are assigned as .onclick properties (not addEventListener) on purpose:
 // disableMainButtons()/enableMainButtons() in ui/scrolls.js temporarily swap .onclick
@@ -52,6 +53,7 @@ if ('serviceWorker' in navigator) {
 // Simulation mode (?sim=1, src/dev/sim.js): a playtest run, much faster than real time.
 // One world, one tab (src/dimension.js): the first tab is the original, any other is a dimension that falls apart.
 const original = await claimWorld();
+if (original) allowSaving();
 if (new URLSearchParams(location.search).has('sim')) import('./dev/sim.js').then((sim) => sim.startSimulation(new URLSearchParams(location.search)));
 else if (DEV) import('./dev/tests.js').catch((error) => console.error('[dev] test bar failed', error)).then(() => initialName());
 else initialName();

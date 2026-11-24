@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Saving is locked until the tab knows it is the original (no write can slip in while the lock answer is pending), and browsers without Web Locks (or a page opened from a file) use a fallback: the original tab writes a heartbeat in localStorage and any other tab seeing it fresh is a dimension.
 - One world, one tab: only the first tab opened saves (a browser lock); any other tab is a throwaway "dimension" that never touches the save, is muted, and falls apart in 30 s to 2 min (garbled console text with odd sizes, colours and gradients, scrambled numbers, flipped, tilted and tinted scene and sprites, buttons vanishing, then a collapsed screen; the page's own colours stay untouched, and the console says the dimension is unstable). The original tab only gets a console line. Off in the dev build unless the address has ?dimension=1.
 - Camping: after the night in the sleeping bag the wizard wakes where he slept and walks back to his place before the journey goes on (he used to jump back at once).
 - Credits: freesound_community (Pixabay) is now thanked in the Licences section.

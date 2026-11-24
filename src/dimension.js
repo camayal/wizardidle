@@ -18,13 +18,34 @@ const MIN_MS = 30000, MAX_MS = 120000, TICK_MS = 1500;
 // Is this the original tab? (the first to ask holds the lock until it closes; resolves at once)
 export function claimWorld() {
     const params = new URLSearchParams(location.search);
-    if (params.has('sim') || (DEV && !params.has('dimension')) || !navigator.locks) return Promise.resolve(true);
+    if (params.has('sim') || (DEV && !params.has('dimension'))) return Promise.resolve(true);
+    if (!navigator.locks) return claimByHeartbeat();
     return new Promise((resolve) => {
         navigator.locks.request(LOCK, { ifAvailable: true }, (lock) => {
             resolve(!!lock);
             return lock ? new Promise(() => {}) : undefined;
-        });
+        }).catch(() => resolve(true));
     });
+}
+
+// Fallback for browsers without Web Locks (or a page opened from a file): the original tab writes its id and the
+// time to localStorage every 3 s and clears it on leaving; a tab finding a fresh id of another tab is a dimension.
+// A tab that crashed leaves a stale id: after 10 s the next tab takes over. Two tabs opened in the same instant
+// both write, wait a moment and read back: the one whose id stayed is the original.
+function claimByHeartbeat() {
+    const KEY = 'wizardidle:owner', me = Math.random().toString(36).slice(2);
+    const read = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } };
+    const write = () => { try { localStorage.setItem(KEY, JSON.stringify({ id: me, t: Date.now() })); } catch (e) { /* no storage: nothing to protect */ } };
+    const other = read();
+    if (other && other.id != me && Date.now() - other.t < 10000) return Promise.resolve(false);
+    write();
+    return new Promise((resolve) => setTimeout(() => {
+        const now = read();
+        if (now && now.id != me) return resolve(false);
+        setInterval(() => { const o = read(); if (!o || o.id == me) write(); }, 3000);
+        window.addEventListener('pagehide', () => { const o = read(); if (o && o.id == me) try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } });
+        resolve(true);
+    }, 150));
 }
 
 // The original tab: a line in its console when another dimension opens or collapses.

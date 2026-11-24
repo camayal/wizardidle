@@ -95,9 +95,14 @@ function read(key) {
     }
 }
 
-let readOnly = false;
+// Nothing is written or forgotten until the tab is known to be the original (allowSaving, src/dimension.js);
+// another dimension (a second tab) stays read-only for good.
+let readOnly = true;
 
-// Another dimension (a second tab, src/dimension.js): nothing is written or forgotten, ever.
+export function allowSaving() {
+    readOnly = false;
+}
+
 export function makeReadOnly() {
     readOnly = true;
     saving = false;
