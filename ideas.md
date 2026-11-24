@@ -224,3 +224,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): pier excluded from planFight (travel.js), so no fight can land on a pier scene. The pier visit never used planFight, so if the author still saw a fight near the pier it was a neighbouring bridge or border crossing: ask which.
 - 2026-11-24 (dev): dev connector walks got From/To stage pickers (devWalk in src/dev/tests.js); the old walk always ended in the start stage, which looked like a teleport back after a crossing fight. Untested in a browser (no node).
 - 2026-11-24 (dev): crossFight waits for run.spellUntil (set in spells.js for every spell) before un-mirroring, so the last spell frames stay mirrored. Untested in a browser.
+- 2026-11-24 (dev): dev connector walks pick From/To by themselves (travel.js stagesFor: first stage pair whose crossingSteps equals the walk; crossing() split into crossingSteps + planFight). Untested in a browser.

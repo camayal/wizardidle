@@ -41,6 +41,12 @@ const LADDER = "ladder_cueva4_mina2", LADDER_CAVE = "ladder_cueva4_mina2_cave", 
 // A bridge is entered from the side he stands on (origin east of the bridge: he walks west); stairs by
 // going up or down; a mouth always left to right, stopping at its opening and fading into its twin.
 function crossing(origin, target) {
+    const walk = crossingSteps(origin, target);
+    if (walk) planFight(walk.steps);
+    return walk;
+}
+
+function crossingSteps(origin, target) {
     // within one zone a connector only passes the trip on (all the Town's stages link to the same bridge): no crossing
     if (places[origin].zone === places[target].zone) return null;
     const chain = connectorsBetween(origin, target), steps = [], x = spotX(origin);
@@ -65,8 +71,30 @@ function crossing(origin, target) {
             steps.push(...mouthSteps(c, chain[++i]));
         }
     }
-    if (steps.length) planFight(steps);
     return steps.length ? { steps, dir: steps[0].dir } : null;
+}
+
+// Dev tools: a pair of stages {from, to} whose real trip walks exactly these steps (same scenes, same directions),
+// or null. The pier is a dead end: the same stage both ways.
+const sigOf = (steps) => steps.map((s) => `${s.scene}/${s.dir}`).join();
+const pairCache = {};
+export function stagesFor(steps) {
+    const key = sigOf(steps);
+    if (key in pairCache) return pairCache[key];
+    let found = null;
+    const names = Object.keys(places);
+    if (steps[0].scene === "pier_land") {
+        const p = names.find((n) => reachesPoint(n, "pier"));
+        found = p ? { from: p, to: p } : null;
+    }
+    for (let i = 0; !found && i < names.length; i++) {
+        for (const b of names) {
+            if (places[names[i]].zone === places[b].zone) continue;
+            const w = crossingSteps(names[i], b);
+            if (w && sigOf(w.steps) === key) { found = { from: names[i], to: b }; break; }
+        }
+    }
+    return (pairCache[key] = found);
 }
 
 // A fight on a crossing: now and then one of its scenes stops him for a normal fight of the zone he is entering.
