@@ -186,6 +186,13 @@ const GAMBLER = { la_Ciudad: "jugon", el_Poblado: "jugon_poblado", el_Desierto: 
 // Explore: maybe loot, maybe a dice house in town, maybe change zone, otherwise walk on.
 // A restless wizard (see restless) goes straight to another zone.
 function exploreEV() {
+    const giver = quests.giverHere();       // a board or a wanted post stands here and he reads it (src/quests.js)
+    if (giver) {
+        run.questMeet = giver;
+        print(`${wizardName()} ${giver === 'board' ? 'stops at the notice board' : 'stops at a wanted post'}`);
+        startEvent(readBoard);
+        return;
+    }
     if (restless()) {
         stats.count("explore.restlessLeaves");
         print(`${wizardName()} ${pickRandomItem("has seen enough of this place,feels the call of the road,wants to see other lands")}`);
@@ -229,6 +236,22 @@ function exploreEV() {
         exploreOn();
     };
 };
+
+// Reading a board or a post: the offer waits a couple of beats (the god may suggest), then he answers.
+function readBoard() {
+    run.multipleEventsCounter += 1;
+    switch (run.multipleEventsCounter) {
+    case 1:
+        if (!quests.beginOffer(run.questMeet)) { print(`${wizardName()} finds nothing for him there`); endEvent(); nextEvent(); }
+        break;
+    case 3:
+        quests.decideOffer();
+        run.previousEvent = "board";
+        addXP(0.25);
+        endEvent();
+        nextEvent();
+    }
+}
 
 // Explore: now and then change zone, otherwise walk on to another stage of this one (from where he stands).
 function exploreOn() {
@@ -583,7 +606,7 @@ function searchInn(){
     switch (run.multipleEventsCounter) {
         case 1: arriveToRest(placesWithInn); break;
         case 2: sleep(placesWithInn); break;
-        case 3: wakeUp(placesWithInn);
+        case 3: quests.decideOffer(); wakeUp(placesWithInn);
     }
 }
 
@@ -593,6 +616,7 @@ function arriveToRest(placesWithInn) {
     if (placesWithInn) {
         enterPlace(`${state.zone.current}_taberna`, state.zone.current == "las_Dunas" ? "viejo" : undefined);     // the Dunes inn keeps the old merchant
         quests.onInn();
+        quests.innVisit();       // the host may have a job; he answers when he wakes (searchInn)
         stats.count("inn.rests");
         if (stats.get("inn.rests") >= 250) logro.set(logro.logro_tabernero);
         stats.count(`inn.zone.${state.zone.current}`);

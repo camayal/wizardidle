@@ -54,6 +54,10 @@ export const run = {
     disablePjBtn: undefined,       // divine buttons temporarily blocked
     disableCenterBtn: undefined,
     simulation: false,             // simulation mode (src/dev/sim.js): no sound, no spell animations
+    questOffer: null,              // a job waiting for his answer: { q, giver, hint } (src/quests.js)
+    questGiver: '',                // the board or post his quest asked the next explore event to read
+    questShrine: false,            // the quest's shrine turns up: the next shrine event is entered
+    questInn: false,               // the quest's inn turns up: the next inn event goes in
     forceOnce: undefined,          // dev tools: event number for the next event only
     forceEnemy: undefined,         // dev tools: sprite for the next normal enemy, e.g. "animalejo13"
     forceBoss: undefined,          // dev tools: which boss of a zone comes next (combat.js)

@@ -14,6 +14,7 @@ import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, statsPageHtml } from './statsPages.js';
+import { godCancel, godOrder } from '../quests.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
@@ -318,6 +319,13 @@ function updateFaith(){
 // imports the dev tools).
 el('innerTextScroll').addEventListener('click', (e) => {
     if (e.target.closest('.devToggle')) document.dispatchEvent(new Event('wizardidle:toggleDevBar'));
+    const questBtn = e.target.closest('.questBtn');       // the Faith scroll's quest buttons: the god's orders and "forget it" (src/quests.js)
+    if (questBtn) {
+        const what = questBtn.dataset.quest;
+        if (what === 'cancel') godCancel(); else if (what.startsWith('order:')) godOrder(what.slice(6));
+        ui.faithHtml = '';
+        updateFaith();
+    }
 });
 
 // Fill the help scroll (collapsible sections).

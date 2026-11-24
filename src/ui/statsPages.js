@@ -14,6 +14,7 @@ import { countLogros, logro } from '../achievements.js';
 import { beliefLevel } from '../belief.js';
 import { config } from '../config.js';
 import { art } from '../media.js';
+import { scrollHtml as questsHtml } from '../quests.js';
 
 const n = roundNumbertoLetter;
 
@@ -148,7 +149,8 @@ function faithSection() {
         section('Your touches') +
         line('Heals', n(stats.get('god.heals'))) +
         line('Revivals', n(stats.get('god.touches'))) +
-        line('Punishments', n(stats.get('god.hits')));
+        line('Punishments', n(stats.get('god.hits'))) +
+        questsHtml();
 }
 
 function achievementsSection() {

@@ -79,3 +79,4 @@ Zone: Swamp, stage 4 (el_Pantano4), runa5 boss fight scene
 Date: 2026-11-24 11:25
 ```
 The scene needs to be modified: the firepit sits on the walkable line, so the wizard walks through it. Move or redraw it off the common walk line (as an overlay if it must stand in front, per the connector rule that obstacles go off the walk line or become overlays).
+- Quests (dev, 2026-11-24): the quest system has no art yet: a notice board for the City (a scene prop or a front overlay), a wanted post for the roads of the regions (Prairie, Forest, Grotto, Mine, Swamp, Dunes, Cave, Tundra), a quest icon and a parcel item. The code only prints console lines for now.

@@ -15,6 +15,7 @@ import { interruptMidasHeal } from './bossEffects.js';
 import { config } from './config.js';
 import { cabinSpot } from './cabin.js';
 import { beliefMoment, isAtheist, touchCost } from './belief.js';
+import { suggest } from './quests.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -99,6 +100,7 @@ function healByTouch() {
 
 // Touch on the enemy: hurt it with divine wrath, at a cost in faith.
 function npcBtn(){
+    if (suggest('accept')) return;      // a job is waiting: the touch on the giver suggests taking it (src/quests.js)
     let txt;
     if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 0){
         if (isAtheist()) return refuseTouch();
@@ -146,6 +148,7 @@ function refuseTouch() {
 
 // Touch on the scene: ask the wizard for a tithe in gold, which becomes faith.
 function centerBtn(){
+    if (suggest('refuse')) return;      // a job is waiting: the touch on the door suggests leaving it
     //increase faith like offer
     if(!run.disableCenterBtn){
         if(state.player.gold > 0 && !!ui.currentBackGround.match(/altar/gi)){

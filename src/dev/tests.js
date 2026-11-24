@@ -252,6 +252,7 @@ const actions = [
     ...quests.KINDS.map((k) => ({ group: 'Quests', name: `Offer a quest: ${k}`, run() { const q = quests.makeQuest(k, 'dev'); devPrint(q ? (quests.offer(q) ? `quest: ${q.text}` : 'queue full: turned down') : 'no such quest could be made'); } })),
     { group: 'Quests', name: 'Offer a secret (jumps the queue)', run() { const q = quests.makeQuest('study', 'dev'); devPrint(q && quests.offer(q, { secret: true }) ? `secret: ${q.text}` : 'not taken'); } },
     { group: 'Quests', name: 'Quest state (current, queue, personality)', run() { const Q = quests.qs(), q = quests.current(); devPrint(q ? `${q.kind} ${q.phase} searched ${q.searched}: ${q.text}` : 'no quest'); devPrint(`queue ${Q.queue.length}: ${Q.queue.map((x) => x.text).join(' | ')}; personality ${Q.persona}; wish would be ${quests.wishKind()}`); } },
+    ...['inn', 'board', 'post'].map((g) => ({ group: 'Quests', name: `Offer from the ${g} now (answers in 4 s: touch NPC / door to suggest)`, run() { devPrint(quests.meetNow(g) ? 'offer waiting' : 'nothing offered (queue full?)'); } })),
     { group: 'Quests', name: 'Cancel the quest (the god)', run() { devPrint(quests.cancel() ? 'cancelled' : 'no quest'); } },
     { group: 'Game', name: 'Cabin: where would it stand now?', run() { const c = cabinSpot(); devPrint(`cabin: ${c.zone}${c.stage}, background ${c.bg}`); } },
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },

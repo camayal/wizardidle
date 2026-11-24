@@ -17,10 +17,11 @@ import { pickRandomItem, YesOrNot } from './utils.js';
 import { byName, destinations, moves, travelCost } from './travelGraph.js';
 import { addXP, calculateFe } from './wizard.js';
 import { print, updateHeading, wizardName } from './ui/render.js';
+import { beliefLevel } from './belief.js';
 
 const here = () => state.zone.current + state.zone.stage;
 const zoneName = (z) => zones[z].name;
-export const qs = () => (state.quests = state.quests || { queue: [], log: [], persona: pickRandomItem('greedy,pious,curious') });
+export const qs = () => (state.quests = state.quests || { queue: [], log: [], persona: pickRandomItem('greedy,pious,curious'), orderWait: 0 });
 
 // ---- the places a quest can name ----
 
@@ -30,6 +31,10 @@ const ZONES = () => Object.keys(zones).filter(hasStages);
 const SHRINE_ZONES = () => ZONES().filter((z) => places[`${z}_altar`]);
 const INN_ZONES = ['la_Ciudad', 'el_Poblado', 'el_Desierto'];
 export const HIDDEN_SHRINE_ZONE = 'el_Volcan';
+// Who gives quests (placeholders: where the boards and posts stand is the author's to say; art for both is still to ask the artist):
+// inns, the board of the City, and wanted posts on the roads of these regions (each gives a wanted quest of its own region).
+export const BOARD_ZONES = ['la_Ciudad'];
+export const POST_ZONES = () => ['la_Pradera', 'el_Bosque', 'la_Gruta', 'la_Mina', 'el_Pantano', 'las_Dunas', 'la_Cueva', 'la_Tundra'].filter(hasStages);
 
 // The rare sprites that live in a zone (families of its enemy list).
 function raresOf(z) {
@@ -44,8 +49,8 @@ const base = (kind, giver, text, target, rewardKind) => ({ id: Date.now() * 10 +
 
 // kind -> a fresh quest of it, or null when nothing fits. `from`: zone where a delivery is picked up.
 const MAKERS = {
-    wanted(giver) {
-        const z = pickRandomItem(ZONES().join(','));
+    wanted(giver, zone) {
+        const z = zone || pickRandomItem(ZONES().join(','));
         const rares = raresOf(z), boss = pickRandomItem(bossesOf(zones[z]).join(','));
         if (rares.length && YesOrNot(0.5, 0)) {
             const s = pickRandomItem(rares.join(','));
@@ -78,9 +83,17 @@ const MAKERS = {
         const z = pickRandomItem(INN_ZONES.filter((x) => x !== state.zone.current && hasStages(x)).join(','));
         return z ? base('delivery', giver, `Deliver a parcel to the inn of the ${zoneName(z)}`, { zone: z }, 'gold') : null;
     },
+    // Looking for work: go to a place that gives quests (an inn, the board, a post) and ask there.
+    seek(giver) {
+        const spots = [...INN_ZONES.filter(hasStages).map((z) => ({ z, g: 'inn', t: `Look for work at the inn of the ${zoneName(z)}` })),
+            ...BOARD_ZONES.filter(hasStages).map((z) => ({ z, g: 'board', t: `Read the board of the ${zoneName(z)}` })),
+            ...POST_ZONES().map((z) => ({ z, g: 'post', t: `Look for a wanted post in the ${zoneName(z)}` }))];
+        const s = spots[Math.floor(Math.random() * spots.length)];
+        return s ? base('seek', giver, s.t, { zone: s.z, giver: s.g }, 'xp') : null;
+    },
 };
 export const KINDS = Object.keys(MAKERS);
-export const makeQuest = (kind, giver = 'himself') => (MAKERS[kind] ? MAKERS[kind](giver) : null);
+export const makeQuest = (kind, giver = 'himself', zone) => (MAKERS[kind] ? MAKERS[kind](giver, zone) : null);
 
 // ---- the queue ----
 
@@ -208,11 +221,12 @@ export function steer(origin, list) {
 
 // ---- finding the target ----
 
-const FORCED = { wanted: 1, shrine: 3, pilgrimage: 3, hidden: 3, delivery: 4, study: 5 };
+const FORCED = { wanted: 1, shrine: 3, pilgrimage: 3, hidden: 3, delivery: 4, study: 5, seek: 2 };
 
 // Each event tick (events.js event()): arrival, the search, wishes. Returns an event number to force, or 0.
 export function eventPick() {
-    const q = state.quest;
+    const q = state.quest, Qs = qs();
+    if (Qs.orderWait > 0) Qs.orderWait--;
     if (!q) { wish(); return 0; }
     if (q.phase === 'travel' && state.zone.current === q.target.zone) {
         q.phase = 'search';
@@ -246,6 +260,10 @@ function turnUp(q) {
     }
     if (q.kind === 'shrine' || q.kind === 'pilgrimage' || q.kind === 'hidden') run.questShrine = true;
     if (q.kind === 'delivery') run.questInn = true;
+    if (q.kind === 'seek') {
+        if (q.target.giver === 'inn') { run.questInn = true; return 4; }
+        run.questGiver = q.target.giver;
+    }
     return FORCED[q.kind] || 0;
 }
 
@@ -291,9 +309,9 @@ function needs() {
     };
 }
 
-const TILT = { greedy: { wanted: 1, delivery: 1 }, pious: { shrine: 1, pilgrimage: 1, hidden: 1 }, curious: { explore: 1, study: 1 } };
+const TILT = { greedy: { wanted: 1, delivery: 1, seek: 1 }, pious: { shrine: 1, pilgrimage: 1, hidden: 1 }, curious: { explore: 1, study: 1 } };
 const NEEDS = { wanted: (n) => n.gold * 0.6 + n.strength, shrine: (n) => n.faith, pilgrimage: (n) => n.faith * 0.6, hidden: (n) => n.faith * 0.3,
-    explore: () => 0.4, study: () => 0.35, delivery: (n) => n.gold * 0.7 };
+    explore: () => 0.4, study: () => 0.35, delivery: (n) => n.gold * 0.7, seek: (n) => 0.3 + n.gold * 0.3 };
 
 export function wishKind() {
     const n = needs(), c = config.quests, tilt = TILT[qs().persona] || {};
@@ -312,4 +330,136 @@ function wish() {
     offer(q);
     stats.count('quest.wishes');
     print(`<i>${wizardName()} has made up his mind: ${q.text}</i>`);
+}
+
+// ---- offers: inns, the board, wanted posts (the god may suggest; belief decides) ----
+
+// config.quests.obey: how often he does what the god suggests or orders, by belief level (placeholders).
+const obeys = () => YesOrNot(config.quests.obey[beliefLevel()] ?? 0.5, 0);
+const canTake = () => !state.quest || qs().queue.length < config.quests.queueMax;
+
+// Which giver stands here (for the explore event): 'board' or 'post', by chance or because the quest he is on asked for it. '' when none.
+export function giverHere() {
+    const z = state.zone.current, forced = run.questGiver;
+    run.questGiver = '';
+    const g = BOARD_ZONES.includes(z) ? 'board' : POST_ZONES().includes(z) ? 'post' : '';
+    if (!g) return '';
+    if (forced === g) return g;
+    return canTake() && YesOrNot(g === 'board' ? config.quests.pBoard : config.quests.pPost, 0) ? g : '';
+}
+
+// A giver offers a job: the offer waits for the wizard's answer (decideOffer) while the god may suggest one (suggest).
+// True when something was offered.
+export function beginOffer(giver) {
+    const z = state.zone.current, cur = state.quest;
+    if (cur && cur.kind === 'seek' && cur.target.zone === z && cur.target.giver === giver) complete(cur);     // he came to ask for work: that errand is done
+    if (!canTake()) { run.questOffer = null; return false; }
+    const kind = giver === 'post' ? 'wanted' : pickRandomItem(giver === 'board' ? 'wanted,delivery,explore,study,shrine' : 'wanted,delivery,explore,study');
+    const q = makeQuest(kind, giver, giver === 'post' ? z : undefined);
+    if (!q) { run.questOffer = null; return false; }
+    run.questOffer = { q, giver, hint: '' };
+    const name = wizardName();
+    print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}: ${q.text}</i>`
+        : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}: ${q.text}</i>`);
+    stats.count(`quest.offers.${giver}`);
+    return true;
+}
+
+// The god's touch while an offer waits: the NPC (right) suggests taking it, the door (centre) suggests leaving it.
+// True when the touch was used for that.
+export function suggest(hint) {
+    const o = run.questOffer;
+    if (!o) return false;
+    o.hint = hint;
+    stats.count('quest.suggestions');
+    return true;
+}
+
+// Does the quest suit what he lacks and his nature? (his own judgement, with a little noise)
+function suits(q) {
+    const tilt = TILT[qs().persona] || {};
+    return NEEDS[q.kind](needs()) + (tilt[q.kind] ? config.quests.personality * 0.2 : 0) + Math.random() * config.quests.needNoise >= config.quests.acceptLine;
+}
+
+// The wizard answers the waiting offer: by the god's suggestion if his belief makes him listen, otherwise by his own mind.
+export function decideOffer() {
+    const o = run.questOffer;
+    run.questOffer = null;
+    if (!o) return;
+    const name = wizardName();
+    let accept = suits(o.q), line;
+    if (o.hint) {
+        if (obeys()) {
+            accept = o.hint === 'accept';
+            line = `${name} feels your will and ${accept ? 'takes the job' : 'leaves it alone'}`;
+            stats.count('quest.obeyed');
+        } else {
+            line = `${name} hears, but he is not convinced, and ${accept ? 'takes the job anyway' : 'turns it down anyway'}`;
+            stats.count('quest.ignored');
+        }
+    } else {
+        line = `${name} thinks it over and ${accept ? 'takes the job' : 'turns it down'}`;
+    }
+    if (accept && !offer(o.q)) { accept = false; line = `${name} has too much to do already and turns it down`; }
+    print(`<i>${line}</i>`);
+    stats.count(accept ? 'quest.accepted' : 'quest.refused');
+}
+
+// The inn he is entering: maybe the host has a job (always when he came looking for work).
+export function innVisit() {
+    const q = state.quest, z = state.zone.current;
+    const seeking = q && q.kind === 'seek' && q.target.giver === 'inn' && q.target.zone === z;
+    if (seeking || (canTake() && YesOrNot(config.quests.pInnOffer, 0))) beginOffer('inn');
+}
+
+// Dev tools: an offer from a giver at once, answered after a few seconds (time to try a touch).
+export function meetNow(giver, after = 4000) {
+    if (!beginOffer(giver)) return false;
+    setTimeout(decideOffer, after);
+    return true;
+}
+
+// ---- the god's orders and cancel (the Faith scroll): obeyed by belief ----
+
+export const GOD_ORDERS = ['shrine', 'pilgrimage', 'hidden'];
+export const ORDER_NAMES = { shrine: 'Pray at a shrine', pilgrimage: 'A pilgrimage', hidden: 'Find the hidden shrine' };
+
+export function godOrder(kind) {
+    const Q = qs(), name = wizardName();
+    if (Q.orderWait > 0 || !GOD_ORDERS.includes(kind)) return false;
+    if (!canTake()) { print(`<i>${name} has too much to do already</i>`); return false; }
+    const q = makeQuest(kind, 'god');
+    if (!q) return false;
+    Q.orderWait = config.quests.orderWait;
+    stats.count('quest.orders');
+    if (!obeys()) { stats.count('quest.ignored'); print(`<i>${name} hears, but he is not convinced</i>`); return true; }
+    stats.count('quest.obeyed');
+    offer(q);
+    print(`<i>${name} feels your will: ${q.text}</i>`);
+    return true;
+}
+
+export function godCancel() {
+    const q = state.quest, name = wizardName();
+    if (!q) return false;
+    if (!obeys()) { stats.count('quest.ignored'); print(`<i>${name} hears, but he is not convinced</i>`); return true; }
+    stats.count('quest.obeyed');
+    print(`<i>${name} feels your will and forgets his errand: ${q.text}</i>`);
+    cancel();
+    return true;
+}
+
+// ---- the Faith scroll's quest section ----
+
+const PHASE = { travel: 'on the road', search: 'searching' };
+export function scrollHtml() {
+    const Q = qs(), q = state.quest, log = Q.log.slice(0, 3);
+    let h = `<br><span class='subtitles'>Quests</span><br>`;
+    h += q ? `Now: ${q.text}<br><small>(${PHASE[q.phase] || q.phase}; from ${q.giver})</small><br>` : 'No quest now<br>';
+    if (Q.queue.length) h += `Waiting: ${Q.queue.map((x) => x.text).join('; ')}<br>`;
+    if (log.length) h += `Lately: ${log.map((x) => `${x.text} (${x.how})`).join('; ')}<br>`;
+    if (q) h += `<button class='questBtn' data-quest='cancel'>Forget it</button> `;
+    h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small><br>`
+        : GOD_ORDERS.map((k) => `<button class='questBtn' data-quest='order:${k}'>${ORDER_NAMES[k]}</button>`).join(' ');
+    return h;
 }

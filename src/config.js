@@ -93,6 +93,12 @@ export const config = {
         pilgrimageShrines: 3,      // zones to pray in
         personality: 1.5,          // how much a personality (greedy, pious, curious) tilts the wish scores
         needNoise: 0.25,           // randomness added to each wish score, so he is not predictable
+        acceptLine: 0.5,           // an offer he judges alone (no suggestion): taken when its score reaches this
+        obey: { devout: 0.95, believer: 0.8, doubter: 0.4, atheist: 0.1 },   // chance he does what the god suggests or orders, by belief
+        pInnOffer: 0.3,            // chance the host of an inn he enters has a job
+        pBoard: 0.08,              // chance an explore event in the City reads the board
+        pPost: 0.05,               // chance an explore event in a region with a post reads it
+        orderWait: 15,             // events before the god can give another order from the Faith scroll
     },
     // Fixed rules of the world.
     balance: {
