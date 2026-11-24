@@ -23,7 +23,6 @@ Built and committed, all untested in a browser (no node in the dev session): bri
 - Fights inside connector scenes: not done. When a fight happens in a mirrored (east to west) scene, mirror the wizard cast, spells, scene spells, enemy entrance and attacks only (never the art); a flag like ui.facing read by those. Start small, extend if it looks good. Open: do enemies appear in connector scenes at all, and how long a scene lasts.
 - Jumps and teleports: later (jump the shaft; about level 100 short teleports to hop obstacles and reach other scenes). Floor shaft of the ladder mine side may sit on the walk line.
 - Still open from the author: bridge halves shown as neighbours with no gap (done by order, no joined wide scene); exit markers drawn per connector pair; enter_mine_S placement.
-- After that: la_playa zone data (docs/plans/MAPS.md step 5).
 
 ```
 Game test
