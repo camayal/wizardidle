@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- A notice board or wanted post is now already standing in the scene when the wizard walks into it (like a rune or a book, but in plain view); he walks up to it and reads it. He can still turn the job down. Quests also come much less often: inn jobs, the board, the posts, strangers on the road and his own wishes are all rarer. On the Quests page the "Past quests" line is centred and red like the other subtitles.
 - The Quests page follows the other scrolls: a gap after the title, a "Divine orders" heading with the three orders in a 3-column grid (icon and a two-line text inside one button, room for more orders) and an "Errands" heading over the list. The stone plate and the up/down/X art are asked from the artist; plain boxes until then.
 - The Faith scroll's first ribbon has its own icon, a candle flame, instead of sharing the Stats one. Art by the artist.
 - Quest art is in: the Quests ribbon has its own exclamation-mark icon, the god's three orders sit on a shared stone ring with their own symbol (a cross, a road arrow, a hidden ?), the City notice board and the wanted posts of the regions stand in the scene when he stops to read them (the post is one of three at random), and a delivery quest shows one of three parcels in its row. Art by the artist.

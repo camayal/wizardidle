@@ -189,11 +189,20 @@ function exploreEV() {
     const giver = quests.giverHere();       // a board or a wanted post stands here and he reads it (src/quests.js)
     if (giver) {
         run.questMeet = giver;
-        print(`${wizardName()} ${giver === 'board' ? 'stops at the notice board' : giver === 'post' ? 'stops at a wanted post' : 'is stopped by a stranger on the road'}`);
-        if (giver === 'human') loadNPC(pickRandomItem(quests.HUMANS));
-        else if (giver === 'board') loadNPC('prop_notice_board');
-        else if (giver === 'post') loadNPC(`prop_wanted_post_${pickRandomItem('a,b,c')}`);      // a merchant or an old man stands in the scene
-        startEvent(readBoard);
+        if (giver === 'human') {
+            print(`${wizardName()} is stopped by a stranger on the road`);
+            loadNPC(pickRandomItem(quests.HUMANS));       // a merchant or an old man stands in the scene
+            startEvent(readBoard);
+            return;
+        }
+        // a board or a post is already standing in the next scene when he walks in; he goes up to it and reads it
+        const prop = giver === 'board' ? 'prop_notice_board' : `prop_wanted_post_${pickRandomItem('a,b,c')}`;
+        print(`${wizardName()} walks on...`);
+        pickRandomBackgroundForCurrentZone(() => {
+            loadNPC(prop);
+            print(`${wizardName()} sees ${giver === 'board' ? 'the notice board' : 'a wanted post'} and walks up to it`);
+            walkWizardTo(READ_SPOT, () => startEvent(readBoard));
+        });
         return;
     }
     if (restless()) {
@@ -400,6 +409,7 @@ const STATUE_X = { el_Bosque: 207, el_Castillo: 128, el_Desierto: 172, el_Duenon
     el_Volcan: 183, la_Ciudad: 148, la_Gruta: 220, la_Mina: 200, la_Pradera: 161, la_Torre: 208, la_Tundra: 212, las_Dunas: 180 };
 const CROSS_X = 124;                // shrine crosses stand around the middle of the scene
 const SHRINE_STOP = 22;             // his offset at a shrine: sprite x 54-86, clear of the cross (left edge about x 100)
+const READ_SPOT = 122;               // his offset at a board or post: sprite x 154-186, just left of the prop (it stands at x 192)
 const LOOT_STOP = 120;              // his offset at a container: sprite x 152-184, just before it (drawn at x 192)
 
 // A blink appears somewhere on the ground and he walks to it; the find will lie there.
