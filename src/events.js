@@ -718,7 +718,7 @@ function wakeUp(placesWithInn) {
         textRecover = "couldn't rest well";
     }
     updateHeading();
-    clearNPC();
+    if (!placesWithInn) clearNPC();       // at an inn whoever is inside (the old merchant) stays until the scene fades (leavePlace)
     print(`${wizardName()} ${pickRandomItem(textRecover)} (${ui.healIcon}${roundNumbertoLetter(rested)})`);
     run.restAtInn = false;
     endEvent();
