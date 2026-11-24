@@ -28,6 +28,7 @@ import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
 import { connectorTests, stagesFor, withFight } from '../travel.js';
 import { SPECTRA, SPECTRA_ZONE } from '../spectra.js';
+import * as quests from '../quests.js';
 import { cabinSpot } from '../cabin.js';
 import { scrollOpen } from '../ui/scrolls.js';
 import { sidePanel } from './panel.js';
@@ -248,7 +249,10 @@ const actions = [
     { group: 'Modes', name: 'Music', run() { openMode('music'); } },
     { group: 'Modes', name: 'Texts', run() { openMode('texts'); } },
 
-    { group: 'Game', name: 'Quest on / off (healer cabin stays near)', run() { state.quest = state.quest ? null : { name: 'dev' }; devPrint(state.quest ? 'on a quest: the next cabin stands near where he falls' : 'no quest: the cabin is random'); } },
+    ...quests.KINDS.map((k) => ({ group: 'Quests', name: `Offer a quest: ${k}`, run() { const q = quests.makeQuest(k, 'dev'); devPrint(q ? (quests.offer(q) ? `quest: ${q.text}` : 'queue full: turned down') : 'no such quest could be made'); } })),
+    { group: 'Quests', name: 'Offer a secret (jumps the queue)', run() { const q = quests.makeQuest('study', 'dev'); devPrint(q && quests.offer(q, { secret: true }) ? `secret: ${q.text}` : 'not taken'); } },
+    { group: 'Quests', name: 'Quest state (current, queue, personality)', run() { const Q = quests.qs(), q = quests.current(); devPrint(q ? `${q.kind} ${q.phase} searched ${q.searched}: ${q.text}` : 'no quest'); devPrint(`queue ${Q.queue.length}: ${Q.queue.map((x) => x.text).join(' | ')}; personality ${Q.persona}; wish would be ${quests.wishKind()}`); } },
+    { group: 'Quests', name: 'Cancel the quest (the god)', run() { devPrint(quests.cancel() ? 'cancelled' : 'no quest'); } },
     { group: 'Game', name: 'Cabin: where would it stand now?', run() { const c = cabinSpot(); devPrint(`cabin: ${c.zone}${c.stage}, background ${c.bg}`); } },
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },
     { group: 'Game', name: 'Pause / resume', run() { pauseToggle(); devPrint(run.pause ? 'paused after this event' : 'resumed'); } },

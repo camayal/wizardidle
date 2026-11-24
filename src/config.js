@@ -78,6 +78,22 @@ export const config = {
         moveLimit: 45,             // a stage of the same zone this cheap away is a move
         manualLinksOnly: 1,        // 1: tools/travel_graph.py makes no links, every link is set by hand in the dev tools; 0: it computes them from the map
     },
+    // Quests (docs/plans/QUESTS.md). Every number here is a PLACEHOLDER for the playtests (the plan gives none).
+    quests: {
+        queueMax: 3,               // quests waiting behind the current one; a full queue turns new offers down
+        pWish: 0.04,               // chance per event, with no quest, that he sets one himself (from his needs)
+        findBase: 0.08,            // searching the target zone: chance per event that the target turns up...
+        findStep: 0.03,            // ...plus this for every event already spent searching...
+        findMax: 0.6,              // ...up to this
+        searchPatience: 40,        // events of searching after which the quest moves down the queue (when another waits)
+        pWantedBoost: 1,           // placeholder: the forced fight when the wanted target "turns up" (1 = always that enemy)
+        goldMult: 6,               // reward: gold = hpBase * rGold * this
+        faithMult: 4,              // reward: faith = calculateFe() * this
+        xpMult: 12,                // reward: XP = xpPerEnemy * this
+        pilgrimageShrines: 3,      // zones to pray in
+        personality: 1.5,          // how much a personality (greedy, pious, curious) tilts the wish scores
+        needNoise: 0.25,           // randomness added to each wish score, so he is not predictable
+    },
     // Fixed rules of the world.
     balance: {
         dunesInn: 1,               // 1 = the underground inn of las_Dunas2 exists (turn on once its art is in img/places/las_dunas/las_dunas_taberna.png)

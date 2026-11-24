@@ -13,6 +13,7 @@ import { startCrossingFight } from './combat.js';
 import * as loop from './loop.js';
 import { config } from './config.js';
 import { addXP } from './wizard.js';
+import { steer } from './quests.js';
 import { drawWizard, loadBackground, print, setFacing, showStage, walkAcross, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
@@ -226,7 +227,7 @@ function changeLocality() {
 // move could pick the scene he was already in (the author: he walked to the same scene).
 function pickRandomBackgroundForCurrentZone(onArrive) {
     const origin = state.zone.current + state.zone.stage;
-    const randomLocality = pickRandomItem(moves(origin).join(","));
+    const randomLocality = steer(origin, moves(origin)) || pickRandomItem(moves(origin).join(","));     // a quest steers (src/quests.js)
     const change = () => {
         state.zone.stage = Number(randomLocality.match(/\d+$/));
         loadBackground(randomLocality);
@@ -241,7 +242,8 @@ function pickRandomBackgroundForCurrentZone(onArrive) {
 function getZone() {
     if (state.zone.current !== undefined) {
         stats.count("explore.zoneChanges");
-        const randomLocality = pickRandomItem(destinations(state.zone.current + state.zone.stage).join(","))
+        const origin = state.zone.current + state.zone.stage;
+        const randomLocality = steer(origin, destinations(origin)) || pickRandomItem(destinations(origin).join(","))
         state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
         stats.count(`explore.zone.${state.zone.current}`);

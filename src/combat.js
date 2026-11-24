@@ -5,6 +5,7 @@
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { bossesOf, zones } from './data/zones.js';
 import { npcSpells, spells } from './data/spells.js';
+import { onKill } from './quests.js';
 import { isSpectrum, pickSpectrum, spectrumKilled, spectrumSeen } from './spectra.js';
 import { capitalize, getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, RAREMULTIPLIER, selfrevivetime } from './config.js';
@@ -114,6 +115,7 @@ function defeatEnemy() {
         stats.count("kill.enemies", 1, { world: true });
         stats.count(`kill.sprite.${fight.enemyAndNumber}`);
     }
+    onKill(fight.bossCombat ? fight.enemy : fight.enemyAndNumber, fight.bossCombat);     // a wanted quest (src/quests.js)
     stats.count("combat.combo");
     updateLongestCombo();
     recordWin(rounds);

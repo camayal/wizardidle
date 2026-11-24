@@ -25,6 +25,7 @@ import { prismFound } from './spectra.js';
 import { cabinSpot } from './cabin.js';
 import { pickDream } from './dream.js';
 import { markup } from './ui/text.js';
+import * as quests from './quests.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 
 //define statueobj
@@ -138,7 +139,9 @@ function event() {
         masterOption = Number(pickRandomItem(state.forceEvent));
     }else{
         masterOption = Math.floor((Math.random() * 5) + 1)
-        if (restless()) masterOption = 2;        // stayed too long: explore takes him away
+        const questOption = quests.eventPick();     // a quest: the search may make the next event (src/quests.js)
+        if (questOption) masterOption = questOption;
+        else if (restless()) masterOption = 2;        // stayed too long: explore takes him away
     }
     state.zone.stay = (state.zone.stay || 0) + 1;
     switch (masterOption) {
@@ -167,7 +170,7 @@ function event() {
 
 // He has stayed in this zone for zoneStayMax events (never while zone changes are switched off).
 function restless() {
-    return config.balance.allowChangeZone > 0 && (state.zone.stay || 0) >= config.balance.zoneStayMax;
+    return config.balance.allowChangeZone > 0 && !quests.active() && (state.zone.stay || 0) >= config.balance.zoneStayMax;     // a quest steers his walking instead
 }
 
 // Chance to change zone: his exploration skill, plus a push for every event past zoneStayFree.
@@ -229,7 +232,8 @@ function exploreEV() {
 
 // Explore: now and then change zone, otherwise walk on to another stage of this one (from where he stands).
 function exploreOn() {
-    if (YesOrNot(changeZoneChance(), 0)) {
+    const questMode = quests.mode();         // on a quest the route decides: leave toward the target, or stay and roam (src/quests.js)
+    if (questMode === 'leave' || (!questMode && YesOrNot(changeZoneChance(), 0))) {
         print(`${wizardName()} is exploring...`);
         startEvent(changeLocality);
     } else {
@@ -283,8 +287,11 @@ function reviveEV(){
 // Find a shrine: enter and offer gold, or pass by and lose a little faith.
 function prayEV(){
     let textCapel;
-    if (YesOrNot(shrineChance(stat("pFindCapel")),0)){      // by his belief level (an Atheist never enters)
+    const questShrine = run.questShrine;      // the quest's shrine turns up: he goes in
+    run.questShrine = false;
+    if (questShrine || YesOrNot(shrineChance(stat("pFindCapel")),0)){      // by his belief level (an Atheist never enters)
         beliefMoment("prayer");
+        quests.onShrine();
         stats.count("faith.shrines");
         stats.count(`faith.shrineZone.${state.zone.current}`);
         if (run.previousEvent == "enterAltar"){
@@ -334,9 +341,12 @@ function prayEV(){
 
 
 // Feel tired: look for an inn (or camp), or feel fine and keep going.
+const INN_ZONES = ["la_Ciudad", "el_Poblado", "el_Desierto"];
 function innEV(){
     let textInn;
-    if(Math.round(state.player.hp) < Math.round(state.player.hpBase)){
+    const questInn = run.questInn && INN_ZONES.includes(state.zone.current);     // the delivery's inn turns up: he goes in, tired or not
+    run.questInn = false;
+    if(questInn || Math.round(state.player.hp) < Math.round(state.player.hpBase)){
            
            if (run.previousEvent == "innEV"){
             textInn = "wants to rest a little more,still is tired"
@@ -449,6 +459,7 @@ function findStatue(){
         //examine and get or not
         if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
             stats.count("study.statueSuccess");
+            quests.onStudy();
             spell("spellStudyGood_15",true,0,0,overStatue());
             learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
             const result = statueObj[`statue_${state.zone.current}`].event()
@@ -528,6 +539,7 @@ function findRuneOrBook(){
         if (YesOrNot(stat("pStudy"),0)){
             playSound("statUp");
             stats.count("study.success");
+            quests.onStudy();
             spell("spellStudyGood_15",true,0,0,aboveFind());
             learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
@@ -580,6 +592,7 @@ function arriveToRest(placesWithInn) {
     run.tentDice = false;       // a night in the tent has no dice table
     if (placesWithInn) {
         enterPlace(`${state.zone.current}_taberna`, state.zone.current == "las_Dunas" ? "viejo" : undefined);     // the Dunes inn keeps the old merchant
+        quests.onInn();
         stats.count("inn.rests");
         if (stats.get("inn.rests") >= 250) logro.set(logro.logro_tabernero);
         stats.count(`inn.zone.${state.zone.current}`);
