@@ -221,7 +221,7 @@ function updateAchievements(){
 const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"], faith: ["faith", "quests"], map: ["above", "ground", "underground"] };
 const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory", faith: "Faith", quests: "Quests", above: "Aboveground", ground: "Ground", underground: "Underground" };
 const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
-    run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory", faith: "icon_stats_stats", quests: "icon_faith_quests",
+    run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory", faith: "icon_faith_faith", quests: "icon_faith_quests",
     above: "icon_map_above", ground: "icon_map_ground", underground: "icon_map_underground" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
 const RIBBON_SCALE = 1.5;           // one ribbon pixel = this many pixels of the 320-wide scroll art (2 was too big, 1.5 a bit small)

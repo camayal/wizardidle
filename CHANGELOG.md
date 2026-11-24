@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Faith scroll's first ribbon has its own icon, a candle flame, instead of sharing the Stats one. Art by the artist.
 - Quest art is in: the Quests ribbon has its own exclamation-mark icon, the god's three orders sit on a shared stone ring with their own symbol (a cross, a road arrow, a hidden ?), the City notice board and the wanted posts of the regions stand in the scene when he stops to read them (the post is one of three at random), and a delivery quest shows one of three parcels in its row. Art by the artist.
 - On the Quests page the history of past quests is folded like the Help sections: a "Past quests (n)" line you tap to open; it lists the last ten instead of three.
 - Quest path on the map: the dotted line is a developer option (DEV only). For players the map only rings the target when the quest names the place (go to, deliver to, pray at, hunt in, and so on); the prism's hunt marks nothing. No belief gating.
