@@ -636,11 +636,12 @@ function dreamStillOff() {
 // npc is who is there (e.g. the shrine's mystic), shown with the place.
 // The doors of those places from the street (the author: he stops at the door before going
 // in): the street background that shows it and the door's centre in scene px. Doors already
-// in the art: the Town's open doorways, the City's saloon doors (beer poster) and the door by
+// in the art: the desert's tent, the Town's open doorways, the City's saloon doors (beer poster) and the door by
 // the dice sign.
 const STREET_DOORS = {
     el_poblado_taberna: ["el_Poblado4", 120], el_poblado_casadados: ["el_Poblado5", 119],
     la_ciudad_taberna: ["la_Ciudad4", 52], la_ciudad_casadados: ["la_Ciudad1", 149],
+    el_desierto_taberna: ["el_Desierto1", 180],     // the tent of el_desierto1: he stops at its door (the dark opening, x about 180) and goes in
 };
 const DOOR_PAUSE_MS = 400;
 

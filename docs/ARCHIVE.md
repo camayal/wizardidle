@@ -2195,3 +2195,19 @@ Author's note: regarding god touches, attacking directly bosses, also boost beli
 (travel console note, done) - edges should have outline, see green lines in a green praire is dificult
 
 (travel console note, done) - be sure to have values of the lenght of the edges of the graph, we need to convert them in sort of unity, for example for xx px we need 2 or 3 dynamic scenes
+
+```
+Date: 2026-11-22 09:27
+Author's note: [waits for art: el_desierto_tienda asked from the artist in docs/art-notes.md, 2026-11-24] important, in the desert make the way wizard enter to the inn is first showing the tent, now he just move from any scene in the desert to the actual inn
+```
+
+```
+Date: 2026-11-24
+Dev's request for @artist, from the author's 11-22 note: the desert inn is a tent (inn, tavern, gambling house). Draw a 256x64 desert scene with the tent's entrance seen from outside, el_desierto_tienda, next to the other Desierto scenes (tent door near the middle of the walk line, as la_Poblado4 has its tavern door). Dev will make the wizard walk to it and go in, instead of jumping from any desert scene into the inn.
+```
+
+```
+Date: 2026-11-20 23:31
+Author's note: send to [[wa in la_Pradera9 the far away tower should be in a kinda hill, same the trees on the left, so in the horizon we can do a kinda elevation and only the base of the tower is visible
+```
+(done: la_pradera9 option B copied in; desert inn now stops at the tent of el_desierto1)

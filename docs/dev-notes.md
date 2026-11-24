@@ -156,11 +156,6 @@ Author's note: regarding the dice house. the current version shows the dice as d
 ```
 
 ```
-Date: 2026-11-22 09:27
-Author's note: [waits for art: el_desierto_tienda asked from the artist in docs/art-notes.md, 2026-11-24] important, in the desert make the way wizard enter to the inn is first showing the tent, now he just move from any scene in the desert to the actual inn
-```
-
-```
 Date: 2026-11-22 09:29
 Author's note: i am thinking that reviving the wizard by touching him is actually penalizing him by removing him from his track (cabin will leave the wizard in many places. we need to be sure to dev soemthing that mke him to be relased close on in the region he was when hi is doing a quest
 ```
