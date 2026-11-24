@@ -14,6 +14,7 @@ import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
+import { beliefLevel } from '../belief.js';
 import { questPath, godDrop, godMove, godOrder } from '../quests.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
@@ -143,7 +144,7 @@ function drawQuestPath(page){
         svg.style.cssText = "position:absolute; pointer-events:none; z-index:2";
         el("mapa").appendChild(svg);
     }
-    const path = questPath();
+    const level = beliefLevel(), path = (level == "believer" || level == "devout") && !state.player.beliefLost ? questPath() : null;   // only a believer shows the way
     const img = el("backMapa"), w = img.offsetWidth || parseFloat(img.style.width), h = img.offsetHeight || w;
     if (!path || !w) { svg.innerHTML = ""; return; }
     Object.assign(svg.style, { left: `${img.offsetLeft}px`, top: `${img.offsetTop}px`, width: `${w}px`, height: `${h}px` });
