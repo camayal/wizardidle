@@ -43,7 +43,12 @@ Small jobs (deliveries, errands) fade as he nears the last levels; then only hun
 
 ### How a quest moves him
 
-He doesn't teleport or walk straight there. At each crossing the route toward the goal is **more likely**, not sure, so the walk still feels free. A focused secret leans harder than a plain job.
+Two phases (decided 2026-11-24):
+
+1. **Travelling: he takes the best route.** Travel already knows the steps between two map points. If his quest is in the Tundra, he follows that route stage by stage, the shortest way there. Events on the way (fights, finds, inns) still happen; after them he carries on along the route.
+2. **Searching: he roams the target area.** Once he arrives, he stays in that zone, wandering from stage to stage, and **doesn't leave until he finds what he came for** (the wanted enemy, the shrine, the rune, the inn for a delivery). Then the quest ends, he takes the next one from his queue, and he's travelling again.
+
+With an empty queue he wanders freely as today.
 
 ### The quest scroll
 
@@ -65,7 +70,7 @@ All eight decided 2026-11-24 (see Decisions). Dev answered the code question (be
 
 ## Dev's answer (2026-11-24)
 
-- **Leaning the walk works.** Travel already picks from a list of candidate moves. On a quest, the candidates that bring him closer to the target get extra weight, so he leans toward it without being forced.
+- **Leaning the walk works.** Travel already picks from a list of candidate moves. On a quest, the candidates that bring him closer to the target get extra weight, so he leans toward it without being forced. (Superseded the same day: the author wants the best route instead, see "How a quest moves him".)
 - **Fast enough to run in play.** The travel graph is already used in play (the healer's cabin uses it). A few lookups at each crossing cost nothing. Limit: **a quest target must be a stage the travel graph knows**, so each quest names a target stage, not just a zone.
 - **`state.quest` is free to reshape.** Only the cabin reads it, and only to check whether one is set. No save migration is needed.
 
@@ -81,3 +86,6 @@ All eight decided 2026-11-24 (see Decisions). Dev answered the code question (be
 | 2026-11-24 | Can a wanted target leave its zone | **No.** The quest sends him to its zone, where it shows a little more often (tuned by playtest) |
 | 2026-11-24 | Which kinds ship first | **Wanted, explore, study, shrine bounty, pilgrimage, hidden shrine, delivery.** Ingredients and crafting come with professions, fishing later |
 | 2026-11-24 | How rewards are chosen | **By kind, shown in the offer:** faith tasks pay faith, people's jobs gold, hunts XP, sized to his level. Amounts from playtests |
+| 2026-11-24 | One quest at a time, more precisely | **He works on one quest at a time, but keeps a queue of the others.** When one ends he takes the next. A secret still goes first |
+| 2026-11-24 | How a quest moves him | **He follows the best route to the target zone** (travel's route between two map points), then **roams that zone until he finds what he came for**, never leaving early. Replaces the earlier "lean, not forced" idea |
+| 2026-11-24 | Queue order and size | **Secrets first, then the quest whose target is nearest on the map** (travel cost from where he stands). **A small cap** (count from playtests); when the queue is full he turns down new offers |
