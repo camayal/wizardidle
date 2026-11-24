@@ -276,10 +276,10 @@
                 display: block;
             }
             .questOrders{ display:grid; grid-template-columns:repeat(3, 1fr); gap:0.4em; margin:0.4em 0 0.6em; }
-            .orderBtn{ position:relative; width:100%; aspect-ratio:88/48; border:0; padding:50% 0.2em 0; background:var(--n) center/100% 100% no-repeat; image-rendering:pixelated; font-family:inherit; font-size:0.7em; line-height:1.1em; color:#f0e4c4; cursor:pointer; text-align:center; overflow:hidden; box-sizing:border-box; }
-            .orderBtn:active:not(:disabled){ background-image:var(--p); } .orderBtn:disabled{ background-image:var(--d); color:#9a9484; cursor:default; }
+            .orderBtn{ position:relative; width:100%; aspect-ratio:88/48; border:0; padding:0; background:var(--n) center/100% 100% no-repeat; image-rendering:pixelated; font-family:inherit; font-size:0.7em; line-height:1.1em; color:#ffffff; text-shadow:1px 1px 0 #000; cursor:pointer; text-align:center; overflow:hidden; box-sizing:border-box; }
+            .orderBtn:active:not(:disabled){ background-image:var(--p); } .orderBtn:disabled{ background-image:var(--d); color:#bdbdbd; cursor:default; }
             .orderBtn .orderIcon{ position:absolute; left:40.9%; top:10.4%; width:18.2%; image-rendering:pixelated; } .orderBtn:active:not(:disabled) .orderIcon{ top:12.5%; }
-            .orderBtn span{ display:block; overflow:hidden; max-height:2.3em; }
+            .orderBtn span{ position:absolute; left:4%; right:4%; top:52%; display:block; overflow:hidden; max-height:2.3em; }
             .stoneBtn{ width:2.6em; height:2.6em; flex:none; border:0; padding:0; background:var(--n) center/100% 100% no-repeat; image-rendering:pixelated; cursor:pointer; }
             .stoneBtn:active:not(:disabled){ background-image:var(--p); } .stoneBtn:disabled{ background-image:var(--d); cursor:default; }
             .questText .parcel{ height:2em; float:left; margin-right:0.4em; image-rendering:pixelated; }
