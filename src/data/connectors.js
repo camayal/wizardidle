@@ -39,10 +39,10 @@ export const mouthDoors = {
     mouth_tundra_volcan: 150, mouth_tundra_volcan_under: 169,
     mouth_pantano_cueva: 157, mouth_pantano_cueva_under: 171,
     mouth_desierto_mina: 138, mouth_desierto_mina_under: 166,
-    mouth_playa-pradera_mina: 171, mouth_playa-pradera_mina_under: 166,
+    "mouth_playa-pradera_mina": 171, "mouth_playa-pradera_mina_under": 166,
     mouth_pradera_cueva: 165, mouth_pradera_cueva_under: 171,
     mouth_dunas_mina: 152, mouth_dunas_mina_under: 166,
-    mouth_dunas-pradera_gruta: 170, mouth_dunas-pradera_gruta_under: 170,      // the big canyon entrance into the Grotto (a front overlay each: he steps in behind the boulders)
+    "mouth_dunas-pradera_gruta": 170, "mouth_dunas-pradera_gruta_under": 170,      // the big canyon entrance into the Grotto (a front overlay each: he steps in behind the boulders)
     mouth_duenon_cueva: 140, mouth_duenon_cueva_under: 171,
     mouth_gruta_cueva: 160, mouth_gruta_cueva_under: 160,      // Grotto side (ground map, la_Gruta3) and Cave side (underground map, la_Cueva2): the crack
     ladder_cueva4_mina2_cave: 150, ladder_cueva4_mina2_mine: 122,      // the ladder and the floor shaft
