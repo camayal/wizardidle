@@ -150,7 +150,8 @@ function drawQuestPath(page){
     svg.setAttribute("viewBox", `0 0 1 ${h / w}`);
     const on = path.filter((p) => LAYER_PAGE[p.layer] == page);
     let html = "";
-    if (DEV && on.length > 1) html +=      // the dotted way is a developer option `<polyline points="${on.map((p) => `${p.x},${p.y}`).join(" ")}" fill="none" stroke="#c0392b" stroke-width="0.008" stroke-dasharray="0.012 0.014" stroke-linecap="round" stroke-linejoin="round"/>`;
+    // the dotted way is a developer option
+    if (DEV && on.length > 1) html += `<polyline points="${on.map((p) => `${p.x},${p.y}`).join(" ")}" fill="none" stroke="#c0392b" stroke-width="0.008" stroke-dasharray="0.012 0.014" stroke-linecap="round" stroke-linejoin="round"/>`;
     const goal = path[path.length - 1];
     if (LAYER_PAGE[goal.layer] == page && questNamesPlace()) html += `<circle cx="${goal.x}" cy="${goal.y}" r="0.02" fill="none" stroke="#c0392b" stroke-width="0.006"/>`;
     svg.innerHTML = html;
