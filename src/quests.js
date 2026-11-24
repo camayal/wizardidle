@@ -551,17 +551,20 @@ export function godDrop(i) {
 
 // ---- the Faith scroll's quest page (its own ribbon): fixed orders on top, then the list with big touch buttons ----
 
+// each delivery carries one of three parcels (kept by its id, so it never changes on redraw)
+const parcelOf = (q) => `item_parcel_${'abc'[q.id % 3]}`;
 const PHASE = { travel: 'on the road', search: 'searching' };
-const ORDER_ICONS = { shrine: 'icon_stats_stats', pilgrimage: 'icon_map_ground', hidden: 'icon_kill_bestiary' };
+const ORDER_ICONS = { shrine: 'icon_order_shrine_mid', pilgrimage: 'icon_order_pilgrim_mid', hidden: 'icon_order_hidden_mid' };   // drawn over icon_order_ring
+const orderIcon = (k) => `<span class='orderIcon'><img src='${art('icon_order_ring')}'/><img src='${art(ORDER_ICONS[k])}'/></span>`;
 export function scrollHtml() {
     const Q = qs(), q = state.quest;
     const all = q ? [q, ...Q.queue] : [...Q.queue];
     let h = `<div class='questOrders'>`;
     h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
-        : GOD_ORDERS.map((k) => `<button class='questBtn order' data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}><img src='${art(ORDER_ICONS[k])}'/>${ORDER_NAMES[k]}</button>`).join('');
+        : GOD_ORDERS.map((k) => `<button class='questBtn order' data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}${ORDER_NAMES[k]}</button>`).join('');
     h += `</div>`;
     if (!all.length) h += `<p>No quest now</p>`;
-    h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
+    h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
         `<button class='questBtn mv' data-quest='up:${i}' ${i === 0 ? 'disabled' : ''}>▲</button>` +
         `<button class='questBtn mv' data-quest='down:${i}' ${i === all.length - 1 ? 'disabled' : ''}>▼</button>` +
         `<button class='questBtn mv drop' data-quest='drop:${i}'>✕</button></div>`).join('');

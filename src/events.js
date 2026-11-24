@@ -190,7 +190,9 @@ function exploreEV() {
     if (giver) {
         run.questMeet = giver;
         print(`${wizardName()} ${giver === 'board' ? 'stops at the notice board' : giver === 'post' ? 'stops at a wanted post' : 'is stopped by a stranger on the road'}`);
-        if (giver === 'human') loadNPC(pickRandomItem(quests.HUMANS));      // a merchant or an old man stands in the scene
+        if (giver === 'human') loadNPC(pickRandomItem(quests.HUMANS));
+        else if (giver === 'board') loadNPC('prop_notice_board');
+        else if (giver === 'post') loadNPC(`prop_wanted_post_${pickRandomItem('a,b,c')}`);      // a merchant or an old man stands in the scene
         startEvent(readBoard);
         return;
     }
@@ -243,11 +245,11 @@ function readBoard() {
     run.multipleEventsCounter += 1;
     switch (run.multipleEventsCounter) {
     case 1:
-        if (!quests.beginOffer(run.questMeet)) { print(`${wizardName()} finds nothing for him there`); if (run.questMeet === 'human') clearNPC(); endEvent(); nextEvent(); }
+        if (!quests.beginOffer(run.questMeet)) { print(`${wizardName()} finds nothing for him there`); if (run.questMeet !== 'inn') clearNPC(); endEvent(); nextEvent(); }
         break;
     case 3:
         quests.decideOffer();
-        if (run.questMeet === 'human') clearNPC();
+        if (run.questMeet !== 'inn') clearNPC();
         run.previousEvent = "board";
         addXP(0.25);
         endEvent();

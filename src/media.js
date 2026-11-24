@@ -31,7 +31,7 @@ const ZONES = new Set(Object.keys(zones).map((z) => z.toLowerCase()));
 const HYDRA = /^(?:anim_)?(mother|icedra|hydskon)(?:\d+|_.+)$/;
 const WIZARD_ANIM = { cast: 'cast', walk: 'walk', pray: 'pray', fall_sit: 'fall', fall_dead: 'fall', petrify: 'petrify', unpetrify: 'unpetrify' };
 const STORY = /^(god_|anim_god_|anim_shrine_|healer|curandero|mistico|comerciante|jugon|viejo)/;
-const OBJECTS = /^(chest\d|pot\d|bag$|barrel$|box$|libro\d|runa\d|item_|d[1-6]$|ship$|captain$|crew$|sleepingbag$|stuff$|staff_\d+$)/;
+const OBJECTS = /^(chest\d|pot\d|bag$|barrel$|box$|libro\d|runa\d|item_|prop_|d[1-6]$|ship$|captain$|crew$|sleepingbag$|stuff$|staff_\d+$)/;
 const APP = /^(favicon|apple-touch-icon|mstile|icon\d*$|safari-pinned-tab)/;
 const UI = /^(achivement|attack|bocadillo|boss|CloseBtn|console|continue|crash|emptyLongBtn|frame|gold|heal|heart\d*|helpbtn|initBack|learn|mapa|mapaunderground|mapaboveground|mapbtn|matar|muerto|nubes|plegariabtn|scroll\w*|spirit|star|start|statsbtn|archbtn|diebtn|xp)$/;
 
@@ -62,8 +62,8 @@ export function artFolder(name) {
     if (OBJECTS.test(name)) return 'objects';
     if (/^(logro_|no_logro$)/.test(name)) return 'ui/achievements';
     if (/^tomb_/.test(name)) return 'ui/cemetery';
-    if (/^(anim_)?faith_|^anim_faith_/.test(name)) return 'ui/faith';   // the faith scroll's meter, candle, border
-    if (/^(ribbon_(rest|selected)|icon_(stats|kill|achievements|map)_[a-z]+)$/.test(name)) return 'ui/ribbon';   // the scroll bookmarks
+    if (/^(anim_)?faith_|^anim_faith_|^icon_order_/.test(name)) return 'ui/faith';   // the faith scroll's meter, candle, border
+    if (/^(ribbon_(rest|selected)|icon_(stats|kill|achievements|map|faith)_[a-z]+)$/.test(name)) return 'ui/ribbon';   // the scroll bookmarks
     if (UI.test(name)) return 'ui';
     return '';
 }
