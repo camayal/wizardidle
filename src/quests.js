@@ -13,7 +13,7 @@ import { enemySprites, enemyTypes } from './data/enemies.js';
 import { config } from './config.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
-import { run } from './runtime.js';
+import { run, ui } from './runtime.js';
 import { pickRandomItem, YesOrNot } from './utils.js';
 import { byName, destinations, moves, route, travelCost, SIZE } from './travelGraph.js';
 import { addXP, calculateFe } from './wizard.js';
@@ -554,7 +554,7 @@ export function godDrop(i) {
 const PHASE = { travel: 'on the road', search: 'searching' };
 const ORDER_ICONS = { shrine: 'icon_stats_stats', pilgrimage: 'icon_map_ground', hidden: 'icon_kill_bestiary' };
 export function scrollHtml() {
-    const Q = qs(), q = state.quest, log = Q.log.slice(0, 3);
+    const Q = qs(), q = state.quest;
     const all = q ? [q, ...Q.queue] : [...Q.queue];
     let h = `<div class='questOrders'>`;
     h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
@@ -565,7 +565,11 @@ export function scrollHtml() {
         `<button class='questBtn mv' data-quest='up:${i}' ${i === 0 ? 'disabled' : ''}>▲</button>` +
         `<button class='questBtn mv' data-quest='down:${i}' ${i === all.length - 1 ? 'disabled' : ''}>▼</button>` +
         `<button class='questBtn mv drop' data-quest='drop:${i}'>✕</button></div>`).join('');
-    if (log.length) h += `<p><small>Lately: ${log.map((x) => `${x.text} (${x.how})`).join('; ')}</small></p>`;
+    if (Q.log.length) {   // the history is folded like the Help sections; the page redraws, so the open state lives in ui
+        const open = ui.questLogOpen;
+        h += `<div class='faq questLogToggle${open ? ' active' : ''}'>Past quests (${Q.log.length})</div>` +
+            `<div class='a' style='max-height:${open ? 'none' : '0'}'>${Q.log.map((x) => `${x.text} <small>(${x.how})</small>`).join('<br>')}</div>`;
+    }
     return h;
 }
 export function questsPageHtml() {

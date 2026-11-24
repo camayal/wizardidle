@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- On the Quests page the history of past quests is folded like the Help sections: a "Past quests (n)" line you tap to open; it lists the last ten instead of three.
 - Quest path on the map: the dotted line is a developer option (DEV only). For players the map only rings the target when the quest names the place (go to, deliver to, pray at, hunt in, and so on); the prism's hunt marks nothing. No belief gating.
 - Secrets now start quests that jump the queue: the second spectrum he meets sends him to find the prism, a rune he finds now and then (rarely) sets him on its trail to another zone, and the first time he enters the Volcano a whisper tells of its hidden shrine. An atheist wizard no longer gets or takes shrine, pilgrimage or hidden-shrine quests, and the god's three faith orders are greyed out on the Quests page while he is one.
 - The map now shows the way of his quest: a dotted red line from where he stands to the nearest place of the quest's goal, with a ring on the goal, drawn on each map page (above, ground, underground) for the part of the way that lies on it.

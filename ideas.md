@@ -245,3 +245,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): secret quests (SECRETS in quests.js: prism from spectrumSeen, rune via config.quests.pRune, hidden at first Volcano arrival), atheist rule (makeQuest returns null for shrine kinds, orders disabled). Story movement limits not built: no such limits exist in the code yet, so quest targets ignore them until the story adds them. Untested in a browser. Idea: a queued shrine quest could be dropped when he turns atheist.
 - 2026-11-24 (dev): map quest path gated by belief (believer or devout only), per the author's decision in QUESTS.md. Untested in a browser.
 - 2026-11-24 (dev): map path replaced belief gating: line only with DEV, ring only when the quest names the place (questNamesPlace; only the prism quest is excluded). Untested in a browser.
+- 2026-11-24 (dev): quest history folded (ui.questLogOpen, .questLogToggle); lists up to 10. Untested in a browser.

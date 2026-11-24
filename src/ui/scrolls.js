@@ -346,6 +346,7 @@ function updateFaith(){
 // imports the dev tools).
 el('innerTextScroll').addEventListener('click', (e) => {
     if (e.target.closest('.devToggle')) document.dispatchEvent(new Event('wizardidle:toggleDevBar'));
+    if (e.target.closest('.questLogToggle')) { ui.questLogOpen = !ui.questLogOpen; ui.faithHtml = ''; updateFaith(); }
     const questBtn = e.target.closest('.questBtn');       // the Faith scroll's quest buttons: the god's orders and "forget it" (src/quests.js)
     if (questBtn) {
         const what = questBtn.dataset.quest;
