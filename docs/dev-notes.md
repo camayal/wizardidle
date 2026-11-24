@@ -47,3 +47,9 @@ Author's note: i was thinking in anothe mouth that conect the cave with la_Gruta
 - Gruta (2026-11-24): the Cave to la_Gruta3 mouth (mouth_gruta_cueva) and the big canyon entrance (mouth_dunas-pradera_gruta, front overlays; ground side joins la_Pradera13 and las_Dunas5, the inside joins la_Gruta1 and 2) are wired; untested in a browser. The author moves the map points in Travel mode if needed.
 
 - Mouth names (2026-11-24): mouths are now mouth_<outside zone>_<inside zone> (pantano_cueva, pradera_cueva, duenon_cueva, playa_mina, dunas_mina, desierto_mina, tundra_volcan, gruta_cueva, pradera_gruta); a mouth reached from two outside zones lists both joined by - (mouth_dunas-pradera_gruta, mouth_playa-pradera_mina). Rename again in connectors.js, travel_graph.py ENTRANCES and the png files if the author prefers other names.
+
+## Next session (dev), 2026-11-24
+- Swamp bridge direction (author unsure): `bridgeLeftZone` in src/data/connectors.js says bridge_swamp has la_Pradera on its left (map has the Prairie east of the Swamp, art reads Prairie left). Check the dev panel's bridge_swamp walks; if wrong, change or remove the line. Other bridges may have the same art-versus-map mismatch: ask which.
+- Remove pier battles (author's request): make sure no fight can happen on the pier walk. Today fights come only from travel.js planFight on zone-changing crossings (the pier visit does not use it), so first find out where the author saw a battle on the pier, then cut it.
+- Keep testing crossing fights with Dev panel > Connectors > "Walk it with a fight" (mirrored when the walk goes right to left); not seen in a browser yet.
+- Clerk prompt not done: rename scenes that are really borders to border_<from>_<to> in notes and lists (mouths are already renamed).
