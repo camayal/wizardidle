@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The pier land scene now has Prairie grass instead of sand (the pier is in the Prairie); art by the artist.
 - Dev panel > Connectors: the From and To pickers are gone; picking a connector walk now finds by itself a stage whose real trip walks those scenes the same way, starts him there and lands him in the stage on the other side (it says which in the console).
 - Crossing fights: the last frames of the winning spell no longer jump back to the unmirrored side when the fight ends; the scene un-mirrors only after the spell finishes.
 - Dev panel > Connectors: new From and To pickers. A connector walk can start in any stage and really arrives in the chosen one (zone, stage and background), instead of always going back to where he started; during the walk the game already counts him in the To zone, so a crossing fight is against that zone's enemies.
