@@ -543,6 +543,7 @@ function findRuneOrBook(){
             state.artefacts.push({ sprite: "item_prism", name: "prism" });
             loadNPC("item_prism");
             print(`${wizardName()} finds a prism! The colours of the Tundra will answer to it`);
+            quests.onPrism();
             run.multipleEventsCounter = 4;
             break;
         }
@@ -553,6 +554,7 @@ function findRuneOrBook(){
         }else{
             run.objectToStudy = "rune";
             loadNPC(`runa${number}`)
+            quests.onRune();
         }
         print(`${wizardName()} finds ${run.previousEvent == "findRuneorBook" ? "another " : "a "}${run.objectToStudy}`) 
         stats.count(`study.found.${run.objectToStudy}`)

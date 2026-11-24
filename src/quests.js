@@ -5,7 +5,7 @@
 // Only the god cancels a quest. With no quest he wanders as always.
 //
 // state.quest = { id, kind, giver, text, target: {zone, enemy?, boss?, zones?, visited?}, phase, searched, secret, reward, since }
-// kinds: wanted, explore, study, shrine, pilgrimage, hidden, delivery (ingredients and crafting wait for professions, fishing later)
+// kinds: wanted, explore, study, shrine, pilgrimage, hidden, delivery, seek; secrets: prism, rune, hidden (ingredients and crafting wait for professions, fishing later)
 
 import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
@@ -97,7 +97,45 @@ const MAKERS = {
     },
 };
 export const KINDS = Object.keys(MAKERS);
-export const makeQuest = (kind, giver = 'himself', zone) => (MAKERS[kind] ? MAKERS[kind](giver, zone) : null);
+// Secrets (they start from a find, never from a wish or an offer): the prism for the lost colours, a rune's trail, the hidden shrine told by a whisper.
+const SECRETS = {
+    prism: () => base('prism', 'whisper', 'Find the prism that gathers the lost colours', { zone: 'la_Tundra' }, 'faith'),
+    rune: (giver, zone) => base('rune', 'whisper', `Follow the rune's trail to the ${zoneName(zone)}`, { zone }, 'xp'),
+    hidden: () => MAKERS.hidden('whisper'),
+};
+// An atheist gets and takes no shrine, pilgrimage or hidden-shrine quest (docs/plans/QUESTS.md).
+export const SHRINE_KINDS = ['shrine', 'pilgrimage', 'hidden'];
+export const isAtheist = () => beliefLevel() === 'atheist' || !!state.player.beliefLost;
+export function makeQuest(kind, giver = 'himself', zone) {
+    if (SHRINE_KINDS.includes(kind) && isAtheist()) return null;
+    const make = MAKERS[kind] || SECRETS[kind];
+    return make ? make(giver, zone) : null;
+}
+
+// A secret starts a quest and jumps the queue like the prism did.
+export function secret(kind, zone) {
+    const q = makeQuest(kind, 'whisper', zone);
+    if (!q || !offer(q, { secret: true })) return false;
+    stats.count(`quest.secret.${kind}`);
+    print(`<i>A whisper that is not his own: ${q.text}</i>`);
+    return true;
+}
+export function onRune() {
+    if (!YesOrNot(config.quests.pRune, 0)) return;
+    const list = ZONES().filter((z) => z !== state.zone.current);
+    if (list.length) secret('rune', pickRandomItem(list.join(',')));
+}
+export function onPrism() {
+    const q = state.quest;
+    if (q && q.kind === 'prism') complete(q);
+}
+// The first time he sets foot in the Volcano the god whispers of its hidden shrine.
+function volcanoWhisper() {
+    const Q = qs();
+    if (Q.hiddenTold || state.zone.current !== HIDDEN_SHRINE_ZONE || isAtheist()) return;
+    Q.hiddenTold = true;
+    secret('hidden');
+}
 
 // ---- the queue ----
 
@@ -235,13 +273,15 @@ export function steer(origin, list) {
 
 // ---- finding the target ----
 
-const FORCED = { wanted: 1, shrine: 3, pilgrimage: 3, hidden: 3, delivery: 4, study: 5, seek: 2 };
+const FORCED = { prism: 5, rune: 5, wanted: 1, shrine: 3, pilgrimage: 3, hidden: 3, delivery: 4, study: 5, seek: 2 };
 
 // Each event tick (events.js event()): arrival, the search, wishes. Returns an event number to force, or 0.
 export function eventPick() {
-    const q = state.quest, Qs = qs();
+    const Qs = qs();
     if (Qs.orderWait > 0) Qs.orderWait--;
-    if (!q) { wish(); return 0; }
+    volcanoWhisper();
+    if (!state.quest) { wish(); return 0; }
+    const q = state.quest;
     if (q.phase === 'travel' && state.zone.current === q.target.zone) {
         q.phase = 'search';
         q.searched = 0;
@@ -304,7 +344,7 @@ export function onShrine() {
 }
 export function onStudy() {
     const q = state.quest;
-    if (q && q.kind === 'study' && state.zone.current === q.target.zone) complete(q);
+    if (q && (q.kind === 'study' || q.kind === 'rune') && state.zone.current === q.target.zone) complete(q);
 }
 export function onInn() {
     const q = state.quest;
@@ -442,7 +482,7 @@ export const ORDER_NAMES = { shrine: 'Pray at a shrine', pilgrimage: 'A pilgrima
 
 export function godOrder(kind) {
     const Q = qs(), name = wizardName();
-    if (Q.orderWait > 0 || !GOD_ORDERS.includes(kind)) return false;
+    if (Q.orderWait > 0 || !GOD_ORDERS.includes(kind) || isAtheist()) return false;
     if (!canTake()) { print(`<i>${name} has too much to do already</i>`); return false; }
     const q = makeQuest(kind, 'god');
     if (!q) return false;
@@ -515,7 +555,7 @@ export function scrollHtml() {
     const all = q ? [q, ...Q.queue] : [...Q.queue];
     let h = `<div class='questOrders'>`;
     h += Q.orderWait > 0 ? `<small>Your next order will be heard in a while</small>`
-        : GOD_ORDERS.map((k) => `<button class='questBtn order' data-quest='order:${k}'><img src='${art(ORDER_ICONS[k])}'/>${ORDER_NAMES[k]}</button>`).join('');
+        : GOD_ORDERS.map((k) => `<button class='questBtn order' data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}><img src='${art(ORDER_ICONS[k])}'/>${ORDER_NAMES[k]}</button>`).join('');
     h += `</div>`;
     if (!all.length) h += `<p>No quest now</p>`;
     h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +

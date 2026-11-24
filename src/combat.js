@@ -5,7 +5,7 @@
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { bossesOf, zones } from './data/zones.js';
 import { npcSpells, spells } from './data/spells.js';
-import { onKill } from './quests.js';
+import { onKill, secret as questSecret } from './quests.js';
 import { isSpectrum, pickSpectrum, spectrumKilled, spectrumSeen } from './spectra.js';
 import { capitalize, getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, RAREMULTIPLIER, selfrevivetime } from './config.js';
@@ -395,7 +395,7 @@ function setUpSpectrum(sprite) {
     fight.enemyHPbase = Math.round(fight.enemyHP);
     updateHeartNPC();
     fight.enemyName = enemyDisplayName(enemySprites[sprite]);
-    if (spectrumSeen()) fight.spectrumQuest = true;      // told after the arrival line, in getEnemy
+    if (spectrumSeen()) { fight.spectrumQuest = true; questSecret('prism'); }      // told after the arrival line, in getEnemy
 }
 
 // "A slime", "The Capricor", or a random name plus the sprite's own name; rare ones are marked.

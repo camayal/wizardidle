@@ -97,6 +97,7 @@ export const config = {
         obey: { devout: 0.95, believer: 0.8, doubter: 0.4, atheist: 0.1 },   // chance he does what the god suggests or orders, by belief
         pInnOffer: 0.3,            // chance the host of an inn he enters has a job
         pBoard: 0.08,              // chance an explore event in the City reads the board
+        pRune: 0.01,               // chance a rune he finds starts a secret quest (the rune's trail to another zone)
         pHuman: 0.01,              // chance an explore event in a safe area meets a stranger with a job (very rare)
         pPost: 0.05,               // chance an explore event in a region with a post reads it
         orderWait: 15,             // events before the god can give another order from the Faith scroll
