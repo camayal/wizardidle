@@ -35,6 +35,7 @@ export const mouthDoors = {
     mouth_229_64: 171, mouth_229_64_under: 166,
     mouth_27_114: 165, mouth_27_114_under: 171,
     mouth_33_165: 152, mouth_33_165_under: 166,
+    mouth_64_170: 170, mouth_64_170_under: 170,      // the big canyon entrance into the Grotto (a front overlay each: he steps in behind the boulders)
     mouth_87_224: 140, mouth_87_224_under: 171,
     mouth_100_181: 160, mouth_100_181_under: 160,      // Grotto side (ground map, la_Gruta3) and Cave side (underground map, la_Cueva2): the crack
     ladder_cueva4_mina2_cave: 150, ladder_cueva4_mina2_mine: 122,      // the ladder and the floor shaft

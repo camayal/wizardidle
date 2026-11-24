@@ -44,4 +44,4 @@ Author's note: i was thinking in anothe mouth that conect the cave with la_Gruta
 ```
 - Dunas2 underground inn is in the game (2026-11-24, untested in a browser; the shop half still waits for the professions vendors, docs/PROFESSIONS.md).
 - Healer cabin on a quest (2026-11-24): done in code and the four looks are wired (src/cabin.js); untested in a browser. Waiting: the quest system must set state.quest. The open-door curanderobg.png is kept for the final battle.
-- Gruta (2026-11-24): the Cave to la_Gruta3 mouth is wired (mouth_100_181, option B; ground side = Grotto, under side = Cave; untested in a browser). Still open: the big canyon entrance (mouth_64_170, mostly a front overlay he walks into; the author will relink the graph so Dunes and Prairie reach it and it reaches some Grotto stages), artist is redrawing options.
+- Gruta (2026-11-24): the Cave to la_Gruta3 mouth (mouth_100_181) and the big canyon entrance (mouth_64_170, front overlays; ground side joins la_Pradera13 and las_Dunas5, the inside joins la_Gruta1 and 2) are wired; untested in a browser. The author moves the map points in Travel mode if needed.
