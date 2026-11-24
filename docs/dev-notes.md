@@ -24,7 +24,7 @@ Built and committed, all untested in a browser (no node in the dev session): bri
 - Jumps and teleports: later (jump the shaft; about level 100 short teleports to hop obstacles and reach other scenes). Floor shaft of the ladder mine side may sit on the walk line.
 - Still open from the author: bridge halves shown as neighbours with no gap (done by order, no joined wide scene); exit markers drawn per connector pair; enter_mine_S placement.
 
-- Dice house (2026-11-24): the iso round table with five tiny dice is wired in the City and Town houses (src/ui/diceTable.js; the wizard walks to the table and away; the throw is mirrored for the gambler); untested in a browser. Still open from the author's 11-21 notes: the desert tent's table (art is ready, style `desierto`: add the tent to DICE_HOUSES when its scene exists) and other games (shut the box, sevens).
+- Dice house (2026-11-24): the iso round table with five tiny dice is wired in the City and Town houses (src/ui/diceTable.js; the wizard walks to the table and away; the throw is mirrored for the gambler); untested in a browser. The desert tent plays dice too (see the Desert tent item), with a gambler look per house (jugon, jugon_poblado, jugon_desierto). Still open from the author's 11-21 notes: other games (shut the box, sevens).
 
 ```
 Date: 2026-11-22 09:47
