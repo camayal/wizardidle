@@ -19,6 +19,7 @@ import { sidePanel } from './panel.js';
 import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
 import { art } from '../media.js';
+import { el } from '../ui/dom.js';
 import { connectorScenesOf } from '../data/connectors.js';
 
 const MAPS = { above: 'img/ui/mapaboveground.png', ground: 'img/ui/mapa.png', under: 'img/ui/mapaunderground.png' };
@@ -230,18 +231,39 @@ function nearest(ev) {
 
 // The game's own scene of a stage, as a reference for the curation (the stage name is its background name).
 function show(n) {
-    if (!isStage(n)) return;
-    try { loadBackground(n); } catch (e) { /* no background for this stage */ }
+    const s = scenesOf(n)[0];
+    if (!s) return;
+    try { loadBackground(s); } catch (e) { /* no background for this stage */ }
 }
 
-// The scenes of a spot for the viewers: a connector's own scenes (a bridge, stairs or mouth has several), else its stage.
+// The scenes of a spot: a connector's own scenes (a bridge, stairs or mouth has several), else its stage.
+// The game's scene shows the first scene of the source; the alt viewers, in the console's place under it
+// (as in the art mode), show the rest: the source's other scenes, then the target's.
 const scenesOf = (n) => (isStage(n) ? [n] : connectorScenesOf(n));
+let alts = null;
+function placeAlts() {
+    if (!alts) return;
+    const scene = el('esceneCanvas').getBoundingClientRect(), back = el('backConsole').getBoundingClientRect();
+    if (!scene.width) return;
+    const room = back.height ? back : { left: scene.left, top: scene.bottom + 8, width: scene.width, height: innerHeight - scene.bottom - 16 };
+    Object.assign(alts.style, { left: `${Math.round(room.left)}px`, top: `${Math.round(room.top)}px`, width: `${Math.round(room.width)}px`, maxHeight: `${Math.round(room.height)}px` });
+}
 function viewers() {
-    p.views.innerHTML = [src, tgt()].filter(Boolean).map((n) => {
-        const list = scenesOf(n);
-        return `<div><b>${esc(n)}</b>${list.length ? '' : ' <span class="muted">(no scene yet)</span>'}<div style="display:flex;flex-wrap:wrap;gap:6px">${list.map((s, k) =>
-            `<figure style="margin:0"><img src="${art(s.toLowerCase())}" alt="${esc(s)}" style="width:256px;image-rendering:pixelated;display:block;background:#222" onerror="this.style.display='none'"><figcaption class="muted">${k ? (k > 1 ? `Alt${k}` : 'Alt') + ' scene' : 'Scene'}: ${esc(s)}</figcaption></figure>`).join('')}</div></div>`;
+    if (!alts) {
+        alts = document.createElement('div');
+        Object.assign(alts.style, { position: 'fixed', zIndex: 9990, display: 'flex', flexWrap: 'wrap', gap: '4px', overflow: 'auto', boxSizing: 'border-box' });
+        document.body.appendChild(alts);
+        alts.timer = setInterval(placeAlts, 1000);
+    }
+    const first = scenesOf(src), list = [...first.slice(1), ...scenesOf(tgt())];
+    const n = Math.max(2, list.length), w = n > 2 ? 'calc(33% - 4px)' : 'calc(50% - 4px)';
+    alts.innerHTML = Array.from({ length: n }, (_, k) => {
+        const s = list[k], label = `${k ? `Alt${k + 1}` : 'Alt'} scene`;
+        return `<div style="width:${w};background:#1b1612;border:1px solid #2a5fa8;border-radius:3px;font:12px sans-serif;color:#cfe0ff;box-sizing:border-box;padding:2px">
+            <div style="padding:0 4px 2px">${label}: ${s ? esc(s) : 'empty'}</div>
+            ${s ? `<img src="${art(s.toLowerCase())}" alt="${esc(s)}" style="width:100%;display:block;image-rendering:pixelated" onerror="this.style.display='none'">` : ''}</div>`;
     }).join('');
+    placeAlts();
 }
 
 function setLayer(l) {
@@ -257,7 +279,8 @@ function choose(role, n) {
     else if (n) tgts = tgts.includes(n) ? tgts.filter((t) => t !== n) : [...tgts, n];       // shift-click: add or drop a target
     p.srcSel.value = src; p.tgtSel.value = tgt(); viewers();
     placing = '';
-    if (n) { show(n); setLayer(layerOf(n)); } else draw();
+    if (src) show(src);
+    if (n) setLayer(layerOf(n)); else draw();
 }
 
 const options = () => `<option value="">(drop to select)</option><optgroup label="Scenes">${stages.map((n) => `<option>${n}</option>`).join('')}</optgroup>
@@ -269,6 +292,7 @@ export async function open(devTools) {
     tools.resetScene();             // the game waits while the mode is open: the scene stays as picked
     side = sidePanel('right', 'Travel: curate the links', () => close());
     side.maxWidth = 900;
+    el('console').style.visibility = 'hidden'; el('backConsole').style.visibility = 'hidden';
     side.body.innerHTML = `
         <div class="row"><b>Source:</b><select data-id="srcSel">${options()}</select><button data-id="srcPlace">change coord</button></div>
         <div class="row"><b>Target:</b><select data-id="tgtSel">${options()}</select><button data-id="tgtPlace">change coord</button></div>
@@ -290,7 +314,6 @@ export async function open(devTools) {
                 <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button><button data-id="check" title="ring every spot that no chain of links joins to the main map">Check connections</button>
                 <button data-id="path" title="pick a source and exactly one target: draws the cheapest path the wizard would walk">Optimal path</button></div>
         </div>
-        <div data-id="views" style="display:flex;flex-direction:column;gap:6px;margin:6px 0"></div>
         <div data-id="linkInfo"></div>
         <div data-id="checkInfo"></div>
         <div data-id="pathInfo"></div>
@@ -379,5 +402,7 @@ export function close(resume = true) {
     if (!side) return;
     side.close();
     side = null; p = null;
+    if (alts) { clearInterval(alts.timer); alts.remove(); alts = null; }
+    el('console').style.visibility = ''; el('backConsole').style.visibility = '';
     if (resume) tools.closed();
 }
