@@ -2261,3 +2261,101 @@ Author's note: las_Dunas2 already have a cave entrance, we need  to decide what 
 
 - Update to the scene questions above (2026-11-20, later): the six bridge scenes were redone as one 512px picture per bridge cut in half at the seam (`_west` + `_east` line up when shown side by side, so the game must show them as neighbours with no gap); the deck covers rows 34-60 and the river shows only behind it (rows 12-33). All ground mouths (147_31, 27_114, 87_224, 229_64, 33_165, 218_182) were redrawn bedded into their terrain, and mouth_130_120 now sits in a basalt slope at the back. Still open for the author to review in the drop (`scene_connectors/`, `scene_future/`): the redone bridges, the bedded mouths, the stairs (seen from above), the pier, the ladder scenes, el_Duenon7, el_Pantano_fishing, el_Pantano9_fueracastle, la_Pradera_northTown, la_Pradera_fueraCity, future_cave_NW, pradera_pantano_E/_w. New questions for the author: (a) the bridge halves must be shown as one place: should the game join them in one wide scene or just place them next to each other? (b) which scenes keep the shared grass texture twig removal, (c) does each connector pair need an exit marker drawn (path, gate) per SCENES.md "exits are drawn in the scene"? The author left the computer unattended on 2026-11-20; nothing is wired into the game.
 - After that: la_playa zone data (docs/plans/MAPS.md step 5).
+
+
+## dev-notes cleanup 2026-11-24 (done or moved to plans: sea-colour spells, submaps -> MAPS.md, Etymos -> thinker-notes, Rainbow and spectra wired, caravans -> FAITH.md, battle AI -> thinker-notes, dynamic scenes -> SCENES.md)
+
+```
+Game test
+Wizard: level 50, HP 166 / 166, gold 465, faith -2104
+Zone: Beach, stage 3
+On the scene: lamia (boss fight)
+Speed x1
+Date: 2026-11-20 22:41
+Author's note: spell powers of both bosses should match the color of the sea
+```
+
+```
+
+```
+Date: 2026-11-20 23:15
+Author's note: Important to work in submaps, ideas:
+1. locations: city, town, castle (areas in castle), perhaps tower (in this rather than places we can have floors and rooms)
+2. revamp tower image in the map, not to be more exagerated but to be kinda recognizable
+3. create a city map with streets, two gates, northwest and southeast, wall and and decent size. the this map should be added to the existent map, two options: 1) replace the full ground map fo rthe one in the city, more detail and nicer or 2) create a little patch of scroll, perhaps 3/4 of the normal map size and put on top of the map with a pin (kinda better).
+4. Town, very similar to city, but this is not walled town, adobe houses plus some huts, etc
+5. in the castle we can make two floors with different rooms, add stairs (conector similar to mouths), this would be 2 maps, one put on top of the other one a little bit not pefflyeny alingned
+6. in the tower we can make 7 floors with at least two rooms in each floor plust stairs (conector). this will need 7 maps, one per room
+7. not sure if 5 or 7 we can create some planes rather than "realistic map", perhaps that is the way to go
+
+Additionnal not about map and submaps. those will be only discovered when the wizard enters to the place the first time, parts of the city map can be already discovered and some floors of the  tower (he lived in both places), but we need to introduce the fog system, that only discover when the wizard visit the region.
+```
+
+```
+Date: 2026-11-20 23:21
+Author's note: work on the etmos boss split
+```
+
+```
+Game test
+Wizard: level 13, HP 22 / 221, gold 1537, faith -862
+Zone: Tundra, stage 3
+On the scene: rainbow (boss fight)
+Speed x1
+Date: 2026-11-21 10:07
+STATUS 2026-11-24: all wired (fusion B, prism B); only a browser test is left.
+Author's note: for this boss, i would like to add another special events:
+1. appear rare npcs in the following sheet C:\Users\camayal\OneDrive\Documentos\GitHub\wizardidle-old-ideas\unorganzed_sprites\dark-skelets.png
+2. these rare enemies only apper once and they are take off of the pool of enemies. 
+3. these enemies will come when enemies or bosses events are triggered
+4. we can add an artefact to increase the chances of find one of those policorlor  school spectros.
+5. those are secred enemies.
+6. we need to be sure all colors found in the boss Rainbow are represented, so modify the sprites accordently.
+7. when all of them are dead we need to change the animation of the entrance of this boss when it will appear for firs time, we make that all the specturm sprites (a little translucid) come from multiple directions to the enemy position and them a fash of all the raimbow color and then the boss Raimbow appears.
+8. from this point in this region the raimbow boss is the one that will appear using the portal as it is today.
+
+art notes: we need some spectrum created to match colors of the raimbow:
+Red
+Orange
+Yellow
+Green
+Blue
+Indigo
+Violet
+
+in the sprite, we have some already, their attasks weill be light school mostly with the color they represent, those are only found in Tundra region of course.
+
+anotehr art change is the current Rainbow boss, the cape is yellow, we need to die it black to match the spectrum
+```
+
+```
+Date: 2026-11-21 10:09
+Author's note: Create art and events for carabans and random healer npcs, they should walk from right to left to reach the wizard sometimes, not all times the wizard fell to help the wizard. wizard continues his way, lose some money.
+```
+
+```
+Date: 2026-11-21 10:25
+Author's note: We need a simple AI for battle system, now is just random and the survaibalility of the wizard is very low, healing, protective spells, etc. but i dont want the wizard is fully invincible, bosses need to be almost 90% killable with god help, regular enemies 100%, rares 95, so in that way the god has a purpose
+```
+
+```
+Date: 2026-11-21 10:52
+Author's note: Ideas for dynamic scenes. The current model is having all dynamic, with the last change in travel system i think to much randomization will be bad, better to have some ideantity with areas that are common.
+
+So here are the most updated ideas of dynamic scenes:
+- Dynamic scenes will be build based on rules, where things can go or not  and what features should be added in relation with the map.
+- Dynamic scenes (DS) will be to give the ilusion of traveling distance from one fixed scene to another. for example moving in the praire is usually pretty free and involve long distance, using the edge lenght we can calculate an estimate or intermediate dynamic scenes between two already selected fixed scenes.  for example la_Pradera1 to 6 require perhaps one intermediated DS, while go to 11 would require perhpas 3 DS
+```
+
+```
+Date: 2026-11-21 11:10
+Author's note: for Etymos boss idea, i will need to remove some regular enemies, now ccalled la_esencia, not all numbers are the ones we need to remove from the normal la_esencia pool, only the ones that are very symilar to the etymos
+
+reminder, when etymos is destroyed for first time, this boss will be out of the game then it is repaced for all the other mini bosses, they are more like a Rare type of strengh rather than boss level of strengh
+```
+
+```
+Date: 2026-11-22 09:44
+Author's note: beach scenes are interesting but it is weird the transitions, i think we need to be sure that during our dynamic scene implementation we do sintermeditate scenes where the walk line is beach and the rest on top is ocean, then before the next scene we need to transition with another scene to a more away from the ocean scene so the following scene has a good fit with the current fixed beach scenes
+```
+
