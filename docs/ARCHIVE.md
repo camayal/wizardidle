@@ -2430,3 +2430,12 @@ Relic Tethering: Equipped gear carries a passive bonus into the next timeline ba
 Witness Meter: Overt miracles draw heavier enemy aggro/difficulty; invisible nudges let the wizard ambush foes undetected.
 ```
 
+
+## Thinker note done 2026-11-24: the desert tent (now docs/plans/DESERT_TENT.md)
+
+```
+Date: 2026-11-24
+Author's note: the desert has only the tent, so the tent is everything there: inn, dice house, shop and other things. The interior probably has to be adapted for it. For the thinker to design (art needs the artist after).
+What the code does today (from dev): the tent's only interior is el_desierto_taberna (the inn); its door is the dark opening in el_Desierto1 (STREET_DOORS in src/ui/render.js). A place has one background, one door and one NPC at a time. The City and Town each have two interiors (inn and dice house). The dice table is only a style and a position (DICE_HOUSES and TABLE in src/ui/diceTable.js; the bone table, dice and throw sheet are drawn and in img/places/dice, style desierto), so dice work in any interior with a table. The explore event only offers the dice house in la_Ciudad and el_Poblado (src/events.js), so the desert has no gambling event yet. The shop half waits for the professions vendors (docs/PROFESSIONS.md).
+Open: one big interior with every service, or several scenes inside the tent (inn corner, gambling table, vendor)? Does the wizard walk to a different spot for each service (like he now walks to the dice table)? Which NPC stands where (innkeeper, gambler, vendor)? How often does the desert offer each service?
+```
