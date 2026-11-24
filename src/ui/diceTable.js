@@ -10,7 +10,7 @@ import { run, ui } from '../runtime.js';
 // Dice house backgrounds and the style of their table (red lacquer, wood, bone). The desert tent joins when it exists.
 export const DICE_HOUSES = { la_ciudad_casadados: "ciudad", el_poblado_casadados: "poblado" };
 
-const TABLE = { x: 148, y: 27, w: 34 };
+const TABLE = { x: 148, y: 36, w: 34 };
 export const WIZARD_AT_TABLE = 80;                  // wizardOffset that puts him just left of the table
 const SPOTS = [[8, 2], [15, 2], [22, 2], [11, 6], [19, 6]];     // where the five dice rest, from the table's top-left: back row, then front row
 const MIRROR = [2, 1, 0, 4, 3];                    // the spot a die lands on when the sheet is flipped over the table's middle
