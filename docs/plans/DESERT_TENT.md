@@ -17,26 +17,27 @@ The tent is a desert caravanserai: everything happens under one roof, and **one 
 
 **Proposal (to be decided below):**
 
-1. **One big interior, three corners.** The tent's background is redrawn wider in feel: on the left a sleeping corner (rugs, cushions, a low lamp), in the middle the bone dice table on a rug, on the right the host's goods (jars, rolled carpets, hanging lamps).
-2. **He walks to the corner of the service**, the way he already walks to the dice table: in for the inn, he goes to the cushions; for dice, to the table; to trade, to the goods. The tent stays one place with one door, so the map and the pathfinder see one landmark.
-3. **One host, the tent keeper**, moves to the corner he's using (or there's one sprite per corner pose). Innkeeper, gambler and merchant are the same person: "she sells you a bed, then takes your gold at dice, then sells you the bed's blanket."
+1. **The old tent scene stays, and shows what the visit is for.** He enters the tent with one purpose, and the scene draws only what that purpose needs (decided, see Decisions):
+   - **Dice:** the bone dice table is there, and he plays at it.
+   - **Buying:** he walks to the far end, where the shopkeeper stands.
+   - **Sleeping:** he walks in a little and sleeps.
+2. The tent stays one place with one door, so the map and the pathfinder see one landmark, and the walking line isn't broken.
+3. **One host, the tent keeper**, stands wherever the visit needs her (at the table for dice, at the far end for buying, by the door for a bed). Innkeeper, gambler and merchant are the same person: "she sells you a bed, then takes your gold at dice, then sells you the bed's blanket."
 4. **How he gets in:** he enters the tent by the door like today; inside, the visit picks a service. Inn when he needs rest (as today); otherwise dice or trade by chance. No numbers until playtests: start from the City and Town dice share and tune it.
-5. **The shop corner is drawn now but stays empty (or shows the goods as scenery) until professions ship.** Then the tent keeper is the Desert's vendor from PROFESSIONS.md, and sells desert things: bone, and the Volcano's brimstone sometimes, since the caravan comes from there.
+5. **No buying visits until professions ship** (nothing to draw or sell before that). Then the tent keeper is the Desert's vendor from PROFESSIONS.md, and sells desert things: bone, and the Volcano's brimstone sometimes, since the caravan comes from there.
 
-## Art it needs (for the artist after the OK)
+## Art it needs
 
-- The tent interior redrawn with three corners (or kept, with the corners added to it).
-- The tent keeper: one NPC, a pose per corner, or one pose that slides along.
-- Nothing new for dice (the desert set exists).
+None new (decided): the old tent scene is fine, and the desert dice set exists. The shopkeeper sprite comes with the professions vendors.
 
 ## Open questions
 
-1. One big interior with corners, or several scenes inside the tent?
-2. Does he walk to a spot for each service?
+1. ~~One interior or several scenes?~~ Decided.
+2. ~~Does he walk to a spot for each service?~~ Decided.
 3. One host for everything, or a different NPC per service?
 4. How does a visit pick its service (need first, chance, the god's touch)?
-5. The shop corner before professions: empty, scenery, or wait to draw it?
+5. ~~The shop before professions?~~ Follows from the decision: no buying visits until professions ship.
 
 ## Decisions
 
-(none yet)
+- **2026-11-24, interior and walking:** one interior, the **old tent scene, no new art.** The scene shows things by what he came to do: to play dice, the table is there; to buy, he walks to the far end where the shopkeeper is; to sleep, he walks in a little and sleeps. No corners to walk between: that would break the walking line.
