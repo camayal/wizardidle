@@ -203,6 +203,8 @@ The offering question (cap, diminishing returns, fixed by level, keep the snowba
 
 ## 6. Open questions
 
+- **To review, future (the author, 2026-11-24): the god's whispers.** The prism quest of the Tundra spectra arrives as a whisper of the god to the wizard (the second spectrum he meets; text in src/combat.js, getEnemy). Review whispers as a faith feature: when the god speaks to a wizard, which belief levels hear it (an Atheist or Doubter may not), whether other quests, hints or comforts come the same way, and whether hearing one raises belief. Until then it is one fixed line, heard by everyone.
+
 - **For later (the author, 2026-11-13): the god's critics need faith.** The god's touches cost faith, so with no faith left (an Atheist, or after heavy spending) the god can't touch at all: no critic, no super-critic, and none of the belief they give (+3 / +6), just when the wizard is furthest away. To think about in the future: e.g. a touch that costs nothing below 0 faith but has a cool-down, belief moments that don't need faith, or the winning-back actions (3.6, which cost no faith) as the only way in.
 
 - **Offerings:** cap, diminishing returns, fixed by level, or keep the snowball: decided by the playtests (3.10).

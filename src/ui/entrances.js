@@ -122,7 +122,7 @@ const FUSION = { src: "anim_rainbow_fusion", frame: 256, high: 64, ms: 83, fusio
 const OFF_RIGHT = 80;               // sprite px from its place to just past the scene's right edge
 
 export function entranceKind(npc) {
-    const family = (npc || "").replace(/\d+$/, "");
+    const family = (npc || "").replace(/\d+$/, "").replace(/^spectrum_.*/, "spectrum");     // the spectra: spectrum_<colour>
     return KIND[family] || "walk";
 }
 
