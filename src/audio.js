@@ -7,7 +7,7 @@ import { snd } from './media.js';
     
 // Play a sound once by its name (its folder: src/media.js). Browsers may block sound until the player interacts; that is ignored.
 function playSound(ogg, volume = 0.3){
-    if (run.simulation) return;
+    if (run.simulation || run.muted) return;
 
     ui.audio = new Audio(snd(ogg));
     ui.audio.volume = volume;

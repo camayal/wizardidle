@@ -333,7 +333,3 @@ Relic Tethering: Equipped gear carries a passive bonus into the next timeline ba
 Witness Meter: Overt miracles draw heavier enemy aggro/difficulty; invisible nudges let the wizard ambush foes undetected.
 ```
 
-```
-Date: 2026-11-23 19:19
-Author's note: [[wd we need to avoid the game bein gopen in two windoes, we can create a paradox, i open the same game in two tabls both of them run  in parallel differenlty, it can be either that or just for fun, put in the console that a new dimension has been open, and the paradox will grow with time. Explore the technical repercusions of having different opengames? which is the one saved? ae those shared data?
-```

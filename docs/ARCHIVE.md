@@ -2098,3 +2098,9 @@ Author's note: when rest in sleeping bag next scene the wizard should start in t
 also sleep twice in a row shoudl happen
 ```
 (done 2026-11-24: he wakes where he slept and walks back; sleeping twice in a row was already possible)
+
+```
+Date: 2026-11-23 19:19
+Author's note: [[wd we need to avoid the game bein gopen in two windoes, we can create a paradox, i open the same game in two tabls both of them run  in parallel differenlty, it can be either that or just for fun, put in the console that a new dimension has been open, and the paradox will grow with time. Explore the technical repercusions of having different opengames? which is the one saved? ae those shared data?
+```
+(done 2026-11-24: src/dimension.js, the author chose the read-only, collapsing second tab)

@@ -95,7 +95,16 @@ function read(key) {
     }
 }
 
+let readOnly = false;
+
+// Another dimension (a second tab, src/dimension.js): nothing is written or forgotten, ever.
+export function makeReadOnly() {
+    readOnly = true;
+    saving = false;
+}
+
 function write(key, value) {
+    if (readOnly) return;
     try {
         localStorage.setItem(key, JSON.stringify(value));
     } catch (e) {
@@ -149,7 +158,7 @@ export function freshStart() {
 export function deleteSave() {
     saving = false;
     write(WORLD_KEY, world);
-    localStorage.removeItem(SAVE_KEY);
+    if (!readOnly) localStorage.removeItem(SAVE_KEY);
 }
 
 // The moment the god looks away: stored in the save (src/away.js settles it on the next load).
