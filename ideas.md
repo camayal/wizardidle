@@ -362,3 +362,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 travel_graph.py GROUND_TWINS: mouth_dunas-pradera_gruta_under is a ground node 12 px right of its door (was an underground node); tool pos() follows. Other mouths unchanged.
 
 - 2026-11-25 Console: print() inserts the new line in front instead of rebuilding innerHTML, so the dlNew sparkles of a divine line are not cut by the next line; printDivine removes the class after 2.6 s. Untested in a browser.
+
+- 2026-11-25 Author reinstated the signature miracles (Sanctuary, Smite, Providence) in the faith plan; artist asked for options. Dev builds them in step 5 with the god's face.
