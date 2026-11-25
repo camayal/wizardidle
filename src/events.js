@@ -164,6 +164,10 @@ function event() {
     case 5:
         //found book, rune or statue
         studyEV();
+        break;
+    case 6:
+        //report a hunt at the guild (only a quest makes it)
+        guildEV();
     }
 
 };
@@ -392,6 +396,23 @@ function prayEV(){
 }
 
 
+
+// The hunters' guild in the Town: he goes in, tells the hunter, gets paid and walks out (src/quests.js, hunts report here).
+function guildEV() {
+    if (!quests.guildReady()) { nextEvent(); return; }
+    print(`${wizardName()} walks to the hunters' guild to report`);
+    run.previousEvent = "guild";
+    startEvent(guildReport);
+}
+function guildReport() {
+    run.multipleEventsCounter += 1;
+    switch (run.multipleEventsCounter) {
+        case 1: enterPlace("el_poblado_cazadores", pickRandomItem("cazador_a,cazador_b")); print(`${wizardName()} enters the hunters' guild`); break;
+        case 2: quests.guildTell(); break;
+        case 3: quests.guildPay(); showBubble('yes'); break;
+        case 4: clearFrontProp(); endEvent(); leavePlace(showStage, nextEvent);
+    }
+}
 
 // Feel tired: look for an inn (or camp), or feel fine and keep going.
 const INN_ZONES = ["la_Ciudad", "el_Poblado", "el_Desierto"];

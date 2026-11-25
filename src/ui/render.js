@@ -502,7 +502,7 @@ function showBlink(spotX) {
 // a simulation nothing is drawn and everything happens at once, in the same order.
 
 // Doors in the place backgrounds: scene x of the door's middle, in sprite px.
-const DOORS = { el_poblado_casadados: 16, la_ciudad_casadados: 16, el_poblado_taberna: 40, la_ciudad_taberna: 52, las_dunas_taberna: 22 };
+const DOORS = { el_poblado_cazadores: 25, el_poblado_casadados: 16, la_ciudad_casadados: 16, el_poblado_taberna: 40, la_ciudad_taberna: 52, las_dunas_taberna: 22 };
 
 let fadeCanvas;
 function fadeLayer() {
@@ -672,6 +672,7 @@ function dreamStillOff() {
 // in the art: the desert's tent, the Town's open doorways, the City's saloon doors (beer poster) and the door by
 // the dice sign.
 const STREET_DOORS = {
+    el_poblado_cazadores: ["el_poblado_cazadores_fuera", 128],     // the guild's hut: its own stage, not one of the Town's
     el_poblado_taberna: ["el_Poblado4", 120], el_poblado_casadados: ["el_Poblado5", 119],
     la_ciudad_taberna: ["la_Ciudad4", 52], la_ciudad_casadados: ["la_Ciudad1", 149],
     las_dunas_taberna: ["las_Dunas2", 243],         // the stone arch at the right edge of las_dunas2 (x about 243): the underground inn

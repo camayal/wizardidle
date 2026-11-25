@@ -384,6 +384,16 @@ export const DONE_STORIES = {
         "{name} has ended {who} of the {where}. The people who asked will sleep tonight.",
         "With {who} gone, the {where} is a little brighter. {name} takes his time to leave.",
     ],
+    guild_rare: [
+        "The hunter opens the guild ledger and writes: {who} of the {where}, done. {name} gets his due and a nod.",
+        "\"A {who}, and from the {where}!\" The hunter whistles, and stamps the bounty paper with a heavy seal.",
+        "The old hunters crowd round to hear of the {who}. {name} tells it short, and they pay him well.",
+    ],
+    guild_boss: [
+        "The hunter lets the ledger fall shut: {who} of the {where} is dead. The guild stamps the bounty, and the hall goes quiet with respect.",
+        "\"{who}?\" The hunter looks at {name} for a long moment, then pushes the heavy purse across the counter.",
+        "The guild bell rings once for {who} of the {where}. {name} gets his bounty and a name in the ledger.",
+    ],
     prism: ["{name} holds the prism up and, for a moment, all the lost colours return."],
     medusa: ["{name} finds what he sought in the {where}: the shield against Medusa's gaze is his."],
     rune: ["{name} follows the rune's trail to its end in the {where} and the glyph glows once and goes dark."],
@@ -410,6 +420,12 @@ export const SPOTS = {
     la_Mina: [["the old lift still creaks over a fine view", "the old mine lift, creaking above a long drop"], ["a vein of blue stone glows deep inside", "the vein of blue stone, glowing"]],
 };
 
+// What the wizard says at the guild counter ({name}, {who}, {where}).
+export const GUILD_TELL = [
+    "{name} puts his hand on the counter and tells how the {who} fell in the {where}.",
+    "\"It is done,\" says {name}, and lays the proof of the {who} on the counter.",
+    "{name} reports the {who} of the {where}; the hunter listens without looking up from his ledger.",
+];
 export const pickFrom = (list) => list[Math.floor(Math.random() * list.length)];
 export function doneStory(kind, vars) {
     const list = DONE_STORIES[kind];

@@ -278,3 +278,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 dev: finish narratives (DONE_STORIES) and key places (SPOTS) in questTexts.js; known zones refused with a line (config.quests.pKnownPlace). Guild report later will reuse the hunter NPC with an interaction.
 
 - 2026-11-24 dev: quest info scroll wired (img/ui/quests, infoCard in quests.js); guild art being redone (hunter in strangers' anatomy, big hut F as the whole stage).
+
+- 2026-11-24 dev: guild wired (event 6 guildEV, quests.guildTell/guildPay, img/places/el_poblado/el_poblado_cazadores*). Pending: 8 new strangers in review/guild/strangers await the author.

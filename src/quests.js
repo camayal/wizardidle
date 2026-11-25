@@ -9,7 +9,7 @@
 
 import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
-import { doneStory, huntStory, pickFrom, SPOTS } from './data/questTexts.js';
+import { doneStory, GUILD_TELL, huntStory, pickFrom, SPOTS } from './data/questTexts.js';
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { config } from './config.js';
 import { state } from './state.js';
@@ -245,9 +245,9 @@ function reward(q) {
 
 function complete(q) {
     const got = reward(q);
-    const key = q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : q.kind;
+    const key = (q.target.report ? 'guild_' : '') + (q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : q.kind);
     const who = q.target.boss ? enemyTypes[q.target.boss].name : q.target.enemy ? enemySprites[q.target.enemy].altName : '';
-    const tale = doneStory(key, { name: wizardName(), where: zoneName(q.target.zone), who, found: q.target.found });
+    const tale = doneStory(key, { name: wizardName(), where: zoneName(q.target.huntZone || q.target.zone), who, found: q.target.found });
     print(`<i>${tale || `${wizardName()} has finished his quest (${q.text})`} <small>(${got})</small></i>`);
     finish(q, 'done');
 }
@@ -298,6 +298,7 @@ export function steer(origin, list) {
 
 // ---- finding the target ----
 
+export const GUILD_ZONE = 'el_Poblado';       // the hunters' guild stands in the Town
 const FORCED = { prism: 5, medusa: 5, rune: 5, wanted: 1, shrine: 3, pilgrimage: 3, hidden: 3, delivery: 4, study: 5, seek: 2 };
 
 // Each event tick (events.js event()): arrival, the search, wishes. Returns an event number to force, or 0.
@@ -307,6 +308,10 @@ export function eventPick() {
     volcanoWhisper();
     if (!state.quest) { wish(); return 0; }
     const q = state.quest;
+    if (q.target.report) {          // a hunt to report: in the Town he goes to the guild (event 6), otherwise he travels there
+        if (state.zone.current === GUILD_ZONE) { stats.count('quest.arrived'); return 6; }
+        return YesOrNot(config.quests.pTravelExplore, 0) ? 2 : 0;
+    }
     if (q.phase === 'travel' && state.zone.current === q.target.zone) {
         q.phase = 'search';
         q.searched = 0;
@@ -353,7 +358,32 @@ function turnUp(q) {
 export function onKill(name, boss) {
     const q = state.quest;
     if (!q || q.kind !== 'wanted' || state.zone.current !== q.target.zone) return;
-    if (boss ? q.target.boss === name : q.target.enemy === name) complete(q);
+    if (q.target.report) return;
+    if (boss ? q.target.boss === name : q.target.enemy === name) {       // the hunt is done: he goes to the guild in the Town to report it
+        q.target.huntZone = q.target.zone;
+        q.target.zone = GUILD_ZONE;
+        q.target.report = true;
+        q.phase = 'travel';
+        q.searched = 0;
+        stats.count('quest.hunted');
+        print(`<i>${wizardName()} has done what was asked. Now he must report it to the hunters' guild in the ${zoneName(GUILD_ZONE)}.</i>`);
+    }
+}
+
+// At the guild: the wizard tells it, then the hunter pays (the quest is done).
+const hunted = (q) => (q.target.boss ? enemyTypes[q.target.boss].name : enemySprites[q.target.enemy].altName);
+export const guildReady = () => !!state.quest && !!state.quest.target.report;
+export function guildTell() {
+    const q = state.quest;
+    if (!q || !q.target.report) return false;
+    print(`<i>${pickFrom(GUILD_TELL).replace(/\{(\w+)\}/g, (m, k) => ({ name: wizardName(), who: hunted(q), where: zoneName(q.target.huntZone) }[k]))}</i>`);
+    return true;
+}
+export function guildPay() {
+    const q = state.quest;
+    if (!q || !q.target.report) return false;
+    complete(q);
+    return true;
 }
 export function onShrine() {
     const q = state.quest, z = state.zone.current;
@@ -653,7 +683,7 @@ export function scrollHtml() {
         : GOD_ORDERS.map((k) => `<button class='orderBtn' ${STATES('order_plate')} data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
     h += `</div><br><span class='subtitles'>Errands</span><br>`;
     if (!all.length) h += `<p>No quest now</p>`;
-    h += all.map((x, i) => `<div class='questRow'><div class='questText' data-info='${x.id}'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
+    h += all.map((x, i) => `<div class='questRow'><div class='questText' data-info='${x.id}'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${x.target.report ? 'to report at the guild' : PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
         mvBtn('up', i, 'btn_up', i === 0) +
         mvBtn('down', i, 'btn_down', i === all.length - 1) +
         mvBtn('drop', i, 'btn_x', false) + `</div>`).join('');
