@@ -21,6 +21,7 @@ import { ui } from '../runtime.js';
 import { zones } from '../data/zones.js';
 import { dreams } from '../data/dreams.js';
 import { poems } from '../data/awayTexts.js';
+import { BOSS_STORIES, RARE_STORIES } from '../data/questTexts.js';
 import { beliefLevel } from '../belief.js';
 import { dreamStill, dreamStillOff, sleepInDark, wizardName } from '../ui/render.js';
 import { scrollClose, scrollOpen } from '../ui/scrolls.js';
@@ -171,7 +172,8 @@ async function loadItems() {
     })));
     const code = [];
     for (const file of CODE_FILES) code.push(...parseCode(file, await fetchText(`src/${file}`)).map((x) => ({ ...x, group: `Game phrases: ${file}` })));
-    const consoleItems = [...code, ...zoneLines().map((x) => ({ ...x, group: 'Entering a zone' })),
+    const hunts = (list, what) => Object.entries(list).map(([key, lines]) => ({ label: `${what}: ${key}`, where: `src/data/questTexts.js, ${what === 'Boss' ? 'BOSS_STORIES' : 'RARE_STORIES'}.${key} (one per line; {who} and {where} are filled)`, lines, group: 'Hunt stories (quests)' }));
+    const consoleItems = [...code, ...hunts(BOSS_STORIES, 'Boss'), ...hunts(RARE_STORIES, 'Rare school'), ...zoneLines().map((x) => ({ ...x, group: 'Entering a zone' })),
         ...story.lines.map((x) => ({ ...x, group: 'Story beats (docs/STORY.md)' }))];
     items.console = consoleItems.map((x, i) => ({ kind: 'console', id: `console:${x.where}:${x.label}`, prefix: '', suffix: '', ...x, text: x.lines.join('\n'), n: i }));
 }
@@ -190,7 +192,7 @@ function zoneName() {
 function slotValues() {
     const name = wizardName();
     return { name, zone: zoneName(), shrineZone: zoneName(), staffName: world.staffName || 'Orrovan',
-        loop: world.loop || 2, reversedName: name.split('').reverse().join(''), enemy: 'The Slime' };
+        loop: world.loop || 2, reversedName: name.split('').reverse().join(''), enemy: 'The Slime', who: 'the creature', where: zoneName() };
 }
 
 // A chapter's ⟨slots⟩ filled with the variants picked in the panel.
