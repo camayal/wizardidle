@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) The Regions picker keeps a report of the walk (each scene, direction, mirroring, wizard position, overlay, arrival) in a box with a Copy button. A mirrored scene now mirrors its front layer (bridge overlays) with it.
 - (Developer tools) A Regions picker in the dev panel: choose a region to start in and another to walk to, and he is teleported and made to walk the real connector between them (border, bridge, mouth, stairs), or a plain walk when there is none. The console says which stages and scenes were used.
 - The god's touch spots on the wizard and on the enemy are now the usual 32 x 32 squares on the walk line instead of wide tall columns, on both sides. A speech bubble follows the enemy to the left when the scene is mirrored, text always readable.
 - Border and bridge scenes crossed the other way (leaving the Swamp, the Dunes...) now show the same art mirrored while he walks right, so he no longer turns around on the border scene. Speech bubbles read the right way round when the characters are mirrored.

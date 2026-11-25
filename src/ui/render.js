@@ -94,11 +94,15 @@ function placeDivine() {
     for (const id of ["pjDivineBtn", "npcDivineBtn"]) el(id).style.top = top + "px";
 }
 
+// Dev tools: ui.trace (set by the Regions picker) receives a line for each scene and walk.
+const trace = (text) => { if (ui.trace) ui.trace(text); };
+
 function loadBackground(back, mirror = false) {
     ui.currentBackGround = back;
     ui.mirrored = mirror;           // a border or bridge crossed the other way is the same art mirrored, so he always walks right
     ui.headLevel = ui.objectSize * headLevelShare(back);     // the walk line: raised only in the connector scenes
     if (run.simulation) return;     // in a simulation only what's on the scene matters
+    trace(`scene ${back} mirror=${mirror} zone=${state.zone.current}${state.zone.stage} offset=${ui.wizardOffset} facing=${ui.facing} overlay=${overlays.has(back.toLowerCase())}`);
     placeDivine();
     showHotspots(back);             // its clickable spots (a new scene visit)
     // the old background stays until the new image has loaded (no flash of the page behind)
@@ -110,6 +114,7 @@ function loadBackground(back, mirror = false) {
         const front = el("overlayCanvas").style, name = back.toLowerCase();
         front.background = overlays.has(name) ? `url('${art(`overlay_${name}`)}') no-repeat` : "none";
         front.backgroundSize = "contain";
+        front.transform = mirror ? "scaleX(-1)" : "";      // the front layer is mirrored with its scene
         showDiceTable(back);                    // the table of a dice house (cleared in any other scene)
         showTrophyWall(back);                   // the plaques of the trophy room
     });
@@ -393,6 +398,7 @@ function walkAcross(steps, changeScene, onArrive) {
     const play = (i) => {
         const s = steps[i], more = i + 1 < steps.length;
         ui.wizardOffset = startOf(s);
+        trace(`step ${i + 1}/${steps.length} ${s.scene} dir=${s.dir} mirror=${!!s.mirror} from=${ui.wizardOffset} to=${s.end != null ? s.end : side(s.dir)}${s.fade ? " fade" : ""}${s.border ? " border" : ""}`);
         const target = s.end != null ? s.end : side(s.dir);
         const walkOn = (onReached) => s.fightSpot == null ? walkWizardTo(target, onReached)
             // a fight on the way (travel.js): he walks to its spot, the fight runs, then he walks on

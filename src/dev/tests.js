@@ -366,6 +366,8 @@ function pickerHtml() {
         Regions: `
             <div class="row"><label>From <select data-f="regFrom">${regionOpts}</select></label>
                 <label>To <select data-f="regTo">${regionOpts}</select></label> <button data-do="regionWalk">Go</button></div>
+            <div class="row"><textarea id="regLog" rows="8" style="width:100%;font-size:11px" placeholder="the walk's report appears here"></textarea></div>
+            <div class="row"><button data-do="regionCopy">Copy report</button></div>
             <div class="note">Puts him in a stage of the first region and makes him walk to the second, through the real border, bridge, mouth or stairs between them when there is one (the console says which stages and scenes). With no connector between them it is a plain walk out and in.</div>`,
         Spectra: `
             <div class="row"><select data-f="spectrum">${opts(SPECTRA.map((c) => `spectrum_${c}`), SPECTRA)}</select>
@@ -413,8 +415,18 @@ const pickerActions = {
         if (a === b) return devPrint('pick two different regions');
         resetScene();
         run.crossing = null;
-        const text = regionTrip(a, b, nextEvent);
+        const log = document.getElementById('regLog'), t0 = performance.now();
+        const note = (line) => { if (log) { log.value += `${((performance.now() - t0) / 1000).toFixed(1)}s ${line}
+`; log.scrollTop = log.scrollHeight; } };
+        if (log) log.value = '';
+        ui.trace = note;
+        const text = regionTrip(a, b, () => { note(`arrived: zone=${state.zone.current}${state.zone.stage} offset=${ui.wizardOffset} facing=${ui.facing}`); ui.trace = null; nextEvent(); });
+        note(`region walk ${a} -> ${b}: ${text || 'no stages in a region'}`);
         devPrint(text ? `region walk ${text}` : 'no stages in a region');
+    },
+    regionCopy() {
+        const log = document.getElementById('regLog');
+        if (log) { log.select(); navigator.clipboard.writeText(log.value).catch(() => document.execCommand('copy')); }
     },
     connector(f) { devWalk(connectorTests()[Number(f('connector'))].steps); },
     connectorFight(f) {
