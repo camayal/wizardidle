@@ -2505,3 +2505,9 @@ Author's note: More ideas for economy quests:
 - Quest trophies (author via dev, 2026-11-24): a hunt now ends with a temporary quest item he carries to the guild, a trophy of the hunted enemy in a box of a different colour than normal items so it reads as a quest item. One unique trophy per hunted rare and boss, easy to read and easy to cut from the current sprite, nothing extreme: a head, a staff, a cape, a horn, a tail. Offer the options in the art console first. Dev wires them in.
 - Quest trophies, author's choice (2026-11-24): look C (outlined piece on a wooden plaque, no box), never a full body. Pieces per boss: arcangel wings; bicatio both heads; cuboq a bottle of liquid in cuboq colours; doria staff; fenix a fire egg (the phoenix is destroyed, only an egg is left); goro head; greater naga tail; herbus head; infraespectro crown; kkck a bottle of brown matter (very smelly); lamia rings from the tail; medusa head; protomus head; red crown and staff; skeleton sword and staff. No trophy: etymos (split in parts), hydras (find only), midas (cannot die until a later story moment), rainbow (only when fully formed). Rares of the zones: pieces to be picked later.
 - Doria staff (author via dev, 2026-11-24): make Doria's staff more impressive in the actual sprite and in all its animations, and redo the trophy to match: a big palantir (a glowing orb) on top of the staff. Options first in the art console.
+
+## Gear button
+
+- For artist (author, 2026-11-25): the ? help button (img/ui/helpbtn.png, 33 x 33) becomes a gear that opens the Settings scroll (text size, sound, and the help below). Draw `img/ui/settingsbtn.png` in the same style as the other toolbar buttons and drop it in the review. Dev wires it in.
+
+(done 2026-11-25: gear C, ribbon icons settings A and faq A, slider C wired in)

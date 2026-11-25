@@ -33,7 +33,7 @@ const WIZARD_ANIM = { cast: 'cast', walk: 'walk', pray: 'pray', fall_sit: 'fall'
 const STORY = /^(god_|anim_god_|anim_shrine_|healer|curandero|mistico|comerciante|jugon|viejo|stranger_|cazador_|bubble_)/;
 const OBJECTS = /^(chest\d|pot\d|bag$|barrel$|box$|libro\d|runa\d|item_|proof_|prop_|d[1-6]$|ship$|captain$|crew$|sleepingbag$|stuff$|staff_\d+$)/;
 const APP = /^(favicon|apple-touch-icon|mstile|icon\d*$|safari-pinned-tab)/;
-const UI = /^(achivement|attack|bocadillo|boss|CloseBtn|console|continue|crash|emptyLongBtn|frame|gold|heal|heart\d*|helpbtn|initBack|learn|mapa|mapaunderground|mapaboveground|mapbtn|matar|muerto|nubes|plegariabtn|scroll\w*|spirit|star|start|statsbtn|archbtn|diebtn|xp)$/;
+const UI = /^(achivement|attack|bocadillo|boss|CloseBtn|console|continue|crash|emptyLongBtn|frame|gold|heal|heart\d*|helpbtn|initBack|learn|mapa|mapaunderground|mapaboveground|mapbtn|matar|muerto|nubes|plegariabtn|scroll\w*|spirit|star|start|statsbtn|archbtn|diebtn|settingsbtn|slider_\w+|xp)$/;
 
 // The folder of an image (without img/), or '' when no rule knows the name.
 export function artFolder(name) {
@@ -64,7 +64,7 @@ export function artFolder(name) {
     if (/^tomb_/.test(name)) return 'ui/cemetery';
     if (/^(anim_)?faith_|^anim_faith_|^icon_order_|^order_plate_|^btn_(up|down|x)_/.test(name)) return 'ui/faith';   // the faith scroll's meter, candle, border
     if (/^quest_scroll_/.test(name)) return 'ui/quests';     // the little info scroll of a quest
-    if (/^(ribbon_(rest|selected)|icon_(stats|kill|achievements|map|faith)_[a-z]+)$/.test(name)) return 'ui/ribbon';   // the scroll bookmarks
+    if (/^(ribbon_(rest|selected)|icon_(stats|kill|achievements|map|faith|help)_[a-z]+)$/.test(name)) return 'ui/ribbon';   // the scroll bookmarks
     if (UI.test(name)) return 'ui';
     return '';
 }

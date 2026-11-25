@@ -163,6 +163,19 @@
                 transition: 0.5s width;
             }
 
+            /* settings page: the text size slider (art in img/ui/slider_*.png, drawn by scrolls.js; --su = one art pixel) */
+            .setSliderRow{ display:flex; align-items:center; gap:calc(2 * var(--su)); margin:calc(2 * var(--su)) 0; }
+            .setSliderRow img{ image-rendering:pixelated; }
+            .setSliderBox{ position:relative; flex:none; }
+            .setSliderBox canvas{ position:absolute; left:0; top:0; image-rendering:pixelated; }
+            #textSizeSlider{ position:absolute; left:0; top:0; margin:0; padding:0; background:none; -webkit-appearance:none; appearance:none; outline:none; touch-action:pan-y; }
+            #textSizeSlider::-webkit-slider-runnable-track{ background:none; border:0; height:calc(14 * var(--su)); }
+            #textSizeSlider::-moz-range-track{ background:none; border:0; height:calc(14 * var(--su)); }
+            #textSizeSlider::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; border:0; border-radius:0; width:calc(14 * var(--su)); height:calc(14 * var(--su)); background:var(--thumb) center / 100% 100% no-repeat; image-rendering:pixelated; }
+            #textSizeSlider::-moz-range-thumb{ border:0; border-radius:0; width:calc(14 * var(--su)); height:calc(14 * var(--su)); background:var(--thumb) center / 100% 100% no-repeat; image-rendering:pixelated; }
+            #textSizeSlider:active::-webkit-slider-thumb{ background-image:var(--thumbDown); }
+            #textSizeSlider:active::-moz-range-thumb{ background-image:var(--thumbDown); }
+
             .btn:active {
                 transform: translateY(0.2em);
             }
@@ -495,7 +508,7 @@
                  <img id="btn3" class="btn dis" src="img/ui/diebtn.png"/>
                  <img id="btn4" class="btn dis" src="img/ui/plegariabtn.png"/>
                  <img id="btn5" class="btn dis" src="img/ui/mapbtn.png"/>
-                 <img id="btn6" class="btn dis" src="img/ui/helpbtn.png"/>
+                 <img id="btn6" class="btn dis" src="img/ui/settingsbtn.png"/>
             </div>
         
         </div>

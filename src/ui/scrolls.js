@@ -219,11 +219,11 @@ function updateAchievements(){
 // bookmark with an icon hanging from the scroll's top edge; tapping one brings that page to the
 // front and plays the scroll sound. The open page's ribbon hangs lower and is lighter (the
 // author chose look A and the one-colour ribbons on 2026-11-18, replacing the paper strips).
-const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"], faith: ["faith", "quests"], map: ["above", "ground", "underground"] };
-const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory", faith: "Faith", quests: "Quests", above: "Aboveground", ground: "Ground", underground: "Underground" };
+const TAB_SETS = { kill: ["kill", "cemetery", "bestiary"], stats: ["stats", "inventory"], faith: ["faith", "quests"], map: ["above", "ground", "underground"], help: ["settings", "faq"] };
+const PAGE_NAMES = { run: "This wizard", all: "Other wizards", kill: "Kill", cemetery: "Cemetery", bestiary: "Bestiary", stats: "Stats", inventory: "Inventory", faith: "Faith", quests: "Quests", above: "Aboveground", ground: "Ground", underground: "Underground", settings: "Settings", faq: "FAQ" };
 const RIBBON_ICONS = { kill: "icon_kill_kill", cemetery: "icon_kill_cemetery", bestiary: "icon_kill_bestiary",
     run: "icon_achievements_run", all: "icon_achievements_all", stats: "icon_stats_stats", inventory: "icon_stats_inventory", faith: "icon_faith_faith", quests: "icon_faith_quests",
-    above: "icon_map_above", ground: "icon_map_ground", underground: "icon_map_underground" };
+    above: "icon_map_above", ground: "icon_map_ground", underground: "icon_map_underground", settings: "icon_help_settings", faq: "icon_help_faq" };
 const RIBBON_SIDE = "left";         // "left" or "right" of the top edge; the close button sits at the top right
 const RIBBON_SCALE = 1.5;           // one ribbon pixel = this many pixels of the 320-wide scroll art (2 was too big, 1.5 a bit small)
 const RIBBON_TOP = -5;              // ribbon pixels below the roll's top edge (negative = above it). Test (author): -5, the ribbons start above the roll and hang over it; 3 with the roll over them (ribbon z-index 1) tucks them into it
@@ -368,6 +368,35 @@ el('innerTextScroll').addEventListener('click', (e) => {
     }
 });
 
+// The text size slider, drawn from the artist's pieces (img/ui/slider_*.png): the track is a 3-slice (caps 8 px, a
+// 4 px middle that repeats), the four ticks sit under the steps, and the thumb is the input's own thumb (CSS).
+// su is one art pixel on screen, a whole number of pixels so the pixel art stays sharp.
+function drawSlider(slider) {
+    const su = Math.max(2, Math.min(Math.round(ui.em * 0.35), Math.floor(ui.objectSize * 0.8 / 78)));
+    const W = 56 * su, steps = TEXT_SIZES.length - 1;
+    const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = el("sliderArt");
+    row.style.setProperty("--su", `${su}px`);
+    slider.style.setProperty("--thumb", `url(${art("slider_thumb")})`);
+    slider.style.setProperty("--thumbDown", `url(${art("slider_thumb_down")})`);
+    box.style.width = `${W}px`; box.style.height = `${19 * su}px`;
+    slider.style.width = `${W}px`; slider.style.height = `${14 * su}px`;
+    canvas.width = W; canvas.height = 19 * su; canvas.style.width = `${W}px`; canvas.style.height = `${19 * su}px`;
+    el("aSmall").style.width = `${5 * su}px`; el("aBig").style.width = `${9 * su}px`;
+    const track = new Image(), ticks = new Image();
+    let loaded = 0;
+    const paint = () => {
+        if (++loaded < 2) return;
+        const ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(track, 0, 0, 8, 10, 0, 2 * su, 8 * su, 10 * su);
+        for (let x = 8 * su; x < W - 8 * su; x += 4 * su) ctx.drawImage(track, 8, 0, 4, 10, x, 2 * su, 4 * su, 10 * su);
+        ctx.drawImage(track, 12, 0, 8, 10, W - 8 * su, 2 * su, 8 * su, 10 * su);
+        for (let i = 0; i <= steps; i++) ctx.drawImage(ticks, 0, 0, 3, 5, Math.round(7 * su + i * (W - 14 * su) / steps - 1.5 * su), 14 * su, 3 * su, 5 * su);
+    };
+    track.onload = ticks.onload = paint;
+    track.src = art("slider_track"); ticks.src = art("slider_ticks");
+}
+
 // Fill the help scroll (collapsible sections).
 function updateHelp(){
     const frequentQuestions = '<b>Why does everyone have a name?</b> - All individuals of sentient species have one (Pybryas are very smart!)<br>' +
@@ -390,12 +419,14 @@ function updateHelp(){
     '<b>I opened the game in another tab and it fell apart. Is that a bug?</b> - Not exactly. There is one world and one tab: the first tab keeps and saves the world, any other is a dimension that is unstable and collapses by itself. Close the extra tab.<br>' +
     '<b>Where is my game saved?</b> - In your browser, on this device only. Clearing the site data erases it. The game also works offline once it has loaded.<br>';
 
-    const sizeChoices = TEXT_SIZES.map(t => `<span class="setChoice${t.id == prefs.textSize ? ' on' : ''}" data-size="${t.id}">${t.label}</span>`).join(' ');
-    const settings = '<div id="settings"><div class="setRow">Text size<br>' + sizeChoices + '</div>' +
+    const sizeIndex = TEXT_SIZES.findIndex(s => s.id == prefs.textSize);
+    const settings = '<div id="settings"><div class="setRow">Text size<br><div class="setSliderRow"><img id="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas id="sliderArt"></canvas>' +
+        '<input id="textSizeSlider" type="range" min="0" max="' + (TEXT_SIZES.length - 1) + '" step="1" value="' + sizeIndex + '"></div><img id="aBig" src="' + art('slider_a_big') + '"></div>' +
+        '<span id="textSizeName">' + TEXT_SIZES[sizeIndex].label + '</span></div>' +
         '<div class="setRow">Sound<br><span class="setChoice' + (prefs.sound ? ' on' : '') + '" data-sound="1">On</span> <span class="setChoice' + (prefs.sound ? '' : ' on') + '" data-sound="0">Off</span></div>' +
         '<div class="setRow" style="opacity:.7">The text also follows the text size of your browser, and grows a little on tall screens.</div></div>';
 
-    const txt = '<div id="help"><span class="titles" id="titleHelp">Settings</span><br>' + settings +
+    const faqBody = '' +
    '<div class="faq">WizardIDLE, what is this?</div><div class="a">It is a game with typical elements of a common RPG game, the only difference is the player role. You are the god of the wizard and your interaction is limited due his free will. With or without your help the wizard can reach his fate being a deep believer or a hardened atheist.</div>' +
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true idle game, you must do nothing. The wizard can perform all actions without your help. This is a different way to play, watching what other beings do without your control but some interference (you can interact with miracles). <b><i>This is a god like game</i></b>. When no god is looking the world is in no hurry: it counts its time in the beads of a mala.</div>' +
    '<div class="faq">Graphical layout</div><div class="a">The screen is divided into three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, health points, gold and faith points. In this panel you can find the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where all actions performed by the wizard are printed.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to interact</i> with the wizard, non-player characters or environments. </div>' +
@@ -445,9 +476,14 @@ function updateHelp(){
    '<div class="faq">Licences</div><div class="a">' + 
    'All media included in this game was provided by the authors under Creative Commons licenses or Public domain (included: CC0,CC-BY 3.0, CC-BY-SA 3.0).<br><br>The vast majority of the graphics were created by: David E. Gervais found in the following repository <a href="http://pousse.rapiere.free.fr/tome/" target="_blank">http://pousse.rapiere.free.fr/tome/</a>.  <br>Some other graphics were created by multiple artists and distributed by Crawl Stone Soup team (<a href="http://crawl.develz.org/wordpress/" target="_blank">http://crawl.develz.org/wordpress/</a>) based on the work rltiles (<a href="http://rltiles.sourceforge.net/" target="_blank">http://rltiles.sourceforge.net/</a>). The repository can be found at <a href="https://github.com/crawl/tiles" target="_blank">https://github.com/crawl/tiles</a> <br><br>Some of the sounds were created by:<br>David McKee (VIRiX Dreamcore) (<a href="https://soundcloud.com/virix" target="_blank">https://soundcloud.com/virix</a>) <br>Little Robot Sound Factory (<a href="http://www.littlerobotsoundfactory.com/" target="_blank">http://www.littlerobotsoundfactory.com/</a>) <br>p0ss (<a href="https://opengameart.org/users/p" target="_blank">https://opengameart.org/users/p</a>) 0ss) <br>wobbleboxx (<a href="http://wobbleboxx.com" target="_blank">http://wobbleboxx.com</a>) <br>kenney (<a href="http://kenney.nl" target="_blank">http://kenney.nl</a>) <br>Iwan Gabovitch (<a href="http://qubodup.net" target="_blank">http://qubodup.net</a>) <br>Bart Kelsey (<a href="https://opengameart.org/users/bart" target="_blank">https://opengameart.org/users/bart</a>) <br>spookymodem (<a href="https://opengameart.org/users/spookymodem" target="_blank">https://opengameart.org/users/spookymodem</a>) <br>artisticdude (<a href="https://opengameart.org/users/artisticdude" target="_blank">https://opengameart.org/users/artisticdude</a>) <br>DoKashiteru (<a href="https://opengameart.org/users/dokashiteru" target="_blank">https://opengameart.org/users/dokashiteru</a>) <br>Vehicle (<a href="http://www.vehiclemusic.eu" target="_blank">http://www.vehiclemusic.eu</a>) <br>Ogrebane (<a href="https://opengameart.org/users/ogrebane" target="_blank">https://opengameart.org/users/ogrebane</a>) <br>Dragon Studio (<a href="https://ko-fi.com/dragonstudio" target="_blank">https://ko-fi.com/dragonstudio</a>), for a bunch of sounds <br>freesound_community (<a href="https://pixabay.com/users/freesound_community-46691455/" target="_blank">https://pixabay.com/users/freesound_community-46691455/</a>), for many more sounds <br><br>Thanks to all the kind artists who share their art for other people\'s projects' +
    '</div>' +
+   '';
+
+    const aboutBody = '' +
    (DEV ? '<div class="faq">Developer tools</div><div class="a">Only while developing (never on the live site): the dev panel beside the game, with modes (sounds, art), test scenarios, fights, quick actions, a command line and the author notes box.<br><br><span class="devToggle" style="text-decoration:underline;cursor:pointer">Show or hide the dev panel</span></div>' : '') +
-   '<div class="faq">Version</div><div class="a">The current version is: <b>' + version + '</b></div>' +
-   '</div>';
+   '<div class="faq">Version</div><div class="a">The current version is: <b>' + version + '</b></div>';
+
+    const page = ui.scrollViews.help;
+    const txt = '<div id="help"><span class="titles" id="titleHelp">' + PAGE_NAMES[page] + '</span><br>' + (page == "faq" ? faqBody : settings + aboutBody) + '</div>';
 
 
     el('innerTextScroll').innerHTML=txt;
@@ -455,20 +491,28 @@ function updateHelp(){
     el("help").style.lineHeight = `${ui.em}px`;
     el("titleHelp").style.fontSize = `${ui.em * 2.5}px`;
     el("titleHelp").style.lineHeight = `${ui.em * 2.5}px`;  
-    // settings: the choices are buttons made of text, the page is drawn again to show the pick
-    for (const choice of el("settings").querySelectorAll(".setChoice")) {
-        choice.style.cssText = `display:inline-block;margin:${ui.em * 0.3}px ${ui.em * 0.3}px 0 0;padding:${ui.em * 0.4}px ${ui.em * 0.8}px;border:2px solid #5a3a1a;border-radius:${ui.em * 0.3}px;cursor:pointer;line-height:${ui.em * 1.2}px;` +
-            (choice.classList.contains("on") ? 'background:#5a3a1a;color:#f4e4bc;' : '');
-        choice.addEventListener("click", () => {
-            if (choice.dataset.size) setTextSize(choice.dataset.size);
-            else setSound(choice.dataset.sound == "1");
+    // settings page: the text size slider (the page is not redrawn while dragging, only at the end) and the sound choice
+    if (el("settings")) {
+        const slider = el("textSizeSlider");
+        const u = ui.em;
+        el("settings").style.fontSize = `${u}px`;
+        drawSlider(slider);
+        slider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[slider.value].label; };
+        slider.onchange = () => {
+            setTextSize(TEXT_SIZES[slider.value].id);
             responsiveLayout();      // sizes everything again, with the new text size
             updateHelp();
-        });
+        };
+        for (const choice of el("settings").querySelectorAll(".setChoice")) {
+            choice.style.cssText = `display:inline-block;margin:${u * 0.3}px ${u * 0.3}px 0 0;padding:${u * 0.4}px ${u * 0.8}px;border:2px solid #5a3a1a;border-radius:${u * 0.3}px;cursor:pointer;line-height:${u * 1.2}px;` +
+                (choice.classList.contains("on") ? 'background:#5a3a1a;color:#f4e4bc;' : '');
+            choice.addEventListener("click", () => {
+                setSound(choice.dataset.sound == "1");
+                updateHelp();
+            });
+        }
     }
 
-
-    
     //collapsible in help scroll
     const coll = document.getElementsByClassName("faq");
     let i;
@@ -559,7 +603,7 @@ function askForgetSecret(btn, what) {
 }
 
 // How each tabbed scroll redraws its front page.
-const PAGE_RENDER = { stats: updateStats, faith: updateFaith, kill: updateKill, achievements: updateAchievements, map: localizarBocadillo };
+const PAGE_RENDER = { stats: updateStats, faith: updateFaith, kill: updateKill, achievements: updateAchievements, map: localizarBocadillo, help: updateHelp };
 
 export {
     counterText,

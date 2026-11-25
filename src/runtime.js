@@ -85,7 +85,7 @@ export const ui = {
     wizardOffset: 0,               // how far right of his place the wizard walked (sprite px)
     findSpot: null,                // where a find lies in the scene (sprite px), see events.js
     crisp: true,                   // sprites drawn as sharp pixels (dev bar can switch it off to compare)
-    scrollViews: { kill: "kill", stats: "stats", faith: "faith", achievements: "run", map: "ground" },  // front page of each tabbed scroll (ui/scrolls.js)
+    scrollViews: { kill: "kill", stats: "stats", faith: "faith", achievements: "run", map: "ground", help: "settings" },  // front page of each tabbed scroll (ui/scrolls.js)
     audio: undefined,              // last sound played
     goldIcon: undefined,           // <img> snippets sized to em, used in console messages
     spiritIcon: undefined,

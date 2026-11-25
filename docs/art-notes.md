@@ -93,7 +93,3 @@ The scene needs to be modified: the firepit sits on the walkable line, so the wi
 
 - Rare proofs, lump similar ones (author via dev, 2026-11-24): the 18 proofs in style C are approved. To keep it simple, families that look alike share one container: e.g. esqueleto and golem the same box, animalejo and the other bagged ones the same bag. Only containers that differ in colour or shape stay separate. Report the groups (which families share which file, named by the shape and colour, e.g. proof_box_grey.png), so dev maps families to files.
 - Capricor trophy (author via dev, 2026-11-24): el_capricor is the one rare that gets a real trophy, a rare rare with a story. Its head, look C (outlined piece on the wooden plaque, 32x32, item_trophy_capricor.png). It is hung on the MAIN wall of the hunters hut, perhaps above the table: tell dev the spot (x, y in the 256x64 scene of el_poblado_cazadores.png) where a 32x32 plaque fits.
-
-## Gear button
-
-- For artist (author, 2026-11-25): the ? help button (img/ui/helpbtn.png, 33 x 33) becomes a gear that opens the Settings scroll (text size, sound, and the help below). Draw `img/ui/settingsbtn.png` in the same style as the other toolbar buttons and drop it in the review. Dev wires it in.
