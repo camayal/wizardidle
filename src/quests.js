@@ -9,7 +9,7 @@
 
 import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
-import { huntStory } from './data/questTexts.js';
+import { doneStory, huntStory, pickFrom, SPOTS } from './data/questTexts.js';
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { config } from './config.js';
 import { state } from './state.js';
@@ -47,6 +47,9 @@ function raresOf(z) {
     return Object.keys(enemySprites).filter((s) => enemySprites[s].rare && !/^spectrum_/.test(s) && fam.includes(s.replace(/\d+$/, '')));
 }
 
+// Has he been there already? (the zones he has stood in are counted by the stats)
+const knowsZone = (z) => stats.get(`explore.zone.${z}`) > 0;
+
 // ---- making a quest ----
 
 let nextId = 1;
@@ -70,8 +73,13 @@ const MAKERS = {
         return w;
     },
     explore(giver) {
-        const z = pickRandomItem(ZONES().filter((x) => x !== state.zone.current).join(','));
-        return base('explore', giver, `Go and see the ${zoneName(z)}`, { zone: z }, 'xp');
+        const all = ZONES().filter((x) => x !== state.zone.current);
+        const fresh = all.filter((x) => !knowsZone(x));     // the giver mostly tells of places he has not seen; now and then of one he knows
+        const z = pickRandomItem((fresh.length && !YesOrNot(config.quests.pKnownPlace, 0) ? fresh : all).join(','));
+        const spot = SPOTS[z] ? pickFrom(SPOTS[z]) : null;
+        const w = base('explore', giver, `Go and see the ${zoneName(z)}`, { zone: z, found: spot ? spot[1] : 'it is as quiet as they said' }, 'xp');
+        if (spot) w.story = `You should see the ${zoneName(z)}: ${spot[0]}`;
+        return w;
     },
     study(giver) {
         const z = pickRandomItem(ZONES().join(','));
@@ -237,7 +245,10 @@ function reward(q) {
 
 function complete(q) {
     const got = reward(q);
-    print(`<i>${wizardName()} has finished his quest (${q.text}): ${got}</i>`);
+    const key = q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : q.kind;
+    const who = q.target.boss ? enemyTypes[q.target.boss].name : q.target.enemy ? enemySprites[q.target.enemy].altName : '';
+    const tale = doneStory(key, { name: wizardName(), where: zoneName(q.target.zone), who, found: q.target.found });
+    print(`<i>${tale || `${wizardName()} has finished his quest (${q.text})`} <small>(${got})</small></i>`);
     finish(q, 'done');
 }
 
@@ -489,6 +500,11 @@ export function decideOffer() {
     run.questOffer = null;
     if (!o) return false;
     const name = wizardName();
+    if (o.q.kind === 'explore' && knowsZone(o.q.target.zone)) {       // he has been there: no errand, but he agrees it is good
+        print(`<i>${name} smiles: "I was already there. It is indeed a good place."</i>`);
+        stats.count('quest.refused');
+        return false;
+    }
     let accept = suits(o.q), line;
     if (o.hint) {
         if (obeys()) {

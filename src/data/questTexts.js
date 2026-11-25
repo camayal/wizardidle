@@ -339,3 +339,80 @@ export function huntStory(kind, key, who, where) {
     const t = list[Math.floor(Math.random() * list.length)].replace(/\{who\}/g, who).replace(/\{where\}/g, where);
     return t.charAt(0).toUpperCase() + t.slice(1);
 }
+
+// ---- finished quests: what the console tells when he gets there ({name}, {where}, {who}, {found}) ----
+export const DONE_STORIES = {
+    explore: [
+        "{name} finally arrived at the {where}: {found}.",
+        "After a long walk, {name} stands in the {where} at last: {found}.",
+        "The {where} opens before {name}, as he was told: {found}.",
+        "{name} reached the {where} and looked around slowly: {found}.",
+    ],
+    study: [
+        "{name} sits down in the {where} and reads what he found until the light changes.",
+        "In the {where} {name} has found something worth his notebook, and he writes for a long while.",
+        "{name} turns the find over in his hands in the {where}, and understands a little more than before.",
+    ],
+    shrine: [
+        "{name} kneels at the shrine of the {where} and the quiet answers him.",
+        "At the shrine of the {where}, {name} says the old words, and something listens.",
+        "{name} lights a small offering at the {where} shrine and stays until it burns down.",
+    ],
+    pilgrimage: [
+        "{name} has prayed at the last shrine. His long road is over, and he is not the same man who began it.",
+        "The pilgrimage ends. {name} bows at the last shrine and feels his feet, and his faith, grow lighter.",
+    ],
+    hidden: [
+        "{name} pushes through the last brambles and finds the hidden shrine of the {where}, waiting as if for him.",
+        "There it is, in the {where}: the shrine nobody told him about. {name} lowers his head.",
+    ],
+    delivery: [
+        "{name} sets the parcel on the counter at the {where}, and the host signs for it with a smile.",
+        "At the inn of the {where}, {name} hands over the parcel and gets a nod and his pay.",
+        "The parcel is safe. {name} gives it to the host of the {where} and the host weighs it twice before he thanks him.",
+    ],
+    seek: [
+        "{name} came to the inn of the {where} asking for work, and the host looks him up and down.",
+    ],
+    rare: [
+        "{name} drops the {who} of the {where} and the road is quiet again. Someone will be glad of it.",
+        "The {who} is down. {name} wipes his staff and thinks of the ones who asked him.",
+        "It is done: the {who} of the {where} will trouble nobody now.",
+    ],
+    boss: [
+        "{who} falls, and the {where} breathes out. {name} stands there a while before he walks on.",
+        "{name} has ended {who} of the {where}. The people who asked will sleep tonight.",
+        "With {who} gone, the {where} is a little brighter. {name} takes his time to leave.",
+    ],
+    prism: ["{name} holds the prism up and, for a moment, all the lost colours return."],
+    medusa: ["{name} finds what he sought in the {where}: the shield against Medusa's gaze is his."],
+    rune: ["{name} follows the rune's trail to its end in the {where} and the glyph glows once and goes dark."],
+};
+
+// Key places of each zone: [what the giver says, what the wizard finds].
+export const SPOTS = {
+    el_Castillo: [["the old watchtower still gives a view of the whole valley", "the old watchtower, with a view over the whole valley"]],
+    la_Ciudad: [["the market square is well worth a morning", "the market square, loud and bright"], ["the fountain in the middle is a nice place to rest", "the fountain in the middle, where he rests a while"]],
+    la_Pradera: [["there is a quiet hill with a view of everything", "the quiet hill, with a view of the whole prairie"], ["a stream there runs clear and cold", "a clear cold stream, where he drinks"]],
+    el_Poblado: [["the round huts are a pretty sight at dusk", "the round huts, glowing at dusk"], ["they brew a good cider at the end of the road", "the cider house at the end of the road"]],
+    la_Cueva: [["there is a cavern where the walls glitter", "the glittering cavern"], ["the echo in the deep chamber is worth hearing", "the deep chamber, with its long echo"]],
+    la_Gruta: [["a hall of crystals hangs from the roof", "the hall of crystals"], ["the underground pool is perfectly still", "the still underground pool"]],
+    la_Torre: [["from the top you can see the whole coast", "the top of the tower, with the whole coast below"]],
+    el_Bosque: [["a clearing there is full of fireflies at night", "the clearing of fireflies"], ["the oldest tree is as wide as a hut", "the oldest tree, as wide as a hut"]],
+    el_Pantano: [["the lilies bloom at night and glow", "the glowing lilies"], ["there is a hidden walkway that keeps your boots dry", "the hidden walkway over the bog"]],
+    las_Dunas: [["the ridge at sunset is a sight", "the high ridge, golden at sunset"], ["there is a dry well where the old man stops", "the dry well, with a story of its own"]],
+    la_Tundra: [["there are lights in the sky some nights", "the lights in the sky, dancing in green"], ["an ice cave glows blue at noon", "the ice cave, blue as the sea"]],
+    el_Volcan: [["the lava falls glow at night, a sight to see", "the lava falls, glowing in the dark"]],
+    el_Desierto: [["there is an oasis half a day in", "the oasis, cool and green"], ["the ruins at dusk are worth the walk", "the ruins, long shadows in the dusk"]],
+    el_Heidan: [["the floating isles hang over the mist", "the floating isles above the mist"]],
+    el_Duenon: [["the bone arch at the gate is something to see", "the bone arch at the gate, which he does not enjoy"]],
+    la_playa: [["there is a nice fishing spot on the rocks", "the fishing spot on the rocks"], ["the shells are huge at low tide", "the huge shells at low tide"]],
+    la_Mina: [["the old lift still creaks over a fine view", "the old mine lift, creaking above a long drop"], ["a vein of blue stone glows deep inside", "the vein of blue stone, glowing"]],
+};
+
+export const pickFrom = (list) => list[Math.floor(Math.random() * list.length)];
+export function doneStory(kind, vars) {
+    const list = DONE_STORIES[kind];
+    if (!list) return '';
+    return pickFrom(list).replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m));
+}

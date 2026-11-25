@@ -274,3 +274,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 dev: hunt stories in src/data/questTexts.js (10 per boss, 10 per school); author to review wording. Next: scroll spacing + info scrolls, guild report (art options in review/guild awaiting author pick), inn bubbles.
 
 - 2026-11-24 dev: inn meeting in beats (offer, answer, then sleep); bubble floats at the NPC spot when the inn draws no keeper (tune position). Errand rows spaced 0.9em.
+
+- 2026-11-24 dev: finish narratives (DONE_STORIES) and key places (SPOTS) in questTexts.js; known zones refused with a line (config.quests.pKnownPlace). Guild report later will reuse the hunter NPC with an interaction.
