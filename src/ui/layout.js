@@ -4,7 +4,7 @@
 import { headLevelShare } from '../data/connectors.js';
 import { state } from '../state.js';
 import { fight, ui } from '../runtime.js';
-import { drawWizard, drawWizardPose, loadNPC } from './render.js';
+import { drawWizard, drawWizardPose, loadNPC, placeDivine } from './render.js';
 import { scrollClose } from './scrolls.js';
 import { el } from './dom.js';
 import { art } from '../media.js';
@@ -172,6 +172,16 @@ function getEM(){
 
 
 // Set inline styles on one element; numbers are written as pixels.
+// The touch spots of the god: the wizard's and the enemy's usual 32 x 32 sprite squares (x 32 and 192 of the 256 wide scene),
+// and the middle between them. Their height follows the walk line (render.placeDivine).
+function divineSpots(s, sceneLeft) {
+    const u = s * 0.125, left = parseInt(sceneLeft);
+    setStyles("pjDivineBtn", { width: u, height: u, left: left + u });
+    setStyles("centerDivineBtn", { width: u * 4, height: s * 0.25, left: left + u * 2 });
+    setStyles("npcDivineBtn", { width: u, height: u, left: left + u * 6 });
+    placeDivine();
+}
+
 function setStyles(id, styles) {
     const style = el(id).style;
     for (const [property, value] of Object.entries(styles)) {
@@ -252,18 +262,15 @@ function layoutPortrait(){
     setStyles("main", { width: s, height: H, left: (W / 2) - (s * 1.0625 / 2), top: H * 0.005 });
     setStyles("marco", { width: s * 1.0625, height: marcoH });
     setEach(CANVASES, { width: s, height: sceneH, left: sceneLeft });
-    setStyles("pjDivineBtn", { width: pjBtnW, height: s * 0.25, left: sceneLeft });
-    setStyles("centerDivineBtn", { width: centerBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW) });
-    setStyles("npcDivineBtn", { width: pjBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW) + parseInt(centerBtnW) });
+    divineSpots(s, sceneLeft);
     setStyles("console", { display: "block", fontSize: em, width: s, height: parseInt(backConsoleH) * 0.94, left: s * 0.03 });
     setStyles("backConsole", { display: "block", width: s + (s * 0.075), height: backConsoleH, left: (s * -0.01) });
     setStyles("statusText", { fontSize: em * 2, left: s });
 
     // vertical order: scene above the console, or below it while a scroll is open
-    const sceneDivine = ["pjDivineBtn", "npcDivineBtn", "centerDivineBtn"];
     if (ui.sceneOnTop) {
         setStyles("marco", { top: parseInt(headingH) + parseInt(headingH) * 0.1 });
-        setEach([...CANVASES, ...sceneDivine], { top: parseInt(headingH) + (parseInt(marcoH) * 0.165) });
+        setEach([...CANVASES, 'centerDivineBtn'], { top: parseInt(headingH) + (parseInt(marcoH) * 0.165) });
         setStyles("console", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) });
         setStyles("backConsole", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.1) });
         setStyles("statusText", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) + (parseInt(backConsoleH) * 0.925) });
@@ -271,9 +278,10 @@ function layoutPortrait(){
         setStyles("console", { top: parseInt(headingH) + parseInt(headingH) * 0.2 });
         setStyles("backConsole", { top: headingH });
         setStyles("marco", { top: parseInt(headingH) + parseInt(backConsoleH) });
-        setEach([...CANVASES, ...sceneDivine], { top: parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) });
+        setEach([...CANVASES, 'centerDivineBtn'], { top: parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) });
         setStyles("statusText", { top: parseInt(headingH) + (parseInt(backConsoleH) * 0.925) });
     }
+    placeDivine();
 
     // name screen
     setStyles("launcher", { width: s / 0.9, height: H, left: (W / 2) - ((s / 0.9) / 2) });
@@ -336,9 +344,8 @@ function layoutLandscapeMobile(){
     setStyles("main", { width: s, left: (W - s) / 2 - (W * 0.025) });
     setStyles("marco", { width: s * 1.0625, height: marcoH, top: parseInt(headingH) });
     setEach(CANVASES, { width: s, height: s * 0.25, left: sceneLeft, top: sceneTop });
-    setStyles("pjDivineBtn", { width: pjBtnW, height: s * 0.25, left: sceneLeft, top: sceneTop });
-    setStyles("centerDivineBtn", { width: centerBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW), top: sceneTop });
-    setStyles("npcDivineBtn", { width: pjBtnW, height: s * 0.25, left: parseInt(sceneLeft) + parseInt(pjBtnW) + parseInt(centerBtnW), top: sceneTop });
+    divineSpots(s, sceneLeft);
+    setStyles("centerDivineBtn", { top: sceneTop });
 
     // clouds behind the name screen
     setStyles("nubes", { width: W, height: H, left: 0, top: 0 });

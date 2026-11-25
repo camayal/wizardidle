@@ -88,11 +88,18 @@ ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 //Graphics
 
 // Draw a background (a zone stage, altar, inn...) and move the map marker.
+// The two touch spots sit on the walk line, level with the characters.
+function placeDivine() {
+    const top = (parseFloat(esceneCanvas.style.top) || 0) + (ui.headLevel || 0);
+    for (const id of ["pjDivineBtn", "npcDivineBtn"]) el(id).style.top = top + "px";
+}
+
 function loadBackground(back, mirror = false) {
     ui.currentBackGround = back;
     ui.mirrored = mirror;           // a border or bridge crossed the other way is the same art mirrored, so he always walks right
     ui.headLevel = ui.objectSize * headLevelShare(back);     // the walk line: raised only in the connector scenes
     if (run.simulation) return;     // in a simulation only what's on the scene matters
+    placeDivine();
     showHotspots(back);             // its clickable spots (a new scene visit)
     // the old background stays until the new image has loaded (no flash of the page behind)
     withImage("background", art(`${back.toLowerCase()}`), () => {
@@ -783,7 +790,9 @@ function showBubble(kind) {
         c.width = c.offsetWidth;
         c.height = c.offsetHeight;
         const [x, y] = state.npc ? npcBox(state.npc) : [ui.squareSide * 6, ui.headLevel];
-        const ctx = pixelContext(c), bx = x - 14 * unit, bw = 26 * unit;
+        const ctx = pixelContext(c), bw = 26 * unit;
+        let bx = x - 14 * unit;
+        if (ui.facing < 0 && c !== npcCanvas) bx = c.width - bx - bw;     // the enemy stands on the left now: the bubble follows him, its text unflipped
         if (ui.facing < 0 && c === npcCanvas) { ctx.save(); ctx.translate(bx + bw / 2, 0); ctx.scale(-1, 1); ctx.translate(-(bx + bw / 2), 0); }     // that canvas is mirrored: flip back so the text reads right
         ctx.drawImage(img, bx, Math.max(0, y - 14 * unit), bw, 20 * unit);
         ctx.restore();
@@ -981,6 +990,7 @@ export {
     whenSceneReady,
     clearNPC,
     showBubble,
+    placeDivine,
     clearFrontProp,
     drawWizard,
     showStage,

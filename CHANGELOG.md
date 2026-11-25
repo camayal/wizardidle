@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The god's touch spots on the wizard and on the enemy are now the usual 32 x 32 squares on the walk line instead of wide tall columns, on both sides. A speech bubble follows the enemy to the left when the scene is mirrored, text always readable.
 - Border and bridge scenes crossed the other way (leaving the Swamp, the Dunes...) now show the same art mirrored while he walks right, so he no longer turns around on the border scene. Speech bubbles read the right way round when the characters are mirrored.
 - An Atheist no longer just refuses the god's touches: the god's touch on the enemy weakens it, a touch on him in a fight makes his next killing blow only a graze, and a touch outside a fight (or with a graze waiting) makes a healing herb appear. He never knows: each shows a luck excuse in the console, and belief does not move.
 - The Tower's first room has bookshelves and a palantir the god can touch: the shelves guide him to a book, the palantir sends him a nightmare tonight (when he agrees).
