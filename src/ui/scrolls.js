@@ -571,24 +571,44 @@ function updateHelp(){
         if (el("devToggle")) drawToggle(el("devToggle"), su, () => document.body.dataset.devPanel != "off",
             () => document.dispatchEvent(new Event("wizardidle:toggleDevBar")));
         for (const b of el("settings").querySelectorAll(".setBtn")) b.style.setProperty("--bu", `${su}px`);
+        // like the Kill button: the first press opens a small parchment note over the buttons, the same button again does it
+        let asked = null;
+        const note = (btn, lines, ms) => {
+            const row = btn.parentElement;
+            row.querySelectorAll(".killNote").forEach((n) => n.remove());
+            row.style.position = "relative";
+            const width = Math.min(row.clientWidth * 0.9, ui.em * 18);
+            const n = parchmentNote(lines, width, `left:${(row.clientWidth - width) / 2}px; bottom:100%`);
+            n.className = "killNote";
+            n.onclick = () => { n.remove(); asked = null; };
+            row.appendChild(n);
+            if (ms) setTimeout(() => n.remove(), ms);
+        };
+        const again = (btn, key, lines, go) => {
+            if (asked == key) { asked = null; btn.parentElement.querySelectorAll(".killNote").forEach((n) => n.remove()); return go(); }
+            asked = key;
+            note(btn, lines);
+        };
         el("exportBtn").onclick = () => {
+            asked = null;
             const text = exportSaveText();
             const copied = navigator.clipboard ? navigator.clipboard.writeText(text).then(() => true, () => false) : Promise.resolve(false);
-            copied.then((ok) => { if (ok) alert("Your game is copied. Paste it with Import on the other device."); else window.prompt("Copy this text, then paste it with Import on the other device:", text); });
+            copied.then((ok) => {
+                if (ok) note(el("exportBtn"), ["Copied. Paste it with", "<b>Import save</b> on the other device."], 4000);
+                else window.prompt("Copy this text, then paste it with Import on the other device:", text);
+            });
         };
-        el("importBtn").onclick = () => {
-            const text = window.prompt("Paste the text you got from Export save. It replaces the game on this device.");
+        el("importBtn").onclick = () => again(el("importBtn"), "import", ["Press <b>Import save</b> again, then paste.", "It replaces the game on this device."], () => {
+            const text = window.prompt("Paste the text you got from Export save.");
             if (!text) return;
-            if (!window.confirm("Replace the game on this device with the pasted one?")) return;
             const error = importSaveText(text);
-            if (error) alert(error);
-        };
-        el("resetBtn").onclick = () => {
-            if (!window.confirm("Put every setting back to its default?")) return;
+            if (error) note(el("importBtn"), [error], 4000);
+        });
+        el("resetBtn").onclick = () => again(el("resetBtn"), "reset", ["Press <b>Reset settings</b> again to put", "every setting back to its default."], () => {
             resetPrefs();
             responsiveLayout();
             updateHelp();
-        };
+        });
     }
 
     //collapsible in help scroll

@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Map scroll: the title is always "Map"; the name of the region (or connector) is written under the map picture.
+- Settings: Reset and Import ask like the Kill button (a parchment note, press again) instead of browser dialogs; Export says "Copied" in a note.
 - Settings: the text size and volume sliders have a minus and a plus at their ends (tap to step), so both line up.
 - More settings: Volume (slider, four steps), Fight details in the console (off hides each round of a fight, keeps the start and the end), Screen shake, Vibration (a short buzz on divine touches, phones that can), Keep the screen awake (Wake Lock, where the browser has it), Export save / Import save (the save and the world as one text, copied or pasted, to move a game between devices) and Reset settings. All kept per device.
 - Long phone screens: text grows with the screen height (from 16:9 up to a cap), follows the browser's own text size, and can be set in the Settings scroll (Small, Normal, Large, Extra large). Toolbar buttons grow on tall screens and sit closer together; on tall screens the XP bar with HP, gold and spirit moves under the buttons at full width and grows with them. The `?` button is now a gear that opens a scroll with two ribbons, Settings (a text size slider and a sound switch with the red seal knob, each on one line with its name; a Developer panel switch while developing; the version always shown) and FAQ (the old help); the choices are kept per device (`wizardidle2:prefs`).
