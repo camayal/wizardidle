@@ -165,7 +165,7 @@
 
             /* settings page: the text size slider (art in img/ui/slider_*.png, drawn by scrolls.js; --su = one art pixel) */
             .setSliderRow{ display:flex; justify-content:flex-end; align-items:center; gap:calc(2 * var(--su)); margin:calc(2 * var(--su)) 0; flex:none; }
-            #settings .setRow{ display:flex; justify-content:space-between; align-items:center; gap:1em; margin-bottom:2.4em; min-height:2.5em; }
+            #settings .setRow{ display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1em; margin-bottom:2.4em; min-height:2.5em; }
             /* the red seal button (img/ui/settings_btn_rest/down.png, 24 x 14: caps 8, the middle repeats); --bu = one art pixel, set by scrolls.js */
             .setBtn{ font-family:inherit; color:#fff0aa; text-shadow:0 calc(var(--bu) * 0.5) 0 #3c0000; box-sizing:border-box; height:calc(14 * var(--bu)); min-width:calc(24 * var(--bu)); margin:0; cursor:pointer; touch-action:manipulation;
                 border:0 solid transparent; border-left-width:calc(8 * var(--bu)); border-right-width:calc(8 * var(--bu)); padding:calc(2 * var(--bu)) 0 0; line-height:calc(8 * var(--bu)); font-size:calc(8 * var(--bu)); background:none;

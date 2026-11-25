@@ -110,4 +110,4 @@ const canVibrate = () => !!navigator.vibrate;
 const canWake = () => !!navigator.wakeLock;
 const volumeScale = () => VOLUMES[prefs.volume];
 
-export { VOLUMES, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale, prefs, TEXT_SIZES, setTextSize, setSound, chosenTextScale, browserTextScale, heightScale };
+export { DEFAULTS, VOLUMES, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale, prefs, TEXT_SIZES, setTextSize, setSound, chosenTextScale, browserTextScale, heightScale };

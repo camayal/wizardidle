@@ -10,7 +10,7 @@ import { version } from '../game.js';
 import { achievementList, countLogros, hasOthers, othersList } from '../achievements.js';
 import { playSound } from '../audio.js';
 import { detectmob, layoutPortrait, responsiveLayout } from './layout.js';
-import { prefs, TEXT_SIZES, VOLUMES, setTextSize, setSound, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale } from '../prefs.js';
+import { prefs, DEFAULTS, TEXT_SIZES, VOLUMES, setTextSize, setSound, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale } from '../prefs.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
@@ -385,8 +385,8 @@ function snapToDevice(px) {     // a whole number of device pixels, so the pixel
     return Math.max(1, Math.round(px * dpr)) / dpr;
 }
 
-function drawSlider(slider) {
-    const su = snapToDevice(0.6 * Math.max(2, Math.min(Math.round(ui.em * 0.14), 4)));
+function drawSlider(slider, defaultStep) {
+    const su = snapToDevice(ui.em * 0.085);      // one art pixel: grows with the text size, so the sliders, switches and buttons do too
     const W = 72 * su, steps = Number(slider.max);
     const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = box.querySelector("canvas");
     row.style.setProperty("--su", `${su}px`);
@@ -419,7 +419,15 @@ function drawSlider(slider) {
         ctx.drawImage(track, 0, 0, 8, 10, 0, 2 * su, 8 * su, 10 * su);
         for (let x = 8 * su; x < W - 8 * su; x += 4 * su) ctx.drawImage(track, 8, 0, 4, 10, x, 2 * su, 4 * su, 10 * su);
         ctx.drawImage(track, 12, 0, 8, 10, W - 8 * su, 2 * su, 8 * su, 10 * su);
-        for (let i = 0; i <= steps; i++) ctx.drawImage(ticks, 0, 0, 3, 5, Math.round(7 * su + i * (W - 14 * su) / steps - 1.5 * su), Math.round(4.5 * su), 3 * su, 5 * su);
+        // the tick of the default step is amber, so the default can be found again
+        const amber = document.createElement("canvas");
+        amber.width = 3; amber.height = 5;
+        const actx = amber.getContext("2d");
+        actx.drawImage(ticks, 0, 0);
+        actx.globalCompositeOperation = "source-atop";
+        actx.fillStyle = "#f0a81e";
+        actx.fillRect(0, 0, 3, 5);
+        for (let i = 0; i <= steps; i++) ctx.drawImage(i == defaultStep ? amber : ticks, 0, 0, 3, 5, Math.round(7 * su + i * (W - 14 * su) / steps - 1.5 * su), Math.round(4.5 * su), 3 * su, 5 * su);
     };
     track.onload = ticks.onload = paint;
     track.src = art("slider_track"); ticks.src = art("slider_ticks");
@@ -555,8 +563,8 @@ function updateHelp(){
     if (el("settings")) {
         el("settings").style.fontSize = `${ui.em}px`;
         const textSlider = el("textSizeSlider"), volumeSlider = el("volumeSlider");
-        const su = drawSlider(textSlider);
-        drawSlider(volumeSlider);
+        const su = drawSlider(textSlider, TEXT_SIZES.findIndex(s => s.id == DEFAULTS.textSize));
+        drawSlider(volumeSlider, DEFAULTS.volume);
         textSlider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[textSlider.value].label; };
         textSlider.onchange = () => {
             setTextSize(TEXT_SIZES[textSlider.value].id);
