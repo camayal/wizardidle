@@ -21,7 +21,7 @@ import { ui } from '../runtime.js';
 import { zones } from '../data/zones.js';
 import { dreams } from '../data/dreams.js';
 import { poems } from '../data/awayTexts.js';
-import { BOSS_STORIES, DONE_STORIES, RARE_STORIES, REWARD_STORIES, SPOTS } from '../data/questTexts.js';
+import { BOSS_STORIES, DONE_STORIES, LINES, RARE_STORIES, REWARD_STORIES, SPOTS } from '../data/questTexts.js';
 import { beliefLevel } from '../belief.js';
 import { dreamStill, dreamStillOff, sleepInDark, wizardName } from '../ui/render.js';
 import { scrollClose, scrollOpen } from '../ui/scrolls.js';
@@ -176,6 +176,7 @@ async function loadItems() {
     const consoleItems = [...code, ...hunts(BOSS_STORIES, 'Boss'), ...hunts(RARE_STORIES, 'Rare school'),
         ...Object.entries(DONE_STORIES).map(([key, lines]) => ({ label: `Quest done: ${key}`, where: `src/data/questTexts.js, DONE_STORIES.${key} (one per line; {name} {where} {who} {found})`, lines: lines.map((l) => l.replace('{found}', 'the place he was told of').replace('{gain}', 'increases the <i>Wisdom</i>')), group: 'Quest finished (narrative)' })),
         ...Object.entries(REWARD_STORIES).filter(([, l]) => l[0]).map(([key, lines]) => ({ label: `Reward told: ${key}`, where: `src/data/questTexts.js, REWARD_STORIES.${key} (one per line; {n} is the amount)`, lines: lines.map((l) => l.replace('{n}', '40')), group: 'Quest finished (narrative)' })),
+        ...Object.entries(LINES).map(([key, byBelief]) => ({ label: `God's touch: ${key}`, where: `src/data/questTexts.js, LINES.${key} (by belief: devout, believer, doubter, atheist; {task} is the quest told as a verb)`, lines: Object.entries(byBelief).flatMap(([lvl, l]) => l.map((x) => `[${lvl}] ${x.replace('{task}', 'hunt the rare giant frog')}`)), group: 'Quest finished (narrative)' })),
         ...Object.entries(SPOTS).map(([key, list]) => ({ label: `Key places: ${key}`, where: `src/data/questTexts.js, SPOTS.${key} (giver says / wizard finds)`, lines: list.map(([a, b]) => `You should see the place: ${a}  /  ${b}`), group: 'Quest finished (narrative)' })), ...zoneLines().map((x) => ({ ...x, group: 'Entering a zone' })),
         ...story.lines.map((x) => ({ ...x, group: 'Story beats (docs/STORY.md)' }))];
     items.console = consoleItems.map((x, i) => ({ kind: 'console', id: `console:${x.where}:${x.label}`, prefix: '', suffix: '', ...x, text: x.lines.join('\n'), n: i }));

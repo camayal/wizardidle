@@ -455,6 +455,65 @@ export const GUILD_TELL = [
     "\"It is done,\" says {name}, and lays the proof of the {who} on the counter.",
     "{name} reports the {who} of the {where}; the hunter listens without looking up from his ledger.",
 ];
+// How the wizard takes the god's touch on his quests, by belief ({name} is filled; a few take {task}, the errand told as a verb).
+// obey_*: he listens. resist_*: he hears and does not (a clause: offers add ", and takes the job anyway" after it).
+export const LINES = {
+    obey_cancel: {
+        devout: ["{name} bows his head, sets this errand aside with a calm heart and trusts where it leads.", "{name} feels your will, and lets this errand go without a word."],
+        believer: ["{name} thinks it is better to concentrate on other things and leaves this errand.", "{name} feels your will and gives up this errand."],
+        doubter: ["{name} gets an odd feeling that this errand is a waste of time, and drops it.", "{name} cannot say why, but he lets this errand go."],
+        atheist: ["{name} decides, for his own reasons, to drop this errand.", "{name} shrugs, thinks of other things and forgets this errand."],
+    },
+    obey_priority: {
+        devout: ["{name} feels your will and turns, gladly, to {task}.", "{name} bows his head and sets out to {task}."],
+        believer: ["{name} thinks it is better to concentrate on another quest now: he will {task}.", "{name} feels your will and turns to {task}."],
+        doubter: ["{name} cannot say why, but it feels better to {task} first.", "{name} changes his mind, almost against it, and will {task}."],
+        atheist: ["{name} decides, on his own, that another errand comes first and will {task}.", "{name} reorders his plans for no reason he can name and will {task}."],
+    },
+    obey_order: {
+        devout: ["{name} bows his head and goes at once to {task}.", "{name} hears your will and sets out to {task} with a light heart."],
+        believer: ["{name} feels your will and sets out to {task}.", "{name} takes it as a sign and will {task}."],
+        doubter: ["{name} is not sure why, but something pushes him to {task}.", "{name} hears an odd voice in his head and will {task}."],
+        atheist: ["{name} decides, for his own reasons, to {task}.", "{name} thinks it over and will {task}."],
+    },
+    obey_take: {
+        devout: ["{name} feels your will and takes the job gladly."],
+        believer: ["{name} feels your will and takes the job."],
+        doubter: ["{name} cannot say why, but he takes the job."],
+        atheist: ["{name} takes the job, for his own reasons."],
+    },
+    obey_leave: {
+        devout: ["{name} feels your will and leaves the job alone."],
+        believer: ["{name} feels your will and leaves the job alone."],
+        doubter: ["{name} cannot say why, but he leaves the job alone."],
+        atheist: ["{name} leaves the job alone, for his own reasons."],
+    },
+    resist_cancel: {
+        devout: ["{name} hears you, but he cannot let this errand go yet and continues."],
+        believer: ["{name} hears a voice, thinks it is only his tiredness and continues with this quest."],
+        doubter: ["{name} hears something, shrugs it off and continues with this quest."],
+        atheist: ["{name} for some reason is tired of this quest, but he does not care and continues."],
+    },
+    resist_priority: {
+        devout: ["{name} hears you, but his errand seems right and he keeps his course."],
+        believer: ["{name} hears a voice, thinks it is only his tiredness and keeps his course."],
+        doubter: ["{name} hears something, shrugs it off and keeps his course."],
+        atheist: ["{name} for some reason feels like changing plans, but he does not care and keeps his course."],
+    },
+    resist_order: {
+        devout: ["{name} hears you, but something holds him back and he walks on."],
+        believer: ["{name} hears a voice, thinks it is only his thoughts and walks on."],
+        doubter: ["{name} hears something, shrugs it off and walks on."],
+        atheist: ["{name} for some reason feels like praying, but he does not care and walks on."],
+    },
+    resist_offer: {
+        devout: ["{name} hears you, but his heart says otherwise"],
+        believer: ["{name} hears a voice, but thinks it is only his thoughts"],
+        doubter: ["{name} hears something, but shrugs it off"],
+        atheist: ["{name} for some reason feels like deciding otherwise, but he does not care"],
+    },
+};
+
 export const pickFrom = (list) => list[Math.floor(Math.random() * list.length)];
 export function doneStory(kind, vars) {
     const list = DONE_STORIES[kind];

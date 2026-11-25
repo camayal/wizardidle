@@ -9,7 +9,7 @@
 
 import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
-import { doneStory, GUILD_TELL, huntStory, pickFrom, REWARD_STORIES, SPOTS } from './data/questTexts.js';
+import { doneStory, GUILD_TELL, huntStory, LINES, pickFrom, REWARD_STORIES, SPOTS } from './data/questTexts.js';
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { config } from './config.js';
 import { state } from './state.js';
@@ -132,7 +132,7 @@ export function secret(kind, zone) {
     const q = makeQuest(kind, 'whisper', zone);
     if (!q || !offer(q, { secret: true })) return false;
     stats.count(`quest.secret.${kind}`);
-    print(`<i>A whisper that is not his own: ${q.text}</i>`);
+    print(`<i>A whisper that is not his own urges him to ${lc(q.text)}.</i>`);
     return true;
 }
 export function onRune() {
@@ -179,7 +179,7 @@ function promote() {
     const q = list.shift();
     q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
     state.quest = q;
-    print(`<i>${wizardName()} sets out on his next errand: ${q.text}</i>`);
+    print(`<i>${wizardName()} turns to his next errand and will ${lc(q.text)}.</i>`);
 }
 
 // A new quest from any source. True when it was taken (current or queued); false when the queue is full.
@@ -225,6 +225,9 @@ function finish(q, how) {
     promote();
 }
 
+// A line by belief ("{name}" filled; "{task}" is the quest told as a verb: "hunt the rare ...").
+const lc = (t) => t.charAt(0).toLowerCase() + t.slice(1);
+const say = (group, q) => pickFrom(LINES[group][beliefLevel()] || LINES[group].believer).replace('{name}', wizardName()).replace('{task}', q ? lc(q.text) : 'something else');
 const rewardLine = (kind, n) => pickFrom(REWARD_STORIES[kind]).replace('{n}', n);
 
 function reward(q) {
@@ -320,7 +323,7 @@ export function eventPick() {
         q.searched = 0;
         stats.count('quest.arrived');
         if (q.kind === 'explore') { complete(q); return 0; }
-        print(`<i>${wizardName()} has reached the ${zoneName(q.target.zone)} and looks around: ${q.text}</i>`);
+        print(`<i>${wizardName()} has reached the ${zoneName(q.target.zone)} and looks around.</i>`);
     }
     if (q.phase === 'travel') return YesOrNot(config.quests.pTravelExplore, 0) ? 2 : 0;     // on the road he mostly keeps walking (2 = explore)
     if (q.phase !== 'search') return 0;
@@ -332,7 +335,7 @@ export function eventPick() {
         qs().queue.push(q);
         state.quest = null;
         stats.count('quest.postponed');
-        print(`<i>${wizardName()} puts his quest aside for now: ${q.text}</i>`);
+        print(`<i>${wizardName()} thinks this one can wait and puts his quest aside for now.</i>`);
         promote();
         return 0;
     }
@@ -449,7 +452,7 @@ function wish() {
     if (!q) return;
     offer(q);
     stats.count('quest.wishes');
-    print(`<i>${wizardName()} has made up his mind: ${q.text}</i>`);
+    print(`<i>${wizardName()} has made up his mind to ${lc(q.text)}.</i>`);
 }
 
 // ---- offers: inns, the board, wanted posts (the god may suggest; belief decides) ----
@@ -547,10 +550,10 @@ export function decideOffer() {
     if (o.hint) {
         if (obeys()) {
             accept = o.hint === 'accept';
-            line = `${name} feels your will and ${accept ? 'takes the job' : 'leaves it alone'}`;
+            line = say(accept ? 'obey_take' : 'obey_leave');
             stats.count('quest.obeyed');
         } else {
-            line = `${name} hears, but he is not convinced, and ${accept ? 'takes the job anyway' : 'turns it down anyway'}`;
+            line = `${say('resist_offer').replace(/\.$/, '')}, and ${accept ? 'takes the job anyway' : 'turns it down anyway'}`;
             stats.count('quest.ignored');
         }
     } else {
@@ -589,19 +592,19 @@ export function godOrder(kind) {
     if (!q) return false;
     Q.orderWait = config.quests.orderWait;
     stats.count('quest.orders');
-    if (!obeys()) { stats.count('quest.ignored'); print(`<i>${name} hears, but he is not convinced</i>`); return true; }
+    if (!obeys()) { stats.count('quest.ignored'); print(`<i>${say('resist_order')}</i>`); return true; }
     stats.count('quest.obeyed');
     offer(q);
-    print(`<i>${name} feels your will: ${q.text}</i>`);
+    print(`<i>${say('obey_order', q)}</i>`);
     return true;
 }
 
 export function godCancel() {
     const q = state.quest, name = wizardName();
     if (!q) return false;
-    if (!obeys()) { stats.count('quest.ignored'); print(`<i>${name} hears, but he is not convinced</i>`); return true; }
+    if (!obeys()) { stats.count('quest.ignored'); print(`<i>${say('resist_cancel')}</i>`); return true; }
     stats.count('quest.obeyed');
-    print(`<i>${name} feels your will and forgets his errand: ${q.text}</i>`);
+    print(`<i>${say('obey_cancel')}</i>`);
     cancel();
     return true;
 }
@@ -609,10 +612,9 @@ export function godCancel() {
 // Reordering from the Faith scroll (i = 0 is the current quest, i >= 1 the queue). Moving the current quest down
 // or the first waiting one up swaps them. A move or a cancel is an order too: belief decides.
 function hear() {
-    const name = wizardName();
     if (obeys()) { stats.count('quest.obeyed'); return true; }
     stats.count('quest.ignored');
-    print(`<i>${name} hears, but he is not convinced</i>`);
+    print(`<i>${say('resist_priority')}</i>`);
     return false;
 }
 function activate(q) {
@@ -631,7 +633,7 @@ export function godMove(i, dir) {
     if (all[0] !== cur) {
         if (cur) cur.phase = 'travel';
         activate(all[0]);
-        print(`<i>${wizardName()} feels your will and turns to: ${all[0].text}</i>`);
+        print(`<i>${say('obey_priority', all[0])}</i>`);
     }
     return true;
 }

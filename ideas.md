@@ -282,3 +282,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 dev: guild wired (event 6 guildEV, quests.guildTell/guildPay, img/places/el_poblado/el_poblado_cazadores*). Pending: 8 new strangers in review/guild/strangers await the author.
 
 - 2026-11-24 dev: reward lines (REWARD_STORIES) and boosted study quests (study_book/rune/statue/text stories with {gain}); studyBoost=2 placeholder.
+
+- 2026-11-24 dev: LINES (questTexts.js) = belief-based lines for the god's touch; quest lines no longer use the colon form.
