@@ -766,7 +766,7 @@ function drawFrontProp(npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn
 // bottom-left), above-left of his head, on the front layer; clearNPC takes it away with him.
 function showBubble(kind) {
     if (run.simulation) return;
-    const c = el("overlayCanvas"), unit = ui.charWidth / 32;
+    const c = state.npc.startsWith("prop_") ? npcCanvas : el("overlayCanvas"), unit = ui.charWidth / 32;     // a prop stands on the front layer already
     withImage("bubble", art(`bubble_${kind}`), (img) => {
         if (!state.npc) return;
         c.width = c.offsetWidth;

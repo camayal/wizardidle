@@ -190,7 +190,7 @@ function exploreEV() {
     if (giver) {
         run.questMeet = giver;
         if (giver === 'human') {
-            print(`${wizardName()} is stopped by a stranger on the road`);
+            print(`${wizardName()} sees a stranger on the road`);
             loadNPC(pickRandomItem(quests.HUMANS));       // a merchant or an old man stands in the scene
             startEvent(readBoard);
             return;
@@ -252,27 +252,34 @@ function exploreEV() {
 // Reading a board or a post: the offer waits a couple of beats (the god may suggest), then he answers.
 function readBoard() {
     run.multipleEventsCounter += 1;
+    const g = run.questMeet, name = wizardName(), human = g === 'human';
+    const finish = () => { clearNPC(); run.previousEvent = "board"; addXP(0.25); endEvent(); nextEvent(); };
     switch (run.multipleEventsCounter) {
-    case 1:
-        if (!quests.beginOffer(run.questMeet)) { print(`${wizardName()} finds nothing for him there`); if (run.questMeet !== 'inn') clearNPC(); endEvent(); nextEvent(); }
-        else if (run.questMeet === 'human') showBubble('quest');       // the stranger's bubble: he offers a job
+    case 1:         // the first beat: the stranger calls out (he may be ignored), or he reads what is pinned
+        if (human) { print(`<i>The stranger waves and calls out, trying to get ${name}'s attention</i>`); quests.attentionBegin(); }
+        else print(`${name} looks over ${g === 'board' ? 'the notices pinned on the board' : 'the wanted poster'}`);
         break;
-    case 3: {
-        const took = quests.decideOffer();
-        if (run.questMeet === 'human') { showBubble(took ? 'yes' : 'no'); break; }     // the answer stays one beat over the stranger
-        if (run.questMeet !== 'inn') clearNPC();
-        run.previousEvent = "board";
-        addXP(0.25);
-        endEvent();
-        nextEvent();
+    case 2:         // he stops to help or walks on to the left
+        if (human) {
+            if (!quests.stops()) {
+                print(`${name} ignores the stranger and walks on`);
+                endEvent();
+                walkBackThroughScene(() => { clearNPC(); newStage(); }, nextEvent);
+                break;
+            }
+            print(`${name} stops and asks the stranger what is happening`);
+            showBubble('quest');
+        }
         break;
-    }
+    case 3:         // the job is told in full (the god may suggest an answer while it waits)
+        if (!quests.beginOffer(g)) { print(`${name} finds nothing for him there`); endEvent(); clearNPC(); nextEvent(); break; }
+        showBubble('quest');
+        break;
     case 4:
-        clearNPC();
-        run.previousEvent = "board";
-        addXP(0.25);
-        endEvent();
-        nextEvent();
+        showBubble(quests.decideOffer() ? 'yes' : 'no');       // the answer stays one beat over the giver
+        break;
+    case 5:
+        finish();
     }
 }
 

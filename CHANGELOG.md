@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Meeting a giver now plays out in steps you can follow in the console, with the speech bubbles. A stranger on the road first calls out to catch his attention: the wizard may ignore him and walk on to the left, or stop and ask what is happening (belief and a curious nature make him stop, and your touch on the stranger nudges him to stop, on the door to walk on). Then the stranger tells his trouble with the bubble over him, and the answer shows as a check or an X. Boards and posts go the same way after the first line (he looks over the notices, the job is read with the bubble, then the answer). Inns still have no bubbles.
 - The secret quests (the prism, Medusa's shield, a rune's trail, the hidden shrine) are one-time, so forgetting one asks first, like the Kill button: the first press of X opens a small parchment note ("Press X again to forget this quest"), the second press forgets it, tapping the note takes it back. Ordinary quests are still forgotten at once.
 - Medusa has her own secret quest now, like the prism: the first time her gaze turns him to stone, a whisper sends him to find what shields him from it in the Desert, and it ends when he finds the mirror shield or the gorgon's-eye amulet. It jumps the queue.
 - Wanted jobs are split in two kinds in the odds: hunting a rare enemy (more often) and defeating a zone boss (less often), for each giver; the posts offer only those two. His own wishes lean the same way (seven in ten a rare).

@@ -435,15 +435,34 @@ export function beginOffer(giver) {
     run.questOffer = { q, giver, hint: '' };
     const name = wizardName();
     print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}: ${q.text}</i>`
-        : giver === 'human' ? `<i>The stranger has a job for ${name}: ${q.text}</i>`
+        : giver === 'human' ? `<i>The stranger explains his trouble to ${name}: ${q.text}</i>`
         : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}: ${q.text}</i>`);
     stats.count(`quest.offers.${giver}`);
     return true;
 }
 
+// A stranger tries to catch his attention: the wizard may stop or ignore him, by belief and nature; the god's touch nudges
+// him (a believer listens). True when he stops.
+export function attentionBegin() { run.questAttn = { hint: '' }; }
+export function stops() {
+    const a = run.questAttn || { hint: '' };
+    run.questAttn = null;
+    if (a.hint) {
+        if (obeys()) { stats.count('quest.obeyed'); return a.hint === 'accept'; }
+        stats.count('quest.ignored');
+    }
+    const c = config.quests, chance = (c.pStop[beliefLevel()] ?? 0.5) + (qs().persona === 'curious' ? c.stopCurious : 0);
+    return YesOrNot(Math.min(0.98, chance), 0);
+}
+
 // The god's touch while an offer waits: the NPC (right) suggests taking it, the door (centre) suggests leaving it.
 // True when the touch was used for that.
 export function suggest(hint) {
+    if (run.questAttn) {       // a stranger is trying to catch his attention: the touch nudges him to stop (the NPC) or to walk on (the door)
+        run.questAttn.hint = hint;
+        stats.count('quest.suggestions');
+        return true;
+    }
     const o = run.questOffer;
     if (!o) return false;
     o.hint = hint;

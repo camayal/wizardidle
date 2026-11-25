@@ -54,6 +54,7 @@ export const run = {
     disablePjBtn: undefined,       // divine buttons temporarily blocked
     disableCenterBtn: undefined,
     simulation: false,             // simulation mode (src/dev/sim.js): no sound, no spell animations
+    questAttn: null,               // a stranger trying to catch his attention: { hint } (src/quests.js)
     questOffer: null,              // a job waiting for his answer: { q, giver, hint } (src/quests.js)
     questGiver: '',                // the board or post his quest asked the next explore event to read
     questShrine: false,            // the quest's shrine turns up: the next shrine event is entered

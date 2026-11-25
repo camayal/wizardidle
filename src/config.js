@@ -109,6 +109,8 @@ export const config = {
             post:  { rare: 3, boss: 1 },       // hunts only
         },
         pWantedRare: 0.7,          // a hunt he sets himself (a wish): chance it is a rare enemy rather than a boss
+        pStop: { devout: 0.95, believer: 0.8, doubter: 0.55, atheist: 0.3 },   // a stranger calls: chance he stops to help instead of walking on, by belief
+        stopCurious: 0.15,         // ...plus this for a curious nature
         orderWait: 15,             // events before the god can give another order from the Faith scroll
     },
     // Fixed rules of the world.
