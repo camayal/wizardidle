@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Eight new road strangers can stop the wizard with a job: an urchin, a porter, a beggar, a jester, a wild man, a dancer, a brawler and a lad (art by the artist).
 - Version numbers mean something now: 2.<big changes>.<commits>. The big-change count is 19 (counted back through the changelog, list in docs/VERSIONS.md) and the last number rises with every commit on dev-repo by itself (tools/version.py, run by the pre-commit hook).
 - Quests he makes up himself are now only "look for work at an inn" (City, Town, Desert, Dunes). The old man of the Dunes inn gives jobs too, mostly the artefact against Medusa's gaze while he is missing it.
 - Export save is sealed with a checksum: an edited export is refused on import (casual-tamper guard only).

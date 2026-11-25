@@ -313,3 +313,4 @@ Newest first; keep the last three, cut older ones to the archive.
 2026-11-25 — art in: la_playa_estatua (option B) + dune statue shore. Beach statue is not live: needs a statueObj entry (name, effect) = design call for thinker; STATUE_X for la_Playa ~190 fits B.
 2026-11-25 — wishes = seek only; Dunes inn counts as an inn (seek, delivery); old man uses offerKinds.oldman (artefact job = medusa quest while petrifiedOnce and not immune).
 2026-11-25 — version = 2.19.<commits>: tools/version.py + tools/hooks/pre-commit (dev-repo only, avoids merge conflicts on work branches); big-change list in docs/VERSIONS.md.
+2026-11-25 — 8 new road strangers wired (img/story, quests.HUMANS).
