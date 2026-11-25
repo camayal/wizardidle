@@ -103,11 +103,12 @@ export const config = {
         pTravelExplore: 0.75,      // on the way to a quest's target, chance each event is just exploring (walking on) instead of a random event
         turnUpCooldown: 8,         // events after the target turned up (a wanted enemy, a boss) before it can turn up again
         offerKinds: {              // how likely each kind is when a giver offers a job (weights, placeholders for the playtests)
-            inn:   { wanted: 3, delivery: 4, explore: 2, study: 1 },
-            board: { wanted: 4, delivery: 2, explore: 2, study: 1, shrine: 1 },
-            human: { wanted: 2, delivery: 3, explore: 3, study: 2, shrine: 1 },
-            post:  { wanted: 1 },
+            inn:   { rare: 3, boss: 1, delivery: 4, explore: 2, study: 1 },
+            board: { rare: 4, boss: 2, delivery: 2, explore: 2, study: 1, shrine: 1 },
+            human: { rare: 2, boss: 1, delivery: 3, explore: 3, study: 2, shrine: 1 },
+            post:  { rare: 3, boss: 1 },       // hunts only
         },
+        pWantedRare: 0.7,          // a hunt he sets himself (a wish): chance it is a rare enemy rather than a boss
         orderWait: 15,             // events before the god can give another order from the Faith scroll
     },
     // Fixed rules of the world.

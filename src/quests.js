@@ -53,10 +53,11 @@ const base = (kind, giver, text, target, rewardKind) => ({ id: Date.now() * 10 +
 
 // kind -> a fresh quest of it, or null when nothing fits. `from`: zone where a delivery is picked up.
 const MAKERS = {
-    wanted(giver, zone) {
+    wanted(giver, zone, how) {       // how: 'rare' (a rare enemy) or 'boss'; unset = by config.quests.pWantedRare
         const z = zone || pickRandomItem(ZONES().join(','));
         const rares = raresOf(z), boss = pickRandomItem(bossesOf(zones[z]).join(','));
-        if (rares.length && YesOrNot(0.5, 0)) {
+        const wantRare = how ? how === 'rare' : YesOrNot(config.quests.pWantedRare, 0);
+        if (rares.length && (wantRare || !boss)) {
             const s = pickRandomItem(rares.join(','));
             return base('wanted', giver, `Hunt the ${enemySprites[s].altName} of the ${zoneName(z)}`, { zone: z, enemy: s }, 'xp');
         }
@@ -104,10 +105,10 @@ const SECRETS = {
 // An atheist gets and takes no shrine, pilgrimage or hidden-shrine quest (docs/plans/QUESTS.md).
 export const SHRINE_KINDS = ['shrine', 'pilgrimage', 'hidden'];
 export const isAtheist = () => beliefLevel() === 'atheist' || !!state.player.beliefLost;
-export function makeQuest(kind, giver = 'himself', zone) {
+export function makeQuest(kind, giver = 'himself', zone, how) {
     if (SHRINE_KINDS.includes(kind) && isAtheist()) return null;
     const make = MAKERS[kind] || SECRETS[kind];
-    return make ? make(giver, zone) : null;
+    return make ? make(giver, zone, how) : null;
 }
 
 // A secret starts a quest and jumps the queue like the prism did.
@@ -422,8 +423,8 @@ export function beginOffer(giver) {
     const z = state.zone.current, cur = state.quest;
     if (cur && cur.kind === 'seek' && cur.target.zone === z && cur.target.giver === giver) complete(cur);     // he came to ask for work: that errand is done
     if (!canTake()) { run.questOffer = null; return false; }
-    const kind = offerKind(giver);
-    const q = makeQuest(kind, giver, giver === 'post' ? z : undefined);
+    const pick = offerKind(giver), hunt = pick === 'rare' || pick === 'boss';       // the two hunts are told apart in config.quests.offerKinds
+    const q = makeQuest(hunt ? 'wanted' : pick, giver, giver === 'post' ? z : undefined, hunt ? pick : undefined);
     if (!q) { run.questOffer = null; return false; }
     run.questOffer = { q, giver, hint: '' };
     const name = wizardName();
