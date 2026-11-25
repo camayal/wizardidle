@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The beats of quest scenes (strangers, boards, inn host, guild) run slower, 2.8 s instead of 1.5 s (config.quests.stepTime), so the lines can be read.
 - Quest rewards are narrated ("he has learned a great deal", "the purse is heavier by 40 gold", "his belief grows") instead of a bare word. A study quest gives no experience: the book, rune, statue or sacred text gives its usual skill plus extra boosts (config.quests.studyBoost), told in the console.
 - The hunters' guild: a hunt (rare or boss) no longer ends at the kill. The wizard goes to the Town, walks into the guild's round hut (new exterior and interior), tells one of two hunters how it went and gets paid; the story is told in the console. The errand shows "to report at the guild" until then.
 - Tap a quest's name in the Errands list: a little scroll opens with a picture for its kind (rare hunt, boss, parcel, place, study, prayer, pilgrimage, hidden shrine, work, prism, Medusa, rune), its title and a few plain lines. Tap it to close.

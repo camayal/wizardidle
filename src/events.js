@@ -83,8 +83,8 @@ const statueObj = {
 // and the "event" clock runs a multi-step event until it hands control back.
 
 // Run fn on the event clock, one step every masterTime.
-function startEvent(fn){
-    loop.every("event", fn, masterTime);
+function startEvent(fn, ms = masterTime){
+    loop.every("event", fn, ms);
 }
 
 // The current event is over: stop its clock and reset its step counter.
@@ -196,7 +196,7 @@ function exploreEV() {
         if (giver === 'human') {
             print(`${wizardName()} sees a stranger on the road`);
             loadNPC(pickRandomItem(quests.HUMANS));       // a merchant or an old man stands in the scene
-            startEvent(readBoard);
+            startEvent(readBoard, config.quests.stepTime);
             return;
         }
         // a board or a post is already standing in the next scene when he walks in; he goes up to it and reads it
@@ -205,7 +205,7 @@ function exploreEV() {
         pickRandomBackgroundForCurrentZone(() => {
             loadNPC(prop);
             print(`${wizardName()} sees ${giver === 'board' ? 'the notice board' : 'a wanted post'} and walks up to it`);
-            walkWizardTo(READ_SPOT, () => startEvent(readBoard));
+            walkWizardTo(READ_SPOT, () => startEvent(readBoard, config.quests.stepTime));
         });
         return;
     }
@@ -402,7 +402,7 @@ function guildEV() {
     if (!quests.guildReady()) { nextEvent(); return; }
     print(`${wizardName()} walks to the hunters' guild to report`);
     run.previousEvent = "guild";
-    startEvent(guildReport);
+    startEvent(guildReport, config.quests.stepTime);
 }
 function guildReport() {
     run.multipleEventsCounter += 1;
@@ -664,11 +664,11 @@ function searchInn(){
             if (!placesWithInn) run.multipleEventsCounter = 3;      // camping: no host to talk to
             break;
         case 2:         // the host may have a job: he tells it (bubble), the god may nudge before the answer
-            if (quests.innVisit()) showBubble('quest');
+            if (quests.innVisit()) { showBubble('quest'); startEvent(searchInn, config.quests.stepTime); }       // a job to read: slower beats
             else run.multipleEventsCounter = 3;
             break;
         case 3: showBubble(quests.decideOffer() ? 'yes' : 'no'); break;
-        case 4: clearFrontProp(); sleep(placesWithInn); break;
+        case 4: clearFrontProp(); startEvent(searchInn); sleep(placesWithInn); break;
         case 5: wakeUp(placesWithInn);
     }
 }

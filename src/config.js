@@ -108,6 +108,7 @@ export const config = {
             human: { rare: 2, boss: 1, delivery: 3, explore: 3, study: 2, shrine: 1 },
             post:  { rare: 3, boss: 1 },       // hunts only
         },
+        stepTime: 2800,            // ms between the beats of a quest scene (meeting, guild): slower than the usual 1500 so the lines can be read
         studyBoost: 2,             // a study quest: the find gives its skill this many extra times
         pKnownPlace: 0.15,         // an explore offer names a place he already knows (he says so and goes on)
         pWantedRare: 0.7,          // a hunt he sets himself (a wish): chance it is a rare enemy rather than a boss
