@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) Grotto stages 1 and 2 were linked to the Grotto mouth's outside point as well as its inside twin, a shortcut that made trips from the Prairie skip the mouth scenes; only the inside link is kept.
 - New Prairie scene (Prairie 15): a bit of beach in front, the far Castle at the back right, the Prairie road. It is a new stage of the Prairie, linked on the travel map to Prairie 5 and 7, the Castle and the Beach.
 - (Developer tools) A scene of the game (e.g. Prairie 14) can now be marked as a border (or connector, future scene) in the travel console with the type radios, and a new "scene" radio puts it back. Saved in travelKinds; Prairie 14 is a border.
 - (Developer tools) The travel console's point type is three radio buttons (future scene, connector, border) that show the source's type and switch the selected points to exactly one of them.
