@@ -17,6 +17,7 @@ import { state } from './state.js';
 import { stats } from './stats.js';
 import { playSoundAt } from './audio.js';
 import { fight, run, ui } from './runtime.js';
+import { secret as questSecret } from './quests.js';
 import { playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 
 const b = () => config.balance;
@@ -42,9 +43,11 @@ export function applyBossEffect(attack) {
     if (fight.enemy == "medusa" && attack.id == "gaze" && !state.petrifyImmune && !fight.stoneTurns
         && YesOrNot(b().petrifyChance, 0)) {
         fight.stoneTurns = b().petrifyTurns;
+        const first = !state.petrifiedOnce;
         state.petrifiedOnce = true;
         stats.count("boss.petrified");
         print(`${wizardName()} is turned to stone by Medusa's gaze!`);
+        if (first) questSecret('medusa');       // a whisper: there may be a way to shield himself (src/quests.js)
         return true;
     }
     if (fight.enemy == "midas" && attack.id == "golden_rays" && fight.midasHeals < b().midasHealsPerFight) {

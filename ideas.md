@@ -266,3 +266,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): strangers + bubbles wired (img/story/stranger_*, bubble_quest/yes/no; render.js showBubble on overlayCanvas; readBoard has a 4th step for humans; decideOffer returns accept). Bubble offset (-14,-14 sprite px) is a guess. Untested in a browser.
 - 2026-11-24 (dev): quests.offerKind weighted by config.quests.offerKinds per giver (placeholder weights).
 - 2026-11-24 (dev): offerKinds split wanted into rare/boss (quests.js beginOffer passes how to MAKERS.wanted); wishes use pWantedRare 0.7.
+- 2026-11-24 (dev): secret quest 'medusa' (quests.js SECRETS/onArtefact; started in bossEffects at the first petrify, completed in events findRuneOrBook artefact branch; target zone el_Desierto, forced event = study). Secrets now: prism, medusa, rune, hidden. Untested in a browser.

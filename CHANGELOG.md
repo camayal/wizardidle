@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Medusa has her own secret quest now, like the prism: the first time her gaze turns him to stone, a whisper sends him to find what shields him from it in the Desert, and it ends when he finds the mirror shield or the gorgon's-eye amulet. It jumps the queue.
 - Wanted jobs are split in two kinds in the odds: hunting a rare enemy (more often) and defeating a zone boss (less often), for each giver; the posts offer only those two. His own wishes lean the same way (seven in ten a rare).
 - The kind of job each giver offers now follows its own odds (config.quests.offerKinds): the inn leans to deliveries and hunts, the board to hunts, the strangers to deliveries and trips, the wanted posts only to hunts. The numbers are placeholders for the playtests.
 - Road strangers have their own faces now: a merchant, a farmer, a hunter, a pilgrim, a young woman, an old woman and a traveller, one at random each time. While a stranger offers a job a speech bubble with lines of text floats over his head; when the wizard answers it turns into a green check (he takes it) or a red X (he turns it down) for a moment before the stranger leaves. Art by the artist.

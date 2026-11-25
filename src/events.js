@@ -554,6 +554,7 @@ function findRuneOrBook(){
             run.objectToStudy = "artefact";
             run.artefactName = name;
             state.artefacts.push({ sprite, name });
+            quests.onArtefact();
             loadNPC(sprite);
             print(`${wizardName()} finds a ${name}! Medusa's gaze will never turn him to stone again`);
             run.multipleEventsCounter = 4;

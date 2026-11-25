@@ -5,7 +5,7 @@
 // Only the god cancels a quest. With no quest he wanders as always.
 //
 // state.quest = { id, kind, giver, text, target: {zone, enemy?, boss?, zones?, visited?}, phase, searched, secret, reward, since }
-// kinds: wanted, explore, study, shrine, pilgrimage, hidden, delivery, seek; secrets: prism, rune, hidden (ingredients and crafting wait for professions, fishing later)
+// kinds: wanted, explore, study, shrine, pilgrimage, hidden, delivery, seek; secrets: prism, medusa, rune, hidden (ingredients and crafting wait for professions, fishing later)
 
 import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
@@ -96,9 +96,11 @@ const MAKERS = {
     },
 };
 export const KINDS = Object.keys(MAKERS);
+const MEDUSA_ZONE = 'el_Desierto';       // where Medusa lives (her gaze, and the artefact against it)
 // Secrets (they start from a find, never from a wish or an offer): the prism for the lost colours, a rune's trail, the hidden shrine told by a whisper.
 const SECRETS = {
     prism: () => base('prism', 'whisper', 'Find the prism that gathers the lost colours', { zone: 'la_Tundra' }, 'faith'),
+    medusa: () => base('medusa', 'whisper', `Find what shields him from Medusa's gaze in the ${zoneName(MEDUSA_ZONE)}`, { zone: MEDUSA_ZONE }, 'faith'),
     rune: (giver, zone) => base('rune', 'whisper', `Follow the rune's trail to the ${zoneName(zone)}`, { zone }, 'xp'),
     hidden: () => MAKERS.hidden('whisper'),
 };
@@ -123,6 +125,10 @@ export function onRune() {
     if (!YesOrNot(config.quests.pRune, 0)) return;
     const list = ZONES().filter((z) => z !== state.zone.current);
     if (list.length) secret('rune', pickRandomItem(list.join(',')));
+}
+export function onArtefact() {         // the mirror shield or the gorgon's-eye amulet was found
+    const q = state.quest;
+    if (q && q.kind === 'medusa') complete(q);
 }
 export function onPrism() {
     const q = state.quest;
@@ -275,7 +281,7 @@ export function steer(origin, list) {
 
 // ---- finding the target ----
 
-const FORCED = { prism: 5, rune: 5, wanted: 1, shrine: 3, pilgrimage: 3, hidden: 3, delivery: 4, study: 5, seek: 2 };
+const FORCED = { prism: 5, medusa: 5, rune: 5, wanted: 1, shrine: 3, pilgrimage: 3, hidden: 3, delivery: 4, study: 5, seek: 2 };
 
 // Each event tick (events.js event()): arrival, the search, wishes. Returns an event number to force, or 0.
 export function eventPick() {
