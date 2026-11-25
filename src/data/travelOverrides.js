@@ -351,6 +351,12 @@ export const travelOverrides = {
 };
 export const travelPositions = {};
 export const travelPoints = {
+    "border_gruta_duenon": {
+        "kind": "border",
+        "layer": "ground",
+        "x": 89,
+        "y": 179
+    },
     "ladder_cueva4_mina2": {
         "kind": "connector",
         "layer": "under",
