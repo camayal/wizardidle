@@ -4,6 +4,7 @@
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { getRandomInt } from './utils.js';
 import { config, RAREMULTIPLIER } from './config.js';
+import { selfReliance } from './belief.js';
 import { state } from './state.js';
 import { recordLevel, stats } from './stats.js';
 import { fight, ui } from './runtime.js';
@@ -132,7 +133,7 @@ function addGold(){
 
 // Add XP (a multiple of the XP per enemy) and level up when it reaches the next level.
 function addXP(specialMultiplier = 1){
-    const xpGained = ((state.player.xpPerEnemy * specialMultiplier));
+    const xpGained = state.player.xpPerEnemy * specialMultiplier * (1 + selfReliance() * config.belief.selfXp);
     state.player.xp = (xpGained + state.player.xp);
     updateHeading();
     if(state.player.xp >= state.player.xpNext){

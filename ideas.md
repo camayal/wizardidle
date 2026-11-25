@@ -322,3 +322,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25: delivery rework: stranger recipient (quests.handOver, events readBoard 'recipient'); untested in a browser.
 - 2026-11-25: render.walkAcross: after a plain connector's last scene he stands in his place (no walk-in); mouths with a fade and borders unchanged.
 - 2026-11-25: faith stage 1 (for_implementation_faith.md 13.1): src/faith.js faithChange()/faithMax(), config.faith placeholders; hategod achievement moved to belief atheist; playtest docs/playtests/2026-11-25-faith-stage1 runs. Next: stage 2 (action bar by level, self-reliance, candle art).
+- 2026-11-25: faith step 2 (code part): selfReliance(), doubter heal factor, equal touch cost; candle waits for art; decisions recorded in for_implementation_faith.md.

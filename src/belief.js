@@ -73,6 +73,12 @@ function updateLevel() {
     print(`<span style='color:#7a4fa0'>${wizardName()} ${ANNOUNCE[next]}</span>`);
 }
 
+// Self-reliance, 0 to 1: nothing at +20 (where he starts) or above, full at -100. The lower his belief, the more
+// XP and crit he earns on his own (faith plan, section 5).
+export function selfReliance() {
+    return Math.max(0, Math.min(1, (20 - state.player.belief) / 120));
+}
+
 // What a touch costs at his level (Devout cheaper, Doubter double); null when he refuses it
 // (an Atheist refuses every touch but a revive).
 export function touchCost(faith) {

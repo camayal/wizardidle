@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Belief now shapes how he copes on his own: a Doubter's healing touch heals less, touches cost the same at every level, and the less he believes the more XP and critical hits he earns by himself.
 - The Help scroll's second page is now called Information (it held a section also called FAQ), and its text no longer gives away the healer's cabin, the spectra and prism, the underground inn, the king or which enemies cannot appear on the road.
 - Faith now has a ceiling that grows with his strength and never goes below zero; every gain and loss goes through one place (src/faith.js), so the stats can tell where faith came from and where it went. The "Atheist!" achievement now comes from losing all belief, since faith can no longer be negative.
 - After crossing a bridge he no longer walks right to left again in the scene he arrives in: he is already there, so he just stands in his place.

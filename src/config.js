@@ -40,7 +40,9 @@ export const config = {
         closeCallLine: 0.1,
         superCriticChance: 0.1,                // 1 in 10 of the god's critics (the author)
         superCriticMultiplier: 16,             // against x8 for a critic
-        devoutTouchCost: 0.75, doubterTouchCost: 2,
+        devoutTouchCost: 1, doubterTouchCost: 1,   // touches cost the same at every level now (faith plan, section 5)
+        doubterHealFactor: 0.6,                // a Doubter's heal restores this share (the god's help works worse on a doubter)
+        selfXp: 0.3, selfCrit: 0.1,            // self-reliance: at the lowest belief he earns this much more XP and crit chance on his own (placeholders)
         healCostFactor: 0.5,                   // a healing touch costs this share of the faith an attack of the same size would (a first number to tune)
         devoutShrine: 0.15, doubterShrine: -0.15,
     },

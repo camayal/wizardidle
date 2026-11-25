@@ -14,7 +14,7 @@ import { enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartN
 import { interruptMidasHeal } from './bossEffects.js';
 import { config } from './config.js';
 import { cabinSpot } from './cabin.js';
-import { beliefMoment, isAtheist, touchCost } from './belief.js';
+import { beliefLevel, beliefMoment, isAtheist, touchCost } from './belief.js';
 import { suggest } from './quests.js';
 import { buzz } from './prefs.js';
 import { faithChange } from './faith.js';
@@ -71,7 +71,7 @@ function reviveByTouch() {
 function healByTouch() {
     if (isAtheist()) return refuseTouch();
     const healOperation = state.player.hpBase * stat("fHeal");
-    let healHit = getRandomInt(healOperation * 0.5, healOperation * 2);
+    let healHit = getRandomInt(healOperation * 0.5, healOperation * 2) * (beliefLevel() == 'doubter' ? config.belief.doubterHealFactor : 1);
     if (Math.round(state.player.hp) + Math.round(healHit) > Math.round(state.player.hpBase)) {
         healHit = Math.round(state.player.hpBase) - Math.round(state.player.hp);
     }

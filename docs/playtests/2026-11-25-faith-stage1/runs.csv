@@ -1,7 +1,0 @@
-setting,seed,error,reason,level,hours,freezes,kills,bossKills,falls,selfRevives,godTouches,godHeals,zoneChanges,faith,gold,h25,h50,h100,h150,h200,beliefEnd,levelEnd,firstDoubter,firstAtheist,backToBeliever,h_devout,h_believer,h_doubter,h_atheist
-idle,1,,reached level,60,5.01,0,188,0,71,71,0,0,172,116967,8022,2.97,4.6,,,,4,believer,1,,5,0.0,0.77,4.24,0.0
-idle,2,,reached level,60,4.89,0,239,0,58,58,0,0,149,87785,13025,2.31,3.81,,,,6.5,doubter,1,,6,0.0,0.88,4.01,0.0
-idle,3,,reached level,60,6.57,0,204,0,106,106,0,0,193,31183,9457,2.9,5.54,,,,2,doubter,1,,4,0.0,0.56,6.01,0.0
-active,1,,reached level,60,2.66,0,204,0,12,0,12,225,158,116364,490,0.94,2.29,,,,99,devout,,,0,2.43,0.23,0.0,0.0
-active,2,,reached level,60,3.39,0,189,0,9,0,9,410,172,116377,577,1.23,2.88,,,,97,devout,,,0,2.9,0.49,0.0,0.0
-active,3,,reached level,60,2.75,0,219,1,7,0,7,81,152,116417,818,1.19,2.23,,,,96,devout,,,0,2.19,0.56,0.0,0.0

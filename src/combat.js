@@ -24,7 +24,7 @@ import { mutedLanding } from './data/bossAttacks.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
 import { playEntrance, playLeave } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
-import { beliefMoment, isDoubting } from './belief.js';
+import { beliefMoment, isDoubting, selfReliance } from './belief.js';
 import { art } from './media.js';
 import { faithChange } from './faith.js';
 
@@ -491,7 +491,7 @@ function attackEV() {
         castPolymorph();
     } else if (YesOrNot(stat("pAttack"), 0)) {
         if (attackPrevented()) return;
-        const damage = YesOrNot(stat("pCritic"), 0) ? criticAttack() : normalAttack();
+        const damage = YesOrNot(stat("pCritic") + selfReliance() * config.belief.selfCrit, 0) ? criticAttack() : normalAttack();
         if (damage > 500) logro.set(logro.logro_attack500);
         if (damage > 1000) logro.set(logro.logro_attack1000);
     } else {

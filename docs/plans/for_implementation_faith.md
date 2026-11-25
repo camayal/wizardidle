@@ -189,3 +189,12 @@ Measured per level: faith, belief and time at each level, touches the god could 
 8. Story locks (chapter X and after) with the story.
 
 Playtests after step 1 and again after each step that adds an amount.
+
+---
+
+## Decisions (author, 2026-11-25)
+
+- **No signature miracles** (sections 5 and 7): the scene spells and scene heals are already the big miracles. The god's face stays (prayers, console lines, glow colour) but picks no extra miracle.
+- **The candle** sits on top of the stats/XP box, right aligned; long wizard names must never run under it (the name is clipped or shrunk first). Four static drawings, one per belief level (art asked in docs/art-notes.md).
+- **Nudges must work everywhere with console text**: the god clicks a rune, a book, a destination, a cave or mine mouth, or any part of an intersection (for example the Tower crossing) to suggest he goes or does it. Needs clickable spots in the scene data (hotspots per scene: a rect, what it suggests, where it leads). Step 6.
+- Built 2026-11-25: step 1 (src/faith.js, cap), and from step 2 the equal touch cost at every level, the weaker Doubter heal (config.belief.doubterHealFactor) and self-reliance (selfReliance(): extra XP and crit as belief falls). Still to do in step 2: the candle (waits for art).
