@@ -385,7 +385,7 @@ function snapToDevice(px) {     // a whole number of device pixels, so the pixel
     return Math.max(1, Math.round(px * dpr)) / dpr;
 }
 
-function drawSlider(slider, glyphs = true) {
+function drawSlider(slider) {
     const su = snapToDevice(0.6 * Math.max(2, Math.min(Math.round(ui.em * 0.14), 4)));
     const W = 72 * su, steps = Number(slider.max);
     const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = box.querySelector("canvas");
@@ -395,10 +395,18 @@ function drawSlider(slider, glyphs = true) {
     box.style.width = `${W}px`; box.style.height = `${14 * su}px`;
     slider.style.width = `${W}px`; slider.style.height = `${14 * su}px`;
     canvas.width = W; canvas.height = 14 * su; canvas.style.width = `${W}px`; canvas.style.height = `${14 * su}px`;
-    for (const [cls, w] of [["aSmall", 5], ["aBig", 9]]) {
+    // the minus and plus at the ends step the slider; both sliders have them, so they line up
+    for (const [cls, delta] of [["aSmall", -1], ["aBig", 1]]) {
         const glyph = row.querySelector("." + cls);
-        glyph.style.display = glyphs ? "" : "none";
-        glyph.style.width = `${w * su}px`;
+        Object.assign(glyph.style, { display: "inline-block", width: `${9 * su}px`, textAlign: "center", fontSize: `${10 * su}px`, lineHeight: `${14 * su}px`,
+            color: "#3c2412", cursor: "pointer", userSelect: "none", touchAction: "manipulation" });
+        glyph.onclick = () => {
+            const next = Math.max(0, Math.min(steps, Number(slider.value) + delta));
+            if (next == Number(slider.value)) return;
+            slider.value = next;
+            slider.dispatchEvent(new Event("input"));
+            slider.dispatchEvent(new Event("change"));
+        };
     }
     const track = new Image(), ticks = new Image();
     let loaded = 0;
@@ -465,8 +473,8 @@ function updateHelp(){
     const sizeIndex = TEXT_SIZES.findIndex(s => s.id == prefs.textSize);
     const switchRow = (id, label) => '<div class="setRow"><div>' + label + '</div><div class="setToggleRow"><div id="' + id + '" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div>';
     const sliderRow = (id, label, nameId, name, steps, value) => '<div class="setRow"><div>' + label + ' (<span id="' + nameId + '">' + name + '</span>)</div>' +
-        '<div class="setSliderRow"><img class="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas></canvas>' +
-        '<input id="' + id + '" class="setSlider" type="range" min="0" max="' + steps + '" step="1" value="' + value + '"></div><img class="aBig" src="' + art('slider_a_big') + '"></div></div>';
+        '<div class="setSliderRow"><span class="aSmall">&minus;</span><div class="setSliderBox"><canvas></canvas>' +
+        '<input id="' + id + '" class="setSlider" type="range" min="0" max="' + steps + '" step="1" value="' + value + '"></div><span class="aBig">+</span></div></div>';
     const settings = '<div id="settings">' +
         sliderRow('textSizeSlider', 'Text size', 'textSizeName', TEXT_SIZES[sizeIndex].label, TEXT_SIZES.length - 1, sizeIndex) +
         switchRow('soundToggle', 'Sound') +
@@ -545,7 +553,7 @@ function updateHelp(){
         el("settings").style.fontSize = `${ui.em}px`;
         const textSlider = el("textSizeSlider"), volumeSlider = el("volumeSlider");
         const su = drawSlider(textSlider);
-        drawSlider(volumeSlider, false);
+        drawSlider(volumeSlider);
         textSlider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[textSlider.value].label; };
         textSlider.onchange = () => {
             setTextSize(TEXT_SIZES[textSlider.value].id);
