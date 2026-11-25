@@ -180,7 +180,7 @@ const startPhase = (q) => (!q.target.scene && state.zone.current === q.target.zo
 function promote() {
     const list = qs().queue;
     if (!list.length) return;
-    if (!qs().manual) list.sort((a, b) => urgent(a) - urgent(b) || costTo(a) - costTo(b));   // once the god reorders, his order stands
+    if (!qs().manual) list.sort((a, b) => urgent(a) - urgent(b) || (b.paused ? 1 : 0) - (a.paused ? 1 : 0) || costTo(a) - costTo(b));   // once the god reorders, his order stands
     const q = list.shift();
     q.paused = false;
     q.walked = 0;

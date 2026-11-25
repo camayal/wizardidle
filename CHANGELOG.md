@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- A quest paused by a secret now resumes first, instead of being re-sorted by distance.
 - Toolbar order: top row Faith, Achievements, Stats; bottom row Map, Kill, Settings (grouped by use, Kill is no longer next to the XP plate).
 - Text audit: grammar and wording fixed across the player texts (achievements, quest stories, console lines, Help/FAQ, statues, inns, stat names; list in docs/plans/TEXT_AUDIT.md). "God" is gone from the public text: "you" where the narrator can say it, "deity" for any other divine being, "the Unseen" kept for poems and dreams, the prophecy keeps "god of gods".
 - Eight new road strangers can stop the wizard with a job: an urchin, a porter, a beggar, a jester, a wild man, a dancer, a brawler and a lad (art by the artist).
