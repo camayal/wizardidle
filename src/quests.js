@@ -710,7 +710,15 @@ export function godDrop(i) {
 const parcelOf = (q) => `item_parcel_${'abc'[q.id % 3]}`;
 // a finished hunt carries the boss's trophy to the guild (img/objects/item_trophy_<boss>.png); etymos, hydras, midas and the rainbow have none
 export const TROPHIES = 'arcangel,bicaptop,cuboq,doria,fenix,goro,greater_naga,herbus,infraespectro,kkck,lamia,medusa,protromus,rojo,skeleton'.split(',');
-const trophyOf = (q) => (q.target.report && TROPHIES.includes(q.target.boss) ? `item_trophy_${q.target.boss}` : '');
+// a hunted rare keeps only a proof in a small container, shared by families that look alike (img/objects/proof_<shape>_<colour>.png); el_capricor, a rare rare with a story, gets a real trophy
+const PROOFS = { el_esqueleto: 'box_grey', el_golem: 'box_grey', el_roco: 'box_grey', animalejo: 'bag_brown', el_ogro: 'bag_brown', el_demonio: 'bottle_red', el_diabillo: 'bottle_violet', el_espectro: 'bottle_white',
+    polipoide: 'jar_pink', la_naga: 'jar_teal', el_pillo: 'pouch_brown', la_amazona: 'pouch_brown', el_hechicero: 'vial_blue', la_hechicera: 'vial_blue', el_dragonian: 'crate_red', el_dragus: 'crate_red', el_ent: 'bundle_green' };
+const trophyOf = (q) => {
+    if (!q.target.report) return '';
+    if (TROPHIES.includes(q.target.boss)) return `item_trophy_${q.target.boss}`;
+    const fam = (q.target.enemy || '').replace(/\d+$/, '');
+    return fam === 'el_capricor' ? 'item_trophy_capricor' : PROOFS[fam] ? `proof_${PROOFS[fam]}` : '';
+};
 const PHASE = { travel: 'on the road', search: 'searching' };
 const ORDER_ICONS = { shrine: 'icon_order_shrine_mid', pilgrimage: 'icon_order_pilgrim_mid', hidden: 'icon_order_hidden_mid' };   // drawn in the socket of order_plate_*
 const STATES = (stem) => `style="--n:url(${art(stem + '_normal')});--p:url(${art(stem + '_pressed')});--d:url(${art(stem + '_disabled')})"`;
