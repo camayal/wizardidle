@@ -378,7 +378,7 @@ function snapToDevice(px) {     // a whole number of device pixels, so the pixel
 
 function drawSlider(slider) {
     const su = snapToDevice(0.6 * Math.max(2, Math.min(Math.round(ui.em * 0.14), 4)));
-    const W = 44 * su, steps = TEXT_SIZES.length - 1;
+    const W = 72 * su, steps = TEXT_SIZES.length - 1;
     const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = el("sliderArt");
     row.style.setProperty("--su", `${su}px`);
     slider.style.setProperty("--thumb", `url(${art("slider_thumb")})`);
@@ -451,7 +451,7 @@ function updateHelp(){
 
     const sizeIndex = TEXT_SIZES.findIndex(s => s.id == prefs.textSize);
     const switchRow = (id, label) => '<div class="setRow"><div>' + label + '</div><div class="setToggleRow"><div id="' + id + '" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div>';
-    const settings = '<div id="settings"><div class="setRow"><div>Text size<br><span id="textSizeName">' + TEXT_SIZES[sizeIndex].label + '</span></div>' +
+    const settings = '<div id="settings"><div class="setRow"><div>Text size (<span id="textSizeName">' + TEXT_SIZES[sizeIndex].label + '</span>)</div>' +
         '<div class="setSliderRow"><img id="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas id="sliderArt"></canvas>' +
         '<input id="textSizeSlider" type="range" min="0" max="' + (TEXT_SIZES.length - 1) + '" step="1" value="' + sizeIndex + '"></div><img id="aBig" src="' + art('slider_a_big') + '"></div></div>' +
         switchRow('soundToggle', 'Sound') +
