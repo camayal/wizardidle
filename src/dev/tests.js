@@ -365,7 +365,7 @@ function pickerHtml() {
             <div class="note">Plays a connector's scenes. The stages are picked by themselves: he is put in a stage whose real trip walks these scenes the same way, and he really arrives in the stage on the other side (zone, stage and background). While he walks, the game already counts him in that zone, as in a real crossing, so a fight is against its enemies. With a fight: he is stopped in the first scene that can have one (mirrored when the walk goes right to left), then walks on if he wins.</div>`,
         Regions: `
             <div class="row"><label>From <select data-f="regFrom">${regionOpts}</select></label>
-                <label>To <select data-f="regTo">${regionOpts}</select></label> <button data-do="regionWalk">Go</button></div>
+                <label>To <select data-f="regTo">${regionOpts}</select></label> <button data-do="regionWalk">Go</button> <button data-do="regionBug">Bug here</button></div>
             <div class="row"><textarea id="regLog" rows="8" style="width:100%;font-size:11px" placeholder="the walk's report appears here"></textarea></div>
             <div class="row"><button data-do="regionCopy">Copy report</button></div>
             <div class="note">Puts him in a stage of the first region and makes him walk to the second, through the real border, bridge, mouth or stairs between them when there is one (the console says which stages and scenes). With no connector between them it is a plain walk out and in.</div>`,
@@ -423,6 +423,14 @@ const pickerActions = {
         const text = regionTrip(a, b, () => { note(`arrived: zone=${state.zone.current}${state.zone.stage} offset=${ui.wizardOffset} facing=${ui.facing}`); ui.trace = null; nextEvent(); });
         note(`region walk ${a} -> ${b}: ${text || 'no stages in a region'}`);
         devPrint(text ? `region walk ${text}` : 'no stages in a region');
+    },
+    regionBug() {       // marks the moment in the report, with where he stands and what is shown
+        const log = document.getElementById('regLog');
+        if (!log) return;
+        const t = log.value.match(/^(\d+\.\d)s/gm), last = t ? t[t.length - 1] : '';
+        log.value += `${last ? '' : '0.0s '}>>> BUG marked: scene=${ui.currentBackGround} zone=${state.zone.current}${state.zone.stage} offset=${ui.wizardOffset} facing=${ui.facing} mirrored=${ui.mirrored}
+`;
+        log.scrollTop = log.scrollHeight;
     },
     regionCopy() {
         const log = document.getElementById('regLog');
