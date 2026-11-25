@@ -315,3 +315,4 @@ Newest first; keep the last three, cut older ones to the archive.
 2026-11-25 — version = 2.19.<commits>: tools/version.py + tools/hooks/pre-commit (dev-repo only, avoids merge conflicts on work branches); big-change list in docs/VERSIONS.md.
 2026-11-25 — 8 new road strangers wired (img/story, quests.HUMANS).
 2026-11-25 — text audit applied (TEXT_AUDIT.md); toolbar reordered faith/ach/stats + map/kill/settings. Left from the audit (no literal match): combat.js 132,140,326,330,530,546; events.js 37-39,45,326,554-555,634-636; travel.js 206-212; scrolls.js 504,518,519,549 p0ss link; enemies lower-case names; questTexts 227-313 splices.
+2026-11-25 — art-notes: taller scenes idea (x15 and double-height tests loved by author; needs dev work on scene height before wiring).
