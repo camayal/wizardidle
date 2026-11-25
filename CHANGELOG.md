@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Trophy room: plaques shown at 75% (24 px), room for 20; he leaves the room by the hut's own door (fades out where he stands, no walk to the main wall).
 - Rare hunts: a hunted rare now shows a small proof (a bag, bottle, jar, box, pouch, vial, crate or bundle with a red wax seal, 11 looks shared by similar families) beside the quest while he carries it to the guild. Capricor, a rare rare, has a real trophy (its head). Proofs are not hung on the wall.
 - Trophy room: after he tells the hunter, a boss hunt's trophy is carried to a second scene inside the hunters hut, the plain wall of the round hut, and hung on it (zigzag, two rows, room for 15 plaques; state.trophies). Dev test: Quests > Trophy room: hang all 15, to see how many fit. The guild scenes now find their images by name (el_poblado_cazadores, _fuera, _trofeos).
 - Quest trophies: a finished boss hunt now shows the boss's trophy (15 pieces on a wooden plaque: wings, heads, bottles, staffs, crowns, a fire egg) beside the quest while he carries it to the guild. Etymos, the hydras, Midas and the rainbow have none. Doria's staff now ends in a violet seeing stone, in the sprite and all three casts.

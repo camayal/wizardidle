@@ -507,6 +507,7 @@ function showBlink(spotX) {
 // a simulation nothing is drawn and everything happens at once, in the same order.
 
 // Doors in the place backgrounds: scene x of the door's middle, in sprite px.
+const SAME_DOOR = { el_poblado_cazadores_trofeos: "el_poblado_cazadores" };      // the trophy room is the other side of the round guild hut: same door
 const DOORS = { el_poblado_cazadores: 25, el_poblado_casadados: 16, la_ciudad_casadados: 16, el_poblado_taberna: 40, la_ciudad_taberna: 52, las_dunas_taberna: 22 };
 
 let fadeCanvas;
@@ -729,7 +730,7 @@ function goInside(bg, npc, done, fade) {
 // the author's idea from the connectors); with no street he stands in changeScene's scene at his place. Where
 // there is no door at all, he walks out of the scene to the right and in again.
 function leavePlace(changeScene, done) {
-    const key = (ui.currentBackGround || "").toLowerCase(), door = DOORS[key], street = STREET_DOORS[key];
+    const inner = (ui.currentBackGround || "").toLowerCase(), key = SAME_DOOR[inner] || inner, door = SAME_DOOR[inner] ? null : DOORS[key], street = STREET_DOORS[key];     // a room of the same hut (the trophy room) leaves by the hut's door without walking to it: he fades out where he stands
     if (door == null && !street) return walkThroughScene(() => { clearNPC(); changeScene(); }, done);
     (door == null ? (go) => go() : (go) => walkWizardTo(door - 48, go))(() => fadeScene(() => {       // (no door inside, as in the desert tent: he fades out where he stands)
         clearNPC();                                      // whoever stayed inside (the gambler) goes only when the scene fades
