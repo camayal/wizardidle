@@ -427,8 +427,7 @@ const pickerActions = {
     regionBug() {       // marks the moment in the report, with where he stands and what is shown
         const log = document.getElementById('regLog');
         if (!log) return;
-        const t = log.value.match(/^(\d+\.\d)s/gm), last = t ? t[t.length - 1] : '';
-        log.value += `${last ? '' : '0.0s '}>>> BUG marked: scene=${ui.currentBackGround} zone=${state.zone.current}${state.zone.stage} offset=${ui.wizardOffset} facing=${ui.facing} mirrored=${ui.mirrored}
+        log.value += `>>> BUG marked: scene=${ui.currentBackGround} zone=${state.zone.current}${state.zone.stage} offset=${ui.wizardOffset} facing=${ui.facing} mirrored=${ui.mirrored}
 `;
         log.scrollTop = log.scrollHeight;
     },
