@@ -279,13 +279,16 @@
             }
 
             .dl { position: relative; display: inline-block; width: 100%; }
-            .dl.dlNew::after { content: ""; position: absolute; inset: -3px 0; pointer-events: none; opacity: 0;
-                background: radial-gradient(circle, #fffbe0 0 1.6px, rgba(255,230,120,0.55) 2.4px, transparent 3.6px) 0 0 / 23px 14px,
-                            radial-gradient(circle, #ffd45a 0 1.8px, rgba(255,190,60,0.5) 2.6px, transparent 4px) 9px 6px / 31px 17px,
-                            radial-gradient(circle, #ffffff 0 1.2px, rgba(255,255,255,0.5) 2px, transparent 3px) 15px 3px / 17px 11px;
-                filter: drop-shadow(0 0 3px #ffd45a);
-                animation: dlSparkle 1.1s ease-in-out infinite; }
-            @keyframes dlSparkle { 0% { opacity: 0.15; background-position: 0 0, 9px 6px, 15px 3px; } 35% { opacity: 1; } 70% { opacity: 0.55; } 100% { opacity: 0.15; background-position: 0 -8px, 9px -12px, 15px -6px; } }
+            .dl.dlNew::after { content: ""; position: absolute; inset: -4px 0; pointer-events: none; opacity: 0;
+                background: radial-gradient(circle, #fff 0 1.8px, rgba(255,240,120,0.7) 3px, transparent 4.5px) 0 0 / 23px 14px,
+                            radial-gradient(circle, #ff5fd2 0 2px, rgba(255,95,210,0.6) 3.2px, transparent 4.8px) 9px 6px / 31px 17px,
+                            radial-gradient(circle, #4fe8ff 0 1.8px, rgba(79,232,255,0.6) 3px, transparent 4.5px) 15px 3px / 27px 13px,
+                            radial-gradient(circle, #8dff5a 0 1.6px, rgba(141,255,90,0.55) 2.8px, transparent 4.2px) 4px 9px / 37px 15px,
+                            radial-gradient(circle, #ffb02e 0 1.8px, rgba(255,176,46,0.6) 3px, transparent 4.5px) 20px 1px / 29px 18px;
+                filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 5px #ffd45a);
+                animation: dlSparkle 0.9s ease-in-out infinite, dlHue 2.7s linear infinite; }
+            @keyframes dlSparkle { 0% { opacity: 0.3; background-position: 0 0, 9px 6px, 15px 3px, 4px 9px, 20px 1px; } 35% { opacity: 1; } 70% { opacity: 0.6; } 100% { opacity: 0.3; background-position: 0 -8px, 9px -12px, 15px -6px, 4px -10px, 20px -9px; } }
+            @keyframes dlHue { to { filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 5px #ffd45a) hue-rotate(360deg); } }
             #hotspotLayer { pointer-events: none; z-index: 5; }
             #hotspotLayer .spot { position: absolute; pointer-events: auto; background: transparent; border: none; padding: 0; cursor: default; outline: none; -webkit-tap-highlight-color: transparent; }
             .transparentBtn {
