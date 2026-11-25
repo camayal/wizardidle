@@ -86,6 +86,7 @@ export const config = {
         findStep: 0.03,            // ...plus this for every event already spent searching...
         findMax: 0.6,              // ...up to this
         searchPatience: 40,        // events of searching after which the quest moves down the queue (when another waits)
+        maxDemotions: 3,           // the quest is dropped the 3rd time its search runs out (or at once when it is the only one); never a secret
         pWantedBoost: 1,           // placeholder: the forced fight when the wanted target "turns up" (1 = always that enemy)
         goldMult: 6,               // reward: gold = hpBase * rGold * this
         faithMult: 4,              // reward: faith = calculateFe() * this

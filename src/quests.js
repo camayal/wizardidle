@@ -329,16 +329,24 @@ export function eventPick() {
     if (q.phase !== 'search') return 0;
     q.searched++;
     const c = config.quests;
-    if (q.searched >= c.searchPatience && qs().queue.length) {          // it drags on: down the queue, never dropped
+    if (q.searched >= c.searchPatience && !q.secret) {          // it drags on: down the queue; the third time, or when it is the only one, it is dropped (a secret is never dropped)
         q.searched = 0;
+        q.demoted = (q.demoted || 0) + 1;
+        if (q.demoted >= c.maxDemotions || !qs().queue.length) {
+            print(`<i>${wizardName()} gives up on his quest: he cannot find what it asks.</i>`);
+            finish(q, 'abandoned');
+            if (!state.quest) wish(true);       // nothing else waits: he makes up an errand of his own
+            return 0;
+        }
         q.phase = 'travel';
-        qs().queue.push(q);
         state.quest = null;
+        promote();                  // the next one first, so the postponed quest cannot be picked again at once
+        qs().queue.push(q);
         stats.count('quest.postponed');
         print(`<i>${wizardName()} thinks this one can wait and puts his quest aside for now.</i>`);
-        promote();
         return 0;
     }
+    if (q.searched >= c.searchPatience && qs().queue.length) q.searched = 0;       // a secret keeps searching
     if (q.cool > 0) { q.cool--; return 0; }          // just met the target: a breather, so it does not turn up again and again
     if (!YesOrNot(Math.min(c.findMax, c.findBase + c.findStep * q.searched), 0)) return 0;
     return turnUp(q);
@@ -446,8 +454,8 @@ export function wishKind() {
     return best;
 }
 
-function wish() {
-    if (qs().queue.length || !YesOrNot(config.quests.pWish, 0)) return;
+function wish(force = false) {
+    if (qs().queue.length || (!force && !YesOrNot(config.quests.pWish, 0))) return;
     const kind = wishKind(), q = makeQuest(kind, 'himself');
     if (!q) return;
     offer(q);

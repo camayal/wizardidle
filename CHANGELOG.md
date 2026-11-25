@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Quests: a quest whose search runs out now really moves down the queue (before, it was picked again at once). The third time it is dropped ("he gives up"), and when it is the only quest it is dropped at once and he makes up an errand of his own. Secret quests are never dropped.
 - The Volcano statue: the wizard now stops 18 pixels further back (STATUE_BACK in events.js) instead of standing in the lava.
 - Quests: the limit doubles, from 4 in all (one running and three waiting) to 8 (one running and seven waiting); a full list still turns new offers down. config.quests.queueMax 3 to 7.
 - The beats of quest scenes (strangers, boards, inn host, guild) run slower, 2.8 s instead of 1.5 s (config.quests.stepTime), so the lines can be read.
