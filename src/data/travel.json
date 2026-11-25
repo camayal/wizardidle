@@ -1,5 +1,5 @@
 {
- "saved": "2026-11-25 12:49:12.000000",
+ "saved": "2026-11-25 12:55:07.023066",
  "verdicts": {
   "border_gruta_duenon|el_Duenon1": "move",
   "border_gruta_duenon|el_Duenon2": "move",
@@ -238,6 +238,7 @@
   "la_Gruta1|la_Pradera13": "far",
   "la_Gruta1|la_Pradera4": "far",
   "la_Gruta1|las_Dunas5": "far",
+  "la_Gruta1|mouth_dunas-pradera_gruta": "far",
   "la_Gruta1|mouth_dunas-pradera_gruta_under": "move",
   "la_Gruta2|la_Gruta3": "move",
   "la_Gruta2|la_Gruta4": "move",
@@ -328,6 +329,7 @@
   "las_Dunas1|las_Dunas4": "move",
   "las_Dunas1|mouth_dunas_mina": "far",
   "las_Dunas2|las_Dunas5": "move",
+  "las_Dunas2|mouth_dunas-pradera_gruta": "move",
   "las_Dunas2|mouth_dunas_mina": "move",
   "las_Dunas3|mouth_pradera_cueva": "far",
   "las_Dunas4|las_Dunas5": "move",
@@ -346,34 +348,45 @@
   "stairs_N|stairs_n_ground": "move",
   "stairs|stairs_above": "move"
  },
- "positions": {},
+ "positions": {
+  "mouth_gruta_cueva": [
+   103,
+   169
+  ]
+ },
  "points": {
   "border_gruta_duenon": {
    "kind": "border",
    "layer": "ground",
    "x": 89,
-   "y": 179
+   "y": 179,
+   "note": ""
   },
   "ladder_cueva4_mina2": {
    "kind": "connector",
    "layer": "under",
    "x": 112,
-   "y": 162
+   "y": 162,
+   "note": ""
   },
   "stairs_N": {
    "kind": "connector",
    "layer": "above",
    "x": 79,
-   "y": 43
+   "y": 43,
+   "note": ""
   },
   "stairs_n_ground": {
    "kind": "connector",
    "layer": "ground",
    "x": 79,
-   "y": 43
+   "y": 43,
+   "note": ""
   }
  },
  "kinds": {
+  "la_Pradera11": "border",
+  "la_Pradera12": "border",
   "la_Pradera14": "border"
  }
 }
