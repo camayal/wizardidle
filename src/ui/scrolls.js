@@ -472,7 +472,7 @@ function updateHelp(){
     '<b>What is the ring on the map?</b> - When a quest names a place, the map rings it, so you can see where he is heading.<br>' +
     '<b>Why does the wizard stop and talk to strangers?</b> - People offer him jobs: an innkeeper, a notice board, a wanted post or a traveller on the road. You can suggest an answer by touching the giver (accept) or the door (leave), but he decides.<br>' +
     '<b>What are the Errands?</b> - The quests he follows, one at a time, with the rest waiting in a queue. On the Quests page of the Faith scroll you can move them up or down, cancel them, or give the three divine orders. Whether he obeys each order depends on his belief.<br>' +
-    '<b>What do the hunters do?</b> - When he hunts a rare enemy or a boss, he must report to the hunters' guild in the Town after the kill. He tells the story, gets paid, and a boss hunt leaves a trophy hung on the wall of the hut.<br>' +
+    '<b>What do the hunters do?</b> - When he hunts a rare enemy or a boss, he must report to the hunters\' guild in the Town after the kill. He tells the story, gets paid, and a boss hunt leaves a trophy hung on the wall of the hut.<br>' +
     '<b>Why is a quest sometimes dropped?</b> - If he searches too long or gets lost, he gives up and makes up an errand of his own. Secret quests are never dropped.<br>' +
     '<b>What is the difference between faith and belief?</b> - Faith is your currency, what your touches cost. Belief is how much the wizard trusts you, from doubt to devotion, in four levels (devout, believer, doubter, atheist). A devout wizard pays less for your touches and prays more; an atheist refuses them. You see it in the Faith scroll.<br>' +
     '<b>Does the wizard dream?</b> - Sometimes, when he sleeps at an inn or in his sleeping bag. Some dreams strengthen his belief, some nightmares sow doubt.<br>' +
@@ -499,7 +499,7 @@ function updateHelp(){
         '<div class="setRow version">Version ' + version + '</div></div>';
 
     const faqBody = '' +
-   '<div class="faq">Wizard Idle, what is it?</div><div class="a">A game with the usual elements of an RPG; the difference is your role. You are the wizard's deity, and his free will limits what you can do. With or without your help he will meet his fate, as a deep believer or a hardened atheist.</div>' +
+   '<div class="faq">Wizard Idle, what is it?</div><div class="a">A game with the usual elements of an RPG; the difference is your role. You are the wizard\'s deity, and his free will limits what you can do. With or without your help he will meet his fate, as a deep believer or a hardened atheist.</div>' +
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true one: you do not have to do anything. The wizard does everything without your help. It is a different way to play: you watch another being live, and can only interfere a little, through miracles. <b><i>You play the deity, not the hero</i></b>. When no deity is watching the world is in no hurry: it counts its time in the beads of a mala.</div>' +
    '<div class="faq">Graphical layout</div><div class="a">The screen is divided into three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, health points, gold and faith points. In this panel you can find the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where all actions performed by the wizard are printed.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to interact</i> with the wizard, non-player characters or environments. </div>' +
    '<div class="faq">Icons explanation</div><div class="a">' +
@@ -508,7 +508,7 @@ function updateHelp(){
         '<div class="divTableRow"><div class="divTableCell"><img src="' + art('heart') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Wizard health, shown in five states by percentage (100%, 75%, 50%, 10%, and 0%).</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><img style="filter: hue-rotate(45deg)" src="' + art('heart') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Enemy health, as well as wizard health, it can be found in five states.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><img src="' + art('achivement') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Achievement, just won an achievement.</div></div>' +
-        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('gold') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Gold, the game's currency.</div></div>' +
+        '<div class="divTableRow"><div class="divTableCell"><img src="' + art('gold') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Gold, the game\'s currency.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><img src="' + art('heal') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Healing, followed by amount of health recovered.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><img src="' + art('spirit') + '" height="' + ui.em + 'px" /></div><div class="divTableCell">Faith, the divine currency: divine touches and other miracles cost faith instead of gold.</div></div>' +
         '<div class="divTableRow"><div class="divTableCell"><span style="font-size:' + ui.em * 1.5 + 'px">!</span></div><div class="divTableCell">Shown near the bottom-right corner, new content or an update is on the server. Reload the game to download it for offline play.</div></div>' +
@@ -525,7 +525,7 @@ function updateHelp(){
    '<div class="divTableRow"><div class="divTableCell"><img src="' + art('archbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">A record of what your wizard achieves on his journey.</div></div>' +
    '</div>' +
    '<div class="faq">Stats</div><div class="a">' +
-   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('statsbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Stats about the wizard's journey, just for information. The second page, Inventory, shows what he carries: his staff, his gold and the artefacts he found.</div></div>' +
+   '<div class="divTableRow"><div class="divTableCell"><img src="' + art('statsbtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Stats about the wizard\'s journey, just for information. The second page, Inventory, shows what he carries: his staff, his gold and the artefacts he found.</div></div>' +
    '</div>' +
    '<div class="faq">Faith scroll</div><div class="a">' +
    '<div class="divTableRow"><div class="divTableCell"><img src="' + art('plegariabtn') + '" height="' + ui.objectSize * 0.09375 + 'px" /></div><div class="divTableCell">Your faith, and the wizard\'s belief in you: its level, a meter from doubt to devotion, and where faith came from. A second page, Quests, lists his errands and the divine orders you can give.</div></div>' +
