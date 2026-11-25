@@ -296,3 +296,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24: explore quests tied to a scene (target.scene, startPhase in quests.js); SPOTS scene numbers still to fill. Split-zone routing on the investigate list.
 - 2026-11-24: SPOTS scene numbers filled by eye for 17 spots; uncovered spots listed in dev-notes. Uncovered spots handed to art-notes.md.
 - 2026-11-24: colons removed from quest texts (questTexts.js, offer lines in quests.js); explore.scene.* stat; scene-tied explore refused when scene already seen. Map ring dropped (dev option only). Lost detector (scenes walked > number of nodes) noted in dev-notes.
+
+- 2026-11-24: lost detector built (quests.onStep from travel.js, finish 'lost'); dev Reachability test; headless balance run still open. Trophy art asked of artist.

@@ -183,6 +183,7 @@ function promote() {
     if (!qs().manual) list.sort((a, b) => urgent(a) - urgent(b) || costTo(a) - costTo(b));   // once the god reorders, his order stands
     const q = list.shift();
     q.paused = false;
+    q.walked = 0;
     q.phase = startPhase(q);
     state.quest = q;
     print(`<i>${wizardName()} turns to his next errand and will ${lc(q.text)}.</i>`);
@@ -293,6 +294,25 @@ function bestOf(q, list) {
     return bestCost === Infinity ? null : best;
 }
 const stepsFrom = (origin) => [...moves(origin), ...destinations(origin)];
+
+// The lost detector (author): on the road a quest may walk no more scenes than there are stages in the whole graph (the longest
+// path touches each once); past that he is lost: stat quest.lost, the quest is dropped.
+export function onStep() {
+    const q = state.quest;
+    if (!q || q.phase !== 'travel') return;
+    q.walked = (q.walked || 0) + 1;
+    if (q.walked <= Object.keys(byName).length) return;
+    print(`<i>${wizardName()} has lost his way and drops his quest (${q.text}).</i>`);
+    finish(q, 'lost');
+    if (!state.quest) wish(true);
+}
+
+// Every stage that can be walked to from `start` (moves and destinations): for the dev reachability check.
+export function reachable(start) {
+    const seen = new Set([start]), todo = [start];
+    while (todo.length) for (const n of stepsFrom(todo.pop())) if (byName[n] !== undefined && !seen.has(n)) { seen.add(n); todo.push(n); }
+    return seen;
+}
 
 // 'leave' (the next stage on the way is in another zone), 'move' (stay in this zone: on the way, or searching), or null (no quest).
 export function mode() {

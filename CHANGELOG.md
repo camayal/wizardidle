@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Quests: the lost detector. On the road a quest counts the scenes he walks; past the number of stages in the whole graph he is lost, the quest is dropped (stat quest.lost) and he makes up an errand of his own. New dev test Quests > Reachability checks that every stage can reach every stage.
 - Quest texts: no more colons in the explore and quest lines (the offer lines, the pilgrimage title, the arrival and done stories, the hunt stories); an explore quest now reads "Go and see the quiet hill in the Prairie". A scene-tied explore is refused when he has already stood in that scene (counted per scene, explore.scene.*), and offers prefer spots he has not seen, so the same place is not asked for again and again.
 - Explore quests: 17 of the key places now name the scene that shows them (matched by eye from the art), so the quest is done only when he stands there.
 - Explore quests can now be tied to one scene: a spot with a scene number in SPOTS (questTexts.js) is only done when he stands in that exact scene, and the route steers him there. No spot has a scene yet.

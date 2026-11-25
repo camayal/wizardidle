@@ -13,7 +13,7 @@ import { startCrossingFight } from './combat.js';
 import * as loop from './loop.js';
 import { config } from './config.js';
 import { addXP } from './wizard.js';
-import { steer } from './quests.js';
+import { steer, onStep } from './quests.js';
 import { drawWizard, loadBackground, print, setFacing, showStage, walkAcross, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
@@ -232,6 +232,7 @@ function pickRandomBackgroundForCurrentZone(onArrive, onScene) {   // onScene: t
         state.zone.stage = Number(randomLocality.match(/\d+$/));
         loadBackground(randomLocality);
         stats.count(`explore.scene.${randomLocality}`);
+        onStep();
         if (onScene) onScene();
     };
     const cross = crossing(origin, randomLocality);
@@ -250,6 +251,7 @@ function getZone() {
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
         stats.count(`explore.zone.${state.zone.current}`);
         stats.count(`explore.scene.${randomLocality}`);
+        onStep();
         state.zone.stay = 0;
         } else {
         state.zone.current = "la_Ciudad";//default start
