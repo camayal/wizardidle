@@ -224,9 +224,11 @@ function layoutPortrait(){
     // sizes everything else depends on
     // tall phones: the XP plate (bar, HP, gold, spirit) drops under the buttons and takes the full width,
     // so its text can grow with them; otherwise it sits beside the buttons as always
-    const tall = kb > 1.02, plateU = s * 0.0042 * (tall ? kb : 1);
-    const plateTop = tall ? tbTop * 1.5 + step * 2 : s * 0.092;
-    const headingH = tall ? plateTop + 28 * plateU + tbTop : Math.max(s * 0.21, tbTop * 2 + step + tb);
+    const tall = kb > 1.02;
+    const plateW = tall ? tbLeft - s * 0.04 : Math.min(s * 0.7, tbLeft - s * 0.04);
+    const plateU = tall ? Math.min(s * 0.0042 * kb, plateW / 150) : s * 0.0042;
+    const plateTop = tall ? tbTop + step + (tb - 28 * plateU) / 2 : s * 0.092;
+    const headingH = Math.max(tall ? 0 : s * 0.21, tbTop * 2 + step + tb);
     const marcoH = s * 0.3125;
     const sceneH = s * 0.25;
     const backConsoleH = H - parseInt(sceneH) * 1.2 - parseInt(headingH) * 1.2;
@@ -237,7 +239,6 @@ function layoutPortrait(){
 
     // heading
     setStyles("heading", { height: headingH });
-    const plateW = tall ? s * 1.0 : Math.min(s * 0.7, tbLeft - s * 0.04);
     setStyles("pjName", { fontSize: button * (tall ? kb : 1), width: Math.min(s * 0.7, tbLeft - s * 0.04) });
     layoutXPPlate(plateTop, plateW, plateU);
     setEach(TOOLBAR, { display: "block", width: tb });

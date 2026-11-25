@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Long phone screens: the XP bar and indicators shrink and sit beside the second row of buttons instead of spanning under them; wizard names are limited to 12 characters.
 - Map scroll: the title is always "Map"; the name of the region (or connector) is written under the map picture.
 - Settings: the tick of the default step on the sliders is red like the seal; the sliders, switches and buttons now grow with the text size.
 - Settings: Reset and Import ask like the Kill button (a parchment note, press again) instead of browser dialogs; Export says "Copied" in a note.

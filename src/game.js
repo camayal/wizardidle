@@ -148,7 +148,7 @@ function initialName(){
 // Start button on the name screen: keep the typed name (or a random one) and start.
 function setName(){
     if(el("inputName").value !== ""){
-            if(!state.player.name){state.player.name = el("inputName").value};
+            if(!state.player.name){state.player.name = el("inputName").value.trim().slice(0, 12)};
         }else{
             if(!state.player.name){state.player.name = randomName()};
         }

@@ -308,3 +308,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24: 15 boss trophies and Doria's violet staff wired (trophyOf in quests.js, art in img/objects and img/bosses/doria). Rares have no trophy yet.
 - 2026-11-24 (dev): Help FAQ rewritten from the code and the plans (scrolls.js updateHelp): 16 new Q&As, answers fixed (free revive, atheist refuses touches, quests suggestions). The 108 stays a hint only: no FAQ line names time away. Bestiary mention in the Kill entry goes if the bestiary is replaced by the achievement.
 - 2026-11-24 (dev): travel.js changeLocality case 2: the "is entering to" line is printed in walkAcross's changeScene callback (after the connector scenes), not before. Untested in a browser.
+2026-11-25 — long screens: XP plate beside button row 2 (u capped by width/150), name max 12 chars.
