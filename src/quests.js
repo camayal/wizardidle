@@ -77,7 +77,8 @@ const MAKERS = {
         const fresh = all.filter((x) => !knowsZone(x));     // the giver mostly tells of places he has not seen; now and then of one he knows
         const z = pickRandomItem((fresh.length && !YesOrNot(config.quests.pKnownPlace, 0) ? fresh : all).join(','));
         const spot = SPOTS[z] ? pickFrom(SPOTS[z]) : null;
-        const w = base('explore', giver, `Go and see the ${zoneName(z)}`, { zone: z, found: spot ? spot[1] : 'it is as quiet as they said' }, 'xp');
+        const scene = spot && spot[2] ? `${z}${spot[2]}` : null;       // a spot tied to one scene: only standing there completes the quest
+        const w = base('explore', giver, scene ? `Go and see ${spot[1].split(',')[0]} in the ${zoneName(z)}` : `Go and see the ${zoneName(z)}`, { zone: z, scene: scene && byName[scene] !== undefined ? scene : null, found: spot ? spot[1] : 'it is as quiet as they said' }, 'xp');
         if (spot) w.story = `You should see the ${zoneName(z)}: ${spot[0]}`;
         return w;
     },
@@ -169,7 +170,9 @@ function costTo(q, from = here()) {
     for (const t of targetStages(q)) best = Math.min(best, travelCost(from, t));
     return best;
 }
-const targetStages = (q) => (q.target.zone ? stagesOf(q.target.zone) : []);
+const targetStages = (q) => (q.target.scene ? [q.target.scene] : q.target.zone ? stagesOf(q.target.zone) : []);
+// An explore quest with a named scene keeps travelling (never searches) until he stands in that very scene.
+const startPhase = (q) => (!q.target.scene && state.zone.current === q.target.zone ? 'search' : 'travel');
 
 // Take the next quest from the queue: secrets first, then the nearest by travel cost.
 function promote() {
@@ -178,7 +181,7 @@ function promote() {
     if (!qs().manual) list.sort((a, b) => urgent(a) - urgent(b) || costTo(a) - costTo(b));   // once the god reorders, his order stands
     const q = list.shift();
     q.paused = false;
-    q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
+    q.phase = startPhase(q);
     state.quest = q;
     print(`<i>${wizardName()} turns to his next errand and will ${lc(q.text)}.</i>`);
 }
@@ -191,7 +194,7 @@ export function offer(q, { secret = false } = {}) {
     const Q = qs();
     if (!state.quest) {
         state.quest = q;
-        q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
+        q.phase = startPhase(q);
         stats.count('quest.started');
         return true;
     }
@@ -201,7 +204,7 @@ export function offer(q, { secret = false } = {}) {
         paused.paused = true;
         Q.queue.unshift(paused);
         state.quest = q;
-        q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
+        q.phase = startPhase(q);
         stats.count('quest.started');
         return true;
     }
@@ -322,7 +325,8 @@ export function eventPick() {
         if (state.zone.current === GUILD_ZONE) { stats.count('quest.arrived'); return 6; }
         return YesOrNot(config.quests.pTravelExplore, 0) ? 2 : 0;
     }
-    if (q.phase === 'travel' && state.zone.current === q.target.zone) {
+    if (q.target.scene && here() === q.target.scene) { stats.count('quest.arrived'); complete(q); return 0; }     // the named scene
+    if (q.phase === 'travel' && !q.target.scene && state.zone.current === q.target.zone) {
         q.phase = 'search';
         q.searched = 0;
         stats.count('quest.arrived');
@@ -641,7 +645,7 @@ function hear() {
     return false;
 }
 function activate(q) {
-    q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
+    q.phase = startPhase(q);
     state.quest = q;
 }
 export function godMove(i, dir) {

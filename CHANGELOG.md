@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Explore quests can now be tied to one scene: a spot with a scene number in SPOTS (questTexts.js) is only done when he stands in that exact scene, and the route steers him there. No spot has a scene yet.
 - Quests: a quest a secret paused now really resumes next (was re-sorted by distance). Boss hunts pay 2.5 times more gold, faith and XP (config.quests.bossMult). If he falls in the fight with the hunted enemy itself the hunt fails; a fall after the kill changes nothing. The log of past quests keeps 20 (config.quests.logMax). More quest stats (per kind done, cancelled, failed). Achievement ideas in docs/plans/QUEST_ACHIEVEMENTS.md.
 - Border scenes: walking one right to left, he now comes into the next scene from the left and walks to his place as usual (he was walking right to left again, though he is already in the region).
 - Wanted posts and the notice board: the prop now stands in the scene before he walks in and stays until he has walked out (he walks out and into the next scene instead of the scene just changing). The wanted post is set 4 px further back so it is not in his path.
