@@ -160,7 +160,7 @@ function volcanoWhisper() {
 
 export const current = () => state.quest || null;
 export const active = () => !!state.quest;
-const urgent = (q) => (q.secret ? 0 : 1);
+const urgent = (q) => (q.paused ? -1 : q.secret ? 0 : 1);      // a quest a secret paused waits first in line
 
 // How far (travel cost) from where he stands the quest's nearest target stage is.
 function costTo(q, from = here()) {
@@ -177,6 +177,7 @@ function promote() {
     if (!list.length) return;
     if (!qs().manual) list.sort((a, b) => urgent(a) - urgent(b) || costTo(a) - costTo(b));   // once the god reorders, his order stands
     const q = list.shift();
+    q.paused = false;
     q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
     state.quest = q;
     print(`<i>${wizardName()} turns to his next errand and will ${lc(q.text)}.</i>`);
@@ -197,6 +198,7 @@ export function offer(q, { secret = false } = {}) {
     if (secret && !state.quest.secret) {
         const paused = state.quest;
         paused.phase = 'travel';
+        paused.paused = true;
         Q.queue.unshift(paused);
         state.quest = q;
         q.phase = state.zone.current === q.target.zone ? 'search' : 'travel';
@@ -219,9 +221,10 @@ export function cancel() {
 function finish(q, how) {
     const log = qs().log;
     log.unshift({ text: q.text, giver: q.giver, kind: q.kind, how, at: Date.now() });
-    if (log.length > 10) log.length = 10;
+    if (log.length > config.quests.logMax) log.length = config.quests.logMax;
     state.quest = null;
     stats.count(`quest.${how}`);
+    stats.count(`quest.${q.kind}.${how}`);
     promote();
 }
 
@@ -232,20 +235,21 @@ const rewardLine = (kind, n) => pickFrom(REWARD_STORIES[kind]).replace('{n}', n)
 
 function reward(q) {
     const c = config.quests, p = state.player;
+    const m = q.target.boss ? c.bossMult : 1;       // a boss hunt pays more of everything
     if (q.reward === 'gold') {
-        const gold = Math.round(p.hpBase * config.balance.rGold * c.goldMult);
+        const gold = Math.round(p.hpBase * config.balance.rGold * c.goldMult * m);
         p.gold += gold;
         updateHeading();
         return rewardLine('gold', gold);
     }
     if (q.reward === 'faith') {
-        const f = Math.round(calculateFe() * c.faithMult * p.faithMultiplier);
+        const f = Math.round(calculateFe() * c.faithMult * m * p.faithMultiplier);
         p.faith += f;
         updateHeading();
         return rewardLine('faith', f);
     }
     if (q.reward === 'study') return '';        // a study quest gives what the find gives, boosted (onStudy)
-    addXP(c.xpMult);
+    addXP(c.xpMult * m);
     return rewardLine('xp');
 }
 
@@ -381,6 +385,17 @@ export function onKill(name, boss) {
         q.searched = 0;
         stats.count('quest.hunted');
         print(`<i>${wizardName()} has done what was asked. Now he must report it to the hunters' guild in the ${zoneName(GUILD_ZONE)}.</i>`);
+    }
+}
+
+// He fell in the fight with the hunted enemy itself: the hunt fails (a fall after the kill changes nothing).
+export function onFall(name, boss) {
+    const q = state.quest;
+    if (!q || q.kind !== 'wanted' || q.target.report || state.zone.current !== q.target.zone || !name) return;
+    if (boss ? q.target.boss === name : q.target.enemy === name) {
+        print(`<i>${wizardName()} fell to the one he was hunting. The hunt is lost.</i>`);
+        stats.count('quest.huntFell');
+        finish(q, 'failed');
     }
 }
 
@@ -657,7 +672,7 @@ export function godDrop(i) {
     if (!hear()) return true;
     const [q] = Q.queue.splice(i - 1, 1);
     qs().log.unshift({ text: q.text, giver: q.giver, kind: q.kind, how: 'cancelled', at: Date.now() });
-    if (Q.log.length > 10) Q.log.length = 10;
+    if (Q.log.length > config.quests.logMax) Q.log.length = config.quests.logMax;
     stats.count('quest.cancelled');
     return true;
 }

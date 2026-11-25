@@ -5,7 +5,7 @@
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { bossesOf, zones } from './data/zones.js';
 import { npcSpells, spells } from './data/spells.js';
-import { onKill, secret as questSecret } from './quests.js';
+import { onKill, onFall, secret as questSecret } from './quests.js';
 import { isSpectrum, pickSpectrum, spectrumKilled, spectrumSeen } from './spectra.js';
 import { capitalize, getRandomInt, pickRandomItem, roundNumbertoLetter, YesOrNot } from './utils.js';
 import { config, RAREMULTIPLIER, selfrevivetime } from './config.js';
@@ -240,6 +240,7 @@ function wizardFalls() {
     if (fight.hydraCombat && fight.enemyHP > 0) {       // the hydra keeps its wounds for next time
         state.hydraHealth[fight.hydra] = Math.min(1, fight.enemyHP / fight.enemyHPbase);
     }
+    if (fight.enemy || fight.enemyAndNumber) onFall(fight.bossCombat ? fight.enemy : fight.enemyAndNumber, fight.bossCombat);     // a wanted quest is lost (src/quests.js)
     const winner = state.npc;       // empty if it fell in the same round
     clearFight();
     playLeave(winner);              // it leaves its own way in, backwards (ui/entrances.js)

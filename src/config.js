@@ -90,6 +90,8 @@ export const config = {
         pWantedBoost: 1,           // placeholder: the forced fight when the wanted target "turns up" (1 = always that enemy)
         goldMult: 6,               // reward: gold = hpBase * rGold * this
         faithMult: 4,              // reward: faith = calculateFe() * this
+        bossMult: 2.5,             // a boss hunt pays this many times the gold, faith and XP of a rare hunt (placeholder)
+        logMax: 20,                // finished quests kept in the log
         xpMult: 12,                // reward: XP = xpPerEnemy * this
         pilgrimageShrines: 3,      // zones to pray in
         personality: 1.5,          // how much a personality (greedy, pious, curious) tilts the wish scores

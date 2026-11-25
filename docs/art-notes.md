@@ -82,3 +82,5 @@ The scene needs to be modified: the firepit sits on the walkable line, so the wi
 
 
 - el_Desierto4 (author, 2026-11-24): the scene art shows a mine mouth the game does not use as a mouth (the Desert's real mine mouth is elsewhere). Redraw it as collapsed or rubble (a caved-in entrance), same scene otherwise. No code change.
+
+- Quest trophies (author via dev, 2026-11-24): a hunt now ends with a temporary quest item he carries to the guild, a trophy of the hunted enemy in a box of a different colour than normal items so it reads as a quest item. One unique trophy per hunted rare and boss, easy to read and easy to cut from the current sprite, nothing extreme: a head, a staff, a cape, a horn, a tail. Offer the options in the art console first. Dev wires them in.

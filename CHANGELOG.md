@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Quests: a quest a secret paused now really resumes next (was re-sorted by distance). Boss hunts pay 2.5 times more gold, faith and XP (config.quests.bossMult). If he falls in the fight with the hunted enemy itself the hunt fails; a fall after the kill changes nothing. The log of past quests keeps 20 (config.quests.logMax). More quest stats (per kind done, cancelled, failed). Achievement ideas in docs/plans/QUEST_ACHIEVEMENTS.md.
 - Border scenes: walking one right to left, he now comes into the next scene from the left and walks to his place as usual (he was walking right to left again, though he is already in the region).
 - Wanted posts and the notice board: the prop now stands in the scene before he walks in and stays until he has walked out (he walks out and into the next scene instead of the scene just changing). The wanted post is set 4 px further back so it is not in his path.
 - Quests: a quest whose search runs out now really moves down the queue (before, it was picked again at once). The third time it is dropped ("he gives up"), and when it is the only quest it is dropped at once and he makes up an errand of his own. Secret quests are never dropped.
