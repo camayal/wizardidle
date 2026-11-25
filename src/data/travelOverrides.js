@@ -380,7 +380,7 @@ export const travelPoints = {
         "y": 166
     },
     "border_gruta_duenon": {
-        "kind": "connector",
+        "kind": "border",
         "layer": "ground",
         "x": 89,
         "y": 179

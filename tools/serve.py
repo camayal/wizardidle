@@ -164,7 +164,7 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
             zones_path = os.path.join(REPO, 'src', 'data', 'zones.js')
             with open(zones_path, encoding='utf-8', newline='') as f:
                 zones = f.read()
-            points = {k: v for k, v in data.get('points', {}).items() if re.fullmatch(r'\w+', k) and v.get('kind') in ('future', 'connector')
+            points = {k: v for k, v in data.get('points', {}).items() if re.fullmatch(r'\w+', k) and v.get('kind') in ('future', 'connector', 'border')
                       and v.get('layer') in ('ground', 'above', 'under')}
             for v in points.values():
                 v['note'] = str(v.get('note', ''))[:500]
