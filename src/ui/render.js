@@ -826,7 +826,7 @@ function npcBox(npc, squareSideIn = ui.squareSide, headLevelIn = ui.headLevel, c
     // the sleeping bag, laid in front of him where he stopped (ui.bagSpot, scene px)
     if (npc === "sleepingbag" && ui.bagSpot != null) return [ui.bagSpot * charWidthIn / 32, headLevelIn, charWidthIn, charWidthIn];
     // props that stand in the scene: the notice board (32x32) and the wanted posts (24x32 in a 32 square, centred)
-    if (npc.startsWith("prop_wanted_post")) return [squareSideIn * 6 + charWidthIn * 4 / 32, headLevelIn, charWidthIn * 24 / 32, charWidthIn];
+    if (npc.startsWith("prop_wanted_post")) return [squareSideIn * 6 + charWidthIn * 4 / 32, headLevelIn - charWidthIn * 4 / 32, charWidthIn * 24 / 32, charWidthIn];     // set 4 px back, out of the wizard's path
     //the remaining (32x32px)
     return [squareSideIn * 6, headLevelIn, charWidthIn, charWidthIn];
 }

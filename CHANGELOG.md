@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Wanted posts and the notice board: the prop now stands in the scene before he walks in and stays until he has walked out (he walks out and into the next scene instead of the scene just changing). The wanted post is set 4 px further back so it is not in his path.
 - Quests: a quest whose search runs out now really moves down the queue (before, it was picked again at once). The third time it is dropped ("he gives up"), and when it is the only quest it is dropped at once and he makes up an errand of his own. Secret quests are never dropped.
 - The Volcano statue: the wizard now stops 18 pixels further back (STATUE_BACK in events.js) instead of standing in the lava.
 - Quests: the limit doubles, from 4 in all (one running and three waiting) to 8 (one running and seven waiting); a full list still turns new offers down. config.quests.queueMax 3 to 7.

@@ -225,12 +225,13 @@ function changeLocality() {
 
 // Move to another stage of the current zone. The stage is kept too: it was not, so the next
 // move could pick the scene he was already in (the author: he walked to the same scene).
-function pickRandomBackgroundForCurrentZone(onArrive) {
+function pickRandomBackgroundForCurrentZone(onArrive, onScene) {   // onScene: the new scene is shown (before he walks in)
     const origin = state.zone.current + state.zone.stage;
     const randomLocality = steer(origin, moves(origin)) || pickRandomItem(moves(origin).join(","));     // a quest steers (src/quests.js)
     const change = () => {
         state.zone.stage = Number(randomLocality.match(/\d+$/));
         loadBackground(randomLocality);
+        if (onScene) onScene();
     };
     const cross = crossing(origin, randomLocality);
     if (cross) walkAcross(cross.steps, change, onArrive);

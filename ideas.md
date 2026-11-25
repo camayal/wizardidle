@@ -290,3 +290,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24: quest limit doubled (queueMax 3 to 7, 8 in all) at the author's request.
 - 2026-11-24: Volcano statue stop moved 18 px back (STATUE_BACK in events.js); tune the number if still on lava.
 - 2026-11-24: quest postponement fixed (promote first, then push; 3rd demotion or lone quest is abandoned and a wish replaces it; config.quests.maxDemotions 3). Full review list in docs/dev-notes.md.
+- 2026-11-24: wanted post/board shown on scene entry (new onScene hook in pickRandomBackgroundForCurrentZone), walk-out after reading, post 4 px back (npcBox). Untested; tune the 4 px.

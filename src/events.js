@@ -203,10 +203,9 @@ function exploreEV() {
         const prop = giver === 'board' ? 'prop_notice_board' : `prop_wanted_post_${pickRandomItem('a,b,c')}`;
         print(`${wizardName()} walks on...`);
         pickRandomBackgroundForCurrentZone(() => {
-            loadNPC(prop);
             print(`${wizardName()} sees ${giver === 'board' ? 'the notice board' : 'a wanted post'} and walks up to it`);
             walkWizardTo(READ_SPOT, () => startEvent(readBoard, config.quests.stepTime));
-        });
+        }, () => loadNPC(prop));       // it stands there already as he walks in
         return;
     }
     if (restless()) {
@@ -257,7 +256,11 @@ function exploreEV() {
 function readBoard() {
     run.multipleEventsCounter += 1;
     const g = run.questMeet, name = wizardName(), human = g === 'human';
-    const finish = () => { clearNPC(); run.previousEvent = "board"; addXP(0.25); endEvent(); nextEvent(); };
+    const finish = () => {
+        run.previousEvent = "board"; addXP(0.25); endEvent();
+        if (human) { clearNPC(); nextEvent(); return; }
+        walkThroughScene(() => { clearNPC(); newStage(); }, nextEvent);      // the board or post stays until he walks out, then he walks into the next scene
+    };
     switch (run.multipleEventsCounter) {
     case 1:         // the first beat: the stranger calls out (he may be ignored), or he reads what is pinned
         if (human) { print(`<i>The stranger waves and calls out, trying to get ${name}'s attention</i>`); quests.attentionBegin(); }
