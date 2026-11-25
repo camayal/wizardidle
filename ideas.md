@@ -272,3 +272,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 (dev): readBoard is now 5 beats (call out / stop-or-ignore / job told / answer / leave); quests.attentionBegin/stops, config.quests.pStop + stopCurious; suggest() also nudges the first choice; bubbles on boards drawn on npcCanvas. TODO of the same request: guild report (needs art), texts per boss/school, scroll spacing + info scrolls, inn bubbles. Untested in a browser.
 
 - 2026-11-24 dev: hunt stories in src/data/questTexts.js (10 per boss, 10 per school); author to review wording. Next: scroll spacing + info scrolls, guild report (art options in review/guild awaiting author pick), inn bubbles.
+
+- 2026-11-24 dev: inn meeting in beats (offer, answer, then sleep); bubble floats at the NPC spot when the inn draws no keeper (tune position). Errand rows spaced 0.9em.

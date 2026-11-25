@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- At an inn the host now speaks before the night: he tells his job (bubble), the god may nudge, the wizard answers (check or X), then he sleeps. The quest scroll keeps a little more space between errands.
 - Hunts now come with a story: ten complaints for every boss and ten by school for rare enemies; the console tells it in full when the job is offered, the scroll keeps the short line.
 - Meeting a giver now plays out in steps you can follow in the console, with the speech bubbles. A stranger on the road first calls out to catch his attention: the wizard may ignore him and walk on to the left, or stop and ask what is happening (belief and a curious nature make him stop, and your touch on the stranger nudges him to stop, on the door to walk on). Then the stranger tells his trouble with the bubble over him, and the answer shows as a check or an X. Boards and posts go the same way after the first line (he looks over the notices, the job is read with the bubble, then the answer). Inns still have no bubbles.
 - The secret quests (the prism, Medusa's shield, a rune's trail, the hidden shrine) are one-time, so forgetting one asks first, like the Kill button: the first press of X opens a small parchment note ("Press X again to forget this quest"), the second press forgets it, tapping the note takes it back. Ordinary quests are still forgotten at once.

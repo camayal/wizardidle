@@ -512,7 +512,7 @@ export function decideOffer() {
 export function innVisit() {
     const q = state.quest, z = state.zone.current;
     const seeking = q && q.kind === 'seek' && q.target.giver === 'inn' && q.target.zone === z;
-    if (seeking || (canTake() && YesOrNot(config.quests.pInnOffer, 0))) beginOffer('inn');
+    return (seeking || (canTake() && YesOrNot(config.quests.pInnOffer, 0))) && beginOffer('inn');
 }
 
 // Dev tools: an offer from a giver at once, answered after a few seconds (time to try a touch).

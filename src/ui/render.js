@@ -764,14 +764,14 @@ function drawFrontProp(npc, squareSideIn, headLevelIn, charWidthIn, charHeightIn
 
 // The speech bubble of a stranger who gives a quest (img/story/bubble_quest, _yes, _no: 26x20, tail at the
 // bottom-left), above-left of his head, on the front layer; clearNPC takes it away with him.
+// With no one standing there (an innkeeper the scene does not draw) the bubble floats where an NPC would stand.
 function showBubble(kind) {
     if (run.simulation) return;
     const c = state.npc.startsWith("prop_") ? npcCanvas : el("overlayCanvas"), unit = ui.charWidth / 32;     // a prop stands on the front layer already
     withImage("bubble", art(`bubble_${kind}`), (img) => {
-        if (!state.npc) return;
         c.width = c.offsetWidth;
         c.height = c.offsetHeight;
-        const [x, y] = npcBox(state.npc);
+        const [x, y] = state.npc ? npcBox(state.npc) : [ui.squareSide * 6, ui.headLevel];
         pixelContext(c).drawImage(img, x - 14 * unit, Math.max(0, y - 14 * unit), 26 * unit, 20 * unit);
     });
 }
@@ -959,6 +959,7 @@ export {
     whenSceneReady,
     clearNPC,
     showBubble,
+    clearFrontProp,
     drawWizard,
     showStage,
     wizardName,

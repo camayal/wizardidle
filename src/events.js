@@ -16,7 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showBubble, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { clearFrontProp, clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showBubble, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { playExit } from './ui/entrances.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
@@ -638,9 +638,17 @@ function searchInn(){
     const placesWithInn = state.zone.current == "la_Ciudad" || state.zone.current == "el_Poblado" || state.zone.current == "el_Desierto" || (state.zone.current == "las_Dunas" && config.balance.dunesInn == 1);
     run.multipleEventsCounter += 1;
     switch (run.multipleEventsCounter) {
-        case 1: arriveToRest(placesWithInn); break;
-        case 2: sleep(placesWithInn); break;
-        case 3: quests.decideOffer(); wakeUp(placesWithInn);
+        case 1:
+            arriveToRest(placesWithInn);
+            if (!placesWithInn) run.multipleEventsCounter = 3;      // camping: no host to talk to
+            break;
+        case 2:         // the host may have a job: he tells it (bubble), the god may nudge before the answer
+            if (quests.innVisit()) showBubble('quest');
+            else run.multipleEventsCounter = 3;
+            break;
+        case 3: showBubble(quests.decideOffer() ? 'yes' : 'no'); break;
+        case 4: clearFrontProp(); sleep(placesWithInn); break;
+        case 5: wakeUp(placesWithInn);
     }
 }
 
@@ -650,7 +658,6 @@ function arriveToRest(placesWithInn) {
     if (placesWithInn) {
         enterPlace(`${state.zone.current}_taberna`, state.zone.current == "las_Dunas" ? "viejo" : undefined);     // the Dunes inn keeps the old merchant
         quests.onInn();
-        quests.innVisit();       // the host may have a job; he answers when he wakes (searchInn)
         stats.count("inn.rests");
         if (stats.get("inn.rests") >= 250) logro.set(logro.logro_tabernero);
         stats.count(`inn.zone.${state.zone.current}`);
