@@ -1,0 +1,5 @@
+#!/bin/sh
+# On dev-repo every commit carries its own version number (tools/version.py): 2.<big changes>.<commits>.
+if [ "$(git rev-parse --abbrev-ref HEAD)" = "dev-repo" ]; then
+    python "$(git rev-parse --show-toplevel)/tools/version.py" >/dev/null && git add src/game.js
+fi
