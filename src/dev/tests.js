@@ -676,9 +676,11 @@ function buildBar(prepared) {
     let hidden = false;
     try { hidden = localStorage.getItem(HIDDEN_KEY) == '1'; } catch (e) { /* private mode */ }
     panel.root.style.display = hidden ? 'none' : '';
+    document.body.dataset.devPanel = hidden ? 'off' : 'on';     // read by the Settings switch
     document.addEventListener('wizardidle:toggleDevBar', () => {
         hidden = !hidden;
         panel.root.style.display = hidden ? 'none' : '';
+        document.body.dataset.devPanel = hidden ? 'off' : 'on';
         try { localStorage.setItem(HIDDEN_KEY, hidden ? '1' : '0'); } catch (e) { /* private mode */ }
     });
 

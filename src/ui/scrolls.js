@@ -372,8 +372,8 @@ el('innerTextScroll').addEventListener('click', (e) => {
 // 4 px middle that repeats), the four ticks sit under the steps, and the thumb is the input's own thumb (CSS).
 // su is one art pixel on screen, a whole number of pixels so the pixel art stays sharp.
 function drawSlider(slider) {
-    const su = Math.max(2, Math.min(Math.round(ui.em * 0.2), Math.floor(ui.objectSize * 0.6 / 78)));
-    const W = 56 * su, steps = TEXT_SIZES.length - 1;
+    const su = Math.max(2, Math.min(Math.round(ui.em * 0.14), 4));
+    const W = 44 * su, steps = TEXT_SIZES.length - 1;
     const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = el("sliderArt");
     row.style.setProperty("--su", `${su}px`);
     slider.style.setProperty("--thumb", `url(${art("slider_thumb")})`);
@@ -395,27 +395,29 @@ function drawSlider(slider) {
     };
     track.onload = ticks.onload = paint;
     track.src = art("slider_track"); ticks.src = art("slider_ticks");
+    return su;
 }
 
-// The sound switch (img/ui/toggle_*.png, look A): a 28 x 12 track that is dull when off and lit when on, the red
+// A switch (img/ui/toggle_*.png, look A): a 28 x 12 track that is dull when off and lit when on, the red
 // seal knob at its left (off) or right (on) end sticking out 1 px above and below, and the word ON or OFF beside it.
-function drawToggle(su) {
-    su = parseFloat(su);
-    const toggle = el("soundToggle"), knob = toggle.querySelector(".knob"), label = toggle.parentNode.querySelector(".toggleLabel");
+// su is one art pixel on screen; isOn reads the state and flip changes it.
+function drawToggle(toggle, su, isOn, flip) {
+    const knob = toggle.querySelector(".knob"), label = toggle.parentNode.querySelector(".toggleLabel");
     const paint = () => {
-        toggle.style.backgroundImage = `url(${art(prefs.sound ? "toggle_track_on" : "toggle_track_off")})`;
-        knob.style.left = `${prefs.sound ? 14 * su : 0}px`;
-        label.src = art(prefs.sound ? "toggle_label_on" : "toggle_label_off");
-        label.style.width = `${(prefs.sound ? 8 : 11) * su}px`;
+        const on = isOn();
+        toggle.style.backgroundImage = `url(${art(on ? "toggle_track_on" : "toggle_track_off")})`;
+        knob.style.left = `${on ? 14 * su : 0}px`;
+        label.src = art(on ? "toggle_label_on" : "toggle_label_off");
+        label.style.width = `${(on ? 8 : 11) * su}px`;
     };
     Object.assign(toggle.style, { position: "relative", width: `${28 * su}px`, height: `${12 * su}px`, cursor: "pointer", flex: "none",
         backgroundSize: "100% 100%", imageRendering: "pixelated", touchAction: "manipulation" });
     knob.src = art("toggle_thumb");
     Object.assign(knob.style, { position: "absolute", top: `${-su}px`, width: `${14 * su}px`, height: `${14 * su}px`, imageRendering: "pixelated", pointerEvents: "none" });
     Object.assign(label.style, { imageRendering: "pixelated", marginLeft: `${3 * su}px` });
-    el("settings").querySelector(".setToggleRow").style.cssText = `display:flex;justify-content:center;align-items:center;margin:${2 * su}px 0`;
+    toggle.parentNode.style.cssText = `display:flex;align-items:center;flex:none`;
     toggle.onpointerdown = () => { knob.src = art("toggle_thumb_down"); };
-    toggle.onclick = () => { setSound(!prefs.sound); knob.src = art("toggle_thumb"); paint(); };
+    toggle.onclick = () => { flip(); knob.src = art("toggle_thumb"); paint(); };
     toggle.onpointerup = toggle.onpointerleave = () => { knob.src = art("toggle_thumb"); };
     paint();
 }
@@ -443,11 +445,13 @@ function updateHelp(){
     '<b>Where is my game saved?</b> - In your browser, on this device only. Clearing the site data erases it. The game also works offline once it has loaded.<br>';
 
     const sizeIndex = TEXT_SIZES.findIndex(s => s.id == prefs.textSize);
-    const settings = '<div id="settings"><div class="setRow">Text size<br><div class="setSliderRow"><img id="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas id="sliderArt"></canvas>' +
-        '<input id="textSizeSlider" type="range" min="0" max="' + (TEXT_SIZES.length - 1) + '" step="1" value="' + sizeIndex + '"></div><img id="aBig" src="' + art('slider_a_big') + '"></div>' +
-        '<span id="textSizeName">' + TEXT_SIZES[sizeIndex].label + '</span></div>' +
-        '<div class="setRow">Sound<br><div class="setToggleRow"><div id="soundToggle" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div></div>' +
-        '<div class="setRow" style="opacity:.7">The text also follows the text size of your browser, and grows a little on tall screens.</div></div>';
+    const switchRow = (id, label) => '<div class="setRow"><div>' + label + '</div><div class="setToggleRow"><div id="' + id + '" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div>';
+    const settings = '<div id="settings"><div class="setRow"><div>Text size<br><span id="textSizeName">' + TEXT_SIZES[sizeIndex].label + '</span></div>' +
+        '<div class="setSliderRow"><img id="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas id="sliderArt"></canvas>' +
+        '<input id="textSizeSlider" type="range" min="0" max="' + (TEXT_SIZES.length - 1) + '" step="1" value="' + sizeIndex + '"></div><img id="aBig" src="' + art('slider_a_big') + '"></div></div>' +
+        switchRow('soundToggle', 'Sound') +
+        (DEV ? switchRow('devToggle', 'Developer panel') : '') +
+        '<div class="setRow version">Version ' + version + '</div></div>';
 
     const faqBody = '' +
    '<div class="faq">WizardIDLE, what is this?</div><div class="a">It is a game with typical elements of a common RPG game, the only difference is the player role. You are the god of the wizard and your interaction is limited due his free will. With or without your help the wizard can reach his fate being a deep believer or a hardened atheist.</div>' +
@@ -501,12 +505,8 @@ function updateHelp(){
    '</div>' +
    '';
 
-    const aboutBody = '' +
-   (DEV ? '<div class="faq">Developer tools</div><div class="a">Only while developing (never on the live site): the dev panel beside the game, with modes (sounds, art), test scenarios, fights, quick actions, a command line and the author notes box.<br><br><span class="devToggle" style="text-decoration:underline;cursor:pointer">Show or hide the dev panel</span></div>' : '') +
-   '<div class="faq">Version</div><div class="a">The current version is: <b>' + version + '</b></div>';
-
     const page = ui.scrollViews.help;
-    const txt = '<div id="help"><span class="titles" id="titleHelp">' + PAGE_NAMES[page] + '</span><br>' + (page == "faq" ? faqBody : settings + aboutBody) + '</div>';
+    const txt = '<div id="help"><span class="titles" id="titleHelp">' + PAGE_NAMES[page] + '</span><br>' + (page == "faq" ? faqBody : settings) + '</div>';
 
 
     el('innerTextScroll').innerHTML=txt;
@@ -517,16 +517,17 @@ function updateHelp(){
     // settings page: the text size slider (the page is not redrawn while dragging, only at the end) and the sound choice
     if (el("settings")) {
         const slider = el("textSizeSlider");
-        const u = ui.em;
-        el("settings").style.fontSize = `${u}px`;
-        drawSlider(slider);
+        el("settings").style.fontSize = `${ui.em}px`;
+        const su = drawSlider(slider);
         slider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[slider.value].label; };
         slider.onchange = () => {
             setTextSize(TEXT_SIZES[slider.value].id);
             responsiveLayout();      // sizes everything again, with the new text size
             updateHelp();
         };
-        drawToggle(slider.closest(".setSliderRow").style.getPropertyValue("--su"));
+        drawToggle(el("soundToggle"), su, () => prefs.sound, () => setSound(!prefs.sound));
+        if (el("devToggle")) drawToggle(el("devToggle"), su, () => document.body.dataset.devPanel != "off",
+            () => document.dispatchEvent(new Event("wizardidle:toggleDevBar")));
     }
 
     //collapsible in help scroll
