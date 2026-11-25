@@ -79,3 +79,7 @@ Zone: Swamp, stage 4 (el_Pantano4), runa5 boss fight scene
 Date: 2026-11-24 11:25
 ```
 The scene needs to be modified: the firepit sits on the walkable line, so the wizard walks through it. Move or redraw it off the common walk line (as an overlay if it must stand in front, per the connector rule that obstacles go off the walk line or become overlays).
+
+## Hunters guild and quest info scrolls (author, 2026-11-24)
+- Hunters guild in the Town (el_Poblado): a hunters' hut, exterior scene (the hut stands in a Town stage, with a door the wizard walks into) and interior scene (a place background like the inns), plus one hunter NPC (32x32, stands inside) who accepts the wizard's report after a hunt (wanted quests only; other quests never report). Options first, as usual; exterior as a standalone sprite/overlay if it must stand on a stage, per the walk-line rule.
+- Quest info scroll: when the player touches a quest's name in the Quests scroll, a small scroll opens with a general picture for that kind of quest. Follow the scroll patterns in wizardidle-old-ideas/unorganzed_sprites/Sprites/profesiones, but with readable text areas (the game draws the text) and one picture per kind: hunt a rare enemy, defeat a boss, deliver a parcel, go and see a place, find something to study, pray at a shrine, pilgrimage, find the hidden shrine, look for work, and the secrets (prism, Medusa's shield, a rune's trail). One scroll frame plus the pictures as separate small sprites.
