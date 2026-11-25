@@ -170,9 +170,18 @@ export function deleteSave() {
 }
 
 // Save transfer between devices (Settings): the save and the world as one text, easy to copy and paste.
+// A simple checksum (FNV-1a with a salt) seals the body: edited text is refused. It stops casual
+// tampering only; the code is readable, so it is no real protection.
+function seal(body) {
+    let h = 0x811c9dc5;
+    for (const c of 'wizardidle-seal:' + body) { h ^= c.charCodeAt(0); h = Math.imul(h, 0x01000193) >>> 0; }
+    return h.toString(36);
+}
+
 export function exportSaveText() {
     saveGame();
-    const text = JSON.stringify({ wizardidle: 2, save: read(SAVE_KEY), world: read(WORLD_KEY) });
+    const body = JSON.stringify({ save: read(SAVE_KEY), world: read(WORLD_KEY) });
+    const text = JSON.stringify({ wizardidle: 2, body, sig: seal(body) });
     return btoa(unescape(encodeURIComponent(text)));
 }
 
@@ -180,7 +189,10 @@ export function exportSaveText() {
 export function importSaveText(text) {
     let data;
     try { data = JSON.parse(decodeURIComponent(escape(atob(text.trim())))); } catch (e) { return 'That is not a saved game.'; }
-    if (!data || data.wizardidle !== 2 || (!data.save && !data.world)) return 'That is not a saved game.';
+    if (!data || data.wizardidle !== 2 || typeof data.body !== 'string') return 'That is not a saved game.';
+    if (data.sig !== seal(data.body)) return 'This saved game was changed, so it cannot be loaded.';
+    try { data = JSON.parse(data.body); } catch (e) { return 'That is not a saved game.'; }
+    if (!data.save && !data.world) return 'That is not a saved game.';
     saving = false;             // nothing writes the old wizard back before the reload
     try {
         if (data.save) localStorage.setItem(SAVE_KEY, JSON.stringify(data.save)); else localStorage.removeItem(SAVE_KEY);
