@@ -14,7 +14,7 @@ import { places } from './data/zones.js';
 import { config } from './config.js';
 import { travelOverrides } from './data/travelOverrides.js';
 
-// Manual verdicts of a pair of stages (see data/travelOverrides.js); the dev tools edit this object.
+// Manual verdicts of a pair of stages (see data/travel.json); the dev tools edit this object.
 const overrides = { ...travelOverrides };
 const pairKey = (a, b) => a < b ? `${a}|${b}` : `${b}|${a}`;
 const verdict = (a, b) => overrides[pairKey(a, b)] || '';
@@ -90,7 +90,7 @@ function route(a, b) {
     return routeIds(a, b).map((n) => { const [layer, x, y] = g.nodes[n]; return { layer, x, y }; });
 }
 
-// The graph IS the author's manual links (Modes > Travel, data/travelOverrides.js): Accessible and Difficult
+// The graph IS the author's manual links (Modes > Travel, data/travel.json): Accessible and Difficult
 // both lead somewhere, Impossible does not. A stage is anything in `places`; a point that is not a stage
 // (a bridge, a cave mouth, the stairs) only passes the trip on to the stages linked to it.
 // Stages linked to a stage, directly or through such points, as {stage name: true}.

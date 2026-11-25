@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) The travel tool is stable now: everything you do in it (link verdicts, moved scenes and points, added points, scene types) is saved in one plain file, src/data/travel.json, exactly as the tool sends it, with no filtering. The game reads that file directly, so your link verdicts are live at once. Each save keeps the old file in docs/travel-backups, a page loaded before the last save is refused instead of wiping newer work, a stale draft is dropped, and a damaged file stops the graph build with a clear message instead of silently losing points. Moved scenes are stored in the file too (zones.js is no longer rewritten).
 - (Developer tools) Removed the old travel point enter_mine_S (the mine's exit from before the connectors) and its links; the graph is regenerated. The tunnel scene itself still plays behind the south mine mouth.
 - (Developer tools) Grotto stages 1 and 2 were linked to the Grotto mouth's outside point as well as its inside twin, a shortcut that made trips from the Prairie skip the mouth scenes; only the inside link is kept.
 - New Prairie scene (Prairie 15): a bit of beach in front, the far Castle at the back right, the Prairie road. It is a new stage of the Prairie, linked on the travel map to Prairie 5 and 7, the Castle and the Beach.

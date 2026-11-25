@@ -23,7 +23,7 @@ ABOVE_ZONES = {'el_Heidan'}
 
 # Waypoints (map pixels of the 250 px maps). Bridges cancel the river price near them.
 # name, kind, x, y: Prairie spring, Swamp and south road bridges, the fisher's pier. The names are the ones the dev
-# tools (Modes > Travel) use; a name moved there is read from src/data/travelOverrides.js (travelPositions).
+# tools (Modes > Travel) use; a name moved there is read from src/data/travel.json (positions).
 WAYPOINTS = [('bridge_spring', 'bridge', 125, 145), ('bridge_swamp', 'bridge', 181, 50),
              ('bridge_south', 'bridge', 166, 162), ('pier', 'pier', 150, 168)]
 BRIDGES = [(x, y) for _, kind, x, y in WAYPOINTS if kind == 'bridge']
@@ -110,27 +110,36 @@ def snap(t, x, y):
     return best[1], best[2]
 
 
-def read_positions():
-    """Waypoints moved in the dev tools: {name: [x, y]} (a mouth moves with its underground twin)."""
+TRAVEL = os.path.join(REPO, 'src/data/travel.json')
+
+
+def read_travel():
+    """The travel tool's data file (src/data/travel.json); a damaged file stops the build instead of being ignored."""
     try:
-        s = open(os.path.join(REPO, 'src/data/travelOverrides.js'), encoding='utf-8').read()
-        return json.loads(re.search(r'travelPositions = (\{.*?\});', s, re.S).group(1))
-    except (OSError, AttributeError, ValueError):
+        with open(TRAVEL, encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
         return {}
+    except ValueError as e:
+        raise SystemExit('src/data/travel.json is not valid JSON: ' + str(e))
+
+
+def read_positions():
+    """Waypoints and scenes moved in the dev tools: {name: [x, y]} (a mouth moves with its underground twin)."""
+    return read_travel().get('positions', {})
 
 
 def read_points():
-    """Points added in the dev tools: {name: {kind: future|connector, layer, x, y}}."""
-    try:
-        s = open(os.path.join(REPO, 'src/data/travelOverrides.js'), encoding='utf-8').read()
-        return json.loads(re.search(r'travelPoints = (\{.*?\});', s, re.S).group(1))
-    except (OSError, AttributeError, ValueError):
-        return {}
+    """Points added in the dev tools: {name: {kind: future|connector|border, layer, x, y}}."""
+    return read_travel().get('points', {})
 
 
 def build():
     global BRIDGES
     cfg, places, moved = read_config(), read_places(), read_positions()
+    for n, xy in moved.items():          # a scene moved in the tool
+        if n in places:
+            places[n]['x'], places[n]['y'] = int(xy[0]), int(xy[1])
     at = lambda name, x, y: tuple(moved.get(name, (x, y)))
     waypoints = [(n, k) + at(n, x, y) for n, k, x, y in WAYPOINTS]
     BRIDGES = [(x, y) for _, k, x, y in waypoints if k == 'bridge']

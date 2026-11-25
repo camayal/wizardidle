@@ -3,7 +3,7 @@
 // Curate the travel graph by hand. Pick a source and a target (the lists, or click a spot on the map and
 // shift-click another; scenes, bridges, the pier, cave mouths and stairs all count), set the weight of the
 // link between them (Accessible / Difficult / Impossible / Auto) and move a spot's coordinates ("change
-// coord", then click the map). "Save verdict" writes the verdicts (src/data/travelOverrides.js) and the new
+// coord", then click the map). "Save verdict" writes the verdicts (src/data/travel.json) and the new
 // positions (zones.js for scenes, travelPositions for waypoints) and regenerates the graph; reload after.
 // The map shows the cheapest paths from the source: green = a move inside the zone, yellow = a destination
 // in another zone, red = too far. Clicking a scene also shows that scene in the game.
@@ -14,7 +14,7 @@ import { travelGraph as g, travelGraphBuilt } from '../data/travelGraph.js';
 import { places } from '../data/zones.js';
 import { neighbors, overrides, pairKey, verdict, byName, rebuild, travelCost, routeIds, dynamicScenes, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
-import { travelPoints, travelKinds } from '../data/travelOverrides.js';
+import { travelPoints, travelKinds, travelPositions, travelSaved } from '../data/travelOverrides.js';
 import { sidePanel } from './panel.js';
 import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
@@ -34,8 +34,10 @@ const CUSTOM = ['future', 'connector', 'border'];         // kinds of the points
 const touched = new Set();                      // links given a verdict since this page was opened
 let checking = false, showPath = false;
 const stageKinds = { ...travelKinds };      // the type of a scene (a stage) when it is not a plain scene, e.g. a border: {stage: kind}
-let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = {}, points = {}, newPoint = null;
+let base = travelSaved;      // the stamp of the data file this page loaded: the server refuses a save made from an older one
+let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = { ...travelPositions }, points = {}, newPoint = null;
 g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2], note: (travelPoints[n[4]] || {}).note || '' }; });
+for (const [n, d] of Object.entries(travelPoints)) points[n] = { ...d, note: d.note || '' };       // the saved file wins; a point the graph lacks still shows
 // The spots not joined to the biggest group of linked spots (impossible links do not count): [node, ...].
 function lost() {
     const group = g.nodes.map(() => -1), sizes = [];
@@ -59,7 +61,7 @@ const tgt = () => tgts[tgts.length - 1] || '';           // the last target: the
 const layerOf = (n) => g.nodes[byName[n]][0];
 const isStage = (n) => n in g.anchors;
 const pos = (i) => moved[baseOf(names[i][0] || '')] || [g.nodes[i][1], g.nodes[i][2]];
-const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify({ verdicts: overrides, positions: moved, points, stageKinds })); } catch (e) { /* no storage: fine */ } };
+const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify({ base, verdicts: overrides, positions: moved, points, stageKinds })); } catch (e) { /* no storage: fine */ } };
 
 // The colour of a direct link source -> node j of cost c: the manual verdict if there is one, else the cost.
 function edgeKind(a, j, c) {
@@ -217,9 +219,10 @@ function setVerdict(v) {
 async function post(url, body, what) {
     try {
         const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-        p.tip.textContent = r.ok ? `${what}: ${await r.text()}` : `${what} failed (${r.status}): run tools/serve.py from this computer`;
-        return r.ok;
-    } catch (e) { p.tip.textContent = `${what} failed: ${e.message}`; return false; }
+        const text = await r.text();
+        p.tip.textContent = r.ok ? `${what}: ${text}` : `${what} failed (${r.status}): ${text || 'run tools/serve.py from this computer'}`;
+        return r.ok ? r : null;
+    } catch (e) { p.tip.textContent = `${what} failed: ${e.message}`; return null; }
 }
 
 function nearest(ev) {
@@ -400,11 +403,13 @@ export async function open(devTools) {
         for (const [name, d] of Object.entries(points)) {       // a moved point of ours is saved in its own entry
             if (positions[name]) { [d.x, d.y] = positions[name]; delete positions[name]; }
         }
-        if (await post('travel/overrides', { verdicts: overrides, positions, points, kinds: stageKinds }, 'Save')) { try { localStorage.removeItem(DRAFT); } catch (e) { /* none */ } }
+        const r = await post('travel/overrides', { base, verdicts: overrides, positions, points, kinds: stageKinds }, 'Save');
+        if (r) { base = r.headers.get('X-Travel-Saved') || base; try { localStorage.removeItem(DRAFT); } catch (e) { /* none */ } }
     };
     p.capture.onclick = () => post('travel/capture', { png: p.canvas.toDataURL('image/png'), stage: src, layer, overrides, moved }, 'Capture');
     try {
         const d = JSON.parse(localStorage.getItem(DRAFT) || '{}');
+        if (d.base !== base) throw new Error('the draft is older than the data file: dropped');       // a draft of another version would bring back what was changed since
         Object.assign(overrides, d.verdicts || {});
         moved = d.positions || {};
         if (d.points) points = d.points;

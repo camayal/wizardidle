@@ -356,3 +356,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Regions report: Dunas5>Gruta1 and Mina5>Dunas2 walked plain because no manual path crosses the mouth (Dunas5-mouth far; no Mina stage linked to mouth_dunas_mina_under) so the old typed lists answer; Gruta1/2 linked to the outside mouth point was a shortcut, removed.
 
 - 2026-11-25 Travel: enter_mine_S point and links removed from travelOverrides, graph regenerated. The tunnel scene (connectors.js addScenes, travel.js MINE_TUNNEL) stays; remove it too if the author wants no tunnel scene.
+
+- 2026-11-25 Travel tool rebuilt for stability (author asked): src/data/travel.json is the one data file (saved, verdicts, positions, points, kinds), travelOverrides.js only loads it (JSON import) and applies moved scene positions to places; serve.py writes it verbatim, backs the old one up (docs/travel-backups, 60 kept), refuses a stale page (base stamp), then runs travel_graph.py; the tool starts from the file (not the graph) and drops stale drafts; generator reads the JSON and fails loudly. Untested in a browser: no node here.

@@ -150,50 +150,51 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(msg.encode('utf-8'))
 
     def travel_post(self, local):
-        # The Travel mode (src/dev/travel.js): /travel/overrides rewrites src/data/travelOverrides.js; /travel/capture
+        # The Travel mode (src/dev/travel.js): /travel/overrides writes src/data/travel.json; /travel/capture
         # writes a snapshot, docs/travel-captures/<time>-<stage>.png and .json (the picture and the verdicts).
         length = int(self.headers.get('Content-Length') or 0)
         if not local or not 0 < length <= 5000000:
             return self.send_error(400)
         data = json.loads(self.rfile.read(length).decode('utf-8'))
         if self.path.endswith('/overrides'):
-            # {verdicts: {"a|b": move|dest|far}, positions: {name: [x, y]} in map pixels}. A stage's position goes to
-            # zones.js (the source of truth); a waypoint's to travelPositions here; then the graph is regenerated.
-            verdicts = {k: v for k, v in sorted(data.get('verdicts', {}).items())
-                        if v in ('move', 'dest', 'far') and re.fullmatch(r'[\w-]+\|[\w-]+', k)}
-            zones_path = os.path.join(REPO, 'src', 'data', 'zones.js')
-            with open(zones_path, encoding='utf-8', newline='') as f:
-                zones = f.read()
-            points = {k: v for k, v in data.get('points', {}).items() if re.fullmatch(r'\w+', k) and v.get('kind') in ('future', 'connector', 'border')
-                      and v.get('layer') in ('ground', 'above', 'under')}
-            for v in points.values():
-                v['note'] = str(v.get('note', ''))[:500]
-                if not v['note']:
-                    v.pop('note')
-            kinds = {k: v for k, v in data.get('kinds', {}).items() if re.fullmatch(r'\w+', k) and v in ('future', 'connector', 'border')}
-            positions, stages = {}, 0
-            for name, xy in data.get('positions', {}).items():
-                if not re.fullmatch(r'\w+', name) or len(xy) != 2:
-                    continue
-                x, y = max(0, min(250, round(float(xy[0])))), max(0, min(250, round(float(xy[1]))))
-                new, n = re.subn(r'(\b' + name + r': \{zone:"\w+",x:)[\d.]+(,y:)[\d.]+', r'\g<1>%s\g<2>%s' % (round(x / 250, 3), round(y / 250, 3)), zones)
-                if n:
-                    zones, stages = new, stages + 1
-                else:
-                    positions[name] = [x, y]
-            with open(zones_path, 'w', encoding='utf-8', newline='') as f:
-                f.write(zones)
-            target = os.path.join(REPO, 'src', 'data', 'travelOverrides.js')
-            with open(target, encoding='utf-8') as f:
-                head = f.read().split('export const')[0]
-            with open(target, 'w', encoding='utf-8', newline='\n') as f:
-                f.write(head + 'export const travelOverrides = ' + json.dumps(verdicts, indent=4) + ';\n'
-                        + 'export const travelPositions = ' + json.dumps(positions, indent=4) + ';\n'
-                        + 'export const travelPoints = ' + json.dumps(points, indent=4) + ';\n'
-                        + 'export const travelKinds = ' + json.dumps(kinds, indent=4) + ';\n')
+            # The tool sends its whole state {base, verdicts, positions, points, kinds}; it is written as it comes (no
+            # filtering) to src/data/travel.json, the old file kept in docs/travel-backups, then the graph is rebuilt.
+            # Only one check: a page loaded before the last save is refused, so a stale page can never wipe newer work.
+            import time
+            path = os.path.join(REPO, 'src', 'data', 'travel.json')
+            try:
+                with open(path, encoding='utf-8') as f:
+                    old = json.load(f)
+            except (OSError, ValueError):
+                old = {}
+            if str(data.get('base', '')) != str(old.get('saved', '')):
+                self.send_response(409)
+                self.send_header('Content-Type', 'text/plain; charset=utf-8')
+                self.end_headers()
+                return self.wfile.write(b'NOT saved: the data file changed since this page loaded (another save or an older page). Reload the travel page and redo the change.')
+            stamp = time.strftime('%Y-%m-%d %H:%M:%S') + '.%06d' % int(time.time() * 1000000 % 1000000)
+            new = {'saved': stamp}
+            for key in ('verdicts', 'positions', 'points', 'kinds'):
+                new[key] = dict(sorted(data.get(key, {}).items()))
+            if old:
+                folder = os.path.join(REPO, 'docs', 'travel-backups')
+                os.makedirs(folder, exist_ok=True)
+                with open(os.path.join(folder, 'travel-' + re.sub(r'\D', '', str(old.get('saved', 'old')))[:20] + '.json'), 'w', encoding='utf-8', newline='\n') as f:
+                    json.dump(old, f, indent=1, ensure_ascii=False)
+                for extra in sorted(os.listdir(folder))[:-60]:
+                    os.remove(os.path.join(folder, extra))
+            tmp = path + '.tmp'
+            with open(tmp, 'w', encoding='utf-8', newline='\n') as f:
+                json.dump(new, f, indent=1, ensure_ascii=False)
+                f.write('\n')
+            os.replace(tmp, path)
             done = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'travel_graph.py')], capture_output=True, text=True)
-            msg = f'saved {len(verdicts)} verdicts, {stages} stage and {len(positions)} waypoint positions, {len(points)} added points; graph ' + \
-                ('regenerated: reload the page' if done.returncode == 0 else 'NOT regenerated: ' + done.stderr[-200:])
+            msg = f"saved {len(new['verdicts'])} verdicts, {len(new['positions'])} moved positions, {len(new['points'])} added points, {len(new['kinds'])} scene types; graph " +                 ('rebuilt: reload the page' if done.returncode == 0 else 'NOT rebuilt: ' + (done.stderr or done.stdout)[-300:])
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/plain; charset=utf-8')
+            self.send_header('X-Travel-Saved', stamp)
+            self.end_headers()
+            return self.wfile.write(msg.encode('utf-8'))
         else:
             import base64, time
             stage = re.sub(r'\W', '', str(data.get('stage', '')))[:40] or 'map'
