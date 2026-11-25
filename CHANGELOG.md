@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The secret quests (the prism, Medusa's shield, a rune's trail, the hidden shrine) are one-time, so forgetting one asks first, like the Kill button: the first press of X opens a small parchment note ("Press X again to forget this quest"), the second press forgets it, tapping the note takes it back. Ordinary quests are still forgotten at once.
 - Medusa has her own secret quest now, like the prism: the first time her gaze turns him to stone, a whisper sends him to find what shields him from it in the Desert, and it ends when he finds the mirror shield or the gorgon's-eye amulet. It jumps the queue.
 - Wanted jobs are split in two kinds in the odds: hunting a rare enemy (more often) and defeating a zone boss (less often), for each giver; the posts offer only those two. His own wishes lean the same way (seven in ten a rare).
 - The kind of job each giver offers now follows its own odds (config.quests.offerKinds): the inn leans to deliveries and hunts, the board to hunts, the strangers to deliveries and trips, the wanted posts only to hunts. The numbers are placeholders for the playtests.

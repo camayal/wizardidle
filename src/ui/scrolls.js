@@ -14,7 +14,7 @@ import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
-import { questNamesPlace, questPath, godDrop, godMove, godOrder } from '../quests.js';
+import { questNamesPlace, questPath, godDrop, godMove, godOrder, isSecretAt } from '../quests.js';
 import { DEV } from '../config.js';
 import { bestiaryPageHtml, paintInkStains } from './bestiary.js';
 import { cemeteryPageHtml, paintCemetery, parchmentNote } from './cemetery.js';
@@ -334,6 +334,7 @@ function updateFaith(){
     const html = quests ? questsPageHtml() : faithPageHtml();
     if (html === ui.faithHtml) return;   // unchanged: keep the candle's animation running
     ui.faithHtml = html;
+    ui.questConfirm = null;      // the page is redrawn: a pending forget-note is gone
     el('innerTextScroll').innerHTML = html;
     const id = quests ? "quests" : "faith", title = quests ? "titleQuests" : "titleFaith";
     el(id).style.fontSize = `${ui.em}px`;
@@ -352,6 +353,8 @@ el('innerTextScroll').addEventListener('click', (e) => {
     if (questBtn) {
         const what = questBtn.dataset.quest;
         const [act, arg] = what.split(':');
+        if (act === 'drop' && isSecretAt(+arg) && ui.questConfirm !== what) return askForgetSecret(questBtn, what);    // a one-time quest: ask first (like the Kill button)
+        ui.questConfirm = null;
         if (act === 'order') godOrder(arg);
         else if (act === 'up') godMove(+arg, -1);
         else if (act === 'down') godMove(+arg, 1);
@@ -506,6 +509,24 @@ function killClick() {
     note.className = 'killNote';
     note.onclick = () => { note.remove(); stats.count("god.killTakenBack"); };
     wrap.appendChild(note);
+}
+
+// Forgetting a secret quest (it happens only once) asks twice, like the Kill button: the first press opens a small
+// parchment note over the row; pressing the same X again, while it shows, forgets it. Tapping the note closes it.
+function askForgetSecret(btn, what) {
+    const row = btn.closest('.questRow');
+    if (!row) return;
+    row.parentElement.querySelectorAll('.killNote').forEach((n) => n.remove());
+    ui.questConfirm = what;
+    row.style.position = 'relative';
+    const width = Math.min(row.clientWidth * 0.8, ui.em * 16);
+    const note = parchmentNote([
+        'Press <b>X</b> again to forget this quest.',
+        'It comes only once.',
+    ], width, `right:${btn.offsetWidth}px; top:100%`);
+    note.className = 'killNote';
+    note.onclick = (e) => { e.stopPropagation(); note.remove(); ui.questConfirm = null; };
+    row.appendChild(note);
 }
 
 // How each tabbed scroll redraws its front page.

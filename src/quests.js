@@ -555,6 +555,11 @@ export function godMove(i, dir) {
     }
     return true;
 }
+// Is the quest in row i (0 = the current one) a secret (a one-time quest: forgetting it asks first)?
+export function isSecretAt(i) {
+    const q = i === 0 ? state.quest : qs().queue[i - 1];
+    return !!(q && q.secret);
+}
 export function godDrop(i) {
     const Q = qs();
     if (i === 0) return godCancel();
