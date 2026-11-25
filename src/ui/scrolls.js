@@ -378,9 +378,9 @@ function drawSlider(slider) {
     row.style.setProperty("--su", `${su}px`);
     slider.style.setProperty("--thumb", `url(${art("slider_thumb")})`);
     slider.style.setProperty("--thumbDown", `url(${art("slider_thumb_down")})`);
-    box.style.width = `${W}px`; box.style.height = `${19 * su}px`;
+    box.style.width = `${W}px`; box.style.height = `${14 * su}px`;
     slider.style.width = `${W}px`; slider.style.height = `${14 * su}px`;
-    canvas.width = W; canvas.height = 19 * su; canvas.style.width = `${W}px`; canvas.style.height = `${19 * su}px`;
+    canvas.width = W; canvas.height = 14 * su; canvas.style.width = `${W}px`; canvas.style.height = `${14 * su}px`;
     el("aSmall").style.width = `${5 * su}px`; el("aBig").style.width = `${9 * su}px`;
     const track = new Image(), ticks = new Image();
     let loaded = 0;
@@ -391,7 +391,7 @@ function drawSlider(slider) {
         ctx.drawImage(track, 0, 0, 8, 10, 0, 2 * su, 8 * su, 10 * su);
         for (let x = 8 * su; x < W - 8 * su; x += 4 * su) ctx.drawImage(track, 8, 0, 4, 10, x, 2 * su, 4 * su, 10 * su);
         ctx.drawImage(track, 12, 0, 8, 10, W - 8 * su, 2 * su, 8 * su, 10 * su);
-        for (let i = 0; i <= steps; i++) ctx.drawImage(ticks, 0, 0, 3, 5, Math.round(7 * su + i * (W - 14 * su) / steps - 1.5 * su), 14 * su, 3 * su, 5 * su);
+        for (let i = 0; i <= steps; i++) ctx.drawImage(ticks, 0, 0, 3, 5, Math.round(7 * su + i * (W - 14 * su) / steps - 1.5 * su), Math.round(4.5 * su), 3 * su, 5 * su);
     };
     track.onload = ticks.onload = paint;
     track.src = art("slider_track"); ticks.src = art("slider_ticks");
