@@ -52,7 +52,7 @@ function tap(e, node, spot, scene) {
     const blocked = fight.enemy || /altar/i.test(String(scene)) || run.disablePjBtn;      // those scenes keep their own touches
     const used = blocked ? false : touchSpot(spot);
     if (used) {
-        if (used == 'done') spell('spellSparkGold_8', true, 0, 0, { x: Math.round(spot.x + spot.w / 2 - 15), y: Math.round(spot.y + spot.h / 2 - 15) }, true);     // sparkles (a sprite) only after a real nudge
+        if (used == 'done') spell(`spellProvidence_${'abc'[Math.floor(Math.random() * 3)]}`, true, 0, 0, { x: Math.round(spot.x + spot.w / 2 - 15), y: Math.round(spot.y + spot.h / 2 - 15) }, true);     // Providence (one of its three looks) only after a real nudge
         return;
     }
     // not ours: the button under the spot gets the tap

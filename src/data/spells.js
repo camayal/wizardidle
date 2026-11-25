@@ -41,6 +41,10 @@ export const spells = {
     spellRingPale_8: {school:"Fire",frames:16,name:"<span style='color:#E32300'>Superheated steam</span>"},
     spellRingRose_8: {school:"Arcane",frames:16,name:"<span style='color:#BA47E0'>Arcane atmosphere</span>"},
     spellRingYellow_8: {school:"Thunder",frames:8,name:"<span style='color:#FFD800'>Electrostatic ring</span>"},
+    // Providence (the god's touch on the scene): 16 px frames, no gutter between them
+    spellProvidence_a: {school:"na",frames:6,size:16,gap:0,ms:90,name:"Providence"},
+    spellProvidence_b: {school:"na",frames:6,size:16,gap:0,ms:90,name:"Providence"},
+    spellProvidence_c: {school:"na",frames:6,size:16,gap:0,ms:90,name:"Providence"},
     spellSparkGold_8: {school:"Thunder",frames:16,name:"<span style='color:#FFD800'>Shock</span>"},
     spellSparkGreen_8: {school:"Nature",frames:16,name:"<span style='color:#00AB00'>Poison sparks</span>"},
     spellSparkRose_8: {school:"Arcane",frames:16,name:"<span style='color:#BA47E0'>Arcane sparks</span>"},

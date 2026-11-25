@@ -372,3 +372,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Providence = the visible effect of environment touches (hotspot taps: runes, books, doors, mouths...), random among its three looks; not for heal or attack touches. Recorded in the faith plan. Wiring idea: replace the spellSparkGold_8 glow in src/ui/hotspots.js with fx_providence_a/b/c once approved.
 
 - 2026-11-25 Quest steering fixed: travelGraph.js rebuild() now builds edges from the manual links only (Accessible 5, Difficult difficultMin), quests.js bestOf adds the step cost. The generated graph (src/data/travelGraph.js) is no longer used for routes; only its nodes. No-quest picks stay uniform random over linked stages (the author's decision).
+
+- 2026-11-25 Providence wired into hotspot taps: sprites copied as img/effects/spells/spellProvidence_a-c (spells.js entries with size 16, gap 0; spell() now reads size/gap per sprite, 30/1 by default). Belief gating (Doubter faint, Atheist none) waits for belief levels.

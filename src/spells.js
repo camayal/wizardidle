@@ -17,7 +17,7 @@ import { art } from './media.js';
 // at: {x, y} in scene sprite px (256 x 64) to place the effect somewhere else, e.g. above a find.
 function spell(img, pj, critic = 0, center = 0, at = null, silent = false){
     if (run.simulation) return;
-    const frameWidth = 30, frameHeight = 30;    // size of one frame in the sprite sheet
+    const frameWidth = spells[img].size || 30, frameHeight = frameWidth, gap = spells[img].gap ?? 1;    // size of one frame in the sprite sheet and the gutter between frames (the 30 px ones)
     let currentFrame = 0, shift = 0;            // animation position, advanced every frame
 
 
@@ -89,8 +89,9 @@ function spell(img, pj, critic = 0, center = 0, at = null, silent = false){
         const y = at ? at.y * unit : ui.headLevel * topMultiHeadLocation;
         cellCtx.clearRect(0, 0, frameWidth, frameHeight);
         cellCtx.drawImage(myImage, shift, 0, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
-        context.drawImage(cell, x, y, ui.squareSide * multiSize, ui.squareSide * multiSize);
-        shift += frameWidth + 1;
+        const side = ui.squareSide * multiSize * frameWidth / 30, pad = (ui.squareSide * multiSize - side) / 2;     // a smaller sprite stays centred where a 30 px one would sit
+        context.drawImage(cell, x + pad, y + pad, side, side);
+        shift += frameWidth + gap;
         currentFrame++;
         requestAnimationFrame(animate);
     }
