@@ -386,3 +386,6 @@ export const travelPoints = {
         "y": 107
     }
 };
+export const travelKinds = {
+    "la_Pradera14": "border"
+};
