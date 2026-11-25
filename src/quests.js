@@ -707,6 +707,9 @@ export function godDrop(i) {
 
 // each delivery carries one of three parcels (kept by its id, so it never changes on redraw)
 const parcelOf = (q) => `item_parcel_${'abc'[q.id % 3]}`;
+// a finished hunt carries the boss's trophy to the guild (img/objects/item_trophy_<boss>.png); etymos, hydras, midas and the rainbow have none
+const TROPHIES = 'arcangel,bicaptop,cuboq,doria,fenix,goro,greater_naga,herbus,infraespectro,kkck,lamia,medusa,protromus,rojo,skeleton'.split(',');
+const trophyOf = (q) => (q.target.report && TROPHIES.includes(q.target.boss) ? `item_trophy_${q.target.boss}` : '');
 const PHASE = { travel: 'on the road', search: 'searching' };
 const ORDER_ICONS = { shrine: 'icon_order_shrine_mid', pilgrimage: 'icon_order_pilgrim_mid', hidden: 'icon_order_hidden_mid' };   // drawn in the socket of order_plate_*
 const STATES = (stem) => `style="--n:url(${art(stem + '_normal')});--p:url(${art(stem + '_pressed')});--d:url(${art(stem + '_disabled')})"`;
@@ -742,7 +745,7 @@ export function scrollHtml() {
         : GOD_ORDERS.map((k) => `<button class='orderBtn' ${STATES('order_plate')} data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
     h += `</div><br><span class='subtitles'>Errands</span><br>`;
     if (!all.length) h += `<p>No quest now</p>`;
-    h += all.map((x, i) => `<div class='questRow'><div class='questText' data-info='${x.id}'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${x.target.report ? 'to report at the guild' : PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
+    h += all.map((x, i) => `<div class='questRow'><div class='questText' data-info='${x.id}'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : trophyOf(x) ? `<img class='parcel' src='${art(trophyOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${x.target.report ? 'to report at the guild' : PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
         mvBtn('up', i, 'btn_up', i === 0) +
         mvBtn('down', i, 'btn_down', i === all.length - 1) +
         mvBtn('drop', i, 'btn_x', false) + `</div>`).join('');
