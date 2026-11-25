@@ -108,6 +108,7 @@ export const config = {
             human: { rare: 2, boss: 1, delivery: 3, explore: 3, study: 2, shrine: 1 },
             post:  { rare: 3, boss: 1 },       // hunts only
         },
+        studyBoost: 2,             // a study quest: the find gives its skill this many extra times
         pKnownPlace: 0.15,         // an explore offer names a place he already knows (he says so and goes on)
         pWantedRare: 0.7,          // a hunt he sets himself (a wish): chance it is a rare enemy rather than a boss
         pStop: { devout: 0.95, believer: 0.8, doubter: 0.55, atheist: 0.3 },   // a stranger calls: chance he stops to help instead of walking on, by belief

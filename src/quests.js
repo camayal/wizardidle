@@ -9,7 +9,7 @@
 
 import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
-import { doneStory, GUILD_TELL, huntStory, pickFrom, SPOTS } from './data/questTexts.js';
+import { doneStory, GUILD_TELL, huntStory, pickFrom, REWARD_STORIES, SPOTS } from './data/questTexts.js';
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { config } from './config.js';
 import { state } from './state.js';
@@ -83,7 +83,7 @@ const MAKERS = {
     },
     study(giver) {
         const z = pickRandomItem(ZONES().join(','));
-        return base('study', giver, `Find something to study in the ${zoneName(z)}`, { zone: z }, 'xp');
+        return base('study', giver, `Find something to study in the ${zoneName(z)}`, { zone: z }, 'study');
     },
     shrine(giver) {
         const z = pickRandomItem(SHRINE_ZONES().join(','));
@@ -115,7 +115,7 @@ const MEDUSA_ZONE = 'el_Desierto';       // where Medusa lives (her gaze, and th
 const SECRETS = {
     prism: () => base('prism', 'whisper', 'Find the prism that gathers the lost colours', { zone: 'la_Tundra' }, 'faith'),
     medusa: () => base('medusa', 'whisper', `Find what shields him from Medusa's gaze in the ${zoneName(MEDUSA_ZONE)}`, { zone: MEDUSA_ZONE }, 'faith'),
-    rune: (giver, zone) => base('rune', 'whisper', `Follow the rune's trail to the ${zoneName(zone)}`, { zone }, 'xp'),
+    rune: (giver, zone) => base('rune', 'whisper', `Follow the rune's trail to the ${zoneName(zone)}`, { zone }, 'study'),
     hidden: () => MAKERS.hidden('whisper'),
 };
 // An atheist gets and takes no shrine, pilgrimage or hidden-shrine quest (docs/plans/QUESTS.md).
@@ -225,30 +225,33 @@ function finish(q, how) {
     promote();
 }
 
+const rewardLine = (kind, n) => pickFrom(REWARD_STORIES[kind]).replace('{n}', n);
+
 function reward(q) {
     const c = config.quests, p = state.player;
     if (q.reward === 'gold') {
         const gold = Math.round(p.hpBase * config.balance.rGold * c.goldMult);
         p.gold += gold;
         updateHeading();
-        return `${gold} gold`;
+        return rewardLine('gold', gold);
     }
     if (q.reward === 'faith') {
         const f = Math.round(calculateFe() * c.faithMult * p.faithMultiplier);
         p.faith += f;
         updateHeading();
-        return `${f} faith`;
+        return rewardLine('faith', f);
     }
+    if (q.reward === 'study') return '';        // a study quest gives what the find gives, boosted (onStudy)
     addXP(c.xpMult);
-    return 'experience';
+    return rewardLine('xp');
 }
 
-function complete(q) {
+function complete(q, extra = {}) {
     const got = reward(q);
-    const key = (q.target.report ? 'guild_' : '') + (q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : q.kind);
+    const key = (q.target.report ? 'guild_' : '') + (q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : extra.object ? `study_${extra.object === 'book' && Math.random() < 0.4 ? 'text' : extra.object}` : q.kind);
     const who = q.target.boss ? enemyTypes[q.target.boss].name : q.target.enemy ? enemySprites[q.target.enemy].altName : '';
-    const tale = doneStory(key, { name: wizardName(), where: zoneName(q.target.huntZone || q.target.zone), who, found: q.target.found });
-    print(`<i>${tale || `${wizardName()} has finished his quest (${q.text})`} <small>(${got})</small></i>`);
+    const tale = doneStory(key, { name: wizardName(), where: zoneName(q.target.huntZone || q.target.zone), who, found: q.target.found, gain: extra.gain });
+    print(`<i>${tale || `${wizardName()} has finished his quest (${q.text})`}${got ? ' ' + got : ''}</i>`);
     finish(q, 'done');
 }
 
@@ -400,9 +403,14 @@ export function onShrine() {
     }
     if ((q.kind === 'shrine' || q.kind === 'hidden') && z === q.target.zone) complete(q);
 }
-export function onStudy() {
+// A find was studied with success (object: 'book', 'rune' or 'statue'; again() gives the same gain once more; gain is what the find gave).
+// A study quest boosts it and tells it ("the sacred text, ..., {gain}").
+export function onStudy(object, again, gain) {
     const q = state.quest;
-    if (q && (q.kind === 'study' || q.kind === 'rune') && state.zone.current === q.target.zone) complete(q);
+    if (!q || (q.kind !== 'study' && q.kind !== 'rune') || state.zone.current !== q.target.zone) return;
+    for (let i = 0; i < config.quests.studyBoost; i++) if (again) again();
+    stats.count('quest.studyBoosted');
+    complete(q, { object: object === 'artefact' ? 'book' : object, gain: gain || 'learns much more than usual' });
 }
 export function onInn() {
     const q = state.quest;

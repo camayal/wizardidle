@@ -384,6 +384,27 @@ export const DONE_STORIES = {
         "{name} has ended {who} of the {where}. The people who asked will sleep tonight.",
         "With {who} gone, the {where} is a little brighter. {name} takes his time to leave.",
     ],
+    study_book: [
+        "{name} opens the magical book and the pages seem to read themselves: {gain}, far beyond what a book gives.",
+        "The old magical book hums in {name}'s hands. He reads until dawn, and {gain}, far more than usual.",
+        "A magical book, and a good one: {name} stays with it and {gain}, deeper than he ever has.",
+        "{name} turns the last page of the magical book; {gain}, and the whole lesson settles in.",
+    ],
+    study_rune: [
+        "The ancient rune glows as {name} traces it: {gain}, with a force no rune gave before.",
+        "{name} reads the ancient rune aloud, and the whole of it answers: {gain}, and then some.",
+        "An ancient rune, and it was waiting for him: {gain}, far beyond the usual.",
+        "{name} kneels by the ancient rune until it fades, and {gain}, much more than he expected.",
+    ],
+    study_statue: [
+        "{name} walks round the old statue three times, then he understands: {gain}, a great deal more than usual.",
+        "The carved statue gives up its secret to {name}: {gain}, beyond what a statue gives.",
+        "The sacred statue lets {name} read its glyphs to the end: {gain}, as never before.",
+    ],
+    study_text: [
+        "{name} reads the sacred text slowly, and every line opens another: {gain}, far beyond the usual.",
+        "A sacred text, kept for ages: {name} learns from it and {gain}, deeper than ever.",
+    ],
     guild_rare: [
         "The hunter opens the guild ledger and writes: {who} of the {where}, done. {name} gets his due and a nod.",
         "\"A {who}, and from the {where}!\" The hunter whistles, and stamps the bounty paper with a heavy seal.",
@@ -418,6 +439,14 @@ export const SPOTS = {
     el_Duenon: [["the bone arch at the gate is something to see", "the bone arch at the gate, which he does not enjoy"]],
     la_playa: [["there is a nice fishing spot on the rocks", "the fishing spot on the rocks"], ["the shells are huge at low tide", "the huge shells at low tide"]],
     la_Mina: [["the old lift still creaks over a fine view", "the old mine lift, creaking above a long drop"], ["a vein of blue stone glows deep inside", "the vein of blue stone, glowing"]],
+};
+
+// What a finished quest gives, told ({n} is the amount where it has one).
+export const REWARD_STORIES = {
+    xp: ["He has learned a great deal on the way.", "He feels he has grown a lot from this.", "A good measure of experience for the road.", "He feels wiser than before."],
+    gold: ["The purse is heavier by {n} gold.", "He is paid {n} gold, and counts it twice.", "{n} gold clink in his purse."],
+    faith: ["He feels his faith burn brighter ({n} faith).", "Something in him is lighter and surer: {n} faith.", "His belief grows by {n}."],
+    study: [""],
 };
 
 // What the wizard says at the guild counter ({name}, {who}, {where}).

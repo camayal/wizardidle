@@ -534,7 +534,6 @@ function findStatue(){
         //examine and get or not
         if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
             stats.count("study.statueSuccess");
-            quests.onStudy();
             spell("spellStudyGood_15",true,0,0,overStatue());
             learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
             const result = statueObj[`statue_${state.zone.current}`].event()
@@ -544,6 +543,7 @@ function findStatue(){
         }else{
             playSound("statUp");
             print(`${wizardName()} ${learnTxt}. Increases the <i>${result}</i>`);
+            quests.onStudy('statue', () => statueObj[`statue_${state.zone.current}`].event(), `increases the <i>${result}</i>`);
         }
             run.multipleEventsCounter = 4;
         }else{
@@ -617,7 +617,6 @@ function findRuneOrBook(){
         if (YesOrNot(stat("pStudy"),0)){
             playSound("statUp");
             stats.count("study.success");
-            quests.onStudy();
             spell("spellStudyGood_15",true,0,0,aboveFind());
             learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
             //exit loop, sucess study
@@ -625,6 +624,7 @@ function findRuneOrBook(){
             const learned = statObj.increase(statToIncrease.code);
             print(`${wizardName()} ${learnTxt} ${run.objectToStudy} and increases the <i>${learned}</i>`) 
             stats.count(`study.skill.${statToIncrease.code}`);
+            quests.onStudy(run.objectToStudy, () => statObj.increase(statToIncrease.code), `increases the <i>${learned}</i>`);
             
             run.multipleEventsCounter = 4;
         }else{

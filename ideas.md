@@ -280,3 +280,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24 dev: quest info scroll wired (img/ui/quests, infoCard in quests.js); guild art being redone (hunter in strangers' anatomy, big hut F as the whole stage).
 
 - 2026-11-24 dev: guild wired (event 6 guildEV, quests.guildTell/guildPay, img/places/el_poblado/el_poblado_cazadores*). Pending: 8 new strangers in review/guild/strangers await the author.
+
+- 2026-11-24 dev: reward lines (REWARD_STORIES) and boosted study quests (study_book/rune/statue/text stories with {gain}); studyBoost=2 placeholder.
