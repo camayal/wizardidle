@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Crossing a bridge westward (Swamp to Prairie), he now keeps walking right to left into the new area from its right edge, instead of standing in his place at once.
 - Bridges (connectors) go back to walking both ways as drawn, no mirroring: only border scenes are mirrored.
 - (Developer tools) The Regions picker keeps a report of the walk (each scene, direction, mirroring, wizard position, overlay, arrival) in a box with a Copy button. A mirrored scene now mirrors its front layer (bridge overlays) with it.
 - (Developer tools) A Regions picker in the dev panel: choose a region to start in and another to walk to, and he is teleported and made to walk the real connector between them (border, bridge, mouth, stairs), or a plain walk when there is none. The console says which stages and scenes were used.

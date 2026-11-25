@@ -408,10 +408,10 @@ function walkAcross(steps, changeScene, onArrive) {
                 if (more) loadBackground(steps[i + 1].scene, steps[i + 1].mirror); else changeScene();
                 // after the last scene he comes into the real one from the edge he was heading to; out of a border he is
                 // already in the region, so he enters from the left as usual
-                ui.wizardOffset = more ? startOf(steps[i + 1]) : s.border ? OFF_LEFT : s.fade ? entry(s.dir) : 0;      // the last scene of a plain walk (a bridge) is already the area he is in: he just stands in his place
+                ui.wizardOffset = more ? startOf(steps[i + 1]) : s.border ? OFF_LEFT : s.fade ? entry(s.dir) : s.walkIn ? OFF_RIGHT : 0;      // the last scene of a plain walk (a bridge) is already the area he is in: he just stands in his place
                 if (!run.simulation) drawWizard();
             };
-            const next = () => more ? play(i + 1) : (!s.fade && !s.border ? (loop.stop('walkPJ'), onArrive && onArrive()) : walkWizardTo(0, onArrive));      // and walks in to his place (unless he already stands there)
+            const next = () => more ? play(i + 1) : (!s.fade && !s.border && !s.walkIn ? (loop.stop('walkPJ'), onArrive && onArrive()) : walkWizardTo(0, onArrive));      // and walks in to his place (unless he already stands there)
             const go = () => { if (s.fade) fadeScene(show, next); else { show(); next(); } };
             if (s.pause && !run.simulation && document.hasFocus()) {     // a stop at `end` (the pier's end), then on
                 loop.freezeGame();

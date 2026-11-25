@@ -333,3 +333,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25: dev panel Regions (tests.js regionWalk, travel.regionTrip): from/to region walk through real connectors; untested in a browser. Bubble stays only for NPCs at the right spot.
 - 2026-11-25: Regions report box (ui.trace in render.js); front overlay mirrored with its scene; untested in a browser.
 - 2026-11-25: bridges no longer mirrored (connectors work both ways); only borders mirror. Author tests and shares Regions reports.
+- 2026-11-25: westward bridge ends: walkIn step flag, he walks into the new area from the right edge (render.walkAcross); untested in a browser.
