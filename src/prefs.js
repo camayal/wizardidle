@@ -8,10 +8,10 @@ const PREFS_KEY = 'wizardidle2:prefs';
 
 // Text size steps offered in the settings scroll (a multiplier on top of the automatic one).
 const TEXT_SIZES = [
-    { id: 'small', label: 'Small', scale: 0.85 },
-    { id: 'normal', label: 'Normal', scale: 1 },
-    { id: 'large', label: 'Large', scale: 1.25 },
-    { id: 'huge', label: 'Extra large', scale: 1.5 },
+    { id: 'small', label: 'Small', short: 'S', scale: 0.85 },
+    { id: 'normal', label: 'Normal', short: 'N', scale: 1 },
+    { id: 'large', label: 'Large', short: 'L', scale: 1.25 },
+    { id: 'huge', label: 'Extra large', short: 'XL', scale: 1.5 },
 ];
 
 // Volume steps of the slider (a multiplier on every sound's own volume).

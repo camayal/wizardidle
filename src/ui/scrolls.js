@@ -486,7 +486,7 @@ function updateHelp(){
         '<div class="setSliderRow"><span class="aSmall">' + small + '</span><div class="setSliderBox"><canvas></canvas>' +
         '<input id="' + id + '" class="setSlider" type="range" min="0" max="' + steps + '" step="1" value="' + value + '"></div><span class="aBig">' + big + '</span></div></div>';
     const settings = '<div id="settings">' +
-        sliderRow('textSizeSlider', 'Text size', 'textSizeName', TEXT_SIZES[sizeIndex].label, TEXT_SIZES.length - 1, sizeIndex, '<img src="' + art('slider_a_small') + '">', '<img src="' + art('slider_a_big') + '">') +
+        sliderRow('textSizeSlider', 'Text size', 'textSizeName', TEXT_SIZES[sizeIndex].short, TEXT_SIZES.length - 1, sizeIndex, '<img src="' + art('slider_a_small') + '">', '<img src="' + art('slider_a_big') + '">') +
         switchRow('soundToggle', 'Sound') +
         sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '<img src="' + art('slider_vol_low') + '" data-w="7">', '<img src="' + art('slider_vol_high') + '" data-w="11">') +
         
@@ -565,7 +565,7 @@ function updateHelp(){
         const textSlider = el("textSizeSlider"), volumeSlider = el("volumeSlider");
         const su = drawSlider(textSlider, TEXT_SIZES.findIndex(s => s.id == DEFAULTS.textSize));
         drawSlider(volumeSlider, DEFAULTS.volume);
-        textSlider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[textSlider.value].label; };
+        textSlider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[textSlider.value].short; };
         textSlider.onchange = () => {
             setTextSize(TEXT_SIZES[textSlider.value].id);
             responsiveLayout();      // sizes everything again, with the new text size
@@ -581,7 +581,7 @@ function updateHelp(){
         if (el("wakeToggle")) drawToggle(el("wakeToggle"), su, () => prefs.wake, () => setWake(!prefs.wake));
         if (el("devToggle")) drawToggle(el("devToggle"), su, () => document.body.dataset.devPanel != "off",
             () => document.dispatchEvent(new Event("wizardidle:toggleDevBar")));
-        for (const b of el("settings").querySelectorAll(".setBtn")) b.style.setProperty("--bu", `${su}px`);
+        for (const b of el("settings").querySelectorAll(".setBtn")) b.style.setProperty("--bu", `${ui.em * 0.11}px`);      // not snapped: the label grows smoothly with the text size
         // like the Kill button: the first press opens a small parchment note over the buttons, the same button again does it
         let asked = null;
         const note = (btn, lines, ms) => {
