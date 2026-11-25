@@ -298,3 +298,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24: colons removed from quest texts (questTexts.js, offer lines in quests.js); explore.scene.* stat; scene-tied explore refused when scene already seen. Map ring dropped (dev option only). Lost detector (scenes walked > number of nodes) noted in dev-notes.
 
 - 2026-11-24: lost detector built (quests.onStep from travel.js, finish 'lost'); dev Reachability test; headless balance run still open. Trophy art asked of artist.
+
+- 2026-11-24 (author): trophy wall. After a hunt he reports at the guild, then walks to the empty side of the round hut (a plain wall, no door), hangs his trophy in the next free spot (zigzag, not in a line, to use the space), takes his reward and leaves. The bestiary shows an image of that wall. Needs the thinker (one wall scene, how many slots, what happens when full, bestiary page) and art for the wall scene; trophies are the item_trophy_<creature>.png sprites in the review drop.
