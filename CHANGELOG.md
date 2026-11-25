@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- A faith candle sits on top of the stats/XP box, right aligned: a brass candle with a glow for each belief level (Devout with the halo, Believer, Doubter, and a snuffed wick with smoke for Atheist). A long wizard name is clipped before it runs under it.
 - The sparkles on the god's lines (touches, nudges) now keep playing for their couple of seconds: a new console line no longer rebuilds the lines already there (that was cutting the sparkles short as soon as the next line, e.g. a fight round, arrived).
 - (Developer tools) The Grotto canyon mouth's inside twin (mouth_dunas-pradera_gruta_under) is on the ground map, beside its door, not on the underground one: it is two scenes that are one, like a bridge. Its links are unchanged.
 - (Developer tools) The travel tool is stable now: everything you do in it (link verdicts, moved scenes and points, added points, scene types) is saved in one plain file, src/data/travel.json, exactly as the tool sends it, with no filtering. The game reads that file directly, so your link verdicts are live at once. Each save keeps the old file in docs/travel-backups, a page loaded before the last save is refused instead of wiping newer work, a stale draft is dropped, and a damaged file stops the graph build with a clear message instead of silently losing points. Moved scenes are stored in the file too (zones.js is no longer rewritten).

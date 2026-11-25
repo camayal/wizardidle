@@ -50,6 +50,8 @@ function updateHeading() {
 function showHeading() {
     el('pjName').innerText = state.player.name;
     el('lvl').innerText = `Lv. ${state.player.lvl}`;
+    const belief = state.player.beliefLost ? 'atheist' : (state.player.beliefLevel || 'believer'), candle = el('faithCandle');       // the faith candle of his belief level
+    if (candle.dataset.level !== belief) { candle.dataset.level = belief; candle.src = art(`icon_candle_${belief}`); }
     const span = state.player.xpNext - state.player.xpPast;
     const xpShare = span > 0 ? Math.min(1, Math.max(0, (state.player.xp - state.player.xpPast) / span)) : 0;
     el("xpFill").style.width = `${xpShare * 100}%`;

@@ -153,6 +153,8 @@
             }
             #xpPlate { border-image: url(img/ui/xpbar_plate.png) 4 8 2 8 fill round; }
             #XPprogressBar { border-image: url(img/ui/xpbar_frame.png) 0 8 fill round; }
+            #faithCandle { position: absolute; image-rendering: pixelated; pointer-events: none; display: none; }
+            #pjName { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }      /* a long name is clipped before it runs under the candle */
             #indicadores { color: #1e140a; }
             #indicadores .stat { white-space: nowrap; }
             #xpTrack, #xpFill { position: absolute; top: 0; bottom: 0; }
@@ -509,6 +511,7 @@
         <div id ="heading">
             <div id="info">
                 <div class="left" id="pjName">_name_</div>
+                <img id="faithCandle" alt="">
                 <div id="xpPlate"></div>
                 <div id="xpbar" class="left" ><div id="XPprogressBar"><div id="xpTrack"><div id="xpFill"></div></div></div></div>
                 <div id="indicadores" class="left">

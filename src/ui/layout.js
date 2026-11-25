@@ -204,6 +204,10 @@ const HEADING_ICONS = ["hpIcon", "goldIcon", "spiritIcon"];
 // The bar is 10 high (caps 8 wide, the track 4 in from each end), 3 below the plate's top; the
 // indicators take the 12 rows under it, in text as big as before.
 function layoutXPPlate(top, width, u) {
+    // The faith candle: on top of the plate, right aligned, 20 art pixels tall at most (12 wide); the name stops before it.
+    const candleH = Math.max(0, Math.min(20 * u, top)), candleW = candleH * 12 / 20;
+    setStyles("faithCandle", { display: candleH > 4 ? "block" : "none", left: width - candleW, top: top - candleH, width: candleW, height: candleH });
+    setStyles("pjName", { width: Math.max(0, Math.min(parseFloat(el("pjName").style.width) || width, width - candleW - 2 * u)) });
     setStyles("xpPlate", { left: 0, top, width, height: 28 * u, borderImageWidth: `${4 * u}px ${8 * u}px ${2 * u}px` });
     setStyles("XPprogressBar", { display: "block", left: 4 * u, top: top + 3 * u, width: width - 8 * u, height: 10 * u, borderImageWidth: `0 ${8 * u}px` });
     setStyles("xpTrack", { left: 4 * u, right: 4 * u });
