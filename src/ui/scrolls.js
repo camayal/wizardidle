@@ -400,6 +400,8 @@ function drawSlider(slider) {
         const glyph = row.querySelector("." + cls);
         Object.assign(glyph.style, { display: "inline-block", width: `${9 * su}px`, textAlign: "center", fontSize: `${10 * su}px`, lineHeight: `${14 * su}px`,
             color: "#3c2412", cursor: "pointer", userSelect: "none", touchAction: "manipulation" });
+        const image = glyph.querySelector("img");
+        if (image) { image.style.imageRendering = "pixelated"; image.style.verticalAlign = "middle"; image.style.width = `${(cls == "aSmall" ? 5 : 9) * su}px`; }
         glyph.onclick = () => {
             const next = Math.max(0, Math.min(steps, Number(slider.value) + delta));
             if (next == Number(slider.value)) return;
@@ -472,13 +474,14 @@ function updateHelp(){
 
     const sizeIndex = TEXT_SIZES.findIndex(s => s.id == prefs.textSize);
     const switchRow = (id, label) => '<div class="setRow"><div>' + label + '</div><div class="setToggleRow"><div id="' + id + '" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div>';
-    const sliderRow = (id, label, nameId, name, steps, value) => '<div class="setRow"><div>' + label + ' (<span id="' + nameId + '">' + name + '</span>)</div>' +
-        '<div class="setSliderRow"><span class="aSmall">&minus;</span><div class="setSliderBox"><canvas></canvas>' +
-        '<input id="' + id + '" class="setSlider" type="range" min="0" max="' + steps + '" step="1" value="' + value + '"></div><span class="aBig">+</span></div></div>';
+    const sliderRow = (id, label, nameId, name, steps, value, small, big) => '<div class="setRow"><div>' + label + ' (<span id="' + nameId + '">' + name + '</span>)</div>' +
+        '<div class="setSliderRow"><span class="aSmall">' + small + '</span><div class="setSliderBox"><canvas></canvas>' +
+        '<input id="' + id + '" class="setSlider" type="range" min="0" max="' + steps + '" step="1" value="' + value + '"></div><span class="aBig">' + big + '</span></div></div>';
     const settings = '<div id="settings">' +
-        sliderRow('textSizeSlider', 'Text size', 'textSizeName', TEXT_SIZES[sizeIndex].label, TEXT_SIZES.length - 1, sizeIndex) +
+        sliderRow('textSizeSlider', 'Text size', 'textSizeName', TEXT_SIZES[sizeIndex].label, TEXT_SIZES.length - 1, sizeIndex, '<img src="' + art('slider_a_small') + '">', '<img src="' + art('slider_a_big') + '">') +
         switchRow('soundToggle', 'Sound') +
-        sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume) +
+        sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '&minus;', '+') +      // a speaker pair replaces these once drawn
+        
         switchRow('fightToggle', 'Fight details in the console') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
