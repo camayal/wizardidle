@@ -27,6 +27,7 @@ import { cabinSpot } from './cabin.js';
 import { pickDream } from './dream.js';
 import { markup } from './ui/text.js';
 import * as quests from './quests.js';
+import { moves } from './travelGraph.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 import { faithChange } from './faith.js';
 import { endFind, nudgeEvent, studyFocus, tickNudge } from './nudge.js';
@@ -492,9 +493,16 @@ function overStatue() {
 // Never the stage he is on (the author: he walked out and back into the same scene).
 function newStage() {
     if (!run.simulation) {
-        // any other of the zone's stages 1..5 that exist (the Beach has no 5), skipping his
-        const own = state.zone.current, all = [1, 2, 3, 4, 5].filter((n) => places[own + n] && n != state.zone.stage);
-        state.zone.stage = all[Math.floor(looksRandom() * all.length)] ?? state.zone.stage;
+        // a stage he can walk to from here along the author's links (a quest steers it), so the route is not lost;
+        // none linked: any other of the zone's stages 1..5 that exist (the Beach has no 5), skipping his
+        const own = state.zone.current, origin = own + state.zone.stage;
+        const next = places[origin] ? moves(origin).filter((n) => places[n] && places[n].zone === own && n !== origin) : [];
+        const pick = quests.steer(origin, next) || next[Math.floor(looksRandom() * next.length)];
+        if (pick) state.zone.stage = Number(pick.match(/\d+$/));
+        else {
+            const all = [1, 2, 3, 4, 5].filter((n) => places[own + n] && n != state.zone.stage);
+            state.zone.stage = all[Math.floor(looksRandom() * all.length)] ?? state.zone.stage;
+        }
     }
     showStage();
 }

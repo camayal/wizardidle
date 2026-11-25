@@ -382,3 +382,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 God-line effect redone (multicolour was too much): css dlText (normal > gold with black shadow > normal) then gold sparkles delayed 1.9 s; render.js holds new print() lines for DIVINE_HOLD_MS (2.6 s) after a divine line and flushes them in order.
 
 - 2026-11-25 Fix: the full step cost I added to quests.js bestOf kept quest wizards inside their zone (playtest: 2-19 zone changes per run against 131-166); now the step cost is only a 1/1000 tie-break. Manual-only routing stays. Idea: a Difficult exit could still be avoided when an Accessible one is as good, needs a test with quests.
+
+- 2026-11-25 Cause of the wizard circling the City on a Desert quest: events.js newStage() (after NPC/loot events, live only) re-rolled the stage among 1..5 of the zone, breaking the route now that routing uses only the manual links (Pradera1 routes back through the City). newStage now picks among moves(origin), steered by the quest. The simulation never ran newStage, which is why playtests missed it.

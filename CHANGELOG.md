@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- A wizard on a quest no longer loses his route: after an event with a person, a find or loot he used to be moved to a random scene of the zone (looks only), which could put him back on the wrong side of the map, so he kept going around the City on his way to the Desert. Now the scene he walks into is one linked to where he stands, and the quest chooses among them.
 - A god line (touch, nudge, heal, hit) now plays in three beats: the text in its normal colour, then golden with a black shadow, then back to normal, and then the golden sparkles. The console holds its next lines for about 2.6 seconds so it can be seen, then they appear in order.
 - The sparkles on the god's console lines are brighter and glow, twinkling until two newer lines have been printed (or 12 seconds with nothing new), then they are gone.
 - Tapping a rune, book or door spot now shows the god's Providence (a small gold twinkle, a faint hand or a gold feather, one at random) instead of the flashy shock sparkles.
