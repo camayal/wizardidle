@@ -397,6 +397,29 @@ function drawSlider(slider) {
     track.src = art("slider_track"); ticks.src = art("slider_ticks");
 }
 
+// The sound switch (img/ui/toggle_*.png, look A): a 28 x 12 track that is dull when off and lit when on, the red
+// seal knob at its left (off) or right (on) end sticking out 1 px above and below, and the word ON or OFF beside it.
+function drawToggle(su) {
+    su = parseFloat(su);
+    const toggle = el("soundToggle"), knob = toggle.querySelector(".knob"), label = toggle.parentNode.querySelector(".toggleLabel");
+    const paint = () => {
+        toggle.style.backgroundImage = `url(${art(prefs.sound ? "toggle_track_on" : "toggle_track_off")})`;
+        knob.style.left = `${prefs.sound ? 14 * su : 0}px`;
+        label.src = art(prefs.sound ? "toggle_label_on" : "toggle_label_off");
+        label.style.width = `${(prefs.sound ? 8 : 11) * su}px`;
+    };
+    Object.assign(toggle.style, { position: "relative", width: `${28 * su}px`, height: `${12 * su}px`, cursor: "pointer", flex: "none",
+        backgroundSize: "100% 100%", imageRendering: "pixelated", touchAction: "manipulation" });
+    knob.src = art("toggle_thumb");
+    Object.assign(knob.style, { position: "absolute", top: `${-su}px`, width: `${14 * su}px`, height: `${14 * su}px`, imageRendering: "pixelated", pointerEvents: "none" });
+    Object.assign(label.style, { imageRendering: "pixelated", marginLeft: `${3 * su}px` });
+    el("settings").querySelector(".setToggleRow").style.cssText = `display:flex;justify-content:center;align-items:center;margin:${2 * su}px 0`;
+    toggle.onpointerdown = () => { knob.src = art("toggle_thumb_down"); };
+    toggle.onclick = () => { setSound(!prefs.sound); knob.src = art("toggle_thumb"); paint(); };
+    toggle.onpointerup = toggle.onpointerleave = () => { knob.src = art("toggle_thumb"); };
+    paint();
+}
+
 // Fill the help scroll (collapsible sections).
 function updateHelp(){
     const frequentQuestions = '<b>Why does everyone have a name?</b> - All individuals of sentient species have one (Pybryas are very smart!)<br>' +
@@ -423,7 +446,7 @@ function updateHelp(){
     const settings = '<div id="settings"><div class="setRow">Text size<br><div class="setSliderRow"><img id="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas id="sliderArt"></canvas>' +
         '<input id="textSizeSlider" type="range" min="0" max="' + (TEXT_SIZES.length - 1) + '" step="1" value="' + sizeIndex + '"></div><img id="aBig" src="' + art('slider_a_big') + '"></div>' +
         '<span id="textSizeName">' + TEXT_SIZES[sizeIndex].label + '</span></div>' +
-        '<div class="setRow">Sound<br><span class="setChoice' + (prefs.sound ? ' on' : '') + '" data-sound="1">On</span> <span class="setChoice' + (prefs.sound ? '' : ' on') + '" data-sound="0">Off</span></div>' +
+        '<div class="setRow">Sound<br><div class="setToggleRow"><div id="soundToggle" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div></div>' +
         '<div class="setRow" style="opacity:.7">The text also follows the text size of your browser, and grows a little on tall screens.</div></div>';
 
     const faqBody = '' +
@@ -503,14 +526,7 @@ function updateHelp(){
             responsiveLayout();      // sizes everything again, with the new text size
             updateHelp();
         };
-        for (const choice of el("settings").querySelectorAll(".setChoice")) {
-            choice.style.cssText = `display:inline-block;margin:${u * 0.3}px ${u * 0.3}px 0 0;padding:${u * 0.4}px ${u * 0.8}px;border:2px solid #5a3a1a;border-radius:${u * 0.3}px;cursor:pointer;line-height:${u * 1.2}px;` +
-                (choice.classList.contains("on") ? 'background:#5a3a1a;color:#f4e4bc;' : '');
-            choice.addEventListener("click", () => {
-                setSound(choice.dataset.sound == "1");
-                updateHelp();
-            });
-        }
+        drawToggle(slider.closest(".setSliderRow").style.getPropertyValue("--su"));
     }
 
     //collapsible in help scroll
