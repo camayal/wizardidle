@@ -33,6 +33,10 @@ BRIDGE_RADIUS = 7
 ENTRANCES = [('mouth_pantano_cueva', 147, 31), ('mouth_pradera_cueva', 27, 114), ('mouth_duenon_cueva', 87, 224), ('mouth_playa-pradera_mina', 229, 64),
              ('mouth_dunas_mina', 33, 165), ('mouth_desierto_mina', 218, 182), ('mouth_tundra_volcan', 130, 120),
              ('mouth_gruta_cueva', 100, 181), ('mouth_dunas-pradera_gruta', 64, 170)]
+# Mouths whose inside is on the ground map, not under it (the big Grotto canyon: two scenes that are one, like a bridge).
+# The inside twin sits TWIN_GAP map pixels to the right of the outside door so both can be picked in the dev tools.
+GROUND_TWINS = {'mouth_dunas-pradera_gruta'}
+TWIN_GAP = 12
 STAIRS = (212, 205)                                      # the sacred stairs, ground -> Heidan (a guess, to confirm)
 
 
@@ -172,9 +176,12 @@ def build():
                 old[0]['kind'] = d.get('kind', 'connector')
             else:
                 node(d['layer'], int(d['x']), int(d['y']), d.get('kind', 'connector'), name)
+    pairs = []                      # (outside node, inside node) of every mouth
     for name, x, y in mouths:
-        node('ground', x, y, 'mouth', name)
-        node('under', x, y, 'mouth', name + '_under')
+        if name in GROUND_TWINS:    # the inside is on the ground map too (a bridge of two scenes): its own spot beside the door
+            pairs.append((node('ground', x, y, 'mouth', name), node('ground', x + TWIN_GAP, y, 'mouth', name + '_under')))
+        else:
+            pairs.append((node('ground', x, y, 'mouth', name), node('under', x, y, 'mouth', name + '_under')))
     node('ground', *stairs, 'stairs', 'stairs')
     node('above', *stairs, 'stairs', 'stairs_above')
 
@@ -192,8 +199,7 @@ def build():
                     key = (min(a, b), max(a, b))
                     if key not in edges:
                         edges[key] = edge_cost(terr[layer], (nodes[a]['x'], nodes[a]['y']), (nodes[b]['x'], nodes[b]['y']), cfg)
-    for _, x, y in mouths:
-        a, b = index[('ground', x, y)], index[('under', x, y)]
+    for a, b in pairs:
         edges[(min(a, b), max(a, b))] = cfg['entranceCost']
     a, b = index[('ground', *stairs)], index[('above', *stairs)]
     edges[(min(a, b), max(a, b))] = cfg['stairsCost']

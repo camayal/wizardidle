@@ -358,3 +358,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Travel: enter_mine_S point and links removed from travelOverrides, graph regenerated. The tunnel scene (connectors.js addScenes, travel.js MINE_TUNNEL) stays; remove it too if the author wants no tunnel scene.
 
 - 2026-11-25 Travel tool rebuilt for stability (author asked): src/data/travel.json is the one data file (saved, verdicts, positions, points, kinds), travelOverrides.js only loads it (JSON import) and applies moved scene positions to places; serve.py writes it verbatim, backs the old one up (docs/travel-backups, 60 kept), refuses a stale page (base stamp), then runs travel_graph.py; the tool starts from the file (not the graph) and drops stale drafts; generator reads the JSON and fails loudly. Untested in a browser: no node here.
+
+- 2026-11-25 travel_graph.py GROUND_TWINS: mouth_dunas-pradera_gruta_under is a ground node 12 px right of its door (was an underground node); tool pos() follows. Other mouths unchanged.

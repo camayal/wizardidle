@@ -60,7 +60,8 @@ const isCustom = (n) => n in points;
 const tgt = () => tgts[tgts.length - 1] || '';           // the last target: the one "change coord" moves
 const layerOf = (n) => g.nodes[byName[n]][0];
 const isStage = (n) => n in g.anchors;
-const pos = (i) => moved[baseOf(names[i][0] || '')] || [g.nodes[i][1], g.nodes[i][2]];
+const GROUND_TWIN = 'mouth_dunas-pradera_gruta_under';      // its inside is on the ground map, 12 px right of the door (tools/travel_graph.py)
+const pos = (i) => { const m = moved[baseOf(names[i][0] || '')]; return m ? [m[0] + (names[i][0] === GROUND_TWIN ? 12 : 0), m[1]] : [g.nodes[i][1], g.nodes[i][2]]; };
 const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify({ base, verdicts: overrides, positions: moved, points, stageKinds })); } catch (e) { /* no storage: fine */ } };
 
 // The colour of a direct link source -> node j of cost c: the manual verdict if there is one, else the cost.
