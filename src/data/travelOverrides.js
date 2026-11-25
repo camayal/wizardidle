@@ -339,7 +339,7 @@ export const travelOverrides = {
     "las_Dunas3|mouth_pradera_cueva": "far",
     "las_Dunas4|las_Dunas5": "move",
     "las_Dunas4|mouth_dunas_mina": "move",
-    "las_Dunas5|mouth_dunas-pradera_gruta": "move",
+    "las_Dunas5|mouth_dunas-pradera_gruta": "far",
     "las_Dunas5|mouth_dunas_mina": "move",
     "mouth_desierto_mina|mouth_desierto_mina_under": "move",
     "mouth_duenon_cueva|mouth_duenon_cueva_under": "move",
@@ -351,7 +351,7 @@ export const travelOverrides = {
     "mouth_pradera_cueva|mouth_pradera_cueva_under": "move",
     "mouth_tundra_volcan|mouth_tundra_volcan_under": "move",
     "stairs_N|stairs_n_ground": "move",
-    "stairs|stairs_above": "move",
+    "stairs|stairs_above": "move"
 };
 export const travelPositions = {};
 export const travelPoints = {
@@ -359,42 +359,36 @@ export const travelPoints = {
         "kind": "connector",
         "layer": "under",
         "x": 112,
-        "y": 162,
-        "note": ""
+        "y": 162
     },
     "stairs_N": {
         "kind": "connector",
         "layer": "above",
         "x": 79,
-        "y": 43,
-        "note": ""
+        "y": 43
     },
     "stairs_n_ground": {
         "kind": "connector",
         "layer": "ground",
         "x": 79,
-        "y": 43,
-        "note": ""
+        "y": 43
     },
     "enter_mine_S": {
         "kind": "connector",
         "layer": "under",
         "x": 34,
-        "y": 166,
-        "note": ""
+        "y": 166
     },
     "border_gruta_duenon": {
         "kind": "connector",
         "layer": "ground",
         "x": 89,
-        "y": 179,
-        "note": ""
+        "y": 179
     },
     "la_Pradera15": {
         "kind": "future",
         "layer": "ground",
         "x": 191,
-        "y": 107,
-        "note": ""
+        "y": 107
     }
 };
