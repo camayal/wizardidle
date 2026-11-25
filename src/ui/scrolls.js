@@ -372,7 +372,7 @@ el('innerTextScroll').addEventListener('click', (e) => {
 // 4 px middle that repeats), the four ticks sit under the steps, and the thumb is the input's own thumb (CSS).
 // su is one art pixel on screen, a whole number of pixels so the pixel art stays sharp.
 function drawSlider(slider) {
-    const su = Math.max(2, Math.min(Math.round(ui.em * 0.35), Math.floor(ui.objectSize * 0.8 / 78)));
+    const su = Math.max(2, Math.min(Math.round(ui.em * 0.2), Math.floor(ui.objectSize * 0.6 / 78)));
     const W = 56 * su, steps = TEXT_SIZES.length - 1;
     const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = el("sliderArt");
     row.style.setProperty("--su", `${su}px`);

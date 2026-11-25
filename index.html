@@ -164,7 +164,8 @@
             }
 
             /* settings page: the text size slider (art in img/ui/slider_*.png, drawn by scrolls.js; --su = one art pixel) */
-            .setSliderRow{ display:flex; align-items:center; gap:calc(2 * var(--su)); margin:calc(2 * var(--su)) 0; }
+            .setSliderRow{ display:flex; justify-content:center; align-items:center; gap:calc(2 * var(--su)); margin:calc(2 * var(--su)) 0; }
+            #settings .setRow{ text-align:center; margin-bottom:1em; }
             .setSliderRow img{ image-rendering:pixelated; }
             .setSliderBox{ position:relative; flex:none; }
             .setSliderBox canvas{ position:absolute; left:0; top:0; image-rendering:pixelated; }
