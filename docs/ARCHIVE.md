@@ -2783,3 +2783,4 @@ The offering question (cap, diminishing returns, fixed by level, keep the snowba
 - **Revive boost amount**, and whether farming needs a guard: playtests.
 - The rescuers, the winning-back actions and the escape scroll's plot: to be confirmed (see Decisions).
 - Faith (thinker, 2026-11-24): archive FAITH.md and point links to for_implementation_faith.md. Done 2026-11-25 (section numbers like 3.1 in old links may not match the new file).
+- Cemetery note for an unfinished quest (quests review 5): dropped by the author 2026-11-25.
