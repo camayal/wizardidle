@@ -320,3 +320,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25: FAITH.md archived, links point to for_implementation_faith.md; QUESTS.md queue cap fixed; stale CHANGELOG sentence cut. Also: a quest paused by a secret now resumes first (sort in promote()).
 
 - 2026-11-25: delivery rework: stranger recipient (quests.handOver, events readBoard 'recipient'); untested in a browser.
+- 2026-11-25: render.walkAcross: after a plain connector's last scene he stands in his place (no walk-in); mouths with a fade and borders unchanged.

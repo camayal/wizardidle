@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- After crossing a bridge he no longer walks right to left again in the scene he arrives in: he is already there, so he just stands in his place.
 - Parcel deliveries are now carried: besides an inn host, the parcel can go to a stranger waiting by the road, who takes it in the next scene.
 - A quest paused by a secret now resumes first, instead of being re-sorted by distance.
 - Toolbar order: top row Faith, Achievements, Stats; bottom row Map, Kill, Settings (grouped by use, Kill is no longer next to the XP plate).
