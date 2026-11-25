@@ -8,6 +8,7 @@ import { config } from './config.js';
 import { state } from './state.js';
 import { playTime, stats } from './stats.js';
 import { print, wizardName } from './ui/render.js';
+import { logro } from './achievements.js';
 
 const LEVELS = ["atheist", "doubter", "believer", "devout"];
 const ANNOUNCE = {
@@ -68,6 +69,7 @@ function updateLevel() {
     p.beliefLevel = next;
     stats.first(`first.belief.${next}`);
     stats.count(`belief.reached.${next}`);
+    if (next == 'atheist') logro.set(logro.logro_hategod);
     print(`<span style='color:#7a4fa0'>${wizardName()} ${ANNOUNCE[next]}</span>`);
 }
 

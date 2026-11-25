@@ -20,6 +20,7 @@ import { byName, destinations, moves, route, travelCost, SIZE } from './travelGr
 import { addXP, calculateFe } from './wizard.js';
 import { print, updateHeading, wizardName } from './ui/render.js';
 import { beliefLevel } from './belief.js';
+import { faithChange } from './faith.js';
 
 const here = () => state.zone.current + state.zone.stage;
 const zoneName = (z) => zones[z].name;
@@ -254,7 +255,7 @@ function reward(q) {
     }
     if (q.reward === 'faith') {
         const f = Math.round(calculateFe() * c.faithMult * m * p.faithMultiplier);
-        p.faith += f;
+        faithChange(f, 'quest');
         updateHeading();
         return rewardLine('faith', f);
     }

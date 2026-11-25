@@ -39,7 +39,6 @@ const npcCanvas = el("npcCanvas");
 // Refresh the heading: name, level, XP bar, HP, gold and faith.
 function updateHeading() {
     if (!run.simulation) showHeading();
-    if (state.player.faith < -10000){logro.set(logro.logro_hategod)}
     stats.max("faith.highest", Math.round(state.player.faith));
     stats.max("gold.highest", Math.round(state.player.gold));
     //calcule % of xp bar

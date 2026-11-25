@@ -28,6 +28,7 @@ import { pickDream } from './dream.js';
 import { markup } from './ui/text.js';
 import * as quests from './quests.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
+import { faithChange } from './faith.js';
 
 //define statueobj
 const statueObj = {
@@ -39,8 +40,7 @@ const statueObj = {
     statue_el_Duenon: {name:"Terrifying Imp", event:function(){return statObj.increase(statObj.pCritic.code,2)},code:"statue_el_Duenon"},
     statue_las_Dunas: {name:"Perfect sphere", event:function(){
         run.feGanada = (getRandomInt(((state.player.hpBase * config.balance.rGold) * 0.75),((state.player.hpBase * config.balance.rGold) * 1.5))) * 10;
-        run.feGanada *= state.player.faithMultiplier
-        state.player.faith = state.player.faith + run.feGanada;
+        run.feGanada = faithChange(run.feGanada * state.player.faithMultiplier, "statue");
         updateHeading();
         return `divine</i> and gains some faith (${ui.spiritIcon}${roundNumbertoLetter(run.feGanada)})<i>`;
     },code:"statue_las_Dunas"},
@@ -401,7 +401,7 @@ function prayEV(){
         beliefMoment(isDoubting() ? "passedShrine" : "skippedShrine");      // the way back for a Doubter
         const faithLost = calculateFe();
         print(`${wizardName()} ${textCapel} but does not go in, and walks on (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
-        state.player.faith = state.player.faith - faithLost;
+        faithChange(-faithLost, "skippedShrine");
         updateHeading();
         run.previousEvent = "negar"
         nextEvent();
@@ -821,12 +821,10 @@ function doOffering(){
 function giveOffering() {
     const ofrendaGold = getRandomInt(state.player.gold * 0.1, state.player.gold * 0.5);
     run.feGanada = (ofrendaGold * stat("fOfrenda"));
-    run.feGanada *= state.player.faithMultiplier;
-    state.player.faith = state.player.faith + run.feGanada;
+    run.feGanada = faithChange(run.feGanada * state.player.faithMultiplier, "offering");
     state.player.gold = state.player.gold - ofrendaGold;
     stats.count("faith.offerings");
     stats.add("gold.offered", Math.round(ofrendaGold));
-    stats.add("faith.gain.offering", Math.round(run.feGanada));
     playSound("coins");
     spell("spellCoins", false);
     const textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,to cherish you,to honor you");
@@ -839,9 +837,7 @@ function pray() {
     playWizardAnim("pray");     // kneels and keeps praying until he leaves the shrine
     spell("spellAnk_8", true, 0, 0, aroundCross());
     run.feGanada = calculateFe();
-    run.feGanada *= state.player.faithMultiplier;
-    state.player.faith = state.player.faith + run.feGanada;
-    stats.add("faith.gain.prayer", Math.round(run.feGanada));
+    run.feGanada = faithChange(run.feGanada * state.player.faithMultiplier, "prayer");
     const textPray = pickRandomItem(" concentrates on his prayer,  prays for greatness, tries to please you, begs for your help");
     print(wizardName() + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
 }

@@ -17,6 +17,7 @@ import { cabinSpot } from './cabin.js';
 import { beliefMoment, isAtheist, touchCost } from './belief.js';
 import { suggest } from './quests.js';
 import { buzz } from './prefs.js';
+import { faithChange } from './faith.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -92,7 +93,7 @@ function healByTouch() {
         } else {
             state.player.hp = state.player.hp + (healHit);
         }
-        state.player.faith = state.player.faith - faithLost;
+        faithChange(-faithLost, "heal");
         updateHeading();
         playSound("heal");
         spell("spellHeal_8", true);
@@ -135,7 +136,7 @@ function npcBtn(){
             if (fight.enemyHP <= 0) beliefMoment("finalBlow");      // it falls at the fight's next step
             
             updateHeartNPC()
-            state.player.faith = state.player.faith - faithLost;
+            faithChange(-faithLost, "hit");
             updateHeading();
             print(`${wizardName()} ${txt}${ui.heartIcon} ${roundNumbertoLetter(fight.enemyHP)}`)
             stats.count("god.hits");
@@ -159,14 +160,12 @@ function centerBtn(){
             run.disableCenterBtn = true;
             const ofrendaGold = getRandomInt(state.player.gold * 0.25, state.player.gold * 0.75);
             run.feGanada = (ofrendaGold * stat("fOfrenda"));
-            run.feGanada *= state.player.faithMultiplier;
-            state.player.faith = state.player.faith + run.feGanada;
+            run.feGanada = faithChange(run.feGanada * state.player.faithMultiplier, "tithe");
             state.player.gold = state.player.gold - ofrendaGold;
             const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone wants him to offer extra gold"
             print(`${wizardName()} ${pickRandomItem(textoffer)} (${ui.goldIcon} -${roundNumbertoLetter(ofrendaGold)}, ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)})`);
             stats.count("faith.mandatoryOffers");
             stats.add("gold.offered", Math.round(ofrendaGold));
-            stats.add("faith.gain.offering", Math.round(run.feGanada));
             updateHeading();
             playSound("coins");
             spell("spellCoins",false);

@@ -44,6 +44,11 @@ export const config = {
         healCostFactor: 0.5,                   // a healing touch costs this share of the faith an attack of the same size would (a first number to tune)
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
+    // Faith, the god's currency (docs/plans/for_implementation_faith.md): placeholders, tune with the playtests.
+    faith: {
+        maxPerHp: 100,             // the most faith he can hold = hpBase x this
+        maxMin: 200,               // ... but never less than this
+    },
     // Time away (docs/plans/AWAY.md, first estimates, to playtest): away time / worldDivisor = world time.
     away: {
         worldDivisor: 108,         // 1 month away is about 6.7 world hours

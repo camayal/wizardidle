@@ -18,8 +18,9 @@ import { el } from './ui/dom.js';
 import * as loop from './loop.js';
 import { art } from './media.js';
 import { settleAway, watchHidden } from './away.js';
+import { faithChange } from './faith.js';
 
-const version = "2.19.806"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
+const version = "2.19.807"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * headLevelShare(ui.currentBackGround);      // row 28 of 256; row 24 in the connector scenes
@@ -82,7 +83,7 @@ function start() {
     if (away != "soft" && state.player.hp <= 0){//perfom a weak revive if the player does not revive after reload, loss faith
         state.player.hp = state.player.hpBase * 0.1;
             const feperdida = state.player.hpBase * 0.25;
-            state.player.faith = state.player.faith - feperdida
+            faithChange(-feperdida, "lostHope");
         print(`${wizardName()} loses hope in you and tries to get up on his own (${ui.spiritIcon}-${roundNumbertoLetter(feperdida)})`);
     }
     updateHeading();

@@ -19,6 +19,7 @@ import { print, wizardName, poemInDark } from './ui/render.js';
 import { zones } from './data/zones.js';
 import { poems, awayText } from './data/awayTexts.js';
 import { faithAfter, goldAfter, levelsGained, permadeathChance, worldHours } from './awayMath.js';
+import { faithChange } from './faith.js';
 
 // Levels with a chapter stop the levels from away time; so does the last level.
 const thresholds = () => [...Object.keys(chapter).map((k) => Number(k.replace("lvl", ""))), 200];
@@ -57,7 +58,7 @@ export function settleAway(rand = Math.random) {
         return "dead";
     }
     if (hours) {
-        p.faith = faithAfter(p.faith, hours);
+        faithChange(faithAfter(p.faith, hours) - p.faith, 'away');
         p.gold = goldAfter(p.gold, hours, rand());
         for (let n = levelsGained(p.lvl, hours, rand(), thresholds()); n > 0; n--) quietLevel();
         stats.add("away.worldHours", hours);

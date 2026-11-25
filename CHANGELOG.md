@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Faith now has a ceiling that grows with his strength and never goes below zero; every gain and loss goes through one place (src/faith.js), so the stats can tell where faith came from and where it went. The "Atheist!" achievement now comes from losing all belief, since faith can no longer be negative.
 - After crossing a bridge he no longer walks right to left again in the scene he arrives in: he is already there, so he just stands in his place.
 - Parcel deliveries are now carried: besides an inn host, the parcel can go to a stranger waiting by the road, who takes it in the next scene.
 - A quest paused by a secret now resumes first, instead of being re-sorted by distance.

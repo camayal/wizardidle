@@ -26,6 +26,7 @@ import { playEntrance, playLeave } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
 import { beliefMoment, isDoubting } from './belief.js';
 import { art } from './media.js';
+import { faithChange } from './faith.js';
 
 
 
@@ -126,17 +127,14 @@ function defeatEnemy() {
     if (!fight.bossCombat && !fight.hydraCombat) {
         if (enemySprites[fight.enemyAndNumber].corrupted && !state.player.inSin) {
             run.feGanada = calculateFe() * 5;
-            run.feGanada *= state.player.faithMultiplier;
-            state.player.faith = state.player.faith + run.feGanada;
-            stats.add("faith.gain.cleanse", Math.round(run.feGanada));
+            run.feGanada = faithChange(run.feGanada * state.player.faithMultiplier, "cleanse");
             faithText = `, also gained ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)} by corruption eradication`;
         } else {
             faithText = "";
         }
     }
     if (state.player.inSin) {
-        const faithLost = calculateFe();
-        state.player.faith = state.player.faith - faithLost;
+        const faithLost = -faithChange(-calculateFe(), "sin");
         faithText = `, and reduce the faith ${ui.spiritIcon} -${roundNumbertoLetter(faithLost)}`;
     }
 
@@ -258,7 +256,7 @@ function scheduleSelfRevive() {
         run.fallBy = "alone";
         beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
         const faithLost = state.player.hpBase * 1.2454654;
-        state.player.faith = state.player.faith - faithLost;
+        faithChange(-faithLost, "gotUpAlone");
         print(`${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
         fight.pjDead = false;
         drawWizard();

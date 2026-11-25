@@ -38,7 +38,7 @@ export const achievements = {
     logro_killedbychicken: {name:"logro_killedbychicken", title:"The last cluck-cluck", description:"Get badly beaten by a demonic chicken."},//ok
     logro_spectra: {name:"logro_spectra", title:"All the colours", description:"Defeat the seven secret spectra of the Tundra"},
     logro_namesake: {name:"logro_namesake", title:"Tocayo", description:"Find a namesake, something almost impossible in these lands"},//ok -i
-    logro_hategod:  {name:"logro_hategod", title:"Atheist!", description:"A new way of life: pure, honest hatred for the heavens. Reach -10K faith."},//ok -i
+    logro_hategod:  {name:"logro_hategod", title:"Atheist!", description:"A new way of life: pure, honest hatred for the heavens. Lose every belief in the heavens."},//ok -i
     // planned: when the god loves the wizard, unlock state.travelFavor (map travel)
     logro_hydramystery:  {name:"logro_hydramystery", title:"The hydra is awake", description:"Discover the mantra that wakes the ancient hydras."},//ok
 };
