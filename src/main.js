@@ -18,11 +18,11 @@ import { allowSaving } from './state.js';
 // to block the toolbar while a scroll is open.
 const clickHandlers = {
     startBtn: setName,
-    btn1: archBtn,
-    btn2: statsBtn,
-    btn3: killBtn,
-    btn4: faithBtn,
-    btn5: mapBtn,
+    btn1: faithBtn,
+    btn2: archBtn,
+    btn3: statsBtn,
+    btn4: mapBtn,
+    btn5: killBtn,
     btn6: helpBtn,
     pjDivineBtn: pjBtn,
     centerDivineBtn: centerBtn,

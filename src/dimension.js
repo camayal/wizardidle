@@ -66,7 +66,7 @@ export function watchDimensions() {
 const rnd = (a, b) => a + Math.random() * (b - a);
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
 const GLYPHS = '#%&@?!/\\<>~^*0123456789';
-const LINES = ['the god sees himself', 'TIME LOOP', 'who is watching whom', 'two wizards, one name', 'the world forgets this place',
+const LINES = ['you see yourself', 'TIME LOOP', 'who is watching whom', 'two wizards, one name', 'the world forgets this place',
     'ERROR: dimension 2', 'you were never here', 'the stars fall upward', 'nothing is saved'];
 const COLORS = ['#f0f', '#0ff', '#f80', '#8f0', '#f33', '#aaf'];
 

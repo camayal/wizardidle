@@ -80,7 +80,7 @@ export function startOfTurn() {
         fight.poisonTurns--;
         const damage = Math.min(state.player.hp, state.player.hpBase * b().poisonDamage);
         state.player.hp -= damage;
-        print(`${wizardName()} suffers the poison (${ui.attackIcon}${roundNumbertoLetter(damage)})`);
+        print(`${wizardName()} suffers from the poison (${ui.attackIcon}${roundNumbertoLetter(damage)})`);
     }
     if (fight.midasPendingHeal) {
         fight.enemyHP = Math.min(fight.enemyHPbase, fight.enemyHP + fight.midasPendingHeal);

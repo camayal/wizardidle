@@ -197,7 +197,7 @@ export function importSaveText(text) {
     try {
         if (data.save) localStorage.setItem(SAVE_KEY, JSON.stringify(data.save)); else localStorage.removeItem(SAVE_KEY);
         if (data.world) localStorage.setItem(WORLD_KEY, JSON.stringify(data.world));
-    } catch (e) { saving = true; return 'This browser would not store it.'; }
+    } catch (e) { saving = true; return 'This browser refused to store it.'; }
     location.reload();
     return '';
 }

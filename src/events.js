@@ -50,7 +50,7 @@ const statueObj = {
         state.player.gold = state.player.gold + goldFound;
         updateHeading();
         playSound("coins");
-        return `${statObj.pBotin.name}</i> and found some coins (${ui.goldIcon}${roundNumbertoLetter(goldFound)})<i>`;
+        return `${statObj.pBotin.name}</i> and finds some coins (${ui.goldIcon}${roundNumbertoLetter(goldFound)})<i>`;
     },code:"statue_el_Heidan"},
     statue_la_Mina: {name:"Dwarf", event:function(){return statObj.increase(statObj.pFindMaterials.code,2)},code:"statue_la_Mina"},
     statue_el_Pantano: {name:"Hydra", event:function(){
@@ -298,7 +298,7 @@ function exploreOn() {
         print(`${wizardName()} is exploring...`);
         startEvent(changeLocality);
     } else {
-        print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and continues in the , advances in the ") + zones[state.zone.current].name);
+        print(wizardName() + pickRandomItem(" continues exploring the , sees something interesting and goes on into the , advances through the ") + zones[state.zone.current].name);
         pickRandomBackgroundForCurrentZone(() => {   // walks on to the next spot
             addXP(0.5);
             nextEvent();
@@ -378,7 +378,7 @@ function prayEV(){
     }else{
         stats.count("faith.shrineSkipped");
         if (run.previousEvent == "negar"){
-            textCapel = pickRandomItem("finds again the same shrine,sees the same shrine");
+            textCapel = pickRandomItem("finds the same shrine again,sees the same shrine");
         }else{
             textCapel = pickRandomItem("finds a shrine,sees a shrine,finds a temple");
         }
@@ -391,7 +391,7 @@ function prayEV(){
         }
         beliefMoment(isDoubting() ? "passedShrine" : "skippedShrine");      // the way back for a Doubter
         const faithLost = calculateFe();
-        print(`${wizardName()} ${textCapel} but does not enter and continues (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
+        print(`${wizardName()} ${textCapel} but does not go in, and walks on (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
         state.player.faith = state.player.faith - faithLost;
         updateHeading();
         run.previousEvent = "negar"
@@ -430,7 +430,7 @@ function innEV(){
     if(questInn || Math.round(state.player.hp) < Math.round(state.player.hpBase)){
            
            if (run.previousEvent == "innEV"){
-            textInn = "wants to rest a little more,still is tired"
+            textInn = "wants to rest a little more,is still tired"
            }else{
             textInn = "feels tired,wants to rest,is falling asleep"
            }
@@ -438,7 +438,7 @@ function innEV(){
            run.previousEvent = "innEV"
            startEvent(searchInn);
     }else{
-        const textNoInn = "feels good and continues his journey, continues with his trip, wants to explore a little more,has energies to continue"
+        const textNoInn = "feels good and continues his journey, goes on with his trip, wants to explore a little more,has the energy to go on"
         print(`${wizardName()} ${pickRandomItem(textNoInn)}`) 
         run.previousEvent = "innEVFeelsGood"
         nextEvent();
@@ -533,7 +533,7 @@ function findStatue(){
         stats.count(`explore.statue.statue_${state.zone.current}`)
         stats.count("explore.statues");
         if (run.previousEvent == "findStatue"){
-            print(`${wizardName()} wants to try study the ${statueObj["statue_" + state.zone.current].name} statue again`);
+            print(`${wizardName()} wants to try to study the ${statueObj["statue_" + state.zone.current].name} statue again`);
         }else{
             print(`${wizardName()} finds a ${statueObj["statue_" + state.zone.current].name} statue`);
         }
@@ -544,7 +544,7 @@ function findStatue(){
         if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
             stats.count("study.statueSuccess");
             spell("spellStudyGood_15",true,0,0,overStatue());
-            learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue scripts,feels the power of the statue");
+            learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue's inscriptions,feels the power of the statue");
             const result = statueObj[`statue_${state.zone.current}`].event()
         if(result == "hydraMysteryResolved"){
             //play hydra sound
@@ -558,13 +558,13 @@ function findStatue(){
         }else{
             playSound("studyrune");
             spell("spellStudyTry_16",true,0,0,overStatue());
-            learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs in at the base of the statue,observes the statue,interprets the shape of the figure and the material");
+            learnTxt = pickRandomItem("tries to understand what is written in the statue,reads the glyphs at the base of the statue,observes the statue,interprets the shape of the figure and the material");
             //fail study try again
             if(run.multipleEventsCounter == 4){
                 stats.count("study.statueFail");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,0,0,overStatue());
-                learnTxt = pickRandomItem("does not find any pattern,can not understand the glyphs in the statue,does not know the purpose of the statue");
+                learnTxt = pickRandomItem("does not find any pattern,cannot understand the glyphs on the statue,does not know the purpose of the statue");
             }
             print(`${wizardName()} ${learnTxt}`) 
         }
@@ -627,7 +627,7 @@ function findRuneOrBook(){
             playSound("statUp");
             stats.count("study.success");
             spell("spellStudyGood_15",true,0,0,aboveFind());
-            learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge of the");
+            learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge in the");
             //exit loop, sucess study
             const statToIncrease = statObj[statObj.random()];
             const learned = statObj.increase(statToIncrease.code);
@@ -645,7 +645,7 @@ function findRuneOrBook(){
                 stats.count("study.fail");
                 //last chance of study failed, mod text
                 spell("spellStudySleep_15",true,0,0,aboveFind());
-                learnTxt = pickRandomItem("does not find any pattern in the,can not understand anything in the,does not understand the language in the");
+                learnTxt = pickRandomItem("does not find any pattern in the,cannot understand anything in the,does not understand the language in the");
             }
             print(`${wizardName()} ${learnTxt} ${run.objectToStudy}`) 
         }
@@ -691,9 +691,9 @@ function arriveToRest(placesWithInn) {
         stats.count("inn.rests");
         if (stats.get("inn.rests") >= 250) logro.set(logro.logro_tabernero);
         stats.count(`inn.zone.${state.zone.current}`);
-        print(`${wizardName()} enters in an inn`);
+        print(`${wizardName()} enters an inn`);
     } else {
-        const textCamping = "looks for a safe place too rest,hides to rest,falls asleep";
+        const textCamping = "looks for a safe place to rest,hides to rest,falls asleep";
         print(`${wizardName()} ${pickRandomItem(textCamping)}`);
         stats.count("inn.campings");
     }
@@ -731,12 +731,12 @@ function goToBed(placesWithInn) {
 
 // Pay for a bed if he can (a full rest), otherwise sleep for free (a partial rest).
 function sleep(placesWithInn) {
-    const textSleeps = "sleeps,replenishes energies,rests";
+    const textSleeps = "sleeps,recovers his strength,rests";
     if (placesWithInn) {
         const innCost = 1 + getRandomInt(state.player.lastBattleGold * 2, state.player.lastBattleGold * 3);
         if ((state.player.gold - innCost) <= 0) {
             playSound("drink");
-            print(`${wizardName()} cannot afford pay a bed, but takes a free drink`);
+            print(`${wizardName()} cannot afford a bed, but gets a free drink`);
             run.restAtInn = false;
         } else {
             goToBed(true);
@@ -765,9 +765,9 @@ function wakeUp(placesWithInn) {
     state.player.hp = state.player.hp + rested;
     stats.add("inn.hpRecovered", Math.round(Math.max(0, rested)));
     if (state.player.hp >= state.player.hpBase) {
-        textRecover = "feels totally renewed,feels well rested,has new energies,regained his health";
+        textRecover = "feels totally renewed,feels well rested,feels full of energy,regains his health";
     } else {
-        textRecover = "feels slightly renewed,feels poorly rested,has some energies,regained some health";
+        textRecover = "feels slightly renewed,feels poorly rested,has a little more energy,regains some health";
     }
     if (Math.round(rested) <= 0) {
         textRecover = "couldn't rest well";
@@ -797,7 +797,7 @@ function doOffering(){
     } else {
         switch (studyPhase()) {
             case 1:
-                print(wizardName() + pickRandomItem(" adores you, prays to you, asks for your advice, praises you, exalts you, asks you for his favor"));
+                print(wizardName() + pickRandomItem(" adores you, prays to you, asks for your advice, praises you, exalts you, asks for your favour"));
                 break;
             case 2: pray(); break;
             case 5:
@@ -820,7 +820,7 @@ function giveOffering() {
     stats.add("faith.gain.offering", Math.round(run.feGanada));
     playSound("coins");
     spell("spellCoins", false);
-    const textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,for cherishing you,to honor you");
+    const textOffering = pickRandomItem("to revere you,to please you,to exalt you,to adore you,to venerate you,to idolize you,to cherish you,to honor you");
     print(`${wizardName()} offers ${ui.goldIcon}${roundNumbertoLetter(ofrendaGold)} ${textOffering}`);
 }
 
@@ -833,7 +833,7 @@ function pray() {
     run.feGanada *= state.player.faithMultiplier;
     state.player.faith = state.player.faith + run.feGanada;
     stats.add("faith.gain.prayer", Math.round(run.feGanada));
-    const textPray = pickRandomItem(" concentrates on his prayer,  asks for his greatness, tries to please you, begs for your help");
+    const textPray = pickRandomItem(" concentrates on his prayer,  prays for greatness, tries to please you, begs for your help");
     print(wizardName() + textPray + " (" + ui.spiritIcon + roundNumbertoLetter(run.feGanada) + ")");
 }
 

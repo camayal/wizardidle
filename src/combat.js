@@ -55,11 +55,11 @@ function battle() {
 function announceBattle() {
     const hp = ` (${ui.heartIcon}${roundNumbertoLetter(fight.enemyHP)})`;
     if (fight.bossCombat) {
-        print(`${fight.enemyName} releases the power and attack!${hp}`, true);
+        print(`${fight.enemyName} unleashes its power and attacks!${hp}`, true);
     } else if (fight.hydraCombat) {
-        print(`${fight.enemyName} releases all its fury and attack with brutality!${hp}`, true);
+        print(`${fight.enemyName} unleashes all its fury and attacks brutally!${hp}`, true);
     } else {
-        print(fight.enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + hp, true);
+        print(fight.enemyName + pickRandomItem(" backs away, looks scared, charges, shouts, raises its guard") + hp, true);
     }
 }
 
@@ -184,10 +184,10 @@ function victoryRewards(faithText) {
         addGold();
         if (fight.bossCombat) {
             addXP(4);
-            print(`${fight.enemyName} was defeated and a big loot has been found ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier)}`);
+            print(`${fight.enemyName} was defeated, leaving a great hoard ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier)}`);
         } else if (fight.hydraCombat) {
             addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
-            print(`${fight.enemyName} was defeated and a treasure has been found ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * 15)}`);
+            print(`${fight.enemyName} was defeated, leaving a treasure ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * 15)}`);
         } else {
             addXP(enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1.5);
             print(`${fight.enemyName} was defeated and looted ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold)}${faithText}`);
@@ -259,7 +259,7 @@ function scheduleSelfRevive() {
         beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
         const faithLost = state.player.hpBase * 1.2454654;
         state.player.faith = state.player.faith - faithLost;
-        print(`${wizardName()} recovers himself but feels abandoned by his god (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
+        print(`${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
         fight.pjDead = false;
         drawWizard();
         stats.count("death.selfRevive");
@@ -330,7 +330,7 @@ function getEnemy(plain = false) {      // plain: a normal enemy only (a fight o
         startBattleText = `has entered in ${article} battle with a Boss!,finds ${article} Boss!,start ${article} fight with a Boss!`;
         run.previousEvent = "boss";
     } else {
-        if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY GUY LOOK AT ME!";
+        if (fight.enemyAndNumber == "el_mediano14") startBattleText = "shouts: HEY, YOU! LOOK AT ME!";
         run.previousEvent = "enemy";
     }
     print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
@@ -436,13 +436,13 @@ function getHydra(newEncounter = false){
         stats.count("combat.hydras");
         stats.count(`combat.hydra.${fight.hydra}`)
         stats.count(`seen.hydra.${fight.hydra}`);
-        startBattleText = "has entered in a battle with a hydra!,finds a hydra!,start a fight with a hydra!"
+        startBattleText = "enters a battle with a hydra!,finds a hydra!,starts a fight with a hydra!"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
         playEntrance();     // it comes out of the ground (ui/entrances.js)
         if (wounded !== undefined) print(`The hydra still bears the wounds of their last battle`);
         startEvent(battle);
     } else {
-        startBattleText = "sees how another head grows!, sees how the hydra regenerates its health points"
+        startBattleText = "watches another head grow!, watches the hydra regain its health"
         print(`${wizardName()} ${pickRandomItem(startBattleText)}`);
         // the author: a short word on the heads (how many, and when it can be killed)
         const heads = state.hydraHeads[fight.hydra], max = Number(zones[state.zone.current].headsMax);
@@ -511,7 +511,7 @@ function castPolymorph() {
     fight.polymorphedAnimal = pickRandomItem("gallina,oveja");
     playSound(fight.polymorphedAnimal);
     loadNPC(fight.polymorphedAnimal);
-    print(`${wizardName()} cast polymorphism!`);
+    print(`${wizardName()} casts polymorph!`);
     stats.count(`spell.polymorph.${fight.polymorphedAnimal}`);
     fight.polymorphed = true;
 }
@@ -613,7 +613,7 @@ function healEV() {
         stats.add("spell.healed", Math.round(healHit));
         playSound("heal");
         spell("spellHeal_8",true);
-        print(wizardName() + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")", true);    
+        print(wizardName() + pickRandomItem(" casts a healing spell and restores , casts minor healing , uses restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")", true);    
          
         
     

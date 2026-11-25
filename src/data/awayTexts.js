@@ -3,7 +3,7 @@
 
 export const awayTexts = {
     // console line when he is found fallen after about a month away (he can still be revived)
-    softDead: "{name} has lain in the {zone} since dawn. If no god comes for him before nightfall, it will be his last day.",
+    softDead: "{name} has lain in the {zone} since dawn. If no deity comes for him before nightfall, it will be his last day.",
 };
 
 // The poems for an absence permadeath, a shuffle bag per world (they never repeat until all
@@ -20,7 +20,7 @@ export const poems = [
     { id: "b", title: "The last call", lines: [
         "{name} called you at dusk, and again at dawn.",
         "After that, he did not call.",
-        "A god can be gone for a moment.",
+        "A deity can be gone for a moment.",
         "A man is gone for good.",
         "The {zone} keeps him now.",
     ] },

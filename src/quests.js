@@ -363,7 +363,7 @@ export function eventPick() {
         q.searched = 0;
         q.demoted = (q.demoted || 0) + 1;
         if (q.demoted >= c.maxDemotions || !qs().queue.length) {
-            print(`<i>${wizardName()} gives up on his quest: he cannot find what it asks.</i>`);
+            print(`<i>${wizardName()} gives up on his quest: he cannot find what it asks for.</i>`);
             finish(q, 'abandoned');
             if (!state.quest) wish(true);       // nothing else waits: he makes up an errand of his own
             return 0;
@@ -736,7 +736,7 @@ const CARD = {
     delivery: ['A parcel', 'Carry the parcel to the inn and hand it to the host.'],
     explore: ['A place to see', 'Go to the place and look around.'],
     study: ['Something to study', 'Find a thing worth studying there.'],
-    shrine: ['A prayer', 'Pray at the shrine. The god will notice.'],
+    shrine: ['A prayer', 'Pray at the shrine. Someone is listening.'],
     pilgrimage: ['A pilgrimage', 'Pray at each of the shrines on the road.'],
     hidden: ['A hidden shrine', 'A shrine nobody speaks of. Find it.'],
     seek: ['Looking for work', 'Ask at the inn if anyone needs a wizard.'],

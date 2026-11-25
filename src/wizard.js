@@ -18,18 +18,18 @@ import { art } from './media.js';
 //stat definition object
 const statObj = {
     pAttack: {name:"attack chance", code:"pAttack"},
-    fAttack: {name:"mastery in magic arts", code:"fAttack"},
-    pPolymorph: {name:"polymorphism mastery", code:"pPolymorph"},
+    fAttack: {name:"magic mastery", code:"fAttack"},
+    pPolymorph: {name:"polymorph mastery", code:"pPolymorph"},
     fCritic: {name:"critical multiplier", code:"fCritic"},
-    pCritic: {name:"critic chance", code:"pCritic"},
-    pHeal: {name:"heal chance", code:"pHeal"},
+    pCritic: {name:"critical chance", code:"pCritic"},
+    pHeal: {name:"healing chance", code:"pHeal"},
     fHeal: {name:"restoration knowledge", code:"fHeal"},
     pStudy: {name:"intellect", code:"pStudy"},
     pBotin: {name:"avarice", code:"pBotin"},
-    pChangeZone: {name:"exploration faculties", code:"pChangeZone"},
+    pChangeZone: {name:"wanderlust", code:"pChangeZone"},
     pFindCapel: {name:"devotion", code:"pFindCapel"},
     pFindMaterials: {name:"scavenger skills", code:"pFindMaterials"},
-    pOfrenda: {name:"devotion for the tithe", code:"pOfrenda"},
+    pOfrenda: {name:"devotion to the tithe", code:"pOfrenda"},
     fOfrenda: {name:"generosity", code:"fOfrenda"},
     increase: function(stat,extra=1,value=0.001){
         if (!!stat.match(/^f/)){//if is a factor and not a probability modify 0.1 instead 0.001

@@ -45,7 +45,7 @@ export const dreams = {
         { id: "night.grave", lines: ["A fresh grave in the cemetery.", "The stone carver asks him how to spell his name."] },
         { id: "night.sun", lines: ["The sun goes out like a pinched wick.", "Someone in the dark says: finally."] },
         { id: "night.book", lines: ["The pages of his spellbook turn on their own.", "All blank, but the last, which is burning."] },
-        { id: "night.table", lines: ["A hundred gods sit at a long table,", "and none of them knows who he is."] },
+        { id: "night.table", lines: ["A hundred deities sit at a long table,", "and none of them knows who he is."] },
         { id: "night.ice", lines: ["Under the Grotto ice, faces press up", "and mouth his name, one after another."] },
         { id: "night.stairs", lines: ["The Tower stairs go down instead of up,", "and his old teacher waits on every landing."] },
         { id: "night.hoods", lines: ["A sandstorm tears the hood off every traveler.", "Under each hood: nothing at all."] },

@@ -11,9 +11,9 @@ import { print, wizardName } from './ui/render.js';
 
 const LEVELS = ["atheist", "doubter", "believer", "devout"];
 const ANNOUNCE = {
-    devout: "is filled with devotion for his god",
-    believer: "believes in his god again",
-    doubter: "starts to doubt his god",
+    devout: "is filled with devotion for you",
+    believer: "believes in you again",
+    doubter: "starts to doubt you",
     atheist: "no longer believes in anything",
 };
 const b = () => config.belief;

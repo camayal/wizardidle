@@ -123,10 +123,10 @@ function npcBtn(){
             if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                 const superCritic = config.belief.superCriticChance > 0 && YesOrNot(config.belief.superCriticChance, 0);
                 divineHit = Math.round(divineHit) * (superCritic ? config.belief.superCriticMultiplier : 8) //if is one of the divine powers
-                txt = superCritic ? "sees the god's wrath crush the enemy - " : "sees how the god's wrath destroy the enemy - ";
+                txt = superCritic ? "sees divine wrath crush the enemy - " : "watches divine wrath destroy the enemy - ";
                 moment = superCritic ? "superCritic" : "critic";
             }else{
-                txt = "feels the god's power over the enemy - ";
+                txt = "feels a divine power strike the enemy - ";
             }
             fight.enemyHP = Math.max(0, Math.round(fight.enemyHP) - (Math.round(divineHit)));
             beliefMoment(moment);
@@ -145,7 +145,7 @@ function npcBtn(){
 
 // An Atheist refuses the god's heal and hit (docs/plans/FAITH.md 3.1); nothing is spent.
 function refuseTouch() {
-    print(`${wizardName()} ${pickRandomItem("shrugs off a touch he doesn't believe in,refuses the help of a god he doesn't believe in,ignores a strange warmth")}`);
+    print(`${wizardName()} ${pickRandomItem("shrugs off a touch he doesn't believe in,refuses help from a deity he doesn't believe in,ignores a strange warmth")}`);
     stats.count("belief.touchesRefused");
 }
 
@@ -162,7 +162,7 @@ function centerBtn(){
             run.feGanada *= state.player.faithMultiplier;
             state.player.faith = state.player.faith + run.feGanada;
             state.player.gold = state.player.gold - ofrendaGold;
-            const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone order to offer extra gold"
+            const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone wants him to offer extra gold"
             print(`${wizardName()} ${pickRandomItem(textoffer)} (${ui.goldIcon} -${roundNumbertoLetter(ofrendaGold)}, ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)})`);
             stats.count("faith.mandatoryOffers");
             stats.add("gold.offered", Math.round(ofrendaGold));
