@@ -368,3 +368,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Faith candle wired: img/ui/faith/icon_candle_<level>.png (artist, look C), <img id=faithCandle> in the heading, laid out in layoutXPPlate (20 art px tall at most, right aligned above the plate), src set in showHeading from beliefLevel (lost -> atheist); pjName clipped with an ellipsis. Untested in a browser; landscape/tall layouts worth a look.
 
 - 2026-11-25 Miracle variants decided by the author: looks grow with belief level (Doubter 1, Believer 2, Devout 3) for Sanctuary and Smite, Providence random; recorded in for_implementation_faith.md (to confirm the exact mapping). Artist finals in the review drop.
+
+- 2026-11-25 Providence = the visible effect of environment touches (hotspot taps: runes, books, doors, mouths...), random among its three looks; not for heal or attack touches. Recorded in the faith plan. Wiring idea: replace the spellSparkGold_8 glow in src/ui/hotspots.js with fx_providence_a/b/c once approved.
