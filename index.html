@@ -279,16 +279,14 @@
             }
 
             .dl { position: relative; display: inline-block; width: 100%; }
-            .dl.dlNew::after { content: ""; position: absolute; inset: -4px 0; pointer-events: none; opacity: 0;
-                background: radial-gradient(circle, #fff 0 1.8px, rgba(255,240,120,0.7) 3px, transparent 4.5px) 0 0 / 23px 14px,
-                            radial-gradient(circle, #ff5fd2 0 2px, rgba(255,95,210,0.6) 3.2px, transparent 4.8px) 9px 6px / 31px 17px,
-                            radial-gradient(circle, #4fe8ff 0 1.8px, rgba(79,232,255,0.6) 3px, transparent 4.5px) 15px 3px / 27px 13px,
-                            radial-gradient(circle, #8dff5a 0 1.6px, rgba(141,255,90,0.55) 2.8px, transparent 4.2px) 4px 9px / 37px 15px,
-                            radial-gradient(circle, #ffb02e 0 1.8px, rgba(255,176,46,0.6) 3px, transparent 4.5px) 20px 1px / 29px 18px;
-                filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 5px #ffd45a);
-                animation: dlSparkle 0.9s ease-in-out infinite, dlHue 2.7s linear infinite; }
-            @keyframes dlSparkle { 0% { opacity: 0.3; background-position: 0 0, 9px 6px, 15px 3px, 4px 9px, 20px 1px; } 35% { opacity: 1; } 70% { opacity: 0.6; } 100% { opacity: 0.3; background-position: 0 -8px, 9px -12px, 15px -6px, 4px -10px, 20px -9px; } }
-            @keyframes dlHue { to { filter: drop-shadow(0 0 3px #fff) drop-shadow(0 0 5px #ffd45a) hue-rotate(360deg); } }
+            .dl.dlNew { animation: dlText 2.6s ease-in-out 1; }
+            @keyframes dlText { 0%, 15% { color: inherit; text-shadow: none; } 30%, 55% { color: #ffcf3a; text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 0 2px 2px #000; } 75%, 100% { color: inherit; text-shadow: none; } }
+            .dl.dlNew::after { content: ""; position: absolute; inset: -3px 0; pointer-events: none; opacity: 0;
+                background: radial-gradient(circle, #fff6c4 0 1.4px, rgba(255,214,90,0.5) 2.4px, transparent 3.4px) 0 0 / 23px 14px,
+                            radial-gradient(circle, #ffd45a 0 1.5px, rgba(255,190,60,0.5) 2.5px, transparent 3.6px) 9px 6px / 31px 17px,
+                            radial-gradient(circle, #ffe9a0 0 1.1px, rgba(255,220,120,0.5) 2px, transparent 3px) 15px 3px / 17px 11px;
+                animation: dlSparkle 1.2s ease-in-out 1.9s infinite backwards; }
+            @keyframes dlSparkle { 0% { opacity: 0; background-position: 0 0, 9px 6px, 15px 3px; } 40% { opacity: 0.95; } 100% { opacity: 0; background-position: 0 -8px, 9px -12px, 15px -6px; } }
             #hotspotLayer { pointer-events: none; z-index: 5; }
             #hotspotLayer .spot { position: absolute; pointer-events: auto; background: transparent; border: none; padding: 0; cursor: default; outline: none; -webkit-tap-highlight-color: transparent; }
             .transparentBtn {

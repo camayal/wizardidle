@@ -378,3 +378,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 God-line sparkles: brighter glow, infinite twinkle in css; render.js print() counts newer lines on each .dlNew[data-after] (2) and removes the class; 12 s timer is the fallback.
 
 - 2026-11-25 God-line sparkles multicolour: five dot layers (white, pink, cyan, green, amber) plus a slow hue-rotate in css .dl.dlNew::after.
+
+- 2026-11-25 God-line effect redone (multicolour was too much): css dlText (normal > gold with black shadow > normal) then gold sparkles delayed 1.9 s; render.js holds new print() lines for DIVINE_HOLD_MS (2.6 s) after a divine line and flushes them in order.
