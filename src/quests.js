@@ -49,6 +49,7 @@ function raresOf(z) {
 
 // Has he been there already? (the zones he has stood in are counted by the stats)
 const knowsZone = (z) => stats.get(`explore.zone.${z}`) > 0;
+const knowsScene = (n) => stats.get(`explore.scene.${n}`) > 0;
 
 // ---- making a quest ----
 
@@ -76,10 +77,11 @@ const MAKERS = {
         const all = ZONES().filter((x) => x !== state.zone.current);
         const fresh = all.filter((x) => !knowsZone(x));     // the giver mostly tells of places he has not seen; now and then of one he knows
         const z = pickRandomItem((fresh.length && !YesOrNot(config.quests.pKnownPlace, 0) ? fresh : all).join(','));
-        const spot = SPOTS[z] ? pickFrom(SPOTS[z]) : null;
+        const fresher = (SPOTS[z] || []).filter((x) => !x[2] || !knowsScene(`${z}${x[2]}`));      // he is told of spots he has not stood in
+        const spot = SPOTS[z] ? pickFrom(fresher.length ? fresher : SPOTS[z]) : null;
         const scene = spot && spot[2] ? `${z}${spot[2]}` : null;       // a spot tied to one scene: only standing there completes the quest
         const w = base('explore', giver, scene ? `Go and see ${spot[1].split(',')[0]} in the ${zoneName(z)}` : `Go and see the ${zoneName(z)}`, { zone: z, scene: scene && byName[scene] !== undefined ? scene : null, found: spot ? spot[1] : 'it is as quiet as they said' }, 'xp');
-        if (spot) w.story = `You should see the ${zoneName(z)}: ${spot[0]}`;
+        if (spot) w.story = w.target.scene ? `You should see ${spot[1].split(',')[0]} in the ${zoneName(z)}` : `You should see the ${zoneName(z)}, they say ${spot[0]}`;
         return w;
     },
     study(giver) {
@@ -93,7 +95,7 @@ const MAKERS = {
     pilgrimage(giver) {
         const list = SHRINE_ZONES().sort(() => Math.random() - 0.5).slice(0, config.quests.pilgrimageShrines);
         if (list.length < 2) return null;
-        return base('pilgrimage', giver, `Pilgrimage: pray in ${list.map(zoneName).join(', ')}`, { zones: list, visited: [], zone: list[0] }, 'faith');
+        return base('pilgrimage', giver, `Pilgrimage to pray in ${list.map(zoneName).join(', ')}`, { zones: list, visited: [], zone: list[0] }, 'faith');
     },
     hidden(giver) {
         if (!hasStages(HIDDEN_SHRINE_ZONE)) return null;
@@ -520,9 +522,9 @@ export function beginOffer(giver) {
     run.questOffer = { q, giver, hint: '' };
     const name = wizardName();
     const tell = q.story ? `${q.text}. ${q.story}` : q.text;       // the scroll keeps the short line, the console tells the whole story
-    print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}: ${tell}</i>`
-        : giver === 'human' ? `<i>The stranger explains his trouble to ${name}: ${tell}</i>`
-        : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}: ${tell}</i>`);
+    print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}. ${tell}</i>`
+        : giver === 'human' ? `<i>The stranger explains his trouble to ${name}. ${tell}</i>`
+        : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}. ${tell}</i>`);
     stats.count(`quest.offers.${giver}`);
     return true;
 }
@@ -568,7 +570,7 @@ export function decideOffer() {
     run.questOffer = null;
     if (!o) return false;
     const name = wizardName();
-    if (o.q.kind === 'explore' && knowsZone(o.q.target.zone)) {       // he has been there: no errand, but he agrees it is good
+    if (o.q.kind === 'explore' && (o.q.target.scene ? knowsScene(o.q.target.scene) : knowsZone(o.q.target.zone))) {       // he has been there: no errand, but he agrees it is good
         print(`<i>${name} smiles: "I was already there. It is indeed a good place."</i>`);
         stats.count('quest.refused');
         return false;

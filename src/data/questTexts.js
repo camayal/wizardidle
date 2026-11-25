@@ -4,7 +4,7 @@
 export const BOSS_STORIES = {
     infraespectro: [
         "{who} drifts through the {where} at night and the guards who hear it whisper never speak again.",
-        "{who} has emptied three houses of the {where}: the doors were open, the people were not.",
+        "{who} has emptied three houses of the {where}, the doors were open, the people were not.",
         "Every candle in the {where} burns blue when {who} is near, and the sick do not wake.",
         "{who} steals the names off the graves of the {where}, and the dead wander lost.",
         "Cold hands pulled children from their beds in the {where}. They say it was {who}.",
@@ -31,7 +31,7 @@ export const BOSS_STORIES = {
         "{who} has eaten half the flock of the {where}, shepherds included.",
         "The fences of the {where} are splinters since {who} came by.",
         "{who} charges at every cart on the {where}'s roads and smashes it.",
-        "Farmers of the {where} no longer dare to sleep: {who} comes by the barn at night.",
+        "Farmers of the {where} no longer dare to sleep, {who} comes by the barn at night.",
         "{who} tore down a windmill of the {where} in a rage.",
         "{who} roars across the {where} and the horses bolt and are never found.",
         "A wedding party in the {where} ran for their lives from {who}.",
@@ -41,7 +41,7 @@ export const BOSS_STORIES = {
     kkck: [
         "{who} has been dropping wild things on the roofs of the {where} for weeks.",
         "{who} frightens the {where}'s dogs, and the dogs then chew everything.",
-        "Nobody sleeps in the {where}: {who} screams all night.",
+        "Nobody sleeps in the {where}, {who} screams all night.",
         "{who} steals bread from the ovens of the {where} before dawn.",
         "{who} bit a tax collector of the {where}, which would be funny, but he bit twelve more.",
         "The {where}'s children throw stones at {who} and {who} throws them back.",
@@ -56,7 +56,7 @@ export const BOSS_STORIES = {
         "The {where}'s walls drip with the slime of {who} and burn the skin.",
         "{who} devours every light we bring to the {where}.",
         "{who} has eaten the pack-mules of the {where}, and one cart.",
-        "Nobody can fish the {where}'s pools: {who} drinks them and spits poison.",
+        "Nobody can fish the {where}'s pools, {who} drinks them and spits poison.",
         "{who} roars from the deep of the {where} and rocks fall on the passers-by.",
         "{who} has made a nest of bones in the {where}.",
         "Bats flee the {where} in black clouds whenever {who} wakes.",
@@ -224,7 +224,7 @@ export const BOSS_STORIES = {
 export const RARE_STORIES = {
     arcane: [
         "A {who} of the {where} twists the air until travellers cannot tell north from south.",
-        "The scholars want a {who} of the {where}: its sparks open doors that were never there.",
+        "The scholars want a {who} of the {where}, its sparks open doors that were never there.",
         "A {who} wanders the {where} and spells in its reach come out backwards.",
         "A {who} of the {where} turns small things into the wrong things, and nobody knows why.",
         "Some say the {who} of the {where} is a spell that learnt to walk; the scholars would like to study it.",
@@ -238,7 +238,7 @@ export const RARE_STORIES = {
         "A {who} of the {where} is said to be blessed, and the priests want to know why it is hostile.",
         "The faithful of the {where} say a {who} guards a holy thing and attacks the pious.",
         "A {who} of the {where} has been stopping pilgrims at the crossroads.",
-        "Priests ask for a {who} of the {where}: its light is pure but its temper is not.",
+        "Priests ask for a {who} of the {where}, its light is pure but its temper is not.",
         "A {who} of the {where} blinds the devout with its glow.",
         "A {who} shines in the {where} and the candles in the chapel bend toward it.",
         "A {who} is said to be a lost angel in the {where}, and it will not be spoken to.",
@@ -254,7 +254,7 @@ export const RARE_STORIES = {
         "The firewood sellers of the {where} fear a {who} that burns their stock.",
         "A {who} of the {where} left a trail of black footprints from village to village.",
         "A {who} in the {where} cooks whatever it touches, and it touches everything.",
-        "An alchemist wants the heart of a {who} of the {where}: it stays warm for years.",
+        "An alchemist wants the heart of a {who} of the {where}, it stays warm for years.",
         "A {who} of the {where} sets roofs on fire for the pleasure of it.",
         "The torches of the {where} burn bright when a {who} is near, and out of control.",
     ],
@@ -279,7 +279,7 @@ export const RARE_STORIES = {
         "A {who} in the {where} is said to be the strongest around, and the village is tired of hearing it.",
         "A {who} of the {where} burnt a farm and broke its owner's leg.",
         "A {who} of the {where} challenges every traveller to a brawl.",
-        "The tavern folk of the {where} want a {who} gone: it drinks and breaks the tables.",
+        "The tavern folk of the {where} want a {who} gone, it drinks and breaks the tables.",
         "A {who} of the {where} has taken a bridge for its own and charges a toll in teeth.",
     ],
     nature: [
@@ -289,7 +289,7 @@ export const RARE_STORIES = {
         "A {who} of the {where} drives the deer away and the hunters starve.",
         "A {who} of the {where} has choked a field with weeds in a single night.",
         "A {who} in the {where} sings and the plants grow where they should not.",
-        "A herbalist wants a {who} of the {where}: its petals cure fevers.",
+        "A herbalist wants a {who} of the {where}, its petals cure fevers.",
         "Wolves are leaving the {where}, and a {who} is the reason.",
         "A {who} of the {where} has made a jungle of a farmer's yard.",
         "A {who} of the {where} spreads a green mould that rots the barns.",
@@ -310,7 +310,7 @@ export const RARE_STORIES = {
         "A {who} of the {where} drowns the shore and the fishermen with it.",
         "A {who} of the {where} drinks the wells dry and leaves salt behind.",
         "A {who} of the {where} sinks small boats for sport.",
-        "A sailor wants the scale of a {who} of the {where}: it keeps the water out.",
+        "A sailor wants the scale of a {who} of the {where}, it keeps the water out.",
         "A {who} in the {where} sends waves at the beach and floods the huts.",
         "A {who} of the {where} steals the nets and tangles the rest.",
         "A {who} of the {where} sings and the tide follows it inland.",
@@ -343,10 +343,10 @@ export function huntStory(kind, key, who, where) {
 // ---- finished quests: what the console tells when he gets there ({name}, {where}, {who}, {found}) ----
 export const DONE_STORIES = {
     explore: [
-        "{name} finally arrived at the {where}: {found}.",
-        "After a long walk, {name} stands in the {where} at last: {found}.",
-        "The {where} opens before {name}, as he was told: {found}.",
-        "{name} reached the {where} and looked around slowly: {found}.",
+        "{name} finally arrived at the {where} and saw {found}.",
+        "After a long walk, {name} stands in the {where} at last and saw {found}.",
+        "The {where} opens before {name}, as he was told and saw {found}.",
+        "{name} reached the {where} and looked around slowly and saw {found}.",
     ],
     study: [
         "{name} sits down in the {where} and reads what he found until the light changes.",
@@ -364,7 +364,7 @@ export const DONE_STORIES = {
     ],
     hidden: [
         "{name} pushes through the last brambles and finds the hidden shrine of the {where}, waiting as if for him.",
-        "There it is, in the {where}: the shrine nobody told him about. {name} lowers his head.",
+        "There it is, in the {where}, the shrine nobody told him about. {name} lowers his head.",
     ],
     delivery: [
         "{name} sets the parcel on the counter at the {where}, and the host signs for it with a smile.",
@@ -377,7 +377,7 @@ export const DONE_STORIES = {
     rare: [
         "{name} drops the {who} of the {where} and the road is quiet again. Someone will be glad of it.",
         "The {who} is down. {name} wipes his staff and thinks of the ones who asked him.",
-        "It is done: the {who} of the {where} will trouble nobody now.",
+        "It is done, the {who} of the {where} will trouble nobody now.",
     ],
     boss: [
         "{who} falls, and the {where} breathes out. {name} stands there a while before he walks on.",
@@ -385,33 +385,33 @@ export const DONE_STORIES = {
         "With {who} gone, the {where} is a little brighter. {name} takes his time to leave.",
     ],
     study_book: [
-        "{name} opens the magical book and the pages seem to read themselves: {gain}, far beyond what a book gives.",
+        "{name} opens the magical book and the pages seem to read themselves, {gain}, far beyond what a book gives.",
         "The old magical book hums in {name}'s hands. He reads until dawn, and {gain}, far more than usual.",
-        "A magical book, and a good one: {name} stays with it and {gain}, deeper than he ever has.",
+        "A magical book, and a good one, {name} stays with it and {gain}, deeper than he ever has.",
         "{name} turns the last page of the magical book; {gain}, and the whole lesson settles in.",
     ],
     study_rune: [
-        "The ancient rune glows as {name} traces it: {gain}, with a force no rune gave before.",
-        "{name} reads the ancient rune aloud, and the whole of it answers: {gain}, and then some.",
-        "An ancient rune, and it was waiting for him: {gain}, far beyond the usual.",
+        "The ancient rune glows as {name} traces it, {gain}, with a force no rune gave before.",
+        "{name} reads the ancient rune aloud, and the whole of it answers, {gain}, and then some.",
+        "An ancient rune, and it was waiting for him, {gain}, far beyond the usual.",
         "{name} kneels by the ancient rune until it fades, and {gain}, much more than he expected.",
     ],
     study_statue: [
-        "{name} walks round the old statue three times, then he understands: {gain}, a great deal more than usual.",
-        "The carved statue gives up its secret to {name}: {gain}, beyond what a statue gives.",
-        "The sacred statue lets {name} read its glyphs to the end: {gain}, as never before.",
+        "{name} walks round the old statue three times, then he understands, {gain}, a great deal more than usual.",
+        "The carved statue gives up its secret to {name}, {gain}, beyond what a statue gives.",
+        "The sacred statue lets {name} read its glyphs to the end, {gain}, as never before.",
     ],
     study_text: [
-        "{name} reads the sacred text slowly, and every line opens another: {gain}, far beyond the usual.",
-        "A sacred text, kept for ages: {name} learns from it and {gain}, deeper than ever.",
+        "{name} reads the sacred text slowly, and every line opens another, {gain}, far beyond the usual.",
+        "A sacred text, kept for ages, {name} learns from it and {gain}, deeper than ever.",
     ],
     guild_rare: [
-        "The hunter opens the guild ledger and writes: {who} of the {where}, done. {name} gets his due and a nod.",
+        "The hunter opens the guild ledger and writes, {who} of the {where}, done. {name} gets his due and a nod.",
         "\"A {who}, and from the {where}!\" The hunter whistles, and stamps the bounty paper with a heavy seal.",
         "The old hunters crowd round to hear of the {who}. {name} tells it short, and they pay him well.",
     ],
     guild_boss: [
-        "The hunter lets the ledger fall shut: {who} of the {where} is dead. The guild stamps the bounty, and the hall goes quiet with respect.",
+        "The hunter lets the ledger fall shut, {who} of the {where} is dead. The guild stamps the bounty, and the hall goes quiet with respect.",
         "\"{who}?\" The hunter looks at {name} for a long moment, then pushes the heavy purse across the counter.",
         "The guild bell rings once for {who} of the {where}. {name} gets his bounty and a name in the ledger.",
     ],
