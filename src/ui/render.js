@@ -956,6 +956,11 @@ function print(data, minor = false) {
     // keep playing while ordinary lines come after it (printDivine takes its sparkle class off after a while)
     const con = el("console");
     con.insertAdjacentHTML("afterbegin", `${data}<br>`);
+    for (const l of con.querySelectorAll(".dlNew[data-after]")) {        // a divine line's sparkles end after a couple of newer lines
+        if (l === con.firstElementChild) continue;
+        l.dataset.after = Number(l.dataset.after) - 1;
+        if (l.dataset.after <= 0) l.classList.remove("dlNew");
+    }
     const breaks = con.querySelectorAll("br");
     if (breaks.length > MAXLINESINCONSOLE) {         // drop the oldest line: what stands before the last <br> (back to the one before), and that <br>
         const last = breaks[breaks.length - 1];
@@ -964,12 +969,12 @@ function print(data, minor = false) {
     }
 };
 
-// A line about the god's own doing (a touch, a nudge): little sparkles play over the whole line for a couple of
-// seconds, then they are gone and the text is untouched (css .dl in index.html).
+// A line about the god's own doing (a touch, a nudge): little sparkles play over the whole line until a couple of
+// newer lines have come (or 12 s), then they are gone and the text is untouched (css .dl in index.html).
 function printDivine(data, minor = false) {
-    print(`<span class="dl dlNew">${data}</span>`, minor);
+    print(`<span class="dl dlNew" data-after="2">${data}</span>`, minor);
     const line = el("console").firstElementChild;
-    if (line && line.classList.contains("dlNew")) setTimeout(() => line.classList.remove("dlNew"), 2600);
+    if (line && line.classList.contains("dlNew")) setTimeout(() => line.classList.remove("dlNew"), 12000);     // fallback when nothing else is printed
 }
 
 export {

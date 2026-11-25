@@ -374,3 +374,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Quest steering fixed: travelGraph.js rebuild() now builds edges from the manual links only (Accessible 5, Difficult difficultMin), quests.js bestOf adds the step cost. The generated graph (src/data/travelGraph.js) is no longer used for routes; only its nodes. No-quest picks stay uniform random over linked stages (the author's decision).
 
 - 2026-11-25 Providence wired into hotspot taps: sprites copied as img/effects/spells/spellProvidence_a-c (spells.js entries with size 16, gap 0; spell() now reads size/gap per sprite, 30/1 by default). Belief gating (Doubter faint, Atheist none) waits for belief levels.
+
+- 2026-11-25 God-line sparkles: brighter glow, infinite twinkle in css; render.js print() counts newer lines on each .dlNew[data-after] (2) and removes the class; 12 s timer is the fallback.

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The sparkles on the god's console lines are brighter and glow, twinkling until two newer lines have been printed (or 12 seconds with nothing new), then they are gone.
 - Tapping a rune, book or door spot now shows the god's Providence (a small gold twinkle, a faint hand or a gold feather, one at random) instead of the flashy shock sparkles.
 - A wizard on a quest follows the best path again: the route is worked out over the links you marked only (before, it also used automatic shortcuts he could not walk, so his steps looked like random jumps), and the step itself counts, so a Difficult link is avoided when an Accessible one gets him there.
 - A faith candle sits on top of the stats/XP box, right aligned: a brass candle with a glow for each belief level (Devout with the halo, Believer, Doubter, and a snuffed wick with smoke for Atheist). A long wizard name is clipped before it runs under it.
