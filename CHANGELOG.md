@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Help scroll's FAQ is up to date: sixteen new questions (doing nothing, why a touch fails, free will, losing a wizard for good, time away without naming it, strangers and errands, the hunters, faith against belief, dreams, the dice game, a second tab, saving), and corrected answers for the player, divine touches (the revive is free; touching a giver or a door), faith, revive, Stats (Inventory), Faith (Quests) and Kill (bestiary, cemetery).
 - Trophy room: plaques spaced 32 px apart (room for the 15 boss trophies in two staggered rows); Capricor's head hung 4 px lower over the counter.
 - Capricor's trophy is hung on the main wall of the hunters hut, over the counter, when its hunt is reported (not in the trophy room).
 - Trophy room: plaques shown at 75% (24 px), room for 20; he leaves the room by the hut's own door (fades out where he stands, no walk to the main wall).
