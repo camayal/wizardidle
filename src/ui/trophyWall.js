@@ -22,14 +22,18 @@ function load(name, then) {
 export const hung = () => (state.trophies = state.trophies || []);
 export function hang(boss) { if (boss && !hung().includes(boss)) hung().push(boss); }
 
-let here = false;
+export const MAIN_HUT = 'el_poblado_cazadores';
+const CAPRICOR = { x: 222, y: -5 };           // the goat's head over the counter of the main hall (a rare rare with a story: not in the trophy room)
+let here = false, main = false;
 function paint() {
-    if (run.simulation || !here) return;
+    if (run.simulation || !(here || main)) return;
     const canvas = document.getElementById('propsCanvas');
     if (!canvas) return;
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    const list = hung().slice(0, SLOTS), u = ui.charWidth / 32;
+    const u = ui.charWidth / 32;
+    if (main) { if (hung().includes('capricor')) load('item_trophy_capricor', (img) => { if (main) { const ctx = canvas.getContext('2d'); ctx.imageSmoothingEnabled = !ui.crisp; ctx.drawImage(img, CAPRICOR.x * u, CAPRICOR.y * u, 32 * u, 32 * u); } }); return; }
+    const list = hung().filter((b) => b !== 'capricor').slice(0, SLOTS);
     list.forEach((boss, i) => load(`item_trophy_${boss}`, (img) => {
         if (!here) return;
         const ctx = canvas.getContext('2d'), s = slotAt(i);
@@ -40,7 +44,9 @@ function paint() {
 
 // A background was loaded: show the plaques when it is the trophy room (call it after showDiceTable, which clears the props canvas).
 export function showTrophyWall(bg) {
-    here = (bg || '').toLowerCase() === TROPHY_ROOM;
-    if (here) paint();
+    const name = (bg || '').toLowerCase();
+    here = name === TROPHY_ROOM;
+    main = name === MAIN_HUT;
+    if (here || main) paint();
 }
 export const repaintTrophyWall = () => paint();

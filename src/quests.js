@@ -435,6 +435,7 @@ export function guildTell() {
     return true;
 }
 export const trophyBoss = () => { const q = state.quest; return q && q.target.report && TROPHIES.includes(q.target.boss) ? q.target.boss : ''; };     // the boss whose trophy he hangs in the trophy room
+export const capricorTrophy = () => { const q = state.quest; return q && q.target.report && (q.target.enemy || '').replace(/\d+$/, '') === 'el_capricor' ? 'capricor' : ''; };     // hung on the hut's main wall, over the counter, not in the trophy room
 export function guildPay() {
     const q = state.quest;
     if (!q || !q.target.report) return false;

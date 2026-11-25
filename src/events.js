@@ -413,7 +413,7 @@ function guildReport() {
     switch (run.multipleEventsCounter) {
         case 1: enterPlace("el_poblado_cazadores", pickRandomItem("cazador_a,cazador_b")); print(`${wizardName()} enters the hunters' guild`); break;
         case 2: quests.guildTell(); break;
-        case 3: if (!quests.trophyBoss()) { run.multipleEventsCounter += 2; quests.guildPay(); showBubble('yes'); break; }       // a trophy: on to the trophy room, the empty wall of the hut
+        case 3: if (!quests.trophyBoss()) { run.multipleEventsCounter += 2; hang(quests.capricorTrophy()); quests.guildPay(); showBubble('yes'); break; }       // a trophy: on to the trophy room, the empty wall of the hut
                 print(`${wizardName()} walks to the trophy wall`); enterPlace(TROPHY_ROOM); break;
         case 4: hang(quests.trophyBoss()); print(`${wizardName()} hangs the trophy on the wall`); break;
         case 5: quests.guildPay(); showBubble('yes'); break;
