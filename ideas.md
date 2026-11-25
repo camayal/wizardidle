@@ -294,4 +294,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-24: border exit fix: last border step enters from OFF_LEFT (step.border flag in travel.js, render.js walkAcross).
 - 2026-11-24: quests round 2 partly done: paused-first order, boss mult 2.5, huntFell fail (onFall in combat.js wizardFalls), log 20, per-kind stats, achievements draft; delivery/explore/trophy/balance run listed in docs/dev-notes.md.
 - 2026-11-24: explore quests tied to a scene (target.scene, startPhase in quests.js); SPOTS scene numbers still to fill. Split-zone routing on the investigate list.
-- 2026-11-24: SPOTS scene numbers filled by eye for 17 spots; uncovered spots listed in dev-notes.
+- 2026-11-24: SPOTS scene numbers filled by eye for 17 spots; uncovered spots listed in dev-notes. Uncovered spots handed to art-notes.md.
