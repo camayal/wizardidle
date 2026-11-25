@@ -354,3 +354,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Prairie 15 wired: img/places/la_pradera/la_pradera15.png (artist, option A + road from Prairie 7), stage in zones.js at 191,107 of the map, future point dropped from travelPoints, graph regenerated.
 
 - 2026-11-25 Regions report: Dunas5>Gruta1 and Mina5>Dunas2 walked plain because no manual path crosses the mouth (Dunas5-mouth far; no Mina stage linked to mouth_dunas_mina_under) so the old typed lists answer; Gruta1/2 linked to the outside mouth point was a shortcut, removed.
+
+- 2026-11-25 Travel: enter_mine_S point and links removed from travelOverrides, graph regenerated. The tunnel scene (connectors.js addScenes, travel.js MINE_TUNNEL) stays; remove it too if the author wants no tunnel scene.

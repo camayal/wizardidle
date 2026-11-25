@@ -182,8 +182,6 @@ export const travelOverrides = {
     "el_Volcan4|la_Cueva5": "far",
     "el_Volcan4|mouth_tundra_volcan_under": "move",
     "el_Volcan5|mouth_tundra_volcan_under": "move",
-    "enter_mine_S|mouth_dunas_mina": "move",
-    "enter_mine_S|mouth_dunas_mina_under": "move",
     "la_Ciudad1|la_Pradera1": "move",
     "la_Ciudad1|la_Pradera10": "move",
     "la_Ciudad1|la_Pradera4": "dest",
@@ -371,12 +369,6 @@ export const travelPoints = {
         "x": 79,
         "y": 43
     },
-    "enter_mine_S": {
-        "kind": "connector",
-        "layer": "under",
-        "x": 34,
-        "y": 166
-    }
 };
 export const travelKinds = {
     "la_Pradera14": "border"
