@@ -16,7 +16,7 @@ import { useSpots } from '../ui/hotspots.js';
 import { el } from '../ui/dom.js';
 
 const W = 256, H = 64;
-const KIND_NAMES = ['exit', 'mouth', 'place'];       // place: leads to shrine, inn or study (the next event); exit and mouth: a stage, a zone or a connector point
+const KIND_NAMES = ['exit', 'mouth', 'place', 'dream'];       // place: leads to shrine, inn, study or book (the next event); dream: leads to nightmare (tonight's sleep); exit and mouth: a stage, a zone or a connector point
 let side, tools, scene = '', draft = {}, overlay = null, timer = null, drag = null;
 
 const key = () => scene.toLowerCase();

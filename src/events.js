@@ -505,7 +505,9 @@ function aroundCross() {
 }
 
 function studyEV() {
-     if(YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva" && state.zone.current != "la_playa"){//found statue; poblado, cueva and the beach have none
+    const book = run.studyBook;       // the shelves were pointed at (src/nudge.js): a book, never a statue
+    run.studyBook = false;
+     if(!book && YesOrNot(config.balance.pGetStatue, 0) &&  state.zone.current != "el_Poblado" &&  state.zone.current != "la_Cueva" && state.zone.current != "la_playa"){//found statue; poblado, cueva and the beach have none
         if(state.zone.current == "el_Pantano" && state.hydraMysteryResolved){//avoid show hidra statue twice, instead find a rune
             print(`${wizardName()} sees something...`)
             walkToFind();

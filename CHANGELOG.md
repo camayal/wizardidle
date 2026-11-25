@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Tower's first room has bookshelves and a palantir the god can touch: the shelves guide him to a book, the palantir sends him a nightmare tonight (when he agrees).
 - His own errands no longer send him to the hidden Dunes inn (only other people ask that of him).
 - (Developer tools) The Hotspots mode picks scenes by region with small thumbnails, and lists the bridges, stairs, pier, mouths and borders too. The Tower has its first four spots (the doors and gates between its rooms).
 - Divine lines in the console (the god's touches, tithes and nudges) get little sparkles over the whole line for a couple of seconds; the text itself is never changed. Touching a rune, book or statue he is studying makes the study succeed, and touching a shrine, inn or crossing in a scene (once a scene has such spots) steers him there.

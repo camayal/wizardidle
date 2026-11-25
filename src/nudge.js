@@ -37,7 +37,8 @@ export function touchSpot(spot) {
     const thens = THEN[spot.kind] || THEN.exit, then = thens[Math.floor(Math.random() * thens.length)];
     printDivine(`<i>${line.replace('{then}', follows ? then : '').replace('{where}', spot.label || 'there').replace('{name}', wizardName()).trim()}</i>`);
     const travels = spot.kind == 'exit' || spot.kind == 'mouth';
-    if (follows) run.nudge = { kind: spot.kind, to: spot.to, label: spot.label, fresh: true, life: travels ? config.faith.nudgeTravelLife : config.faith.nudgeLife };
+    if (follows && spot.kind == 'dream') { run.godDream = spot.to || 'nightmare'; stats.count('nudge.used.dream'); }       // tonight's sleep (src/dream.js)
+    else if (follows) run.nudge = { kind: spot.kind, to: spot.to, label: spot.label, fresh: true, life: travels ? config.faith.nudgeTravelLife : config.faith.nudgeLife };
     return 'done';
 }
 
@@ -47,7 +48,7 @@ export function tickNudge() {
 }
 
 // A place nudge (a shrine, an inn, something to study in sight) decides the next event; returns its number or 0.
-const PLACE_EVENT = { shrine: 3, inn: 4, study: 5 };
+const PLACE_EVENT = { shrine: 3, inn: 4, study: 5, book: 5 };
 export function nudgeEvent() {
     const n = run.nudge;
     if (!n || n.kind != 'place') return 0;
@@ -57,6 +58,7 @@ export function nudgeEvent() {
     stats.count('nudge.used.place');
     if (event == 3) run.questShrine = true;          // he goes in, as for a quest's shrine
     if (event == 4) run.questInn = true;
+    if (n.to == 'book') run.studyBook = true;        // the shelves: a book, never a statue
     return event;
 }
 

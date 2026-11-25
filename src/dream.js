@@ -47,6 +47,12 @@ export function pickDream() {
         run.storyDream = "";
         stats.count("dream.story");
         pool = kind == "fall" ? { healer: "fallHealer", rescuer: "fallRescuer" }[run.fallBy] || "fallAlone" : "chap";
+    } else if (run.godDream) {         // the god's touch on a scene spot (src/nudge.js): tonight is a nightmare, whatever the odds
+        const doubting = ["doubter", "atheist"].includes(beliefLevel());
+        nightmare = run.godDream === "nightmare";
+        run.godDream = "";
+        stats.count(nightmare ? "nightmare.godSent" : "dream.godSent");
+        pool = nightmare ? "night" : doubting ? "call" : "light";
     } else {
         if (Math.random() >= config.balance.dreamChance) return null;
         const level = beliefLevel();

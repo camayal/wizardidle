@@ -25,5 +25,6 @@ export const THEN = {
     exit: ["He heads for {where}.", "He turns toward {where}."],
     mouth: ["He heads for {where}.", "He turns toward {where}."],
     place: ["He makes for {where}.", "He turns toward {where}."],
+    dream: ["The night ahead will not be easy for him.", "He will sleep uneasily tonight."],
     find: ["He looks closer at {where}.", "He studies {where} with care."],
 };

@@ -12,6 +12,33 @@ export const hotspots = {
             "kind": "exit",
             "to": "la_Torre2",
             "label": "the wooden door"
+        },
+        {
+            "x": 14,
+            "y": 3,
+            "w": 76,
+            "h": 30,
+            "kind": "place",
+            "to": "book",
+            "label": "the bookshelves"
+        },
+        {
+            "x": 162,
+            "y": 3,
+            "w": 38,
+            "h": 30,
+            "kind": "place",
+            "to": "book",
+            "label": "the bookshelves"
+        },
+        {
+            "x": 112,
+            "y": 28,
+            "w": 28,
+            "h": 30,
+            "kind": "dream",
+            "to": "nightmare",
+            "label": "the palantir"
         }
     ],
     "la_torre2": [
@@ -34,17 +61,6 @@ export const hotspots = {
             "kind": "exit",
             "to": "la_Torre5",
             "label": "the dark archway"
-        }
-    ],
-    "la_torre5": [
-        {
-            "x": 131,
-            "y": 5,
-            "w": 22,
-            "h": 30,
-            "kind": "exit",
-            "to": "la_Torre3",
-            "label": "the iron gate"
         }
     ]
 };

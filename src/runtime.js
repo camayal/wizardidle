@@ -58,6 +58,8 @@ export const run = {
     questOffer: null,              // a job waiting for his answer: { q, giver, hint } (src/quests.js)
     questGiver: '',                // the board or post his quest asked the next explore event to read
     questShrine: false,            // the quest's shrine turns up: the next shrine event is entered
+    godDream: '',                  // the god's touch on a dream spot: tonight's sleep will be this ('nightmare'), src/dream.js
+    studyBook: false,              // a nudge at the shelves: the next study is a book, never a statue
     nudge: null,                   // a followed nudge of the god waiting for his next decision (src/nudge.js)
     questInn: false,               // the quest's inn turns up: the next inn event goes in
     forceOnce: undefined,          // dev tools: event number for the next event only
