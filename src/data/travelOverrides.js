@@ -378,12 +378,6 @@ export const travelPoints = {
         "layer": "under",
         "x": 34,
         "y": 166
-    },
-    "la_Pradera15": {
-        "kind": "future",
-        "layer": "ground",
-        "x": 191,
-        "y": 107
     }
 };
 export const travelKinds = {

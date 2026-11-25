@@ -139,6 +139,7 @@ export const places = {
     la_Pradera12: {zone:"la_Pradera",x:0.812,y:0.2,moves:"",destinations:""},
     la_Pradera13: {zone:"la_Pradera",x:0.256,y:0.636,moves:"",destinations:""},
     la_Pradera14: {zone:"la_Pradera",x:0.076,y:0.472,moves:"",destinations:""},
+    la_Pradera15: {zone:"la_Pradera",x:0.764,y:0.428,moves:"",destinations:""},
     la_Torre1: {zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre2,la_Torre3,la_Torre4,la_Torre5",destinations:"la_Tundra1"},
     la_Torre2: {zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre1,la_Torre3,la_Torre4,la_Torre5",destinations:"la_Tundra1"},
     la_Torre3: {zone:"la_Torre",x:0.412,y:0.336,moves:"la_Torre1,la_Torre2,la_Torre4,la_Torre5",destinations:"la_Tundra1"},

@@ -350,3 +350,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Travel console: point type as three radios. Border crossings already roll the crossing fight like connectors (planFight takes every step); they are mirrored so he always walks left to right there.
 
 - 2026-11-25 Travel console: stage types (travelKinds in travelOverrides.js, saved by serve.py); la_Pradera14 is a border. Display only for now: the game does not read it.
+
+- 2026-11-25 Prairie 15 wired: img/places/la_pradera/la_pradera15.png (artist, option A + road from Prairie 7), stage in zones.js at 191,107 of the map, future point dropped from travelPoints, graph regenerated.

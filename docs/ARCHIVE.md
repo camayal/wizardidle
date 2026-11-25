@@ -2784,3 +2784,5 @@ The offering question (cap, diminishing returns, fixed by level, keep the snowba
 - The rescuers, the winning-back actions and the escape scroll's plot: to be confirmed (see Decisions).
 - Faith (thinker, 2026-11-24): archive FAITH.md and point links to for_implementation_faith.md. Done 2026-11-25 (section numbers like 3.1 in old links may not match the new file).
 - Cemetery note for an unfinished quest (quests review 5): dropped by the author 2026-11-25.
+
+- New scene la_Pradera15 (author, 2026-11-25): a new Prairie scene, 256 px wide like the others (img/places/la_pradera/la_pradera15.png). Brief: a little piece of beach in the front (sand only, NO water), and in the back right the far Castle. Be creative, but follow the Castle on the map a little for inspiration. On the travel map it is a future point at map x 191, y 107, linked to Prairie 5 and 7, the Castle stages and Beach 5. Keep the usual walk line and leave the enemy spot (x 192-224) and the sign area readable. Dev adds the stage in zones.js once the art exists.
