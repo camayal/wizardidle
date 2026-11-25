@@ -80,3 +80,5 @@ Date: 2026-11-24 11:25
 ```
 The scene needs to be modified: the firepit sits on the walkable line, so the wizard walks through it. Move or redraw it off the common walk line (as an overlay if it must stand in front, per the connector rule that obstacles go off the walk line or become overlays).
 
+
+- el_Desierto4 (author, 2026-11-24): the scene art shows a mine mouth the game does not use as a mouth (the Desert's real mine mouth is elsewhere). Redraw it as collapsed or rubble (a caved-in entrance), same scene otherwise. No code change.
