@@ -25,7 +25,7 @@ Each dream is 1–3 short lines shown over the dark scene (one line per `/` belo
 
 ## Callings (Doubter and Atheist) — 12, all ★
 
-Quiet: the god never commands here. Different from the god's dream touch (plans/FAITH.md 3.6), which sends him into the next shrine.
+Quiet: the god never commands here. Different from the god's dream touch (plans/for_implementation_faith.md 3.6), which sends him into the next shrine.
 
 | Id | ★ | Dream |
 |---|---|---|
@@ -67,7 +67,7 @@ Each costs −1 belief while he is a Believer or Devout, never taking him below 
 
 ## Fall dreams — 6, by who got him up, pure story
 
-The first rest after a fall. The bag is per kind of rescue (plans/FAITH.md: the god's touch sends the healer; otherwise a rescuer, or nobody).
+The first rest after a fall. The bag is per kind of rescue (plans/for_implementation_faith.md: the god's touch sends the healer; otherwise a rescuer, or nobody).
 
 | Id | Got him up | Dream |
 |---|---|---|

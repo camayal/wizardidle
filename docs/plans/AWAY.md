@@ -49,13 +49,13 @@ The player is a god. When the app is closed he cannot see the world: other gods 
 |---|---|---|---|
 | What it is | Rest at an inn or camp | He fell while the god was away; no rescuer came, nothing finished him. He lies where he fell, fading, waiting for the one hand that can still lift him | Gone for good |
 | How it ends | He wakes by himself | **Only the god** can end it, on return | Never: cemetery, then the name screen |
-| Rescuers (FAITH.md) | not needed | **none**: the caravan, the shaman and the others had their chance while the god was away | none |
-| Looks | Dark fade, maybe a dream | The fallen sprite with the skull above him (the skull means "the god can still act", FAITH.md) | The dead sprite, no skull |
+| Rescuers (for_implementation_faith.md) | not needed | **none**: the caravan, the shaman and the others had their chance while the god was away | none |
+| Looks | Dark fade, maybe a dream | The fallen sprite with the skull above him (the skull means "the god can still act", for_implementation_faith.md) | The dead sprite, no skull |
 | Told to the player | sleep lines | **one console line** (below) | **the poem** (absence permadeath only) |
 
 **Story rules:**
 - Permadeath from absence comes **only out of the soft-dead state**, never straight from a healthy wizard. Soft dead is the last door: the god walks through it or he doesn't.
-- It obeys the true death rule (FAITH.md): he dies for good only where the god could have clicked. The god could have come back, so absence counts; the protected chapters are an open question below.
+- It obeys the true death rule (for_implementation_faith.md): he dies for good only where the god could have clicked. The god could have come back, so absence counts; the protected chapters are an open question below.
 - No word about time in any line: no "months", no "days" (a month away is only some hours of world time), no "offline", no 108.
 
 ### The soft-dead line (console, on return)
@@ -72,7 +72,7 @@ Shown once when the god returns and finds him soft dead. It must say: he is stil
 - **When and how:** once, on entering, over the dark scene the way a dream vision is shown (SLEEP.md): the lines appear softly, then the cemetery record and the name screen (STORY.md, *True death*). Not a scroll, not a popup.
 - **Voice:** addressed to **you**, the god (STORY.md). Quiet, plain words; grief more than accusation, no blame spelled out.
 - **Length:** 4 to 6 short lines.
-- **Must say:** he waited for you; you did not come; he is dead for good. Uses {name}, may use {zone}. May echo the death-chapter idea *"for you, god, time is nothing; for the world it is everything"* (FAITH.md).
+- **Must say:** he waited for you; you did not come; he is dead for good. Uses {name}, may use {zone}. May echo the death-chapter idea *"for you, god, time is nothing; for the world it is everything"* (for_implementation_faith.md).
 - **Must not say:** any time unit or count, the 108 factor, system words (save, app, offline, closed), any number.
 - **Final text:** the author or the historian writes it; the drafts are starting points.
 
@@ -154,7 +154,7 @@ A bag of eight (Decision 6): one is drawn at each absence permadeath, and none r
 
 ### Cemetery, not erasure
 
-An absence permadeath is a **regular cemetery death** (erasure is only for final-battle losers): a normal tomb (not cracked), his name **not** reversed or struck through, **no echo slot**, no soul in the final battle. He is a regular past wizard, so he can come back as the **ghost rescuer** and write **letters** (FAITH.md). The tomb's parchment note gives the cause in one line, for example *"He waited for you in the {zone}."* A letter from such a wizard (he waited, the god never came) is a strong hook; not decided.
+An absence permadeath is a **regular cemetery death** (erasure is only for final-battle losers): a normal tomb (not cracked), his name **not** reversed or struck through, **no echo slot**, no soul in the final battle. He is a regular past wizard, so he can come back as the **ghost rescuer** and write **letters** (for_implementation_faith.md). The tomb's parchment note gives the cause in one line, for example *"He waited for you in the {zone}."* A letter from such a wizard (he waited, the god never came) is a strong hook; not decided.
 
 ## Open questions
 

@@ -28,7 +28,7 @@ Resting is the inn event (`innEV()` → `searchInn()` → `wakeUp()` in `src/eve
 - **Story dreams** come on the first rest after a moment: a chapter (a general chapter dream from its own bag) or a fall (by who got him up). Dreams tied to a chapter's events are kept for later ([ideas/dreams.md](ideas/dreams.md), *Story-linked chapter dreams*), like one near the final battle. They can carry hints (the hood, the staff) without any mechanical effect.
 - **Random dreams and nightmares** come from the pool in [ideas/dreams.md](ideas/dreams.md), chosen by belief level (dreams more for believers, nightmares more for doubters and atheists). Belief dreams raise belief and nightmares can lower it a little; the rest change nothing in play (*Belief dreams* below).
 - **After an erasure** ([ERASURE.md](ERASURE.md)) the pool can include echo dreams (a wizard who isn't him, a reversed name), only when `world.erasures` is not empty. Text only, like the small echoes.
-- **The god's "dream" touch** ([FAITH.md](FAITH.md), 3.6) stays a separate god action: touching the sleeping bag while an atheist camps sends a dream of a shrine, and he enters the next one. It uses this same dark-and-vision scene.
+- **The god's "dream" touch** ([for_implementation_faith.md](for_implementation_faith.md), 3.6) stays a separate god action: touching the sleeping bag while an atheist camps sends a dream of a shrine, and he enters the next one. It uses this same dark-and-vision scene.
 
 ## Belief dreams
 
@@ -47,7 +47,7 @@ Decided 2026-11-17 (the author) for the note above. The full text is in [ideas/d
 
 **Which kind tonight:** a rest still has the small dream chance. On a dream night, a story dream (chapter, then fall) wins if one is due; otherwise it is a nightmare or a dream, split by **belief level** (Believer and Devout: mostly dreams; Doubter and Atheist: mostly nightmares, as today). *Today the split reads faith (the currency); it should read the belief level.* A dream for a Believer or Devout comes from the light dreams, for a Doubter or Atheist from the callings.
 
-**How much a dream moves belief** (starting weights, to playtest, on the FAITH.md 3.1 scale): the weight depends on his level when he dreams it.
+**How much a dream moves belief** (starting weights, to playtest, on the for_implementation_faith.md 3.1 scale): the weight depends on his level when he dreams it.
 
 | Level when he dreams | Belief |
 |---|---|
@@ -60,8 +60,8 @@ Decided 2026-11-17 (the author) for the note above. The full text is in [ideas/d
 
 **Every weight in config** (the author: playtests must retune them easily): one weight per level for belief dreams (e.g. `config.belief.weights.dreamDevout`, `dreamBeliever`, `dreamDoubter`, `dreamAtheist`), one for nightmares (`config.belief.weights.nightmare`), and the nightmare floor (the Believer line, 0) as its own config value. No dream number lives in the code.
 
-- **Callings are a second way back from atheism** for an idle player, next to passing shrines and close calls (FAITH.md 3.1). They don't send him to a shrine: that stays the god's dream touch (FAITH.md 3.6).
-- **Nightmares are seeds of doubt, never a spiral.** They can shake a believer but cannot make him a Doubter: the floor stops them at the Believer line, and they do nothing once he doubts, so they never push a doubter towards atheism (the spiral FAITH.md 3.1 fixed).
+- **Callings are a second way back from atheism** for an idle player, next to passing shrines and close calls (for_implementation_faith.md 3.1). They don't send him to a shrine: that stays the god's dream touch (for_implementation_faith.md 3.6).
+- **Nightmares are seeds of doubt, never a spiral.** They can shake a believer but cannot make him a Doubter: the floor stops them at the Believer line, and they do nothing once he doubts, so they never push a doubter towards atheism (the spiral for_implementation_faith.md 3.1 fixed).
 - **No line about the gain:** the dream is the message; the belief icon moves on its own.
 
 **No repeats: a shuffle bag per pool, per wizard**

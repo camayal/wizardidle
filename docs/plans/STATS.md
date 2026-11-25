@@ -1,6 +1,6 @@
 # Stats and playtest tools plan
 
-The technical base the professions plan ([PROFESSIONS.md](PROFESSIONS.md)) and the faith plan ([FAITH.md](FAITH.md)) both need:
+The technical base the professions plan ([PROFESSIONS.md](PROFESSIONS.md)) and the faith plan ([for_implementation_faith.md](for_implementation_faith.md)) both need:
 1. **Stats:** record almost everything that happens, so achievements, quests, the story and balance decisions have numbers to work from. This is the "Track almost everything as stats" backlog entry in `ideas.md`.
 2. **Playtest tools:** fast, repeatable simulated runs with god bots, because the author decided that **no balance number is set without a playtest**.
 
@@ -32,13 +32,13 @@ A new `src/stats.js` replaces the bare `count()`:
 
 - **Per wizard** in `state.stats`, **per world** in `world.stats` (lifetime kills, wizards created, highest level ever, oldest wizard). One call can write both: `stat.count("kill.boss", 1, { world: true })`.
 - **Names (decided):** every stat uses a dotted name by area (`faith.*`, `combat.*`, `prof.*`, `dice.*`, `explore.*`, `world.*`). The 55 existing counters are **renamed** (e.g. `GoldFromEnemies` → `gold.fromEnemies`, `negar` → `faith.shrineSkipped`, `taberna_zone_el_Poblado` → `inn.zone.el_Poblado`). No migration: a save from before simply starts its stats again.
-- **Per-level history:** at every level-up, one line is stored in `state.history`: `{ lvl, playTimeMs, faithG, goldG, belief, deaths, kills }` (amounts in g, the unit from FAITH.md). It's small (one line per level, 200 at most), and it serves the playtests now and a chart on the stats scroll later.
+- **Per-level history:** at every level-up, one line is stored in `state.history`: `{ lvl, playTimeMs, faithG, goldG, belief, deaths, kills }` (amounts in g, the unit from for_implementation_faith.md). It's small (one line per level, 200 at most), and it serves the playtests now and a chart on the stats scroll later.
 
 ### What goes in first
 
 Only what the next features need, in this order:
 
-1. **Faith** (FAITH.md): every gain and loss goes through `faithChange(amount, source)`, which writes `faith.gain.<source>` / `faith.loss.<source>` totals, the `faith.highestG` / `faith.lowestG` records, belief-level changes and time spent at each level, and touches by kind (heal, hit, revive, tithe, refused).
+1. **Faith** (for_implementation_faith.md): every gain and loss goes through `faithChange(amount, source)`, which writes `faith.gain.<source>` / `faith.loss.<source>` totals, the `faith.highestG` / `faith.lowestG` records, belief-level changes and time spent at each level, and touches by kind (heal, hit, revive, tithe, refused).
 2. **Deaths and revivals:** deaths by zone and by enemy (`killedBy`), revived by the god vs each rescuer.
 3. **Professions** (PROFESSIONS.md): gathered, crafted, failed, used, sold and bought per item, blessings, trainer meetings.
 4. **Dice game:** games, won / lost / tied, gold won / lost, best cargo, risky rolls and whether they paid.

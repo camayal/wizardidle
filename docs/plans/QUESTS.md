@@ -5,7 +5,7 @@ Quests give the wizard a purpose to walk somewhere, and give the god new ways to
 ## What exists today
 
 - **The prism quest** (Tundra spectra): given as a whisper of the god after the second spectrum; a flag in `state.spectra`, no quest scroll.
-- **Whispers** (FAITH.md): the god's voice brings quests, secrets and warnings; a Believer always hears it, a Doubter sometimes, an Atheist rarely (as his own thought).
+- **Whispers** (for_implementation_faith.md): the god's voice brings quests, secrets and warnings; a Believer always hears it, a Doubter sometimes, an Atheist rarely (as his own thought).
 - **The healer's cabin** stands near where he fell only while `state.quest` is set: it waits for this plan.
 - **Travel**: travel.js picks the next stage from the author's links; the travel graph can already find a route between two map points (dev tools).
 - **Professions** are planned, not built: crafting and ingredient quests wait for them. There is no fishing yet.
@@ -91,7 +91,7 @@ Events on the way are fine: travel carries on at the next explore.
 
 Built on dev-repo, untested in a browser (a headless sim loads). All numbers are placeholders in the config.
 
-- Queue (cap 3; secrets first, then nearest), the route step by step, searching with rising find odds, a long search moves the quest down the queue, only the god cancels.
+- Queue (cap 7 waiting, 8 in all; secrets first, then nearest), the route step by step, searching with rising find odds, a long search moves the quest down the queue, only the god cancels.
 - Kinds: wanted, explore, study, shrine, pilgrimage, hidden shrine, delivery, plus **seek** (dev's addition: go and ask for work).
 - His own wishes: needs plus personality (greedy, pious, curious).
 - Givers: inn hosts, plus three of dev's additions: **a notice board in the City, wanted posts in 8 regions, rare strangers in safe zones** (merchant or old man sprite). Board and posts are console text only.

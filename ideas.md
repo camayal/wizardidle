@@ -10,7 +10,7 @@ The index of Wizard Idle v2: where the project stands, one line per idea, and th
 ## Where we are
 
 - **Branch:** `dev-repo` (v2 work). `main` is the live site, so merge only when playable.
-- **Released:** 2.2.0 live since 2026-11-18 (animations, arrivals, boss attacks, belief, bestiary, cemetery, XP bar; 2.1.0 on 2026-11-12: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the faith stats and playtests ([FAITH.md](docs/plans/FAITH.md)); then the story with the faith rebalance.
+- **Released:** 2.2.0 live since 2026-11-18 (animations, arrivals, boss attacks, belief, bestiary, cemetery, XP bar; 2.1.0 on 2026-11-12: cleanup and speed). **Now:** stage 3a; the dev test bar, the stats module and the playtest tools are built, with a baseline. **Next:** the faith stats and playtests ([for_implementation_faith.md](docs/plans/for_implementation_faith.md)); then the story with the faith rebalance.
 - **Live:** [camayal.info/wizardidle](https://camayal.info/wizardidle/) serves 2.2.0 from `main`; `/legacy/` serves the frozen `v1.0.0` tag (not linked anywhere).
 
 ## Inboxes (notes from the dev tools, one per role)
@@ -23,7 +23,7 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 **With a plan**
 - Map revamp: ground and aboveground maps, delta and beach with nagas, bridges, border scenes → [docs/plans/MAPS.md](docs/plans/MAPS.md)
-- Faith rebalance, belief levels, rescuers → [docs/plans/FAITH.md](docs/plans/FAITH.md)
+- Faith rebalance, belief levels, rescuers → [docs/plans/for_implementation_faith.md](docs/plans/for_implementation_faith.md)
 - Professions: reagents, items, vendors → [docs/plans/PROFESSIONS.md](docs/plans/PROFESSIONS.md)
 - Stats for almost everything, playtest tools → [docs/plans/STATS.md](docs/plans/STATS.md)
 - Souls of erased wizards in the final battle → [docs/plans/ERASURE.md](docs/plans/ERASURE.md)
@@ -317,3 +317,4 @@ Newest first; keep the last three, cut older ones to the archive.
 2026-11-25 — text audit applied (TEXT_AUDIT.md); toolbar reordered faith/ach/stats + map/kill/settings. Left from the audit (no literal match): combat.js 132,140,326,330,530,546; events.js 37-39,45,326,554-555,634-636; travel.js 206-212; scrolls.js 504,518,519,549 p0ss link; enemies lower-case names; questTexts 227-313 splices.
 2026-11-25 — art-notes: taller scenes idea (x15 and double-height tests loved by author; needs dev work on scene height before wiring).
 2026-11-25 — author's idea: double the scene viewer height in game (256x128). Dev work needed: marcoH/sceneH in layout.js, canvas sizes, walk line row 28, sprite anchors; on phones it eats console space (check tall screens).
+- 2026-11-25: FAITH.md archived, links point to for_implementation_faith.md; QUESTS.md queue cap fixed; stale CHANGELOG sentence cut.
