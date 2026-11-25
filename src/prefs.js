@@ -17,14 +17,25 @@ const TEXT_SIZES = [
 // Volume steps of the slider (a multiplier on every sound's own volume).
 const VOLUMES = [0.25, 0.5, 0.75, 1];
 
-const DEFAULTS = { textSize: 'normal', sound: true, volume: 3, wake: false, shake: true, vibrate: true, fightLines: true };
+// The kinds of line the console prints, each with its own switch in Settings (Text in the console).
+const CONSOLE_LINES = [
+    { id: 'fight', label: 'Battles and bosses' },
+    { id: 'divine', label: 'Divine messages' },
+    { id: 'dreams', label: 'Dreams and nightmares' },
+    { id: 'achievements', label: 'Achievements and level ups' },
+    { id: 'quests', label: 'Quests' },
+    { id: 'dice', label: 'Dice games' },
+    { id: 'journey', label: 'The journey (travel, finds, inns...)' },
+];
+
+const DEFAULTS = { textSize: 'normal', sound: true, volume: 3, wake: false, shake: true, vibrate: true, fightLines: true, ...Object.fromEntries(CONSOLE_LINES.map(l => ['line_' + l.id, true])) };
 const prefs = { ...DEFAULTS };
 
 try {
     const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || 'null');
     if (saved && TEXT_SIZES.some(t => t.id == saved.textSize)) prefs.textSize = saved.textSize;
     if (saved) {
-        for (const key of ['sound', 'wake', 'shake', 'vibrate', 'fightLines']) if (typeof saved[key] == 'boolean') prefs[key] = saved[key];
+        for (const key of ['sound', 'wake', 'shake', 'vibrate', 'fightLines', ...CONSOLE_LINES.map(l => 'line_' + l.id)]) if (typeof saved[key] == 'boolean') prefs[key] = saved[key];
         if (Number.isInteger(saved.volume) && saved.volume >= 0 && saved.volume < VOLUMES.length) prefs.volume = saved.volume;
     }
 } catch (e) { /* no storage: defaults */ }
@@ -110,4 +121,4 @@ const canVibrate = () => !!navigator.vibrate;
 const canWake = () => !!navigator.wakeLock;
 const volumeScale = () => VOLUMES[prefs.volume];
 
-export { DEFAULTS, VOLUMES, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale, prefs, TEXT_SIZES, setTextSize, setSound, chosenTextScale, browserTextScale, heightScale };
+export { CONSOLE_LINES, DEFAULTS, VOLUMES, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale, prefs, TEXT_SIZES, setTextSize, setSound, chosenTextScale, browserTextScale, heightScale };

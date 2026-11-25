@@ -12,7 +12,8 @@ import { randomName } from './combat.js';
 import { event, nextEvent, startWatchdog } from './events.js';
 import { levelUP } from './wizard.js';
 import { playSound } from './audio.js';
-import { drawWizard, print, showStage, updateHeading, wizardName } from './ui/render.js';
+import { drawWizard, printIn, showStage, updateHeading, wizardName } from './ui/render.js';
+const print = printIn('journey');      // the console category (Settings: Text in the console)
 import { defineObjectSize, getEM, responsiveLayout } from './ui/layout.js';
 import { el } from './ui/dom.js';
 import * as loop from './loop.js';
@@ -20,7 +21,7 @@ import { art } from './media.js';
 import { settleAway, watchHidden } from './away.js';
 import { faithChange } from './faith.js';
 
-const version = "2.19.862"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
+const version = "2.19.863"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * headLevelShare(ui.currentBackGround);      // row 28 of 256; row 24 in the connector scenes

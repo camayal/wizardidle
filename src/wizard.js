@@ -11,7 +11,8 @@ import { fight, ui } from './runtime.js';
 import { chapter, openHistory } from './story.js';
 import { logro } from './achievements.js';
 import { playSound } from './audio.js';
-import { drawWizard, print, updateHeading } from './ui/render.js';
+import { drawWizard, printIn, updateHeading } from './ui/render.js';
+const print = printIn('achievements');      // the console category (Settings: Text in the console)
 import { art } from './media.js';
 
     

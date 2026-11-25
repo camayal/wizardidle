@@ -18,7 +18,8 @@ import { run, ui } from './runtime.js';
 import { pickRandomItem, YesOrNot } from './utils.js';
 import { byName, destinations, moves, route, travelCost, SIZE } from './travelGraph.js';
 import { addXP, calculateFe } from './wizard.js';
-import { print, updateHeading, wizardName } from './ui/render.js';
+import { printIn, updateHeading, wizardName } from './ui/render.js';
+const print = printIn('quests');      // the console category (Settings: Text in the console)
 import { beliefLevel } from './belief.js';
 import { faithChange } from './faith.js';
 

@@ -10,7 +10,8 @@ import { makeReadOnly } from './state.js';
 import { stats } from './stats.js';
 import { run } from './runtime.js';
 import { el } from './ui/dom.js';
-import { print } from './ui/render.js';
+import { printIn } from './ui/render.js';
+const print = printIn('journey');      // the console category (Settings: Text in the console)
 import * as loop from './loop.js';
 
 const LOCK = 'wizardidle:world', CHANNEL = 'wizardidle:dimension';

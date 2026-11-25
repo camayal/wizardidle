@@ -17,7 +17,8 @@ import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
 import { TROPHY_ROOM, hang } from './ui/trophyWall.js';
-import { clearFrontProp, clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showBubble, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { clearFrontProp, clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, printIn, showBlink, showBubble, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+const print = printIn('journey');      // the console category (Settings: Text in the console)
 import { counterText } from './ui/scrolls.js';
 import { playExit } from './ui/entrances.js';
 import { sixfivefour } from './minigames/sixFiveFour.js';
@@ -746,7 +747,7 @@ function goToBed(placesWithInn) {
             loadNPC("sleepingbag");
         }
         spell("spellSleep_24", true);
-        if (dream) print(`<i>${wizardName()} dreams: ${markup(dream.lines.join(" "), { name: wizardName() })}</i>`);
+        if (dream) print(`<i>${wizardName()} dreams: ${markup(dream.lines.join(" "), { name: wizardName() })}</i>`, false, false, 'dreams');
         sleepInDark(dream, null, () => {
             if (placesWithInn) ui.wizardOffset = 0;     // camping: he wakes where he slept and walks on from there (wakeUp)
             drawWizard();

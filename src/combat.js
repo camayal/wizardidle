@@ -18,7 +18,8 @@ import { addGold, addXP, calculateFe } from './wizard.js';
 import { logro } from './achievements.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+const print = printIn('fight');      // the console category (Settings: Text in the console)
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 import { mutedLanding } from './data/bossAttacks.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';

@@ -950,9 +950,10 @@ function animateNPC() {
 // Add a line at the top of the console, keeping at most MAXLINESINCONSOLE lines.
 const DIVINE_HOLD_MS = 2600;
 let holdUntil = 0, held = [], holdTimer = 0;      // a divine line holds the console a few seconds so its effect is seen
-function print(data, minor = false, release = false) {
+function print(data, minor = false, release = false, cat = 'journey') {
     setLiveTime(); //set seconds of game and add to total time
     if (run.simulation) return;     // nobody reads the console in a simulation
+    if (prefs['line_' + cat] === false) return;     // Settings: Text in the console, a category switched off
     if (minor && !prefs.fightLines) return;     // Settings: fight details off hides each round of a fight
     if (!release && performance.now() < holdUntil) { held.push([data, minor]); return; }
     // the new line is inserted in front; the lines already there are not rebuilt, so the sparkles of a divine line
@@ -975,8 +976,8 @@ function print(data, minor = false, release = false) {
 // A line about the god's own doing (a touch, a nudge): little sparkles play over the whole line (first the text goes golden, the console waits 2.6 s so it is seen) until a couple of
 // newer lines have come (or 12 s), then they are gone and the text is untouched (css .dl in index.html).
 function printDivine(data, minor = false) {
-    if (run.simulation) return;
-    print(`<span class="dl dlNew" data-after="2">${data}</span>`, minor, true);
+    if (run.simulation || prefs.line_divine === false) return;
+    print(`<span class="dl dlNew" data-after="2">${data}</span>`, minor, true, 'divine');
     holdUntil = performance.now() + DIVINE_HOLD_MS;
     clearTimeout(holdTimer);
     holdTimer = setTimeout(() => { holdUntil = 0; const q = held; held = []; q.forEach(([d, m]) => print(d, m)); }, DIVINE_HOLD_MS);
@@ -984,7 +985,11 @@ function printDivine(data, minor = false) {
     if (line && line.classList.contains("dlNew")) setTimeout(() => line.classList.remove("dlNew"), 12000);     // fallback when nothing else is printed
 }
 
+// A print function that files its lines under a console category (Settings: Text in the console).
+function printIn(cat) { return (data, minor, release, c) => print(data, minor, release, c || cat); }
+
 export {
+    printIn,
     printDivine,
     setFacing,
     forgetImages,

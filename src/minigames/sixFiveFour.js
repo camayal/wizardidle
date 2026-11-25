@@ -12,7 +12,8 @@ import { hopEnemy, hopWizard } from '../combat.js';
 import { spell } from '../spells.js';
 import { clearDice, throwDice } from '../ui/diceTable.js';
 import { playSound } from '../audio.js';
-import { leavePlace, print, showStage, updateHeading, wizardName } from '../ui/render.js';
+import { leavePlace, printIn, showStage, updateHeading, wizardName } from '../ui/render.js';
+const print = printIn('dice');      // the console category (Settings: Text in the console)
 import { art } from '../media.js';
 
 //TODO add idx for all this part and achievements

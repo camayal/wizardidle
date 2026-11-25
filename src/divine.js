@@ -10,7 +10,8 @@ import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { logro } from './achievements.js';
-import { enterPlace, loadBackground, loadNPC, print, printDivine, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { enterPlace, loadBackground, loadNPC, printIn, printDivine, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+const print = printIn('divine');      // the console category (Settings: Text in the console)
 import { interruptMidasHeal } from './bossEffects.js';
 import { config } from './config.js';
 import { cabinSpot } from './cabin.js';

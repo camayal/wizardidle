@@ -7,7 +7,8 @@
 import { config } from './config.js';
 import { state } from './state.js';
 import { playTime, stats } from './stats.js';
-import { print, wizardName } from './ui/render.js';
+import { printIn, wizardName } from './ui/render.js';
+const print = printIn('divine');      // the console category (Settings: Text in the console)
 import { logro } from './achievements.js';
 
 const LEVELS = ["atheist", "doubter", "believer", "devout"];

@@ -14,7 +14,8 @@ import * as loop from './loop.js';
 import { config } from './config.js';
 import { addXP } from './wizard.js';
 import { steer, onStep } from './quests.js';
-import { drawWizard, loadBackground, print, setFacing, showStage, walkAcross, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+import { drawWizard, loadBackground, printIn, setFacing, showStage, walkAcross, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
+const print = printIn('journey');      // the console category (Settings: Text in the console)
 
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
 

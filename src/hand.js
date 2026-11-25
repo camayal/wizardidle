@@ -10,7 +10,8 @@ import { fight } from './runtime.js';
 import { pickRandomItem, roundNumbertoLetter, getRandomInt } from './utils.js';
 import { faithChange } from './faith.js';
 import { calculateFe } from './wizard.js';
-import { print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+const print = printIn('fight');      // the console category (Settings: Text in the console)
 
 const EXCUSES = {
     weaken: "the enemy's blade snaps on its own,the enemy stumbles on a loose stone,a strap of the enemy's armour gives way,the enemy's eyes water for no reason",

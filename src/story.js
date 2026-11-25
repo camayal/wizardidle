@@ -6,7 +6,8 @@ import { state } from './state.js';
 import { stats } from './stats.js';
 import { run, ui } from './runtime.js';
 import { playSound } from './audio.js';
-import { clearNPC, drawWizard, loadBackground, loadNPC, print, showStage, wizardName, whenSceneReady } from './ui/render.js';
+import { clearNPC, drawWizard, loadBackground, loadNPC, printIn, showStage, wizardName, whenSceneReady } from './ui/render.js';
+const print = printIn('journey');      // the console category (Settings: Text in the console)
 import { counterText, scrollClose, scrollOpen } from './ui/scrolls.js';
 import { el } from './ui/dom.js';
 

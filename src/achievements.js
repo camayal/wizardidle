@@ -5,7 +5,8 @@ import { achievements } from './data/achievements.js';
 import { state, world } from './state.js';
 import { ui } from './runtime.js';
 import { playSound } from './audio.js';
-import { print } from './ui/render.js';
+import { printIn } from './ui/render.js';
+const print = printIn('achievements');      // the console category (Settings: Text in the console)
 import { updateAchievements } from './ui/scrolls.js';
 import { art } from './media.js';
 import { stats } from './stats.js';

@@ -18,7 +18,8 @@ import { stats } from './stats.js';
 import { playSoundAt } from './audio.js';
 import { fight, run, ui } from './runtime.js';
 import { secret as questSecret } from './quests.js';
-import { playWizardAnim, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { playWizardAnim, printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+const print = printIn('fight');      // the console category (Settings: Text in the console)
 
 const b = () => config.balance;
 

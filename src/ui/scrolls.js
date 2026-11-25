@@ -10,7 +10,7 @@ import { version } from '../game.js';
 import { achievementList, countLogros, hasOthers, othersList } from '../achievements.js';
 import { playSound } from '../audio.js';
 import { detectmob, layoutPortrait, responsiveLayout } from './layout.js';
-import { prefs, DEFAULTS, TEXT_SIZES, VOLUMES, setTextSize, setSound, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale } from '../prefs.js';
+import { prefs, CONSOLE_LINES, DEFAULTS, TEXT_SIZES, VOLUMES, setTextSize, setSound, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale } from '../prefs.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
@@ -489,7 +489,9 @@ function updateHelp(){
         switchRow('soundToggle', 'Sound') +
         sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '<img src="' + art('slider_vol_low') + '" data-w="7">', '<img src="' + art('slider_vol_high') + '" data-w="11">') +
         
-        switchRow('fightToggle', 'Fight details in the console') +
+        '<div class="setRow"><b>Text in the console</b></div>' +
+        CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label)).join('') +
+        switchRow('fightToggle', 'Each round of a fight') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
         (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
@@ -572,6 +574,7 @@ function updateHelp(){
         const flag = (id, key, after) => { if (el(id)) drawToggle(el(id), su, () => prefs[key], () => { setFlag(key, !prefs[key]); if (after) after(); }); };
         drawToggle(el("soundToggle"), su, () => prefs.sound, () => setSound(!prefs.sound));
         flag("fightToggle", "fightLines");
+        for (const l of CONSOLE_LINES) flag('line_' + l.id, 'line_' + l.id);
         flag("shakeToggle", "shake");
         flag("buzzToggle", "vibrate", () => buzz(60));
         if (el("wakeToggle")) drawToggle(el("wakeToggle"), su, () => prefs.wake, () => setWake(!prefs.wake));

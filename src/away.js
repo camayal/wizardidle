@@ -15,7 +15,8 @@ import * as loop from './loop.js';
 import { chapter } from './story.js';
 import { recordLevel, stats } from './stats.js';
 import { setLevelValues } from './wizard.js';
-import { print, wizardName, poemInDark } from './ui/render.js';
+import { printIn, wizardName, poemInDark } from './ui/render.js';
+const print = printIn('journey');      // the console category (Settings: Text in the console)
 import { zones } from './data/zones.js';
 import { poems, awayText } from './data/awayTexts.js';
 import { faithAfter, goldAfter, levelsGained, permadeathChance, worldHours } from './awayMath.js';
