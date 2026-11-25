@@ -330,3 +330,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25: faith step 3 part 1: the invisible hand (src/hand.js, config.hand): Atheist touches weaken the enemy, arm a graze, or grow a herb; untested in a browser. Left in step 3: the winning-back actions (sign, dream, pilgrim, relics, hidden blessings).
 - 2026-11-25: borders/bridges crossed in reverse: mirrored scene (loadBackground mirror, step.mirror) with dir always 1; bubble un-mirrored on npcCanvas; untested in a browser (no node). Stairs still walk left going down.
 - 2026-11-25: touch spots shrunk to 32x32 (layout.divineSpots, render.placeDivine); bubble follows a mirrored enemy; author will test and log bugs for bridges, stairs and mouths.
+- 2026-11-25: dev panel Regions (tests.js regionWalk, travel.regionTrip): from/to region walk through real connectors; untested in a browser. Bubble stays only for NPCs at the right spot.

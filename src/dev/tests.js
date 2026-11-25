@@ -26,7 +26,7 @@ import { clearNPC, drawWizard, drawWizardPose, enterPlace, loadNPC, playWizardAn
 import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
-import { connectorTests, stagesFor, withFight } from '../travel.js';
+import { connectorTests, regionTrip, stagesFor, withFight } from '../travel.js';
 import { SPECTRA, SPECTRA_ZONE } from '../spectra.js';
 import * as quests from '../quests.js';
 import { TROPHY_ROOM, hang } from '../ui/trophyWall.js';
@@ -335,6 +335,7 @@ const ENEMY_PICKS = {
 const pickRandom = (list) => list[Math.floor(Math.random() * list.length)];
 
 function pickerHtml() {
+    const regionOpts = Object.keys(zones).map((z) => `<option value="${z}">${zones[z].name}</option>`).join('');
     const opts = (list, labels = list) => list.map((x, i) => `<option value="${x}">${labels[i]}</option>`).join('');
     const portals = Object.keys(PORTALS).map((x) => `portal:${x}`);
     const arrival = `<label>Arrival <select data-f="arrival"><option value="">its own way</option>${opts(ARRIVALS.map((x) => x == 'portal' ? 'portal' : x),
@@ -362,6 +363,10 @@ function pickerHtml() {
             <div class="row"><select data-f="connector">${connectorTests().map((t, i) => `<option value="${i}">${t.label}</option>`).join('')}</select>
                 <button data-do="connector">Walk it</button> <button data-do="connectorFight">Walk it with a fight</button></div>
             <div class="note">Plays a connector's scenes. The stages are picked by themselves: he is put in a stage whose real trip walks these scenes the same way, and he really arrives in the stage on the other side (zone, stage and background). While he walks, the game already counts him in that zone, as in a real crossing, so a fight is against its enemies. With a fight: he is stopped in the first scene that can have one (mirrored when the walk goes right to left), then walks on if he wins.</div>`,
+        Regions: `
+            <div class="row"><label>From <select data-f="regFrom">${regionOpts}</select></label>
+                <label>To <select data-f="regTo">${regionOpts}</select></label> <button data-do="regionWalk">Go</button></div>
+            <div class="note">Puts him in a stage of the first region and makes him walk to the second, through the real border, bridge, mouth or stairs between them when there is one (the console says which stages and scenes). With no connector between them it is a plain walk out and in.</div>`,
         Spectra: `
             <div class="row"><select data-f="spectrum">${opts(SPECTRA.map((c) => `spectrum_${c}`), SPECTRA)}</select>
                 <button data-do="spectrum">Fight it</button></div>
@@ -403,6 +408,14 @@ const pickerActions = {
         else drawWizard();
     },
     gift(f) { GIFTS[f('gift')](); updateHeading(); },
+    regionWalk(f) {
+        const a = f('regFrom'), b = f('regTo');
+        if (a === b) return devPrint('pick two different regions');
+        resetScene();
+        run.crossing = null;
+        const text = regionTrip(a, b, nextEvent);
+        devPrint(text ? `region walk ${text}` : 'no stages in a region');
+    },
     connector(f) { devWalk(connectorTests()[Number(f('connector'))].steps); },
     connectorFight(f) {
         const steps = withFight(connectorTests()[Number(f('connector'))].steps);

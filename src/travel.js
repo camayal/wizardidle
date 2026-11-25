@@ -174,6 +174,33 @@ function connectorTests() {
     return list;
 }
 
+// Dev tools: put him in a stage of region `from` and make him walk to a stage of region `to` (zone ids, as in `zones`),
+// through the real connectors between them when there are some (a pair of stages with a crossing is preferred).
+// Returns a text for the console, or null when a region has no stages.
+function regionTrip(from, to, onArrive) {
+    const names = Object.keys(places), ins = (z) => names.filter((n) => places[n].zone === z);
+    let pair = null;
+    for (const a of ins(from)) {
+        for (const b of ins(to)) {
+            const w = crossingSteps(a, b);
+            if (w) { pair = { a, b, steps: w.steps }; break; }
+            if (!pair) pair = { a, b, steps: null };
+        }
+        if (pair && pair.steps) break;
+    }
+    if (!pair) return null;
+    const at = (n) => ({ current: places[n].zone, stage: Number(n.match(/\d+$/)[0]) });
+    Object.assign(state.zone, at(pair.a));
+    showStage();
+    Object.assign(state.zone, at(pair.b));
+    if (pair.steps) walkAcross(pair.steps, showStage, onArrive);
+    else {          // no connector between them: out to the right, in from the left
+        state.zone.current = places[pair.a].zone;
+        walkWizardTo(OFF_SCENE_RIGHT, () => { Object.assign(state.zone, at(pair.b)); showStage(); ui.wizardOffset = OFF_SCENE_LEFT; walkWizardTo(0, onArrive); });
+    }
+    return `${pair.a} to ${pair.b}${pair.steps ? ": " + pair.steps.map((x) => x.scene + (x.mirror ? " (mirrored)" : "")).join(", ") : ": no connector, a plain walk"}`;
+}
+
 // The pier (a dead end): can he walk out on it from this stage, and the walk out and back to the same stage.
 const canVisitPier = () => reachesPoint(state.zone.current + state.zone.stage, "pier");
 function visitPier(onArrive) {
@@ -270,6 +297,7 @@ function getZone() {
 
 export {
     connectorTests,
+    regionTrip,
     canVisitPier,
     visitPier,
     changeLocality,

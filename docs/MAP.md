@@ -63,7 +63,7 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 ## src/dev/ (dev)
 
-- tests.js: the dev panel: pickers (wizard, bosses, hydras, enemies, each fight with a chosen arrival), scenarios, quick actions, command line, mode buttons.
+- tests.js: the dev panel (Regions picker: from/to region walk, travel.js `regionTrip`): pickers (wizard, bosses, hydras, enemies, each fight with a chosen arrival), scenarios, quick actions, command line, mode buttons.
 - panel.js: left and right side panels (float over the game on small screens).
 - music.js: music mode: pick, edit and play a song (songs/ or the review drop's .song.txt), restarts on every edit, Save to game writes songs/<name>.txt.
 - sounds.js: sounds mode: pick a scene and a sound, cut/speed/fade/volume, play together.
