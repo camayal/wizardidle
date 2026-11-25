@@ -9,6 +9,7 @@
 
 import { art } from './media.js';
 import { zones, places, bossesOf } from './data/zones.js';
+import { huntStory } from './data/questTexts.js';
 import { enemySprites, enemyTypes } from './data/enemies.js';
 import { config } from './config.js';
 import { state } from './state.js';
@@ -59,9 +60,14 @@ const MAKERS = {
         const wantRare = how ? how === 'rare' : YesOrNot(config.quests.pWantedRare, 0);
         if (rares.length && (wantRare || !boss)) {
             const s = pickRandomItem(rares.join(','));
-            return base('wanted', giver, `Hunt the ${enemySprites[s].altName} of the ${zoneName(z)}`, { zone: z, enemy: s }, 'xp');
+            const w = base('wanted', giver, `Hunt the ${enemySprites[s].altName} of the ${zoneName(z)}`, { zone: z, enemy: s }, 'xp');
+            w.story = huntStory('rare', enemySprites[s].type, enemySprites[s].altName, zoneName(z));
+            return w;
         }
-        return boss ? base('wanted', giver, `Defeat ${enemyTypes[boss].name} of the ${zoneName(z)}`, { zone: z, boss }, 'xp') : null;
+        if (!boss) return null;
+        const w = base('wanted', giver, `Defeat ${enemyTypes[boss].name} of the ${zoneName(z)}`, { zone: z, boss }, 'xp');
+        w.story = huntStory('boss', boss, enemyTypes[boss].name, zoneName(z));
+        return w;
     },
     explore(giver) {
         const z = pickRandomItem(ZONES().filter((x) => x !== state.zone.current).join(','));
@@ -434,9 +440,10 @@ export function beginOffer(giver) {
     if (!q) { run.questOffer = null; return false; }
     run.questOffer = { q, giver, hint: '' };
     const name = wizardName();
-    print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}: ${q.text}</i>`
-        : giver === 'human' ? `<i>The stranger explains his trouble to ${name}: ${q.text}</i>`
-        : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}: ${q.text}</i>`);
+    const tell = q.story ? `${q.text}. ${q.story}` : q.text;       // the scroll keeps the short line, the console tells the whole story
+    print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}: ${tell}</i>`
+        : giver === 'human' ? `<i>The stranger explains his trouble to ${name}: ${tell}</i>`
+        : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}: ${tell}</i>`);
     stats.count(`quest.offers.${giver}`);
     return true;
 }
