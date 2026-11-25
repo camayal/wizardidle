@@ -19,7 +19,7 @@ import { drawWizard, loadBackground, print, setFacing, showStage, walkAcross, wa
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
 
 // The walking steps (render.walkAcross) of each kind of connector.
-const bridgeSteps = (c, dir) => (dir > 0 ? connectorScenes[c] : connectorScenes[c].slice().reverse()).map(scene => ({ scene, dir: 1, mirror: dir < 0 }));      // crossed the other way: mirrored art, still walking right
+const bridgeSteps = (c, dir) => (dir > 0 ? connectorScenes[c] : connectorScenes[c].slice().reverse()).map(scene => ({ scene, dir }));
 const stairSteps = (ground, up) => (up ? stairScenes[ground].scenes : stairScenes[ground].scenes.slice().reverse()).map(scene => ({ scene, dir: up ? 1 : -1 }));
 // A cave or mine mouth, or the ladder: he walks to the opening of the first scene (left to right), the scene fades
 // into the second, and he walks on from the opening there.
