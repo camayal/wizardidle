@@ -346,3 +346,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 tools/serve.py save kept only verdict keys matching \w+|\w+, so every link to mouth_dunas-pradera_gruta and mouth_playa-pradera_mina was dropped on each save. Regex now allows hyphens; 13 links restored from git. Restart serve.py to load the fix.
 
 - 2026-11-25 Travel map: new point kind 'border' (triangle); serve.py accepts it; border_gruta_duenon set to border. Restart serve.py.
+
+- 2026-11-25 Travel console: point type as three radios. Border crossings already roll the crossing fight like connectors (planFight takes every step); they are mirrored so he always walks left to right there.

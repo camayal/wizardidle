@@ -176,6 +176,7 @@ function draw() {
 function drawLink() {
     const has = src && tgts.some((t) => t !== src), vs = has ? tgts.filter((t) => t !== src).map((t) => verdict(src, t)) : [];
     const own = isCustom(src);
+    for (const r of p.kinds.querySelectorAll('input')) r.checked = own && points[src].kind === r.value;      // the source's type
     p.srcPlace.style.fontWeight = placing === 'src' ? 'bold' : '';
     p.tgtPlace.style.fontWeight = placing === 'tgt' ? 'bold' : '';
     p.newAdd.textContent = placing === 'new' ? 'click the map...' : 'Add point';
@@ -313,7 +314,10 @@ export async function open(devTools) {
                 <button data-v="">Auto</button></div>
             <div style="display:flex;gap:4px;align-items:center"><b>Points</b>
                 <button data-id="align" title="move the target(s) onto the source, e.g. the two ends of a connector">Align to source</button>
-                <button data-id="swap" title="cycles future scene, connector, border (source and targets)">Future / connector / border</button></div>
+<span data-id="kinds" title="the type of the selected points (source and targets): pick one">
+                    <label><input type="radio" name="ptKind" value="future"> future scene</label>
+                    <label><input type="radio" name="ptKind" value="connector"> connector</label>
+                    <label><input type="radio" name="ptKind" value="border"> border</label></span></div>
             <div style="display:flex;gap:4px;align-items:center"><b>View</b>
                 <button data-id="deselect">Deselect all</button><button data-id="nums">Hide numbers</button><button data-id="check" title="ring every spot that no chain of links joins to the main map">Check connections</button>
                 <button data-id="path" title="pick a source and exactly one target: draws the cheapest path the wizard would walk">Optimal path</button></div>
@@ -340,18 +344,19 @@ export async function open(devTools) {
         for (const t of tgts) if (t !== src) for (const m of names[byName[t]]) moved[baseOf(m)] = [x, y];
         save(); draw();
     };
-    p.swap.onclick = () => {           // future scene <-> connector, for the points added by hand
+    p.kinds.onchange = (e) => {         // the three types of a point: future scene, connector, border (points added by hand)
+        const kind = e.target.value;
         for (const n of [src, ...tgts]) {   // a built-in bridge, the pier or the stairs can be switched too: it becomes an entry of ours
             if (n && !isCustom(n) && byName[n] !== undefined && ['bridge', 'pier', 'stairs'].includes(g.nodes[byName[n]][3])) {
                 const [x, y] = pos(byName[n]);
-                points[n] = { kind: 'connector', layer: layerOf(n), x, y, note: '' };
+                points[n] = { kind, layer: layerOf(n), x, y, note: '' };
             }
         }
         const list = [src, ...tgts].filter((n, i, a) => n && isCustom(n) && a.indexOf(n) === i);
-        if (!list.length) { p.tip.textContent = 'Select a future scene, a connector, a bridge, the pier or the stairs.'; return; }
-        for (const n of list) points[n].kind = { future: 'connector', connector: 'border', border: 'future' }[points[n].kind];
+        if (!list.length) { p.tip.textContent = 'Select a future scene, a connector, a border, a bridge, the pier or the stairs first.'; drawLink(); return; }
+        for (const n of list) points[n].kind = kind;
         save(); draw();
-        p.tip.textContent = `${list.join(', ')}: type switched. Save verdict and reload to apply it to the graph.`;
+        p.tip.textContent = `${list.join(', ')}: now a ${kind}. Save verdict and reload to apply it to the graph.`;
     };
     p.path.onclick = () => { showPath = !showPath; p.path.textContent = showPath ? 'Hide path' : 'Optimal path'; draw(); };
     p.deselect.onclick = () => { tgts = []; choose('src', ''); };
