@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The kind of job each giver offers now follows its own odds (config.quests.offerKinds): the inn leans to deliveries and hunts, the board to hunts, the strangers to deliveries and trips, the wanted posts only to hunts. The numbers are placeholders for the playtests.
 - Road strangers have their own faces now: a merchant, a farmer, a hunter, a pilgrim, a young woman, an old woman and a traveller, one at random each time. While a stranger offers a job a speech bubble with lines of text floats over his head; when the wizard answers it turns into a green check (he takes it) or a red X (he turns it down) for a moment before the stranger leaves. Art by the artist.
 - The notice board and the wanted posts are drawn in front of the wizard (on the front layer), so when he walks past one he seems to pass behind it instead of over it.
 - After the god gives a divine order, the Quests page shows a message across the whole scroll in grey italics, like the "No achievements yet" text, instead of the small line.

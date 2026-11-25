@@ -102,6 +102,12 @@ export const config = {
         pPost: 0.02,               // chance an explore event in a region with a post reads it
         pTravelExplore: 0.75,      // on the way to a quest's target, chance each event is just exploring (walking on) instead of a random event
         turnUpCooldown: 8,         // events after the target turned up (a wanted enemy, a boss) before it can turn up again
+        offerKinds: {              // how likely each kind is when a giver offers a job (weights, placeholders for the playtests)
+            inn:   { wanted: 3, delivery: 4, explore: 2, study: 1 },
+            board: { wanted: 4, delivery: 2, explore: 2, study: 1, shrine: 1 },
+            human: { wanted: 2, delivery: 3, explore: 3, study: 2, shrine: 1 },
+            post:  { wanted: 1 },
+        },
         orderWait: 15,             // events before the god can give another order from the Faith scroll
     },
     // Fixed rules of the world.

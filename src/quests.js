@@ -407,13 +407,22 @@ export function giverHere() {
     return SAFE_ZONES.includes(z) && YesOrNot(config.quests.pHuman, 0) ? 'human' : '';
 }
 
+// The kind of job a giver offers, by the weights of config.quests.offerKinds (a post only ever has hunts).
+function offerKind(giver) {
+    const w = config.quests.offerKinds[giver] || config.quests.offerKinds.board;
+    const list = Object.entries(w), total = list.reduce((t, [, n]) => t + n, 0);
+    let r = Math.random() * total;
+    for (const [k, n] of list) { r -= n; if (r < 0) return k; }
+    return list[0][0];
+}
+
 // A giver offers a job: the offer waits for the wizard's answer (decideOffer) while the god may suggest one (suggest).
 // True when something was offered.
 export function beginOffer(giver) {
     const z = state.zone.current, cur = state.quest;
     if (cur && cur.kind === 'seek' && cur.target.zone === z && cur.target.giver === giver) complete(cur);     // he came to ask for work: that errand is done
     if (!canTake()) { run.questOffer = null; return false; }
-    const kind = giver === 'post' ? 'wanted' : pickRandomItem(giver === 'inn' ? 'wanted,delivery,explore,study' : 'wanted,delivery,explore,study,shrine');
+    const kind = offerKind(giver);
     const q = makeQuest(kind, giver, giver === 'post' ? z : undefined);
     if (!q) { run.questOffer = null; return false; }
     run.questOffer = { q, giver, hint: '' };
