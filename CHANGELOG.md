@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) Regions picker prefers stages the game really links (Prairie to Dunes is a direct link with no scene in between, so it is a plain walk) and says so in the report.
 - Crossing a bridge westward (Swamp to Prairie), he now keeps walking right to left into the new area from its right edge, instead of standing in his place at once.
 - Bridges (connectors) go back to walking both ways as drawn, no mirroring: only border scenes are mirrored.
 - (Developer tools) The Regions picker keeps a report of the walk (each scene, direction, mirroring, wizard position, overlay, arrival) in a box with a Copy button. A mirrored scene now mirrors its front layer (bridge overlays) with it.

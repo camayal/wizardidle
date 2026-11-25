@@ -184,7 +184,8 @@ function regionTrip(from, to, onArrive) {
         for (const b of ins(to)) {
             const w = crossingSteps(a, b);
             if (w) { pair = { a, b, steps: w.steps }; break; }
-            if (!pair) pair = { a, b, steps: null };
+            const linkedPair = destinations(a).includes(b);
+            if (!pair || (!pair.linked && linkedPair)) pair = { a, b, steps: null, linked: linkedPair };
         }
         if (pair && pair.steps) break;
     }
@@ -198,7 +199,7 @@ function regionTrip(from, to, onArrive) {
         state.zone.current = places[pair.a].zone;
         walkWizardTo(OFF_SCENE_RIGHT, () => { Object.assign(state.zone, at(pair.b)); showStage(); ui.wizardOffset = OFF_SCENE_LEFT; walkWizardTo(0, onArrive); });
     }
-    return `${pair.a} to ${pair.b}${pair.steps ? ": " + pair.steps.map((x) => x.scene + (x.mirror ? " (mirrored)" : "")).join(", ") : ": no connector, a plain walk"}`;
+    return `${pair.a} to ${pair.b}${pair.steps ? ": " + pair.steps.map((x) => x.scene + (x.mirror ? " (mirrored)" : "")).join(", ") : ": " + (pair.linked ? "linked directly in the game, a plain walk (no scene)" : "no link in the game, a plain walk")}`;
 }
 
 // The pier (a dead end): can he walk out on it from this stage, and the walk out and back to the same stage.
