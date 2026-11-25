@@ -3,7 +3,7 @@
 // A tap goes to src/nudge.js; when that leaves it unused (a fight, a job waiting) it falls through to the buttons below.
 
 import { hotspots } from '../data/hotspots.js';
-import { fight, run } from '../runtime.js';
+import { fight, run, ui } from '../runtime.js';
 import { touchSpot, newScene } from '../nudge.js';
 import { el } from './dom.js';
 
@@ -27,6 +27,24 @@ export function showHotspots(scene) {
         b.onclick = (e) => tap(e, b, spot, scene);
         layer.appendChild(b);
     }
+}
+
+// A find in sight (a rune, a book, a statue) is a spot while he studies it; the code makes it, nobody authors it.
+export function showFindSpot(x, label, y = 24, w = 36, h = 36) {
+    const layer = el('hotspotLayer');
+    if (!layer || run.simulation) return;
+    clearFindSpot();
+    const spot = { x, y, w, h, kind: 'find', label };
+    const b = document.createElement('button');
+    b.className = 'spot found';
+    const sw = Math.max(MIN_W, w);
+    Object.assign(b.style, { left: `${Math.max(0, x) / W * 100}%`, top: `${y / H * 100}%`, width: `${sw / W * 100}%`, height: `${h / H * 100}%` });
+    b.onclick = (e) => tap(e, b, spot, ui.currentBackGround);
+    layer.appendChild(b);
+}
+export function clearFindSpot() {
+    const layer = el('hotspotLayer');
+    if (layer) layer.querySelectorAll('.found').forEach((n) => n.remove());
 }
 
 function tap(e, node, spot, scene) {

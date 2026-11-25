@@ -1,6 +1,6 @@
 # Hotspots: nudging by clicking the scene
 
-Design for step 6 of the faith plan ([for_implementation_faith.md](for_implementation_faith.md), section 6, and the author's decision of 2026-11-25). **Status: design decided (author, 2026-11-25). Build step 1 done 2026-11-25 (layer, taps, cost, belief roll, console lines, one touch per scene, dev mode, `exit` kind); untested in a browser, and no spot is authored yet.**
+Design for step 6 of the faith plan ([for_implementation_faith.md](for_implementation_faith.md), section 6, and the author's decision of 2026-11-25). **Status: design decided (author, 2026-11-25). Steps 1 to 4 built 2026-11-25; untested in a browser, and no spot is authored yet. Headless runs with a bot that nudges (`god=active&nudge=1`) ran without errors and walked more (163 zone changes against 112 over 40 levels).**
 
 ## 1. What the author asked for
 
@@ -91,3 +91,10 @@ Dev mode **Modes > Hotspots**: the scene picker, drag a rectangle on the scene, 
 3. **Quests:** a followed nudge is a detour; the quest resumes from where he ends up. A nudge never completes or cancels a quest.
 4. **Cost:** flat, one number in config, tuned by playtests.
 - **One touch of the environment per scene (author, 2026-11-25):** the first tap in a scene visit counts; every later tap, on the same spot or another, does nothing and shows nothing (no text, no glow, no cost). A tap with too little faith, or while a nudge is still pending, is silent too, so nothing reveals where a spot is. During a fight, in an altar scene or while a job is waiting, a tap falls through to the old buttons.
+- **What got built for each kind (2026-11-25):**
+  - **find** (rune, book, statue): made by the code while he studies it (`showFindSpot`). A followed nudge makes that study succeed (`studyFocus`). It ends with the find.
+  - **place** (authored, `to` = shrine, inn or study): a followed nudge decides the next event (`nudgeEvent`; a shrine or inn nudge makes him go in, like a quest's). Only for spots drawn on a scene that shows the building.
+  - **exit** and **mouth** (authored, `to` = a stage, a zone or a connector point): steer the walk like a quest target, ahead of the quest (`steer`, `mode` and `eventPick` in quests.js), until he arrives or `nudgeTravelLife` events pass; the quest then takes over again (a detour).
+  - **prop** (board, post, stranger): no new spot. The existing touches (stranger or giver: take the job; door: leave it) already do this.
+  - **mouth** spots are authored, not automatic: the mouth scenes are only walked through during a crossing, so the spot goes in the scenes whose art shows an entrance.
+- **Divine lines in the console** (decided with the build): a small gold sparkle opens each line about the god's own doing (touches, tithe, nudges); it twinkles once when the line appears and stays as a faint dot. `printDivine()` in ui/render.js.

@@ -3,19 +3,27 @@
 // all the same). An Atheist who follows thinks it was his own idea.
 export const NUDGE_TEXTS = {
     devout: {
-        yes: ["{name} bows his head: \"I will obey you.\" He turns to {where}.", "\"As you wish.\" {name} goes to {where} at once."],
-        no: ["{name} hears you but his mind is elsewhere; he does not go to {where}."],
+        yes: ["{name} bows his head: \"I will obey you.\" {then}", "\"As you wish.\" {then}"],
+        no: ["{name} hears you but his mind is elsewhere; he lets it pass."],
     },
     believer: {
-        yes: ["{name} thinks it over: \"A good idea.\" He heads for {where}.", "{name} feels a pull toward {where} and follows it."],
-        no: ["{name} feels a pull toward {where} but keeps to his own way."],
+        yes: ["{name} thinks it over: \"A good idea.\" {then}", "{name} feels a pull and follows it. {then}"],
+        no: ["{name} feels a pull but keeps to his own way."],
     },
     doubter: {
-        yes: ["{name} shrugs: \"Why not?\" He goes to {where}.", "{name} frowns, unsure why, and heads for {where} anyway."],
-        no: ["{name} feels something nudge him toward {where} and tells himself it is nothing."],
+        yes: ["{name} shrugs: \"Why not?\" {then}", "{name} frowns, unsure why, and does it anyway. {then}"],
+        no: ["{name} feels something nudge him and tells himself it is nothing."],
     },
     atheist: {
-        yes: ["{name} decides, all on his own, to go to {where}.", "\"I was going that way anyway,\" says {name}, and heads for {where}."],
-        no: ["{name} does not even notice the nudge toward {where}."],
+        yes: ["{name} decides, all on his own: {then}", "\"I was going that way anyway,\" says {name}, and does it. {then}"],
+        no: ["{name} does not even notice the nudge."],
     },
+};
+
+// What he does when he follows, by the kind of spot; {where} is the spot's label.
+export const THEN = {
+    exit: ["He heads for {where}.", "He turns toward {where}."],
+    mouth: ["He heads for {where}.", "He turns toward {where}."],
+    place: ["He makes for {where}.", "He turns toward {where}."],
+    find: ["He looks closer at {where}.", "He studies {where} with care."],
 };

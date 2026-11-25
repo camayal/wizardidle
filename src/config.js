@@ -53,6 +53,7 @@ export const config = {
         nudgeCostFe: 2,            // a nudge (touching a spot of the scene) costs this many prayers' worth of faith (calculateFe)
         nudgeFollow: { devout: 0.95, believer: 0.8, doubter: 0.5, atheist: 0.1 },      // how often he follows a nudge
         nudgeLife: 3,              // events a followed nudge waits for his next decision
+        nudgeTravelLife: 10,       // ... a nudge to walk somewhere keeps steering him this many events (it ends on arrival)
     },
     // Time away (docs/plans/AWAY.md, first estimates, to playtest): away time / worldDivisor = world time.
     away: {

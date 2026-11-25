@@ -29,7 +29,8 @@ import { markup } from './ui/text.js';
 import * as quests from './quests.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 import { faithChange } from './faith.js';
-import { tickNudge } from './nudge.js';
+import { endFind, nudgeEvent, studyFocus, tickNudge } from './nudge.js';
+import { showFindSpot } from './ui/hotspots.js';
 
 //define statueobj
 const statueObj = {
@@ -142,8 +143,10 @@ function event() {
     }else{
         masterOption = Math.floor((Math.random() * 5) + 1)
         tickNudge();
-        const questOption = quests.eventPick();     // a quest: the search may make the next event (src/quests.js)
-        if (questOption) masterOption = questOption;
+        const nudged = nudgeEvent();                // the god's nudge toward a shrine, an inn or a study (src/nudge.js)
+        const questOption = nudged ? 0 : quests.eventPick();     // a quest: the search may make the next event (src/quests.js)
+        if (nudged) masterOption = nudged;
+        else if (questOption) masterOption = questOption;
         else if (restless()) masterOption = 2;        // stayed too long: explore takes him away
     }
     state.zone.stay = (state.zone.stay || 0) + 1;
@@ -548,11 +551,12 @@ function findStatue(){
         }else{
             print(`${wizardName()} finds a ${statueObj["statue_" + state.zone.current].name} statue`);
         }
+        showFindSpot((STATUE_X[state.zone.current] || 190) - 16, 'the statue', 8, 32, 52)       // the god may point at it (src/nudge.js)
         run.previousEvent = "findStatue"
         break;
         case 2:
         //examine and get or not
-        if (YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
+        if (studyFocus() || YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
             stats.count("study.statueSuccess");
             spell("spellStudyGood_15",true,0,0,overStatue());
             learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue's inscriptions,feels the power of the statue");
@@ -582,6 +586,7 @@ function findStatue(){
         break;
         case 5:
         print(`${wizardName()} leaves the statue and continues`)
+        endFind();
         endEvent();
         addXP(1);
         walkThroughScene(newStage, nextEvent);  // walks on out of the scene, into the next one
@@ -627,14 +632,15 @@ function findRuneOrBook(){
             loadNPC(`runa${number}`)
             quests.onRune();
         }
-        print(`${wizardName()} finds ${run.previousEvent == "findRuneorBook" ? "another " : "a "}${run.objectToStudy}`) 
+        print(`${wizardName()} finds ${run.previousEvent == "findRuneorBook" ? "another " : "a "}${run.objectToStudy}`)
+        showFindSpot(ui.findSpot - 6, `the ${run.objectToStudy}`)       // the god may point at it (src/nudge.js)
         stats.count(`study.found.${run.objectToStudy}`)
         if (stats.get("study.found.book") >= 1000) logro.set(logro.logro_libros);
         if (stats.get("study.found.rune") >= 1000) logro.set(logro.logro_runas);
         run.previousEvent = "findRuneorBook"
         break;
         case 2:
-        if (YesOrNot(stat("pStudy"),0)){
+        if (studyFocus() || YesOrNot(stat("pStudy"),0)){
             playSound("statUp");
             stats.count("study.success");
             spell("spellStudyGood_15",true,0,0,aboveFind());
@@ -666,6 +672,7 @@ function findRuneOrBook(){
         clearNPC();
         run.objectToStudy = "";
         ui.findSpot = null;
+        endFind();
         endEvent();
         addXP(0.25);
         walkThroughScene(newStage, nextEvent);  // walks on out of the scene, into the next one

@@ -10,9 +10,10 @@ import { stats } from './stats.js';
 import { beliefLevel } from './belief.js';
 import { faithChange } from './faith.js';
 import { calculateFe } from './wizard.js';
-import { NUDGE_TEXTS } from './data/nudgeTexts.js';
+import { NUDGE_TEXTS, THEN } from './data/nudgeTexts.js';
 import { YesOrNot } from './utils.js';
-import { print, updateHeading, wizardName } from './ui/render.js';
+import { clearFindSpot } from './ui/hotspots.js';
+import { printDivine, updateHeading, wizardName } from './ui/render.js';
 
 export const nudgeCost = () => Math.round(calculateFe() * config.faith.nudgeCostFe);
 
@@ -33,12 +34,43 @@ export function touchSpot(spot) {
     stats.count(`nudge.sent.${spot.kind}`);
     stats.count(follows ? 'nudge.followed' : 'nudge.refused');
     const lines = NUDGE_TEXTS[level][follows ? 'yes' : 'no'], line = lines[Math.floor(Math.random() * lines.length)];
-    print(`<i>${line.replace('{name}', wizardName()).replace('{where}', spot.label || 'there')}</i>`);
-    if (follows) run.nudge = { kind: spot.kind, to: spot.to, label: spot.label, life: config.faith.nudgeLife };
+    const thens = THEN[spot.kind] || THEN.exit, then = thens[Math.floor(Math.random() * thens.length)];
+    printDivine(`<i>${line.replace('{then}', follows ? then : '').replace('{where}', spot.label || 'there').replace('{name}', wizardName()).trim()}</i>`);
+    const travels = spot.kind == 'exit' || spot.kind == 'mouth';
+    if (follows) run.nudge = { kind: spot.kind, to: spot.to, label: spot.label, fresh: true, life: travels ? config.faith.nudgeTravelLife : config.faith.nudgeLife };
     return 'done';
 }
 
 // Each event: a pending nudge grows old.
 export function tickNudge() {
     if (run.nudge && --run.nudge.life <= 0) run.nudge = null;
+}
+
+// A place nudge (a shrine, an inn, something to study in sight) decides the next event; returns its number or 0.
+const PLACE_EVENT = { shrine: 3, inn: 4, study: 5 };
+export function nudgeEvent() {
+    const n = run.nudge;
+    if (!n || n.kind != 'place') return 0;
+    run.nudge = null;
+    const event = PLACE_EVENT[n.to];
+    if (!event) return 0;
+    stats.count('nudge.used.place');
+    if (event == 3) run.questShrine = true;          // he goes in, as for a quest's shrine
+    if (event == 4) run.questInn = true;
+    return event;
+}
+
+// While he studies a find the god pointed at: this study succeeds. True once, then the nudge is used up.
+export function studyFocus() {
+    const n = run.nudge;
+    if (!n || n.kind != 'find') return false;
+    run.nudge = null;
+    stats.count('nudge.used.find');
+    return true;
+}
+
+// The find is over: a nudge about it that was not used goes with it.
+export function endFind() {
+    if (run.nudge && run.nudge.kind == 'find') run.nudge = null;
+    clearFindSpot();
 }

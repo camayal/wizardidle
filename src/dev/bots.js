@@ -5,10 +5,13 @@
 //   god=idle     never touches
 //   god=active   revives at once, heals below 30% HP, tithes at every shrine
 //   heal=0.5, revive=0|1, tithe=0|1   change one rule of either bot (a custom god)
+//   nudge=1      touches a made-up spot of the scene now and then (a shrine, an inn, a study, a zone to walk to), src/nudge.js
 
 import { state } from '../state.js';
 import { fight, run, ui } from '../runtime.js';
 import { centerBtn, pjBtn } from '../divine.js';
+import { newScene, touchSpot } from '../nudge.js';
+import { zones } from '../data/zones.js';
 
 const BOTS = {
     idle: { heal: 0, revive: false, tithe: false },
@@ -21,9 +24,14 @@ export function makeBot(params) {
     if (params.has('heal')) rules.heal = Number(params.get('heal'));
     if (params.has('revive')) rules.revive = params.get('revive') == '1';
     if (params.has('tithe')) rules.tithe = params.get('tithe') == '1';
+    rules.nudge = params.get('nudge') == '1';
+    let steps = 0;
+    const spots = () => [{ kind: 'place', to: 'shrine', label: 'the shrine' }, { kind: 'place', to: 'inn', label: 'the inn' }, { kind: 'place', to: 'study', label: 'the old stones' },
+        { kind: 'exit', to: Object.keys(zones)[Math.floor(Math.random() * Object.keys(zones).length)], label: 'the road' }];
     return {
         name, rules,
         step() {
+            if (rules.nudge && ++steps % 15 == 0 && !fight.pjDead && !fight.enemy) { newScene(); const all = spots(); touchSpot(all[Math.floor(Math.random() * all.length)]); }
             if (fight.pjDead) {
                 if (rules.revive && !run.disablePjBtn) pjBtn();
                 return;

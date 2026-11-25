@@ -276,6 +276,9 @@
                 
             }
 
+            .sp { color: #c8a23a; opacity: 0.65; font-size: 0.85em; }
+            .sp.spNew { display: inline-block; animation: spTwinkle 1.6s ease-out; }
+            @keyframes spTwinkle { 0% { opacity: 0; transform: scale(0.3); text-shadow: 0 0 0 #ffe27a; } 30% { opacity: 1; transform: scale(1.5); text-shadow: 0 0 6px #ffe27a; } 100% { opacity: 0.65; transform: scale(1); text-shadow: 0 0 0 #ffe27a; } }
             #hotspotLayer { pointer-events: none; z-index: 5; }
             #hotspotLayer .spot { position: absolute; pointer-events: auto; background: transparent; border: none; padding: 0; cursor: pointer; border-radius: 6px; }
             #hotspotLayer .spot.glow { animation: spotGlow 1.6s ease-out; }

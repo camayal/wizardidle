@@ -10,7 +10,7 @@ import { reviveEV, startEvent } from './events.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
 import { logro } from './achievements.js';
-import { enterPlace, loadBackground, loadNPC, print, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { enterPlace, loadBackground, loadNPC, print, printDivine, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 import { interruptMidasHeal } from './bossEffects.js';
 import { config } from './config.js';
 import { cabinSpot } from './cabin.js';
@@ -48,7 +48,7 @@ function reviveByTouch() {
     run.disablePjBtn = true;
     playSound("revive");
     spell("spellMultiDivine_28", true);
-    print(`${wizardName()} feels the divine touch!`);
+    printDivine(`${wizardName()} feels the divine touch!`);
     if (!!fight.autorevive) {
         loop.stop("selfRevive");
         fight.autorevive = "";
@@ -97,7 +97,7 @@ function healByTouch() {
         updateHeading();
         playSound("heal");
         spell("spellHeal_8", true);
-        print(`${wizardName()} feels a healing touch and recovers ${ui.healIcon}${roundNumbertoLetter(healHit)}`);
+        printDivine(`${wizardName()} feels a healing touch and recovers ${ui.healIcon}${roundNumbertoLetter(healHit)}`);
     }
 }
 
@@ -138,7 +138,7 @@ function npcBtn(){
             updateHeartNPC()
             faithChange(-faithLost, "hit");
             updateHeading();
-            print(`${wizardName()} ${txt}${ui.heartIcon} ${roundNumbertoLetter(fight.enemyHP)}`)
+            printDivine(`${wizardName()} ${txt}${ui.heartIcon} ${roundNumbertoLetter(fight.enemyHP)}`)
             stats.count("god.hits");
             touchedCheck();
         }
@@ -163,7 +163,7 @@ function centerBtn(){
             run.feGanada = faithChange(run.feGanada * state.player.faithMultiplier, "tithe");
             state.player.gold = state.player.gold - ofrendaGold;
             const textoffer = "feels the need to give a higher tithe, increases the tithe, feels that someone wants him to offer extra gold"
-            print(`${wizardName()} ${pickRandomItem(textoffer)} (${ui.goldIcon} -${roundNumbertoLetter(ofrendaGold)}, ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)})`);
+            printDivine(`${wizardName()} ${pickRandomItem(textoffer)} (${ui.goldIcon} -${roundNumbertoLetter(ofrendaGold)}, ${ui.spiritIcon} ${roundNumbertoLetter(run.feGanada)})`);
             stats.count("faith.mandatoryOffers");
             stats.add("gold.offered", Math.round(ofrendaGold));
             updateHeading();

@@ -320,7 +320,21 @@ export function reachable(start) {
 }
 
 // 'leave' (the next stage on the way is in another zone), 'move' (stay in this zone: on the way, or searching), or null (no quest).
+// The god's nudge (src/nudge.js) toward an exit or a mouth: a followed one steers the walk like a quest target does, ahead of
+// the quest (a detour: the quest takes over again on arrival or when the nudge runs out).
+const nudgeTarget = () => {
+    const n = run.nudge;
+    if (!n || (n.kind !== 'exit' && n.kind !== 'mouth') || !n.to) return null;
+    return zones[n.to] ? { zone: n.to } : { scene: n.to };
+};
+const nudgeArrived = (t) => (t.scene ? here() === t.scene : state.zone.current === t.zone);
+
 export function mode() {
+    const nt = nudgeTarget();
+    if (nt && !nudgeArrived(nt)) {
+        const best = bestOf({ target: nt }, stepsFrom(here()));
+        if (best) return places[best].zone === state.zone.current ? 'move' : 'leave';
+    }
     const q = state.quest;
     if (!q) return null;
     if (q.phase === 'search') return 'move';
@@ -331,6 +345,8 @@ export function mode() {
 
 // The stage to walk to among `list` (the moves or the destinations of `origin`), or null: pick at random as usual.
 export function steer(origin, list) {
+    const nt = nudgeTarget();
+    if (nt && !nudgeArrived(nt)) { const best = bestOf({ target: nt }, list); if (best) return best; }
     const q = state.quest;
     if (!q || q.phase === 'search') return null;
     return bestOf(q, list);
@@ -346,6 +362,18 @@ export function eventPick() {
     const Qs = qs();
     if (Qs.orderWait > 0) Qs.orderWait--;
     volcanoWhisper();
+    const nt = nudgeTarget();
+    if (nt) {
+        if (nudgeArrived(nt)) {
+            run.nudge = null;
+            stats.count('nudge.used.exit');
+            print(`<i>${wizardName()} has come where your hint pointed.</i>`);
+        } else {            // on the god's detour: the quest waits
+            if (run.nudge.fresh) { run.nudge.fresh = false; return 2; }
+            return YesOrNot(config.quests.pTravelExplore, 0) ? 2 : 0;
+        }
+    }
+    if (state.quest && state.quest.phase === 'search' && startPhase(state.quest) === 'travel') state.quest.phase = 'travel';      // a detour took him out of the quest's zone
     if (!state.quest) { wish(); return 0; }
     const q = state.quest;
     if (q.target.report) {          // a hunt to report: in the Town he goes to the guild (event 6), otherwise he travels there
