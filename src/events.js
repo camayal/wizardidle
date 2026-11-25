@@ -445,7 +445,9 @@ function innEV(){
 // 256 x 64 scene; his place is x 32, so walking to x means an offset of x - 32.
 const STATUE_X = { el_Bosque: 207, el_Castillo: 128, el_Desierto: 172, el_Duenon: 161, el_Heidan: 195, el_Pantano: 188,
     el_Volcan: 183, la_Ciudad: 148, la_Gruta: 220, la_Mina: 200, la_Pradera: 161, la_Torre: 208, la_Tundra: 212, las_Dunas: 180 };
-const CROSS_X = 124;                // shrine crosses stand around the middle of the scene
+// Zones where his usual stop beside the statue lands in the lava: pixels to stop earlier
+const STATUE_BACK = { el_Volcan: 18 };
+const CROSS_X = 124;               // shrine crosses stand around the middle of the scene
 const SHRINE_STOP = 22;             // his offset at a shrine: sprite x 54-86, clear of the cross (left edge about x 100)
 const READ_SPOT = 122;               // his offset at a board or post: sprite x 154-186, just left of the prop (it stands at x 192)
 const LOOT_STOP = 120;              // his offset at a container: sprite x 152-184, just before it (drawn at x 192)
@@ -520,7 +522,7 @@ function findStatue(){
     switch(optionTemp){
         case 1:
         //found and change locality
-        enterPlace(`${state.zone.current}_estatua`, null, () => walkWizardTo((STATUE_X[state.zone.current] || 190) - 88));
+        enterPlace(`${state.zone.current}_estatua`, null, () => walkWizardTo((STATUE_X[state.zone.current] || 190) - 88 - (STATUE_BACK[state.zone.current] || 0)));
         stats.count(`explore.statue.statue_${state.zone.current}`)
         stats.count("explore.statues");
         if (run.previousEvent == "findStatue"){
