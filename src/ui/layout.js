@@ -222,7 +222,11 @@ function layoutPortrait(){
     }
 
     // sizes everything else depends on
-    const headingH = Math.max(s * 0.21, tbTop * 2 + step + tb);
+    // tall phones: the XP plate (bar, HP, gold, spirit) drops under the buttons and takes the full width,
+    // so its text can grow with them; otherwise it sits beside the buttons as always
+    const tall = kb > 1.02, plateU = s * 0.0042 * (tall ? kb : 1);
+    const plateTop = tall ? tbTop * 1.5 + step * 2 : s * 0.092;
+    const headingH = tall ? plateTop + 28 * plateU + tbTop : Math.max(s * 0.21, tbTop * 2 + step + tb);
     const marcoH = s * 0.3125;
     const sceneH = s * 0.25;
     const backConsoleH = H - parseInt(sceneH) * 1.2 - parseInt(headingH) * 1.2;
@@ -233,9 +237,9 @@ function layoutPortrait(){
 
     // heading
     setStyles("heading", { height: headingH });
-    const plateW = Math.min(s * 0.7, tbLeft - s * 0.04);
-    setStyles("pjName", { fontSize: button, width: plateW });
-    layoutXPPlate(Math.max(s * 0.092, (headingH - 28 * s * 0.0042) / 2), plateW, s * 0.0042);
+    const plateW = tall ? s * 1.0 : Math.min(s * 0.7, tbLeft - s * 0.04);
+    setStyles("pjName", { fontSize: button * (tall ? kb : 1), width: Math.min(s * 0.7, tbLeft - s * 0.04) });
+    layoutXPPlate(plateTop, plateW, plateU);
     setEach(TOOLBAR, { display: "block", width: tb });
     setEach(["btn1", "btn4"], { left: tbLeft });
     setEach(["btn2", "btn5"], { left: tbLeft + step });
