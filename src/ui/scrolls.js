@@ -398,10 +398,10 @@ function drawSlider(slider, defaultStep) {
     // the minus and plus at the ends step the slider; both sliders have them, so they line up
     for (const [cls, delta] of [["aSmall", -1], ["aBig", 1]]) {
         const glyph = row.querySelector("." + cls);
-        Object.assign(glyph.style, { display: "inline-block", width: `${9 * su}px`, textAlign: "center", fontSize: `${10 * su}px`, lineHeight: `${14 * su}px`,
+        Object.assign(glyph.style, { display: "inline-block", width: `${11 * su}px`, textAlign: "center", fontSize: `${10 * su}px`, lineHeight: `${14 * su}px`,
             color: "#3c2412", cursor: "pointer", userSelect: "none", touchAction: "manipulation" });
         const image = glyph.querySelector("img");
-        if (image) { image.style.imageRendering = "pixelated"; image.style.verticalAlign = "middle"; image.style.width = `${(cls == "aSmall" ? 5 : 9) * su}px`; }
+        if (image) { image.style.imageRendering = "pixelated"; image.style.verticalAlign = "middle"; image.style.width = `${Number(image.dataset.w || (cls == "aSmall" ? 5 : 9)) * su}px`; }
         glyph.onclick = () => {
             const next = Math.max(0, Math.min(steps, Number(slider.value) + delta));
             if (next == Number(slider.value)) return;
@@ -488,7 +488,7 @@ function updateHelp(){
     const settings = '<div id="settings">' +
         sliderRow('textSizeSlider', 'Text size', 'textSizeName', TEXT_SIZES[sizeIndex].label, TEXT_SIZES.length - 1, sizeIndex, '<img src="' + art('slider_a_small') + '">', '<img src="' + art('slider_a_big') + '">') +
         switchRow('soundToggle', 'Sound') +
-        sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '&minus;', '+') +      // a speaker pair replaces these once drawn
+        sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '<img src="' + art('slider_vol_low') + '" data-w="7">', '<img src="' + art('slider_vol_high') + '" data-w="11">') +
         
         switchRow('fightToggle', 'Fight details in the console') +
         switchRow('shakeToggle', 'Screen shake') +
