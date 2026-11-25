@@ -200,8 +200,11 @@ function changeLocality() {
         if (run.crossing) {                  // over a bridge: its scenes first, then the new stage
             const { steps } = run.crossing;
             run.crossing = null;
-            print(`${wizardName()} is entering to the ${zones[state.zone.current].name}, ${pickRandomItem(zones[state.zone.current].legend)}`);
-            walkAcross(steps, showStage);
+            // the scenes of the crossing come first ("comes to the spring bridge"); he enters the zone when its own scene shows
+            walkAcross(steps, () => {
+                showStage();
+                print(`${wizardName()} is entering to the ${zones[state.zone.current].name}, ${pickRandomItem(zones[state.zone.current].legend)}`);
+            });
             break;
         }
         //change background
