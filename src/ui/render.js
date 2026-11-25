@@ -950,19 +950,24 @@ function print(data, minor = false) {
     setLiveTime(); //set seconds of game and add to total time
     if (run.simulation) return;     // nobody reads the console in a simulation
     if (minor && !prefs.fightLines) return;     // Settings: fight details off hides each round of a fight
-    el("console").innerHTML = `${data}<br>${el("console").innerHTML.replaceAll(" dlNew", "")}`;      // only the newest line sparkles
-    const brSplit = el('console').innerHTML.split("<br>")
-    if (brSplit.length > MAXLINESINCONSOLE) {
-        brSplit.splice(-1, 1);
-        el("console").innerHTML = brSplit.join("<br>");
+    // the new line is inserted in front; the lines already there are not rebuilt, so the sparkles of a divine line
+    // keep playing while ordinary lines come after it (printDivine takes its sparkle class off after a while)
+    const con = el("console");
+    con.insertAdjacentHTML("afterbegin", `${data}<br>`);
+    const breaks = con.querySelectorAll("br");
+    if (breaks.length > MAXLINESINCONSOLE) {         // drop the oldest line: what stands before the last <br> (back to the one before), and that <br>
+        const last = breaks[breaks.length - 1];
+        while (last.previousSibling && last.previousSibling.nodeName !== "BR") last.previousSibling.remove();
+        last.remove();
     }
-    ;
 };
 
 // A line about the god's own doing (a touch, a nudge): little sparkles play over the whole line for a couple of
 // seconds, then they are gone and the text is untouched (css .dl in index.html).
 function printDivine(data, minor = false) {
     print(`<span class="dl dlNew">${data}</span>`, minor);
+    const line = el("console").firstElementChild;
+    if (line && line.classList.contains("dlNew")) setTimeout(() => line.classList.remove("dlNew"), 2600);
 }
 
 export {

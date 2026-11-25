@@ -360,3 +360,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Travel tool rebuilt for stability (author asked): src/data/travel.json is the one data file (saved, verdicts, positions, points, kinds), travelOverrides.js only loads it (JSON import) and applies moved scene positions to places; serve.py writes it verbatim, backs the old one up (docs/travel-backups, 60 kept), refuses a stale page (base stamp), then runs travel_graph.py; the tool starts from the file (not the graph) and drops stale drafts; generator reads the JSON and fails loudly. Untested in a browser: no node here.
 
 - 2026-11-25 travel_graph.py GROUND_TWINS: mouth_dunas-pradera_gruta_under is a ground node 12 px right of its door (was an underground node); tool pos() follows. Other mouths unchanged.
+
+- 2026-11-25 Console: print() inserts the new line in front instead of rebuilding innerHTML, so the dlNew sparkles of a divine line are not cut by the next line; printDivine removes the class after 2.6 s. Untested in a browser.

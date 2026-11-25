@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The sparkles on the god's lines (touches, nudges) now keep playing for their couple of seconds: a new console line no longer rebuilds the lines already there (that was cutting the sparkles short as soon as the next line, e.g. a fight round, arrived).
 - (Developer tools) The Grotto canyon mouth's inside twin (mouth_dunas-pradera_gruta_under) is on the ground map, beside its door, not on the underground one: it is two scenes that are one, like a bridge. Its links are unchanged.
 - (Developer tools) The travel tool is stable now: everything you do in it (link verdicts, moved scenes and points, added points, scene types) is saved in one plain file, src/data/travel.json, exactly as the tool sends it, with no filtering. The game reads that file directly, so your link verdicts are live at once. Each save keeps the old file in docs/travel-backups, a page loaded before the last save is refused instead of wiping newer work, a stale draft is dropped, and a damaged file stops the graph build with a clear message instead of silently losing points. Moved scenes are stored in the file too (zones.js is no longer rewritten).
 - (Developer tools) Removed the old travel point enter_mine_S (the mine's exit from before the connectors) and its links; the graph is regenerated. The tunnel scene itself still plays behind the south mine mouth.
