@@ -6,6 +6,7 @@ import { hotspots } from '../data/hotspots.js';
 import { fight, run, ui } from '../runtime.js';
 import { touchSpot, newScene } from '../nudge.js';
 import { el } from './dom.js';
+import { spell } from '../spells.js';
 
 const W = 256, H = 64;          // the scene in sprite px
 const MIN_W = 24;               // a spot is never narrower than this: it has to be easy to hit with a finger
@@ -51,7 +52,7 @@ function tap(e, node, spot, scene) {
     const blocked = fight.enemy || /altar/i.test(String(scene)) || run.disablePjBtn;      // those scenes keep their own touches
     const used = blocked ? false : touchSpot(spot);
     if (used) {
-        if (used == 'done') { node.classList.remove('glow'); void node.offsetWidth; node.classList.add('glow'); }     // the glow only shows after a real nudge
+        if (used == 'done') spell('spellSparkGold_8', true, 0, 0, { x: Math.round(spot.x + spot.w / 2 - 15), y: Math.round(spot.y + spot.h / 2 - 15) }, true);     // sparkles (a sprite) only after a real nudge
         return;
     }
     // not ours: the button under the spot gets the tap

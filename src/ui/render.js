@@ -930,7 +930,7 @@ function print(data, minor = false) {
     setLiveTime(); //set seconds of game and add to total time
     if (run.simulation) return;     // nobody reads the console in a simulation
     if (minor && !prefs.fightLines) return;     // Settings: fight details off hides each round of a fight
-    el("console").innerHTML = `${data}<br>${el("console").innerHTML.replaceAll(" spNew", "")}`;      // only the newest sparkle twinkles
+    el("console").innerHTML = `${data}<br>${el("console").innerHTML.replaceAll(" dlNew", "")}`;      // only the newest line sparkles
     const brSplit = el('console').innerHTML.split("<br>")
     if (brSplit.length > MAXLINESINCONSOLE) {
         brSplit.splice(-1, 1);
@@ -939,9 +939,10 @@ function print(data, minor = false) {
     ;
 };
 
-// A line about the god's own doing (a touch, a nudge): a small gold sparkle opens it, and twinkles once when it appears.
+// A line about the god's own doing (a touch, a nudge): little sparkles play over the whole line for a couple of
+// seconds, then they are gone and the text is untouched (css .dl in index.html).
 function printDivine(data, minor = false) {
-    print(`<span class="sp spNew">&#10022;</span> ${data}`, minor);
+    print(`<span class="dl dlNew">${data}</span>`, minor);
 }
 
 export {

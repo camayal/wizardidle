@@ -112,7 +112,7 @@ const MAKERS = {
     },
     // Looking for work: he only goes to the inns to ask (the board and the posts he finds by chance on his way, never on purpose).
     seek(giver) {
-        const spots = INN_ZONES().filter(hasStages).map((z) => ({ z, g: 'inn', t: `Look for work at the inn of the ${zoneName(z)}` }));
+        const spots = INN_ZONES().filter((z) => hasStages(z) && !(giver === 'himself' && z === 'las_Dunas')).map((z) => ({ z, g: 'inn', t: `Look for work at the inn of the ${zoneName(z)}` }));
         const s = spots[Math.floor(Math.random() * spots.length)];
         return s ? base('seek', giver, s.t, { zone: s.z, giver: s.g }, 'xp') : null;
     },
