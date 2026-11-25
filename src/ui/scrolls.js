@@ -419,13 +419,13 @@ function drawSlider(slider, defaultStep) {
         ctx.drawImage(track, 0, 0, 8, 10, 0, 2 * su, 8 * su, 10 * su);
         for (let x = 8 * su; x < W - 8 * su; x += 4 * su) ctx.drawImage(track, 8, 0, 4, 10, x, 2 * su, 4 * su, 10 * su);
         ctx.drawImage(track, 12, 0, 8, 10, W - 8 * su, 2 * su, 8 * su, 10 * su);
-        // the tick of the default step is amber, so the default can be found again
+        // the tick of the default step is red, so the default can be found again
         const amber = document.createElement("canvas");
         amber.width = 3; amber.height = 5;
         const actx = amber.getContext("2d");
         actx.drawImage(ticks, 0, 0);
         actx.globalCompositeOperation = "source-atop";
-        actx.fillStyle = "#f0a81e";
+        actx.fillStyle = "#c81e1e";      // the red of the seal knob
         actx.fillRect(0, 0, 3, 5);
         for (let i = 0; i <= steps; i++) ctx.drawImage(i == defaultStep ? amber : ticks, 0, 0, 3, 5, Math.round(7 * su + i * (W - 14 * su) / steps - 1.5 * su), Math.round(4.5 * su), 3 * su, 5 * su);
     };

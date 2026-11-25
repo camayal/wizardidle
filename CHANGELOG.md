@@ -2,7 +2,7 @@
 
 ## Unreleased
 - Map scroll: the title is always "Map"; the name of the region (or connector) is written under the map picture.
-- Settings: the tick of the default step on the sliders is amber; the sliders, switches and buttons now grow with the text size.
+- Settings: the tick of the default step on the sliders is red like the seal; the sliders, switches and buttons now grow with the text size.
 - Settings: Reset and Import ask like the Kill button (a parchment note, press again) instead of browser dialogs; Export says "Copied" in a note.
 - Settings: the text size slider has the small and the big A at its ends, the volume slider a small and a loud speaker; tapping an end steps the slider, and both sliders line up.
 - More settings: Volume (slider, four steps), Fight details in the console (off hides each round of a fight, keeps the start and the end), Screen shake, Vibration (a short buzz on divine touches, phones that can), Keep the screen awake (Wake Lock, where the browser has it), Export save / Import save (the save and the world as one text, copied or pasted, to move a game between devices) and Reset settings. All kept per device.
