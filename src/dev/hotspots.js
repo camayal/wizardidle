@@ -6,7 +6,9 @@
 // only here: in the game nothing marks a spot.
 
 import { hotspots } from '../data/hotspots.js';
-import { places } from '../data/zones.js';
+import { places, zones } from '../data/zones.js';
+import { connectorSceneNames, connectorSceneInfo } from '../data/connectors.js';
+import { art } from '../media.js';
 import { sidePanel } from './panel.js';
 import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
@@ -37,6 +39,7 @@ function draw() {
         overlay.appendChild(d);
     });
     list();
+    thumbs();
 }
 
 function list() {
@@ -55,11 +58,38 @@ function list() {
     });
 }
 
+// The scenes by region: each zone's stages, then its inside places, the bridges and other connectors, the mouths and the borders.
+function regions() {
+    const out = {};
+    for (const [n, p] of Object.entries(places)) if (p.zone && zones[p.zone]) (out[`${zones[p.zone].name} (${p.zone})`] = out[`${zones[p.zone].name} (${p.zone})`] || []).push(n);
+    const inside = Object.keys(places).filter((n) => !places[n].zone);
+    const conn = connectorSceneNames();
+    out['Inside places (altars, inns, houses)'] = inside;
+    out['Bridges, stairs, pier, ladder'] = conn.filter((n) => !/^mouth_|^border_/.test(connectorSceneInfo(n).point));
+    out['Mouths (outside and inside)'] = conn.filter((n) => /^mouth_/.test(connectorSceneInfo(n).point));
+    out['Borders'] = conn.filter((n) => /^border_/.test(connectorSceneInfo(n).point));
+    for (const k of Object.keys(out)) out[k] = out[k].filter((n) => n).sort();
+    return out;
+}
+
+function thumbs() {
+    const box = side.body.querySelector('[data-id=thumbs]'), name = side.body.querySelector('[data-id=region]').value;
+    const list = regions()[name] || [];
+    box.innerHTML = list.map((n) => {
+        const count = (draft[n.toLowerCase()] || []).length;
+        return `<div data-n="${n}" style="cursor:pointer;width:132px;text-align:center;border:2px solid ${n.toLowerCase() == key() ? '#f0f' : 'transparent'};border-radius:3px">
+            <img loading="lazy" src="${art(n.toLowerCase())}" style="width:128px;height:32px;image-rendering:pixelated;display:block;background:#222">
+            <small>${esc(n)}${count ? ` <b style="color:#c0c">(${count})</b>` : ''}</small></div>`;
+    }).join('') || '<div class="muted">No scene here.</div>';
+    box.querySelectorAll('[data-n]').forEach((d) => { d.onclick = () => { show(d.dataset.n); }; });
+}
+
 function show(name) {
     scene = name.trim();
     if (!scene) return;
+    side.body.querySelector('[data-id=scene]').value = scene;
     loadBackground(scene);
-    setTimeout(() => { placeOverlay(); draw(); }, 100);
+    setTimeout(() => { placeOverlay(); draw(); thumbs(); }, 100);
 }
 
 const point = (e) => {
@@ -77,8 +107,10 @@ export async function open(devTools) {
     side.maxWidth = 700;
     el('console').style.visibility = 'hidden'; el('backConsole').style.visibility = 'hidden';
     side.body.innerHTML = `
-        <div class="row"><b>Scene:</b><input type="text" data-id="scene" list="hsScenes" placeholder="e.g. la_Torre1" size="20" spellcheck="false">
-            <datalist id="hsScenes">${Object.keys(places).sort().map((n) => `<option value="${n}">`).join('')}</datalist><button data-id="go">Show</button></div>
+        <div class="row"><b>Region:</b><select data-id="region">${Object.keys(regions()).map((k) => `<option>${esc(k)}</option>`).join('')}</select>
+            <b>Scene:</b><input type="text" data-id="scene" list="hsScenes" placeholder="or type a name" size="20" spellcheck="false">
+            <datalist id="hsScenes">${Object.values(regions()).flat().map((n) => `<option value="${n}">`).join('')}</datalist><button data-id="go">Show</button></div>
+        <div data-id="thumbs" style="display:flex;flex-wrap:wrap;gap:4px;max-height:230px;overflow:auto;margin:4px 0"></div>
         <div class="muted">Drag a rectangle on the scene to add a spot (sprite px of the 256 x 64 scene; a spot under 24 px wide is widened in the game). The outlines show only here. One touch per scene in the game; the first tap spends faith.</div>
         <div data-id="list"></div>
         <div class="row"><button data-id="save">Save to src/data/hotspots.js</button><span data-id="msg" class="muted"></span></div>`;
@@ -97,6 +129,8 @@ export async function open(devTools) {
     timer = setInterval(() => { if (overlay) placeOverlay(); }, 500);
     const input = side.body.querySelector('[data-id=scene]');
     side.body.querySelector('[data-id=go]').onclick = () => show(input.value);
+    side.body.querySelector('[data-id=region]').onchange = thumbs;
+    thumbs();
     input.onkeydown = (e) => { if (e.key == 'Enter') show(input.value); };
     side.body.querySelector('[data-id=save]').onclick = async () => {
         const msg = side.body.querySelector('[data-id=msg]');

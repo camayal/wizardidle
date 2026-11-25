@@ -80,6 +80,7 @@ export const connectorScenesOf = (point) => {
     return own.length && !own[0].endsWith("_under") && SCENE_INFO[`${own[0]}_under`] ? [...own, `${own[0]}_under`] : own;
 };
 export const connectorSceneInfo = (scene) => SCENE_INFO[String(scene).toLowerCase()];
+export const connectorSceneNames = () => Object.keys(SCENE_INFO);
 
 // Where the wizard's head sits, as a share of the scene (row 28 of 256 everywhere; row 24 in the connector scenes, whose overlays were drawn for the raised walk line).
 export const headLevelShare = (scene) => connectorSceneInfo(scene) ? 0.09375 : 0.109375;

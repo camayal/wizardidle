@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) The Hotspots mode picks scenes by region with small thumbnails, and lists the bridges, stairs, pier, mouths and borders too. The Tower has its first four spots (the doors and gates between its rooms).
 - Divine lines in the console (the god's touches, tithes and nudges) now open with a small gold sparkle that twinkles once. Touching a rune, book or statue he is studying makes the study succeed, and touching a shrine, inn or crossing in a scene (once a scene has such spots) steers him there.
 - (Developer tools) A Hotspots mode to place clickable spots on scenes; in the game, touching such a spot will nudge the wizard (once per scene, costing a little faith, followed according to his belief). No spots are placed yet.
 - Belief now shapes how he copes on his own: a Doubter's healing touch heals less, touches cost the same at every level, and the less he believes the more XP and critical hits he earns by himself.
