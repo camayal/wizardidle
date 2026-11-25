@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- A wizard on a quest follows the best path again: the route is worked out over the links you marked only (before, it also used automatic shortcuts he could not walk, so his steps looked like random jumps), and the step itself counts, so a Difficult link is avoided when an Accessible one gets him there.
 - A faith candle sits on top of the stats/XP box, right aligned: a brass candle with a glow for each belief level (Devout with the halo, Believer, Doubter, and a snuffed wick with smoke for Atheist). A long wizard name is clipped before it runs under it.
 - The sparkles on the god's lines (touches, nudges) now keep playing for their couple of seconds: a new console line no longer rebuilds the lines already there (that was cutting the sparkles short as soon as the next line, e.g. a fight round, arrived).
 - (Developer tools) The Grotto canyon mouth's inside twin (mouth_dunas-pradera_gruta_under) is on the ground map, beside its door, not on the underground one: it is two scenes that are one, like a bridge. Its links are unchanged.

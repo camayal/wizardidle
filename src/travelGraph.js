@@ -25,17 +25,17 @@ g.nodes.forEach((n, i) => { if (n[4]) byName[n[4]] = i; });
 const cache = new Map();            // source node -> {dist, prev}; cleared when the graph changes
 let adj = [];
 
-// The adjacency lists: the generated edges, then the manual verdicts on top (a pair set Accessible gets a cheap
-// edge, Difficult a dear one, Impossible none). The dev tools call this after changing the verdicts.
+// The adjacency lists: the manual verdicts only (a pair set Accessible gets a cheap edge, Difficult a dear one,
+// Impossible none), so a quest route never uses a step that moves() and destinations() would not take. The dev tools call this after changing the verdicts.
 function rebuild() {
-    const edges = new Map(g.edges.map(([a, b, c]) => [`${a},${b}`, c])), t = config.travel;
+    const edges = new Map(), t = config.travel;      // only the author's links: the generated edges are walls he could not walk
     for (const [k, v] of Object.entries(overrides)) {
         const [x, y] = k.split('|'), a = byName[x], b = byName[y];
         if (a === undefined || b === undefined || a === b) continue;
         const key = a < b ? `${a},${b}` : `${b},${a}`;
         if (v === 'far') edges.delete(key);
         else if (v === 'move') edges.set(key, t.accessibleCost);
-        else edges.set(key, Math.max((edges.get(key) || 0) * t.difficultFactor, t.difficultMin));
+        else edges.set(key, t.difficultMin);
     }
     adj = g.nodes.map(() => []);
     for (const [key, c] of edges) { const [a, b] = key.split(',').map(Number); adj[a].push([b, c]); adj[b].push([a, c]); }
