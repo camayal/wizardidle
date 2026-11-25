@@ -1,6 +1,6 @@
 # Hotspots: nudging by clicking the scene
 
-Design for step 6 of the faith plan ([for_implementation_faith.md](for_implementation_faith.md), section 6, and the author's decision of 2026-11-25). **Status: design, waiting for the author's approval; nothing is built.**
+Design for step 6 of the faith plan ([for_implementation_faith.md](for_implementation_faith.md), section 6, and the author's decision of 2026-11-25). **Status: design decided (author, 2026-11-25), nothing is built yet.**
 
 ## 1. What the author asked for
 
@@ -63,7 +63,7 @@ The wizard on an errand keeps his errand unless the nudge is followed; then the 
 
 ## 9. Letting the player find the spots
 
-No spots are marked by default, so the game stays a quiet idle game. See question 1 below.
+**No marks at all (decided):** pure discovery. The Information scroll already says the deity can interact with the environment. The answer is the console: when a tap lands on a spot, the line depends on his belief (*"a good idea, he goes"*, *"I will obey you"*, a Doubter's *"why not"*, an Atheist's *"his own idea"*), so the player learns what works by trying. A tap on nothing says nothing and costs nothing.
 
 ## 10. Authoring tool
 
@@ -86,4 +86,7 @@ Dev mode **Modes > Hotspots**: the scene picker, drag a rectangle on the scene, 
 
 ## Decisions
 
-(none yet)
+1. **Visibility:** no marks, no pulse, no glow before a tap. Discovery only; the console answers each tap by belief. (Section 9. The glow after a successful tap stays.)
+2. **Following:** belief rolls (Devout nearly always, Believer usually, Doubter about half, Atheist rarely); a refused nudge still costs faith.
+3. **Quests:** a followed nudge is a detour; the quest resumes from where he ends up. A nudge never completes or cancels a quest.
+4. **Cost:** flat, one number in config, tuned by playtests.
