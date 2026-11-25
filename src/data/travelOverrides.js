@@ -379,19 +379,10 @@ export const travelPoints = {
         "x": 34,
         "y": 166
     },
-    "border_gruta_duenon": {
-        "kind": "border",
-        "layer": "ground",
-        "x": 89,
-        "y": 179
-    },
     "la_Pradera15": {
         "kind": "future",
         "layer": "ground",
         "x": 191,
         "y": 107
     }
-};
-export const travelKinds = {
-    "la_Pradera14": "border"
 };
