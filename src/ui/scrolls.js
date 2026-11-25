@@ -371,8 +371,13 @@ el('innerTextScroll').addEventListener('click', (e) => {
 // The text size slider, drawn from the artist's pieces (img/ui/slider_*.png): the track is a 3-slice (caps 8 px, a
 // 4 px middle that repeats), the four ticks sit under the steps, and the thumb is the input's own thumb (CSS).
 // su is one art pixel on screen, a whole number of pixels so the pixel art stays sharp.
+function snapToDevice(px) {     // a whole number of device pixels, so the pixel art stays sharp
+    const dpr = window.devicePixelRatio || 1;
+    return Math.max(1, Math.round(px * dpr)) / dpr;
+}
+
 function drawSlider(slider) {
-    const su = Math.max(2, Math.min(Math.round(ui.em * 0.14), 4));
+    const su = snapToDevice(0.6 * Math.max(2, Math.min(Math.round(ui.em * 0.14), 4)));
     const W = 44 * su, steps = TEXT_SIZES.length - 1;
     const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = el("sliderArt");
     row.style.setProperty("--su", `${su}px`);
