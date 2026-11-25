@@ -15,6 +15,7 @@ import { playSoundAt } from '../audio.js';
 import { drawFrame, imageNow, loadNPC, looksRandom, npcBox, npcCanvas, pixelContext, playWizardAnim } from './render.js';
 import { el } from './dom.js';
 import { art } from '../media.js';
+import { prefs } from '../prefs.js';
 
 const FW = 104, FH = 80;            // a boss frame; the 64 x 64 boss rests at (36, 12) in it
 const SHAKE = [0, 1, -1, 2, -2, 2, -2, 1, -1, 2, -2, 1, -1, 1, 0, 0];     // the earthquake, px per frame
@@ -45,6 +46,7 @@ document.addEventListener("wizardidle:layout", () => {
 });
 
 function shakeScene(px) {
+    if (!prefs.shake) px = 0;      // Settings: screen shake off
     // mirrored characters (ui.facing, a fight in a scene walked right to left) keep their mirror while the scene shakes
     for (const id of SHAKEN) {
         const mirrored = ui.facing < 0 && ["pjCanvas", "npcCanvas", "spellCanvas"].includes(id) ? " scaleX(-1)" : "";

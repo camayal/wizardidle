@@ -3,6 +3,7 @@
 
 import { run, ui } from './runtime.js';
 import { snd } from './media.js';
+import { volumeScale } from './prefs.js';
 
     
 // Play a sound once by its name (its folder: src/media.js). Browsers may block sound until the player interacts; that is ignored.
@@ -10,7 +11,7 @@ function playSound(ogg, volume = 0.3){
     if (run.simulation || run.muted) return;
 
     ui.audio = new Audio(snd(ogg));
-    ui.audio.volume = volume;
+    ui.audio.volume = Math.min(1, volume * volumeScale());
     const promise = ui.audio.play();
     //avoid autoplay policy error
     if (promise !== undefined) {

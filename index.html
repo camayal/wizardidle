@@ -166,17 +166,20 @@
             /* settings page: the text size slider (art in img/ui/slider_*.png, drawn by scrolls.js; --su = one art pixel) */
             .setSliderRow{ display:flex; justify-content:flex-end; align-items:center; gap:calc(2 * var(--su)); margin:calc(2 * var(--su)) 0; flex:none; }
             #settings .setRow{ display:flex; justify-content:space-between; align-items:center; gap:1em; margin-bottom:2.4em; min-height:2.5em; }
+            .setBtn{ font-family:inherit; font-size:inherit; color:#3c2412; background:#e4ce80; border:2px solid #3c2412; border-bottom-width:4px; padding:0.3em 0.9em; cursor:pointer; image-rendering:pixelated; }
+            .setBtn:active{ background:#c4a658; border-bottom-width:2px; transform:translateY(2px); }
+            #settings .setRow.buttons{ flex-wrap:wrap; justify-content:center; }
             #settings .setRow.version{ justify-content:center; opacity:.7; margin-top:2em; }
             .setSliderRow img{ image-rendering:pixelated; }
             .setSliderBox{ position:relative; flex:none; }
             .setSliderBox canvas{ position:absolute; left:0; top:0; image-rendering:pixelated; }
-            #textSizeSlider{ position:absolute; left:0; top:0; margin:0; padding:0; background:none; -webkit-appearance:none; appearance:none; outline:none; touch-action:pan-y; }
-            #textSizeSlider::-webkit-slider-runnable-track{ background:none; border:0; height:calc(14 * var(--su)); }
-            #textSizeSlider::-moz-range-track{ background:none; border:0; height:calc(14 * var(--su)); }
-            #textSizeSlider::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; border:0; border-radius:0; width:calc(14 * var(--su)); height:calc(14 * var(--su)); background:var(--thumb) center / 100% 100% no-repeat; image-rendering:pixelated; }
-            #textSizeSlider::-moz-range-thumb{ border:0; border-radius:0; width:calc(14 * var(--su)); height:calc(14 * var(--su)); background:var(--thumb) center / 100% 100% no-repeat; image-rendering:pixelated; }
-            #textSizeSlider:active::-webkit-slider-thumb{ background-image:var(--thumbDown); }
-            #textSizeSlider:active::-moz-range-thumb{ background-image:var(--thumbDown); }
+            input.setSlider{ position:absolute; left:0; top:0; margin:0; padding:0; background:none; -webkit-appearance:none; appearance:none; outline:none; touch-action:pan-y; }
+            input.setSlider::-webkit-slider-runnable-track{ background:none; border:0; height:calc(14 * var(--su)); }
+            input.setSlider::-moz-range-track{ background:none; border:0; height:calc(14 * var(--su)); }
+            input.setSlider::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; border:0; border-radius:0; width:calc(14 * var(--su)); height:calc(14 * var(--su)); background:var(--thumb) center / 100% 100% no-repeat; image-rendering:pixelated; }
+            input.setSlider::-moz-range-thumb{ border:0; border-radius:0; width:calc(14 * var(--su)); height:calc(14 * var(--su)); background:var(--thumb) center / 100% 100% no-repeat; image-rendering:pixelated; }
+            input.setSlider:active::-webkit-slider-thumb{ background-image:var(--thumbDown); }
+            input.setSlider:active::-moz-range-thumb{ background-image:var(--thumbDown); }
 
             .btn:active {
                 transform: translateY(0.2em);
@@ -550,6 +553,7 @@
                 <img id="backMapa">
                 <img id="bocadilloMapa">
                 <img id="pjMapa">
+                <span class="goticFont" id="zoneName" style="position:absolute; text-align:center"></span>
             </div>
 
         </div>

@@ -297,6 +297,7 @@ function layoutPortrait(){
     }
     document.dispatchEvent(new Event("wizardidle:layout"));    // e.g. the stats scroll tab fits itself again
     setStyles("zoneMap", { fontSize: em * 2.5 });
+    setStyles("zoneName", { fontSize: em * 2, width: s, left: 0 });
     setStyles("backMapa", { width: s, left: 0, top: s * 0.1 });
     setStyles("bocadilloMapa", { width: s * 0.075 });
     setStyles("pjMapa", { width: s * 0.065 });

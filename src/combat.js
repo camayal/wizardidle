@@ -55,11 +55,11 @@ function battle() {
 function announceBattle() {
     const hp = ` (${ui.heartIcon}${roundNumbertoLetter(fight.enemyHP)})`;
     if (fight.bossCombat) {
-        print(`${fight.enemyName} releases the power and attack!${hp}`);
+        print(`${fight.enemyName} releases the power and attack!${hp}`, true);
     } else if (fight.hydraCombat) {
-        print(`${fight.enemyName} releases all its fury and attack with brutality!${hp}`);
+        print(`${fight.enemyName} releases all its fury and attack with brutality!${hp}`, true);
     } else {
-        print(fight.enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + hp);
+        print(fight.enemyName + pickRandomItem(" goes back, is scared, rammed, shouts, defends himself") + hp, true);
     }
 }
 
@@ -527,7 +527,7 @@ function criticAttack() {
     stats.count(`spell.school.${spells[spellId].school}`);
     stats.count(`spell.cast.${spellId}`);
     spell(spellId, false, true);
-    print(`${wizardName()} performs a <b>critic attack!</b> (${ui.attackIcon}${roundNumbertoLetter(state.player.attack * stat("fAttack"))}) &times; ${Math.round(stat("fCritic"))} - ${ui.heartIcon}${roundNumbertoLetter(fight.enemyHP)}`);
+    print(`${wizardName()} performs a <b>critic attack!</b> (${ui.attackIcon}${roundNumbertoLetter(state.player.attack * stat("fAttack"))}) &times; ${Math.round(stat("fCritic"))} - ${ui.heartIcon}${roundNumbertoLetter(fight.enemyHP)}`, true);
     stats.count("combat.critics");
     return damage;
 }
@@ -544,7 +544,7 @@ function normalAttack() {
     stats.count(`spell.cast.${spellId}`);
     const spellText = spells[spellId].name.toLowerCase();
     const verb = pickRandomItem(" cast , attacks with ");
-    print(wizardName() + verb + spellText + " (" + ui.attackIcon + roundNumbertoLetter(damage) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP));
+    print(wizardName() + verb + spellText + " (" + ui.attackIcon + roundNumbertoLetter(damage) + ") - " + ui.heartIcon + roundNumbertoLetter(fight.enemyHP), true);
     spell(spellId, false);
     stats.count("combat.attacks");
     return damage;
@@ -563,7 +563,7 @@ function enemyAttack() {
     // only when it lands: the game waits for it, then he falls. Other hits count at once, as before.
     const lethal = Math.round(state.player.hp - enemyHit) <= 0;
     if (!lethal) takeHit();
-    print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`);
+    print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`, true);
     let hit = false, waiting = false;   // waiting: the blow lands after this round (else battle() sees the fall)
     const landed = (spellId, silent = false) => () => {
         spell(spellId, true, 0, 0, null, silent);
@@ -613,7 +613,7 @@ function healEV() {
         stats.add("spell.healed", Math.round(healHit));
         playSound("heal");
         spell("spellHeal_8",true);
-        print(wizardName() + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")");    
+        print(wizardName() + pickRandomItem(" casts heal spell and restore , cast minor healing , use restoration ") + "(" + ui.healIcon + roundNumbertoLetter(healHit) + ")", true);    
          
         
     

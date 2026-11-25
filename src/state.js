@@ -169,6 +169,27 @@ export function deleteSave() {
     if (!readOnly) localStorage.removeItem(SAVE_KEY);
 }
 
+// Save transfer between devices (Settings): the save and the world as one text, easy to copy and paste.
+export function exportSaveText() {
+    saveGame();
+    const text = JSON.stringify({ wizardidle: 2, save: read(SAVE_KEY), world: read(WORLD_KEY) });
+    return btoa(unescape(encodeURIComponent(text)));
+}
+
+// Replace this device's save by an exported text and reload. Returns an error message, or '' when it went through.
+export function importSaveText(text) {
+    let data;
+    try { data = JSON.parse(decodeURIComponent(escape(atob(text.trim())))); } catch (e) { return 'That is not a saved game.'; }
+    if (!data || data.wizardidle !== 2 || (!data.save && !data.world)) return 'That is not a saved game.';
+    saving = false;             // nothing writes the old wizard back before the reload
+    try {
+        if (data.save) localStorage.setItem(SAVE_KEY, JSON.stringify(data.save)); else localStorage.removeItem(SAVE_KEY);
+        if (data.world) localStorage.setItem(WORLD_KEY, JSON.stringify(data.world));
+    } catch (e) { saving = true; return 'This browser would not store it.'; }
+    location.reload();
+    return '';
+}
+
 // The moment the god looks away: stored in the save (src/away.js settles it on the next load).
 function saveLeaving() {
     state.meta.lastSeen = Date.now();

@@ -14,12 +14,19 @@ const TEXT_SIZES = [
     { id: 'huge', label: 'Extra large', scale: 1.5 },
 ];
 
-const prefs = { textSize: 'normal', sound: true };
+// Volume steps of the slider (a multiplier on every sound's own volume).
+const VOLUMES = [0.25, 0.5, 0.75, 1];
+
+const DEFAULTS = { textSize: 'normal', sound: true, volume: 3, wake: false, shake: true, vibrate: true, fightLines: true };
+const prefs = { ...DEFAULTS };
 
 try {
     const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || 'null');
     if (saved && TEXT_SIZES.some(t => t.id == saved.textSize)) prefs.textSize = saved.textSize;
-    if (saved && typeof saved.sound == 'boolean') prefs.sound = saved.sound;
+    if (saved) {
+        for (const key of ['sound', 'wake', 'shake', 'vibrate', 'fightLines']) if (typeof saved[key] == 'boolean') prefs[key] = saved[key];
+        if (Number.isInteger(saved.volume) && saved.volume >= 0 && saved.volume < VOLUMES.length) prefs.volume = saved.volume;
+    }
 } catch (e) { /* no storage: defaults */ }
 run.muted = !prefs.sound;
 
@@ -59,4 +66,48 @@ function heightScale(W, H, isPhone) {
     return Math.min(1.3, Math.max(1, (H / W) / (16 / 9)));
 }
 
-export { prefs, TEXT_SIZES, setTextSize, setSound, chosenTextScale, browserTextScale, heightScale };
+function setVolume(step) {
+    prefs.volume = Math.max(0, Math.min(VOLUMES.length - 1, step));
+    savePrefs();
+}
+
+// Keep the screen awake (Wake Lock): asked again when the page comes back, the browser drops it when hidden.
+let wakeLock = null;
+async function applyWake() {
+    try {
+        if (!prefs.wake) {
+            if (wakeLock) { await wakeLock.release(); wakeLock = null; }
+            return;
+        }
+        if (!navigator.wakeLock || wakeLock || document.hidden) return;
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (e) { wakeLock = null; /* refused: low battery, or not allowed */ }
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) applyWake(); });
+function setWake(on) { prefs.wake = !!on; savePrefs(); applyWake(); }
+applyWake();
+
+function setFlag(key, on) {
+    prefs[key] = !!on;
+    savePrefs();
+}
+
+// A short buzz on phones that can (the divine touches).
+function buzz(ms = 25) {
+    if (prefs.vibrate && navigator.vibrate) { try { navigator.vibrate(ms); } catch (e) { /* ignore */ } }
+}
+
+// Every setting back to its default.
+function resetPrefs() {
+    Object.assign(prefs, DEFAULTS);
+    run.muted = false;
+    savePrefs();
+    applyWake();
+}
+
+const canVibrate = () => !!navigator.vibrate;
+const canWake = () => !!navigator.wakeLock;
+const volumeScale = () => VOLUMES[prefs.volume];
+
+export { VOLUMES, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale, prefs, TEXT_SIZES, setTextSize, setSound, chosenTextScale, browserTextScale, heightScale };

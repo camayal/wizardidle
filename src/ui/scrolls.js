@@ -3,14 +3,14 @@
 
 import { places, zones } from '../data/zones.js';
 import { roundNumbertoLetter, secsToHours } from '../utils.js';
-import { state, world } from '../state.js';
+import { state, world, exportSaveText, importSaveText } from '../state.js';
 import { run, ui } from '../runtime.js';
 import * as loop from '../loop.js';
 import { version } from '../game.js';
 import { achievementList, countLogros, hasOthers, othersList } from '../achievements.js';
 import { playSound } from '../audio.js';
 import { detectmob, layoutPortrait, responsiveLayout } from './layout.js';
-import { prefs, TEXT_SIZES, setTextSize, setSound } from '../prefs.js';
+import { prefs, TEXT_SIZES, VOLUMES, setTextSize, setSound, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale } from '../prefs.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
@@ -160,6 +160,13 @@ function drawQuestPath(page){
 
 // Draw the map page that is open (the wizard's own layer when the scroll opens, or the ribbon the
 // player tapped) and put the marker (speech bubble) on the wizard's current stage, only on his layer.
+// The region's name sits just under the map picture (whose height is known once it has loaded).
+function placeZoneName() {
+    const map = el("backMapa");
+    el("zoneName").style.top = `${parseFloat(map.style.top) + (map.clientHeight || map.width * 0.6) + ui.em * 0.5}px`;
+}
+document.addEventListener("DOMContentLoaded", () => el("backMapa").addEventListener("load", placeZoneName));
+
 function localizarBocadillo(){
     // a connector scene sits on the map at its connector's point, on that point's layer
     const info = connectorSceneInfo(ui.currentBackGround), spot = info && pointSpot(info.point);
@@ -168,8 +175,10 @@ function localizarBocadillo(){
     el("backMapa").src = art(MAP_PAGES[page]);
     drawQuestPath(page);
     const hide = () => { el("bocadilloMapa").style.display ="none"; el("pjMapa").style.display ="none"; };
+    el("zoneMap").innerHTML = "Map";      // the scroll's title; the region's name hangs under the map
+    el("zoneName").innerHTML = page == mine && !ui.currentBackGround.startsWith("curanderobg") ? (info ? info.label[0].toUpperCase() + info.label.slice(1) : `The ${zones[state.zone.current].name}`) : "";
+    placeZoneName();
     if (ui.currentBackGround.startsWith("curanderobg")) return hide();
-    el("zoneMap").innerHTML = page == mine ? (info ? info.label[0].toUpperCase() + info.label.slice(1) : `The ${zones[state.zone.current].name}`) : "Map";
     if (page != mine || ui.currentBackGround.match(/_altar/) || ui.currentBackGround.match(/_estatua/)) return hide();
     const localidad = spot || places[ui.currentBackGround];
     if (!localidad) return hide();
@@ -376,17 +385,21 @@ function snapToDevice(px) {     // a whole number of device pixels, so the pixel
     return Math.max(1, Math.round(px * dpr)) / dpr;
 }
 
-function drawSlider(slider) {
+function drawSlider(slider, glyphs = true) {
     const su = snapToDevice(0.6 * Math.max(2, Math.min(Math.round(ui.em * 0.14), 4)));
-    const W = 72 * su, steps = TEXT_SIZES.length - 1;
-    const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = el("sliderArt");
+    const W = 72 * su, steps = Number(slider.max);
+    const row = slider.closest(".setSliderRow"), box = slider.parentNode, canvas = box.querySelector("canvas");
     row.style.setProperty("--su", `${su}px`);
     slider.style.setProperty("--thumb", `url(${art("slider_thumb")})`);
     slider.style.setProperty("--thumbDown", `url(${art("slider_thumb_down")})`);
     box.style.width = `${W}px`; box.style.height = `${14 * su}px`;
     slider.style.width = `${W}px`; slider.style.height = `${14 * su}px`;
     canvas.width = W; canvas.height = 14 * su; canvas.style.width = `${W}px`; canvas.style.height = `${14 * su}px`;
-    el("aSmall").style.width = `${5 * su}px`; el("aBig").style.width = `${9 * su}px`;
+    for (const [cls, w] of [["aSmall", 5], ["aBig", 9]]) {
+        const glyph = row.querySelector("." + cls);
+        glyph.style.display = glyphs ? "" : "none";
+        glyph.style.width = `${w * su}px`;
+    }
     const track = new Image(), ticks = new Image();
     let loaded = 0;
     const paint = () => {
@@ -451,10 +464,18 @@ function updateHelp(){
 
     const sizeIndex = TEXT_SIZES.findIndex(s => s.id == prefs.textSize);
     const switchRow = (id, label) => '<div class="setRow"><div>' + label + '</div><div class="setToggleRow"><div id="' + id + '" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div>';
-    const settings = '<div id="settings"><div class="setRow"><div>Text size (<span id="textSizeName">' + TEXT_SIZES[sizeIndex].label + '</span>)</div>' +
-        '<div class="setSliderRow"><img id="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas id="sliderArt"></canvas>' +
-        '<input id="textSizeSlider" type="range" min="0" max="' + (TEXT_SIZES.length - 1) + '" step="1" value="' + sizeIndex + '"></div><img id="aBig" src="' + art('slider_a_big') + '"></div></div>' +
+    const sliderRow = (id, label, nameId, name, steps, value) => '<div class="setRow"><div>' + label + ' (<span id="' + nameId + '">' + name + '</span>)</div>' +
+        '<div class="setSliderRow"><img class="aSmall" src="' + art('slider_a_small') + '"><div class="setSliderBox"><canvas></canvas>' +
+        '<input id="' + id + '" class="setSlider" type="range" min="0" max="' + steps + '" step="1" value="' + value + '"></div><img class="aBig" src="' + art('slider_a_big') + '"></div></div>';
+    const settings = '<div id="settings">' +
+        sliderRow('textSizeSlider', 'Text size', 'textSizeName', TEXT_SIZES[sizeIndex].label, TEXT_SIZES.length - 1, sizeIndex) +
         switchRow('soundToggle', 'Sound') +
+        sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume) +
+        switchRow('fightToggle', 'Fight details in the console') +
+        switchRow('shakeToggle', 'Screen shake') +
+        (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
+        (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
+        '<div class="setRow buttons"><button class="setBtn" id="exportBtn">Export save</button><button class="setBtn" id="importBtn">Import save</button><button class="setBtn" id="resetBtn">Reset settings</button></div>' +
         (DEV ? switchRow('devToggle', 'Developer panel') : '') +
         '<div class="setRow version">Version ' + version + '</div></div>';
 
@@ -521,18 +542,44 @@ function updateHelp(){
     el("titleHelp").style.lineHeight = `${ui.em * 2.5}px`;  
     // settings page: the text size slider (the page is not redrawn while dragging, only at the end) and the sound choice
     if (el("settings")) {
-        const slider = el("textSizeSlider");
         el("settings").style.fontSize = `${ui.em}px`;
-        const su = drawSlider(slider);
-        slider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[slider.value].label; };
-        slider.onchange = () => {
-            setTextSize(TEXT_SIZES[slider.value].id);
+        const textSlider = el("textSizeSlider"), volumeSlider = el("volumeSlider");
+        const su = drawSlider(textSlider);
+        drawSlider(volumeSlider, false);
+        textSlider.oninput = () => { el("textSizeName").textContent = TEXT_SIZES[textSlider.value].label; };
+        textSlider.onchange = () => {
+            setTextSize(TEXT_SIZES[textSlider.value].id);
             responsiveLayout();      // sizes everything again, with the new text size
             updateHelp();
         };
+        volumeSlider.oninput = () => { el("volumeName").textContent = Math.round(VOLUMES[volumeSlider.value] * 100) + "%"; };
+        volumeSlider.onchange = () => { setVolume(Number(volumeSlider.value)); playSound("scroll"); };
+        const flag = (id, key, after) => { if (el(id)) drawToggle(el(id), su, () => prefs[key], () => { setFlag(key, !prefs[key]); if (after) after(); }); };
         drawToggle(el("soundToggle"), su, () => prefs.sound, () => setSound(!prefs.sound));
+        flag("fightToggle", "fightLines");
+        flag("shakeToggle", "shake");
+        flag("buzzToggle", "vibrate", () => buzz(60));
+        if (el("wakeToggle")) drawToggle(el("wakeToggle"), su, () => prefs.wake, () => setWake(!prefs.wake));
         if (el("devToggle")) drawToggle(el("devToggle"), su, () => document.body.dataset.devPanel != "off",
             () => document.dispatchEvent(new Event("wizardidle:toggleDevBar")));
+        el("exportBtn").onclick = () => {
+            const text = exportSaveText();
+            const copied = navigator.clipboard ? navigator.clipboard.writeText(text).then(() => true, () => false) : Promise.resolve(false);
+            copied.then((ok) => { if (ok) alert("Your game is copied. Paste it with Import on the other device."); else window.prompt("Copy this text, then paste it with Import on the other device:", text); });
+        };
+        el("importBtn").onclick = () => {
+            const text = window.prompt("Paste the text you got from Export save. It replaces the game on this device.");
+            if (!text) return;
+            if (!window.confirm("Replace the game on this device with the pasted one?")) return;
+            const error = importSaveText(text);
+            if (error) alert(error);
+        };
+        el("resetBtn").onclick = () => {
+            if (!window.confirm("Put every setting back to its default?")) return;
+            resetPrefs();
+            responsiveLayout();
+            updateHelp();
+        };
     }
 
     //collapsible in help scroll

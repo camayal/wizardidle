@@ -19,6 +19,7 @@ import { overlays } from '../data/overlays.js';
 import { connectorSceneInfo, headLevelShare } from '../data/connectors.js';
 import { markup } from './text.js';
 import { showTrophyWall } from './trophyWall.js';
+import { prefs } from '../prefs.js';
 import { WIZARD_AT_TABLE, hasDiceTable, showDiceTable } from './diceTable.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -924,9 +925,10 @@ function animateNPC() {
 
 
 // Add a line at the top of the console, keeping at most MAXLINESINCONSOLE lines.
-function print(data) {
+function print(data, minor = false) {
     setLiveTime(); //set seconds of game and add to total time
     if (run.simulation) return;     // nobody reads the console in a simulation
+    if (minor && !prefs.fightLines) return;     // Settings: fight details off hides each round of a fight
     el("console").innerHTML = `${data}<br>${el("console").innerHTML}`;
     const brSplit = el('console').innerHTML.split("<br>")
     if (brSplit.length > MAXLINESINCONSOLE) {
