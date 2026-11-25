@@ -1,6 +1,7 @@
 // Wizard Idle v2 - Screen layout: sizes everything from the window size, in portrait or landscape.
 // Code from v1 (hand-written by Carlos Alonso Maya Lastra), split into modules in phase 3.
 
+import { headLevelShare } from '../data/connectors.js';
 import { state } from '../state.js';
 import { fight, ui } from '../runtime.js';
 import { drawWizard, drawWizardPose, loadNPC } from './render.js';
@@ -110,7 +111,7 @@ function responsiveLayout() {
 
     
      
-     ui.headLevel = ui.objectSize * 0.09375;      // head at row 24 of 256 (was 28: the walk line raised 4 sprite px, 2026-11-20)
+     ui.headLevel = ui.objectSize * headLevelShare(ui.currentBackGround);      // row 28 of 256; row 24 in the connector scenes
      ui.charWidth = ui.charHeight = ui.squareSide = ui.objectSize * 0.125;//64;
      //load chars if was ok to redraw
     if (state.npc) {

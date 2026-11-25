@@ -16,7 +16,7 @@ import { stats } from '../stats.js';
 import { spells } from '../data/spells.js';
 import { art } from '../media.js';
 import { overlays } from '../data/overlays.js';
-import { connectorSceneInfo } from '../data/connectors.js';
+import { connectorSceneInfo, headLevelShare } from '../data/connectors.js';
 import { markup } from './text.js';
 import { WIZARD_AT_TABLE, hasDiceTable, showDiceTable } from './diceTable.js';
 
@@ -88,6 +88,7 @@ ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 // Draw a background (a zone stage, altar, inn...) and move the map marker.
 function loadBackground(back) {
     ui.currentBackGround = back;
+    ui.headLevel = ui.objectSize * headLevelShare(back);     // the walk line: raised only in the connector scenes
     if (run.simulation) return;     // in a simulation only what's on the scene matters
     // the old background stays until the new image has loaded (no flash of the page behind)
     withImage("background", art(`${back.toLowerCase()}`), () => {

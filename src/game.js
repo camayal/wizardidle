@@ -3,6 +3,7 @@
 // Original game hand-written by Carlos Alonso Maya Lastra (2018-2020), see tag v1.0.0.
 
 import { zones } from './data/zones.js';
+import { headLevelShare } from './data/connectors.js';
 import { roundNumbertoLetter } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
@@ -21,7 +22,7 @@ import { settleAway, watchHidden } from './away.js';
 const version = "2.2.0"; // "-dev" until the release; v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
-ui.headLevel = ui.objectSize * 0.09375;      // head at row 24 of 256 (was 28: the walk line raised 4 sprite px, 2026-11-20)
+ui.headLevel = ui.objectSize * headLevelShare(ui.currentBackGround);      // row 28 of 256; row 24 in the connector scenes
 ui.squareSide = ui.objectSize * 0.125;//64;
 ui.charWidth = ui.squareSide; ui.charHeight = ui.squareSide;
 ui.em = getEM();
