@@ -342,3 +342,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Travel: a stale tool page saved links under old mouth names (mouth_64_170 etc.) and the _png border point again; renamed back, graph regenerated. Pradera15 art brief put in art-notes.md for the artist.
 
 - 2026-11-25 Travel console: shows the graph build time (travelGraphBuilt, written by tools/travel_graph.py). Note: tools/serve.py already regenerates the graph on every Save.
+
+- 2026-11-25 tools/serve.py save kept only verdict keys matching \w+|\w+, so every link to mouth_dunas-pradera_gruta and mouth_playa-pradera_mina was dropped on each save. Regex now allows hyphens; 13 links restored from git. Restart serve.py to load the fix.

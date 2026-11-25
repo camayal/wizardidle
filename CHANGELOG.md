@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) Fixed the travel tool losing links of mouths with a hyphen in the name (Grotto mouth, Prairie-Beach mine mouth): the save dropped them every time. They are restored.
 - (Developer tools) The travel console shows when the travel graph was last built, so you can check it is current.
 - (Developer tools) Travel links saved by a stale tool page under the old coordinate names of the cave and mine mouths (mouth_64_170...) are renamed to the real mouth names, so the Grotto mouth is connected again; the Gruta-Duenon border point is a connector again. Reload the travel tool page before editing.
 - (Developer tools) The travel map's Gruta-Duenon border point is a real connector again (it was saved as a magenta future scene named border_gruta_duenon_png); its links follow the new name and the graph is regenerated.

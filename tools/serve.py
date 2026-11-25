@@ -160,7 +160,7 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
             # {verdicts: {"a|b": move|dest|far}, positions: {name: [x, y]} in map pixels}. A stage's position goes to
             # zones.js (the source of truth); a waypoint's to travelPositions here; then the graph is regenerated.
             verdicts = {k: v for k, v in sorted(data.get('verdicts', {}).items())
-                        if v in ('move', 'dest', 'far') and re.fullmatch(r'\w+\|\w+', k)}
+                        if v in ('move', 'dest', 'far') and re.fullmatch(r'[\w-]+\|[\w-]+', k)}
             zones_path = os.path.join(REPO, 'src', 'data', 'zones.js')
             with open(zones_path, encoding='utf-8', newline='') as f:
                 zones = f.read()
