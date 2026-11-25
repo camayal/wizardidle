@@ -10,7 +10,7 @@
 // The source has a black dot in its centre. Shift-click adds or drops targets: the weight buttons set the link from the source to every target at once. The map layers (above, ground, under) are buttons beside the map, with the weight buttons below them.
 // Opened from the dev panel (Modes > Travel), on the right of the game; the game waits until it is closed.
 
-import { travelGraph as g } from '../data/travelGraph.js';
+import { travelGraph as g, travelGraphBuilt } from '../data/travelGraph.js';
 import { places } from '../data/zones.js';
 import { neighbors, overrides, pairKey, verdict, byName, rebuild, travelCost, routeIds, dynamicScenes, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
@@ -319,6 +319,7 @@ export async function open(devTools) {
         <div data-id="linkInfo"></div>
         <div data-id="checkInfo"></div>
         <div data-id="pathInfo"></div>
+        <div class="muted">Graph built: ${travelGraphBuilt} (every save regenerates it; reload the page to load a new one)</div>
         <div class="row"><button data-id="save">Save verdict</button><button data-id="capture">Capture the map</button><span data-id="count" class="muted"></span></div>
         <div class="row" style="gap:2px 12px">
             <span>Only the direct links of the source are drawn, as straight lines; a spot reached only through another is not a neighbour.</span>
