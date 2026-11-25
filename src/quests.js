@@ -293,7 +293,7 @@ function bestOf(q, list) {
     let best = null, bestCost = Infinity;
     for (const n of list) {
         if (byName[n] === undefined) continue;
-        const c = costTo(q, n) + travelCost(here(), n);      // the step itself counts: a Difficult link is dear
+        const c = costTo(q, n) + travelCost(here(), n) / 1000;      // the way on from n decides; the step itself only breaks a tie (a full step cost kept him in his zone)
         if (c < bestCost) { best = n; bestCost = c; }
     }
     return bestCost === Infinity ? null : best;
