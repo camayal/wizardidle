@@ -55,7 +55,7 @@ function crossingSteps(origin, target) {
         const c = chain[i];
         if (borderScenes[c]) {
             const b = borderScenes[c];
-            steps.push({ scene: b.scene, dir: places[origin].zone === b.left ? 1 : -1 });
+            steps.push({ scene: b.scene, dir: places[origin].zone === b.left ? 1 : -1, border: true });
         } else if (connectorScenes[c]) {
             const bx = spotX(c);
             const east = bridgeLeftZone[c] ? places[origin].zone === bridgeLeftZone[c]      // art with a known zone on its left

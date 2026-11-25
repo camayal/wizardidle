@@ -387,7 +387,9 @@ function walkAcross(steps, changeScene, onArrive) {
         walkOn(() => {
             const show = () => {
                 if (more) loadBackground(steps[i + 1].scene); else changeScene();
-                ui.wizardOffset = more ? startOf(steps[i + 1]) : entry(s.dir);      // after the last scene he comes into the real one from the edge he was heading to
+                // after the last scene he comes into the real one from the edge he was heading to; out of a border he is
+                // already in the region, so he enters from the left as usual
+                ui.wizardOffset = more ? startOf(steps[i + 1]) : s.border ? OFF_LEFT : entry(s.dir);
                 if (!run.simulation) drawWizard();
             };
             const next = () => more ? play(i + 1) : walkWizardTo(0, onArrive);      // and walks in to his place

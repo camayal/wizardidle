@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Border scenes: walking one right to left, he now comes into the next scene from the left and walks to his place as usual (he was walking right to left again, though he is already in the region).
 - Wanted posts and the notice board: the prop now stands in the scene before he walks in and stays until he has walked out (he walks out and into the next scene instead of the scene just changing). The wanted post is set 4 px further back so it is not in his path.
 - Quests: a quest whose search runs out now really moves down the queue (before, it was picked again at once). The third time it is dropped ("he gives up"), and when it is the only quest it is dropped at once and he makes up an errand of his own. Secret quests are never dropped.
 - The Volcano statue: the wizard now stops 18 pixels further back (STATUE_BACK in events.js) instead of standing in the lava.
