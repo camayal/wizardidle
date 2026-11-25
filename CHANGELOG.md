@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) The travel map's Gruta-Duenon border point is a real connector again (it was saved as a magenta future scene named border_gruta_duenon_png); its links follow the new name and the graph is regenerated.
 - (Developer tools) With no connector between two regions, the Regions picker walks the game's own route stage by stage (Prairie 1 > Prairie 14 > Dunes 3 > Dunes 1), the edge stages acting as the border, and lists the stages in the report.
 - Crossing a bridge westward (Swamp to Prairie), he now keeps walking right to left into the new area from its right edge, instead of standing in his place at once.
 - Bridges (connectors) go back to walking both ways as drawn, no mirroring: only border scenes are mirrored.

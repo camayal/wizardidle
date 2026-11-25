@@ -153,7 +153,7 @@ export const places = {
     la_playa2: {zone:"la_playa",x:0.9,y:0.324,moves:"",destinations:""},
     la_playa3: {zone:"la_playa",x:0.936,y:0.464,moves:"",destinations:""},
     la_playa4: {zone:"la_playa",x:0.864,y:0.468,moves:"",destinations:""},
-    la_playa5: {zone:"la_playa",x:0.76,y:0.452,moves:"",destinations:""},
+    la_playa5: {zone:"la_playa",x:0.76,y:0.484,moves:"",destinations:""},
     las_Dunas1: {zone:"las_Dunas",x:0.07,y:0.6,moves:"las_Dunas2,las_Dunas3,las_Dunas4",destinations:"la_Mina5"},
     las_Dunas2: {zone:"las_Dunas",x:0.2,y:0.668,moves:"las_Dunas1,las_Dunas3,las_Dunas4,las_Dunas5",destinations:"la_Mina5,el_Duenon1,la_Gruta1,la_Gruta2,la_Gruta3,la_Gruta4,la_Pradera4"},
     las_Dunas3: {zone:"las_Dunas",x:0.07,y:0.53,moves:"las_Dunas1,las_Dunas2,las_Dunas4",destinations:"la_Mina5,la_Pradera4"},
