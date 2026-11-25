@@ -22,13 +22,14 @@ import { enemySprites, enemyTypes } from '../data/enemies.js';
 import { bossesOf, places, zones } from '../data/zones.js';
 import { addXP, setLevelValues } from '../wizard.js';
 import { pauseToggle } from '../game.js';
-import { clearNPC, drawWizard, drawWizardPose, loadNPC, playWizardAnim, print, showStage, updateHeading, walkAcross } from '../ui/render.js';
+import { clearNPC, drawWizard, drawWizardPose, enterPlace, loadNPC, playWizardAnim, print, showStage, updateHeading, walkAcross } from '../ui/render.js';
 import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
 import { connectorTests, stagesFor, withFight } from '../travel.js';
 import { SPECTRA, SPECTRA_ZONE } from '../spectra.js';
 import * as quests from '../quests.js';
+import { TROPHY_ROOM, hang } from '../ui/trophyWall.js';
 import * as travelGraph from '../travelGraph.js';
 import { cabinSpot } from '../cabin.js';
 import { scrollOpen } from '../ui/scrolls.js';
@@ -255,6 +256,8 @@ const actions = [
     { group: 'Quests', name: 'Quest state (current, queue, personality)', run() { const Q = quests.qs(), q = quests.current(); devPrint(q ? `${q.kind} ${q.phase} searched ${q.searched}: ${q.text}` : 'no quest'); devPrint(`queue ${Q.queue.length}: ${Q.queue.map((x) => x.text).join(' | ')}; personality ${Q.persona}; wish would be ${quests.wishKind()}`); } },
     ...['inn', 'board', 'post', 'human'].map((g) => ({ group: 'Quests', name: `Offer from the ${g} now (answers in 4 s: touch NPC / door to suggest)`, run() { devPrint(quests.meetNow(g) ? 'offer waiting' : 'nothing offered (queue full?)'); } })),
     { group: 'Quests', name: 'Reachability: stages the walk can reach from each stage', run() { const all = Object.keys(travelGraph.byName); const bad = all.map((n) => [n, quests.reachable(n).size]).filter(([, k]) => k < all.length); devPrint(bad.length ? `${bad.length} of ${all.length} stages cannot reach every stage: ${bad.slice(0, 12).map(([n, k]) => `${n} (${k})`).join(', ')}` : `all ${all.length} stages reach every stage`); } },
+    { group: 'Quests', name: 'Trophy room: hang all 15 trophies and go in (to see how many fit)', run() { for (const b of quests.TROPHIES) hang(b); enterPlace(TROPHY_ROOM); devPrint(`${quests.TROPHIES.length} trophies hung`); } },
+    { group: 'Quests', name: 'Trophy room: take every trophy down', run() { state.trophies = []; devPrint('wall emptied'); } },
     { group: 'Quests', name: 'Cancel the quest (the god)', run() { devPrint(quests.cancel() ? 'cancelled' : 'no quest'); } },
     { group: 'Game', name: 'Cabin: where would it stand now?', run() { const c = cabinSpot(); devPrint(`cabin: ${c.zone}${c.stage}, background ${c.bg}`); } },
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },

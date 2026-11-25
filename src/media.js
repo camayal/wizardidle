@@ -56,7 +56,7 @@ export function artFolder(name) {
     if (/^border_/.test(name)) return 'places/borders';     // border scenes: a static scene joining two regions (data/connectors.js)
     if (/^(bridge|mouth|enter_mine|ladder|pier|stairs)_/.test(name)) return 'places/connectors';     // the connector scenes (bridges, cave and mine mouths, ladders, pier, stairs)
     if (/^fx_/.test(name)) return 'effects/fx';
-    if ((m = /^([a-z]+_[a-z]+?)(\d+|_altar|_estatua|_taberna|_casadados)$/.exec(name)) && ZONES.has(m[1])) return `places/${m[1]}`;
+    if ((m = /^([a-z]+_[a-z]+?)(\d+|_altar|_estatua|_taberna|_casadados|_cazadores|_cazadores_fuera|_cazadores_trofeos)$/.exec(name)) && ZONES.has(m[1])) return `places/${m[1]}`;
     if (name == 'casadados') return 'places';        // a plain dice house
     if (STORY.test(name)) return 'story';
     if (OBJECTS.test(name)) return 'objects';

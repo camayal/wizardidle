@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Trophy room: after he tells the hunter, a boss hunt's trophy is carried to a second scene inside the hunters hut, the plain wall of the round hut, and hung on it (zigzag, two rows, room for 15 plaques; state.trophies). Dev test: Quests > Trophy room: hang all 15, to see how many fit. The guild scenes now find their images by name (el_poblado_cazadores, _fuera, _trofeos).
 - Quest trophies: a finished boss hunt now shows the boss's trophy (15 pieces on a wooden plaque: wings, heads, bottles, staffs, crowns, a fire egg) beside the quest while he carries it to the guild. Etymos, the hydras, Midas and the rainbow have none. Doria's staff now ends in a violet seeing stone, in the sprite and all three casts.
 - Quests: the lost detector. On the road a quest counts the scenes he walks; past the number of stages in the whole graph he is lost, the quest is dropped (stat quest.lost) and he makes up an errand of his own. New dev test Quests > Reachability checks that every stage can reach every stage.
 - Quest texts: no more colons in the explore and quest lines (the offer lines, the pilgrimage title, the arrival and done stories, the hunt stories); an explore quest now reads "Go and see the quiet hill in the Prairie". A scene-tied explore is refused when he has already stood in that scene (counted per scene, explore.scene.*), and offers prefer spots he has not seen, so the same place is not asked for again and again.

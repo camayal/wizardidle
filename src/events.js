@@ -16,6 +16,7 @@ import { afterChapter } from './story.js';
 import { logro } from './achievements.js';
 import { spell } from './spells.js';
 import { playSound } from './audio.js';
+import { TROPHY_ROOM, hang } from './ui/trophyWall.js';
 import { clearFrontProp, clearNPC, drawWizard, enterPlace, leavePlace, loadBackground, loadNPC, looksRandom, playWizardAnim, print, showBlink, showBubble, showStage, sleepInDark, updateHeading, walkBackThroughScene, walkThroughScene, walkWizardTo, wizardName } from './ui/render.js';
 import { counterText } from './ui/scrolls.js';
 import { playExit } from './ui/entrances.js';
@@ -412,8 +413,11 @@ function guildReport() {
     switch (run.multipleEventsCounter) {
         case 1: enterPlace("el_poblado_cazadores", pickRandomItem("cazador_a,cazador_b")); print(`${wizardName()} enters the hunters' guild`); break;
         case 2: quests.guildTell(); break;
-        case 3: quests.guildPay(); showBubble('yes'); break;
-        case 4: clearFrontProp(); endEvent(); leavePlace(showStage, nextEvent);
+        case 3: if (!quests.trophyBoss()) { run.multipleEventsCounter += 2; quests.guildPay(); showBubble('yes'); break; }       // a trophy: on to the trophy room, the empty wall of the hut
+                print(`${wizardName()} walks to the trophy wall`); enterPlace(TROPHY_ROOM); break;
+        case 4: hang(quests.trophyBoss()); print(`${wizardName()} hangs the trophy on the wall`); break;
+        case 5: quests.guildPay(); showBubble('yes'); break;
+        case 6: clearFrontProp(); endEvent(); leavePlace(showStage, nextEvent);
     }
 }
 

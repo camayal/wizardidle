@@ -18,6 +18,7 @@ import { art } from '../media.js';
 import { overlays } from '../data/overlays.js';
 import { connectorSceneInfo, headLevelShare } from '../data/connectors.js';
 import { markup } from './text.js';
+import { showTrophyWall } from './trophyWall.js';
 import { WIZARD_AT_TABLE, hasDiceTable, showDiceTable } from './diceTable.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -99,6 +100,7 @@ function loadBackground(back) {
         front.background = overlays.has(name) ? `url('${art(`overlay_${name}`)}') no-repeat` : "none";
         front.backgroundSize = "contain";
         showDiceTable(back);                    // the table of a dice house (cleared in any other scene)
+        showTrophyWall(back);                   // the plaques of the trophy room
     });
     //change bocadillo location
     localizarBocadillo();

@@ -434,6 +434,7 @@ export function guildTell() {
     print(`<i>${pickFrom(GUILD_TELL).replace(/\{(\w+)\}/g, (m, k) => ({ name: wizardName(), who: hunted(q), where: zoneName(q.target.huntZone) }[k]))}</i>`);
     return true;
 }
+export const trophyBoss = () => { const q = state.quest; return q && q.target.report && TROPHIES.includes(q.target.boss) ? q.target.boss : ''; };     // the boss whose trophy he hangs in the trophy room
 export function guildPay() {
     const q = state.quest;
     if (!q || !q.target.report) return false;
@@ -708,7 +709,7 @@ export function godDrop(i) {
 // each delivery carries one of three parcels (kept by its id, so it never changes on redraw)
 const parcelOf = (q) => `item_parcel_${'abc'[q.id % 3]}`;
 // a finished hunt carries the boss's trophy to the guild (img/objects/item_trophy_<boss>.png); etymos, hydras, midas and the rainbow have none
-const TROPHIES = 'arcangel,bicaptop,cuboq,doria,fenix,goro,greater_naga,herbus,infraespectro,kkck,lamia,medusa,protromus,rojo,skeleton'.split(',');
+export const TROPHIES = 'arcangel,bicaptop,cuboq,doria,fenix,goro,greater_naga,herbus,infraespectro,kkck,lamia,medusa,protromus,rojo,skeleton'.split(',');
 const trophyOf = (q) => (q.target.report && TROPHIES.includes(q.target.boss) ? `item_trophy_${q.target.boss}` : '');
 const PHASE = { travel: 'on the road', search: 'searching' };
 const ORDER_ICONS = { shrine: 'icon_order_shrine_mid', pilgrimage: 'icon_order_pilgrim_mid', hidden: 'icon_order_hidden_mid' };   // drawn in the socket of order_plate_*
