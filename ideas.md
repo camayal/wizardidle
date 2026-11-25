@@ -24,6 +24,7 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 **With a plan**
 - Map revamp: ground and aboveground maps, delta and beach with nagas, bridges, border scenes → [docs/plans/MAPS.md](docs/plans/MAPS.md)
 - Faith rebalance, belief levels, rescuers → [docs/plans/for_implementation_faith.md](docs/plans/for_implementation_faith.md)
+- Hotspots (nudging by clicking the scene): design waits for approval → [docs/plans/HOTSPOTS.md](docs/plans/HOTSPOTS.md)
 - Professions: reagents, items, vendors → [docs/plans/PROFESSIONS.md](docs/plans/PROFESSIONS.md)
 - Stats for almost everything, playtest tools → [docs/plans/STATS.md](docs/plans/STATS.md)
 - Souls of erased wizards in the final battle → [docs/plans/ERASURE.md](docs/plans/ERASURE.md)
