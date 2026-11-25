@@ -46,6 +46,13 @@ export const config = {
         healCostFactor: 0.5,                   // a healing touch costs this share of the faith an attack of the same size would (a first number to tune)
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
+    // The invisible hand (an Atheist's touches, src/hand.js): placeholders, tune with the playtests.
+    hand: {
+        costFe: 2,                 // each touch costs this many prayers' worth of faith (calculateFe)
+        weakenShare: 0.2,          // the enemy loses this share of its life
+        herbShare: 0.3,            // a herb heals this share of his HP (50% to 150% of it)
+    },
+
     // Faith, the god's currency (docs/plans/for_implementation_faith.md): placeholders, tune with the playtests.
     faith: {
         maxPerHp: 100,             // the most faith he can hold = hpBase x this

@@ -18,6 +18,7 @@ import { beliefLevel, beliefMoment, isAtheist, touchCost } from './belief.js';
 import { suggest } from './quests.js';
 import { buzz } from './prefs.js';
 import { faithChange } from './faith.js';
+import { handHelpWizard, handWeakenEnemy } from './hand.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -69,7 +70,7 @@ function reviveByTouch() {
 // Heal 50-200% of his restoration knowledge, paying 1-3 faith per HP; never above full HP,
 // and never more faith than he has.
 function healByTouch() {
-    if (isAtheist()) return refuseTouch();
+    if (isAtheist()) { if (!handHelpWizard()) refuseTouch(); return; }       // the invisible hand: he never knows
     const healOperation = state.player.hpBase * stat("fHeal");
     let healHit = getRandomInt(healOperation * 0.5, healOperation * 2) * (beliefLevel() == 'doubter' ? config.belief.doubterHealFactor : 1);
     if (Math.round(state.player.hp) + Math.round(healHit) > Math.round(state.player.hpBase)) {
@@ -107,7 +108,7 @@ function npcBtn(){
     if (suggest('accept')) return;      // a job is waiting: the touch on the giver suggests taking it (src/quests.js)
     let txt;
     if(!!state.npc && !!fight.enemy && Math.round(state.player.faith) > 0 && Math.round(fight.enemyHP) > 0){
-        if (isAtheist()) return refuseTouch();
+        if (isAtheist()) { if (!handWeakenEnemy()) refuseTouch(); return; }
         //hurt npc
         interruptMidasHeal();
         // the god's touch may kill now (docs/plans/FAITH.md 3.1: the final blow; v1 always left it 1 HP)

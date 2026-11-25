@@ -327,3 +327,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25: hotspots build step 1 (src/nudge.js, src/ui/hotspots.js, src/dev/hotspots.js, data/hotspots.js, serve.py /hotspots/save); next: steps 2-4 (automatic spots, steering).
 - 2026-11-25: hotspots steps 2-4 + divine sparkle (printDivine); sim bot nudge=1; next: author places exit/mouth/place spots in Modes > Hotspots, then browser test.
 - 2026-11-25: Hotspots mode: regions + thumbnails, connectors/mouths/borders listed; Tower: 4 exit spots placed (torre1 door right, torre2 door left, torre3 archway, torre5 gate). Zone scenes seen (Pradera1/14, Pantano1-3) show no mouth art: mouth scenes are only walked in a crossing.
+- 2026-11-25: faith step 3 part 1: the invisible hand (src/hand.js, config.hand): Atheist touches weaken the enemy, arm a graze, or grow a herb; untested in a browser. Left in step 3: the winning-back actions (sign, dream, pilgrim, relics, hidden blessings).

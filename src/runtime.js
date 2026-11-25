@@ -11,6 +11,7 @@ export const fight = {
     enemyAndNumber: undefined,     // sprite of a normal enemy, e.g. "el_golem5"
     healedFrom: 0,                 // his HP before the god's last heal touch, until the enemy's next hit (belief)
     godHelped: false,              // the god touched him or the enemy in this fight (belief: close calls)
+    handGraze: false,              // an Atheist's invisible hand is armed: the next killing hit leaves 1 HP (src/hand.js)
     enemyName: undefined,          // display name, e.g. "<i>Zubruwi</i> the Maro"
     enemyHP: undefined,
     enemyHPbase: undefined,
