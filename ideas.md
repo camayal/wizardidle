@@ -338,3 +338,5 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 Regions picker: with no connector, prefers a pair the game links directly. Correction: Prairie-Dunes goes stage by stage through the links (Pradera14 > Dunas3); no border art exists for it, only Gruta-Duenon has one. Picker now walks that route.
 
 - 2026-11-25 Travel map: border_gruta_duenon_png (future, magenta) renamed to the connector border_gruta_duenon, graph regenerated. la_Pradera15 stays a future point; art note added for its scene.
+
+- 2026-11-25 Travel: a stale tool page saved links under old mouth names (mouth_64_170 etc.) and the _png border point again; renamed back, graph regenerated. Pradera15 art brief put in art-notes.md for the artist.
