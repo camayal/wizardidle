@@ -195,7 +195,7 @@
 
             
 
-            #main, #propsCanvas, #spellCanvas, #overlayCanvas, #console, #backConsole, #marco, #esceneCanvas, #pjCanvas, #npcCanvas, #heading, #xpbar, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #pjName, #xpPlate, #XPprogressBar, #indicadores, #statusText, #launcher, #fondoLauncher, #inputName, #labelInputName, #nubes,  #startBtn, #textStartBtn, #title1, #title2, #footer, #scroll, #scrollBackCenter, #scrollBackUp, #scrollBackDown, #btnClose, #scrollText, #pjDivineBtn, #npcDivineBtn, #centerDivineBtn, #backMapa, #bocadilloMapa, #pjMapa {
+            #main, #propsCanvas, #spellCanvas, #overlayCanvas, #console, #backConsole, #marco, #esceneCanvas, #pjCanvas, #npcCanvas, #heading, #xpbar, #btn1, #btn2, #btn3, #btn4, #btn5, #btn6, #pjName, #xpPlate, #XPprogressBar, #indicadores, #statusText, #launcher, #fondoLauncher, #inputName, #labelInputName, #nubes,  #startBtn, #textStartBtn, #title1, #title2, #footer, #scroll, #scrollBackCenter, #scrollBackUp, #scrollBackDown, #btnClose, #scrollText, #hotspotLayer, #pjDivineBtn, #npcDivineBtn, #centerDivineBtn, #backMapa, #bocadilloMapa, #pjMapa {
                 position: absolute;
             }
 
@@ -276,6 +276,10 @@
                 
             }
 
+            #hotspotLayer { pointer-events: none; z-index: 5; }
+            #hotspotLayer .spot { position: absolute; pointer-events: auto; background: transparent; border: none; padding: 0; cursor: pointer; border-radius: 6px; }
+            #hotspotLayer .spot.glow { animation: spotGlow 1.6s ease-out; }
+            @keyframes spotGlow { 0% { box-shadow: 0 0 0 0 rgba(255,225,120,0.9), inset 0 0 18px rgba(255,225,120,0.7); } 100% { box-shadow: 0 0 22px 10px rgba(255,225,120,0), inset 0 0 0 rgba(255,225,120,0); } }
             .transparentBtn {
                 background-color: Transparent;
                 background-repeat:no-repeat;
@@ -534,6 +538,7 @@
         <button class="transparentBtn" id="pjDivineBtn"></button>
         <button class="transparentBtn" id="centerDivineBtn"></button>
         <button class="transparentBtn" id="npcDivineBtn"></button>
+        <div id="hotspotLayer"></div>
 
         <span id="statusText"></span>  
 

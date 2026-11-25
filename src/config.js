@@ -50,6 +50,9 @@ export const config = {
     faith: {
         maxPerHp: 100,             // the most faith he can hold = hpBase x this
         maxMin: 200,               // ... but never less than this
+        nudgeCostFe: 2,            // a nudge (touching a spot of the scene) costs this many prayers' worth of faith (calculateFe)
+        nudgeFollow: { devout: 0.95, believer: 0.8, doubter: 0.5, atheist: 0.1 },      // how often he follows a nudge
+        nudgeLife: 3,              // events a followed nudge waits for his next decision
     },
     // Time away (docs/plans/AWAY.md, first estimates, to playtest): away time / worldDivisor = world time.
     away: {

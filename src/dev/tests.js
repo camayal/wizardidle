@@ -248,6 +248,7 @@ const actions = [
     { group: 'Modes', name: 'Sounds', run() { openMode('sounds'); } },
     { group: 'Modes', name: 'Art', run() { openMode('art'); } },
     { group: 'Modes', name: 'Travel', run() { openMode('travel'); } },
+    { group: 'Modes', name: 'Hotspots', run() { openMode('hotspots'); } },
     { group: 'Modes', name: 'Music', run() { openMode('music'); } },
     { group: 'Modes', name: 'Texts', run() { openMode('texts'); } },
 

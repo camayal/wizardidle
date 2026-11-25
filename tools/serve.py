@@ -100,6 +100,8 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b'saved')
             return
+        if self.path == '/hotspots/save':
+            return self.hotspots_post(local)
         if self.path in ('/travel/overrides', '/travel/capture'):
             return self.travel_post(local)
         if not self.path.startswith('/notes/') or mode not in NOTE_FILES or not local:
@@ -119,6 +121,33 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b'saved')
 
+
+    def hotspots_post(self, local):
+        # The Hotspots mode (src/dev/hotspots.js): rewrites src/data/hotspots.js from {hotspots: {scene: [{x, y, w, h, kind, to, label}]}}.
+        length = int(self.headers.get('Content-Length') or 0)
+        if not local or not 0 < length <= 1000000:
+            return self.send_error(400)
+        data = json.loads(self.rfile.read(length).decode('utf-8')).get('hotspots', {})
+        clean = {}
+        for scene, spots in sorted(data.items()):
+            if not re.fullmatch(r'[\w-]+', scene):
+                continue
+            good = [{'x': int(s['x']), 'y': int(s['y']), 'w': int(s['w']), 'h': int(s['h']),
+                     'kind': re.sub(r'\W', '', str(s.get('kind', 'exit')))[:20] or 'exit',
+                     'to': re.sub(r'[^\w-]', '', str(s.get('to', '')))[:60], 'label': str(s.get('label', ''))[:80]}
+                    for s in spots if all(k in s for k in ('x', 'y', 'w', 'h'))]
+            if good:
+                clean[scene.lower()] = good
+        target = os.path.join(REPO, 'src', 'data', 'hotspots.js')
+        with open(target, encoding='utf-8') as f:
+            head = f.read().split('export const')[0]
+        with open(target, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(head + 'export const hotspots = ' + json.dumps(clean, indent=4, ensure_ascii=False) + ';\n')
+        msg = 'saved %d spots in %d scenes: reload the page' % (sum(len(v) for v in clean.values()), len(clean))
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/plain; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(msg.encode('utf-8'))
 
     def travel_post(self, local):
         # The Travel mode (src/dev/travel.js): /travel/overrides rewrites src/data/travelOverrides.js; /travel/capture

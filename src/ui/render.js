@@ -19,6 +19,7 @@ import { overlays } from '../data/overlays.js';
 import { connectorSceneInfo, headLevelShare } from '../data/connectors.js';
 import { markup } from './text.js';
 import { showTrophyWall } from './trophyWall.js';
+import { showHotspots } from './hotspots.js';
 import { prefs } from '../prefs.js';
 import { WIZARD_AT_TABLE, hasDiceTable, showDiceTable } from './diceTable.js';
 
@@ -91,6 +92,7 @@ function loadBackground(back) {
     ui.currentBackGround = back;
     ui.headLevel = ui.objectSize * headLevelShare(back);     // the walk line: raised only in the connector scenes
     if (run.simulation) return;     // in a simulation only what's on the scene matters
+    showHotspots(back);             // its clickable spots (a new scene visit)
     // the old background stays until the new image has loaded (no flash of the page behind)
     withImage("background", art(`${back.toLowerCase()}`), () => {
         esceneCanvas.style.background = `url('${art(`${back.toLowerCase()}`)}') no-repeat`;

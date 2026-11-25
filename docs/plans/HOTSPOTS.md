@@ -1,6 +1,6 @@
 # Hotspots: nudging by clicking the scene
 
-Design for step 6 of the faith plan ([for_implementation_faith.md](for_implementation_faith.md), section 6, and the author's decision of 2026-11-25). **Status: design decided (author, 2026-11-25), nothing is built yet.**
+Design for step 6 of the faith plan ([for_implementation_faith.md](for_implementation_faith.md), section 6, and the author's decision of 2026-11-25). **Status: design decided (author, 2026-11-25). Build step 1 done 2026-11-25 (layer, taps, cost, belief roll, console lines, one touch per scene, dev mode, `exit` kind); untested in a browser, and no spot is authored yet.**
 
 ## 1. What the author asked for
 
@@ -90,3 +90,4 @@ Dev mode **Modes > Hotspots**: the scene picker, drag a rectangle on the scene, 
 2. **Following:** belief rolls (Devout nearly always, Believer usually, Doubter about half, Atheist rarely); a refused nudge still costs faith.
 3. **Quests:** a followed nudge is a detour; the quest resumes from where he ends up. A nudge never completes or cancels a quest.
 4. **Cost:** flat, one number in config, tuned by playtests.
+- **One touch of the environment per scene (author, 2026-11-25):** the first tap in a scene visit counts; every later tap, on the same spot or another, does nothing and shows nothing (no text, no glow, no cost). A tap with too little faith, or while a nudge is still pending, is silent too, so nothing reveals where a spot is. During a fight, in an altar scene or while a job is waiting, a tap falls through to the old buttons.

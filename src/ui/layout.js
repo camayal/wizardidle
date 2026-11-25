@@ -184,7 +184,7 @@ function setEach(ids, styles) {
     for (const id of ids) setStyles(id, styles);
 }
 
-const CANVASES = ["esceneCanvas", "propsCanvas", "pjCanvas", "npcCanvas", "spellCanvas", "overlayCanvas"];
+const CANVASES = ["esceneCanvas", "propsCanvas", "pjCanvas", "npcCanvas", "spellCanvas", "overlayCanvas", "hotspotLayer"];
 const TOOLBAR = ["btn1", "btn2", "btn3", "btn4", "btn5", "btn6"];
 const HEADING_ICONS = ["hpIcon", "goldIcon", "spiritIcon"];
 

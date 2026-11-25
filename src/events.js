@@ -29,6 +29,7 @@ import { markup } from './ui/text.js';
 import * as quests from './quests.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 import { faithChange } from './faith.js';
+import { tickNudge } from './nudge.js';
 
 //define statueobj
 const statueObj = {
@@ -140,6 +141,7 @@ function event() {
         masterOption = Number(pickRandomItem(state.forceEvent));
     }else{
         masterOption = Math.floor((Math.random() * 5) + 1)
+        tickNudge();
         const questOption = quests.eventPick();     // a quest: the search may make the next event (src/quests.js)
         if (questOption) masterOption = questOption;
         else if (restless()) masterOption = 2;        // stayed too long: explore takes him away
