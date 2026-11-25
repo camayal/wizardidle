@@ -80,7 +80,7 @@ export const config = {
     },
     // Quests (docs/plans/QUESTS.md). Every number here is a PLACEHOLDER for the playtests (the plan gives none).
     quests: {
-        queueMax: 3,               // quests waiting behind the current one; a full queue turns new offers down
+        queueMax: 7,               // quests waiting behind the current one (8 in all; was 3, 4 in all); a full queue turns new offers down
         pWish: 0.02,               // chance per event, with no quest, that he sets one himself (from his needs)
         findBase: 0.08,            // searching the target zone: chance per event that the target turns up...
         findStep: 0.03,            // ...plus this for every event already spent searching...
