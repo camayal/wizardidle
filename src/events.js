@@ -194,6 +194,12 @@ function exploreEV() {
     const giver = quests.giverHere();       // a board or a wanted post stands here and he reads it (src/quests.js)
     if (giver) {
         run.questMeet = giver;
+        if (giver === 'recipient') {
+            print(`${wizardName()} sees a stranger waiting by the road`);
+            loadNPC(pickRandomItem(quests.HUMANS));
+            startEvent(readBoard, config.quests.stepTime);
+            return;
+        }
         if (giver === 'human') {
             print(`${wizardName()} sees a stranger on the road`);
             loadNPC(pickRandomItem(quests.HUMANS));       // a merchant or an old man stands in the scene
@@ -256,7 +262,7 @@ function exploreEV() {
 // Reading a board or a post: the offer waits a couple of beats (the god may suggest), then he answers.
 function readBoard() {
     run.multipleEventsCounter += 1;
-    const g = run.questMeet, name = wizardName(), human = g === 'human';
+    const g = run.questMeet, name = wizardName(), recipient = g === 'recipient', human = g === 'human' || recipient;
     const finish = () => {
         run.previousEvent = "board"; addXP(0.25); endEvent();
         if (human) { clearNPC(); nextEvent(); return; }
@@ -264,11 +270,13 @@ function readBoard() {
     };
     switch (run.multipleEventsCounter) {
     case 1:         // the first beat: the stranger calls out (he may be ignored), or he reads what is pinned
-        if (human) { print(`<i>The stranger waves and calls out, trying to get ${name}'s attention</i>`); quests.attentionBegin(); }
+        if (recipient) print(`<i>The stranger looks up: he has been waiting for ${name}'s parcel</i>`);
+        else if (human) { print(`<i>The stranger waves and calls out, trying to get ${name}'s attention</i>`); quests.attentionBegin(); }
         else print(`${name} looks over ${g === 'board' ? 'the notices pinned on the board' : 'the wanted poster'}`);
         break;
     case 2:         // he stops to help or walks on to the left
-        if (human) {
+        if (recipient) { print(`${name} walks up to the stranger and takes out the parcel`); showBubble('quest'); }
+        else if (human) {
             if (!quests.stops()) {
                 print(`${name} ignores the stranger and walks on`);
                 endEvent();
@@ -280,6 +288,7 @@ function readBoard() {
         }
         break;
     case 3:         // the job is told in full (the god may suggest an answer while it waits)
+        if (recipient) { quests.handOver(); showBubble('yes'); run.multipleEventsCounter = 4; break; }
         if (!quests.beginOffer(g)) { print(`${name} finds nothing for him there`); endEvent(); clearNPC(); nextEvent(); break; }
         showBubble('quest');
         break;

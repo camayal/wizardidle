@@ -101,6 +101,7 @@ export const config = {
         pInnOffer: 0.12,           // chance the host of an inn he enters has a job
         pBoard: 0.03,              // chance an explore event in the City reads the board
         pRune: 0.01,               // chance a rune he finds starts a secret quest (the rune's trail to another zone)
+        pDeliverStranger: 0.5,      // a delivery goes to a stranger waiting on the road instead of an inn host (placeholder)
         pHuman: 0.004,             // chance an explore event in a safe area meets a stranger with a job (very rare)
         pPost: 0.02,               // chance an explore event in a region with a post reads it
         pTravelExplore: 0.75,      // on the way to a quest's target, chance each event is just exploring (walking on) instead of a random event

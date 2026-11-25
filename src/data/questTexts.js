@@ -371,6 +371,11 @@ export const DONE_STORIES = {
         "At the inn of the {where}, {name} hands over the parcel and gets a nod and his pay.",
         "The parcel is safe. {name} gives it to the host of the {where} and the host weighs it twice before he thanks him.",
     ],
+    delivery_stranger: [
+        "In the {where}, a stranger waits by the road. {name} hands him the parcel and the stranger weighs it twice before he thanks him.",
+        "The stranger in the {where} was watching the road for him. {name} gives him the parcel and gets a nod and his pay.",
+        "{name} finds the stranger of the {where} at last, and the parcel changes hands without many words.",
+    ],
     seek: [
         "{name} comes to the inn of the {where} asking for work, and the host looks him up and down.",
     ],

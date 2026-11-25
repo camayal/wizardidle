@@ -102,8 +102,12 @@ const MAKERS = {
         return base('hidden', giver, `Find the hidden shrine of the ${zoneName(HIDDEN_SHRINE_ZONE)}`, { zone: HIDDEN_SHRINE_ZONE }, 'faith');
     },
     delivery(giver) {
-        const z = pickRandomItem(INN_ZONES().filter((x) => x !== state.zone.current && hasStages(x)).join(','));
-        return z ? base('delivery', giver, `Deliver a parcel to the inn of the ${zoneName(z)}`, { zone: z }, 'gold') : null;
+        // the parcel is handed to him by the giver (he carries it from then on); it goes to an inn host or to a stranger waiting on the road
+        const toStranger = YesOrNot(config.quests.pDeliverStranger, 0);
+        const z = pickRandomItem((toStranger ? SAFE_ZONES : INN_ZONES()).filter((x) => x !== state.zone.current && hasStages(x)).join(','));
+        if (!z) return null;
+        return toStranger ? base('delivery', giver, `Carry a parcel to a stranger waiting in the ${zoneName(z)}`, { zone: z, to: 'stranger' }, 'gold')
+            : base('delivery', giver, `Deliver a parcel to the inn of the ${zoneName(z)}`, { zone: z, to: 'host' }, 'gold');
     },
     // Looking for work: he only goes to the inns to ask (the board and the posts he finds by chance on his way, never on purpose).
     seek(giver) {
@@ -261,7 +265,7 @@ function reward(q) {
 
 function complete(q, extra = {}) {
     const got = reward(q);
-    const key = (q.target.report ? 'guild_' : '') + (q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : extra.object ? `study_${extra.object === 'book' && Math.random() < 0.4 ? 'text' : extra.object}` : q.kind);
+    const key = (q.target.report ? 'guild_' : '') + (q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : q.kind === 'delivery' && q.target.to === 'stranger' ? 'delivery_stranger' : extra.object ? `study_${extra.object === 'book' && Math.random() < 0.4 ? 'text' : extra.object}` : q.kind);
     const who = q.target.boss ? enemyTypes[q.target.boss].name : q.target.enemy ? enemySprites[q.target.enemy].altName : '';
     const tale = doneStory(key, { name: wizardName(), where: zoneName(q.target.huntZone || q.target.zone), who, found: q.target.found, gain: extra.gain });
     print(`<i>${tale || `${wizardName()} has finished his quest (${q.text})`}${got ? ' ' + got : ''}</i>`);
@@ -390,6 +394,7 @@ function turnUp(q) {
         if (q.target.boss) run.forceBoss = q.target.boss; else run.forceEnemy = q.target.enemy;
     }
     if (q.kind === 'shrine' || q.kind === 'pilgrimage' || q.kind === 'hidden') run.questShrine = true;
+    if (q.kind === 'delivery' && q.target.to === 'stranger') { run.questGiver = 'recipient'; return 2; }       // a stranger waits in the next scene
     if (q.kind === 'delivery') run.questInn = true;
     if (q.kind === 'seek') {
         if (q.target.giver === 'inn') { run.questInn = true; return 4; }
@@ -468,7 +473,12 @@ export function onStudy(object, again, gain) {
 }
 export function onInn() {
     const q = state.quest;
-    if (q && q.kind === 'delivery' && state.zone.current === q.target.zone) complete(q);
+    if (q && q.kind === 'delivery' && q.target.to !== 'stranger' && state.zone.current === q.target.zone) complete(q);
+}
+// The stranger waiting for the parcel: he hands it over (events.js readBoard, giver 'recipient').
+export function handOver() {
+    const q = state.quest;
+    if (q && q.kind === 'delivery' && q.target.to === 'stranger' && state.zone.current === q.target.zone) complete(q);
 }
 
 // ---- his own wishes: a needs score plus a small personality ----
@@ -517,6 +527,7 @@ const canTake = () => !state.quest || qs().queue.length < config.quests.queueMax
 export function giverHere() {
     const z = state.zone.current, forced = run.questGiver;
     run.questGiver = '';
+    if (forced === 'recipient') return state.quest && state.quest.kind === 'delivery' && state.zone.current === state.quest.target.zone ? 'recipient' : '';
     const g = BOARD_ZONES.includes(z) ? 'board' : POST_ZONES().includes(z) ? 'post' : '';
     if (g && forced === g) return g;
     if (!canTake()) return '';
@@ -733,7 +744,7 @@ const mvBtn = (act, i, stem, off, cls = '') => `<button class='stoneBtn ${cls}' 
 const CARD = {
     rare: ['A rare hunt', 'A rare creature troubles the people. Find it and put an end to it.'],
     boss: ['A great hunt', 'A fearsome beast rules a land. Bring it down.'],
-    delivery: ['A parcel', 'Carry the parcel to the inn and hand it to the host.'],
+    delivery: ['A parcel', 'Carry the parcel to the inn and hand it to the host, or to the stranger who waits for it.'],
     explore: ['A place to see', 'Go to the place and look around.'],
     study: ['Something to study', 'Find a thing worth studying there.'],
     shrine: ['A prayer', 'Pray at the shrine. Someone is listening.'],
