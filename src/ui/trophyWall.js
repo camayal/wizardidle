@@ -8,10 +8,10 @@ import { state } from '../state.js';
 import { run, ui } from '../runtime.js';
 
 export const TROPHY_ROOM = 'el_poblado_cazadores_trofeos';
-const PLAQUE = 24, ROW_Y = [2, 14], SLOTS = 20;       // plaques drawn at 75% (24 px) so more fit; the sprite is 32 px
+const PLAQUE = 24, STRIDE = 32, ROW_Y = [2, 14], SLOTS = 15;       // plaques drawn at 75% (24 px) so more fit; the sprite is 32 px
 
 // Where slot i sits (scene sprite px, top-left of the plaque): even slots on the upper row, odd ones on the lower, half a plaque to the right.
-export const slotAt = (i) => ({ x: Math.floor(i / 2) * PLAQUE + (i % 2) * (PLAQUE / 2), y: ROW_Y[i % 2] });
+export const slotAt = (i) => ({ x: 4 + Math.floor(i / 2) * STRIDE + (i % 2) * (STRIDE / 2), y: ROW_Y[i % 2] });
 
 const images = {};
 function load(name, then) {
@@ -23,7 +23,7 @@ export const hung = () => (state.trophies = state.trophies || []);
 export function hang(boss) { if (boss && !hung().includes(boss)) hung().push(boss); }
 
 export const MAIN_HUT = 'el_poblado_cazadores';
-const CAPRICOR = { x: 222, y: -5 };           // the goat's head over the counter of the main hall (a rare rare with a story: not in the trophy room)
+const CAPRICOR = { x: 222, y: -1 };           // the goat's head over the counter of the main hall (a rare rare with a story: not in the trophy room)
 let here = false, main = false;
 function paint() {
     if (run.simulation || !(here || main)) return;

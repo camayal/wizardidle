@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Trophy room: plaques spaced 32 px apart (room for the 15 boss trophies in two staggered rows); Capricor's head hung 4 px lower over the counter.
 - Capricor's trophy is hung on the main wall of the hunters hut, over the counter, when its hunt is reported (not in the trophy room).
 - Trophy room: plaques shown at 75% (24 px), room for 20; he leaves the room by the hut's own door (fades out where he stands, no walk to the main wall).
 - Rare hunts: a hunted rare now shows a small proof (a bag, bottle, jar, box, pouch, vial, crate or bundle with a red wax seal, 11 looks shared by similar families) beside the quest while he carries it to the guild. Capricor, a rare rare, has a real trophy (its head). Proofs are not hung on the wall.
