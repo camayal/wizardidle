@@ -166,8 +166,11 @@
             /* settings page: the text size slider (art in img/ui/slider_*.png, drawn by scrolls.js; --su = one art pixel) */
             .setSliderRow{ display:flex; justify-content:flex-end; align-items:center; gap:calc(2 * var(--su)); margin:calc(2 * var(--su)) 0; flex:none; }
             #settings .setRow{ display:flex; justify-content:space-between; align-items:center; gap:1em; margin-bottom:2.4em; min-height:2.5em; }
-            .setBtn{ font-family:inherit; font-size:inherit; color:#3c2412; background:#e4ce80; border:2px solid #3c2412; border-bottom-width:4px; padding:0.3em 0.9em; cursor:pointer; image-rendering:pixelated; }
-            .setBtn:active{ background:#c4a658; border-bottom-width:2px; transform:translateY(2px); }
+            /* the red seal button (img/ui/settings_btn_rest/down.png, 24 x 14: caps 8, the middle repeats); --bu = one art pixel, set by scrolls.js */
+            .setBtn{ font-family:inherit; color:#fff0aa; text-shadow:0 calc(var(--bu) * 0.5) 0 #3c0000; box-sizing:border-box; height:calc(14 * var(--bu)); min-width:calc(24 * var(--bu)); margin:0; cursor:pointer; touch-action:manipulation;
+                border:0 solid transparent; border-left-width:calc(8 * var(--bu)); border-right-width:calc(8 * var(--bu)); padding:calc(2 * var(--bu)) 0 0; line-height:calc(8 * var(--bu)); font-size:calc(8 * var(--bu)); background:none;
+                border-image:url(img/ui/settings_btn_rest.png) 0 8 fill / 0 calc(8 * var(--bu)) / 0 round; image-rendering:pixelated; }
+            .setBtn:active{ border-image-source:url(img/ui/settings_btn_down.png); padding-top:calc(3 * var(--bu)); }
             #settings .setRow.buttons{ flex-wrap:wrap; justify-content:center; }
             #settings .setRow.version{ justify-content:center; opacity:.7; margin-top:2em; }
             .setSliderRow img{ image-rendering:pixelated; }

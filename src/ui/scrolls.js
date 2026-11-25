@@ -562,6 +562,7 @@ function updateHelp(){
         if (el("wakeToggle")) drawToggle(el("wakeToggle"), su, () => prefs.wake, () => setWake(!prefs.wake));
         if (el("devToggle")) drawToggle(el("devToggle"), su, () => document.body.dataset.devPanel != "off",
             () => document.dispatchEvent(new Event("wizardidle:toggleDevBar")));
+        for (const b of el("settings").querySelectorAll(".setBtn")) b.style.setProperty("--bu", `${su}px`);
         el("exportBtn").onclick = () => {
             const text = exportSaveText();
             const copied = navigator.clipboard ? navigator.clipboard.writeText(text).then(() => true, () => false) : Promise.resolve(false);
