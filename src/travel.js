@@ -19,7 +19,7 @@ import { drawWizard, loadBackground, print, setFacing, showStage, walkAcross, wa
 const OFF_SCENE_RIGHT = 240, OFF_SCENE_LEFT = -72;     // just past the scene's edges (ui/render.js)
 
 // The walking steps (render.walkAcross) of each kind of connector.
-const bridgeSteps = (c, dir) => (dir > 0 ? connectorScenes[c] : connectorScenes[c].slice().reverse()).map(scene => ({ scene, dir }));
+const bridgeSteps = (c, dir) => (dir > 0 ? connectorScenes[c] : connectorScenes[c].slice().reverse()).map(scene => ({ scene, dir: 1, mirror: dir < 0 }));      // crossed the other way: mirrored art, still walking right
 const stairSteps = (ground, up) => (up ? stairScenes[ground].scenes : stairScenes[ground].scenes.slice().reverse()).map(scene => ({ scene, dir: up ? 1 : -1 }));
 // A cave or mine mouth, or the ladder: he walks to the opening of the first scene (left to right), the scene fades
 // into the second, and he walks on from the opening there.
@@ -55,7 +55,7 @@ function crossingSteps(origin, target) {
         const c = chain[i];
         if (borderScenes[c]) {
             const b = borderScenes[c];
-            steps.push({ scene: b.scene, dir: places[origin].zone === b.left ? 1 : -1, border: true });
+            steps.push({ scene: b.scene, dir: 1, mirror: places[origin].zone !== b.left, border: true });
         } else if (connectorScenes[c]) {
             const bx = spotX(c);
             const east = bridgeLeftZone[c] ? places[origin].zone === bridgeLeftZone[c]      // art with a known zone on its left

@@ -88,8 +88,9 @@ ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 //Graphics
 
 // Draw a background (a zone stage, altar, inn...) and move the map marker.
-function loadBackground(back) {
+function loadBackground(back, mirror = false) {
     ui.currentBackGround = back;
+    ui.mirrored = mirror;           // a border or bridge crossed the other way is the same art mirrored, so he always walks right
     ui.headLevel = ui.objectSize * headLevelShare(back);     // the walk line: raised only in the connector scenes
     if (run.simulation) return;     // in a simulation only what's on the scene matters
     showHotspots(back);             // its clickable spots (a new scene visit)
@@ -97,6 +98,7 @@ function loadBackground(back) {
     withImage("background", art(`${back.toLowerCase()}`), () => {
         esceneCanvas.style.background = `url('${art(`${back.toLowerCase()}`)}') no-repeat`;
         esceneCanvas.style.backgroundSize = "contain";
+        esceneCanvas.style.transform = mirror ? "scaleX(-1)" : "";
         // the front layer of this scene, if it has one (cleared otherwise)
         const front = el("overlayCanvas").style, name = back.toLowerCase();
         front.background = overlays.has(name) ? `url('${art(`overlay_${name}`)}') no-repeat` : "none";
@@ -390,7 +392,7 @@ function walkAcross(steps, changeScene, onArrive) {
             : walkWizardTo(s.fightSpot, () => s.fight(() => walkWizardTo(target, onReached)));
         walkOn(() => {
             const show = () => {
-                if (more) loadBackground(steps[i + 1].scene); else changeScene();
+                if (more) loadBackground(steps[i + 1].scene, steps[i + 1].mirror); else changeScene();
                 // after the last scene he comes into the real one from the edge he was heading to; out of a border he is
                 // already in the region, so he enters from the left as usual
                 ui.wizardOffset = more ? startOf(steps[i + 1]) : s.border ? OFF_LEFT : s.fade ? entry(s.dir) : 0;      // the last scene of a plain walk (a bridge) is already the area he is in: he just stands in his place
@@ -405,7 +407,7 @@ function walkAcross(steps, changeScene, onArrive) {
         });
     };
     walkWizardTo(side(steps[0].dir), () => {
-        loadBackground(steps[0].scene);
+        loadBackground(steps[0].scene, steps[0].mirror);
         const info = connectorSceneInfo(steps[0].scene);
         if (info && !run.simulation) print(`${wizardName()} comes to ${info.label}`);
         play(0);
@@ -781,7 +783,10 @@ function showBubble(kind) {
         c.width = c.offsetWidth;
         c.height = c.offsetHeight;
         const [x, y] = state.npc ? npcBox(state.npc) : [ui.squareSide * 6, ui.headLevel];
-        pixelContext(c).drawImage(img, x - 14 * unit, Math.max(0, y - 14 * unit), 26 * unit, 20 * unit);
+        const ctx = pixelContext(c), bx = x - 14 * unit, bw = 26 * unit;
+        if (ui.facing < 0 && c === npcCanvas) { ctx.save(); ctx.translate(bx + bw / 2, 0); ctx.scale(-1, 1); ctx.translate(-(bx + bw / 2), 0); }     // that canvas is mirrored: flip back so the text reads right
+        ctx.drawImage(img, bx, Math.max(0, y - 14 * unit), bw, 20 * unit);
+        ctx.restore();
     });
 }
 
