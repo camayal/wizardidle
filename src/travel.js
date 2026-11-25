@@ -179,27 +179,43 @@ function connectorTests() {
 // Returns a text for the console, or null when a region has no stages.
 function regionTrip(from, to, onArrive) {
     const names = Object.keys(places), ins = (z) => names.filter((n) => places[n].zone === z);
-    let pair = null;
-    for (const a of ins(from)) {
+    const at = (n) => ({ current: places[n].zone, stage: Number(n.match(/\d+$/)[0]) });
+    for (const a of ins(from)) {          // a pair with connector scenes between them first
         for (const b of ins(to)) {
             const w = crossingSteps(a, b);
-            if (w) { pair = { a, b, steps: w.steps }; break; }
-            const linkedPair = destinations(a).includes(b);
-            if (!pair || (!pair.linked && linkedPair)) pair = { a, b, steps: null, linked: linkedPair };
+            if (!w) continue;
+            Object.assign(state.zone, at(a)); showStage();
+            Object.assign(state.zone, at(b));
+            walkAcross(w.steps, showStage, onArrive);
+            return `${a} to ${b}: ${w.steps.map((x) => x.scene + (x.mirror ? " (mirrored)" : "")).join(", ")}`;
         }
-        if (pair && pair.steps) break;
     }
-    if (!pair) return null;
-    const at = (n) => ({ current: places[n].zone, stage: Number(n.match(/\d+$/)[0]) });
-    Object.assign(state.zone, at(pair.a));
-    showStage();
-    Object.assign(state.zone, at(pair.b));
-    if (pair.steps) walkAcross(pair.steps, showStage, onArrive);
-    else {          // no connector between them: out to the right, in from the left
-        state.zone.current = places[pair.a].zone;
-        walkWizardTo(OFF_SCENE_RIGHT, () => { Object.assign(state.zone, at(pair.b)); showStage(); ui.wizardOffset = OFF_SCENE_LEFT; walkWizardTo(0, onArrive); });
+    // none: the way the game's links go, stage by stage (a stage at the edge of a zone is the border), shortest first
+    const start = ins(from)[0], goal = new Set(ins(to));
+    if (!start || !goal.size) return null;
+    const prev = { [start]: null }, todo = [start];
+    let end = null;
+    while (todo.length && !end) {
+        const n = todo.shift();
+        for (const m of [...moves(n), ...destinations(n)]) {
+            if (!places[m] || m in prev) continue;
+            prev[m] = n; todo.push(m);
+            if (goal.has(m)) { end = m; break; }
+        }
     }
-    return `${pair.a} to ${pair.b}${pair.steps ? ": " + pair.steps.map((x) => x.scene + (x.mirror ? " (mirrored)" : "")).join(", ") : ": " + (pair.linked ? "linked directly in the game, a plain walk (no scene)" : "no link in the game, a plain walk")}`;
+    if (!end) return null;
+    const path = [];
+    for (let n = end; n; n = prev[n]) path.unshift(n);
+    Object.assign(state.zone, at(start)); showStage();
+    const hop = (k) => {
+        if (k >= path.length) { if (onArrive) onArrive(); return; }
+        const a = path[k - 1], b = path[k], w = crossingSteps(a, b);
+        Object.assign(state.zone, at(b));
+        if (w) walkAcross(w.steps, showStage, () => hop(k + 1));
+        else walkWizardTo(OFF_SCENE_RIGHT, () => { showStage(); ui.wizardOffset = OFF_SCENE_LEFT; walkWizardTo(0, () => hop(k + 1)); });
+    };
+    hop(1);
+    return `${path.join(" > ")}: stage by stage along the game's links, a plain walk between stages`;
 }
 
 // The pier (a dead end): can he walk out on it from this stage, and the walk out and back to the same stage.

@@ -335,4 +335,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25: bridges no longer mirrored (connectors work both ways); only borders mirror. Author tests and shares Regions reports.
 - 2026-11-25: westward bridge ends: walkIn step flag, he walks into the new area from the right edge (render.walkAcross); untested in a browser.
 
-- 2026-11-25 Regions picker: with no connector, prefers a pair the game links directly. Prairie-Dunes has no border scene in the real links (only Gruta-Duenon has one), so the plain walk is the real behavior.
+- 2026-11-25 Regions picker: with no connector, prefers a pair the game links directly. Correction: Prairie-Dunes goes stage by stage through the links (Pradera14 > Dunas3); no border art exists for it, only Gruta-Duenon has one. Picker now walks that route.
