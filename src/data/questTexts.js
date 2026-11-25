@@ -420,25 +420,26 @@ export const DONE_STORIES = {
     rune: ["{name} follows the rune's trail to its end in the {where} and the glyph glows once and goes dark."],
 };
 
-// Key places of each zone: [what the giver says, what the wizard finds].
+// Key places of each zone: [what the giver says, what the wizard finds, the scene number that shows it (optional: only standing there completes an explore quest)].
+// Scenes were matched by eye from the art; spots with no number have no matching scene yet (any stage of the zone counts).
 export const SPOTS = {
     el_Castillo: [["the old watchtower still gives a view of the whole valley", "the old watchtower, with a view over the whole valley"]],
     la_Ciudad: [["the market square is well worth a morning", "the market square, loud and bright"], ["the fountain in the middle is a nice place to rest", "the fountain in the middle, where he rests a while"]],
-    la_Pradera: [["there is a quiet hill with a view of everything", "the quiet hill, with a view of the whole prairie"], ["a stream there runs clear and cold", "a clear cold stream, where he drinks"]],
-    el_Poblado: [["the round huts are a pretty sight at dusk", "the round huts, glowing at dusk"], ["they brew a good cider at the end of the road", "the cider house at the end of the road"]],
-    la_Cueva: [["there is a cavern where the walls glitter", "the glittering cavern"], ["the echo in the deep chamber is worth hearing", "the deep chamber, with its long echo"]],
+    la_Pradera: [["there is a quiet hill with a view of everything", "the quiet hill, with a view of the whole prairie", 9], ["a stream there runs clear and cold", "a clear cold stream, where he drinks", 10]],
+    el_Poblado: [["the round huts are a pretty sight at dusk", "the round huts, glowing at dusk"], ["they brew a good cider at the end of the road", "the cider house at the end of the road", 3]],
+    la_Cueva: [["there is a cavern where the walls glitter", "the glittering cavern", 5], ["the echo in the deep chamber is worth hearing", "the deep chamber, with its long echo", 2]],
     la_Gruta: [["a hall of crystals hangs from the roof", "the hall of crystals"], ["the underground pool is perfectly still", "the still underground pool"]],
     la_Torre: [["from the top you can see the whole coast", "the top of the tower, with the whole coast below"]],
     el_Bosque: [["a clearing there is full of fireflies at night", "the clearing of fireflies"], ["the oldest tree is as wide as a hut", "the oldest tree, as wide as a hut"]],
-    el_Pantano: [["the lilies bloom at night and glow", "the glowing lilies"], ["there is a hidden walkway that keeps your boots dry", "the hidden walkway over the bog"]],
-    las_Dunas: [["the ridge at sunset is a sight", "the high ridge, golden at sunset"], ["there is a dry well where the old man stops", "the dry well, with a story of its own"]],
-    la_Tundra: [["there are lights in the sky some nights", "the lights in the sky, dancing in green"], ["an ice cave glows blue at noon", "the ice cave, blue as the sea"]],
-    el_Volcan: [["the lava falls glow at night, a sight to see", "the lava falls, glowing in the dark"]],
-    el_Desierto: [["there is an oasis half a day in", "the oasis, cool and green"], ["the ruins at dusk are worth the walk", "the ruins, long shadows in the dusk"]],
-    el_Heidan: [["the floating isles hang over the mist", "the floating isles above the mist"]],
-    el_Duenon: [["the bone arch at the gate is something to see", "the bone arch at the gate, which he does not enjoy"]],
-    la_playa: [["there is a nice fishing spot on the rocks", "the fishing spot on the rocks"], ["the shells are huge at low tide", "the huge shells at low tide"]],
-    la_Mina: [["the old lift still creaks over a fine view", "the old mine lift, creaking above a long drop"], ["a vein of blue stone glows deep inside", "the vein of blue stone, glowing"]],
+    el_Pantano: [["the lilies bloom at night and glow", "the glowing lilies", 2], ["there is a hidden walkway that keeps your boots dry", "the hidden walkway over the bog"]],
+    las_Dunas: [["the ridge at sunset is a sight", "the high ridge, golden at sunset", 1], ["there is a dry well where the old man stops", "the dry well, with a story of its own"]],
+    la_Tundra: [["there are lights in the sky some nights", "the lights in the sky, dancing in green", 5], ["an ice cave glows blue at noon", "the ice cave, blue as the sea"]],
+    el_Volcan: [["the lava falls glow at night, a sight to see", "the lava falls, glowing in the dark", 5]],
+    el_Desierto: [["there is an oasis half a day in", "the oasis, cool and green", 1], ["the ruins at dusk are worth the walk", "the ruins, long shadows in the dusk", 4]],
+    el_Heidan: [["the floating isles hang over the mist", "the floating isles above the mist", 9]],
+    el_Duenon: [["the bone arch at the gate is something to see", "the bone arch at the gate, which he does not enjoy", 3]],
+    la_playa: [["there is a nice fishing spot on the rocks", "the fishing spot on the rocks", 3], ["the shells are huge at low tide", "the huge shells at low tide", 1]],
+    la_Mina: [["the old lift still creaks over a fine view", "the old mine lift, creaking above a long drop", 6], ["a vein of blue stone glows deep inside", "the vein of blue stone, glowing", 1]],
 };
 
 // What a finished quest gives, told ({n} is the amount where it has one).
