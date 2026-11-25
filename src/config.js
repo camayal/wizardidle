@@ -107,6 +107,7 @@ export const config = {
         turnUpCooldown: 8,         // events after the target turned up (a wanted enemy, a boss) before it can turn up again
         offerKinds: {              // how likely each kind is when a giver offers a job (weights, placeholders for the playtests)
             inn:   { rare: 3, boss: 1, delivery: 4, explore: 2, study: 1 },
+            oldman: { artefact: 8, rare: 1, boss: 1, delivery: 2, explore: 1, study: 1 },     // the Dunes inn's old man; artefact only counts while an artefact job exists
             board: { rare: 4, boss: 2, delivery: 2, explore: 2, study: 1, shrine: 1 },
             human: { rare: 2, boss: 1, delivery: 3, explore: 3, study: 2, shrine: 1 },
             post:  { rare: 3, boss: 1 },       // hunts only

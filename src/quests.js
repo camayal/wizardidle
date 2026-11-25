@@ -31,7 +31,7 @@ const hasStages = (z) => byName[`${z}1`] !== undefined;
 const stagesOf = (z) => Object.keys(places).filter((n) => places[n].zone === z && byName[n] !== undefined);
 const ZONES = () => Object.keys(zones).filter(hasStages);
 const SHRINE_ZONES = () => ZONES().filter((z) => places[`${z}_altar`]);
-const INN_ZONES = ['la_Ciudad', 'el_Poblado', 'el_Desierto'];
+const INN_ZONES = () => ['la_Ciudad', 'el_Poblado', 'el_Desierto', ...(config.balance.dunesInn ? ['las_Dunas'] : [])];      // the inns that exist (the Dunes one is the old man's)
 export const HIDDEN_SHRINE_ZONE = 'el_Volcan';
 // Who gives quests (placeholders: where the boards and posts stand is the author's to say; art for both is still to ask the artist):
 // inns, the board of the City, and wanted posts on the roads of these regions (each gives a wanted quest of its own region).
@@ -102,12 +102,12 @@ const MAKERS = {
         return base('hidden', giver, `Find the hidden shrine of the ${zoneName(HIDDEN_SHRINE_ZONE)}`, { zone: HIDDEN_SHRINE_ZONE }, 'faith');
     },
     delivery(giver) {
-        const z = pickRandomItem(INN_ZONES.filter((x) => x !== state.zone.current && hasStages(x)).join(','));
+        const z = pickRandomItem(INN_ZONES().filter((x) => x !== state.zone.current && hasStages(x)).join(','));
         return z ? base('delivery', giver, `Deliver a parcel to the inn of the ${zoneName(z)}`, { zone: z }, 'gold') : null;
     },
     // Looking for work: he only goes to the inns to ask (the board and the posts he finds by chance on his way, never on purpose).
     seek(giver) {
-        const spots = INN_ZONES.filter(hasStages).map((z) => ({ z, g: 'inn', t: `Look for work at the inn of the ${zoneName(z)}` }));
+        const spots = INN_ZONES().filter(hasStages).map((z) => ({ z, g: 'inn', t: `Look for work at the inn of the ${zoneName(z)}` }));
         const s = spots[Math.floor(Math.random() * spots.length)];
         return s ? base('seek', giver, s.t, { zone: s.z, giver: s.g }, 'xp') : null;
     },
@@ -497,9 +497,10 @@ export function wishKind() {
     return best;
 }
 
+// Alone he only ever goes to an inn to ask for work (the board and the posts he finds by chance, never on purpose).
 function wish(force = false) {
     if (qs().queue.length || (!force && !YesOrNot(config.quests.pWish, 0))) return;
-    const kind = wishKind(), q = makeQuest(kind, 'himself');
+    const q = makeQuest('seek', 'himself');
     if (!q) return;
     offer(q);
     stats.count('quest.wishes');
@@ -524,9 +525,11 @@ export function giverHere() {
 }
 
 // The kind of job a giver offers, by the weights of config.quests.offerKinds (a post only ever has hunts).
+// An artefact job (what shields him from Medusa) is on offer while he was petrified and has not found it, and none is on the list already.
+const artefactAvailable = () => !!state.petrifiedOnce && !state.petrifyImmune && ![state.quest, ...qs().queue].some((q) => q && q.kind === 'medusa');
 function offerKind(giver) {
     const w = config.quests.offerKinds[giver] || config.quests.offerKinds.board;
-    const list = Object.entries(w), total = list.reduce((t, [, n]) => t + n, 0);
+    const list = Object.entries(w).filter(([k]) => k !== 'artefact' || artefactAvailable()), total = list.reduce((t, [, n]) => t + n, 0);
     let r = Math.random() * total;
     for (const [k, n] of list) { r -= n; if (r < 0) return k; }
     return list[0][0];
@@ -538,13 +541,14 @@ export function beginOffer(giver) {
     const z = state.zone.current, cur = state.quest;
     if (cur && cur.kind === 'seek' && cur.target.zone === z && cur.target.giver === giver) complete(cur);     // he came to ask for work: that errand is done
     if (!canTake()) { run.questOffer = null; return false; }
-    const pick = offerKind(giver), hunt = pick === 'rare' || pick === 'boss';       // the two hunts are told apart in config.quests.offerKinds
-    const q = makeQuest(hunt ? 'wanted' : pick, giver, giver === 'post' ? z : undefined, hunt ? pick : undefined);
+    const oldMan = giver === 'inn' && z === 'las_Dunas';        // the old man of the Dunes inn: mostly artefact jobs, when there is one
+    const pick = offerKind(oldMan ? 'oldman' : giver), hunt = pick === 'rare' || pick === 'boss';       // the two hunts are told apart in config.quests.offerKinds
+    const q = makeQuest(hunt ? 'wanted' : pick === 'artefact' ? 'medusa' : pick, giver, giver === 'post' ? z : undefined, hunt ? pick : undefined);
     if (!q) { run.questOffer = null; return false; }
     run.questOffer = { q, giver, hint: '' };
     const name = wizardName();
     const tell = q.story ? `${q.text}. ${q.story}` : q.text;       // the scroll keeps the short line, the console tells the whole story
-    print(giver === 'inn' ? `<i>The innkeeper has a job for ${name}. ${tell}</i>`
+    print(giver === 'inn' ? `<i>${oldMan ? 'The old man' : 'The innkeeper'} has a job for ${name}. ${tell}</i>`
         : giver === 'human' ? `<i>The stranger explains his trouble to ${name}. ${tell}</i>`
         : `<i>${name} reads ${giver === 'board' ? 'a notice on the board' : 'a wanted poster'}. ${tell}</i>`);
     stats.count(`quest.offers.${giver}`);

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Quests he makes up himself are now only "look for work at an inn" (City, Town, Desert, Dunes). The old man of the Dunes inn gives jobs too, mostly the artefact against Medusa's gaze while he is missing it.
 - Export save is sealed with a checksum: an edited export is refused on import (casual-tamper guard only).
 - Long phone screens: the XP bar and indicators shrink and sit beside the second row of buttons instead of spanning under them; wizard names are limited to 12 characters.
 - Map scroll: the title is always "Map"; the name of the region (or connector) is written under the map picture.

@@ -311,3 +311,4 @@ Newest first; keep the last three, cut older ones to the archive.
 2026-11-25 — long screens: XP plate beside button row 2 (u capped by width/150), name max 12 chars.
 2026-11-25 — export save sealed with salted FNV-1a checksum (state.js seal); import refuses edited text.
 2026-11-25 — art in: la_playa_estatua (option B) + dune statue shore. Beach statue is not live: needs a statueObj entry (name, effect) = design call for thinker; STATUE_X for la_Playa ~190 fits B.
+2026-11-25 — wishes = seek only; Dunes inn counts as an inn (seek, delivery); old man uses offerKinds.oldman (artefact job = medusa quest while petrifiedOnce and not immune).
