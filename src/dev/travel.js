@@ -14,7 +14,7 @@ import { travelGraph as g, travelGraphBuilt } from '../data/travelGraph.js';
 import { places } from '../data/zones.js';
 import { neighbors, overrides, pairKey, verdict, byName, rebuild, travelCost, routeIds, dynamicScenes, SIZE } from '../travelGraph.js';
 import { config } from '../config.js';
-import { travelPoints } from '../data/travelOverrides.js';
+import { travelPoints, travelKinds } from '../data/travelOverrides.js';
 import { sidePanel } from './panel.js';
 import { esc } from './review.js';
 import { loadBackground } from '../ui/render.js';
@@ -33,6 +33,7 @@ const baseOf = (n) => n.replace(/_(under|above)$/, '');       // a cave mouth mo
 const CUSTOM = ['future', 'connector', 'border'];         // kinds of the points added by hand
 const touched = new Set();                      // links given a verdict since this page was opened
 let checking = false, showPath = false;
+const stageKinds = { ...travelKinds };      // the type of a scene (a stage) when it is not a plain scene, e.g. a border: {stage: kind}
 let side, p, tools, imgs = {}, layer = 'ground', src = '', tgts = [], showNums = true, placing = '', moved = {}, points = {}, newPoint = null;
 g.nodes.forEach((n) => { if (CUSTOM.includes(n[3])) points[n[4]] = { kind: n[3], layer: n[0], x: n[1], y: n[2], note: (travelPoints[n[4]] || {}).note || '' }; });
 // The spots not joined to the biggest group of linked spots (impossible links do not count): [node, ...].
@@ -51,14 +52,14 @@ function lost() {
     return g.nodes.map((n, i) => i).filter((i) => names[i].length && group[i] !== main).sort((a, b) => group[a] - group[b]);
 }
 const tri = (ctx, X, Y, r) => { ctx.moveTo(X, Y - r); ctx.lineTo(X + r, Y + r * 0.8); ctx.lineTo(X - r, Y + r * 0.8); ctx.closePath(); };
-const kindOf = (i) => (points[names[i][0]] || {}).kind || g.nodes[i][3];       // a point's type can be switched before the graph is rebuilt
+const kindOf = (i) => (points[names[i][0]] || {}).kind || stageKinds[names[i].find((n) => stageKinds[n])] || g.nodes[i][3];       // a point's type can be switched before the graph is rebuilt
 const isCustom = (n) => n in points;
 
 const tgt = () => tgts[tgts.length - 1] || '';           // the last target: the one "change coord" moves
 const layerOf = (n) => g.nodes[byName[n]][0];
 const isStage = (n) => n in g.anchors;
 const pos = (i) => moved[baseOf(names[i][0] || '')] || [g.nodes[i][1], g.nodes[i][2]];
-const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify({ verdicts: overrides, positions: moved, points })); } catch (e) { /* no storage: fine */ } };
+const save = () => { try { localStorage.setItem(DRAFT, JSON.stringify({ verdicts: overrides, positions: moved, points, stageKinds })); } catch (e) { /* no storage: fine */ } };
 
 // The colour of a direct link source -> node j of cost c: the manual verdict if there is one, else the cost.
 function edgeKind(a, j, c) {
@@ -176,7 +177,7 @@ function draw() {
 function drawLink() {
     const has = src && tgts.some((t) => t !== src), vs = has ? tgts.filter((t) => t !== src).map((t) => verdict(src, t)) : [];
     const own = isCustom(src);
-    for (const r of p.kinds.querySelectorAll('input')) r.checked = own && points[src].kind === r.value;      // the source's type
+    for (const r of p.kinds.querySelectorAll('input')) r.checked = own ? points[src].kind === r.value : isStage(src) && (stageKinds[src] || 'scene') === r.value;      // the source's type
     p.srcPlace.style.fontWeight = placing === 'src' ? 'bold' : '';
     p.tgtPlace.style.fontWeight = placing === 'tgt' ? 'bold' : '';
     p.newAdd.textContent = placing === 'new' ? 'click the map...' : 'Add point';
@@ -315,6 +316,7 @@ export async function open(devTools) {
             <div style="display:flex;gap:4px;align-items:center"><b>Points</b>
                 <button data-id="align" title="move the target(s) onto the source, e.g. the two ends of a connector">Align to source</button>
 <span data-id="kinds" title="the type of the selected points (source and targets): pick one">
+                    <label><input type="radio" name="ptKind" value="scene"> scene</label>
                     <label><input type="radio" name="ptKind" value="future"> future scene</label>
                     <label><input type="radio" name="ptKind" value="connector"> connector</label>
                     <label><input type="radio" name="ptKind" value="border"> border</label></span></div>
@@ -352,7 +354,10 @@ export async function open(devTools) {
                 points[n] = { kind, layer: layerOf(n), x, y, note: '' };
             }
         }
-        const list = [src, ...tgts].filter((n, i, a) => n && isCustom(n) && a.indexOf(n) === i);
+        const scenes = [src, ...tgts].filter((n, i, a) => n && isStage(n) && a.indexOf(n) === i);      // a scene keeps its place and art: only its type changes
+        for (const n of scenes) { if (kind === 'scene') delete stageKinds[n]; else stageKinds[n] = kind; }
+        const list = [src, ...tgts].filter((n, i, a) => n && isCustom(n) && a.indexOf(n) === i && kind !== 'scene');
+        if (scenes.length && !list.length) { save(); draw(); p.tip.textContent = `${scenes.join(', ')}: now a ${kind}. Save verdict to keep it.`; return; }
         if (!list.length) { p.tip.textContent = 'Select a future scene, a connector, a border, a bridge, the pier or the stairs first.'; drawLink(); return; }
         for (const n of list) points[n].kind = kind;
         save(); draw();
@@ -395,7 +400,7 @@ export async function open(devTools) {
         for (const [name, d] of Object.entries(points)) {       // a moved point of ours is saved in its own entry
             if (positions[name]) { [d.x, d.y] = positions[name]; delete positions[name]; }
         }
-        if (await post('travel/overrides', { verdicts: overrides, positions, points }, 'Save')) { try { localStorage.removeItem(DRAFT); } catch (e) { /* none */ } }
+        if (await post('travel/overrides', { verdicts: overrides, positions, points, kinds: stageKinds }, 'Save')) { try { localStorage.removeItem(DRAFT); } catch (e) { /* none */ } }
     };
     p.capture.onclick = () => post('travel/capture', { png: p.canvas.toDataURL('image/png'), stage: src, layer, overrides, moved }, 'Capture');
     try {
@@ -403,6 +408,7 @@ export async function open(devTools) {
         Object.assign(overrides, d.verdicts || {});
         moved = d.positions || {};
         if (d.points) points = d.points;
+        if (d.stageKinds) { for (const k of Object.keys(stageKinds)) delete stageKinds[k]; Object.assign(stageKinds, d.stageKinds); }
         rebuild();
     } catch (e) { /* no draft */ }
     choose('src', src || 'la_Pradera1');

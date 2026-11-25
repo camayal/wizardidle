@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- (Developer tools) A scene of the game (e.g. Prairie 14) can now be marked as a border (or connector, future scene) in the travel console with the type radios, and a new "scene" radio puts it back. Saved in travelKinds; Prairie 14 is a border.
 - (Developer tools) The travel console's point type is three radio buttons (future scene, connector, border) that show the source's type and switch the selected points to exactly one of them.
 - (Developer tools) The travel map draws borders as triangles: one scene walked both ways. Connectors (several scenes, both ways) stay squares and scenes circles. New points can be made a border, and the type button cycles future scene, connector, border. The Gruta-Duenon point is a border.
 - (Developer tools) Fixed the travel tool losing links of mouths with a hyphen in the name (Grotto mouth, Prairie-Beach mine mouth): the save dropped them every time. They are restored.

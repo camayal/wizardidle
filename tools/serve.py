@@ -170,6 +170,7 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
                 v['note'] = str(v.get('note', ''))[:500]
                 if not v['note']:
                     v.pop('note')
+            kinds = {k: v for k, v in data.get('kinds', {}).items() if re.fullmatch(r'\w+', k) and v in ('future', 'connector', 'border')}
             positions, stages = {}, 0
             for name, xy in data.get('positions', {}).items():
                 if not re.fullmatch(r'\w+', name) or len(xy) != 2:
@@ -188,7 +189,8 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
             with open(target, 'w', encoding='utf-8', newline='\n') as f:
                 f.write(head + 'export const travelOverrides = ' + json.dumps(verdicts, indent=4) + ';\n'
                         + 'export const travelPositions = ' + json.dumps(positions, indent=4) + ';\n'
-                        + 'export const travelPoints = ' + json.dumps(points, indent=4) + ';\n')
+                        + 'export const travelPoints = ' + json.dumps(points, indent=4) + ';\n'
+                        + 'export const travelKinds = ' + json.dumps(kinds, indent=4) + ';\n')
             done = subprocess.run([sys.executable, os.path.join(REPO, 'tools', 'travel_graph.py')], capture_output=True, text=True)
             msg = f'saved {len(verdicts)} verdicts, {stages} stage and {len(positions)} waypoint positions, {len(points)} added points; graph ' + \
                 ('regenerated: reload the page' if done.returncode == 0 else 'NOT regenerated: ' + done.stderr[-200:])
