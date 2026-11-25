@@ -8,6 +8,7 @@ import { drawWizard, drawWizardPose, loadNPC } from './render.js';
 import { scrollClose } from './scrolls.js';
 import { el } from './dom.js';
 import { art } from '../media.js';
+import { chosenTextScale, browserTextScale, heightScale } from '../prefs.js';
 
 //seg
 
@@ -157,8 +158,14 @@ function detectmob() {
 
 
 // Base font size, proportional to the game square.
+// The text scale is the product of three things: the screen height (tall phones), the browser's own
+// text size and the choice made in the settings scroll.
+function textScale(){
+    return heightScale(window.innerWidth, window.innerHeight, detectmob()) * browserTextScale() * chosenTextScale();
+}
+
 function getEM(){
-    ui.em = ui.objectSize * 0.04;
+    ui.em = ui.objectSize * 0.04 * textScale();
     return ui.em;
 }
 
@@ -200,7 +207,11 @@ function layoutXPPlate(top, width, u) {
 // Everything is proportional to ui.objectSize (s); the console fills the remaining height.
 function layoutPortrait(){
     const s = ui.objectSize, em = ui.em, W = window.innerWidth, H = window.innerHeight;
-    const button = s * 0.09375;                      // toolbar button size, also the launcher's font unit
+    const button = s * 0.09375;                      // the launcher's font unit
+    // toolbar: on tall phones the buttons grow and sit closer, the name plate gives up the width
+    const kb = heightScale(W, H, detectmob());
+    const tb = button * kb, step = tb * 1.04;        // button size and the distance between buttons
+    const tbLeft = s * 1.04 - step * 3 + (step - tb), tbTop = s * 0.01;
 
     if (state.firstUse) {
         setStyles("nubes", { display: "none" });
@@ -211,7 +222,7 @@ function layoutPortrait(){
     }
 
     // sizes everything else depends on
-    const headingH = s * 0.21;
+    const headingH = Math.max(s * 0.21, tbTop * 2 + step + tb);
     const marcoH = s * 0.3125;
     const sceneH = s * 0.25;
     const backConsoleH = H - parseInt(sceneH) * 1.2 - parseInt(headingH) * 1.2;
@@ -222,14 +233,15 @@ function layoutPortrait(){
 
     // heading
     setStyles("heading", { height: headingH });
-    setStyles("pjName", { fontSize: button, width: s * 0.7 });
-    layoutXPPlate(s * 0.092, s * 0.7, s * 0.0042);
-    setEach(TOOLBAR, { display: "block", width: button });
-    setEach(["btn1", "btn4"], { left: s * 0.75 });
-    setEach(["btn2", "btn5"], { left: s * 0.75 + (s * 0.1) });
-    setEach(["btn3", "btn6"], { left: s * 0.75 + (s * 0.1) * 2 });
-    setEach(["btn1", "btn2", "btn3"], { top: s * 0.01 });
-    setEach(["btn4", "btn5", "btn6"], { top: s * 0.11 });
+    const plateW = Math.min(s * 0.7, tbLeft - s * 0.04);
+    setStyles("pjName", { fontSize: button, width: plateW });
+    layoutXPPlate(Math.max(s * 0.092, (headingH - 28 * s * 0.0042) / 2), plateW, s * 0.0042);
+    setEach(TOOLBAR, { display: "block", width: tb });
+    setEach(["btn1", "btn4"], { left: tbLeft });
+    setEach(["btn2", "btn5"], { left: tbLeft + step });
+    setEach(["btn3", "btn6"], { left: tbLeft + step * 2 });
+    setEach(["btn1", "btn2", "btn3"], { top: tbTop });
+    setEach(["btn4", "btn5", "btn6"], { top: tbTop + step });
 
     // game area, scene and console
     setStyles("main", { width: s, height: H, left: (W / 2) - (s * 1.0625 / 2), top: H * 0.005 });
@@ -273,7 +285,7 @@ function layoutPortrait(){
     setEach(["scrollBackCenter", "scrollBackUp", "scrollBackDown"], { width: s + (s * 0.075), left: (s * -0.01) });
     setEach(["scrollBackCenter", "scrollBackUp"], { top: s * 0.02 });
     setStyles("scrollText", { fontSize: em, margin: em / 2, width: s, height: scrollH, left: s * 0.03, top: s * 0.065 });
-    setStyles("btnClose", { width: button, left: s * 0.75 + (s * 0.1) * 2, top: s * 0.065 });
+    setStyles("btnClose", { width: tb, left: tbLeft + step * 2, top: s * 0.065 });
     if (parseInt(el("scrollBackCenter").style.minHeight) > 0) {     // the scroll is open: resize it too
         setStyles("scrollBackCenter", { minHeight: scrollH * 0.97 });
         setStyles("scrollText", { minHeight: scrollH * 0.92 });

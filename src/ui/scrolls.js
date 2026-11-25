@@ -9,7 +9,8 @@ import * as loop from '../loop.js';
 import { version } from '../game.js';
 import { achievementList, countLogros, hasOthers, othersList } from '../achievements.js';
 import { playSound } from '../audio.js';
-import { detectmob, layoutPortrait } from './layout.js';
+import { detectmob, layoutPortrait, responsiveLayout } from './layout.js';
+import { prefs, TEXT_SIZES, setTextSize, setSound } from '../prefs.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { stats } from '../stats.js';
@@ -389,7 +390,12 @@ function updateHelp(){
     '<b>I opened the game in another tab and it fell apart. Is that a bug?</b> - Not exactly. There is one world and one tab: the first tab keeps and saves the world, any other is a dimension that is unstable and collapses by itself. Close the extra tab.<br>' +
     '<b>Where is my game saved?</b> - In your browser, on this device only. Clearing the site data erases it. The game also works offline once it has loaded.<br>';
 
-    const txt = '<div id="help"><span class="titles" id="titleHelp">Help</span><br>' +
+    const sizeChoices = TEXT_SIZES.map(t => `<span class="setChoice${t.id == prefs.textSize ? ' on' : ''}" data-size="${t.id}">${t.label}</span>`).join(' ');
+    const settings = '<div id="settings"><div class="setRow">Text size<br>' + sizeChoices + '</div>' +
+        '<div class="setRow">Sound<br><span class="setChoice' + (prefs.sound ? ' on' : '') + '" data-sound="1">On</span> <span class="setChoice' + (prefs.sound ? '' : ' on') + '" data-sound="0">Off</span></div>' +
+        '<div class="setRow" style="opacity:.7">The text also follows the text size of your browser, and grows a little on tall screens.</div></div>';
+
+    const txt = '<div id="help"><span class="titles" id="titleHelp">Settings</span><br>' + settings +
    '<div class="faq">WizardIDLE, what is this?</div><div class="a">It is a game with typical elements of a common RPG game, the only difference is the player role. You are the god of the wizard and your interaction is limited due his free will. With or without your help the wizard can reach his fate being a deep believer or a hardened atheist.</div>' +
    '<div class="faq">About the Gameplay</div><div class="a">This is an idle game, a true idle game, you must do nothing. The wizard can perform all actions without your help. This is a different way to play, watching what other beings do without your control but some interference (you can interact with miracles). <b><i>This is a god like game</i></b>. When no god is looking the world is in no hurry: it counts its time in the beads of a mala.</div>' +
    '<div class="faq">Graphical layout</div><div class="a">The screen is divided into three main parts. From top to bottom:<br> <b>The control</b>, this is an informational panel with the name, experience bar, level, health points, gold and faith points. In this panel you can find the buttons to access other information displayed in <b>The scroll</b>.<br><b>The console</b>, where all actions performed by the wizard are printed.<br><b>The scene</b>, this is the graphical version of the console, <i>you can click or touch to interact</i> with the wizard, non-player characters or environments. </div>' +
@@ -449,6 +455,17 @@ function updateHelp(){
     el("help").style.lineHeight = `${ui.em}px`;
     el("titleHelp").style.fontSize = `${ui.em * 2.5}px`;
     el("titleHelp").style.lineHeight = `${ui.em * 2.5}px`;  
+    // settings: the choices are buttons made of text, the page is drawn again to show the pick
+    for (const choice of el("settings").querySelectorAll(".setChoice")) {
+        choice.style.cssText = `display:inline-block;margin:${ui.em * 0.3}px ${ui.em * 0.3}px 0 0;padding:${ui.em * 0.4}px ${ui.em * 0.8}px;border:2px solid #5a3a1a;border-radius:${ui.em * 0.3}px;cursor:pointer;line-height:${ui.em * 1.2}px;` +
+            (choice.classList.contains("on") ? 'background:#5a3a1a;color:#f4e4bc;' : '');
+        choice.addEventListener("click", () => {
+            if (choice.dataset.size) setTextSize(choice.dataset.size);
+            else setSound(choice.dataset.sound == "1");
+            responsiveLayout();      // sizes everything again, with the new text size
+            updateHelp();
+        });
+    }
 
 
     

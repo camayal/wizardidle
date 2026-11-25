@@ -54,6 +54,9 @@ New idea: one line here, its text in the matching file. Nothing here is a commit
 
 Newest first; keep the last three, cut older ones to the archive.
 
+### 2026-11-25: Long phone screens
+- New src/prefs.js (text size, sound; `wizardidle2:prefs`). layout.getEM multiplies the em by heightScale (tall phones: H/W over 16:9, cap 1.3) x browser root font / 16 x the chosen size; layoutPortrait sizes the toolbar from the same height factor (tb, step 4% gap, heading grows, name plate narrows; btnClose follows column 3). Help scroll opens with Settings (text size, sound). Not seen in a browser (no node here): check a 20:9 phone, the large sizes in the console and scrolls, and the toolbar. Next: gear icon replacing the ? button (art note sent), more settings later.
+
 ### 2026-11-24: Fights on crossings
 - A crossing (travel.js crossing/planFight) may stop for a plain fight: render.walkAcross steps carry fightSpot and fight(resume); crossFight stops the event clock, mirrors pjCanvas/npcCanvas/spellCanvas with CSS (render.setFacing, ui.facing; bossAttacks shake keeps the mirror), combat.startCrossingFight runs getEnemy(plain) and defeatEnemy calls run.crossFightDone instead of nextEvent; a fall calls run.crossFightAbort (shows the destination stage). Spot 0 going right, 160 (mirror image) going left, so nothing jumps. config.balance.pFightInCrossing (0.1); stat travel.crossingFights. Simulation: 20-30 crossing fights per 40-level run, no errors. Not seen in a browser: check the mirrored look (boss-free), the god's touch areas swapped, the scene spells (full-scene ones are not mirrored on purpose). Dev panel > Connectors has a 'Walk it with a fight' button (travel.withFight) to test it at once. Idea: mirror the full-scene spell too, and tune the chance after playtests.
 

@@ -52,7 +52,8 @@ Read this before opening any code. Plain JavaScript modules, no build step; the 
 
 - diceTable.js: the dice house table and its five dice on propsCanvas (img/places/dice/); the wizard throws from the left, the gambler mirrored.
 - render.js: heading (HP, XP, gold, faith), console, backgrounds, wizard and enemy drawing and idle animation.
-- layout.js: sizes everything from the window, portrait or landscape.
+- layout.js: sizes everything from the window, portrait or landscape; the text scale (screen height x browser text size x the player's choice) and the toolbar size come from prefs.js.
+- prefs.js: device preferences (text size, sound) in `wizardidle2:prefs`; settings section at the top of the help scroll (scrolls.js updateHelp).
 - menu.js: toolbar buttons. scrolls.js: parchment scroll pages (stats, achievements, help, kill, map). statsPages.js: the Stats page the Inventory page (the stats scroll's second tab) and the Faith scroll (the prayer button, btn4). bestiary.js: kill scroll's bestiary page. cemetery.js: kill scroll's cemetery page (a tomb per dead wizard, name and age carved in the tomb font, a parchment note on tap; erased = cracked tomb).
 - bossAttacks.js: plays boss attack strips, scene spells, earthquake shake, Medusa's gaze.
 - enemyMoves.js: how normal enemies attack (sprite moved by code plus an effect).
