@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Tap a quest's name in the Errands list: a little scroll opens with a picture for its kind (rare hunt, boss, parcel, place, study, prayer, pilgrimage, hidden shrine, work, prism, Medusa, rune), its title and a few plain lines. Tap it to close.
 - Finished quests are told as a little story (per kind, several variants) instead of a dry line. Explore errands name a key place of the zone (a fishing spot, a view...); the giver mostly names places the wizard has not seen, and if he already knows it he says "I was already there, it is a good place" and turns the errand down.
 - At an inn the host now speaks before the night: he tells his job (bubble), the god may nudge, the wizard answers (check or X), then he sleeps. The quest scroll keeps a little more space between errands.
 - Hunts now come with a story: ten complaints for every boss and ten by school for rare enemies; the console tells it in full when the job is offered, the scroll keeps the short line.

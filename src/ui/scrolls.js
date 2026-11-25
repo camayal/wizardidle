@@ -349,6 +349,9 @@ function updateFaith(){
 el('innerTextScroll').addEventListener('click', (e) => {
     if (e.target.closest('.devToggle')) document.dispatchEvent(new Event('wizardidle:toggleDevBar'));
     if (e.target.closest('.questLogToggle')) { ui.questLogOpen = !ui.questLogOpen; ui.faithHtml = ''; updateFaith(); }
+    if (e.target.closest('[data-card]')) { ui.questInfo = null; ui.faithHtml = ''; updateFaith(); return; }
+    const info = e.target.closest('[data-info]');       // a quest's name opens its little scroll
+    if (info) { ui.questInfo = info.dataset.info; ui.faithHtml = ''; updateFaith(); return; }
     const questBtn = e.target.closest('[data-quest]');       // the Faith scroll's quest buttons: the god's orders and "forget it" (src/quests.js)
     if (questBtn) {
         const what = questBtn.dataset.quest;

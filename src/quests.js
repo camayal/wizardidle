@@ -623,6 +623,28 @@ const ORDER_ICONS = { shrine: 'icon_order_shrine_mid', pilgrimage: 'icon_order_p
 const STATES = (stem) => `style="--n:url(${art(stem + '_normal')});--p:url(${art(stem + '_pressed')});--d:url(${art(stem + '_disabled')})"`;
 const orderIcon = (k) => `<img class='orderIcon' src='${art(ORDER_ICONS[k])}'/>`;      // sits in the plate's socket
 const mvBtn = (act, i, stem, off, cls = '') => `<button class='stoneBtn ${cls}' ${STATES(stem)} data-quest='${act}:${i}' ${off ? 'disabled' : ''}></button>`;
+// The little scroll of a quest (tap its name): a picture by kind, a title and a few plain lines. The long story is in the console.
+const CARD = {
+    rare: ['A rare hunt', 'A rare creature troubles the people. Find it and put an end to it.'],
+    boss: ['A great hunt', 'A fearsome beast rules a land. Bring it down.'],
+    delivery: ['A parcel', 'Carry the parcel to the inn and hand it to the host.'],
+    explore: ['A place to see', 'Go to the place and look around.'],
+    study: ['Something to study', 'Find a thing worth studying there.'],
+    shrine: ['A prayer', 'Pray at the shrine. The god will notice.'],
+    pilgrimage: ['A pilgrimage', 'Pray at each of the shrines on the road.'],
+    hidden: ['A hidden shrine', 'A shrine nobody speaks of. Find it.'],
+    seek: ['Looking for work', 'Ask at the inn if anyone needs a wizard.'],
+    prism: ['The lost colours', 'Find the prism that gathers them.'],
+    medusa: ['A shield', 'Find what shields him from her gaze.'],
+    rune: ['A rune trail', 'Follow the trail to its end.'],
+};
+const cardKey = (q) => (q.kind === 'wanted' ? (q.target.boss ? 'boss' : 'rare') : q.kind);
+const PIC = { rare: 'rare', boss: 'boss', delivery: 'parcel', explore: 'visit', study: 'study', shrine: 'shrine', pilgrimage: 'pilgrimage', hidden: 'hidden', seek: 'work', prism: 'prism', medusa: 'medusa', rune: 'rune' };
+function infoCard(q) {
+    const k = cardKey(q), [title, line] = CARD[k] || ['A quest', q.text];
+    return `<div class='questCard' data-card='close'><div class='questFrame' style="background-image:url(${art('quest_scroll_frame')})">` +
+        `<img src='${art('quest_scroll_' + PIC[k])}'/><b>${title}</b><span>${q.text}.<br>${line}</span></div></div>`;
+}
 export function scrollHtml() {
     const Q = qs(), q = state.quest;
     const all = q ? [q, ...Q.queue] : [...Q.queue];
@@ -631,10 +653,12 @@ export function scrollHtml() {
         : GOD_ORDERS.map((k) => `<button class='orderBtn' ${STATES('order_plate')} data-quest='order:${k}' ${isAtheist() ? "disabled title='He no longer believes'" : ''}>${orderIcon(k)}<span>${ORDER_NAMES[k]}</span></button>`).join('');
     h += `</div><br><span class='subtitles'>Errands</span><br>`;
     if (!all.length) h += `<p>No quest now</p>`;
-    h += all.map((x, i) => `<div class='questRow'><div class='questText'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
+    h += all.map((x, i) => `<div class='questRow'><div class='questText' data-info='${x.id}'>${x.kind === 'delivery' ? `<img class='parcel' src='${art(parcelOf(x))}'/>` : ''}${x.text}<br><small>${i === 0 ? `now, ${PHASE[x.phase] || x.phase}` : `waiting #${i}`}; from ${x.giver}</small></div>` +
         mvBtn('up', i, 'btn_up', i === 0) +
         mvBtn('down', i, 'btn_down', i === all.length - 1) +
         mvBtn('drop', i, 'btn_x', false) + `</div>`).join('');
+    const shown = all.find((x) => String(x.id) === String(ui.questInfo));
+    if (shown) h += infoCard(shown);
     if (Q.log.length) {   // the history is folded like the Help sections; the page redraws, so the open state lives in ui
         const open = ui.questLogOpen;
         h += `<br><span class='subtitles questLogToggle'>Past quests (${Q.log.length})</span><br>` +
