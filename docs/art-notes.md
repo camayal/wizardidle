@@ -111,3 +111,12 @@ Author's idea behind it: double the height of the scene viewer in the game (scen
 
 - City roofs (author, 2026-11-25): approved, all three styles kept and mixed. Batch of 7 tall scenes in the review drop places/tall/roofs/ (la_ciudad1 in style b, 2, 3, 4, 5, _altar, _estatua) waiting for dev to copy them into img/places/tall/tall_la_ciudad*.png. Method: upper floor moved down 4 rows, roofs redrawn above it, bottom 64 rows and the side walls in 3 and 4 untouched; casadados and taberna are interiors (no change). Script kept at C:/tmp/art/batch.py.
 - las_dunas4 stray pixels removed (tall and regular) in the review drop, 2026-11-25.
+
+## Rescuers, the miracles again, and learning to draw folk (author via dev, 2026-11-26)
+
+- **Redo the miracles (Wrath/Smite, Sanctuary) for the tall viewer**: see the BIG ANNOUNCEMENT at the top. New options in the review drop; the author picks.
+- **Learn to make new folk first (artist task)**: study the pictures in wizardidle-review/ToLearn/ (1050512585.png, 1050665451.png, 1050665571.png, VFTILES3.png) and the existing townsfolk sprites, and write down the method (proportions, outline, palette, shading, idle frames) so you can create new people in the game's style. Test it on the rescuers below.
+- **Rescuer sprites (new folk, no skeletons or spectres)**: the pagans of the caravan (3 or 4 different people, a fire pit scene), a shaman, a gravedigger. All in the same style as the townsfolk; ask dev for the sprite size and walk/idle frame layout.
+- **The ghost rescuer**: the same wizard sprite with the torso down changed into a ghost's wispy tail, translucent. Not a skeleton or a spectre.
+- **Scene: the caravan fire pit**: a night camp with a fire pit and the pagans around it (256x64, plus the tall 256x128 version). He wakes next to the fire.
+- Staging (author, dev will build it): no lifting animation of the wizard. He fades out, a dream or nightmare plays (the existing dream system), and he fades in next to the rescuer: beside the fire pit with the pagans for the caravan; in place beside the shaman, gravedigger or ghost.
