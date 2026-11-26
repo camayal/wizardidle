@@ -5,7 +5,13 @@
 
 import { config } from './config.js';
 import { state, world } from './state.js';
-import { YesOrNot } from './utils.js';
+import { pickRandomItem, YesOrNot } from './utils.js';
+import { stats } from './stats.js';
+import { zones } from './data/zones.js';
+import { destinations } from './travelGraph.js';
+import { printIn, showStage, wizardName } from './ui/render.js';
+
+const print = printIn('fight');
 
 const BY_ZONE = {
     la_Pradera: "pagan", el_Desierto: "pagan", las_Dunas: "pagan",
@@ -14,7 +20,7 @@ const BY_ZONE = {
 };
 
 const RESCUERS = {
-    pagan: { share: 1, hp: 0.7, text: "A pagan caravan finds him, heals him with their rites and sets him on his feet" },
+    pagan: { share: 1, hp: 0.7, carry: true, text: "A pagan caravan finds him, heals him with their rites and sets him on his feet" },
     shaman: { share: 0.6, hp: 0.5, text: "A shaman heals him with herbs and a murmured song, and asks nothing" },
     digger: { share: 1.5, hp: 0.5, text: "A gravedigger raises him, not quite alive, and whispers that there are quicker ways to power" },
 };
@@ -28,4 +34,17 @@ export function pickRescuer() {
     }
     const kind = BY_ZONE[state.zone.current];
     return kind ? { who: kind, ...RESCUERS[kind] } : null;
+}
+
+// The pagan caravan drops him in another zone (a neighbour of the stage where he fell). Nothing happens if the stage has no way out.
+export function carryAway() {
+    const to = destinations(state.zone.current + state.zone.stage);
+    if (!to.length) return;
+    const spot = pickRandomItem(to.join(","));
+    state.zone.current = spot.match(/\D+/).toString();
+    state.zone.stage = Number(spot.match(/\d+/));
+    state.zone.stay = 0;
+    stats.count("death.carried");
+    showStage();
+    print(`${wizardName()} wakes up in the ${zones[state.zone.current].name}, far from where he fell`);
 }

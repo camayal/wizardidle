@@ -31,7 +31,7 @@ import { faithChange } from './faith.js';
 import { grazeHit } from './hand.js';
 import { clearMiracles, providenceHit, sanctuaryAbsorb } from './miracles_spells.js';
 import { milestone } from './milestones.js';
-import { pickRescuer } from './rescuers.js';
+import { carryAway, pickRescuer } from './rescuers.js';
 import { clearPrayer, despairCheck, hardened } from './prayers.js';
 
 
@@ -268,6 +268,7 @@ function scheduleSelfRevive() {
         print(fx('Bad', rescuer ? `${rescuer.text} (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})` : `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
         fight.pjDead = false;
         if (rescuer) state.player.hp = Math.max(state.player.hp, state.player.hpBase * rescuer.hp);       // a rescuer heals him; getting up alone does not
+        if (rescuer && rescuer.carry) carryAway();       // the caravan moves him on
         drawWizard();
         stats.count("death.selfRevive");
         playSound("heal");
