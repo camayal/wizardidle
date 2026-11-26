@@ -31,7 +31,7 @@ import { faithChange } from './faith.js';
 import { grazeHit } from './hand.js';
 import { clearMiracles, providenceHit, sanctuaryAbsorb } from './miracles_spells.js';
 import { milestone } from './milestones.js';
-import { carryAway, pickRescuer } from './rescuers.js';
+import { carryAway, pickRescuer, rescueScene } from './rescuers.js';
 import { clearPrayer, despairCheck, hardened } from './prayers.js';
 
 
@@ -266,14 +266,20 @@ function scheduleSelfRevive() {
         const faithLost = isDoubting() ? 0 : state.player.hpBase * 1.2454654 * config.milestone.driftOnShrineSkipShare * (rescuer ? rescuer.share : 1);       // softer drain
         faithChange(-faithLost, "gotUpAlone");
         print(fx('Bad', rescuer ? `${rescuer.text} (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})` : `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
-        fight.pjDead = false;
-        if (rescuer) state.player.hp = Math.max(state.player.hp, state.player.hpBase * rescuer.hp);       // a rescuer heals him; getting up alone does not
-        if (rescuer && rescuer.carry) carryAway();       // the caravan moves him on
-        drawWizard();
-        stats.count("death.selfRevive");
-        playSound("heal");
-        updateHeading();
-        nextEvent();
+        const rise = () => {
+            fight.pjDead = false;
+            if (rescuer) state.player.hp = Math.max(state.player.hp, state.player.hpBase * rescuer.hp);       // a rescuer heals him; getting up alone does not
+            if (rescuer && rescuer.carry) carryAway();       // the caravan moves him on
+            drawWizard();
+        };
+        const finish = () => {
+            stats.count("death.selfRevive");
+            playSound("heal");
+            updateHeading();
+            nextEvent();
+        };
+        if (rescuer) rescueScene(rescuer, rise, finish);     // fade, the dream, and he wakes beside the rescuer
+        else { rise(); finish(); }
     }, isAtheist() ? config.rescuer.atheistMs : selfrevivetime);
 }
 

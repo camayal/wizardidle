@@ -105,9 +105,9 @@ export function shrineChance(base) {
 // Doubters and Atheists are on the way out: some moments weigh differently for them.
 export function isDoubting() {
     const level = beliefLevel();
-    return level == "doubter" || level == "atheist";
+    return level == "doubter" || level == "atheist" || !!state.player.beliefLost;
 }
 
 export function isAtheist() {
-    return beliefLevel() == "atheist";
+    return beliefLevel() == "atheist" || !!state.player.beliefLost;       // the story's lock (chapter X) makes him one for good
 }

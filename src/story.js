@@ -193,9 +193,9 @@ const chapter = {
     lvl190:{
         text:'<span class="titles" id="historyTitle">Chapter X</span>',
         event: function(){
-            // no longer dies: at 0 HP he teleports away and heals completely
-            // total refusal, no help (denegateDivineHelp)
-            //
+            // no longer dies: at 0 HP he teleports away and heals completely (src/rescuers.js, the Last Escape)
+            // total refusal, no help (denegateDivineHelp): the lock below
+            state.player.beliefLost = true;       // belief stops moving and he is an Atheist ("Lost"); the invisible hand still works, weaker
             console.log("evento2")
         }
     },
