@@ -482,6 +482,7 @@ function updateHelp(){
     '<b>Where is my game saved?</b> - In your browser, on this device only. Clearing the site data erases it. The game also works offline once it has loaded.<br>';
 
     const sizeIndex = TEXT_SIZES.findIndex(s => s.id == prefs.textSize);
+    const TAB = '&emsp;&emsp;';      // HTML ignores 	: two em spaces indent the sub switches
     const switchRow = (id, label) => '<div class="setRow"><div>' + label + '</div><div class="setToggleRow"><div id="' + id + '" class="toggle"><img class="knob"></div><img class="toggleLabel"></div></div>';
     const sliderRow = (id, label, nameId, name, steps, value, small, big) => '<div class="setRow"><div>' + label + ' (<span id="' + nameId + '">' + name + '</span>)</div>' +
         '<div class="setSliderRow"><span class="aSmall">' + small + '</span><div class="setSliderBox"><canvas></canvas>' +
@@ -492,8 +493,8 @@ function updateHelp(){
         sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '<img src="' + art('slider_vol_low') + '" data-w="7">', '<img src="' + art('slider_vol_high') + '" data-w="11">') +
         
         '<div class="setRow setHead" id="consoleHead" style="cursor:pointer; user-select:none">' + 'Text in the console ' + (consoleOpen ? '&#9662;' : '&#9656;') + '</div>' +
-        (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label).replace('class="setRow"', 'class="setRow sub" style="margin-left:2.2em; margin-bottom:1.6em"')).join('') +
-        switchRow('fightToggle', 'Each round of a fight').replace('class="setRow"', 'class="setRow sub" style="margin-left:2.2em; margin-bottom:1.6em"') : '') +
+        (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, TAB + l.label)).join('') +
+        switchRow('fightToggle', TAB + 'Each round of a fight') : '') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
         (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
