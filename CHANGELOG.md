@@ -7,6 +7,7 @@
 - Faith playtests (tools/faith_sim.py, sim `set=faith.reviveFe:5` style dotted keys, history line has `pray`): see docs/playtests/2026-11-26-faith-*.
 
 ## Unreleased
+- Tall art for the seven castle scenes (el_castillo1 to 5, altar, estatua) wired in img/places/tall and tallScenes. Not yet seen in a browser.
 - Castle gate connector pair wired (gate_castillo outside with moat and drawbridge, gate_castillo_in inside with steps and braziers; tall versions too): art, media rule, tallScenes and the scene registry. Not linked on the travel graph yet. Untested in a browser.
 - Getting up after a fall shows the faith he really lost (none, and no cost shown, when he had no faith left) instead of the full price.
 - The gravedigger (shovel over the shoulder, option a2) stands at the enemy's place when he raises the wizard (img/story/rescuer_digger.png, untested in a browser). All four rescuers now have art; his sin push is still not built.
