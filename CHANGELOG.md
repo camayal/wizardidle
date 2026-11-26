@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The console no longer shows a line cut in half at its bottom edge: each line is measured, and one that does not fit completely in the console's height (which changes with the screen and the text size, and a level-up line is taller) is hidden until it does. In Settings, the Text in the console section can be folded (tap its heading) and its switches are indented under it.
 - Settings has a new section, Text in the console: a switch for each kind of line (battles and bosses, divine messages, dreams and nightmares, achievements and level ups, quests, dice games, and the journey: travel, finds, inns), so a player can turn all the text off if he likes. 'Fight details' is now called 'Each round of a fight' and still works on top of the battles switch.
 - A wizard on a quest no longer loses his route: after an event with a person, a find or loot he used to be moved to a random scene of the zone (looks only), which could put him back on the wrong side of the map, so he kept going around the City on his way to the Desert. Now the scene he walks into is one linked to where he stands, and the quest chooses among them.
 - A god line (touch, nudge, heal, hit) now plays in three beats: the text in its normal colour, then golden with a black shadow, then back to normal, and then the golden sparkles. The console holds its next lines for about 2.6 seconds so it can be seen, then they appear in order.

@@ -458,6 +458,8 @@ function drawToggle(toggle, su, isOn, flip) {
     paint();
 }
 
+let consoleOpen = true;      // the Settings section Text in the console, open or folded
+
 // Fill the help scroll (collapsible sections).
 function updateHelp(){
     const frequentQuestions = '<b>Why does everyone have a name?</b> - All individuals of sentient species have one (Pybryas are very smart!)<br>' +
@@ -489,9 +491,9 @@ function updateHelp(){
         switchRow('soundToggle', 'Sound') +
         sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '<img src="' + art('slider_vol_low') + '" data-w="7">', '<img src="' + art('slider_vol_high') + '" data-w="11">') +
         
-        '<div class="setRow">Text in the console</div>' +
-        CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label).replace('class="setRow"', 'class="setRow sub"')).join('') +
-        switchRow('fightToggle', 'Each round of a fight').replace('class="setRow"', 'class="setRow sub"') +
+        '<div class="setRow setHead" id="consoleHead">' + (consoleOpen ? '&#9662; ' : '&#9656; ') + 'Text in the console</div>' +
+        (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label).replace('class="setRow"', 'class="setRow sub"')).join('') +
+        switchRow('fightToggle', 'Each round of a fight').replace('class="setRow"', 'class="setRow sub"') : '') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
         (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
@@ -573,6 +575,7 @@ function updateHelp(){
         volumeSlider.onchange = () => { setVolume(Number(volumeSlider.value)); playSound("scroll"); };
         const flag = (id, key, after) => { if (el(id)) drawToggle(el(id), su, () => prefs[key], () => { setFlag(key, !prefs[key]); if (after) after(); }); };
         drawToggle(el("soundToggle"), su, () => prefs.sound, () => setSound(!prefs.sound));
+        el("consoleHead").onclick = () => { consoleOpen = !consoleOpen; updateHelp(); };
         flag("fightToggle", "fightLines");
         for (const l of CONSOLE_LINES) flag('line_' + l.id, 'line_' + l.id);
         flag("shakeToggle", "shake");

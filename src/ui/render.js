@@ -955,23 +955,28 @@ function print(data, minor = false, release = false, cat = 'journey') {
     if (run.simulation) return;     // nobody reads the console in a simulation
     if (prefs['line_' + cat] === false) return;     // Settings: Text in the console, a category switched off
     if (minor && !prefs.fightLines) return;     // Settings: fight details off hides each round of a fight
-    if (!release && performance.now() < holdUntil) { held.push([data, minor]); return; }
+    if (!release && performance.now() < holdUntil) { held.push([data, minor, cat]); return; }
     // the new line is inserted in front; the lines already there are not rebuilt, so the sparkles of a divine line
     // keep playing while ordinary lines come after it (printDivine takes its sparkle class off after a while)
     const con = el("console");
-    con.insertAdjacentHTML("afterbegin", `${data}<br>`);
+    con.insertAdjacentHTML("afterbegin", `<div class="cl">${data}</div>`);
     for (const l of con.querySelectorAll(".dlNew[data-after]")) {        // a divine line's sparkles end after a couple of newer lines
-        if (l === con.firstElementChild) continue;
+        if (l.parentElement === con.firstElementChild) continue;
         l.dataset.after = Number(l.dataset.after) - 1;
         if (l.dataset.after <= 0) l.classList.remove("dlNew");
     }
-    const breaks = con.querySelectorAll("br");
-    if (breaks.length > MAXLINESINCONSOLE) {         // drop the oldest line: what stands before the last <br> (back to the one before), and that <br>
-        const last = breaks[breaks.length - 1];
-        while (last.previousSibling && last.previousSibling.nodeName !== "BR") last.previousSibling.remove();
-        last.remove();
-    }
+    const lines = con.querySelectorAll(".cl");
+    if (lines.length > MAXLINESINCONSOLE) lines[lines.length - 1].remove();         // drop the oldest line
+    fitConsole();
 };
+
+// The console shows whole lines only: a line that does not fit in the height of the console (it depends on the
+// screen and the text size, and a level-up line is taller than a plain one) is hidden instead of cut in half.
+function fitConsole() {
+    const con = el("console"), h = con.clientHeight;
+    for (const l of con.querySelectorAll(".cl")) l.style.visibility = l.offsetTop + l.offsetHeight <= h + 0.5 ? "" : "hidden";
+}
+try { new ResizeObserver(fitConsole).observe(el("console")); } catch (e) { /* no observer: fitted at each new line */ }
 
 // A line about the god's own doing (a touch, a nudge): little sparkles play over the whole line (first the text goes golden, the console waits 2.6 s so it is seen) until a couple of
 // newer lines have come (or 12 s), then they are gone and the text is untouched (css .dl in index.html).
@@ -980,8 +985,8 @@ function printDivine(data, minor = false) {
     print(`<span class="dl dlNew" data-after="2">${data}</span>`, minor, true, 'divine');
     holdUntil = performance.now() + DIVINE_HOLD_MS;
     clearTimeout(holdTimer);
-    holdTimer = setTimeout(() => { holdUntil = 0; const q = held; held = []; q.forEach(([d, m]) => print(d, m)); }, DIVINE_HOLD_MS);
-    const line = el("console").firstElementChild;
+    holdTimer = setTimeout(() => { holdUntil = 0; const q = held; held = []; q.forEach(([d, m, c]) => print(d, m, false, c)); }, DIVINE_HOLD_MS);
+    const line = el("console").querySelector(".cl .dlNew");
     if (line && line.classList.contains("dlNew")) setTimeout(() => line.classList.remove("dlNew"), 12000);     // fallback when nothing else is printed
 }
 
