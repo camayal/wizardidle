@@ -23,6 +23,7 @@ export const newScene = () => { usedIn = null; };
 // The spot's tap, called by the hotspot layer. Returns 'done' when it nudged, 'silent' when the tap was swallowed on
 // purpose (no text, no glow: nothing may show where a spot is), false when it falls through to the buttons under it.
 export function touchSpot(spot) {
+    if (spot.kind == 'idea') return false;                   // an author's note from the Hotspots tool: no effect in the game
     if (run.questOffer || run.questAttn) return false;       // a job is waiting: the touches mean "take it" or "leave it"
     if (usedIn) return 'silent';                             // one touch per scene: the rest do nothing
     if (run.nudge || state.player.faith < nudgeCost()) return 'silent';

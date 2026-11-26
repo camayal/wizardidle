@@ -398,3 +398,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 (dev): quests were too rare (author): config.quests pWish .02>.06, pInnOffer .12>.3, pBoard .03>.08, pHuman .004>.03 (strangers, the main lever), pPost .02>.06. All placeholders; to test with the playtest tools (quests per hour) and tune.
 - 2026-11-25 (dev): quest bubble mirrored (render.showBubble: flipped unless the scene is the mirrored overlay case), tail points at the head. Checked strangers: all 15 img/story/stranger_*.png are in quests.HUMANS, nothing waits in the review drop. Untested in a browser.
 - 2026-11-25 (dev): level up effect no longer scales the text (it grew to 1.18x during the pop); it fades in with a small rise and the green sweep, same size as every line.
+- 2026-11-25 (dev): Hotspots tool: kind legend + new kind idea (field note, kept by tools/serve.py hotspots_post, ignored by nudge.touchSpot). Untested in a browser.

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Hotspots dev tool: a "What are the kinds?" legend explains exit, mouth, place and dream (also as tooltips of the kind menu), and there is a new kind, idea: a free-text note for the author that the game ignores.
 - The quest speech bubble (job, yes, no) is drawn mirrored, so its tail points at the stranger (or the wizard) instead of away from him; scenes where the enemy side is mirrored keep the right way round.
 - Quests come more often: strangers on the road with a job are about seven times as likely (0.4% to 3% of the explore events in safe areas), his own wishes three times (2% to 6%), inn hosts with a job 12% to 30%, the City board 3% to 8%, wanted posts 2% to 6%. Placeholders to tune in the playtests.
 - Console text effects replace the old sparkle of divine lines and the big text of level ups and achievements (one text size now): a gold light for the god's touches, a sweep for level ups and achievements, a red shake for bad things, a blur for dreams, a glint for loot. Settings, Text in the console, has a Text effects switch to turn them all off. Dev panel, Console, previews them.

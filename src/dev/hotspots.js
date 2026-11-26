@@ -16,7 +16,15 @@ import { useSpots } from '../ui/hotspots.js';
 import { el } from '../ui/dom.js';
 
 const W = 256, H = 64;
-const KIND_NAMES = ['exit', 'mouth', 'place', 'dream'];       // place: leads to shrine, inn, study or book (the next event); dream: leads to nightmare (tonight's sleep); exit and mouth: a stage, a zone or a connector point
+// What each kind means (shown in the panel, as a legend and as the tooltip of the kind menu).
+const KINDS = {
+    exit: ['a way out of the scene', '"leads to" = the stage, zone or connector he is nudged toward (la_Torre2, a bridge...). He walks there on his next move.'],
+    mouth: ['a cave mouth / entrance', 'same as exit, but for the mouths (mouth_...) that go in or out of a place. "leads to" = the stage or connector point.'],
+    place: ['an inside place for the next event', '"leads to" = shrine, inn, study or book. His next event happens there.'],
+    dream: ['feeds tonight\'s sleep', '"leads to" = the dream (nightmare). If he follows, that is what he dreams tonight.'],
+    idea: ['a note for the author (no effect in the game)', 'Write your idea in the "idea" box: what this spot could do someday. The game ignores it; it is only saved in hotspots.js.'],
+};
+const KIND_NAMES = Object.keys(KINDS);
 let side, tools, scene = '', draft = {}, overlay = null, timer = null, drag = null;
 
 const key = () => scene.toLowerCase();
@@ -45,8 +53,10 @@ function draw() {
 function list() {
     const box = side.body.querySelector('[data-id=list]');
     box.innerHTML = spots().map((s, i) => `<div class="row" data-i="${i}"><b>${i + 1}</b>
-        <select data-f="kind">${KIND_NAMES.map((k) => `<option ${k == s.kind ? 'selected' : ''}>${k}</option>`).join('')}</select>
-        <input type="text" data-f="to" value="${esc(s.to || '')}" placeholder="leads to (stage, zone, connector)" size="16">
+        <select data-f="kind" title="${esc(KINDS[s.kind]?.[1] || '')}">${KIND_NAMES.map((k) => `<option ${k == s.kind ? 'selected' : ''} title="${esc(KINDS[k][0])}">${k}</option>`).join('')}</select>
+        ${s.kind == 'idea'
+            ? `<input type="text" data-f="note" value="${esc(s.note || '')}" placeholder="write your idea here" size="40">`
+            : `<input type="text" data-f="to" value="${esc(s.to || '')}" placeholder="leads to (stage, zone, connector)" size="16">`}
         <input type="text" data-f="label" value="${esc(s.label || '')}" placeholder="label for the console" size="16">
         <label>x<input type="number" data-f="x" value="${s.x}"></label><label>y<input type="number" data-f="y" value="${s.y}"></label>
         <label>w<input type="number" data-f="w" value="${s.w}"></label><label>h<input type="number" data-f="h" value="${s.h}"></label>
@@ -112,6 +122,7 @@ export async function open(devTools) {
             <datalist id="hsScenes">${Object.values(regions()).flat().map((n) => `<option value="${n}">`).join('')}</datalist><button data-id="go">Show</button></div>
         <div data-id="thumbs" style="display:flex;flex-wrap:wrap;gap:4px;max-height:230px;overflow:auto;margin:4px 0"></div>
         <div class="muted">Drag a rectangle on the scene to add a spot (sprite px of the 256 x 64 scene; a spot under 24 px wide is widened in the game). The outlines show only here. One touch per scene in the game; the first tap spends faith.</div>
+        <details class="muted"><summary>What are the kinds?</summary>${KIND_NAMES.map((k) => `<div><b>${k}</b>: ${esc(KINDS[k][0])}. ${esc(KINDS[k][1])}</div>`).join('')}</details>
         <div data-id="list"></div>
         <div class="row"><button data-id="save">Save to src/data/hotspots.js</button><span data-id="msg" class="muted"></span></div>`;
     overlay = document.createElement('div');

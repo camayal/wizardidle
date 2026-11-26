@@ -136,6 +136,9 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
                      'kind': re.sub(r'\W', '', str(s.get('kind', 'exit')))[:20] or 'exit',
                      'to': re.sub(r'[^\w-]', '', str(s.get('to', '')))[:60], 'label': str(s.get('label', ''))[:80]}
                     for s in spots if all(k in s for k in ('x', 'y', 'w', 'h'))]
+            for g, s in zip(good, [s for s in spots if all(k in s for k in ('x', 'y', 'w', 'h'))]):
+                if str(s.get('note', '')).strip():
+                    g['note'] = str(s['note']).strip()[:400]       # idea spots: the author's note
             if good:
                 clean[scene.lower()] = good
         target = os.path.join(REPO, 'src', 'data', 'hotspots.js')
