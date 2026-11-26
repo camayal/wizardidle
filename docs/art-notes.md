@@ -4,6 +4,10 @@ Notes saved from the dev tools' notes box (art mode), newest last: the technical
 filled in by the game, then the author's comment. A later note on the same test replaces an
 earlier one.
 
+## !! RULE FOR EVERYONE: the viewer is always TALL (author, 2026-11-26)
+
+The scene viewer is always 256 x 96 art rows (the extra 32 rows sit on top of the old 64; the walk line is row 92 now, row 60 in the old 64-row scenes). There is no setting any more. For art: every new or redrawn scene is drawn tall (tall_<scene>.png, 256x96; the bottom 64 rows are the old scene, so the walk line and what the wizard passes behind stay where they were); a scene with no tall art yet shows its regular picture from the bottom with black above, so list them and redraw them. Effects, spells, entrances and props are designed for 96 rows (the strike or beam may use the full height; characters stay 32 px tall on the walk line). Front overlays stay 256x64 (the lower rows) unless dev says otherwise. For dev: new code and positions are written for the tall viewer first (spell canvas grows upward, characters' canvases cover the lower 64 rows), and a regular 64-row case is never assumed.
+
 ## !! BIG ANNOUNCEMENT for artist: spells must follow the taller viewer (dev, 2026-11-26, author's order)
 
 The scene viewer is now taller (256x128 tall scenes, Settings > tall viewer), so every spell drawn for the old 64-row scene looks small in it. The author's verdict: **Wrath (the god's Smite) looks quite small and not very good in action.** Please redraw the spells for the new height, starting with the god's miracles:
