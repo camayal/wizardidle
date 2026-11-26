@@ -60,3 +60,8 @@ Read first: docs/plans/for_implementation_faith.md (section 13 build order) and 
 - Open from the quests review: (6) small jobs fading near the last levels, targets respecting story limits, secrets for zones with no giver; (7) a headless quest test; (8) split zones. Delivery rework is partly done (stranger recipient); letters, scrolls and the populated scenes are not.
 - Untested in a browser and worth a look first: bridge arrival (no walk-in after the last bridge scene), stranger parcel delivery, Information scroll, sparkle lines, the Hotspots mode.
 - Next for dev (2026-11-25 handoff, faith art and hotspots): (1) Providence tap look done (spellProvidence_a/b/c); the belief rule (Believer and Devout full, Doubter faint, Atheist none) waits for belief levels. (2) Sanctuary and Smite looks by belief level (docs/plans/for_implementation_faith.md Decisions, mapping to confirm with the author) are step 5, not built. (3) Not done: door glow, enemy weakening, 1 HP graze, healing herb art (artist waits for the author's order, suggested: door glow first). (4) Hotspots: author did not say which part to continue. (5) Travel tool rebuilt (data in src/data/travel.json): untested in a browser; restart tools/serve.py before using it.
+
+```
+Date: 2026-11-25 21:08
+Author's note: artist need to retourch some of the roofs of the city sneces some of them are very compacted, for example 5, 1, 3
+```
