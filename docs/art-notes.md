@@ -114,9 +114,11 @@ Author's idea behind it: double the height of the scene viewer in the game (scen
 
 ## Rescuers, the miracles again, and learning to draw folk (author via dev, 2026-11-26)
 
-- **Redo the miracles (Wrath/Smite, Sanctuary) for the tall viewer**: see the BIG ANNOUNCEMENT at the top. New options in the review drop; the author picks.
+- **Redo the miracle Wrath/Smite for the tall viewer (author 2026-11-26: Sanctuary is NOT needed, it sits on top of the wizard, drop it)**: see the BIG ANNOUNCEMENT at the top. New options in the review drop; the author picks.
 - **Learn to make new folk first (artist task)**: study the pictures in wizardidle-review/ToLearn/ (1050512585.png, 1050665451.png, 1050665571.png, VFTILES3.png) and the existing townsfolk sprites, and write down the method (proportions, outline, palette, shading, idle frames) so you can create new people in the game's style. Test it on the rescuers below.
 - **Rescuer sprites (new folk, no skeletons or spectres)**: the pagans of the caravan (3 or 4 different people, a fire pit scene), a shaman, a gravedigger. All in the same style as the townsfolk; ask dev for the sprite size and walk/idle frame layout.
 - **The ghost rescuer**: the same wizard sprite with the torso down changed into a ghost's wispy tail, translucent. Not a skeleton or a spectre.
 - **Scene: the caravan fire pit**: a night camp with a fire pit and the pagans around it (256x64, plus the tall 256x128 version). He wakes next to the fire.
 - Staging (author, dev will build it): no lifting animation of the wizard. He fades out, a dream or nightmare plays (the existing dream system), and he fades in next to the rescuer: beside the fire pit with the pagans for the caravan; in place beside the shaman, gravedigger or ghost.
+- **Shaman = the druid (author, 2026-11-26)**: use ToAddToInspire/HumanDruid06.PNG (a robed druid with a staff; the other HumanDruid01 to 08 and 31 are variants) as the shaman with small changes (herbs, bone or feather trinkets, so he is not just the druid unit). No new shaman from scratch.
+- **Caravan mule (author)**: ToAddToInspire/Mule.PNG goes into the caravan; grow it to match the game's scale (the wizard is 32 px tall; the mule should read as a pack animal beside the pagans, loaded with bundles and the fire pit gear). Add a small idle (ear flick, tail).
