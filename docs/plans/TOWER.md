@@ -72,7 +72,7 @@ The floor plan follows that story: **the higher he goes, the closer to the king.
 
 **Odd and even floors** (decision 16): the general floors alternate. **Odd floors (1, 3, 5): 4 rooms, one shared layout. Even floors (2, 4): 3 rooms, another shared layout.** On every floor of a kind the stair room sits in the same slice. G, 6 and 7 have their own sketched shapes; the basements follow their own sketch (B1) or the 3-room plan (B2).
 
-Legend: **have** = drawn, **gap** = still to draw (briefs below). Priority A = the floor cannot be reached or the story needs it (every stair scene still to draw is A); B = the author's minimum or a floor's third room; C = the fourth room.
+Legend: **have** = drawn, **gap** = still to draw (briefs below). Priority A = the floor cannot be reached or the story needs it (every stair scene still to draw is A); B = a scene count the author set (G's second scene, the top room's scenes) or a floor's third room; C = the fourth room.
 
 | Floor | Theme | Rooms in ring order → their scenes (★ = stair room; the arch scene first) | Opens |
 |---|---|---|---|
