@@ -29,7 +29,7 @@ import { beliefMoment, isDoubting, selfReliance } from './belief.js';
 import { art } from './media.js';
 import { faithChange } from './faith.js';
 import { grazeHit } from './hand.js';
-import { clearMiracles, providenceHit, sanctuaryAbsorb } from './miracles.js';
+import { clearMiracles, providenceHit, sanctuaryAbsorb } from './miracles_spells.js';
 import { clearPrayer, despairCheck, hardened } from './prayers.js';
 
 

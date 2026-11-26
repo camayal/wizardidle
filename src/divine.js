@@ -22,7 +22,7 @@ import { faithChange } from './faith.js';
 import { handHelpWizard, handWeakenEnemy } from './hand.js';
 import { calculateFe } from './wizard.js';
 import { signTouch } from './winback.js';
-import { sanctuaryOnHeal, smiteFor } from './miracles.js';
+import { sanctuaryOnHeal, smiteFor } from './miracles_spells.js';
 import { prayerAnswered } from './prayers.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
@@ -134,7 +134,12 @@ function npcBtn(){
             let moment = "touch";
             if (smite) {
                 divineHit = Math.round(divineHit * smite.bonus);
-                txt = "sees a Smite fall from above - ";
+                txt = "sees a Wrath strike fall from above - ";
+                if (fight.enemyHP <= fight.enemyHPbase * config.face.strikeFinishShare) {       // the finisher
+                    divineHit = (fight.bossCombat || fight.hydraCombat) ? Math.max(divineHit, fight.enemyHPbase * config.face.strikeFinishShare) : fight.enemyHP;
+                    txt = "watches a Wrath strike finish the enemy - ";
+                    stats.count("god.finishers");
+                }
             } else if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                 const superCritic = config.belief.superCriticChance > 0 && YesOrNot(config.belief.superCriticChance, 0);
                 divineHit = Math.round(divineHit) * (superCritic ? config.belief.superCriticMultiplier : 8) //if is one of the divine powers

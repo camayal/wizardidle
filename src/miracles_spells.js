@@ -1,7 +1,7 @@
-// Wizard Idle - the god's face and the signature miracles (docs/plans/for_implementation_faith.md, section 7, step 5).
+// Wizard Idle - the god's face and the signature miracle spells (Mercy shield, Wrath strike, Last luck) (docs/plans/for_implementation_faith.md, section 7, step 5).
 // The face comes from what the god does most: heals (Mercy), hits (Wrath) or little of either (Distant).
-// Mercy: every heal touch in a fight also raises a Sanctuary (hits by belief level, a few times per fight).
-// Wrath: the god's hit on the enemy is a Smite (sword of light, the pillar for a Devout). Numbers: config.face (placeholders).
+// Mercy: every heal touch in a fight also raises a Mercy shield (hits by belief level, a few times per fight).
+// Wrath: the god's hit on the enemy is a Wrath strike (sword of light, the pillar for a Devout). Numbers: config.face (placeholders).
 
 import { config } from './config.js';
 import { state } from './state.js';
@@ -21,7 +21,7 @@ export function godFace() {
     return heals >= hits ? "mercy" : "wrath";
 }
 
-// After a heal touch (a believing wizard only): a Mercy god also raises a Sanctuary, a few times per fight.
+// After a heal touch (a believing wizard only): a Mercy god also raises a Mercy shield, a few times per fight.
 export function sanctuaryOnHeal() {
     if (!fight.enemy || godFace() != "mercy" || beliefLevel() == "atheist") return;
     if ((fight.sanctUses || 0) >= byLevel(config.face.sanctuaryPerFight)) return;
@@ -29,10 +29,10 @@ export function sanctuaryOnHeal() {
     fight.sanctHits = byLevel(config.face.sanctuaryHits);
     stats.count("god.sanctuary");
     spell("spellSanctuary_1", true, 0, 0, null, true);
-    print(`<i>A Sanctuary rises around ${wizardName()}</i>`);
+    print(`<i>A Mercy shield rises around ${wizardName()}</i>`);
 }
 
-// Called by enemyAttack with the hit about to land: a Sanctuary takes it whole (one hit used, boss or not).
+// Called by enemyAttack with the hit about to land: a Mercy shield takes it whole (one hit used, boss or not).
 export function sanctuaryAbsorb(enemyHit) {
     if (!(fight.sanctHits > 0)) return enemyHit;
     fight.sanctHits--;
@@ -41,22 +41,26 @@ export function sanctuaryAbsorb(enemyHit) {
     return 0;
 }
 
-// The look and the strength of a Smite (null if the god is not Wrath).
+// The look and the strength of a Wrath strike (null if the god is not Wrath).
 export function smiteFor() {
     if (godFace() != "wrath" || beliefLevel() == "atheist") return null;
     return { spell: beliefLevel() == "devout" ? "spellSmite_pillar" : "spellSmite_sword", bonus: config.face.smiteBonus };
 }
 
-// Distant god, Devout wizard, and no faith left to act with (with faith the player heals or shields him): Providence. A killing hit sometimes leaves him 1 HP on its own, once per fight, at no
+// Last luck (Distant god, any belief, an Atheist only 'lucky'): a killing hit sometimes leaves him 1 HP on its own, once per fight, at no
 // faith (the invisible hand's graze, seen this time).
 export function providenceHit(enemyHit) {
-    const hp = state.player.hp;
-    if (godFace() != "distant" || beliefLevel() != "devout" || Math.round(state.player.faith) > 0 || fight.providenceUsed || hp - enemyHit > 0) return enemyHit;
-    if (Math.random() >= config.face.providenceChance) return enemyHit;
+    const hp = state.player.hp, level = beliefLevel(), atheist = level == "atheist";
+    if (godFace() != "distant" || fight.providenceUsed || hp - enemyHit > 0) return enemyHit;
+    if (!atheist && Math.round(state.player.faith) > 0) return enemyHit;      // with faith the player heals or shields him himself
+    if (Math.random() >= config.face.luckChance[level]) return enemyHit;
     fight.providenceUsed = true;
     stats.count("god.providence");
-    spell(["spellProvidence_a", "spellProvidence_b", "spellProvidence_c"][Math.floor(Math.random() * 3)], true, 0, 0, null, true);
-    print(`<i>Providence: ${wizardName()} is spared by a luck he cannot explain</i>`);
+    if (atheist) print(`<i>${wizardName()} says it was only luck</i>`);      // he never sees the miracle
+    else {
+        spell(["spellProvidence_a", "spellProvidence_b", "spellProvidence_c"][Math.floor(Math.random() * 3)], true, 0, 0, null, true);
+        print(`<i>Last luck: ${wizardName()} is spared by a luck he cannot explain</i>`);
+    }
     return Math.max(0, hp - 1);
 }
 

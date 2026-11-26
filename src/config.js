@@ -67,7 +67,8 @@ export const config = {
         minActs: 5,                // heals + hits needed before the god has a face (else Distant)
         sanctuaryHits: [1, 2, 3],  // hits a Sanctuary takes: Doubter, Believer, Devout
         sanctuaryPerFight: [1, 2, 3],   // Sanctuaries per fight, same order
-        providenceChance: 0.5,     // Distant god and Devout wizard: chance a killing hit leaves 1 HP (once per fight)
+        luckChance: { devout: 1, believer: 0.75, doubter: 0.5, atheist: 0.25 },   // Last luck: chance a killing hit leaves 1 HP (once per fight), by belief level
+        strikeFinishShare: 0.3,    // Wrath strike: below this share of its life an enemy dies outright (a boss loses this share of its max life)
         smiteBonus: 1.5,           // a Smite hits this much harder than a plain touch
     },
     hand: {
