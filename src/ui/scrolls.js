@@ -13,6 +13,7 @@ import { detectmob, layoutPortrait, responsiveLayout } from './layout.js';
 import { prefs, CONSOLE_LINES, DEFAULTS, TEXT_SIZES, VOLUMES, setTextSize, setSound, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale } from '../prefs.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
+import { consoleNotice } from './render.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
 import { questNamesPlace, questPath, godDrop, godMove, godOrder, isSecretAt } from '../quests.js';
@@ -578,7 +579,7 @@ function updateHelp(){
         drawToggle(el("soundToggle"), su, () => prefs.sound, () => setSound(!prefs.sound));
         el("consoleHead").onclick = () => { consoleOpen = !consoleOpen; updateHelp(); };
         flag("fightToggle", "fightLines");
-        for (const l of CONSOLE_LINES) flag('line_' + l.id, 'line_' + l.id);
+        for (const l of CONSOLE_LINES) flag('line_' + l.id, 'line_' + l.id, consoleNotice);
         flag("shakeToggle", "shake");
         flag("buzzToggle", "vibrate", () => buzz(60));
         if (el("wakeToggle")) drawToggle(el("wakeToggle"), su, () => prefs.wake, () => setWake(!prefs.wake));

@@ -20,7 +20,7 @@ import { connectorSceneInfo, headLevelShare } from '../data/connectors.js';
 import { markup } from './text.js';
 import { showTrophyWall } from './trophyWall.js';
 import { showHotspots } from './hotspots.js';
-import { prefs } from '../prefs.js';
+import { prefs, CONSOLE_LINES } from '../prefs.js';
 import { WIZARD_AT_TABLE, hasDiceTable, showDiceTable } from './diceTable.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -990,11 +990,21 @@ function printDivine(data, minor = false) {
     if (line && line.classList.contains("dlNew")) setTimeout(() => line.classList.remove("dlNew"), 12000);     // fallback when nothing else is printed
 }
 
+// When every kind of console text is off in Settings, a grey note says so (like "No achievements yet").
+function consoleNotice() {
+    const con = el("console"), old = el("consoleOff"), allOff = CONSOLE_LINES.every(l => prefs['line_' + l.id] === false);
+    if (!allOff) { if (old) old.remove(); return; }
+    if (old) return;
+    con.insertAdjacentHTML("afterbegin", '<div id="consoleOff" style="text-align:center;font-style:italic;color:#7a6a58;margin-top:.5em">No text will show: all the text in the console is off in Settings.</div>');
+}
+consoleNotice();
+
 // A print function that files its lines under a console category (Settings: Text in the console).
 function printIn(cat) { return (data, minor, release, c) => print(data, minor, release, c || cat); }
 
 export {
     printIn,
+    consoleNotice,
     printDivine,
     setFacing,
     forgetImages,
