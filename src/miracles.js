@@ -47,11 +47,11 @@ export function smiteFor() {
     return { spell: beliefLevel() == "devout" ? "spellSmite_pillar" : "spellSmite_sword", bonus: config.face.smiteBonus };
 }
 
-// Distant god, Devout wizard: Providence. A killing hit sometimes leaves him 1 HP on its own, once per fight, at no
+// Distant god, Devout wizard, and no faith left to act with (with faith the player heals or shields him): Providence. A killing hit sometimes leaves him 1 HP on its own, once per fight, at no
 // faith (the invisible hand's graze, seen this time).
 export function providenceHit(enemyHit) {
     const hp = state.player.hp;
-    if (godFace() != "distant" || beliefLevel() != "devout" || fight.providenceUsed || hp - enemyHit > 0) return enemyHit;
+    if (godFace() != "distant" || beliefLevel() != "devout" || Math.round(state.player.faith) > 0 || fight.providenceUsed || hp - enemyHit > 0) return enemyHit;
     if (Math.random() >= config.face.providenceChance) return enemyHit;
     fight.providenceUsed = true;
     stats.count("god.providence");
