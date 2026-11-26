@@ -406,3 +406,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 (dev): las_dunas4 stray pixels fix wired (regular and tall), author approved.
 - 2026-11-25 (dev): faith step 3 winning back built in src/winback.js (sign by context, pilgrim, dream of a shrine via the bag touch or a dream hotspot with to: shrine, hidden blessings in hand.js); untested in a browser (no node here). Left: relics (need loot hooks on chests and pots), loot upgrade sign, a sky/scene tap target, pilgrim and dream art.
 - 2026-11-25 (dev): author picked faith art (weaken B, graze C, herbs a-c plus the mushrooms, no door glow: Providence at the spot centre); wired in hand.js, placement is the spell default and not seen in a browser. Sanctuary and Smite art not in the review drop or img/ yet.
+- 2026-11-25 (dev): mushroom sprites had the magenta background; made transparent. Check any other sprite taken from ToAddToInspire for it.
