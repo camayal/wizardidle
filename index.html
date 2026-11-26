@@ -289,6 +289,31 @@
                             radial-gradient(circle, #ffe9a0 0 1.1px, rgba(255,220,120,0.5) 2px, transparent 3px) 15px 3px / 17px 11px;
                 animation: dlSparkle 1.2s ease-in-out 1.9s infinite backwards; }
             @keyframes dlSparkle { 0% { opacity: 0; background-position: 0 0, 9px 6px, 15px 3px; } 40% { opacity: 0.95; } 100% { opacity: 0; background-position: 0 -8px, 9px -12px, 15px -6px; } }
+            /* console text effects (candidates, shown by Dev > Console > Text effects); each lasts under 2.5 s and ends as plain text */
+            .fx { display: inline-block; width: 100%; }
+            .fxDivA { animation: fxDivA 2.2s ease-out 1; }
+            @keyframes fxDivA { 0% { opacity: 0; text-shadow: 0 0 10px #ffe9a0; } 55% { opacity: 1; text-shadow: 0 0 8px #ffd45a, 0 0 2px #fff6c4; } 100% { opacity: 1; text-shadow: none; } }
+            .fxDivB .ch { opacity: 0; animation: fxCh 0.01s linear forwards; }
+            @keyframes fxCh { to { opacity: 1; } }
+            .fxDivB { animation: fxDivB 2.4s linear 1; }
+            @keyframes fxDivB { 0%, 85% { color: #e8b830; text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 0 2px 2px #000; } 100% { color: inherit; text-shadow: none; } }
+            .fxDivC { animation: fxDivC 2.4s ease-in-out 1; border-top: 1px solid transparent; border-bottom: 1px solid transparent; }
+            @keyframes fxDivC { 0% { opacity: 0; border-color: transparent; } 30%, 70% { opacity: 1; border-color: #e8b830; } 100% { opacity: 1; border-color: transparent; } }
+            .fxLevel { animation: fxPop 0.5s ease-out 1, fxSweep 1.4s ease-in-out 0.3s 1 both; background: linear-gradient(100deg, currentColor 35%, #7dff6a 48%, #ffe36a 52%, currentColor 65%) 120% 0 / 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+            .fxLevel::before { content: "B2  "; }
+            @keyframes fxPop { 0% { transform: scale(0.8); opacity: 0; } 60% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1); } }
+            @keyframes fxSweep { from { background-position: 120% 0; } to { background-position: -20% 0; } }
+            .fxAch { animation: fxSweep 1.4s ease-in-out 1 both, fxFrame 2.2s ease-out 1; background: linear-gradient(100deg, currentColor 35%, #ffd23a 50%, currentColor 65%) 120% 0 / 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; outline: 1px solid transparent; }
+            .fxAch::before { content: "°5  "; }
+            @keyframes fxFrame { 0%, 60% { outline-color: #e8b830; } 100% { outline-color: transparent; } }
+            .fxBad { animation: fxShake 0.35s linear 1, fxRed 2s ease-out 1; }
+            @keyframes fxShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-3px); } 40% { transform: translateX(3px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+            @keyframes fxRed { 0%, 40% { color: #e02a2a; } 100% { color: inherit; } }
+            .fxDream { font-style: italic; animation: fxDream 2.4s ease-in-out 1; }
+            @keyframes fxDream { 0% { opacity: 0; filter: blur(4px); } 35% { opacity: 0.8; filter: blur(2px); } 55% { opacity: 0.45; filter: blur(1px); } 100% { opacity: 1; filter: none; } }
+            .fxLoot { animation: fxSweep 1.1s ease-in-out 1 both; background: linear-gradient(100deg, currentColor 40%, #fff6c4 50%, currentColor 60%) 120% 0 / 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+            .fxBless { animation: fxBless 2.2s ease-out 1; }
+            @keyframes fxBless { 0% { opacity: 0.2; color: #fff; text-shadow: 0 0 12px #ffb35a; } 50% { opacity: 1; color: #ff9a3a; text-shadow: 0 0 8px #ffd9a0; } 100% { color: inherit; text-shadow: none; } }
             #hotspotLayer { pointer-events: none; z-index: 5; }
             #hotspotLayer .spot { position: absolute; pointer-events: auto; background: transparent; border: none; padding: 0; cursor: default; outline: none; -webkit-tap-highlight-color: transparent; }
             .transparentBtn {

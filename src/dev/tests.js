@@ -34,6 +34,7 @@ import * as travelGraph from '../travelGraph.js';
 import { cabinSpot } from '../cabin.js';
 import { scrollOpen } from '../ui/scrolls.js';
 import { sidePanel } from './panel.js';
+import { EFFECTS, playAll, playEffect } from './textfx.js';
 import { buildNotesBox, setNoteSource } from './notes.js';
 
 const PENDING_KEY = 'wizardidle2:devScenario';   // scenario to prepare after the reload
@@ -251,6 +252,9 @@ const actions = [
     { group: 'Modes', name: 'Hotspots', run() { openMode('hotspots'); } },
     { group: 'Modes', name: 'Music', run() { openMode('music'); } },
     { group: 'Modes', name: 'Texts', run() { openMode('texts'); } },
+
+    { group: 'Console', name: 'Text effects: play all (one every 2.8 s)', run() { playAll(); } },
+    ...EFFECTS.map((e) => ({ group: 'Console', name: `Text effect: ${e.name}`, run() { playEffect(e); } })),
 
     ...quests.KINDS.map((k) => ({ group: 'Quests', name: `Offer a quest: ${k}`, run() { const q = quests.makeQuest(k, 'dev'); devPrint(q ? (quests.offer(q) ? `quest: ${q.text}` : 'queue full: turned down') : 'no such quest could be made'); } })),
     { group: 'Quests', name: 'Offer a secret (jumps the queue)', run() { const q = quests.makeQuest('study', 'dev'); devPrint(q && quests.offer(q, { secret: true }) ? `secret: ${q.text}` : 'not taken'); } },
