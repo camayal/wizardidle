@@ -809,7 +809,7 @@ function showBubble(kind) {
         const ctx = pixelContext(c), bw = 26 * unit;
         let bx = x - 14 * unit;
         if (ui.facing < 0 && c !== npcCanvas) bx = c.width - bx - bw;     // the enemy stands on the left now: the bubble follows him, its text unflipped
-        if (ui.facing < 0 && c === npcCanvas) { ctx.save(); ctx.translate(bx + bw / 2, 0); ctx.scale(-1, 1); ctx.translate(-(bx + bw / 2), 0); }     // that canvas is mirrored: flip back so the text reads right
+        if (!(ui.facing < 0 && c !== npcCanvas)) { ctx.save(); ctx.translate(bx + bw / 2, 0); ctx.scale(-1, 1); ctx.translate(-(bx + bw / 2), 0); }     // the picture is drawn mirrored so its tail points at the head (in the mirrored canvas that is the flip back, so the text reads right)
         ctx.drawImage(img, bx, Math.max(0, y - 14 * unit), bw, 20 * unit);
         ctx.restore();
     });
