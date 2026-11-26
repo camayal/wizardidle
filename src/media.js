@@ -33,7 +33,7 @@ const WIZARD_ANIM = { cast: 'cast', walk: 'walk', pray: 'pray', fall_sit: 'fall'
 const STORY = /^(god_|anim_god_|anim_shrine_|healer|curandero|mistico|comerciante|jugon|viejo|stranger_|cazador_|bubble_)/;
 const OBJECTS = /^(chest\d|pot\d|bag$|barrel$|box$|libro\d|runa\d|item_|proof_|prop_|d[1-6]$|ship$|captain$|crew$|sleepingbag$|stuff$|staff_\d+$)/;
 const APP = /^(favicon|apple-touch-icon|mstile|icon\d*$|safari-pinned-tab)/;
-const UI = /^(achivement|attack|bocadillo|boss|CloseBtn|console|continue|crash|emptyLongBtn|frame|frame_tall|gold|heal|heart\d*|helpbtn|initBack|learn|mapa|mapaunderground|mapaboveground|mapbtn|matar|muerto|nubes|plegariabtn|scroll\w*|spirit|star|start|statsbtn|archbtn|diebtn|settingsbtn|slider_\w+|toggle_\w+|settings_btn_\w+|xp)$/;
+const UI = /^(achivement|attack|bocadillo|boss|CloseBtn|console|continue|crash|emptyLongBtn|frame|frame_tall_\d+|gold|heal|heart\d*|helpbtn|initBack|learn|mapa|mapaunderground|mapaboveground|mapbtn|matar|muerto|nubes|plegariabtn|scroll\w*|spirit|star|start|statsbtn|archbtn|diebtn|settingsbtn|slider_\w+|toggle_\w+|settings_btn_\w+|xp)$/;
 
 // The folder of an image (without img/), or '' when no rule knows the name.
 export function artFolder(name) {

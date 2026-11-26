@@ -8,6 +8,7 @@ import { drawWizard, drawWizardPose, loadNPC, placeDivine } from './render.js';
 import { scrollClose } from './scrolls.js';
 import { el } from './dom.js';
 import { art } from '../media.js';
+import { TALL_ROWS } from '../data/tallScenes.js';
 import { chosenTextScale, browserTextScale, heightScale } from '../prefs.js';
 
 //seg
@@ -244,7 +245,7 @@ function layoutPortrait(){
     const plateTop = tall ? tbTop + step + (tb - 28 * plateU) / 2 : s * 0.092;
     const headingH = Math.max(tall ? 0 : s * 0.21, tbTop * 2 + step + tb);
     const marcoBase = s * 0.3125;                    // the frame of a regular scene; offsets inside it stay proportional to this
-    const extra = ui.tallScene ? s * 0.25 : 0;       // a double-height scene: 64 more art rows on top
+    const extra = ui.tallScene ? s * (TALL_ROWS - 64) / 256 : 0;       // a double-height scene: 64 more art rows on top
     const marcoH = marcoBase + extra;
     const sceneH = s * 0.25;                         // the characters' canvases always cover the lower 64 rows
     const backConsoleH = H - parseInt(sceneH + extra) * 1.2 - parseInt(headingH) * 1.2;
@@ -266,7 +267,7 @@ function layoutPortrait(){
 
     // game area, scene and console
     setStyles("main", { width: s, height: H, left: (W / 2) - (s * 1.0625 / 2), top: H * 0.005 });
-    setStyles("marco", { width: s * 1.0625, height: marcoH, backgroundImage: `url('${art(ui.tallScene ? 'frame_tall' : 'frame')}')` });
+    setStyles("marco", { width: s * 1.0625, height: marcoH, backgroundImage: `url('${art(ui.tallScene ? `frame_tall_${TALL_ROWS}` : 'frame')}')` });
     setEach(CANVASES, { width: s, height: sceneH, left: sceneLeft });
     setStyles("esceneCanvas", { height: sceneH + extra });
     divineSpots(s, sceneLeft);
@@ -337,7 +338,7 @@ function layoutLandscapeMobile(){
     }
 
     const headingH = s * 0.24;
-    const extra = ui.tallScene ? s * 0.25 : 0;       // a double-height scene (see layoutPortrait)
+    const extra = ui.tallScene ? s * (TALL_ROWS - 64) / 256 : 0;       // a double-height scene (see layoutPortrait)
     const marcoH = s * 0.3125 + extra;
     const sceneTop = parseInt(headingH) + (parseInt(s * 0.3125) * 0.1);
     const sceneLeft = parseInt(marcoBase) * 0.1;
@@ -354,7 +355,7 @@ function layoutLandscapeMobile(){
 
     // scene
     setStyles("main", { width: s, left: (W - s) / 2 - (W * 0.025) });
-    setStyles("marco", { width: s * 1.0625, height: marcoH, top: parseInt(headingH), backgroundImage: `url('${art(ui.tallScene ? 'frame_tall' : 'frame')}')` });
+    setStyles("marco", { width: s * 1.0625, height: marcoH, top: parseInt(headingH), backgroundImage: `url('${art(ui.tallScene ? `frame_tall_${TALL_ROWS}` : 'frame')}')` });
     setEach(CANVASES, { width: s, height: s * 0.25, left: sceneLeft, top: sceneTop + extra });
     setStyles("esceneCanvas", { height: s * 0.25 + extra, top: sceneTop });
     divineSpots(s, sceneLeft);
