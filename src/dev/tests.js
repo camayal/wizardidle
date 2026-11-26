@@ -26,6 +26,7 @@ import { clearNPC, drawWizard, drawWizardPose, enterPlace, loadNPC, playWizardAn
 import { ARRIVALS, PORTALS, entranceKind } from '../ui/entrances.js';
 import { meleeMoveOf } from '../ui/enemyMoves.js';
 import { endEvent, nextEvent } from '../events.js';
+import { carryAway, rescueScene, rescuerOf } from '../rescuers.js';
 import { connectorTests, regionTrip, stagesFor, withFight } from '../travel.js';
 import { SPECTRA, SPECTRA_ZONE } from '../spectra.js';
 import * as quests from '../quests.js';
@@ -263,6 +264,7 @@ const actions = [
     { group: 'Quests', name: 'Reachability: stages the walk can reach from each stage', run() { const all = Object.keys(travelGraph.byName); const bad = all.map((n) => [n, quests.reachable(n).size]).filter(([, k]) => k < all.length); devPrint(bad.length ? `${bad.length} of ${all.length} stages cannot reach every stage: ${bad.slice(0, 12).map(([n, k]) => `${n} (${k})`).join(', ')}` : `all ${all.length} stages reach every stage`); } },
     { group: 'Quests', name: 'Trophy room: hang all 15 trophies and go in (to see how many fit)', run() { for (const b of quests.TROPHIES) hang(b); enterPlace(TROPHY_ROOM); devPrint(`${quests.TROPHIES.length} trophies hung`); } },
     { group: 'Quests', name: 'Trophy room: take every trophy down', run() { state.trophies = []; devPrint('wall emptied'); } },
+    ...['pagan', 'shaman', 'digger', 'ghost'].map((k) => ({ group: 'Faith', name: `Rescue scene: ${k} (fade, dream, wake beside the rescuer)`, run() { const r = rescuerOf(k); rescueScene(r, () => { if (r.carry) carryAway(); drawWizard(); }, () => { devPrint(`${k} rescue done`); nextEvent(); }); } })),
     { group: 'Quests', name: 'Cancel the quest (the god)', run() { devPrint(quests.cancel() ? 'cancelled' : 'no quest'); } },
     { group: 'Game', name: 'Cabin: where would it stand now?', run() { const c = cabinSpot(); devPrint(`cabin: ${c.zone}${c.stage}, background ${c.bg}`); } },
     { group: 'Game', name: 'Speed x1 / x10', run() { setSpeed(loop.getSpeed() == 1 ? 10 : 1); } },

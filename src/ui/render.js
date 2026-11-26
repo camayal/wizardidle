@@ -19,6 +19,7 @@ import { overlays } from '../data/overlays.js';
 import { connectorSceneInfo, headLevelShare } from '../data/connectors.js';
 import { markup } from './text.js';
 import { showTrophyWall } from './trophyWall.js';
+import { CAMP_OVERLAY, campShowing } from './camp.js';
 import { showHotspots } from './hotspots.js';
 import { prefs, CONSOLE_LINES } from '../prefs.js';
 import { tallScenes } from '../data/tallScenes.js';
@@ -122,7 +123,8 @@ function loadBackground(back, mirror = false) {
         esceneCanvas.style.transform = mirror ? "scaleX(-1)" : "";
         // the front layer of this scene, if it has one (cleared otherwise)
         const front = el("overlayCanvas").style, name = back.toLowerCase();
-        front.background = overlays.has(name) ? `url('${art(`overlay_${name}`)}') no-repeat` : "none";
+        const layers = [campShowing() ? `url('${art(CAMP_OVERLAY)}') no-repeat` : "", overlays.has(name) ? `url('${art(`overlay_${name}`)}') no-repeat` : ""].filter(Boolean);       // the caravan's camp over the scene's own front layer
+        front.background = layers.length ? layers.join(", ") : "none";
         front.backgroundSize = "contain";
         front.transform = mirror ? "scaleX(-1)" : "";      // the front layer is mirrored with its scene
         showDiceTable(back);                    // the table of a dice house (cleared in any other scene)

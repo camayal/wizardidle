@@ -11,16 +11,17 @@ import { zones } from './data/zones.js';
 import { destinations } from './travelGraph.js';
 import { clearNPC, loadNPC, loadBackground, printIn, showStage, sleepInDark, wizardName } from './ui/render.js';
 import { pickDream } from './dream.js';
-import { run } from './runtime.js';
+import { run, ui } from './runtime.js';
+import { hideTableau, showTableau } from './ui/camp.js';
 import { markup } from './ui/text.js';
 
 const print = printIn('fight');
 
-// The art that has landed (img/story/rescuer_<kind>.png, drawn on the enemy side like any NPC) and the camp scene of the caravan
-// (img/places/<zone>/...). Add a kind here once the artist's file is in the game; until then the rescue plays without a picture.
-const RESCUER_ART = new Set([]);
-const CAMP_SCENE = "";           // e.g. "camp_caravan" once the fire pit scene is wired (the pagans only)
-const STAY_MS = 3000;            // how long the rescuer stays beside him once the light is back
+// The art in the game: the pagans' camp (src/ui/camp.js), the shaman (img/story/rescuer_shaman.png, drawn at the enemy's place) and the
+// ghost (an animated strip, camp.js). The gravedigger has none yet: add its kind here once img/story/rescuer_digger.png is in.
+const RESCUER_ART = new Set(["pagan", "shaman", "ghost"]);
+const STAY_MS = { pagan: 5000 };     // how long the rescuer stays once the light is back (the others 3 s)
+const CAMP_ZONES = new Set(["la_Pradera", "el_Desierto", "las_Dunas", "el_Bosque", "la_Tundra"]);     // open scenes where the caravan's camp fits (no swamp firepit, castle, caves, mines)
 
 const BY_ZONE = {
     la_Pradera: "pagan", el_Desierto: "pagan", las_Dunas: "pagan",
@@ -60,7 +61,7 @@ export function pickRescuer() {
 
 // The pagan caravan drops him in another zone (a neighbour of the stage where he fell). Nothing happens if the stage has no way out.
 export function carryAway() {
-    const to = destinations(state.zone.current + state.zone.stage);
+    const to = destinations(state.zone.current + state.zone.stage).filter((d) => CAMP_ZONES.has(d.match(/\D+/).toString()));
     if (!to.length) return;
     const spot = pickRandomItem(to.join(","));
     state.zone.current = spot.match(/\D+/).toString();
@@ -77,17 +78,20 @@ export function carryAway() {
 export function rescueScene(rescuer, rise, done) {
     run.fallBy = "rescuer";
     const dream = pickDream();                   // the dream of the fall (run.storyDream = "fall"), played now instead of at the next rest
-    let kind = rescuer.who;
+    const kind = rescuer.who, art = RESCUER_ART.has(kind) && !run.simulation;
     sleepInDark(dream, () => {
-        const stay = () => { clearNPC(); done(); };
-        if (RESCUER_ART.has(kind) && !run.simulation) setTimeout(stay, STAY_MS);       // the stay is a real-time beat; the game is thawed here
-        else stay();
+        const stay = () => { hideTableau(); clearNPC(); loadBackground(ui.currentBackGround, ui.mirrored); done(); };     // the scene is reloaded so its front layer drops the camp
+        if (art) setTimeout(stay, STAY_MS[kind] || 3000);       // a real-time beat; the game is thawed here
+        else done();
     }, () => {
+        ui.wizardOffset = 0;                     // he wakes at his usual place
+        if (art) showTableau(kind);              // before the move, so the new scene's front layer already has the camp
         rise();                                  // standing, healed, and the caravan carries him away
-        if (rescuer.carry && CAMP_SCENE) loadCamp();
-        if (RESCUER_ART.has(kind)) loadNPC(`rescuer_${kind}`);
+        if (art) loadBackground(ui.currentBackGround, ui.mirrored);
+        if (art && kind == "shaman") loadNPC("rescuer_shaman");
     });
     if (dream) print(fx('Dream', `${wizardName()} dreams: ${markup(dream.lines.join(" "), { name: wizardName() })}`), false, false, 'dreams');
 }
 
-function loadCamp() { loadBackground(CAMP_SCENE); }
+// For the dev tests: the rescuer of a kind ("pagan", "shaman", "digger") or the ghost.
+export const rescuerOf = (kind) => kind == "ghost" ? { who: "ghost", share: 0, hp: 0.25, text: "A ghost lifts him up" } : { who: kind, ...RESCUERS[kind] };
