@@ -141,6 +141,8 @@ export const tallScenes = new Set([
     'la_tundra5',
     'la_tundra_altar',
     'la_tundra_estatua',
+    'gate_castillo',
+    'gate_castillo_in',
     'ladder_cueva4_mina2_cave',
     'ladder_cueva4_mina2_mine',
     'las_dunas1',

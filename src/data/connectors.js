@@ -53,6 +53,9 @@ export const mouthDoors = {
     mouth_gruta_cueva: 160, mouth_gruta_cueva_under: 160,      // Grotto side (ground map, la_Gruta3) and Cave side (underground map, la_Cueva2): the crack
     ladder_cueva4_mina2_cave: 150, ladder_cueva4_mina2_mine: 122,      // the ladder and the floor shaft
 };
+// The castle gate: a connector pair, outside (road, moat and drawbridge) and inside (steps and braziers); the gate arch is centred in both (256 x 64).
+// Art and registry only: not on the travel graph yet (which castle stages are outside and inside is the author's call).
+export const gateDoors = { gate_castillo: 128, gate_castillo_in: 128 };
 export const DOOR_STOP = 48;     // the wizard's offset is the door minus this to stand in front of it
 
 // Every connector scene as a scene of its own (the registry the map, the console and the tools read):
@@ -64,6 +67,8 @@ const addScenes = (point, label, scenes) => scenes.forEach((s, i) =>
 for (const [c, scenes] of Object.entries(connectorScenes)) addScenes(c, `the ${c.replace("bridge_", "")} bridge`, scenes);
 for (const [c, s] of Object.entries(stairScenes)) addScenes(c, "the Heidan stairs", s.scenes);
 for (const [b, d] of Object.entries(borderScenes)) addScenes(b, "the border between the Grotto and Dueñon", [d.scene]);
+addScenes("gate_castillo", "the castle gate, outside", ["gate_castillo"]);
+addScenes("gate_castillo_in", "the castle gate, inside", ["gate_castillo_in"]);
 addScenes("pier", "the pier", ["pier_land", "pier_end"]);
 addScenes("ladder_cueva4_mina2", "the ladder between the cave and the mine", ["ladder_cueva4_mina2_cave", "ladder_cueva4_mina2_mine"]);
 // A mouth's name is mouth_<outside zone(s)>_<inside zone> in the Spanish short names (pantano, cueva...): the label says them in English.

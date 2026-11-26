@@ -425,3 +425,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-26 dev: wired 39 tall underground scenes (cueva, gruta, mina, duenon, volcan). Left: el_castillo, la_torre, casadados and 28 connectors still lack tall art; tundra/bosque were already in.
 - 2026-11-26 dev: removed enter_mine_S (scene, image, MINE_TUNNEL in travel.js); mouth_dunas_mina uses plain doorSteps.
 - 2026-11-26 dev: wired 32 tall scenes (9 mouth pairs, ladder, border, stairs, 5 curanderobg); tools/wire_tall.py is stale (it prefixes tall_ again; drop files already carry it). Left without tall art: el_castillo, la_torre, casadados, pier already in.
+- 2026-11-26 dev: wired the castle gate pair (gate_castillo / gate_castillo_in, 128 door x, gateDoors in connectors.js); no travel link: which castle stages are outside/inside is the author's call.
