@@ -1010,6 +1010,7 @@ export {
     printIn,
     consoleNotice,
     printDivine,
+    fx,
     setFacing,
     forgetImages,
     replaceImage,
