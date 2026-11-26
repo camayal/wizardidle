@@ -21,6 +21,8 @@ import { markup } from './text.js';
 import { showTrophyWall } from './trophyWall.js';
 import { showHotspots } from './hotspots.js';
 import { prefs, CONSOLE_LINES } from '../prefs.js';
+import { tallScenes } from '../data/tallScenes.js';
+import { responsiveLayout } from './layout.js';
 import { WIZARD_AT_TABLE, hasDiceTable, showDiceTable } from './diceTable.js';
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -92,7 +94,7 @@ ui.heartIcon = `<img style="filter: hue-rotate(45deg)" class="imgInConsole" heig
 // Draw a background (a zone stage, altar, inn...) and move the map marker.
 // The two touch spots sit on the walk line, level with the characters.
 function placeDivine() {
-    const top = (parseFloat(esceneCanvas.style.top) || 0) + (ui.headLevel || 0);
+    const top = (parseFloat(el("pjCanvas").style.top) || 0) + (ui.headLevel || 0);       // the characters' canvas: the lower 64 rows of a double-height scene
     for (const id of ["pjDivineBtn", "npcDivineBtn"]) el(id).style.top = top + "px";
 }
 
@@ -108,9 +110,15 @@ function loadBackground(back, mirror = false) {
     placeDivine();
     showHotspots(back);             // its clickable spots (a new scene visit)
     // the old background stays until the new image has loaded (no flash of the page behind)
-    withImage("background", art(`${back.toLowerCase()}`), () => {
-        esceneCanvas.style.background = `url('${art(`${back.toLowerCase()}`)}') no-repeat`;
-        esceneCanvas.style.backgroundSize = "contain";
+    const tall = tallScenes.has(back.toLowerCase()), file = tall ? `tall_${back.toLowerCase()}` : back.toLowerCase();     // no double-height art: the regular scene, and the viewer shrinks back
+    withImage("background", art(file), () => {
+        if (tall != ui.tallScene) { ui.tallScene = tall; responsiveLayout(); }      // the viewer, its frame and the console change size
+        if (tall) {      // drawn from the bottom: an interior (96 rows) leaves black above
+            esceneCanvas.style.background = `url('${art(file)}') no-repeat bottom / 100% auto #000`;
+        } else {
+            esceneCanvas.style.background = `url('${art(file)}') no-repeat`;
+            esceneCanvas.style.backgroundSize = "contain";
+        }
         esceneCanvas.style.transform = mirror ? "scaleX(-1)" : "";
         // the front layer of this scene, if it has one (cleared otherwise)
         const front = el("overlayCanvas").style, name = back.toLowerCase();

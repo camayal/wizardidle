@@ -31,17 +31,17 @@ function sceneLayer() {
         sceneCanvas.style.pointerEvents = "none";
         el("spellCanvas").after(sceneCanvas);
     }
-    const scene = el("esceneCanvas").style;
+    const scene = el("pjCanvas").style;       // the lower 64 rows: scene spells keep their 256 x 64 shape in a double-height scene
     Object.assign(sceneCanvas.style, { left: scene.left, top: scene.top, width: scene.width, height: scene.height,
         zIndex: (parseInt(getComputedStyle(el("spellCanvas")).zIndex) || 0) + 1 });
-    sceneCanvas.width = el("esceneCanvas").offsetWidth;
-    sceneCanvas.height = el("esceneCanvas").offsetHeight;
+    sceneCanvas.width = el("pjCanvas").offsetWidth;
+    sceneCanvas.height = el("pjCanvas").offsetHeight;
     return sceneCanvas;
 }
 // A scroll opened mid-spell moves the scene: the scene spell follows it (only the box moves).
 document.addEventListener("wizardidle:layout", () => {
     if (!sceneCanvas) return;
-    const scene = el("esceneCanvas").style;
+    const scene = el("pjCanvas").style;
     Object.assign(sceneCanvas.style, { left: scene.left, top: scene.top, width: scene.width, height: scene.height });
 });
 

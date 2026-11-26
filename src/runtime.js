@@ -82,6 +82,7 @@ export const ui = {
     xpPercent: undefined,
     frameCounter: undefined,       // character animation frame
     sceneOnTop: undefined,
+    tallScene: false,              // the scene on show has a double-height version: the viewer and its frame grow, the console shrinks (layout.js)
     currentBackGround: undefined,
     scrollCurrentContent: undefined, // which scroll is open: "stats", "achievements", ...
     statsPage: undefined,

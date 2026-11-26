@@ -243,11 +243,13 @@ function layoutPortrait(){
     const plateU = tall ? Math.min(s * 0.0042 * kb, plateW / 150) : s * 0.0042;
     const plateTop = tall ? tbTop + step + (tb - 28 * plateU) / 2 : s * 0.092;
     const headingH = Math.max(tall ? 0 : s * 0.21, tbTop * 2 + step + tb);
-    const marcoH = s * 0.3125;
-    const sceneH = s * 0.25;
-    const backConsoleH = H - parseInt(sceneH) * 1.2 - parseInt(headingH) * 1.2;
+    const marcoBase = s * 0.3125;                    // the frame of a regular scene; offsets inside it stay proportional to this
+    const extra = ui.tallScene ? s * 0.25 : 0;       // a double-height scene: 64 more art rows on top
+    const marcoH = marcoBase + extra;
+    const sceneH = s * 0.25;                         // the characters' canvases always cover the lower 64 rows
+    const backConsoleH = H - parseInt(sceneH + extra) * 1.2 - parseInt(headingH) * 1.2;
     const scrollH = H - (s * 0.25) * 1.5;
-    const sceneLeft = parseInt(marcoH) * 0.1;
+    const sceneLeft = parseInt(marcoBase) * 0.1;
     const pjBtnW = s * 0.325, centerBtnW = s * 0.35;
     const startBtnW = (button * 1.90625) * 1.5;
 
@@ -264,8 +266,9 @@ function layoutPortrait(){
 
     // game area, scene and console
     setStyles("main", { width: s, height: H, left: (W / 2) - (s * 1.0625 / 2), top: H * 0.005 });
-    setStyles("marco", { width: s * 1.0625, height: marcoH });
+    setStyles("marco", { width: s * 1.0625, height: marcoH, backgroundImage: `url('${art(ui.tallScene ? 'frame_tall' : 'frame')}')` });
     setEach(CANVASES, { width: s, height: sceneH, left: sceneLeft });
+    setStyles("esceneCanvas", { height: sceneH + extra });
     divineSpots(s, sceneLeft);
     setStyles("console", { display: "block", fontSize: em, width: s, height: parseInt(backConsoleH) * 0.94, left: s * 0.03 });
     setStyles("backConsole", { display: "block", width: s + (s * 0.075), height: backConsoleH, left: (s * -0.01) });
@@ -274,15 +277,19 @@ function layoutPortrait(){
     // vertical order: scene above the console, or below it while a scroll is open
     if (ui.sceneOnTop) {
         setStyles("marco", { top: parseInt(headingH) + parseInt(headingH) * 0.1 });
-        setEach([...CANVASES, 'centerDivineBtn'], { top: parseInt(headingH) + (parseInt(marcoH) * 0.165) });
-        setStyles("console", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) });
-        setStyles("backConsole", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.1) });
-        setStyles("statusText", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoH) * 0.2) + (parseInt(backConsoleH) * 0.925) });
+        const sceneTop = parseInt(headingH) + (parseInt(marcoBase) * 0.165);
+        setEach([...CANVASES, 'centerDivineBtn'], { top: sceneTop + extra });
+        setStyles("esceneCanvas", { top: sceneTop });
+        setStyles("console", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoBase) * 0.2) });
+        setStyles("backConsole", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoBase) * 0.1) });
+        setStyles("statusText", { top: parseInt(headingH) + parseInt(marcoH) + (parseInt(marcoBase) * 0.2) + (parseInt(backConsoleH) * 0.925) });
     } else {
         setStyles("console", { top: parseInt(headingH) + parseInt(headingH) * 0.2 });
         setStyles("backConsole", { top: headingH });
         setStyles("marco", { top: parseInt(headingH) + parseInt(backConsoleH) });
-        setEach([...CANVASES, 'centerDivineBtn'], { top: parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoH) * 0.1) });
+        const sceneTop = parseInt(headingH) + parseInt(backConsoleH) + (parseInt(marcoBase) * 0.1);
+        setEach([...CANVASES, 'centerDivineBtn'], { top: sceneTop + extra });
+        setStyles("esceneCanvas", { top: sceneTop });
         setStyles("statusText", { top: parseInt(headingH) + (parseInt(backConsoleH) * 0.925) });
     }
     placeDivine();
@@ -330,9 +337,10 @@ function layoutLandscapeMobile(){
     }
 
     const headingH = s * 0.24;
-    const marcoH = s * 0.3125;
-    const sceneTop = parseInt(headingH) + (parseInt(marcoH) * 0.1);
-    const sceneLeft = parseInt(marcoH) * 0.1;
+    const extra = ui.tallScene ? s * 0.25 : 0;       // a double-height scene (see layoutPortrait)
+    const marcoH = s * 0.3125 + extra;
+    const sceneTop = parseInt(headingH) + (parseInt(s * 0.3125) * 0.1);
+    const sceneLeft = parseInt(marcoBase) * 0.1;
     const pjBtnW = s * 0.325, centerBtnW = s * 0.35;
 
     // hidden in landscape
@@ -346,10 +354,12 @@ function layoutLandscapeMobile(){
 
     // scene
     setStyles("main", { width: s, left: (W - s) / 2 - (W * 0.025) });
-    setStyles("marco", { width: s * 1.0625, height: marcoH, top: parseInt(headingH) });
-    setEach(CANVASES, { width: s, height: s * 0.25, left: sceneLeft, top: sceneTop });
+    setStyles("marco", { width: s * 1.0625, height: marcoH, top: parseInt(headingH), backgroundImage: `url('${art(ui.tallScene ? 'frame_tall' : 'frame')}')` });
+    setEach(CANVASES, { width: s, height: s * 0.25, left: sceneLeft, top: sceneTop + extra });
+    setStyles("esceneCanvas", { height: s * 0.25 + extra, top: sceneTop });
     divineSpots(s, sceneLeft);
-    setStyles("centerDivineBtn", { top: sceneTop });
+    setStyles("centerDivineBtn", { top: sceneTop + extra });
+    placeDivine();
 
     // clouds behind the name screen
     setStyles("nubes", { width: W, height: H, left: 0, top: 0 });
