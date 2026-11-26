@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The gravedigger (shovel over the shoulder, option a2) stands at the enemy's place when he raises the wizard (img/story/rescuer_digger.png, untested in a browser). All four rescuers now have art; his sin push is still not built.
 - The quest bubble's check (and the cross) reads the right way round again: the bubble body stays mirrored so its tail points at the stranger, and the mark inside is drawn back unmirrored (untested in a browser; the mirrored-fight case is left as it was).
 - The scene viewer is always tall now (author's order): the 'Taller scene viewer' setting is gone. A scene that has no tall art yet shows its regular picture from the bottom with black above, until the artist draws its tall version. Untested in a browser; the first check is every scene without a tall file (about 60) and the layout on phones.
 - Rescuer art wired (untested in a browser): the pagan caravan's camp is a front overlay over the scene he wakes in (wagon at the right, fire pit with an animated fire, a mule, four pagans: src/ui/camp.js, img/places/overlays/overlay_caravan_camp.png), the shaman stands at the enemy's place, the ghost (pale, no staff) floats there in a 4-frame loop; he wakes at his usual place (x=32). The caravan only drops him in open zones (Prairie, Desert, Dunes, Forest, Tundra). Dev panel, Faith: 'Rescue scene' tests for each rescuer. The gravedigger has no art yet and plays as before.

@@ -17,9 +17,9 @@ import { markup } from './ui/text.js';
 
 const print = printIn('fight');
 
-// The art in the game: the pagans' camp (src/ui/camp.js), the shaman (img/story/rescuer_shaman.png, drawn at the enemy's place) and the
-// ghost (an animated strip, camp.js). The gravedigger has none yet: add its kind here once img/story/rescuer_digger.png is in.
-const RESCUER_ART = new Set(["pagan", "shaman", "ghost"]);
+// The art in the game: the pagans' camp (src/ui/camp.js), the shaman and the gravedigger (img/story/rescuer_<kind>.png, 32x32 stills at the enemy's place)
+// and the ghost (an animated strip, camp.js).
+const RESCUER_ART = new Set(["pagan", "shaman", "digger", "ghost"]);
 const STAY_MS = { pagan: 5000 };     // how long the rescuer stays once the light is back (the others 3 s)
 const CAMP_ZONES = new Set(["la_Pradera", "el_Desierto", "las_Dunas", "el_Bosque", "la_Tundra"]);     // open scenes where the caravan's camp fits (no swamp firepit, castle, caves, mines)
 
@@ -88,7 +88,7 @@ export function rescueScene(rescuer, rise, done) {
         if (art) showTableau(kind);              // before the move, so the new scene's front layer already has the camp
         rise();                                  // standing, healed, and the caravan carries him away
         if (art) loadBackground(ui.currentBackGround, ui.mirrored);
-        if (art && kind == "shaman") loadNPC("rescuer_shaman");
+        if (art && (kind == "shaman" || kind == "digger")) loadNPC(`rescuer_${kind}`);       // a still at the enemy's place
     });
     if (dream) print(fx('Dream', `${wizardName()} dreams: ${markup(dream.lines.join(" "), { name: wizardName() })}`), false, false, 'dreams');
 }
