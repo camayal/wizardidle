@@ -22,8 +22,8 @@ import { faithChange } from './faith.js';
 import { handHelpWizard, handWeakenEnemy } from './hand.js';
 import { calculateFe } from './wizard.js';
 import { signTouch } from './winback.js';
-import { sanctuaryOnHeal, smiteFor } from './miracles_spells.js';
-import { prayerAnswered } from './prayers.js';
+import { faceLogro, faceWord, sanctuaryOnHeal, smiteFor } from './miracles_spells.js';
+import { noteHelp, prayerAnswered } from './prayers.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -42,6 +42,8 @@ const RINGS_MS = 650;
 
 // Every touch of the god counts towards "Feel the divine touch".
 function touchedCheck() {
+    faceLogro();
+    noteHelp();
     if (stats.get("god.touches") + stats.get("god.heals") + stats.get("god.hits") >= config.touchedAchievement) logro.set(logro.logro_tocado);
 }
 
@@ -107,7 +109,7 @@ function healByTouch() {
         playSound("heal");
         spell("spellHeal_8", true);
         sanctuaryOnHeal();
-        printDivine(`${wizardName()} feels a healing touch and recovers ${ui.healIcon}${roundNumbertoLetter(healHit)}`);
+        printDivine(`${wizardName()} feels a ${faceWord()} healing touch and recovers ${ui.healIcon}${roundNumbertoLetter(healHit)}`);
     }
 }
 

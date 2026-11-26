@@ -19,6 +19,7 @@ export const config = {
             savedFromKillingBlow: 8,           // a heal touch that keeps him alive through the enemy's next hit
             lowHpHeal: 5,
             prayerAnswered: 10,                // the god heals him inside the prayer window (src/prayers.js)
+            expectedMissed: -4,                // extra, when the ignored prayer came after he had learnt to count on the god
             prayerIgnored: -8,                 // the window closes with no answer (he also gains Hardened Heart)
             finalBlow: 5,                      // the god's touch kills the enemy
             critic: 3,                         // the god's touch lands a critic (the divine powers)
@@ -58,6 +59,7 @@ export const config = {
     // The invisible hand (an Atheist's touches, src/hand.js): placeholders, tune with the playtests.
     prayer: {
         hpLine: 0.2,               // a boss fight below this share of his HP: he prays
+        expectAfter: 3,            // god's touches since the last ignored prayer that count as help he expects
         windowMs: 8000,            // how long the god has to answer
         hardenedCap: 10,           // ignored prayers that count towards Hardened Heart
         hardenedCrit: 0.01,        // crit chance per ignored prayer

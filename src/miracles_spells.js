@@ -9,6 +9,7 @@ import { stats } from './stats.js';
 import { fight } from './runtime.js';
 import { beliefLevel } from './belief.js';
 import { spell } from './spells.js';
+import { logro } from './achievements.js';
 import { printIn, wizardName } from './ui/render.js';
 const print = printIn('divine');
 
@@ -19,6 +20,15 @@ export function godFace() {
     const heals = stats.get("god.heals"), hits = stats.get("god.hits");
     if (heals + hits < config.face.minActs) return "distant";
     return heals >= hits ? "mercy" : "wrath";
+}
+
+// "gentle", "stern" or "distant": how a heal touch feels from this god
+export const faceWord = () => ({ mercy: "gentle", wrath: "stern", distant: "distant" })[godFace()];
+
+// One achievement per face reached at Devout (called after each touch)
+export function faceLogro() {
+    if (beliefLevel() != "devout") return;
+    logro.set(logro[`logro_${godFace()}`]);
 }
 
 // After a heal touch (a believing wizard only): a Mercy god also raises a Mercy shield, a few times per fight.

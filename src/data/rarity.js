@@ -19,6 +19,7 @@ const rarityOf = {
     logro_ultimocapricor: "common", logro_killedbysheep: "common",
     logro_attack1000: "uncommon", logro_killedbychicken: "uncommon",
     logro_level140: "rare", logro_level200: "rare", logro_hategod: "rare", logro_runas: "rare", logro_hydramystery: "rare",
+    logro_hardened: "rare", logro_mercy: "rare", logro_wrath: "rare", logro_distant: "rare",
     logro_tocado: "rare", logro_vistoaguilaencueva: "rare",
     logro_pots: "epic", logro_botines: "epic",
     logro_tabernero: "legendary", logro_capricorreturns: "legendary",
