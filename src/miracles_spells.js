@@ -47,20 +47,17 @@ export function smiteFor() {
     return { spell: beliefLevel() == "devout" ? "spellSmite_pillar" : "spellSmite_sword", bonus: config.face.smiteBonus };
 }
 
-// Last luck (Distant god, any belief, an Atheist only 'lucky'): a killing hit sometimes leaves him 1 HP on its own, once per fight, at no
+// Last luck (Distant god, Doubter and up; an Atheist has his paid graze instead): a killing hit sometimes leaves him 1 HP on its own, once per fight, at no
 // faith (the invisible hand's graze, seen this time).
 export function providenceHit(enemyHit) {
-    const hp = state.player.hp, level = beliefLevel(), atheist = level == "atheist";
-    if (godFace() != "distant" || fight.providenceUsed || hp - enemyHit > 0) return enemyHit;
-    if (!atheist && Math.round(state.player.faith) > 0) return enemyHit;      // with faith the player heals or shields him himself
+    const hp = state.player.hp, level = beliefLevel();
+    if (level == "atheist" || godFace() != "distant" || fight.providenceUsed || hp - enemyHit > 0) return enemyHit;
+    if (Math.round(state.player.faith) > 0) return enemyHit;      // with faith the player heals or shields him himself
     if (Math.random() >= config.face.luckChance[level]) return enemyHit;
     fight.providenceUsed = true;
     stats.count("god.providence");
-    if (atheist) print(`<i>${wizardName()} says it was only luck</i>`);      // he never sees the miracle
-    else {
-        spell(["spellProvidence_a", "spellProvidence_b", "spellProvidence_c"][Math.floor(Math.random() * 3)], true, 0, 0, null, true);
-        print(`<i>Last luck: ${wizardName()} is spared by a luck he cannot explain</i>`);
-    }
+    spell(["spellProvidence_a", "spellProvidence_b", "spellProvidence_c"][Math.floor(Math.random() * 3)], true, 0, 0, null, true);
+    print(`<i>Last luck: ${wizardName()} is spared by a luck he cannot explain</i>`);
     return Math.max(0, hp - 1);
 }
 
