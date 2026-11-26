@@ -403,3 +403,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 (dev): faith step 3, winning back: free revive doubled for an Atheist (belief and faith). Left: sign (needs a sky/scene tap target), dream shrine (hotspot kind dream with to: shrine, dream.js only knows nightmare), hidden blessings, pilgrim, relics. Untested in a browser.
 - 2026-11-25 (dev): city roofs (artist, author approved) copied into img/places/tall for the 7 tall city scenes. las_dunas4 stray-pixel fix still waits for the author in the review drop.
 - 2026-11-25 (dev): signs redefined by the author (subtle aids: weaken enemy, herb, loot upgrade, understanding a rune/book; inspiration wording, never "obey"). Devout nudge lines and guided study lines rewritten; the rest of the sign is in dev-notes. Untested in a browser.
+- 2026-11-25 (dev): las_dunas4 stray pixels fix wired (regular and tall), author approved.

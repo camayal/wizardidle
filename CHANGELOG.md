@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Dunas 4 (regular and tall): the stray black pixels to the right of the palm are gone.
 - The god's hints no longer sound like orders: a Devout wizard who follows a nudge feels a whisper or a warm light guiding him (no more "I will obey you"), and when the hint on a rune, book or statue makes the study work, the line says he was guided or inspired ("is guided to understand the rune", "sees the statue from a new perspective and understands it").
 - City roofs: the seven tall city scenes (Ciudad 1 to 5, altar, statue) have taller, less squashed roofs in a mix of tile and slate, hipped and mansard, with dormers and chimneys. Only the top rows changed; the 64 rows shown by default are the same.
 - Winning back an Atheist: the god's free revive now counts double for him (belief +4 instead of +2, and the god gets back faith: 3 prayers' worth, 6 for an Atheist; placeholders in config.belief.weights.reviveAtheist and config.faith.reviveFe).
