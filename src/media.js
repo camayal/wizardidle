@@ -58,7 +58,6 @@ export function artFolder(name) {
     if (/^(bridge|gate|mouth|ladder|pier|stairs)_/.test(name)) return 'places/connectors';     // the connector scenes (bridges, castle gate, cave and mine mouths, ladders, pier, stairs)
     if (/^fx_/.test(name)) return 'effects/fx';
     if ((m = /^([a-z]+_[a-z]+?)(\d+|_altar|_estatua|_taberna|_casadados|_cazadores|_cazadores_fuera|_cazadores_trofeos)$/.exec(name)) && ZONES.has(m[1])) return `places/${m[1]}`;
-    if (name == 'casadados') return 'places';        // a plain dice house
     if (STORY.test(name)) return 'story';
     if (OBJECTS.test(name)) return 'objects';
     if (/^(logro_|no_logro$)/.test(name)) return 'ui/achievements';

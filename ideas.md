@@ -427,3 +427,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-26 dev: wired 32 tall scenes (9 mouth pairs, ladder, border, stairs, 5 curanderobg); tools/wire_tall.py is stale (it prefixes tall_ again; drop files already carry it). Left without tall art: el_castillo, la_torre, casadados, pier already in.
 - 2026-11-26 dev: wired the castle gate pair (gate_castillo / gate_castillo_in, 128 door x, gateDoors in connectors.js); no travel link: which castle stages are outside/inside is the author's call.
 - 2026-11-26 dev: wired the 7 castle tall scenes (el_castillo1-5, altar, estatua); tallScenes now 184 entries, all files verified.
+- 2026-11-26 dev: removed leftover img/places/casadados.png and its media.js rule; nothing loaded the bare name (precache list is generated at deploy).
