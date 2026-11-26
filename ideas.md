@@ -408,3 +408,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 (dev): author picked faith art (weaken B, graze C, herbs a-c plus the mushrooms, no door glow: Providence at the spot centre); wired in hand.js, placement is the spell default and not seen in a browser. Sanctuary and Smite art not in the review drop or img/ yet.
 - 2026-11-25 (dev): mushroom sprites had the magenta background; made transparent. Check any other sprite taken from ToAddToInspire for it.
 - 2026-11-26 (dev): Sanctuary rules recorded in for_implementation_faith.md Decisions (heal bonus of a Mercy god, 1/2/3 hits by belief level, boss hit = one hit). Art redrawn by the artist, in the review drop, not yet approved or wired (step 5).
+- 2026-11-26 (dev): author picked the miracle art: Sanctuary c (nested layers by belief), Smite c below Devout and a at Devout; recorded in the faith plan, wire in step 5. Rule from the author: ask him questions as multiple choice always.
