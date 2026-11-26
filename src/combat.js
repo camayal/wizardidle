@@ -30,6 +30,7 @@ import { art } from './media.js';
 import { faithChange } from './faith.js';
 import { grazeHit } from './hand.js';
 import { clearMiracles, sanctuaryAbsorb } from './miracles.js';
+import { clearPrayer, despairCheck, hardened } from './prayers.js';
 
 
 
@@ -282,6 +283,7 @@ function clearFight() {
     fight.godHelped = false;
     fight.handGraze = false;
     clearMiracles();
+    clearPrayer();
     fight.damageTaken = 0;
     fight.enemy = "";
     fight.enemyAndNumber = "";
@@ -496,7 +498,7 @@ function attackEV() {
         castPolymorph();
     } else if (YesOrNot(stat("pAttack"), 0)) {
         if (attackPrevented()) return;
-        const damage = YesOrNot(stat("pCritic") + selfReliance() * config.belief.selfCrit, 0) ? criticAttack() : normalAttack();
+        const damage = YesOrNot(stat("pCritic") + selfReliance() * config.belief.selfCrit + hardened() * config.prayer.hardenedCrit, 0) ? criticAttack() : normalAttack();
         if (damage > 500) logro.set(logro.logro_attack500);
         if (damage > 1000) logro.set(logro.logro_attack1000);
     } else {
@@ -567,7 +569,7 @@ function enemyAttack() {
     // A killing blow (the author: he fell before the boss's scene spell reached him) takes his HP
     // only when it lands: the game waits for it, then he falls. Other hits count at once, as before.
     const lethal = Math.round(state.player.hp - enemyHit) <= 0;
-    if (!lethal) takeHit();
+    if (!lethal) { takeHit(); despairCheck(); }      // low in a boss fight: he prays (src/prayers.js)
     print(`${fight.enemyName} attacks (${ui.attackIcon}${roundNumbertoLetter(enemyHit)})`, true);
     let hit = false, waiting = false;   // waiting: the blow lands after this round (else battle() sees the fall)
     const landed = (spellId, silent = false) => () => {

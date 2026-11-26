@@ -18,6 +18,8 @@ export const config = {
         weights: {
             savedFromKillingBlow: 8,           // a heal touch that keeps him alive through the enemy's next hit
             lowHpHeal: 5,
+            prayerAnswered: 10,                // the god heals him inside the prayer window (src/prayers.js)
+            prayerIgnored: -8,                 // the window closes with no answer (he also gains Hardened Heart)
             finalBlow: 5,                      // the god's touch kills the enemy
             critic: 3,                         // the god's touch lands a critic (the divine powers)
             superCritic: 6,
@@ -47,11 +49,20 @@ export const config = {
         superCriticMultiplier: 16,             // against x8 for a critic
         devoutTouchCost: 1, doubterTouchCost: 1,   // touches cost the same at every level now (faith plan, section 5)
         doubterHealFactor: 0.6,                // a Doubter's heal restores this share (the god's help works worse on a doubter)
+        toleranceKinds: 'touch,lowHpHeal,critic,superCritic,savedFromKillingBlow,bossHit,finalBlow',   // the same miracle again and again counts less
+        toleranceStep: 0.15, toleranceFloor: 0.3,
         selfXp: 0.3, selfCrit: 0.1,            // self-reliance: at the lowest belief he earns this much more XP and crit chance on his own (placeholders)
         healCostFactor: 0.5,                   // a healing touch costs this share of the faith an attack of the same size would (a first number to tune)
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
     // The invisible hand (an Atheist's touches, src/hand.js): placeholders, tune with the playtests.
+    prayer: {
+        hpLine: 0.2,               // a boss fight below this share of his HP: he prays
+        windowMs: 8000,            // how long the god has to answer
+        hardenedCap: 10,           // ignored prayers that count towards Hardened Heart
+        hardenedCrit: 0.01,        // crit chance per ignored prayer
+        hardenedXp: 0.02,          // XP bonus per ignored prayer
+    },
     face: {
         minActs: 5,                // heals + hits needed before the god has a face (else Distant)
         sanctuaryHits: [1, 2, 3],  // hits a Sanctuary takes: Doubter, Believer, Devout

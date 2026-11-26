@@ -23,6 +23,7 @@ import { handHelpWizard, handWeakenEnemy } from './hand.js';
 import { calculateFe } from './wizard.js';
 import { signTouch } from './winback.js';
 import { sanctuaryOnHeal, smiteFor } from './miracles.js';
+import { prayerAnswered } from './prayers.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -77,8 +78,9 @@ function reviveByTouch() {
 // and never more faith than he has.
 function healByTouch() {
     if (isAtheist()) { if (!handHelpWizard()) refuseTouch(); return; }       // the invisible hand: he never knows
+    const answered = prayerAnswered();      // a prayer was open: the heal works at full strength
     const healOperation = state.player.hpBase * stat("fHeal");
-    let healHit = getRandomInt(healOperation * 0.5, healOperation * 2) * (beliefLevel() == 'doubter' ? config.belief.doubterHealFactor : 1);
+    let healHit = getRandomInt(healOperation * 0.5, healOperation * 2) * (beliefLevel() == 'doubter' && !answered ? config.belief.doubterHealFactor : 1);
     if (Math.round(state.player.hp) + Math.round(healHit) > Math.round(state.player.hpBase)) {
         healHit = Math.round(state.player.hpBase) - Math.round(state.player.hp);
     }

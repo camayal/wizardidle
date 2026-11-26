@@ -41,13 +41,20 @@ export function beliefLevel() {
 // A moment moves belief (kind is the config weight's name; stats count each kind). Nothing moves
 // once the story has locked it ("lost").
 // `floor` (optional) stops a negative moment from taking belief below that value (nightmares).
+let lastKind = "", repeats = 0;       // miracle tolerance (not saved)
 export function beliefMoment(kind, floor) {
     if (state.player.beliefLost) return;
     const weight = b().weights[kind];
     if (!weight) return;
     const p = state.player;
     if (floor !== undefined && weight < 0 && p.belief <= floor) return;
-    p.belief = Math.max(b().min, Math.min(b().max, p.belief + weight));
+    let gain = weight;
+    if (weight > 0 && b().toleranceKinds.split(",").includes(kind)) {      // miracle tolerance: the same kind in a row counts less each time
+        repeats = kind == lastKind ? repeats + 1 : 0;
+        lastKind = kind;
+        gain = weight * Math.max(b().toleranceFloor, 1 - b().toleranceStep * repeats);
+    }
+    p.belief = Math.max(b().min, Math.min(b().max, p.belief + gain));
     if (floor !== undefined && weight < 0) p.belief = Math.max(p.belief, floor);
     stats.count(`belief.moment.${kind}`);
     stats.max("belief.highest", Math.round(p.belief));
