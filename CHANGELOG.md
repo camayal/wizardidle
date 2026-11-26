@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Beach shrine now has its own picture (the same ankh as every shrine, with a wave, driftwood, shells and a little seaweed) in the normal and the taller viewer; before it was a copy of the Prairie shrine.
 - Settings has a new switch, Taller scene viewer (off by default): off is the original viewer; on shows the double-height art (96 rows) where a scene has it.
 - Taller scenes (branch taller_scene): the scene viewer and its wooden frame are taller (96 art rows, the interior size) for the 70 scenes the artist redrew in double height: an interior fits exactly, all the tall scenes were cut to 96 rows (the old 128-row set is zipped in the old-ideas folder; TALL_ROWS in data/tallScenes.js sets the viewer height), and the console shrinks to fit the same screen. A scene with no tall art keeps its regular art and the viewer shrinks back. The characters, spells and front layers stay on the lower 64 rows. tools/wire_tall.py copies new tall art in from the review drop.
 - When every kind of console text is switched off in Settings, the console shows a grey note saying no text will show.

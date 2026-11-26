@@ -45,6 +45,7 @@ export const tallScenes = new Set([
     'la_ciudad_casadados',
     'la_ciudad_estatua',
     'la_ciudad_taberna',
+    'la_playa_altar',
     'la_pradera1',
     'la_pradera10',
     'la_pradera11',
