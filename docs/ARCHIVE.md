@@ -2790,3 +2790,10 @@ The offering question (cap, diminishing returns, fixed by level, keep the snowba
 - Faith candle (dev, 2026-11-25): four static candles, one per belief level (Devout, Believer, Doubter, Atheist), no animation. They sit on top of the stats/XP box, right aligned, so keep them small (about the height of the name line) and readable at a glance: a tall bright flame for Devout down to a snuffed wick with a thin smoke thread for Atheist. Drop them in the review drop as icon_candle_<level>.png. (done 2026-11-25: look C, wired)
 
 - 2026-11-25 dev-notes (done): (1) wire Providence into hotspot taps: replace the spellSparkGold_8 glow in src/ui/hotspots.js tap() with fx_providence_a/b/c (16x16, 6 frames, final in the review drop, copy to img/effects/fx/), one at random; author's rule: Believer and Devout see it fully, Doubter a faint version, Atheist none (invisible hand). Check src/spells.js spell(img, pj, critic, center, at, silent) for how frame size is read (fx_ sprites have a size table in src/ui/enemyMoves.js FX_SIZE and src/dev/art.js). 
+
+## From dev-notes.md (moved by artist, 2026-11-25)
+```
+Date: 2026-11-25 21:08
+Author's note: artist need to retourch some of the roofs of the city sneces some of them are very compacted, for example 5, 1, 3
+```
+Handled by the artist: options la_ciudad1_a/b/c in the review drop (places/tall/); status in docs/art-notes.md.
