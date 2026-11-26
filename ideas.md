@@ -421,3 +421,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-26 (dev): rescuer art wired (camp overlay, shaman b32, ghost, pagans, mule still). Idea: the caravan camp as a roadside event in other zones (the overlay works on any open scene). Left: gravedigger art, sin push (thinker), own potion.
 - 2026-11-26 (dev): viewer always tall; scenes with no tall art show black above. Artist: list of scenes still without tall art needed (tools/wire_tall.py). The old 64-row-only code paths (ui.tallScene false) are now dead and could be cleaned.
 - 2026-11-26 dev: tools/faith_sim.py runs faith playtests in prayers; sim set= takes group.key; first results in docs/playtests/2026-11-26-faith-*; idle/active faith hits the cap (~220 prayers) by L100.
+- 2026-11-26 dev: wired 14 tall scenes (la_tundra, el_bosque). Underground options (cueva1, gruta3, mina1, volcan3, duenon4 canyon) wait for the author's A/B.
