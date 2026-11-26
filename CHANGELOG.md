@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- City roofs: the seven tall city scenes (Ciudad 1 to 5, altar, statue) have taller, less squashed roofs in a mix of tile and slate, hipped and mansard, with dormers and chimneys. Only the top rows changed; the 64 rows shown by default are the same.
 - Winning back an Atheist: the god's free revive now counts double for him (belief +4 instead of +2, and the god gets back faith: 3 prayers' worth, 6 for an Atheist; placeholders in config.belief.weights.reviveAtheist and config.faith.reviveFe).
 - Hotspots: the author's idea notes in the Prairie (town, swamp, castle, tower, tundra, city) and the south-east bridge are now real exit spots; the Dunas and Desierto taverns are place spots (inn); the ladder spots got labels; the dice house stays a note until it has an event.
 - Hotspots dev tool: a "What are the kinds?" legend explains exit, mouth, place and dream (also as tooltips of the kind menu), and there is a new kind, idea: a free-text note for the author that the game ignores.
