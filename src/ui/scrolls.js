@@ -489,9 +489,9 @@ function updateHelp(){
         switchRow('soundToggle', 'Sound') +
         sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '<img src="' + art('slider_vol_low') + '" data-w="7">', '<img src="' + art('slider_vol_high') + '" data-w="11">') +
         
-        '<div class="setRow"><b>Text in the console</b></div>' +
-        CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label)).join('') +
-        switchRow('fightToggle', 'Each round of a fight') +
+        '<div class="setRow">Text in the console</div>' +
+        CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label).replace('class="setRow"', 'class="setRow sub"')).join('') +
+        switchRow('fightToggle', 'Each round of a fight').replace('class="setRow"', 'class="setRow sub"') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
         (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
