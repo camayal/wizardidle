@@ -4,6 +4,15 @@ Notes saved from the dev tools' notes box (art mode), newest last: the technical
 filled in by the game, then the author's comment. A later note on the same test replaces an
 earlier one.
 
+## !! BIG ANNOUNCEMENT for artist: spells must follow the taller viewer (dev, 2026-11-26, author's order)
+
+The scene viewer is now taller (256x128 tall scenes, Settings > tall viewer), so every spell drawn for the old 64-row scene looks small in it. The author's verdict: **Wrath (the god's Smite) looks quite small and not very good in action.** Please redraw the spells for the new height, starting with the god's miracles:
+- **Wrath strike (spellWrathStrike_sword and _pillar):** today 32 x 64 per frame, 6 frames. Redo it tall: the sword or pillar of light should come down from the very top of the 128-row scene onto the enemy (frame about 48 to 64 wide x 128 tall, or tell dev your size and frame count; dev's `h` option in src/data/spells.js already takes any height). More impact: a flash at the top, the strike, a ground burst, a short glow that fades. The pillar (Devout) bigger and brighter than the sword.
+- **Mercy shield / Sanctuary (spellMercyShield, 40 px):** check it against the taller wizard area; scale up if it reads small.
+- **Providence, Weaken, Graze, herbs:** same check, and note which ones can stay.
+- **The regular spells** (fire, ice, lightning and the rest): pass over them afterwards and list which need a bigger or taller version; do not redraw all at once, start with Wrath.
+Ask dev for the wizard and enemy x, y and scale in the tall viewer before drawing (the old guesses were for 64 rows). Drop options in the review drop as usual; dev wires the one the author picks.
+
 ## Scenes and backgrounds
 
 ```
