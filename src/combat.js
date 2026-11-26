@@ -264,8 +264,9 @@ function scheduleSelfRevive() {
         run.fallBy = rescuer ? "rescuer" : "alone";
         beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
         const faithLost = isDoubting() ? 0 : state.player.hpBase * 1.2454654 * config.milestone.driftOnShrineSkipShare * (rescuer ? rescuer.share : 1);       // softer drain
-        faithChange(-faithLost, "gotUpAlone");
-        print(fx('Bad', rescuer ? `${rescuer.text} (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})` : `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
+        const taken = -faithChange(-faithLost, "gotUpAlone");       // what it really cost: faith can't go below 0
+        const cost = taken > 0 ? ` (${ui.spiritIcon}-${roundNumbertoLetter(taken)})` : "";
+        print(fx('Bad', rescuer ? `${rescuer.text}${cost}` : `${wizardName()} gets up on his own, but feels abandoned by you${cost}`));
         const rise = () => {
             fight.pjDead = false;
             if (rescuer) state.player.hp = Math.max(state.player.hp, state.player.hpBase * rescuer.hp);       // a rescuer heals him; getting up alone does not

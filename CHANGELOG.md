@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Getting up after a fall shows the faith he really lost (none, and no cost shown, when he had no faith left) instead of the full price.
 - The gravedigger (shovel over the shoulder, option a2) stands at the enemy's place when he raises the wizard (img/story/rescuer_digger.png, untested in a browser). All four rescuers now have art; his sin push is still not built.
 - The quest bubble's check (and the cross) reads the right way round again: the bubble body stays mirrored so its tail points at the stranger, and the mark inside is drawn back unmirrored (untested in a browser; the mirrored-fight case is left as it was).
 - The scene viewer is always tall now (author's order): the 'Taller scene viewer' setting is gone. A scene that has no tall art yet shows its regular picture from the bottom with black above, until the artist draws its tall version. Untested in a browser; the first check is every scene without a tall file (about 60) and the layout on phones.
