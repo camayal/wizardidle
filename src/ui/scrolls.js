@@ -491,9 +491,9 @@ function updateHelp(){
         switchRow('soundToggle', 'Sound') +
         sliderRow('volumeSlider', 'Volume', 'volumeName', Math.round(volumeScale() * 100) + '%', VOLUMES.length - 1, prefs.volume, '<img src="' + art('slider_vol_low') + '" data-w="7">', '<img src="' + art('slider_vol_high') + '" data-w="11">') +
         
-        '<div class="setRow setHead" id="consoleHead">' + (consoleOpen ? '&#9662; ' : '&#9656; ') + 'Text in the console</div>' +
-        (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label).replace('class="setRow"', 'class="setRow sub"')).join('') +
-        switchRow('fightToggle', 'Each round of a fight').replace('class="setRow"', 'class="setRow sub"') : '') +
+        '<div class="setRow setHead" id="consoleHead" style="cursor:pointer; user-select:none">' + 'Text in the console ' + (consoleOpen ? '&#9662;' : '&#9656;') + '</div>' +
+        (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, l.label).replace('class="setRow"', 'class="setRow sub" style="margin-left:2.2em; margin-bottom:1.6em"')).join('') +
+        switchRow('fightToggle', 'Each round of a fight').replace('class="setRow"', 'class="setRow sub" style="margin-left:2.2em; margin-bottom:1.6em"') : '') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
         (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
