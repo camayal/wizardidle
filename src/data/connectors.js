@@ -65,7 +65,6 @@ for (const [c, scenes] of Object.entries(connectorScenes)) addScenes(c, `the ${c
 for (const [c, s] of Object.entries(stairScenes)) addScenes(c, "the Heidan stairs", s.scenes);
 for (const [b, d] of Object.entries(borderScenes)) addScenes(b, "the border between the Grotto and Dueñon", [d.scene]);
 addScenes("pier", "the pier", ["pier_land", "pier_end"]);
-addScenes("enter_mine_S", "the south mine tunnel", ["enter_mine_S"]);
 addScenes("ladder_cueva4_mina2", "the ladder between the cave and the mine", ["ladder_cueva4_mina2_cave", "ladder_cueva4_mina2_mine"]);
 // A mouth's name is mouth_<outside zone(s)>_<inside zone> in the Spanish short names (pantano, cueva...): the label says them in English.
 const zoneEnglish = (short) => { const k = Object.keys(zones).find((z) => z.toLowerCase().replace(/^(el|la|las)_/, "") === short); return k ? zones[k].name : short; };

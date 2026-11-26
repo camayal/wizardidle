@@ -1,5 +1,6 @@
 # Changelog
 
+- Removed the leftover south mine tunnel scene (enter_mine_S): the south mine mouth now goes straight between outside and underground like the other mouths.
 - Tall art for the five underground zones (la_cueva, la_gruta, la_mina, el_duenon, el_volcan: 39 scenes) wired in img/places/tall and tallScenes. Not yet seen in a browser.
 - Tall art for the tundra and forest (14 scenes, style A) wired in img/places/tall and tallScenes.
 - Faith playtests (tools/faith_sim.py, sim `set=faith.reviveFe:5` style dotted keys, history line has `pray`): see docs/playtests/2026-11-26-faith-*.

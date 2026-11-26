@@ -423,3 +423,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-26 dev: tools/faith_sim.py runs faith playtests in prayers; sim set= takes group.key; first results in docs/playtests/2026-11-26-faith-*; idle/active faith hits the cap (~220 prayers) by L100.
 - 2026-11-26 dev: wired 14 tall scenes (la_tundra, el_bosque). Underground options (cueva1, gruta3, mina1, volcan3, duenon4 canyon) wait for the author's A/B.
 - 2026-11-26 dev: wired 39 tall underground scenes (cueva, gruta, mina, duenon, volcan). Left: el_castillo, la_torre, casadados and 28 connectors still lack tall art; tundra/bosque were already in.
+- 2026-11-26 dev: removed enter_mine_S (scene, image, MINE_TUNNEL in travel.js); mouth_dunas_mina uses plain doorSteps.
