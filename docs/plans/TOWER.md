@@ -25,9 +25,10 @@ Answered by the author on 2026-11-26.
 | 13. Knowing the floor | **Only the minimap shows it.** No console line, no plaque, no banner colours. |
 | 14. Landing on a floor | **In the stair room** (the scene with the arch), and he moves on from there to the next rooms, one room linking to two others, as in the sketches. |
 | 15. What the mages close at 149 | **Floors 6 and 7, from 149 until XI: the stair stops at floor 5.** The throne, the portals and the king's room are all shut. |
-| 16. Telling floors apart on the minimap | **Odd and even floors differ:** "odd for odd, even for even". The odd general floors (1, 3, 5) share one room count and layout (4 rooms), the even ones (2, 4) share another (3 rooms), so the floor's shape on the minimap tells odd from even. How it tells 3 from 5 (or 2 from 4): open decision 18. |
+| 16. Telling floors apart on the minimap | **Odd and even floors differ:** "odd for odd, even for even". The odd general floors (1, 3, 5) share one room count and layout (4 rooms), the even ones (2, 4) share another (3 rooms), so the floor's shape on the minimap tells odd from even. How it tells 3 from 5 (or 2 from 4): decision 18. |
 | 17. The altar and statue scenes | **They also become ordinary walkable rooms**, on floors 4 and 1; the altar and statue events keep using the same art. |
-| Rooms of several scenes (the author, unasked) | **A room can span several scenes.** The prison (B1) is 3 scenes; Midas's room (7) at least 4 scenes plus a top landing, a stair scene where the spiral only goes down, with wooden rails; the ground floor at least 2 scenes; every other floor at least 2 scenes. Each drawn picture counts as one scene of its room. |
+| Rooms of several scenes (the author, unasked) | **A room can span several scenes.** The prison (B1) is 3 scenes; Midas's room (7) at least 4 scenes plus a top landing, a stair scene where the spiral only goes down, with wooden rails; the ground floor at least 2 scenes, though it is one room. No minimum for the other floors. Each drawn picture counts as one scene of its room. |
+| 18. Telling floor 3 from 5 (or 2 from 4) | **A small column of ten marks beside the minimap plan, his floor lit.** |
 
 ## What exists today
 
@@ -87,8 +88,6 @@ Legend: **have** = drawn, **gap** = still to draw (briefs below). Priority A = t
 | **B1** | **The prison** | ★ **The prison ring** → jailer's post (`la_Torre_carcelero`, gap A) · cells (`la_Torre5`, have) · torture room (`la_Torre4`, have) | start |
 | **B2** | **What they hid** | ★ Crypt of the founders (`la_Torre_cripta`, gap A) · Artifact vault (`la_Torre_boveda`, have, redo asked) · Cistern (`la_Torre_cisterna`, gap B) | Midas dead |
 | **Every floor** | The way between floors | Spiral stair (`la_Torre_escalera`, connector, have; one scene for all) | |
-
-**Every floor has at least 2 scenes:** G, B1 and 7 through their multi-scene rooms, the others through their rooms of one scene each.
 
 **Totals:** 26 rooms on 10 levels, made of **33 scenes**, plus the exterior, the stair and the 2 gate scenes: **37 scenes in all. 15 drawn, 22 still to draw:** 11 priority A (8 stair scenes, the top landing, the 2 gate scenes), 8 B, 3 C. Of the drawn, the vault still has a redo asked.
 
@@ -173,7 +172,7 @@ Nudges stay nudges: followed by belief, one touch per scene visit, no marks (HOT
 
 ### The sub-map
 
-When he is anywhere in the Tower, the map scroll shows **the tower sub-map** instead of the world map: **the plan of the floor he is on**, drawn like the author's sketches (round, the stair in the centre, the rooms as slices, the marker in his room whichever of its scenes he is in). Five shapes: G and 7 as one room each, the odd general floors (4 slices), the even ones (3 slices, also used by B2), 6 in two halves, and B1 as the ring of cells. This is the only place the floor is shown; how it tells floors of the same kind apart is open decision 18. The world map keeps the Tower as one spot. The castle, city and town sub-maps can follow the same pattern; the author's sketches for them are noted in docs/ideas/world.md.
+When he is anywhere in the Tower, the map scroll shows **the tower sub-map** instead of the world map: **the plan of the floor he is on**, drawn like the author's sketches (round, the stair in the centre, the rooms as slices, the marker in his room whichever of its scenes he is in). Five shapes: G and 7 as one room each, the odd general floors (4 slices), the even ones (3 slices, also used by B2), 6 in two halves, and B1 as the ring of cells. Beside the plan, **a small column of ten marks, one per level from B2 to 7, with his floor lit** (decision 18): this is the only place the floor is shown, and it tells floors of the same kind apart. The world map keeps the Tower as one spot. The castle, city and town sub-maps can follow the same pattern; the author's sketches for them are noted in docs/ideas/world.md.
 
 ## What unlocks when
 
@@ -207,12 +206,11 @@ Each one is described as what it does; the numbers wait for playtests.
 
 ## Order of work
 
-1. **The author answers open decision 18** (below); it only shapes the sub-map art.
-2. **Artist:** the vault redo, then the A gaps (the gate pair, the stair scenes floor by floor from G up, the top landing, B1 and B2), then B, then C. Each to the review drop for the author's check.
-3. **Dev:** the floors as data (each scene a stage with its `floor` and room; scenes of a room in a row; rooms joined round the ring as plain moves; the altar and statue scenes as stages too, their events unchanged), the stair connector between floors, the tower gate pair, the story locks (warded floors, the 139 climb, the new `midasDead` flag opening the portal room, floor 7 and B2; floors 6 and 7 shut from 149 to XI).
-4. **Artist:** the tower sub-map, one plan per shape. **Dev:** the map scroll shows it inside the Tower.
-5. **Author:** places the object hotspots in each new scene (Modes > Hotspots).
-6. **Later:** greenhouse gathering and brewing and the scriptorium with professions; the portal network with the story.
+1. **Artist:** the vault redo, then the A gaps (the gate pair, the stair scenes floor by floor from G up, the top landing, B1 and B2), then B, then C. Each to the review drop for the author's check.
+2. **Dev:** the floors as data (each scene a stage with its `floor` and room; scenes of a room in a row; rooms joined round the ring as plain moves; the altar and statue scenes as stages too, their events unchanged), the stair connector between floors, the tower gate pair, the story locks (warded floors, the 139 climb, the new `midasDead` flag opening the portal room, floor 7 and B2; floors 6 and 7 shut from 149 to XI).
+3. **Artist:** the tower sub-map, one plan per shape and the column of ten floor marks. **Dev:** the map scroll shows it inside the Tower.
+4. **Author:** places the object hotspots in each new scene (Modes > Hotspots).
+5. **Later:** greenhouse gathering and brewing and the scriptorium with professions; the portal network with the story.
 
 ## Answers from dev (2026-11-26)
 
@@ -226,6 +224,4 @@ The questions sent to dev, and its answers (read-only, no code changed):
 
 ## Open decisions
 
-Recommended option first.
-
-18. **How the minimap tells floor 3 from floor 5 (or 2 from 4)**, since floors of a kind share a shape. (a) A small column of ten marks beside the plan, his floor lit. (b) The floor's number written under the plan, like the captions on the sketches. (c) A small side view of the whole tower beside the plan. (d) Add or talk first.
+None open. Every Tower decision so far is in the Decisions table.
