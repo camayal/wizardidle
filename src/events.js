@@ -513,6 +513,10 @@ function aroundCross() {
     return { x: CROSS_X - 16 + Math.round((looksRandom() - 0.5) * 70), y: Math.round(looksRandom() * 26) };
 }
 
+// What he says when the god's hint made the study work: inspiration, never obedience (author, 2026-11-25).
+const GUIDED_FIND = "is guided to understand the,is struck by a sudden inspiration reading the,finds the meaning of the,is led to see the true sense of the";
+const GUIDED_STATUE = "is guided to understand the statue,is struck by a sudden inspiration before the statue,sees the statue from a new perspective and understands it";
+
 function studyEV() {
     const book = run.studyBook;       // the shelves were pointed at (src/nudge.js): a book, never a statue
     run.studyBook = false;
@@ -567,10 +571,11 @@ function findStatue(){
         break;
         case 2:
         //examine and get or not
-        if (studyFocus() || YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
+        const guided = studyFocus();      // the god pointed at it: the study succeeds, and the line says he was guided
+        if (guided || YesOrNot(stat("pStudy"),0.15)){//increase the prob a little to avoid never activate 
             stats.count("study.statueSuccess");
             spell("spellStudyGood_15",true,0,0,overStatue());
-            learnTxt = pickRandomItem("finds powerful information in the statue,learns new mystical arts from the statue's inscriptions,feels the power of the statue");
+            learnTxt = pickRandomItem(guided ? GUIDED_STATUE : "finds powerful information in the statue,learns new mystical arts from the statue's inscriptions,feels the power of the statue");
             const result = statueObj[`statue_${state.zone.current}`].event()
         if(result == "hydraMysteryResolved"){
             //play hydra sound
@@ -651,11 +656,12 @@ function findRuneOrBook(){
         run.previousEvent = "findRuneorBook"
         break;
         case 2:
-        if (studyFocus() || YesOrNot(stat("pStudy"),0)){
+        const guided = studyFocus();      // the god pointed at it: the study succeeds, and the line says he was guided
+        if (guided || YesOrNot(stat("pStudy"),0)){
             playSound("statUp");
             stats.count("study.success");
             spell("spellStudyGood_15",true,0,0,aboveFind());
-            learnTxt = pickRandomItem("finds useful information in the,learns new things from the,feels the power of knowledge in the");
+            learnTxt = pickRandomItem(guided ? GUIDED_FIND : "finds useful information in the,learns new things from the,feels the power of knowledge in the");
             //exit loop, sucess study
             const statToIncrease = statObj[statObj.random()];
             const learned = statObj.increase(statToIncrease.code);

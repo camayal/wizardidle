@@ -3,7 +3,7 @@
 // all the same). An Atheist who follows thinks it was his own idea.
 export const NUDGE_TEXTS = {
     devout: {
-        yes: ["{name} bows his head: \"I will obey you.\" {then}", "\"As you wish.\" {then}"],
+        yes: ["{name} lifts his eyes, as if someone had whispered to him. {then}", "A quiet certainty settles on {name}: this is the way. {then}", "{name} feels a warm light guiding him. {then}"],
         no: ["{name} hears you but his mind is elsewhere; he lets it pass."],
     },
     believer: {
