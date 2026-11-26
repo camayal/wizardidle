@@ -157,15 +157,6 @@ export const hotspots = {
     ],
     "la_torre1": [
         {
-            "x": 226,
-            "y": 3,
-            "w": 26,
-            "h": 32,
-            "kind": "exit",
-            "to": "la_Torre2",
-            "label": "the wooden door"
-        },
-        {
             "x": 14,
             "y": 3,
             "w": 76,
@@ -191,28 +182,6 @@ export const hotspots = {
             "kind": "dream",
             "to": "nightmare",
             "label": "the palantir"
-        }
-    ],
-    "la_torre2": [
-        {
-            "x": 28,
-            "y": 6,
-            "w": 26,
-            "h": 30,
-            "kind": "exit",
-            "to": "la_Torre1",
-            "label": "the wooden door"
-        }
-    ],
-    "la_torre3": [
-        {
-            "x": 194,
-            "y": 2,
-            "w": 30,
-            "h": 34,
-            "kind": "exit",
-            "to": "la_Torre5",
-            "label": "the dark archway"
         }
     ],
     "ladder_cueva4_mina2_cave": [

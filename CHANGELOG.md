@@ -7,6 +7,7 @@
 - Faith playtests (tools/faith_sim.py, sim `set=faith.reviveFe:5` style dotted keys, history line has `pray`): see docs/playtests/2026-11-26-faith-*.
 
 ## Unreleased
+- Tower: removed the three door exit hotspots (la_torre1 and 2 wooden doors, la_torre3 dark archway); the bookshelves and palantir spots stay.
 - Removed the unused bare img/places/casadados.png (the dice houses are zone-prefixed with their own art) and its media.js rule.
 - Tall art for the seven castle scenes (el_castillo1 to 5, altar, estatua) wired in img/places/tall and tallScenes. Not yet seen in a browser.
 - Castle gate connector pair wired (gate_castillo outside with moat and drawbridge, gate_castillo_in inside with steps and braziers; tall versions too): art, media rule, tallScenes and the scene registry. Not linked on the travel graph yet. Untested in a browser.
