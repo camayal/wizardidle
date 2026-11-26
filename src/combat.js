@@ -29,6 +29,7 @@ import { beliefMoment, isDoubting, selfReliance } from './belief.js';
 import { art } from './media.js';
 import { faithChange } from './faith.js';
 import { grazeHit } from './hand.js';
+import { clearMiracles, sanctuaryAbsorb } from './miracles.js';
 
 
 
@@ -280,6 +281,7 @@ function clearFight() {
     fight.healedFrom = 0;
     fight.godHelped = false;
     fight.handGraze = false;
+    clearMiracles();
     fight.damageTaken = 0;
     fight.enemy = "";
     fight.enemyAndNumber = "";
@@ -556,6 +558,7 @@ function enemyAttack() {
     let enemyHit = getRandomInt(state.player.enemyAttackRange * 0.5, state.player.enemyAttackRange * stat("fAttack")) * fight.bossMultiplier;
     if (fight.enemy == "midas") enemyHit *= 2;
     if (isDivineSpell(fight.spellEnemy)) enemyHit *= 4;
+    enemyHit = sanctuaryAbsorb(enemyHit);       // a Mercy god's Sanctuary takes the hit whole
     enemyHit = grazeHit(enemyHit);      // an Atheist's invisible hand may turn a killing hit into a graze
     // belief: the god's last heal saved him if this hit would have killed him without it
     if (fight.healedFrom && enemyHit >= fight.healedFrom && state.player.hp - enemyHit > 0) beliefMoment("savedFromKillingBlow");

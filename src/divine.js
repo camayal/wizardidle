@@ -22,6 +22,7 @@ import { faithChange } from './faith.js';
 import { handHelpWizard, handWeakenEnemy } from './hand.js';
 import { calculateFe } from './wizard.js';
 import { signTouch } from './winback.js';
+import { sanctuaryOnHeal, smiteFor } from './miracles.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -103,6 +104,7 @@ function healByTouch() {
         updateHeading();
         playSound("heal");
         spell("spellHeal_8", true);
+        sanctuaryOnHeal();
         printDivine(`${wizardName()} feels a healing touch and recovers ${ui.healIcon}${roundNumbertoLetter(healHit)}`);
     }
 }
@@ -124,10 +126,14 @@ function npcBtn(){
             divineHit = faithLost / getRandomInt(1,3);//update divine hit
         }
 
-            const spellId = getSpell(20);
+            const smite = smiteFor();       // a Wrath god's touch is a Smite
+            const spellId = smite ? smite.spell : getSpell(20);
             spell( spellId,false);
             let moment = "touch";
-            if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
+            if (smite) {
+                divineHit = Math.round(divineHit * smite.bonus);
+                txt = "sees a Smite fall from above - ";
+            } else if (spellId == "spellChispasMulti_12" || spellId == "spellRainMultiColor_24" || spellId == "spellColorSpin_16"){
                 const superCritic = config.belief.superCriticChance > 0 && YesOrNot(config.belief.superCriticChance, 0);
                 divineHit = Math.round(divineHit) * (superCritic ? config.belief.superCriticMultiplier : 8) //if is one of the divine powers
                 txt = superCritic ? "sees divine wrath crush the enemy - " : "watches divine wrath destroy the enemy - ";
