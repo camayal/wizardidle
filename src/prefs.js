@@ -28,14 +28,14 @@ const CONSOLE_LINES = [
     { id: 'journey', label: 'The journey (travel, finds, inns...)' },
 ];
 
-const DEFAULTS = { textSize: 'normal', sound: true, volume: 3, wake: false, shake: true, vibrate: true, fightLines: true, ...Object.fromEntries(CONSOLE_LINES.map(l => ['line_' + l.id, true])) };
+const DEFAULTS = { textSize: 'normal', sound: true, volume: 3, wake: false, shake: true, vibrate: true, fightLines: true, tallViewer: false, ...Object.fromEntries(CONSOLE_LINES.map(l => ['line_' + l.id, true])) };
 const prefs = { ...DEFAULTS };
 
 try {
     const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || 'null');
     if (saved && TEXT_SIZES.some(t => t.id == saved.textSize)) prefs.textSize = saved.textSize;
     if (saved) {
-        for (const key of ['sound', 'wake', 'shake', 'vibrate', 'fightLines', ...CONSOLE_LINES.map(l => 'line_' + l.id)]) if (typeof saved[key] == 'boolean') prefs[key] = saved[key];
+        for (const key of ['sound', 'wake', 'shake', 'vibrate', 'fightLines', 'tallViewer', ...CONSOLE_LINES.map(l => 'line_' + l.id)]) if (typeof saved[key] == 'boolean') prefs[key] = saved[key];
         if (Number.isInteger(saved.volume) && saved.volume >= 0 && saved.volume < VOLUMES.length) prefs.volume = saved.volume;
     }
 } catch (e) { /* no storage: defaults */ }

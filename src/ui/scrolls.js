@@ -13,7 +13,7 @@ import { detectmob, layoutPortrait, responsiveLayout } from './layout.js';
 import { prefs, CONSOLE_LINES, DEFAULTS, TEXT_SIZES, VOLUMES, setTextSize, setSound, setVolume, setWake, setFlag, buzz, resetPrefs, canVibrate, canWake, volumeScale } from '../prefs.js';
 import { realKill } from './menu.js';
 import { el } from './dom.js';
-import { consoleNotice } from './render.js';
+import { consoleNotice, loadBackground } from './render.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
 import { questNamesPlace, questPath, godDrop, godMove, godOrder, isSecretAt } from '../quests.js';
@@ -496,6 +496,7 @@ function updateHelp(){
         '<div class="setRow setHead" id="consoleHead" style="cursor:pointer; user-select:none">' + 'Text in the console ' + (consoleOpen ? '&#9662;' : '&#9656;') + '</div>' +
         (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, TAB + l.label)).join('') +
         switchRow('fightToggle', TAB + 'Each round of a fight') : '') +
+        switchRow('tallToggle', 'Taller scene viewer') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
         (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
@@ -580,6 +581,7 @@ function updateHelp(){
         el("consoleHead").onclick = () => { consoleOpen = !consoleOpen; updateHelp(); };
         flag("fightToggle", "fightLines");
         for (const l of CONSOLE_LINES) flag('line_' + l.id, 'line_' + l.id, consoleNotice);
+        flag("tallToggle", "tallViewer", () => { if (ui.currentBackGround) loadBackground(ui.currentBackGround, ui.mirrored); });
         flag("shakeToggle", "shake");
         flag("buzzToggle", "vibrate", () => buzz(60));
         if (el("wakeToggle")) drawToggle(el("wakeToggle"), su, () => prefs.wake, () => setWake(!prefs.wake));

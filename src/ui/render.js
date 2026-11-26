@@ -110,7 +110,7 @@ function loadBackground(back, mirror = false) {
     placeDivine();
     showHotspots(back);             // its clickable spots (a new scene visit)
     // the old background stays until the new image has loaded (no flash of the page behind)
-    const tall = tallScenes.has(back.toLowerCase()), file = tall ? `tall_${back.toLowerCase()}` : back.toLowerCase();     // no double-height art: the regular scene, and the viewer shrinks back
+    const tall = !!prefs.tallViewer && tallScenes.has(back.toLowerCase()), file = tall ? `tall_${back.toLowerCase()}` : back.toLowerCase();     // no double-height art: the regular scene, and the viewer shrinks back
     withImage("background", art(file), () => {
         if (tall != ui.tallScene) { ui.tallScene = tall; responsiveLayout(); }      // the viewer, its frame and the console change size
         if (tall) {      // drawn from the bottom: an interior (96 rows) leaves black above
