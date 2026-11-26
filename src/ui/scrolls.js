@@ -498,7 +498,6 @@ function updateHelp(){
         (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, TAB + l.label)).join('') +
         switchRow('fightToggle', TAB + 'Each round of a fight') +
         switchRow('fxToggle', TAB + 'Text effects') : '') +
-        switchRow('tallToggle', 'Taller scene viewer') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
         (canWake() ? switchRow('wakeToggle', 'Keep the screen awake') : '') +
@@ -584,7 +583,6 @@ function updateHelp(){
         flag("fightToggle", "fightLines");
         flag("fxToggle", "textFx");
         for (const l of CONSOLE_LINES) flag('line_' + l.id, 'line_' + l.id, consoleNotice);
-        flag("tallToggle", "tallViewer", () => { if (ui.currentBackGround) loadBackground(ui.currentBackGround, ui.mirrored); });
         flag("shakeToggle", "shake");
         flag("buzzToggle", "vibrate", () => buzz(60));
         if (el("wakeToggle")) drawToggle(el("wakeToggle"), su, () => prefs.wake, () => setWake(!prefs.wake));
