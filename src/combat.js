@@ -30,6 +30,7 @@ import { art } from './media.js';
 import { faithChange } from './faith.js';
 import { grazeHit } from './hand.js';
 import { clearMiracles, providenceHit, sanctuaryAbsorb } from './miracles_spells.js';
+import { milestone } from './milestones.js';
 import { clearPrayer, despairCheck, hardened } from './prayers.js';
 
 
@@ -86,7 +87,7 @@ function defeatEnemy() {
     const rounds = run.multipleEventsCounter - 1;      // before endEvent starts the count again
     endEvent();
     // belief: a close call he came through on his own
-    if (!fight.godHelped && state.player.hp < state.player.hpBase * config.belief.closeCallLine) beliefMoment("closeCall");
+    if (!fight.godHelped && state.player.hp < state.player.hpBase * config.belief.closeCallLine) { beliefMoment("closeCall"); milestone("closeCall"); }
     if (fight.enemy == "el_capricor") {
         // another wizard already killed "the last" one: it came back, and died again
         const again = world.cemetery.some((dead) => dead.achievements?.logro_ultimocapricor);
@@ -99,6 +100,7 @@ function defeatEnemy() {
         stats.count("kill.bosses", 1, { world: true });
         stats.count(`kill.boss.${fight.enemy}`);
         stats.first("first.bossKill");
+        milestone("boss");
         logro.set(logro.logro_primerbossderrotado);
     } else if (fight.hydraCombat) {
         stats.count("kill.hydras", 1, { world: true });
@@ -259,7 +261,7 @@ function scheduleSelfRevive() {
         fight.autorevive = "";
         run.fallBy = "alone";
         beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
-        const faithLost = state.player.hpBase * 1.2454654;
+        const faithLost = isDoubting() ? 0 : state.player.hpBase * 1.2454654 * config.milestone.driftOnShrineSkipShare;       // softer drain
         faithChange(-faithLost, "gotUpAlone");
         print(fx('Bad', `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
         fight.pjDead = false;

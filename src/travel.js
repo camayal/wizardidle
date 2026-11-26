@@ -7,6 +7,7 @@ import { borderScenes, bridgeLeftZone, connectorScenes, DOOR_STOP, mouthDoors, p
 import { pickRandomItem, YesOrNot } from './utils.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
+import { milestone } from './milestones.js';
 import { run, ui } from './runtime.js';
 import { endEvent, event, nextEvent, startEvent } from './events.js';
 import { startCrossingFight } from './combat.js';
@@ -298,6 +299,7 @@ function getZone() {
         state.zone.current = randomLocality.match(/\D+/).toString();//extract no digits
         state.zone.stage = Number(randomLocality.match(/\d+/));//extract digits
         stats.count(`explore.zone.${state.zone.current}`);
+        if (stats.get(`explore.zone.${state.zone.current}`) == 1) milestone("zone");      // a zone seen for the first time
         stats.count(`explore.scene.${randomLocality}`);
         onStep();
         state.zone.stay = 0;

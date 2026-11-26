@@ -19,6 +19,7 @@ export const config = {
             savedFromKillingBlow: 8,           // a heal touch that keeps him alive through the enemy's next hit
             lowHpHeal: 5,
             prayerAnswered: 10,                // the god heals him inside the prayer window (src/prayers.js)
+            silence: -1,                       // one tick of the god's silence (src/milestones.js)
             expectedMissed: -4,                // extra, when the ignored prayer came after he had learnt to count on the god
             prayerIgnored: -8,                 // the window closes with no answer (he also gains Hardened Heart)
             finalBlow: 5,                      // the god's touch kills the enemy
@@ -57,6 +58,15 @@ export const config = {
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
     // The invisible hand (an Atheist's touches, src/hand.js): placeholders, tune with the playtests.
+    milestone: {
+        prayerFe: 1,               // his own prayer gives this many prayers' worth of faith (calculateFe)
+        prayerChance: { devout: 1, believer: 0.75, doubter: 0.4, atheist: 0 },      // per rest and level up
+        boss: 3, chapter: 5, zone: 2, closeCall: 1,                                 // milestone faith, in prayers' worth
+        silenceMs: 600000,         // the god silent this long: belief drifts down by 1 per tick (a tick a minute while it lasts)
+        silenceFloor: 20,          // ... but silence alone never takes him below his start
+        driftPerWorldHour: 6,      // the same drift while the game is closed
+        driftOnShrineSkipShare: 0.5,   // softer drains: skipping a shrine or getting up alone costs this share (nothing for a Doubter or Atheist)
+    },
     prayer: {
         hpLine: 0.2,               // a boss fight below this share of his HP: he prays
         expectAfter: 3,            // god's touches since the last ignored prayer that count as help he expects

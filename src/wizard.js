@@ -6,6 +6,7 @@ import { getRandomInt } from './utils.js';
 import { config, RAREMULTIPLIER } from './config.js';
 import { selfReliance } from './belief.js';
 import { hardened } from './prayers.js';
+import { milestone, ownPrayer } from './milestones.js';
 import { state } from './state.js';
 import { recordLevel, stats } from './stats.js';
 import { fight, ui } from './runtime.js';
@@ -88,10 +89,12 @@ function levelUP() {
 
     setLevelValues();
     recordLevel();
+    ownPrayer();
     updateHeading();
 
     //call history if exists
     if(chapter[`lvl${state.player.lvl}`]){
+        milestone("chapter");
         openHistory()
     }else{//avoid change lvl skin automatically, for levels that needs some previous change (before get corruption staff, en 149, etc)
         drawWizard();

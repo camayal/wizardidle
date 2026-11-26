@@ -23,6 +23,7 @@ import { handHelpWizard, handWeakenEnemy } from './hand.js';
 import { calculateFe } from './wizard.js';
 import { signTouch } from './winback.js';
 import { faceLogro, faceWord, sanctuaryOnHeal, smiteFor } from './miracles_spells.js';
+import { godActed } from './milestones.js';
 import { noteHelp, prayerAnswered } from './prayers.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
@@ -42,6 +43,7 @@ const RINGS_MS = 650;
 
 // Every touch of the god counts towards "Feel the divine touch".
 function touchedCheck() {
+    godActed();
     faceLogro();
     noteHelp();
     if (stats.get("god.touches") + stats.get("god.heals") + stats.get("god.hits") >= config.touchedAchievement) logro.set(logro.logro_tocado);

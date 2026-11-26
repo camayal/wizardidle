@@ -5,6 +5,9 @@
 import { config } from './config.js';
 import { state } from './state.js';
 import { stats } from './stats.js';
+import { godActed } from './milestones.js';
+
+const NOT_ACTS = ['skippedShrine', 'gotUpAlone', 'sin', 'lostHope', 'away'];      // faith losses that are not the god acting
 
 // The most faith he can hold: it grows with his strength (hpBase), so spare gold cannot snowball past it.
 export const faithMax = () => Math.max(config.faith.maxMin, state.player.hpBase * config.faith.maxPerHp);
@@ -18,7 +21,10 @@ export function faithChange(amount, source) {
     if (amount > 0) {
         stats.add(`faith.gain.${source}`, Math.round(done));
         if (done < amount) stats.add('faith.capped', Math.round(amount - done));      // gain lost to the max
-    } else if (amount < 0) stats.add(`faith.spent.${source}`, Math.round(-done));
+    } else if (amount < 0) {
+        stats.add(`faith.spent.${source}`, Math.round(-done));
+        if (!NOT_ACTS.includes(source)) godActed();      // the god did something: no silence
+    }
     stats.max('faith.highest', Math.round(p.faith));
     return done;
 }

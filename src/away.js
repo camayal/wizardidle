@@ -19,6 +19,7 @@ import { printIn, wizardName, poemInDark } from './ui/render.js';
 const print = printIn('journey');      // the console category (Settings: Text in the console)
 import { zones } from './data/zones.js';
 import { poems, awayText } from './data/awayTexts.js';
+import { driftAway } from './milestones.js';
 import { faithAfter, goldAfter, levelsGained, permadeathChance, worldHours } from './awayMath.js';
 import { faithChange } from './faith.js';
 
@@ -60,6 +61,7 @@ export function settleAway(rand = Math.random) {
     }
     if (hours) {
         faithChange(faithAfter(p.faith, hours) - p.faith, 'away');
+        driftAway(hours);
         p.gold = goldAfter(p.gold, hours, rand());
         for (let n = levelsGained(p.lvl, hours, rand(), thresholds()); n > 0; n--) quietLevel();
         stats.add("away.worldHours", hours);

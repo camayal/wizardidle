@@ -31,6 +31,7 @@ import * as quests from './quests.js';
 import { moves } from './travelGraph.js';
 import { beliefMoment, isAtheist, isDoubting, shrineChance } from './belief.js';
 import { faithChange } from './faith.js';
+import { ownPrayer } from './milestones.js';
 import { endFind, nudgeEvent, studyFocus, tickNudge } from './nudge.js';
 import { showFindSpot } from './ui/hotspots.js';
 
@@ -409,7 +410,7 @@ function prayEV(){
             return;
         }
         beliefMoment(isDoubting() ? "passedShrine" : "skippedShrine");      // the way back for a Doubter
-        const faithLost = calculateFe();
+        const faithLost = isDoubting() ? 0 : calculateFe() * config.milestone.driftOnShrineSkipShare;       // softer drain
         print(`${wizardName()} ${textCapel} but does not go in, and walks on (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
         faithChange(-faithLost, "skippedShrine");
         updateHeading();
@@ -814,6 +815,7 @@ function wakeUp(placesWithInn) {
     if (!placesWithInn) clearNPC();       // at an inn whoever is inside (the old merchant) stays until the scene fades (leavePlace)
     print(`${wizardName()} ${pickRandomItem(textRecover)} (${ui.healIcon}${roundNumbertoLetter(rested)})`);
     run.restAtInn = false;
+    ownPrayer();
     endEvent();
     if (placesWithInn) leavePlace(showStage, nextEvent);    // out through the door
     else exploreOn();                                      // camping: he does not go back to his place, he walks on from where he woke

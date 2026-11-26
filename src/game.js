@@ -20,8 +20,9 @@ import * as loop from './loop.js';
 import { art } from './media.js';
 import { settleAway, watchHidden } from './away.js';
 import { faithChange } from './faith.js';
+import { silenceTick } from './milestones.js';
 
-const version = "2.19.911"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
+const version = "2.19.912"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * headLevelShare(ui.currentBackGround);      // row 28 of 256; row 24 in the connector scenes
@@ -93,6 +94,7 @@ function start() {
     //load previous locality random scenery
     if (away == "none" || away == "drift") nextEvent();    // fallen (soft): waits for the god's touch; dead: the poem
     startWatchdog();
+    loop.every("silence", silenceTick, 60000);      // belief drifts down while the god is silent (src/milestones.js)
     //trigger event selecter
 
 };
