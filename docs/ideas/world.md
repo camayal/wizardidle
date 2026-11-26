@@ -38,6 +38,8 @@ Map, scenes and exploration ideas waiting their turn (the scenes plan is docs/pl
   - *Castle top towers:* the four corner tower tops as separate small rooms, each reached from its tower.
   - *City map:* a walled city with the **forest** along the top; a **farm** and a **buildings** block inside the top wall, many **B** blocks (buildings), a **fountain**, a **gate** in the right wall, two small towers along the south; the **road** runs along the south edge; below it the **lake** on the left and **farm** fields with a small house on the right.
 
+- **Sketch-style maps** (the author, 2026-11-26; future, to test): try hand-drawn ink plans for the maps, like the author's minimap sketches and the tower floor maps the artist is drafting, instead of the current realistic "satellite view" world maps. A test first, then the author decides.
+
 ## Open questions
 
 - Dynamic scenes: which kinds of change matter most (layer variety, day / night and weather, animation, scenes that remember, story changes, passers-by)? Do the layers `1`–`5` in *pradera y bosque* really match the five versions of each place? And which .pdn is the latest when there's a "- copia" (copy) with more layers than the original (e.g. Volcano 36 vs 27, Dunes 30 vs 25)?
