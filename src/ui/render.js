@@ -812,8 +812,10 @@ function showBubble(kind) {
         let bx = x - 14 * unit;
         if (ui.facing < 0 && c !== npcCanvas) bx = c.width - bx - bw;     // the enemy stands on the left now: the bubble follows him, its text unflipped
         if (!(ui.facing < 0 && c !== npcCanvas)) { ctx.save(); ctx.translate(bx + bw / 2, 0); ctx.scale(-1, 1); ctx.translate(-(bx + bw / 2), 0); }     // the picture is drawn mirrored so its tail points at the head (in the mirrored canvas that is the flip back, so the text reads right)
-        ctx.drawImage(img, bx, Math.max(0, y - 14 * unit), bw, 20 * unit);
-        ctx.restore();
+        const by = Math.max(0, y - 14 * unit), mirroredDraw = !(ui.facing < 0 && c !== npcCanvas);
+        ctx.drawImage(img, bx, by, bw, 20 * unit);
+        if (mirroredDraw) ctx.restore();
+        if (mirroredDraw && ui.facing >= 0) ctx.drawImage(img, 5, 2, 16, 9, bx + 5 * unit, by + 2 * unit, 16 * unit, 9 * unit);     // the body is mirrored for the tail, but the mark inside (check, cross, ...) is drawn back the right way round: its box is the same mirrored or not
     });
 }
 
