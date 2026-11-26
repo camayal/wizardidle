@@ -1,5 +1,7 @@
 # Changelog
 
+- Faith playtests (tools/faith_sim.py, sim `set=faith.reviveFe:5` style dotted keys, history line has `pray`): see docs/playtests/2026-11-26-faith-*.
+
 ## Unreleased
 - Getting up after a fall shows the faith he really lost (none, and no cost shown, when he had no faith left) instead of the full price.
 - The gravedigger (shovel over the shoulder, option a2) stands at the enemy's place when he raises the wizard (img/story/rescuer_digger.png, untested in a browser). All four rescuers now have art; his sin push is still not built.

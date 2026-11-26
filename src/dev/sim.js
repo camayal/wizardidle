@@ -49,6 +49,11 @@ function applySettings(text) {
     const applied = {}, unknown = [];
     for (const pair of (text || '').split(',').filter(Boolean)) {
         const [key, value] = pair.split(':');
+        if (key.includes('.')) {   // "faith.reviveFe:5": any config group and key
+            const [g, k] = key.split('.');
+            if (config[g] && k in config[g]) { config[g][k] = Number(value); applied[key] = Number(value); } else unknown.push(key);
+            continue;
+        }
         const group = ['balance', 'baseStats'].find((g) => key in config[g]);
         if (!group) { unknown.push(key); continue; }
         config[group][key] = Number(value);

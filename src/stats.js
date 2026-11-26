@@ -18,6 +18,7 @@
 // to this scheme without a migration (dev phase, old saves don't matter).
 
 import { state, world } from './state.js';
+import { config } from './config.js';
 import { run } from './runtime.js';
 import * as loop from './loop.js';
 
@@ -81,6 +82,7 @@ export function recordLevel() {
         lvl: state.player.lvl,
         playTimeMs: playTime(),
         faith: Math.round(state.player.faith),
+        pray: Math.round(state.player.hpBase * config.balance.rGold * 3),   // one prayer's worth of faith on average (calculateFe), the unit of the faith playtests
         gold: Math.round(state.player.gold),
         falls: stats.get('death.falls'),
         kills: stats.get('kill.enemies'),
