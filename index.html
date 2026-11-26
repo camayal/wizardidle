@@ -286,7 +286,7 @@
             @keyframes fxDivA { 0% { opacity: 0; text-shadow: 0 0 10px #ffe9a0; } 55% { opacity: 1; text-shadow: 0 0 8px #ffd45a, 0 0 2px #fff6c4; } 100% { opacity: 1; text-shadow: none; } }
             .fxLevel { animation: fxPop 0.5s ease-out 1, fxSweep 1.4s ease-in-out 0.3s 1 both; background: linear-gradient(100deg, currentColor 35%, #7dff6a 48%, #ffe36a 52%, currentColor 65%) 120% 0 / 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
             .fxLevel::before { content: ""; display: inline-block; margin-right: .45em; border: .32em solid transparent; border-bottom: .55em solid #7dff6a; border-top: 0; vertical-align: .05em; -webkit-text-fill-color: initial; }
-            @keyframes fxPop { 0% { transform: scale(0.8); opacity: 0; } 60% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1); } }
+            @keyframes fxPop { 0% { opacity: 0; transform: translateY(6px); } 100% { opacity: 1; transform: none; } }
             @keyframes fxSweep { from { background-position: 120% 0; } to { background-position: -20% 0; } }
             .fxAch { animation: fxSweep 1.4s ease-in-out 1 both; background: linear-gradient(100deg, currentColor 35%, #ffd23a 50%, currentColor 65%) 120% 0 / 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
             .fxBad { animation: fxShake 0.35s linear 1, fxRed 2s ease-out 1; }
