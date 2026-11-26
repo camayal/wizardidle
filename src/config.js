@@ -67,6 +67,7 @@ export const config = {
         minActs: 5,                // heals + hits needed before the god has a face (else Distant)
         sanctuaryHits: [1, 2, 3],  // hits a Sanctuary takes: Doubter, Believer, Devout
         sanctuaryPerFight: [1, 2, 3],   // Sanctuaries per fight, same order
+        providenceChance: 0.5,     // Distant god and Devout wizard: chance a killing hit leaves 1 HP (once per fight)
         smiteBonus: 1.5,           // a Smite hits this much harder than a plain touch
     },
     hand: {
