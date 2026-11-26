@@ -28,6 +28,16 @@ Map, scenes and exploration ideas waiting their turn (the scenes plan is docs/pl
 
 - **Discoveries in the scene** (2026-11-12, the author; **for the planner** about ingredients): a small blink appears at a random reachable spot in the scene; the wizard walks to it and discovers what is there: a rune or a book today, and later the professions' **ingredients** (gathering, `docs/plans/PROFESSIONS.md`). The study or find effect plays at its current size right above the found item. Statues: he walks to the statue to study it. Shrines: no walk; the prayer effect appears around the big cross. Dev builds the runes, books, statues and shrines part; ingredients come with professions.
 
+- **Portal network** (the author, 2026-11-26, from the Tower plan's decision 6; **future, not built now**): over time, as part of the story, the wizard finds portals placed at set points across the world, and they become quick travel. The Tower's portal room (floor 6, `la_torre_portales`: five coloured portals, plus a sealed variant) is the natural first one; the world map in Midas's top room (`la_Torre_mapa`) could show the portals found. Which points, how he finds them, what they cost and where they lead go to a plan when the story reaches it. See docs/plans/TOWER.md.
+
+- **The Tower's vault later** (the author, 2026-11-26, Tower plan decision 8): today the vault (`la_Torre_boveda`, B2) is Midas's personal collection, static set dressing. Maybe add story to it later, or let it change once the wizard controls the tower (after VII).
+
+- **Minimap sketches for other zones** (the author, 2026-11-26; review drop `minimaps ideas.zip`, WhatsApp jpegs; the Tower's sketches are used in docs/plans/TOWER.md): for future sub-maps, not decided.
+  - *Castle:* a square ring of wings round a central **patio**, drawn on the diagonal; the **front gate** on the side facing the **road**, a **back gate** on the far side facing the **Swamp**, a **tower** at two corners (corner blocks at the others), one wing marked **interior**.
+  - *Castle basement:* a square ring of corridors round a central **storage room**; the **stairs** at one corner; **rooms** along two sides and a **prison** along a third; doors marked between them.
+  - *Castle top towers:* the four corner tower tops as separate small rooms, each reached from its tower.
+  - *City map:* a walled city with the **forest** along the top; a **farm** and a **buildings** block inside the top wall, many **B** blocks (buildings), a **fountain**, a **gate** in the right wall, two small towers along the south; the **road** runs along the south edge; below it the **lake** on the left and **farm** fields with a small house on the right.
+
 ## Open questions
 
 - Dynamic scenes: which kinds of change matter most (layer variety, day / night and weather, animation, scenes that remember, story changes, passers-by)? Do the layers `1`–`5` in *pradera y bosque* really match the five versions of each place? And which .pdn is the latest when there's a "- copia" (copy) with more layers than the original (e.g. Volcano 36 vs 27, Dunes 30 vs 25)?
