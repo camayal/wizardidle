@@ -12,7 +12,7 @@ import { randomName } from './combat.js';
 import { event, nextEvent, startWatchdog } from './events.js';
 import { levelUP } from './wizard.js';
 import { playSound } from './audio.js';
-import { drawWizard, printIn, showStage, updateHeading, wizardName } from './ui/render.js';
+import { fx, drawWizard, printIn, showStage, updateHeading, wizardName } from './ui/render.js';
 const print = printIn('journey');      // the console category (Settings: Text in the console)
 import { defineObjectSize, getEM, responsiveLayout } from './ui/layout.js';
 import { el } from './ui/dom.js';
@@ -21,7 +21,7 @@ import { art } from './media.js';
 import { settleAway, watchHidden } from './away.js';
 import { faithChange } from './faith.js';
 
-const version = "2.19.883"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
+const version = "2.19.884"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * headLevelShare(ui.currentBackGround);      // row 28 of 256; row 24 in the connector scenes
@@ -85,7 +85,7 @@ function start() {
         state.player.hp = state.player.hpBase * 0.1;
             const feperdida = state.player.hpBase * 0.25;
             faithChange(-feperdida, "lostHope");
-        print(`${wizardName()} loses hope in you and tries to get up on his own (${ui.spiritIcon}-${roundNumbertoLetter(feperdida)})`);
+        print(fx('Bad', `${wizardName()} loses hope in you and tries to get up on his own (${ui.spiritIcon}-${roundNumbertoLetter(feperdida)})`));
     }
     updateHeading();
     drawWizard();

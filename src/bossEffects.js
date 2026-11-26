@@ -18,7 +18,7 @@ import { stats } from './stats.js';
 import { playSoundAt } from './audio.js';
 import { fight, run, ui } from './runtime.js';
 import { secret as questSecret } from './quests.js';
-import { playWizardAnim, printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { fx, playWizardAnim, printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 const print = printIn('fight');      // the console category (Settings: Text in the console)
 
 const b = () => config.balance;
@@ -47,7 +47,7 @@ export function applyBossEffect(attack) {
         const first = !state.petrifiedOnce;
         state.petrifiedOnce = true;
         stats.count("boss.petrified");
-        print(`${wizardName()} is turned to stone by Medusa's gaze!`);
+        print(fx('Bad', `${wizardName()} is turned to stone by Medusa's gaze!`));
         if (first) questSecret('medusa');       // a whisper: there may be a way to shield himself (src/quests.js)
         return true;
     }
@@ -81,7 +81,7 @@ export function startOfTurn() {
         fight.poisonTurns--;
         const damage = Math.min(state.player.hp, state.player.hpBase * b().poisonDamage);
         state.player.hp -= damage;
-        print(`${wizardName()} suffers from the poison (${ui.attackIcon}${roundNumbertoLetter(damage)})`);
+        print(fx('Bad', `${wizardName()} suffers from the poison (${ui.attackIcon}${roundNumbertoLetter(damage)})`));
     }
     if (fight.midasPendingHeal) {
         fight.enemyHP = Math.min(fight.enemyHPbase, fight.enemyHP + fight.midasPendingHeal);

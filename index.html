@@ -280,15 +280,6 @@
                 
             }
 
-            .dl { position: relative; display: inline-block; width: 100%; }
-            .dl.dlNew { animation: dlText 2.6s ease-in-out 1; }
-            @keyframes dlText { 0%, 15% { color: inherit; text-shadow: none; } 30%, 55% { color: #ffcf3a; text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 0 2px 2px #000; } 75%, 100% { color: inherit; text-shadow: none; } }
-            .dl.dlNew::after { content: ""; position: absolute; inset: -3px 0; pointer-events: none; opacity: 0;
-                background: radial-gradient(circle, #fff6c4 0 1.4px, rgba(255,214,90,0.5) 2.4px, transparent 3.4px) 0 0 / 23px 14px,
-                            radial-gradient(circle, #ffd45a 0 1.5px, rgba(255,190,60,0.5) 2.5px, transparent 3.6px) 9px 6px / 31px 17px,
-                            radial-gradient(circle, #ffe9a0 0 1.1px, rgba(255,220,120,0.5) 2px, transparent 3px) 15px 3px / 17px 11px;
-                animation: dlSparkle 1.2s ease-in-out 1.9s infinite backwards; }
-            @keyframes dlSparkle { 0% { opacity: 0; background-position: 0 0, 9px 6px, 15px 3px; } 40% { opacity: 0.95; } 100% { opacity: 0; background-position: 0 -8px, 9px -12px, 15px -6px; } }
             /* console text effects (candidates, shown by Dev > Console > Text effects); each lasts under 2.5 s and ends as plain text */
             .fx { display: inline-block; width: 100%; }
             .fxDivA { animation: fxDivA 2.2s ease-out 1; }
@@ -298,7 +289,6 @@
             @keyframes fxPop { 0% { transform: scale(0.8); opacity: 0; } 60% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1); } }
             @keyframes fxSweep { from { background-position: 120% 0; } to { background-position: -20% 0; } }
             .fxAch { animation: fxSweep 1.4s ease-in-out 1 both; background: linear-gradient(100deg, currentColor 35%, #ffd23a 50%, currentColor 65%) 120% 0 / 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-            .fxAch::before { content: "°5  "; }
             .fxBad { animation: fxShake 0.35s linear 1, fxRed 2s ease-out 1; }
             @keyframes fxShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-3px); } 40% { transform: translateX(3px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
             @keyframes fxRed { 0%, 40% { color: #e02a2a; } 100% { color: inherit; } }

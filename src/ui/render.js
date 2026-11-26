@@ -968,11 +968,6 @@ function print(data, minor = false, release = false, cat = 'journey') {
     // keep playing while ordinary lines come after it (printDivine takes its sparkle class off after a while)
     const con = el("console");
     con.insertAdjacentHTML("afterbegin", `<div class="cl">${data}</div>`);
-    for (const l of con.querySelectorAll(".dlNew[data-after]")) {        // a divine line's sparkles end after a couple of newer lines
-        if (l.parentElement === con.firstElementChild) continue;
-        l.dataset.after = Number(l.dataset.after) - 1;
-        if (l.dataset.after <= 0) l.classList.remove("dlNew");
-    }
     const lines = con.querySelectorAll(".cl");
     if (lines.length > MAXLINESINCONSOLE) lines[lines.length - 1].remove();         // drop the oldest line
     fitConsole();
@@ -986,16 +981,17 @@ function fitConsole() {
 }
 try { new ResizeObserver(fitConsole).observe(el("console")); } catch (e) { /* no observer: fitted at each new line */ }
 
-// A line about the god's own doing (a touch, a nudge): little sparkles play over the whole line (first the text goes golden, the console waits 2.6 s so it is seen) until a couple of
-// newer lines have come (or 12 s), then they are gone and the text is untouched (css .dl in index.html).
+// A console line with a text effect (css .fx* in index.html: Whisper, Level up, Achievement, Bad, Dream, Loot, Divine):
+// the effect plays once as the line appears and the text ends plain. Text stays one size. Settings > Text in the console > Text effects off: plain lines.
+function fx(kind, data) { return !prefs.textFx ? data : `<span class="fx fx${kind}">${data}</span>`; }
+
+// A line about the god's own doing (a touch, a nudge): a gold light (the Bless effect); the console waits 2.6 s so it is seen.
 function printDivine(data, minor = false) {
     if (run.simulation || prefs.line_divine === false) return;
-    print(`<span class="dl dlNew" data-after="2">${data}</span>`, minor, true, 'divine');
+    print(fx('Bless', data), minor, true, 'divine');
     holdUntil = performance.now() + DIVINE_HOLD_MS;
     clearTimeout(holdTimer);
     holdTimer = setTimeout(() => { holdUntil = 0; const q = held; held = []; q.forEach(([d, m, c]) => print(d, m, false, c)); }, DIVINE_HOLD_MS);
-    const line = el("console").querySelector(".cl .dlNew");
-    if (line && line.classList.contains("dlNew")) setTimeout(() => line.classList.remove("dlNew"), 12000);     // fallback when nothing else is printed
 }
 
 // When every kind of console text is off in Settings, a grey note says so (like "No achievements yet").

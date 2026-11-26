@@ -496,7 +496,8 @@ function updateHelp(){
         
         '<div class="setRow setHead" id="consoleHead" style="cursor:pointer; user-select:none">' + 'Text in the console ' + (consoleOpen ? '&#9662;' : '&#9656;') + '</div>' +
         (consoleOpen ? CONSOLE_LINES.map(l => switchRow('line_' + l.id, TAB + l.label)).join('') +
-        switchRow('fightToggle', TAB + 'Each round of a fight') : '') +
+        switchRow('fightToggle', TAB + 'Each round of a fight') +
+        switchRow('fxToggle', TAB + 'Text effects') : '') +
         switchRow('tallToggle', 'Taller scene viewer') +
         switchRow('shakeToggle', 'Screen shake') +
         (canVibrate() ? switchRow('buzzToggle', 'Vibration') : '') +
@@ -581,6 +582,7 @@ function updateHelp(){
         drawToggle(el("soundToggle"), su, () => prefs.sound, () => setSound(!prefs.sound));
         el("consoleHead").onclick = () => { consoleOpen = !consoleOpen; updateHelp(); };
         flag("fightToggle", "fightLines");
+        flag("fxToggle", "textFx");
         for (const l of CONSOLE_LINES) flag('line_' + l.id, 'line_' + l.id, consoleNotice);
         flag("tallToggle", "tallViewer", () => { if (ui.currentBackGround) loadBackground(ui.currentBackGround, ui.mirrored); });
         flag("shakeToggle", "shake");

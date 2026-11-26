@@ -11,7 +11,7 @@ import { fight, ui } from './runtime.js';
 import { chapter, openHistory } from './story.js';
 import { logro } from './achievements.js';
 import { playSound } from './audio.js';
-import { drawWizard, printIn, updateHeading } from './ui/render.js';
+import { fx, drawWizard, printIn, updateHeading } from './ui/render.js';
 const print = printIn('achievements');      // the console category (Settings: Text in the console)
 import { art } from './media.js';
 
@@ -77,7 +77,7 @@ function levelUP() {
             break;
             default:
             playSound("lvlup");
-            print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='${art(`star`)}'></img> <span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'> <b>${state.player.name} level up</b></span> <img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='${art(`star`)}'></img> `);
+            print(fx('Level', `<b>${state.player.name} level up</b>`));
         }
     //calculate age
         state.player.age = state.player.age + (state.player.xpNext * 0.0005)

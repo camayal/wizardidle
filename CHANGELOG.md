@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Console text effects replace the old sparkle of divine lines and the big text of level ups and achievements (one text size now): a gold light for the god's touches, a sweep for level ups and achievements, a red shake for bad things, a blur for dreams, a glint for loot. Settings, Text in the console, has a Text effects switch to turn them all off. Dev panel, Console, previews them.
 - Taller viewer: the 11 Heidan scenes with their altar and statue, and the Beach scenes with their statue, now have double-height pictures (open sky above). They show when Taller scene viewer is on in Settings.
 - The Beach shrine now has its own picture (the same ankh as every shrine, with a wave, driftwood, shells and a little seaweed) in the normal and the taller viewer; before it was a copy of the Prairie shrine.
 - Settings has a new switch, Taller scene viewer (off by default): off is the original viewer; on shows the double-height art (96 rows) where a scene has it.

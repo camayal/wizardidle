@@ -5,7 +5,7 @@ import { achievements } from './data/achievements.js';
 import { state, world } from './state.js';
 import { ui } from './runtime.js';
 import { playSound } from './audio.js';
-import { printIn } from './ui/render.js';
+import { fx, printIn } from './ui/render.js';
 const print = printIn('achievements');      // the console category (Settings: Text in the console)
 import { updateAchievements } from './ui/scrolls.js';
 import { art } from './media.js';
@@ -28,7 +28,7 @@ const logro = {
         playSound("achivement");
         state.achievements[nameLogro.name] = Date.now();
         stats.first(`first.achievement.${nameLogro.name}`);   // when (play time, level): the odds model reads it
-        print(`<img class='imgInConsoleSpecial' height='${ui.em * 1.5}' src='${art(`achivement`)}'><span class='specialTextInConsole' style='font-size:${ui.em * 1.5}px; line-height:${ui.em * 1.5}px;'><b>${nameLogro.title}</b> - ${nameLogro.description}</span>`);
+        print(fx('Ach', `<img class='imgInConsoleSpecial' height='${ui.em}' src='${art(`achivement`)}'> <b>${nameLogro.title}</b> - ${nameLogro.description}`));
         
         if (ui.scrollCurrentContent == "achievements"){
         updateAchievements();

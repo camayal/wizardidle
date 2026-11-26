@@ -18,7 +18,7 @@ import { addGold, addXP, calculateFe } from './wizard.js';
 import { logro } from './achievements.js';
 import { getSpell, spell } from './spells.js';
 import { playSound } from './audio.js';
-import { animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
+import { fx, animateNPC, clearNPC, drawWizard, loadNPC, npcCanvas, pjCanvas, playHydraGrow, playWizardAnim, printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 const print = printIn('fight');      // the console category (Settings: Text in the console)
 import { enemyMove, playEnemyMove } from './ui/enemyMoves.js';
 import { mutedLanding } from './data/bossAttacks.js';
@@ -184,13 +184,13 @@ function victoryRewards(faithText) {
         addGold();
         if (fight.bossCombat) {
             addXP(4);
-            print(`${fight.enemyName} was defeated, leaving a great hoard ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier)}`);
+            print(fx('Loot', `${fight.enemyName} was defeated, leaving a great hoard ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * fight.bossGoldMultiplier)}`));
         } else if (fight.hydraCombat) {
             addXP(Number(zones[state.zone.current].hidrasXPMultiplier));
-            print(`${fight.enemyName} was defeated, leaving a treasure ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * 15)}`);
+            print(fx('Loot', `${fight.enemyName} was defeated, leaving a treasure ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold * 15)}`));
         } else {
             addXP(enemySprites[fight.enemyAndNumber].rare ? RAREMULTIPLIER : 1.5);
-            print(`${fight.enemyName} was defeated and looted ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold)}${faithText}`);
+            print(fx('Loot', `${fight.enemyName} was defeated and looted ${ui.goldIcon}${roundNumbertoLetter(state.player.lastBattleGold)}${faithText}`));
         }
     } else if (fight.bossCombat) {
         addXP(4);
@@ -236,7 +236,7 @@ function wizardFalls() {
         lootedText = ` and loses some gold (${ui.goldIcon}-${roundNumbertoLetter(goldLooted)})`;
         stats.add("gold.lostInBattle", goldLooted);
     }
-    print(`${wizardName()} has fallen in battle${lootedText}`);
+    print(fx('Bad', `${wizardName()} has fallen in battle${lootedText}`));
     if (fight.hydraCombat && fight.enemyHP > 0) {       // the hydra keeps its wounds for next time
         state.hydraHealth[fight.hydra] = Math.min(1, fight.enemyHP / fight.enemyHPbase);
     }
@@ -259,7 +259,7 @@ function scheduleSelfRevive() {
         beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
         const faithLost = state.player.hpBase * 1.2454654;
         faithChange(-faithLost, "gotUpAlone");
-        print(`${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`);
+        print(fx('Bad', `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
         fight.pjDead = false;
         drawWizard();
         stats.count("death.selfRevive");
