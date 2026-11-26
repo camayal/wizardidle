@@ -249,7 +249,7 @@ function layoutPortrait(){
     const marcoH = marcoBase + extra;
     const sceneH = s * 0.25;                         // the characters' canvases always cover the lower 64 rows
     const backConsoleH = H - parseInt(sceneH + extra) * 1.2 - parseInt(headingH) * 1.2;
-    const scrollH = H - (s * 0.25) * 1.5;
+    const scrollH = H - (s * 0.25 + extra) * 1.5;       // the scene (taller in a double-height scene) sits under the scroll
     const sceneLeft = parseInt(marcoBase) * 0.1;
     const pjBtnW = s * 0.325, centerBtnW = s * 0.35;
     const startBtnW = (button * 1.90625) * 1.5;

@@ -14,6 +14,7 @@ import { prefs, CONSOLE_LINES, DEFAULTS, TEXT_SIZES, VOLUMES, setTextSize, setSo
 import { realKill } from './menu.js';
 import { el } from './dom.js';
 import { consoleNotice, loadBackground } from './render.js';
+import { TALL_ROWS } from '../data/tallScenes.js';
 import { stats } from '../stats.js';
 import { faithPageHtml, inventoryPageHtml, questsPageHtml, statsPageHtml } from './statsPages.js';
 import { questNamesPlace, questPath, godDrop, godMove, godOrder, isSecretAt } from '../quests.js';
@@ -86,7 +87,7 @@ function showCloseButton(){
 }
 
 // Open the scroll for a page ("stats", "help", ...) with its animation.
-function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize * 0.25) * 1.5)){
+function scrollOpen(currentContent,height = (window.innerHeight - (ui.objectSize * 0.25 + (ui.tallScene ? ui.objectSize * (TALL_ROWS - 64) / 256 : 0)) * 1.5)){
     ui.scrollCurrentContent = currentContent;
     playSound("scroll");
     const content = el("scrollText");
