@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Hotspots: the author's idea notes in the Prairie (town, swamp, castle, tower, tundra, city) and the south-east bridge are now real exit spots; the Dunas and Desierto taverns are place spots (inn); the ladder spots got labels; the dice house stays a note until it has an event.
 - Hotspots dev tool: a "What are the kinds?" legend explains exit, mouth, place and dream (also as tooltips of the kind menu), and there is a new kind, idea: a free-text note for the author that the game ignores.
 - The quest speech bubble (job, yes, no) is drawn mirrored, so its tail points at the stranger (or the wizard) instead of away from him; scenes where the enemy side is mirrored keep the right way round.
 - Quests come more often: strangers on the road with a job are about seven times as likely (0.4% to 3% of the explore events in safe areas), his own wishes three times (2% to 6%), inn hosts with a job 12% to 30%, the City board 3% to 8%, wanted posts 2% to 6%. Placeholders to tune in the playtests.

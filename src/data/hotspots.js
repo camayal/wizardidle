@@ -9,10 +9,9 @@ export const hotspots = {
             "y": 27,
             "w": 51,
             "h": 10,
-            "kind": "idea",
-            "to": "",
-            "label": "",
-            "note": "inspire wizard to go to the town"
+            "kind": "exit",
+            "to": "el_Poblado",
+            "label": "the town"
         }
     ],
     "el_desierto1": [
@@ -21,8 +20,8 @@ export const hotspots = {
             "y": 16,
             "w": 27,
             "h": 32,
-            "kind": "mouth",
-            "to": "el_Desierto_taberna",
+            "kind": "place",
+            "to": "inn",
             "label": "the tent"
         }
     ],
@@ -64,9 +63,10 @@ export const hotspots = {
             "y": 22,
             "w": 24,
             "h": 19,
-            "kind": "mouth",
-            "to": "la_Ciudad_casadados",
-            "label": "the dice house"
+            "kind": "idea",
+            "to": "",
+            "label": "the dice house",
+            "note": "go into the dice house (needs a dice-house event)"
         }
     ],
     "la_playa4": [
@@ -87,10 +87,9 @@ export const hotspots = {
             "y": 0,
             "w": 52,
             "h": 35,
-            "kind": "idea",
-            "to": "",
-            "label": "the castle",
-            "note": "inspire wizard to go to the castle"
+            "kind": "exit",
+            "to": "el_Castillo",
+            "label": "the castle"
         }
     ],
     "la_pradera3": [
@@ -99,10 +98,9 @@ export const hotspots = {
             "y": 18,
             "w": 154,
             "h": 33,
-            "kind": "idea",
-            "to": "",
-            "label": "",
-            "note": "inspire wizard to go to the swamp"
+            "kind": "exit",
+            "to": "el_Pantano",
+            "label": "the swamp"
         }
     ],
     "la_pradera4": [
@@ -123,10 +121,9 @@ export const hotspots = {
             "y": 27,
             "w": 75,
             "h": 12,
-            "kind": "idea",
-            "to": "",
-            "label": "",
-            "note": "inspire wizard to go to the town"
+            "kind": "exit",
+            "to": "el_Poblado",
+            "label": "the town"
         }
     ],
     "la_pradera9": [
@@ -135,30 +132,27 @@ export const hotspots = {
             "y": 5,
             "w": 19,
             "h": 22,
-            "kind": "idea",
-            "to": "",
-            "label": "",
-            "note": "inspire wizard to go to the tower"
+            "kind": "exit",
+            "to": "la_Torre",
+            "label": "the tower"
         },
         {
             "x": 149,
             "y": 28,
             "w": 25,
             "h": 19,
-            "kind": "idea",
-            "to": "",
-            "label": "",
-            "note": "inspire wizard to get the path to the tundra and tower"
+            "kind": "exit",
+            "to": "la_Tundra",
+            "label": "the tundra"
         },
         {
             "x": 103,
             "y": 35,
             "w": 17,
             "h": 10,
-            "kind": "idea",
-            "to": "",
-            "label": "",
-            "note": "inspire wizard to return to the city"
+            "kind": "exit",
+            "to": "la_Ciudad",
+            "label": "the city"
         }
     ],
     "la_torre1": [
@@ -229,7 +223,7 @@ export const hotspots = {
             "h": 35,
             "kind": "exit",
             "to": "ladder_cueva4_mina2_mine",
-            "label": ""
+            "label": "the ladder down"
         }
     ],
     "ladder_cueva4_mina2_mine": [
@@ -240,7 +234,7 @@ export const hotspots = {
             "h": 16,
             "kind": "exit",
             "to": "ladder_cueva4_mina2_cave",
-            "label": ""
+            "label": "the ladder up"
         }
     ],
     "las_dunas2": [
@@ -250,8 +244,8 @@ export const hotspots = {
             "w": 31,
             "h": 29,
             "kind": "place",
-            "to": "las_Dunas_taberna",
-            "label": ""
+            "to": "inn",
+            "label": "the tavern"
         }
     ],
     "las_dunas5": [
