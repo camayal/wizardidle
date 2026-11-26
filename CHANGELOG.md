@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Quests come more often: strangers on the road with a job are about seven times as likely (0.4% to 3% of the explore events in safe areas), his own wishes three times (2% to 6%), inn hosts with a job 12% to 30%, the City board 3% to 8%, wanted posts 2% to 6%. Placeholders to tune in the playtests.
 - Console text effects replace the old sparkle of divine lines and the big text of level ups and achievements (one text size now): a gold light for the god's touches, a sweep for level ups and achievements, a red shake for bad things, a blur for dreams, a glint for loot. Settings, Text in the console, has a Text effects switch to turn them all off. Dev panel, Console, previews them.
 - Taller viewer: the 11 Heidan scenes with their altar and statue, and the Beach scenes with their statue, now have double-height pictures (open sky above). They show when Taller scene viewer is on in Settings.
 - The Beach shrine now has its own picture (the same ankh as every shrine, with a wave, driftwood, shells and a little seaweed) in the normal and the taller viewer; before it was a copy of the Prairie shrine.

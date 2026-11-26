@@ -99,7 +99,7 @@ export const config = {
     // Quests (docs/plans/QUESTS.md). Every number here is a PLACEHOLDER for the playtests (the plan gives none).
     quests: {
         queueMax: 7,               // quests waiting behind the current one (8 in all; was 3, 4 in all); a full queue turns new offers down
-        pWish: 0.02,               // chance per event, with no quest, that he sets one himself (from his needs)
+        pWish: 0.06,               // chance per event, with no quest, that he sets one himself (from his needs)
         findBase: 0.08,            // searching the target zone: chance per event that the target turns up...
         findStep: 0.03,            // ...plus this for every event already spent searching...
         findMax: 0.6,              // ...up to this
@@ -116,12 +116,12 @@ export const config = {
         needNoise: 0.25,           // randomness added to each wish score, so he is not predictable
         acceptLine: 0.5,           // an offer he judges alone (no suggestion): taken when its score reaches this
         obey: { devout: 0.95, believer: 0.8, doubter: 0.4, atheist: 0.1 },   // chance he does what the god suggests or orders, by belief
-        pInnOffer: 0.12,           // chance the host of an inn he enters has a job
-        pBoard: 0.03,              // chance an explore event in the City reads the board
+        pInnOffer: 0.3,            // chance the host of an inn he enters has a job
+        pBoard: 0.08,              // chance an explore event in the City reads the board
         pRune: 0.01,               // chance a rune he finds starts a secret quest (the rune's trail to another zone)
         pDeliverStranger: 0.5,      // a delivery goes to a stranger waiting on the road instead of an inn host (placeholder)
-        pHuman: 0.004,             // chance an explore event in a safe area meets a stranger with a job (very rare)
-        pPost: 0.02,               // chance an explore event in a region with a post reads it
+        pHuman: 0.03,              // chance an explore event in a safe area meets a stranger with a job (was 0.004, very rare; raised 2026-11-25: strangers are the main way to get quests)
+        pPost: 0.06,               // chance an explore event in a region with a post reads it
         pTravelExplore: 0.75,      // on the way to a quest's target, chance each event is just exploring (walking on) instead of a random event
         turnUpCooldown: 8,         // events after the target turned up (a wanted enemy, a boss) before it can turn up again
         offerKinds: {              // how likely each kind is when a giver offers a job (weights, placeholders for the playtests)
