@@ -51,10 +51,10 @@ export const spells = {
     spellHerb_a: {school:"na",frames:1,size:16,gap:0,ms:900,name:"Herb"},
     spellHerb_b: {school:"na",frames:1,size:16,gap:0,ms:900,name:"Herb"},
     spellHerb_c: {school:"na",frames:1,size:16,gap:0,ms:900,name:"Herb"},
-    // The god's miracles (src/miracles.js): Sanctuary 40 px, Smite 32 x 64 (h = frame height)
+    // The god's miracles (src/miracles.js): Sanctuary 40 px, Wrath strike 64 x 96 (h = frame height; exact = drawn 1:1 over the enemy from the top of the tall viewer, ground burst on the walk line)
     spellMercyShield: {school:"na",frames:4,size:40,gap:0,ms:140,name:"Mercy shield"},
-    spellWrathStrike_sword: {school:"na",frames:6,size:32,h:64,gap:0,ms:90,name:"Wrath strike"},
-    spellWrathStrike_pillar: {school:"na",frames:6,size:32,h:64,gap:0,ms:90,name:"Wrath strike"},
+    spellWrathStrike_sword: {school:"na",frames:8,size:64,h:96,exact:true,gap:0,ms:90,name:"Wrath strike"},
+    spellWrathStrike_pillar: {school:"na",frames:8,size:64,h:96,exact:true,gap:0,ms:90,name:"Wrath strike"},
     spellMushroom_black: {school:"na",frames:1,size:32,gap:0,ms:900,name:"Mushroom"},
     spellMushroom_blue: {school:"na",frames:1,size:32,gap:0,ms:900,name:"Mushroom"},
     spellMushroom_brown: {school:"na",frames:1,size:32,gap:0,ms:900,name:"Mushroom"},

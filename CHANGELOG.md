@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- The Wrath strike is redrawn for the tall viewer (sword A for Doubters and Believers, pillar B for the Devout): 64x96 frames, 8 frames, drawn 1:1 over the enemy from the top of the viewer with the ground burst on the walk line. The spell canvas now grows upward over a tall scene so tall effects fit (spells.js `exact`, layout.js); in the regular viewer the top 32 rows are clipped. Untested in a browser.
 - Rescue as a scene (untested in a browser, no node here): when a rescuer gets him up he fades out, the dream of the fall plays (no longer at the next rest), and he wakes beside the rescuer; the caravan carries him to a neighbouring zone. The pictures plug in through RESCUER_ART and CAMP_SCENE in src/rescuers.js (art files img/story/rescuer_<pagan|shaman|digger|ghost>.png); until they exist it plays without a picture.
 - Story locks (faith step 8, untested): where the story takes the god's click away he is raised by the story: chapters VI and VII the corrupt staff (half HP), chapter X the Last Escape scroll (full HP), chapter XI the reforged staff (name from world.staffName); no faith cost. Chapter X sets the belief lock (Lost): he counts as an Atheist for good. Chapter VIII (the lynching) is left to the story's own scene, not built.
 - The pagan caravan now carries him off: after it heals him he wakes in a neighbouring zone (src/rescuers.js carryAway, untested in a browser), with a console line.

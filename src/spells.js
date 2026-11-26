@@ -8,6 +8,7 @@ import { run, ui } from './runtime.js';
 import { playSound } from './audio.js';
 import { withImage } from './ui/render.js';
 import { art } from './media.js';
+import { TALL_ROWS } from './data/tallScenes.js';
 
 
 
@@ -85,11 +86,16 @@ function spell(img, pj, critic = 0, center = 0, at = null, silent = false){
         context.imageSmoothingEnabled = !ui.crisp;   // resizing the canvas resets it
         //draw each frame + place them in the middle
         const unit = ui.charWidth / 32;
-        const x = at ? at.x * unit : (ui.squareSide * mult) * leftMultiHeadLocation + (pj ? (ui.wizardOffset || 0) * unit : 0);
-        const y = at ? at.y * unit : ui.headLevel * topMultiHeadLocation;
+        const lift = ui.tallScene ? (TALL_ROWS - 64) * unit : 0;       // the spell canvas grows upward over a tall scene (layout.js)
+        let x = at ? at.x * unit : (ui.squareSide * mult) * leftMultiHeadLocation + (pj ? (ui.wizardOffset || 0) * unit : 0);
+        let y = (at ? at.y * unit : ui.headLevel * topMultiHeadLocation) + lift;
         cellCtx.clearRect(0, 0, frameWidth, frameHeight);
         cellCtx.drawImage(myImage, shift, 0, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
-        const side = ui.squareSide * multiSize * frameWidth / 30, sideH = side * frameHeight / frameWidth, pad = (ui.squareSide * multiSize - side) / 2, padY = (ui.squareSide * multiSize - sideH) / 2;     // a smaller sprite stays centred where a 30 px one would sit
+        let side = ui.squareSide * multiSize * frameWidth / 30, sideH = side * frameHeight / frameWidth, pad = (ui.squareSide * multiSize - side) / 2, padY = (ui.squareSide * multiSize - sideH) / 2;     // a smaller sprite stays centred where a 30 px one would sit
+        if (spells[img].exact) {        // drawn 1:1 in art pixels, centred over the enemy, its bottom on the walk line (the Wrath strike)
+            side = frameWidth * unit; sideH = frameHeight * unit; pad = 0; padY = 0;
+            if (!at) { x = ui.squareSide * 6 + (ui.squareSide - side) / 2; y = lift - (TALL_ROWS - 64) * unit; }
+        }
         context.drawImage(cell, x + pad, y + padY, side, sideH);
         shift += frameWidth + gap;
         currentFrame++;

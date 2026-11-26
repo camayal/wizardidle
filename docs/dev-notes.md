@@ -72,3 +72,8 @@ Date: 2026-11-26 00:59
 Author's note: still is the bug that when the wizard finished the walk in a connection the following scene he just appears in the next one rather than walk into that one
 ```
 - Handoff 2026-11-26 (dev, faith plan): steps 1-5 and 7 built, step 4 too, all untested in a browser (no node on the dev machine). Rescuers are text only (src/rescuers.js, called from scheduleSelfRevive in src/combat.js): zone picks pagan/shaman/gravedigger, 5% ghost; each heals him (hp share) and scales the faith cost. To do for rescuers (caravan relocation, fade-dream-wake staging and the story locks done 2026-11-26, untested): wire the art (RESCUER_ART, CAMP_SCENE in src/rescuers.js), gravedigger sin push (needs thinker: duration and exit of inSin), the skull above the fallen wizard, own potion (needs an item). Then step 8 (story locks). Miracle spells are in src/miracles_spells.js (Mercy shield, Wrath strike, Last luck); prayers in src/prayers.js; milestones/silence drift in src/milestones.js.
+
+```
+Date: 2026-11-26 01:25
+Author's note: the wizar is teleporting from the pier to the actuall town. no passing by the wooden bridge, so connection to connection is no working well
+```

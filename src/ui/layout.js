@@ -270,6 +270,7 @@ function layoutPortrait(){
     setStyles("marco", { width: s * 1.0625, height: marcoH, backgroundImage: `url('${art(ui.tallScene ? `frame_tall_${TALL_ROWS}` : 'frame')}')` });
     setEach(CANVASES, { width: s, height: sceneH, left: sceneLeft });
     setStyles("esceneCanvas", { height: sceneH + extra });
+    setStyles("spellCanvas", { height: sceneH + extra, marginTop: -extra });       // the spells may reach the top of a tall scene (the Wrath strike)
     divineSpots(s, sceneLeft);
     setStyles("console", { display: "block", fontSize: em, width: s, height: parseInt(backConsoleH) * 0.94, left: s * 0.03 });
     setStyles("backConsole", { display: "block", width: s + (s * 0.075), height: backConsoleH, left: (s * -0.01) });
@@ -358,6 +359,7 @@ function layoutLandscapeMobile(){
     setStyles("marco", { width: s * 1.0625, height: marcoH, top: parseInt(headingH), backgroundImage: `url('${art(ui.tallScene ? `frame_tall_${TALL_ROWS}` : 'frame')}')` });
     setEach(CANVASES, { width: s, height: s * 0.25, left: sceneLeft, top: sceneTop + extra });
     setStyles("esceneCanvas", { height: s * 0.25 + extra, top: sceneTop });
+    setStyles("spellCanvas", { height: s * 0.25 + extra, marginTop: -extra });
     divineSpots(s, sceneLeft);
     setStyles("centerDivineBtn", { top: sceneTop + extra });
     placeDivine();
