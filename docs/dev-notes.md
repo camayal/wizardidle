@@ -66,3 +66,8 @@ Read first: docs/plans/for_implementation_faith.md (section 13 build order) and 
 Date: 2026-11-26 00:56
 Author's note: we need to convert the intersection into a conection. he appears in the middle when is comming from tundra vulcan or tower, and walk left to the city or right to the town
 ```
+
+```
+Date: 2026-11-26 00:59
+Author's note: still is the bug that when the wizard finished the walk in a connection the following scene he just appears in the next one rather than walk into that one
+```

@@ -267,6 +267,7 @@ function scheduleSelfRevive() {
         faithChange(-faithLost, "gotUpAlone");
         print(fx('Bad', rescuer ? `${rescuer.text} (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})` : `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
         fight.pjDead = false;
+        if (rescuer) state.player.hp = Math.max(state.player.hp, state.player.hpBase * rescuer.hp);       // a rescuer heals him; getting up alone does not
         drawWizard();
         stats.count("death.selfRevive");
         playSound("heal");
