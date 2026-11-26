@@ -99,7 +99,6 @@ Tests in the review drop (places/ext15/): five 384x96 expansions (1.5x), a fores
 Author's idea behind it: double the height of the scene viewer in the game (scenes 256x128, same width), so every scene gets a taller picture. Dev job first (scene canvases, marco height, walk line, sprite anchors, console height on phones), then the artist redraws scenes taller one region at a time. Design call for thinker: which scenes first, and whether old 64-row scenes are padded.
 
 
-- Faith art, invisible hand (author via coordinator, 2026-11-25): see docs/plans/for_implementation_faith.md section 11. Order: (1) door glow for nudges, (2) healing herb, (3) enemy weakening effect, (4) 1 HP graze effect. Options on one sprite first, then the set once he picks; review drop only, dev wires. Next artist session (not started yet).
 
 - City roofs (author, 2026-11-25): approved, all three styles kept and mixed. Batch of 7 tall scenes in the review drop places/tall/roofs/ (la_ciudad1 in style b, 2, 3, 4, 5, _altar, _estatua) waiting for dev to copy them into img/places/tall/tall_la_ciudad*.png. Method: upper floor moved down 4 rows, roofs redrawn above it, bottom 64 rows and the side walls in 3 and 4 untouched; casadados and taberna are interiors (no change). Script kept at C:/tmp/art/batch.py.
 - las_dunas4 stray pixels removed (tall and regular) in the review drop, 2026-11-25.

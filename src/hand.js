@@ -11,6 +11,7 @@ import { pickRandomItem, roundNumbertoLetter, getRandomInt } from './utils.js';
 import { faithChange } from './faith.js';
 import { calculateFe } from './wizard.js';
 import { beliefMoment, isAtheist, isDoubting } from './belief.js';
+import { spell } from './spells.js';
 import { printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 const print = printIn('fight');      // the console category (Settings: Text in the console)
 
@@ -37,7 +38,10 @@ function lucky() {
     print(`<i>${wizardName()} ${pickRandomItem("feels someone is watching over him,wonders why he is so lucky lately,feels, for a moment, that he is not alone")}</i>`);
 }
 
-const cost = () =>Math.max(1, Math.round(calculateFe() * config.hand.costFe));
+// The herb he finds: one of the three herbs or one of the mushrooms (img/effects/spells/spellHerb_*, spellMushroom_*).
+const HERBS = ["spellHerb_a", "spellHerb_b", "spellHerb_c"].concat("black,blue,brown,green,green2,grey,grey2,orange,purple,red,red2,silver,tan,teal,white,yellow".split(",").map((c) => `spellMushroom_${c}`));
+
+const cost = () => Math.max(1, Math.round(calculateFe() * config.hand.costFe));
 
 // Pay the faith (all of it or nothing: the hand does not work on credit). False if he has too little.
 function pay(source) {
@@ -54,6 +58,7 @@ export function handWeakenEnemy() {
     fight.enemyHP = Math.max(1, Math.round(fight.enemyHP) - cut);
     updateHeartNPC();
     updateHeading();
+    spell("spellWeaken", false, 0, 0, null, true);       // the violet chevrons sink over the enemy
     print(`${wizardName()} ${isAtheist() ? "sees " : ""}${pickRandomItem(lines("weaken"))} - ${roundNumbertoLetter(fight.enemyHP)}`);
     lucky();
     return true;
@@ -72,6 +77,7 @@ export function handHelpWizard() {
     const heal = Math.min(p.hpBase - p.hp, p.hpBase * config.hand.herbShare * getRandomInt(50, 150) / 100);
     p.hp += heal;
     updateHeading();
+    spell(pickRandomItem(HERBS.join(",")), true, 0, 0, null, true);       // the herb shows for a moment
     print(`${wizardName()} ${pickRandomItem(lines("herb"))} (+${roundNumbertoLetter(heal)})`);
     lucky();
     return true;
@@ -82,6 +88,7 @@ export function grazeHit(enemyHit) {
     if (!fight.handGraze || state.player.hp - enemyHit > 0) return enemyHit;
     fight.handGraze = false;
     stats.count("hand.grazed");
+    spell("spellGraze", true, 0, 0, null, true);       // the cracked heart that holds
     print(`${wizardName()} ${pickRandomItem(EXCUSES.graze)}`);
     return Math.max(0, state.player.hp - 1);
 }
