@@ -65,3 +65,4 @@ Read first: docs/plans/for_implementation_faith.md (section 13 build order) and 
 Date: 2026-11-25 21:08
 Author's note: artist need to retourch some of the roofs of the city sneces some of them are very compacted, for example 5, 1, 3
 ```
+- Faith step 3 (2026-11-25): invisible hand and the Atheist free revive (double belief and faith) are built, untested in a browser. Left of the winning-back list: (a) a sign: needs a tap target for the sky or scene outside a fight (the hotspot layer only has authored rectangles, so author one big "sky" spot or add a default); (b) dream of a shrine: hotspot kind dream with to shrine, dream.js handles only nightmare; (c) hidden blessings counter, (d) pilgrim NPC, (e) relics. Artist asked for the faith art (door glow, herb, enemy weakening, graze).

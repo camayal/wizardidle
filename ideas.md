@@ -400,3 +400,4 @@ Newest first; keep the last three, cut older ones to the archive.
 - 2026-11-25 (dev): level up effect no longer scales the text (it grew to 1.18x during the pop); it fades in with a small rise and the green sweep, same size as every line.
 - 2026-11-25 (dev): Hotspots tool: kind legend + new kind idea (field note, kept by tools/serve.py hotspots_post, ignored by nudge.touchSpot). Untested in a browser.
 - 2026-11-25 (dev): hotspots evaluated: 7 idea notes became exits (town x2, swamp, castle, tower, tundra, city), Dunas/Desierto taverns = place inn, ladder labels. Left as notes for thinker: gold x2, rune/skeleton, secret place (Pradera4), dice house event. Untested in a browser.
+- 2026-11-25 (dev): faith step 3, winning back: free revive doubled for an Atheist (belief and faith). Left: sign (needs a sky/scene tap target), dream shrine (hotspot kind dream with to: shrine, dream.js only knows nightmare), hidden blessings, pilgrim, relics. Untested in a browser.

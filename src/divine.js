@@ -20,6 +20,7 @@ import { suggest } from './quests.js';
 import { buzz } from './prefs.js';
 import { faithChange } from './faith.js';
 import { handHelpWizard, handWeakenEnemy } from './hand.js';
+import { calculateFe } from './wizard.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -57,7 +58,9 @@ function reviveByTouch() {
     }
     state.player.hp = state.player.hpBase;
     fight.pjDead = false;
-    beliefMoment("revive");
+    const atheist = isAtheist();      // winning him back: his free revive is worth double (belief and faith)
+    faithChange(Math.round(calculateFe() * config.faith.reviveFe * (atheist ? 2 : 1)), "revive");
+    beliefMoment(atheist ? "reviveAtheist" : "revive");
     const toCabin = () => enterPlace((run.cabin = cabinSpot()).bg, "healer_hooded", () => startEvent(reviveEV), true);   // he wakes up there, with the hooded healer (the god in disguise; art by the artist)
     if (run.simulation || !document.hasFocus()) return toCabin();
     loop.freezeGame();                          // nothing moves on while the rings play

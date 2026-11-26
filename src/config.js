@@ -24,6 +24,7 @@ export const config = {
             touch: 0.5,                        // a normal heal or hit touch
             bossHit: 1.5,                      // a direct hit on a boss (extra to the touch itself; a first number to tune)
             revive: 2,
+            reviveAtheist: 4,                  // the free revive of an Atheist counts double (winning him back, faith plan section 5)
             prayer: 1,                         // entering a shrine
             skippedShrine: -1,
             passedShrine: 0.5,                 // a Doubter or Atheist walks past a shrine (the way back, 2026-11-13)
@@ -57,6 +58,7 @@ export const config = {
     faith: {
         maxPerHp: 100,             // the most faith he can hold = hpBase x this
         maxMin: 200,               // ... but never less than this
+        reviveFe: 3,               // faith the god gets back from a revive, in prayers' worth (calculateFe); double for an Atheist (placeholder)
         nudgeCostFe: 2,            // a nudge (touching a spot of the scene) costs this many prayers' worth of faith (calculateFe)
         nudgeFollow: { devout: 0.95, believer: 0.8, doubter: 0.5, atheist: 0.1 },      // how often he follows a nudge
         nudgeLife: 3,              // events a followed nudge waits for his next decision
