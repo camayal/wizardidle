@@ -25,12 +25,13 @@ import { mutedLanding } from './data/bossAttacks.js';
 import { hasBossAttacks, playBossAttack, playHydraAttack, startHydraIdle } from './ui/bossAttacks.js';
 import { playEntrance, playLeave } from './ui/entrances.js';
 import { applyBossEffect, attackPrevented, bossAttackFor, resetBossEffects, startOfTurn } from './bossEffects.js';
-import { beliefMoment, isDoubting, selfReliance } from './belief.js';
+import { beliefMoment, isAtheist, isDoubting, selfReliance } from './belief.js';
 import { art } from './media.js';
 import { faithChange } from './faith.js';
 import { grazeHit } from './hand.js';
 import { clearMiracles, providenceHit, sanctuaryAbsorb } from './miracles_spells.js';
 import { milestone } from './milestones.js';
+import { pickRescuer } from './rescuers.js';
 import { clearPrayer, despairCheck, hardened } from './prayers.js';
 
 
@@ -255,22 +256,23 @@ function wizardFalls() {
 function scheduleSelfRevive() {
     // a loop clock that runs once (v1: a setTimeout), so the simulation's clock drives it too
     fight.autorevive = true;
+    const rescuer = pickRescuer();       // null: he gets up alone
     loop.every("selfRevive", function () {
         loop.stop("selfRevive");
         run.previousEvent = "autorevive";
         fight.autorevive = "";
-        run.fallBy = "alone";
+        run.fallBy = rescuer ? "rescuer" : "alone";
         beliefMoment(isDoubting() ? "roseAloneDoubting" : "roseAlone");      // he got up without the god
-        const faithLost = isDoubting() ? 0 : state.player.hpBase * 1.2454654 * config.milestone.driftOnShrineSkipShare;       // softer drain
+        const faithLost = isDoubting() ? 0 : state.player.hpBase * 1.2454654 * config.milestone.driftOnShrineSkipShare * (rescuer ? rescuer.share : 1);       // softer drain
         faithChange(-faithLost, "gotUpAlone");
-        print(fx('Bad', `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
+        print(fx('Bad', rescuer ? `${rescuer.text} (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})` : `${wizardName()} gets up on his own, but feels abandoned by you (${ui.spiritIcon}-${roundNumbertoLetter(faithLost)})`));
         fight.pjDead = false;
         drawWizard();
         stats.count("death.selfRevive");
         playSound("heal");
         updateHeading();
         nextEvent();
-    }, selfrevivetime);
+    }, isAtheist() ? config.rescuer.atheistMs : selfrevivetime);
 }
 
 // Keep the longest streak of fights won in a row.

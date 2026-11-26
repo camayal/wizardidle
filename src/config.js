@@ -58,6 +58,10 @@ export const config = {
         devoutShrine: 0.15, doubterShrine: -0.15,
     },
     // The invisible hand (an Atheist's touches, src/hand.js): placeholders, tune with the playtests.
+    rescuer: {
+        ghostChance: 0.05,         // a fallen wizard's ghost lifts him up, if the cemetery has any
+        atheistMs: 60000,          // an Atheist is rescued sooner (the others wait selfrevivetime, 2 minutes)
+    },
     milestone: {
         prayerFe: 1,               // his own prayer gives this many prayers' worth of faith (calculateFe)
         prayerChance: { devout: 1, believer: 0.75, doubter: 0.4, atheist: 0 },      // per rest and level up

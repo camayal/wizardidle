@@ -61,3 +61,8 @@ Read first: docs/plans/for_implementation_faith.md (section 13 build order) and 
 - Untested in a browser and worth a look first: bridge arrival (no walk-in after the last bridge scene), stranger parcel delivery, Information scroll, sparkle lines, the Hotspots mode.
 - Next for dev (2026-11-25 handoff, faith art and hotspots): (1) Providence tap look done (spellProvidence_a/b/c); the belief rule (Believer and Devout full, Doubter faint, Atheist none) waits for belief levels. (2) Sanctuary and Smite looks by belief level (docs/plans/for_implementation_faith.md Decisions, mapping to confirm with the author) are step 5, not built. (3) Not done: door glow, enemy weakening, 1 HP graze, healing herb art (artist waits for the author's order, suggested: door glow first). (4) Hotspots: author did not say which part to continue. (5) Travel tool rebuilt (data in src/data/travel.json): untested in a browser; restart tools/serve.py before using it.
 - Faith step 3 left (2026-11-25): winning back is built (src/winback.js, hand.js lucky()), untested in a browser. Left: relics (psalm, medallion, crosier shard, letter: need loot hooks on chests and pots and an inventory use), the loot-upgrade sign, a sky/scene tap target for the sign, art for pilgrim and dream. Artist asked for door glow, herb, enemy weakening, graze.
+
+```
+Date: 2026-11-26 00:56
+Author's note: we need to convert the intersection into a conection. he appears in the middle when is comming from tundra vulcan or tower, and walk left to the city or right to the town
+```
