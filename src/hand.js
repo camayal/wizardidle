@@ -10,6 +10,7 @@ import { fight } from './runtime.js';
 import { pickRandomItem, roundNumbertoLetter, getRandomInt } from './utils.js';
 import { faithChange } from './faith.js';
 import { calculateFe } from './wizard.js';
+import { beliefMoment, isAtheist, isDoubting } from './belief.js';
 import { printIn, updateHeading, updateHeartNPC, wizardName } from './ui/render.js';
 const print = printIn('fight');      // the console category (Settings: Text in the console)
 
@@ -19,7 +20,24 @@ const EXCUSES = {
     herb: "a herb, right where he needed it,finds a healing herb growing by the path,a patch of moss that eases the pain",
 };
 
-const cost = () => Math.max(1, Math.round(calculateFe() * config.hand.costFe));
+// The same acts for a wizard who believes (a sign from the centre touch): light and inspiration, never an order.
+const GUIDED = {
+    weaken: "sees a weakness in the enemy, as if someone had pointed at it,notices the enemy's guard has a gap,was guided to the enemy's weak side",
+    herb: "saw a healing herb, as if someone had shown him,was guided to a herb by the path,finds a patch of moss that eases the pain, and feels grateful",
+};
+const lines = (k) => (isAtheist() ? EXCUSES[k] : GUIDED[k]);
+
+// A lucky moment he doesn't understand: every few of them he feels someone watches over him (hidden blessings).
+function lucky() {
+    if (!isDoubting()) return;
+    stats.count("hand.lucky");
+    if (stats.get("hand.lucky") % config.hand.blessingEvery) return;
+    beliefMoment("blessing");
+    stats.count("winback.blessing");
+    print(`<i>${wizardName()} ${pickRandomItem("feels someone is watching over him,wonders why he is so lucky lately,feels, for a moment, that he is not alone")}</i>`);
+}
+
+const cost = () =>Math.max(1, Math.round(calculateFe() * config.hand.costFe));
 
 // Pay the faith (all of it or nothing: the hand does not work on credit). False if he has too little.
 function pay(source) {
@@ -36,7 +54,8 @@ export function handWeakenEnemy() {
     fight.enemyHP = Math.max(1, Math.round(fight.enemyHP) - cut);
     updateHeartNPC();
     updateHeading();
-    print(`${wizardName()} sees ${pickRandomItem(EXCUSES.weaken)} - ${roundNumbertoLetter(fight.enemyHP)}`);
+    print(`${wizardName()} ${isAtheist() ? "sees " : ""}${pickRandomItem(lines("weaken"))} - ${roundNumbertoLetter(fight.enemyHP)}`);
+    lucky();
     return true;
 }
 
@@ -46,13 +65,15 @@ export function handHelpWizard() {
     if (fight.enemy && !fight.handGraze) {
         if (!pay("handGraze")) return false;
         fight.handGraze = true;                       // enemyAttack() reads it (grazeHit)
+        lucky();
         return true;
     }
     if (p.hp >= p.hpBase || !pay("handHerb")) return false;
     const heal = Math.min(p.hpBase - p.hp, p.hpBase * config.hand.herbShare * getRandomInt(50, 150) / 100);
     p.hp += heal;
     updateHeading();
-    print(`${wizardName()} ${pickRandomItem(EXCUSES.herb)} (+${roundNumbertoLetter(heal)})`);
+    print(`${wizardName()} ${pickRandomItem(lines("herb"))} (+${roundNumbertoLetter(heal)})`);
+    lucky();
     return true;
 }
 

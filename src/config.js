@@ -36,6 +36,10 @@ export const config = {
             dreamDoubter: 2,
             dreamAtheist: 3,                   //   (none while belief is lost)
             nightmare: -1,                     // a nightmare, only while Believer or Devout, never below nightmareFloor
+            sign: 2,                           // a sign in the sky that gets through (src/winback.js), only for Atheist and Doubter
+            blessing: 3,                       // several lucky moments: he feels watched over (hidden blessings)
+            pilgrim: 1,                        // a believer talks to an Atheist in a town
+            pilgrimDoubter: 2,                 //   ... and to a Doubter
         },
         nightmareFloor: 0,                     // a nightmare never takes belief below this (the Believer line)
         closeCallLine: 0.1,
@@ -52,6 +56,16 @@ export const config = {
         costFe: 2,                 // each touch costs this many prayers' worth of faith (calculateFe)
         weakenShare: 0.2,          // the enemy loses this share of its life
         herbShare: 0.3,            // a herb heals this share of his HP (50% to 150% of it)
+        blessingEvery: 5,          // every this many lucky moments (hand, signs) he feels someone watches over him (belief.weights.blessing)
+    },
+
+    // Winning back a Doubter or an Atheist (docs/plans/for_implementation_faith.md section 5, src/winback.js): placeholders.
+    winback: {
+        signCooldownMs: 60000,     // play time between two signs
+        signChance: 0.1,           // chance a sign in the sky gets through, plus signChanceStep for each sign sent, up to signChanceMax
+        signChanceStep: 0.05,
+        signChanceMax: 0.5,
+        pilgrimCooldownMs: 120000, // play time between two pilgrims
     },
 
     // Faith, the god's currency (docs/plans/for_implementation_faith.md): placeholders, tune with the playtests.

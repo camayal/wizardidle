@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Winning back a Doubter or an Atheist: touching the scene outside an altar now sends a sign (src/winback.js). In a fight it weakens the enemy, hurt it shows a herb (Believers and Devout feel it as guidance), in a town a pilgrim talks to him (belief +1, +2 for a Doubter), otherwise a sign in the sky that sometimes gets through (chance rising with each one); asleep in the sleeping bag it sends a dream of a shrine, and the next shrine he finds he enters. Every few lucky moments of the invisible hand he feels someone is watching over him (hidden blessings, belief +3). Placeholders in config.winback, config.hand.blessingEvery and config.belief.weights.
 - Dunas 4 (regular and tall): the stray black pixels to the right of the palm are gone.
 - The god's hints no longer sound like orders: a Devout wizard who follows a nudge feels a whisper or a warm light guiding him (no more "I will obey you"), and when the hint on a rune, book or statue makes the study work, the line says he was guided or inspired ("is guided to understand the rune", "sees the statue from a new perspective and understands it").
 - City roofs: the seven tall city scenes (Ciudad 1 to 5, altar, statue) have taller, less squashed roofs in a mix of tile and slate, hipped and mansard, with dormers and chimneys. Only the top rows changed; the 64 rows shown by default are the same.

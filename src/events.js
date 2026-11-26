@@ -366,7 +366,10 @@ function prayEV(){
     let textCapel;
     const questShrine = run.questShrine;      // the quest's shrine turns up: he goes in
     run.questShrine = false;
-    if (questShrine || YesOrNot(shrineChance(stat("pFindCapel")),0)){      // by his belief level (an Atheist never enters)
+    const dreamed = run.dreamShrine;          // the god's dream of a shrine (src/winback.js): he goes in despite himself
+    run.dreamShrine = false;
+    if (dreamed) stats.count("winback.dreamShrine");
+    if (questShrine || dreamed || YesOrNot(shrineChance(stat("pFindCapel")),0)){      // by his belief level (an Atheist never enters)
         beliefMoment("prayer");
         quests.onShrine();
         stats.count("faith.shrines");

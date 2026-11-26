@@ -21,6 +21,7 @@ import { buzz } from './prefs.js';
 import { faithChange } from './faith.js';
 import { handHelpWizard, handWeakenEnemy } from './hand.js';
 import { calculateFe } from './wizard.js';
+import { signTouch } from './winback.js';
 
 // Touch on the wizard: revive him if he has fallen, otherwise heal him, at a cost in faith.
 function pjBtn(){
@@ -174,6 +175,8 @@ function centerBtn(){
             updateHeading();
             playSound("coins");
             spell("spellCoins",false);
+        } else {
+            signTouch();      // a sign, a dream of a shrine or a pilgrim (src/winback.js)
         }
     }
 }
