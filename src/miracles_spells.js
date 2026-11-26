@@ -38,7 +38,7 @@ export function sanctuaryOnHeal() {
     fight.sanctUses = (fight.sanctUses || 0) + 1;
     fight.sanctHits = byLevel(config.face.sanctuaryHits);
     stats.count("god.sanctuary");
-    spell("spellSanctuary_1", true, 0, 0, null, true);
+    spell("spellMercyShield", true, 0, 0, null, true);
     print(`<i>A Mercy shield rises around ${wizardName()}</i>`);
 }
 
@@ -47,14 +47,14 @@ export function sanctuaryAbsorb(enemyHit) {
     if (!(fight.sanctHits > 0)) return enemyHit;
     fight.sanctHits--;
     stats.count("god.sanctuaryHits");
-    spell("spellSanctuary_1", true, 0, 0, null, true);
+    spell("spellMercyShield", true, 0, 0, null, true);
     return 0;
 }
 
 // The look and the strength of a Wrath strike (null if the god is not Wrath).
 export function smiteFor() {
     if (godFace() != "wrath" || beliefLevel() == "atheist") return null;
-    return { spell: beliefLevel() == "devout" ? "spellSmite_pillar" : "spellSmite_sword", bonus: config.face.smiteBonus };
+    return { spell: beliefLevel() == "devout" ? "spellWrathStrike_pillar" : "spellWrathStrike_sword", bonus: config.face.smiteBonus };
 }
 
 // Last luck (Distant god, Doubter and up; an Atheist has his paid graze instead): a killing hit sometimes leaves him 1 HP on its own, once per fight, at no

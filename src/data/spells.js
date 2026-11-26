@@ -52,9 +52,9 @@ export const spells = {
     spellHerb_b: {school:"na",frames:1,size:16,gap:0,ms:900,name:"Herb"},
     spellHerb_c: {school:"na",frames:1,size:16,gap:0,ms:900,name:"Herb"},
     // The god's miracles (src/miracles.js): Sanctuary 40 px, Smite 32 x 64 (h = frame height)
-    spellSanctuary_1: {school:"na",frames:4,size:40,gap:0,ms:140,name:"Mercy shield"},
-    spellSmite_sword: {school:"na",frames:6,size:32,h:64,gap:0,ms:90,name:"Wrath strike"},
-    spellSmite_pillar: {school:"na",frames:6,size:32,h:64,gap:0,ms:90,name:"Wrath strike"},
+    spellMercyShield: {school:"na",frames:4,size:40,gap:0,ms:140,name:"Mercy shield"},
+    spellWrathStrike_sword: {school:"na",frames:6,size:32,h:64,gap:0,ms:90,name:"Wrath strike"},
+    spellWrathStrike_pillar: {school:"na",frames:6,size:32,h:64,gap:0,ms:90,name:"Wrath strike"},
     spellMushroom_black: {school:"na",frames:1,size:32,gap:0,ms:900,name:"Mushroom"},
     spellMushroom_blue: {school:"na",frames:1,size:32,gap:0,ms:900,name:"Mushroom"},
     spellMushroom_brown: {school:"na",frames:1,size:32,gap:0,ms:900,name:"Mushroom"},
