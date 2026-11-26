@@ -1,5 +1,6 @@
 // Wizard Idle - the scenes that have a double-height version: img/places/tall/tall_<scene>.png, 256x128 (interiors 256x96,
 // drawn from the bottom, black above). Written by tools/wire_tall.py; any other scene keeps its regular art.
+export const TALL_ROWS = 96;       // height of the viewer in art rows (96 = interior size, 128 = whole tall scene); needs img/ui/frame_tall_<rows>.png
 export const tallScenes = new Set([
     'bridge_south_east',
     'bridge_south_west',
