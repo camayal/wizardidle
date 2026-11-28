@@ -20,9 +20,9 @@ Summary shows hours to reach levels 25, 50, 100, 150, 200 (median and range), fa
 
 Levels per hour is the number to read. Knobs in `config.balance`: `rXP` (curve exponent, now 1.1), `rEnemyXP` (enemies per level, now 16), `factorHP`, `rHP`, `rGold`; quest XP is `quests.xpMult` (12).
 
-    python tools/playtest.py --name xp-curve --seeds 10 --until 200 --setting base:god=active --setting rXP12:god=active^&set=rXP:1.2 --setting enemies20:god=active^&set=rEnemyXP:20 --setting enemies12:god=active^&set=rEnemyXP:12
+    python tools/playtest.py --name xp-curve --seeds 10 --until 200 --setting base:god=active --setting "rXP12:god=active&set=rXP:1.2" --setting "enemies20:god=active&set=rEnemyXP:20" --setting "enemies12:god=active&set=rEnemyXP:12"
 
-(In bash write `&` inside quotes instead: `--setting "rXP12:god=active&set=rXP:1.2"`. The `^&` form is for cmd.exe only.)
+(Quote any setting that contains `&`.)
 
 Target from the config notes: his normal pace is 3 to 6 levels per world hour (`levelsPerHour: 0.3` is the quest pace). Compare the `hours to L50/L100/L200` columns.
 
