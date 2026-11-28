@@ -22,7 +22,7 @@ import { settleAway, watchHidden } from './away.js';
 import { faithChange } from './faith.js';
 import { silenceTick } from './milestones.js';
 
-const version = "2.19.948"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
+const version = "2.19.949"; // 2.<big changes>.<commits>, kept by tools/version.py (docs/VERSIONS.md); v1: "02nov2020_10pm"
 let uniqueID;
 ui.objectSize = defineObjectSize();
 ui.headLevel = ui.objectSize * headLevelShare(ui.currentBackGround);      // row 28 of 256; row 24 in the connector scenes
